@@ -1,0 +1,70 @@
+{
+  "exports": [
+    {
+      "public_file": "tools/patch_guard.py",
+      "original_sha256": "e340562d1eb7ecea92a77cf6eec76867df29adf03611612276f998cfc0497a87",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/typed_renderer.py",
+      "original_sha256": "82f709486c9a7fef3b7ad4c563fa2dc300881dac13b48603b0b3321686d2c0a8",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/typed_renderer_v1.py",
+      "original_sha256": "82f709486c9a7fef3b7ad4c563fa2dc300881dac13b48603b0b3321686d2c0a8",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/typed_renderer_v2_dev.py",
+      "original_sha256": "71e1fcd05c62c9bdd99e5185e232cc323ab98ff30d258a14fe27c3eef775a8d5",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/realize_T.py",
+      "original_sha256": "735d6455ddb4436cceb7da3d5f9b9fd22f20a0a98e75e87c4ac22ff603a5765d",
+      "change": "removed machine-specific defaults and generation instruction if present; algorithms unchanged"
+    },
+    {
+      "public_file": "tools/realize_T_v2.py",
+      "original_sha256": "950f7e88dc2753ff6adc83c2ec2bce2bde6ad724cb5d17eb360773808e19a736",
+      "change": "removed machine-specific defaults and generation instruction if present; algorithms unchanged"
+    },
+    {
+      "public_file": "tools/score_T.py",
+      "original_sha256": "a7cbe56a5154667ec10b288fd6d1149c27f7662641a33c816810ce9804b31089",
+      "change": "removed machine-specific defaults and generation instruction if present; algorithms unchanged"
+    },
+    {
+      "public_file": "tools/score_J.py",
+      "original_sha256": "e9c6a378af25e058a1ff9252d9d0f90e2c9919d408e4d4011407de2aecef0145",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/test_patch_guard.py",
+      "original_sha256": "98b0acd98f42fafab8473161a75308edca9e1f18654e95d9e23df65e5a32ee0e",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/test_typed_renderer.py",
+      "original_sha256": "788f2d79354a5855e05182561b0f7d5610d31372df4cf04f4b6099d347272427",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/test_realize_T.py",
+      "original_sha256": "aa78009f565b7b6ad0cec15cf03dcd605e8b194720e07058f4098406dee44f60",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/test_realize_T_v2.py",
+      "original_sha256": "96adb5ca13bda487a86fc863ea4c7c051e85e4c6647177e7c040adaa51cd9974",
+      "change": "unchanged code"
+    },
+    {
+      "public_file": "tools/test_score_T.py",
+      "original_sha256": "a9a97ac95c3c6bbe217addecee2e703c4b61a0e06eff498ebc446ff0da8c4493",
+      "change": "unchanged code"
+    }
+  ],
+  "note": "Hashes identify original code; public files may differ as described. Public data exports are not byte-identical originals."
+}

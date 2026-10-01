@@ -1,0 +1,150 @@
+{
+  "artifact_kind": "sanitized derivative; not original bytes",
+  "snapshot_date": "2026-10-01",
+  "records": [
+    {
+      "event_id": "DEV01",
+      "split": "dev",
+      "domain": "economy",
+      "title": "BEA 2024Q2 GDP advance"
+    },
+    {
+      "event_id": "DEV02",
+      "split": "dev",
+      "domain": "economy",
+      "title": "Census 2023 income poverty release"
+    },
+    {
+      "event_id": "DEV03",
+      "split": "dev",
+      "domain": "economy",
+      "title": "ONS September2024 CPI"
+    },
+    {
+      "event_id": "EVAL01",
+      "split": "eval",
+      "domain": "economy",
+      "title": "BOK October2024 rate decision"
+    },
+    {
+      "event_id": "EVAL02",
+      "split": "eval",
+      "domain": "economy",
+      "title": "BLS September2024 employment"
+    },
+    {
+      "event_id": "EVAL03",
+      "split": "eval",
+      "domain": "economy",
+      "title": "BEA August2024 income outlays"
+    },
+    {
+      "event_id": "EVAL04",
+      "split": "eval",
+      "domain": "economy",
+      "title": "IMF October2024 WEO"
+    },
+    {
+      "event_id": "EVAL05",
+      "split": "eval",
+      "domain": "economy",
+      "title": "OECD December2024 outlook"
+    },
+    {
+      "event_id": "DEV04",
+      "split": "dev",
+      "domain": "legal",
+      "title": "FDA v Alliance 2024"
+    },
+    {
+      "event_id": "DEV05",
+      "split": "dev",
+      "domain": "legal",
+      "title": "US v Rahimi 2024"
+    },
+    {
+      "event_id": "DEV06",
+      "split": "dev",
+      "domain": "legal",
+      "title": "Finch v Surrey 2024"
+    },
+    {
+      "event_id": "EVAL06",
+      "split": "eval",
+      "domain": "legal",
+      "title": "Loper Bright v Raimondo 2024"
+    },
+    {
+      "event_id": "EVAL07",
+      "split": "eval",
+      "domain": "legal",
+      "title": "Trump v US immunity 2024"
+    },
+    {
+      "event_id": "EVAL08",
+      "split": "eval",
+      "domain": "legal",
+      "title": "ICJ SouthAfrica Israel May2024 measures"
+    },
+    {
+      "event_id": "EVAL09",
+      "split": "eval",
+      "domain": "legal",
+      "title": "ICJ July2024 occupied territory opinion"
+    },
+    {
+      "event_id": "EVAL10",
+      "split": "eval",
+      "domain": "legal",
+      "title": "ECHR KlimaSeniorinnen2024"
+    },
+    {
+      "event_id": "DEV07",
+      "split": "dev",
+      "domain": "science",
+      "title": "WHO alcohol substance report2024"
+    },
+    {
+      "event_id": "DEV08",
+      "split": "dev",
+      "domain": "science",
+      "title": "NASA Dragonfly confirmation2024"
+    },
+    {
+      "event_id": "EVAL11",
+      "split": "eval",
+      "domain": "science",
+      "title": "WHO mpox PHEIC August2024"
+    },
+    {
+      "event_id": "EVAL12",
+      "split": "eval",
+      "domain": "science",
+      "title": "WHO Chad HAT elimination2024"
+    },
+    {
+      "event_id": "EVAL13",
+      "split": "eval",
+      "domain": "science",
+      "title": "FDA Kisunla approval2024"
+    },
+    {
+      "event_id": "EVAL14",
+      "split": "eval",
+      "domain": "science",
+      "title": "FDA Cobenfy approval2024"
+    },
+    {
+      "event_id": "EVAL15",
+      "split": "eval",
+      "domain": "science",
+      "title": "NASA Webb Horsehead2024"
+    },
+    {
+      "event_id": "EVAL16",
+      "split": "eval",
+      "domain": "science",
+      "title": "WMO StateClimate2023 release2024"
+    }
+  ]
+}

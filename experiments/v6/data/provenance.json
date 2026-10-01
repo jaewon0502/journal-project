@@ -1,0 +1,110 @@
+{
+  "artifact_kind": "source artifact hash index; originals withheld",
+  "note": "Paths are logical source artifact names, not links to supplied files. Hashes attest identity only, not validation or availability.",
+  "records": [
+    {
+      "source_artifact": "registry.json",
+      "sha256": "ffa64ef2ffdb82a1ccbdd226c14c0f48dc136989d832f9656407658019796d7f"
+    },
+    {
+      "source_artifact": "sources/economy-manifest.json",
+      "sha256": "755ce70d3b0b724ffd56e2b4c5f9132c1573ab24d5fe96b9edbb6c7b13c42065"
+    },
+    {
+      "source_artifact": "sources/legal-manifest.json",
+      "sha256": "5a3de0a5ffaa9c8bd8e7f875838edb9be4c899c6fe74fc02a89f0b23b57d8e27"
+    },
+    {
+      "source_artifact": "sources/science-manifest.json",
+      "sha256": "67e3e66843d1c81c80ef220bb0e2d01652c59cf4dcdf1b4213f039d214f437ff"
+    },
+    {
+      "source_artifact": "runs/dev/A0.raw.json",
+      "sha256": "61ea0963f1f11532ae19a60537a0878463b645989741493499c79c9606785fc8"
+    },
+    {
+      "source_artifact": "runs/dev/A1.raw.json",
+      "sha256": "ae70774be1ebcfe301d8a20b28f969d0328a0bc1bfa2213e0c5d802f13ca235d"
+    },
+    {
+      "source_artifact": "runs/dev/D0.raw.json",
+      "sha256": "0c2378e1dac47425a1c70fcce72432f7a6ef1da30ee9b516f065e9b4f2605bcf"
+    },
+    {
+      "source_artifact": "runs/dev/D1.raw.json",
+      "sha256": "31affc9092c0b475f0d1f69cf439dc00f5b6f209262ee50b6ccb1a821f97d845"
+    },
+    {
+      "source_artifact": "runs/eval1/A0.raw.json",
+      "sha256": "c7a9634759a9648e4596ce32481e836979af311b68fa3c45360f56daba0408ef"
+    },
+    {
+      "source_artifact": "runs/eval1/A1.raw.json",
+      "sha256": "7ac9eecd7d1e51be70eb50f50c92dc7b988ad89d2819c3011bb8cf6d2db37647"
+    },
+    {
+      "source_artifact": "runs/eval1/C0.raw.json",
+      "sha256": "e470ffb37aac891e5abc72e326fe0a9d6efe2c4340b70c86d14a48c8e344b72b"
+    },
+    {
+      "source_artifact": "runs/eval1/D0.raw.json",
+      "sha256": "17788caaf1aa793eb3442afc63e1deb02829620dab20c6c2a78e4b57045bd702"
+    },
+    {
+      "source_artifact": "runs/eval1/D1.raw.json",
+      "sha256": "2a12d2b84771e74ab6c5990edccf39225affbe0aba60d1a2391535b83e1fa785"
+    },
+    {
+      "source_artifact": "runs/eval2/A0.raw.json",
+      "sha256": "3986b2d863148742b7cb707051697e1f6dcea96e64a522b89814b5437a3d3bfc"
+    },
+    {
+      "source_artifact": "runs/eval2/A1.raw.json",
+      "sha256": "eba83e9d0f2e39e88494edf63c6627fb86596d3f5be033715d6d5d2d8345c70d"
+    },
+    {
+      "source_artifact": "runs/eval2/C0.raw.json",
+      "sha256": "16d85e4595d6be32fe344ada376044d74adb220867e707047ff0412a5dd45ec1"
+    },
+    {
+      "source_artifact": "runs/eval2/D0.raw.json",
+      "sha256": "41e9939870a473d49c36b6cc44f8bd207b8f1ecdf5806ad74331f2b978651e4b"
+    },
+    {
+      "source_artifact": "runs/eval2/D1.raw.json",
+      "sha256": "6053ac06d721e598a1a13f87a20aa73afb52e25ef997f7d5fd4bffcf12690b30"
+    },
+    {
+      "source_artifact": "results/dev-qa-scored.json",
+      "sha256": "0e7bc8db60307cdc6f30c7e3c1d0e9dc31f7f178dd7de5afe5ec1344db527d18"
+    },
+    {
+      "source_artifact": "results/eval-qa-scored-final.json",
+      "sha256": "d3628b04a82bad31d0138677bd0957ea3f2a60190796859faf6dd1279ad98e0b"
+    },
+    {
+      "source_artifact": "judgments/dev/qa-blind.raw.json",
+      "sha256": "d3fb8737da6bf1079265fb8658001f99111c4ca1e0c398f3403c79940ba9011a"
+    },
+    {
+      "source_artifact": "judgments/eval1/qa-blind.raw.json",
+      "sha256": "840fe96d507ef8c9a91a5a9f441d778e1af3a66b8b2a2b7e8465f43f966d80e4"
+    },
+    {
+      "source_artifact": "judgments/eval2/qa-blind.raw.json",
+      "sha256": "3d9985a15cc05ac3a8b581572f8a2bfeef760ce747a629a0f4ccc28a7ef8334c"
+    },
+    {
+      "source_artifact": "results/dev-decision-table.json",
+      "sha256": "2541a47f3710d9ddc257349282972ffeeeee95286fef98b08057c9e0decde9df"
+    },
+    {
+      "source_artifact": "results/eval-inspectors-final.json",
+      "sha256": "b693bb7554a47958cab8892793e1b8c417e9fa5241f0cac0ee9329deac8c0ab9"
+    },
+    {
+      "source_artifact": "results/source-links.md",
+      "sha256": "e52482536ed87722c09ecc52f782eee5db5d7a4436eaaeb513aae47d91c34763"
+    }
+  ]
+}

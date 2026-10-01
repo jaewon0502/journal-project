@@ -1,0 +1,89 @@
+{
+  "scope": "new_blind_repair_evaluation_not_replacement_for_original_scores",
+  "rows": [
+    {
+      "run_id": "EVAL03-D-v2",
+      "supported": 38,
+      "verifiable": 39,
+      "core_preserved": 4,
+      "core_total": 8,
+      "major": 4,
+      "characters": 880,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 1.0,
+      "rubric_gate_pass": false,
+      "all_core_and_support_pass": false
+    },
+    {
+      "run_id": "EVAL03-Full",
+      "supported": 37,
+      "verifiable": 37,
+      "core_preserved": 7,
+      "core_total": 8,
+      "major": 1,
+      "characters": 821,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 0.44562022339800117,
+      "rubric_gate_pass": false,
+      "all_core_and_support_pass": false
+    },
+    {
+      "run_id": "EVAL03-Patch",
+      "supported": 39,
+      "verifiable": 39,
+      "core_preserved": 8,
+      "core_total": 8,
+      "major": 0,
+      "characters": 876,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 0.5466970387243736,
+      "rubric_gate_pass": true,
+      "all_core_and_support_pass": true
+    },
+    {
+      "run_id": "EVAL05-D-v2",
+      "supported": 38,
+      "verifiable": 38,
+      "core_preserved": 4,
+      "core_total": 9,
+      "major": 2,
+      "characters": 879,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 1.0,
+      "rubric_gate_pass": false,
+      "all_core_and_support_pass": false
+    },
+    {
+      "run_id": "EVAL05-Full",
+      "supported": 37,
+      "verifiable": 37,
+      "core_preserved": 9,
+      "core_total": 9,
+      "major": 0,
+      "characters": 805,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 0.501187648456057,
+      "rubric_gate_pass": true,
+      "all_core_and_support_pass": true
+    },
+    {
+      "run_id": "EVAL05-Patch",
+      "supported": 39,
+      "verifiable": 39,
+      "core_preserved": 9,
+      "core_total": 9,
+      "major": 0,
+      "characters": 836,
+      "length_ok": true,
+      "normal_overediting": [],
+      "matched_character_ratio": 0.5807580174927114,
+      "rubric_gate_pass": true,
+      "all_core_and_support_pass": true
+    }
+  ]
+}

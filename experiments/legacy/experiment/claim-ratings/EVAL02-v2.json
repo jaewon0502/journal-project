@@ -1,0 +1,1862 @@
+{
+  "case_id": "EVAL02",
+  "outputs": [
+    {
+      "run_id": "EVAL02-B-v2",
+      "claims": [
+        {
+          "id": "S1C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S1C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3"
+            }
+          ]
+        },
+        {
+          "id": "S2C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S3C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S3C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S3C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6-L7"
+            }
+          ]
+        },
+        {
+          "id": "S4C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L24-L30"
+            }
+          ]
+        },
+        {
+          "id": "S5C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S5C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S6C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6-L7"
+            }
+          ]
+        },
+        {
+          "id": "S6C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S7C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S7C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S8C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S8C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S8C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S9C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S9C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S9C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S10C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S10C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S10C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S11C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S11C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S11C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S11C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S11C5",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L58"
+            }
+          ]
+        },
+        {
+          "id": "S12C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S12C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S13C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S13C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S13C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S13C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        }
+      ],
+      "core": [
+        {
+          "id": "F1",
+          "status": "preserved"
+        },
+        {
+          "id": "F2",
+          "status": "partial"
+        },
+        {
+          "id": "F3",
+          "status": "omitted"
+        },
+        {
+          "id": "F4",
+          "status": "preserved"
+        },
+        {
+          "id": "F5",
+          "status": "omitted"
+        },
+        {
+          "id": "F6",
+          "status": "omitted"
+        },
+        {
+          "id": "F7",
+          "status": "omitted"
+        },
+        {
+          "id": "F8",
+          "status": "omitted"
+        },
+        {
+          "id": "F9",
+          "status": "omitted"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "status": "answered"
+        },
+        {
+          "id": "Q2",
+          "status": "partial"
+        },
+        {
+          "id": "Q3",
+          "status": "partial"
+        },
+        {
+          "id": "Q4",
+          "status": "unanswered"
+        },
+        {
+          "id": "Q5",
+          "status": "unanswered"
+        }
+      ]
+    },
+    {
+      "run_id": "EVAL02-D-v2",
+      "claims": [
+        {
+          "id": "S1C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S1C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3"
+            }
+          ]
+        },
+        {
+          "id": "S1C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC052",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S3C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L24-L30"
+            }
+          ]
+        },
+        {
+          "id": "S4C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L21-L26"
+            }
+          ]
+        },
+        {
+          "id": "S4C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L276-L279"
+            }
+          ]
+        },
+        {
+          "id": "S4C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L281-L282"
+            }
+          ]
+        },
+        {
+          "id": "S4C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L284-L285"
+            }
+          ]
+        },
+        {
+          "id": "S5C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L29-L30"
+            }
+          ]
+        },
+        {
+          "id": "S5C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L29-L30"
+            }
+          ]
+        },
+        {
+          "id": "S6C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S6C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S6C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S7C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L32-L37"
+            }
+          ]
+        },
+        {
+          "id": "S8C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L345-L347"
+            }
+          ]
+        },
+        {
+          "id": "S8C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L349-L350"
+            }
+          ]
+        },
+        {
+          "id": "S8C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L355-L357"
+            }
+          ]
+        },
+        {
+          "id": "S9C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L50"
+            }
+          ]
+        },
+        {
+          "id": "S9C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L52"
+            }
+          ]
+        },
+        {
+          "id": "S10C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L239-L245"
+            }
+          ]
+        },
+        {
+          "id": "S10C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L249-L255"
+            }
+          ]
+        },
+        {
+          "id": "S10C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S11C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L5"
+            }
+          ]
+        },
+        {
+          "id": "S11C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S11C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S11C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S11C5",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S11C6",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S12C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S12C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L367-L373"
+            }
+          ]
+        },
+        {
+          "id": "S12C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L371-L373"
+            }
+          ]
+        },
+        {
+          "id": "S12C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S12C5",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S12C6",
+          "label": "partial",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S13C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L3"
+            }
+          ]
+        },
+        {
+          "id": "S13C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S13C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S13C4",
+          "label": "partial",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S14C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S14C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L63"
+            }
+          ]
+        }
+      ],
+      "core": [
+        {
+          "id": "F1",
+          "status": "preserved"
+        },
+        {
+          "id": "F2",
+          "status": "preserved"
+        },
+        {
+          "id": "F3",
+          "status": "preserved"
+        },
+        {
+          "id": "F4",
+          "status": "preserved"
+        },
+        {
+          "id": "F5",
+          "status": "preserved"
+        },
+        {
+          "id": "F6",
+          "status": "preserved"
+        },
+        {
+          "id": "F7",
+          "status": "partial"
+        },
+        {
+          "id": "F8",
+          "status": "preserved"
+        },
+        {
+          "id": "F9",
+          "status": "partial"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "status": "answered"
+        },
+        {
+          "id": "Q2",
+          "status": "answered"
+        },
+        {
+          "id": "Q3",
+          "status": "answered"
+        },
+        {
+          "id": "Q4",
+          "status": "partial"
+        },
+        {
+          "id": "Q5",
+          "status": "partial"
+        }
+      ]
+    },
+    {
+      "run_id": "EVAL02-C-v2",
+      "claims": [
+        {
+          "id": "S1C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S1C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3"
+            }
+          ]
+        },
+        {
+          "id": "S1C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L24-L30"
+            }
+          ]
+        },
+        {
+          "id": "S3C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L21-L26"
+            }
+          ]
+        },
+        {
+          "id": "S3C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L29-L30"
+            }
+          ]
+        },
+        {
+          "id": "S3C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L29-L30"
+            }
+          ]
+        },
+        {
+          "id": "S4C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L21-L26"
+            }
+          ]
+        },
+        {
+          "id": "S4C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L276-L279"
+            }
+          ]
+        },
+        {
+          "id": "S4C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L281-L282"
+            }
+          ]
+        },
+        {
+          "id": "S4C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L284-L285"
+            }
+          ]
+        },
+        {
+          "id": "S5C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S5C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S6C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L32-L37"
+            }
+          ]
+        },
+        {
+          "id": "S7C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L345-L347"
+            }
+          ]
+        },
+        {
+          "id": "S7C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L349-L350"
+            }
+          ]
+        },
+        {
+          "id": "S7C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L355-L357"
+            }
+          ]
+        },
+        {
+          "id": "S8C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L50"
+            }
+          ]
+        },
+        {
+          "id": "S8C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L52"
+            }
+          ]
+        },
+        {
+          "id": "S9C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L249-L255"
+            }
+          ]
+        },
+        {
+          "id": "S9C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S10C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L5"
+            }
+          ]
+        },
+        {
+          "id": "S10C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L18-L45"
+            }
+          ]
+        },
+        {
+          "id": "S10C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S10C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L367-L373"
+            }
+          ]
+        },
+        {
+          "id": "S10C5",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L371-L373"
+            }
+          ]
+        },
+        {
+          "id": "S10C6",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S10C7",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S10C8",
+          "label": "partial",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S11C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L253-L255"
+            }
+          ]
+        },
+        {
+          "id": "S11C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S11C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S11C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L50"
+            }
+          ]
+        },
+        {
+          "id": "S11C5",
+          "label": "partial",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC056",
+              "line_range": "L4"
+            },
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L58"
+            }
+          ]
+        }
+      ],
+      "core": [
+        {
+          "id": "F1",
+          "status": "preserved"
+        },
+        {
+          "id": "F2",
+          "status": "preserved"
+        },
+        {
+          "id": "F3",
+          "status": "preserved"
+        },
+        {
+          "id": "F4",
+          "status": "partial"
+        },
+        {
+          "id": "F5",
+          "status": "preserved"
+        },
+        {
+          "id": "F6",
+          "status": "preserved"
+        },
+        {
+          "id": "F7",
+          "status": "preserved"
+        },
+        {
+          "id": "F8",
+          "status": "preserved"
+        },
+        {
+          "id": "F9",
+          "status": "partial"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "status": "answered"
+        },
+        {
+          "id": "Q2",
+          "status": "answered"
+        },
+        {
+          "id": "Q3",
+          "status": "partial"
+        },
+        {
+          "id": "Q4",
+          "status": "answered"
+        },
+        {
+          "id": "Q5",
+          "status": "partial"
+        }
+      ]
+    },
+    {
+      "run_id": "EVAL02-A-v2",
+      "claims": [
+        {
+          "id": "S1C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S1C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3"
+            }
+          ]
+        },
+        {
+          "id": "S2C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S2C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L4"
+            }
+          ]
+        },
+        {
+          "id": "S3C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S3C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6"
+            }
+          ]
+        },
+        {
+          "id": "S3C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6-L7"
+            }
+          ]
+        },
+        {
+          "id": "S4C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L24-L30"
+            }
+          ]
+        },
+        {
+          "id": "S5C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S5C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S6C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L6-L7"
+            }
+          ]
+        },
+        {
+          "id": "S6C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S7C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S7C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L7"
+            }
+          ]
+        },
+        {
+          "id": "S8C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S9C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S9C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8"
+            }
+          ]
+        },
+        {
+          "id": "S10C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S10C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S11C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L9"
+            }
+          ]
+        },
+        {
+          "id": "S11C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L8-L9"
+            }
+          ]
+        },
+        {
+          "id": "S12C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L3-L4"
+            }
+          ]
+        },
+        {
+          "id": "S12C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S12C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S12C4",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S12C5",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S12C6",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC055",
+              "line_range": "L48-L58"
+            }
+          ]
+        },
+        {
+          "id": "S13C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S13C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S14C1",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L10"
+            }
+          ]
+        },
+        {
+          "id": "S14C2",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        },
+        {
+          "id": "S14C3",
+          "label": "supported",
+          "verifiable": true,
+          "evidence": [
+            {
+              "source_id": "SRC050",
+              "line_range": "L1-L10"
+            }
+          ]
+        }
+      ],
+      "core": [
+        {
+          "id": "F1",
+          "status": "preserved"
+        },
+        {
+          "id": "F2",
+          "status": "partial"
+        },
+        {
+          "id": "F3",
+          "status": "omitted"
+        },
+        {
+          "id": "F4",
+          "status": "preserved"
+        },
+        {
+          "id": "F5",
+          "status": "omitted"
+        },
+        {
+          "id": "F6",
+          "status": "omitted"
+        },
+        {
+          "id": "F7",
+          "status": "omitted"
+        },
+        {
+          "id": "F8",
+          "status": "omitted"
+        },
+        {
+          "id": "F9",
+          "status": "omitted"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "status": "answered"
+        },
+        {
+          "id": "Q2",
+          "status": "partial"
+        },
+        {
+          "id": "Q3",
+          "status": "partial"
+        },
+        {
+          "id": "Q4",
+          "status": "unanswered"
+        },
+        {
+          "id": "Q5",
+          "status": "unanswered"
+        }
+      ]
+    }
+  ]
+}

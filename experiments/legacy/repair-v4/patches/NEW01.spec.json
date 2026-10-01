@@ -1,0 +1,38 @@
+{
+  "case": "NEW01",
+  "source": "../outputs/NEW01-Baseline.md",
+  "output": "../outputs/NEW01-Patched.md",
+  "source_sha256": "6fd9f4793e537f9d1cb0317ed97d14f82226c3cc0b04b7aee1d8382a879e3c74",
+  "evidence_inputs": [],
+  "edits": [
+    {
+      "id": "NEW01-E01",
+      "old": "[SRC062:L41]",
+      "new": "[SRC062:L41] 나머지 청구와 공동심판참가·보조참가 신청은 각하됐다.[SRC062:L42]",
+      "reason": "최종주문을 서술하면서 빠진 나머지 청구와 두 참가신청의 각하를 보충. 기각과 각하를 분리한다.",
+      "evidence": [
+        "SRC062:L2",
+        "SRC062:L42"
+      ],
+      "protection_ids": [
+        "NEW01-P01"
+      ]
+    },
+    {
+      "id": "NEW01-E02",
+      "old": "감축경로·수단 자체의 위반",
+      "new": "감축경로·수단 자체의 과소보호금지원칙 위반",
+      "reason": "모든 위법 여부를 포괄하는 것으로 읽힐 수 있는 위반 표현을 양측 공통 판단의 실제 심사기준인 과소보호금지원칙으로 한정.",
+      "evidence": [
+        "SRC062:L78",
+        "SRC062:L82",
+        "SRC062:L95",
+        "SRC062:L96"
+      ],
+      "protection_ids": [
+        "NEW01-P09"
+      ]
+    }
+  ],
+  "public_note": "Sanitized fixture replay only. Original evidence-input hash checks cannot be rerun without private source packets."
+}

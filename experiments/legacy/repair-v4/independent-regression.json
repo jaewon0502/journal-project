@@ -1,0 +1,10 @@
+{
+  "overall": {
+    "patch_regression": "no_observed_material_regression",
+    "new_attribution_error": "none_observed",
+    "whole_meaning_preservation": "not_established",
+    "residual_omissions": "present",
+    "publication_readiness": "hold",
+    "do_not_modify_after_audit": true
+  }
+}

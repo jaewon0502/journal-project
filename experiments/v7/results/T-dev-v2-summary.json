@@ -1,0 +1,992 @@
+{
+  "assigned_case_denominator": 6,
+  "assigned_method_outputs": 18,
+  "cost": null,
+  "duplicate_judgment_ids": [],
+  "event_denominator": 2,
+  "events": [
+    {
+      "event_id": "DEV01",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-9390e507d2c9df8b",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+            "original_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The change correctly replaces final-confirmed status with flash-estimate status and preserves the period, geography, rates and component comparison. The repeated rate comparison is redundant but supported and does not change the answer.",
+              "opaque_output_id": "a9b720b4b1789a49e4cd75f172f584fbd107693874f74c025da6aa15bf456d42",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV01-a1af97ba17f0878f",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "a9b720b4b1789a49e4cd75f172f584fbd107693874f74c025da6aa15bf456d42",
+            "original_sha256": "a1af97ba17f0878f79e9ac745eb52944810702ded764903ce8c2b6316d461224",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_extracted",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "ccf93048dee58a245d5d41baa71d965420cdc9b91deac0bfc36917d187465e13",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-a5c960f3363c419a",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+            "original_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-9390e507d2c9df8b",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+            "original_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The change correctly replaces final-confirmed status with flash-estimate status and preserves the period, geography, rates and component comparison.",
+              "opaque_output_id": "30b9d69022d4f505f71919a1a1c0576656e78e22a47cda51305981c0bbc62417",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV01-a1af97ba17f0878f",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "30b9d69022d4f505f71919a1a1c0576656e78e22a47cda51305981c0bbc62417",
+            "original_sha256": "a1af97ba17f0878f79e9ac745eb52944810702ded764903ce8c2b6316d461224",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-a5c960f3363c419a",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+            "original_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-9390e507d2c9df8b",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9f97673346490aacab8006bb22293f90fd58ccd6fe04910d23102567289f6977",
+            "original_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "9390e507d2c9df8bc2f48fac7dce3b7d4d08c5e2790cec18e3514b69864d3a43",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The change correctly replaces final-confirmed status with flash-estimate status and preserves the period, geography, rates and component comparison. The effective-time wording is awkward but clearly identifies the June reference period and does not introduce a factual change.",
+              "opaque_output_id": "c437f33c9cebc813ac9d9cc5a91134ffd7afe36731b77954878d134414b6b9d8",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV01-a1af97ba17f0878f",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "c437f33c9cebc813ac9d9cc5a91134ffd7afe36731b77954878d134414b6b9d8",
+            "original_sha256": "a1af97ba17f0878f79e9ac745eb52944810702ded764903ce8c2b6316d461224",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_rendered",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "52c4002fb867b181d8e8de00dd027c20b8a5cd1738e57232527165fde04840e1",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary.",
+              "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Declared source text lines 159–185; the date, heading and complete two-paragraph overview."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV01-a5c960f3363c419a",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "3330622eac9fa80940ba098ba57155b9501d3f0b00237a30d9a81184cb141779",
+            "original_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "a5c960f3363c419ae608dbe7985d9091b3808e29c4d020314e7c3ffafb533d27",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "DEV02",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-899bc4a29dc13823",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+            "original_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-ce469d2484cf0247",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+            "original_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The changed protection statement repairs the reversed conclusion; the other question-relevant claims remain supported. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "cfd0a66e0fcca426c55b450e6364341e7fa09c71150bfe6f0263c0a49cd1bf94",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV02-f831c94465481e76",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "cfd0a66e0fcca426c55b450e6364341e7fa09c71150bfe6f0263c0a49cd1bf94",
+            "original_sha256": "f831c94465481e76513d160211c0a996d034f4bb8435ce300460014f92b25b46",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_extracted",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "83222d406ec330f2a5c29ba4bd45a2284d715e53a70f7d005e9d96459ee85e02",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-899bc4a29dc13823",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+            "original_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-ce469d2484cf0247",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+            "original_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The changed protection statement repairs the reversed conclusion; the other question-relevant claims remain supported. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "916f47f6a677b234207c42f0e1d7c66c9c86f5ea49bb11c410344cf45dc70293",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV02-f831c94465481e76",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "916f47f6a677b234207c42f0e1d7c66c9c86f5ea49bb11c410344cf45dc70293",
+            "original_sha256": "f831c94465481e76513d160211c0a996d034f4bb8435ce300460014f92b25b46",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "0b138eba63a6959f074b7501606408a33c170e4ca9d480090c18b14456243c65",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-899bc4a29dc13823",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "17d0157bf831aa0ff026a5b6f957a4deef60fc46230f4618e2f3dc8b65bd92fb",
+            "original_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "899bc4a29dc13823e617102334dcd9cfa4092d4d8fae4a4c8652eec6b8610245",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "Original and revised texts are identical and source-supported; no repair was necessary. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": true,
+            "case_id": "DEV02-ce469d2484cf0247",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "90cd8a176233ca5cb24674fce4d4e9c4ec4223a98152f997ff57f894203e1130",
+            "original_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "ce469d2484cf0247bc63a4872ed7c54b9bc99c976dce985a455328f9d83a954e",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "necessary_question_meaning_preserved": "yes",
+              "new_factual_errors": [],
+              "notes": "The changed protection statement repairs the reversed conclusion; the other question-relevant claims remain supported. Both versions leave the specific GRC-holder exclusion implicit in the biological reading; the revision does not delete question-relevant information.",
+              "opaque_output_id": "e033a728ecadca9efdd85b55f8e3b19aedcfa0c370b32e423c58fe2079b49c7d",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "completed": false,
+                "scope": "Question-scoped semantic verification; no assertion of an exhaustive whole-document audit."
+              },
+              "source_quotes_withheld": true,
+              "source_read_scope": [
+                "Case-page text in input, official press-summary text in input, judgment paragraphs 248–264 directly from declared text file, and paragraphs 265–268 in input."
+              ]
+            },
+            "byte_preserved": false,
+            "case_id": "DEV02-f831c94465481e76",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "e033a728ecadca9efdd85b55f8e3b19aedcfa0c370b32e423c58fe2079b49c7d",
+            "original_sha256": "f831c94465481e76513d160211c0a996d034f4bb8435ce300460014f92b25b46",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_rendered",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "ff652cbf6c07c5cbddac07675e83c84747bd005f7709c3f7b4970387dd88604e",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    }
+  ],
+  "method_count": 3,
+  "missing_judgment_ids": [],
+  "model_invocations": null,
+  "note": "One judgment may map to multiple methods; unique outputs are not independent model calls or independent event samples.",
+  "outcome_model_raw_files": 1,
+  "phase": "dev-v2",
+  "source_preflight_overrides_model_judgment": false,
+  "statistical_superiority": null,
+  "unexpected_judgment_ids": [],
+  "unique_blind_inputs": 10,
+  "unique_judged_outputs": 10,
+  "public_export": {
+    "derived": true,
+    "original_summary_sha256": "3428ab90bd4253e5531f7d0b627a32b7cf2d372e8689db09467acb3a49fe837f",
+    "changes": [
+      "private provenance paths removed",
+      "source quotations removed from evidence",
+      "source file paths replaced by public source IDs"
+    ],
+    "semantic_rejudgment": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "case": "EVAL05",
+  "source": "../../repair-v3/outputs/EVAL05-Guarded.md",
+  "output": "../outputs/EVAL05-Patched.md",
+  "source_sha256": "dae4bf7bba41b35f84de03a5a16fd3f8225251348bada7943b00606d03331c27",
+  "evidence_inputs": [],
+  "edits": [
+    {
+      "id": "april_and_minimum",
+      "old": "증가폭 축소는 전년동월 취업자 수 감소가 아니다.[SRC037:L5-L6]",
+      "new": "전년동월 대비 증가폭은 4월 26만1천명에서 5월 8만명으로 줄어 39개월 만에 최소였지만, 전년동월 취업자 수 감소는 아니다.[SRC037:L2-L6]",
+      "evidence": "SRC037:L2-L6"
+    },
+    {
+      "id": "youth_duration_and_extreme",
+      "old": "청년(15~29세) 취업자는 전년동월보다 17만3천명 줄었다.[SRC037:L12-L12]",
+      "new": "청년(15~29세) 취업자는 전년동월보다 17만3천명 줄어 19개월 연속 감소했으며, 감소폭은 2021년 1월 이후 최대였다.[SRC037:L12-L14]",
+      "evidence": "SRC037:L12-L14"
+    }
+  ],
+  "public_note": "Sanitized fixture replay only. Original evidence-input hash checks cannot be rerun without private source packets."
+}

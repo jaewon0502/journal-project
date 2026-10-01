@@ -1,0 +1,28 @@
+{
+  "derived": true,
+  "original_raw_sha256": "511ea2ac95f5e5cbcbc44c8ffd0512b6a9893274ebff3fe9b5b9629a035b494c",
+  "synthetic_diagnostic": true,
+  "source_quotes_withheld": true,
+  "cases": [
+    {
+      "item_id": "5c8428ff82b17005",
+      "case_id": "DEV01-a1af97ba17f0878f",
+      "factual_error_confirmed": "yes",
+      "span_approved": "yes",
+      "typed_eligible": "no",
+      "typed_ineligibility_reason": "The unchanged status slot is 'final reading', directly contradicting the source's 'flash estimate'. The exact temporal_status template would repeat the original factual error. Slots are not approved merely because the evidence rationale describes a flash estimate.",
+      "scoped_accept": "reject",
+      "whole_source_audit": "incomplete"
+    },
+    {
+      "item_id": "3e234fca2fcb77cc",
+      "case_id": "DEV02-f831c94465481e76",
+      "factual_error_confirmed": "yes",
+      "span_approved": "yes",
+      "typed_eligible": "no",
+      "typed_ineligibility_reason": "The unchanged protection_status slot is 'removed', directly contradicting the judgment and explanatory summary. The exact protection_status template would repeat the original factual error. The slot is untrusted despite its evidence rationale describing retained protection.",
+      "scoped_accept": "reject",
+      "whole_source_audit": "incomplete"
+    }
+  ]
+}
