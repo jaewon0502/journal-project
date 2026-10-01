@@ -1,0 +1,47 @@
+{
+  "derived": true,
+  "original_raw_sha256": "60b1223b76b763ae056cc3fc369d6e667645f648e0dd9d18e8edff88417cc5e4",
+  "note": "Actual model-generated patch fields only; source quotations and ancillary evidence omitted. before is a synthetic erroneous clause. Whole-source audit is author self-report, not certification.",
+  "cases": [
+    {
+      "case_id": "EVAL01-6672d63c09d606a9",
+      "decision": "patch",
+      "before": "Rising investment further deepened the GDP decline",
+      "end": 245,
+      "start": 195,
+      "after": "Rising investment partly offset the GDP decline",
+      "scoped_accept": "accept",
+      "whole_source_audit": "incomplete"
+    },
+    {
+      "case_id": "EVAL03-5a2afd5573979387",
+      "decision": "patch",
+      "before": "A country need not demonstrate capacity to prevent transmission from becoming re-established.",
+      "end": 313,
+      "start": 220,
+      "after": "A country must demonstrate capacity to prevent transmission from becoming re-established.",
+      "scoped_accept": "accept",
+      "whole_source_audit": "complete"
+    },
+    {
+      "case_id": "EVAL02-6f9e7b654dc7b982",
+      "decision": "patch",
+      "before": "Science-data downlink from this pass had already been completed",
+      "end": 267,
+      "start": 204,
+      "after": "Science-data downlink from this pass was still pending",
+      "scoped_accept": "accept",
+      "whole_source_audit": "incomplete"
+    },
+    {
+      "case_id": "EVAL04-def6f04355f784e8",
+      "decision": "patch",
+      "before": "The announcement placed the first cosmology-data release before this preview, in October 2026.",
+      "end": 311,
+      "start": 217,
+      "after": "The announcement placed the first cosmology-data release after this preview, in October 2026.",
+      "scoped_accept": "accept",
+      "whole_source_audit": "incomplete"
+    }
+  ]
+}

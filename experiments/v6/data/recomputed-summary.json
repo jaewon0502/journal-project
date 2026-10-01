@@ -1,0 +1,109 @@
+{
+  "performance_calls": 14,
+  "event_condition_records": 112,
+  "answers": 192,
+  "decisions": 165,
+  "missing_candidate_slots": 27,
+  "qa": {
+    "dev_A0": {
+      "event_count": 8,
+      "obligation_denominator": 48,
+      "obligation_counts": {
+        "preserved": 46,
+        "omitted": 1,
+        "partial": 1
+      },
+      "claim_counts": {
+        "supported": 94,
+        "partial": 1,
+        "unverifiable": 1
+      },
+      "claim_denominator": 96,
+      "severe_unresolved_events": 0,
+      "severe_omissions": 1,
+      "severe_additions": 0
+    },
+    "dev_A1": {
+      "event_count": 8,
+      "obligation_denominator": 48,
+      "obligation_counts": {
+        "preserved": 46,
+        "omitted": 1,
+        "partial": 1
+      },
+      "claim_counts": {
+        "supported": 85,
+        "partial": 1,
+        "unverifiable": 1
+      },
+      "claim_denominator": 87,
+      "severe_unresolved_events": 0,
+      "severe_omissions": 1,
+      "severe_additions": 1
+    },
+    "eval_A0": {
+      "event_count": 16,
+      "obligation_denominator": 78,
+      "obligation_counts": {
+        "preserved": 66,
+        "unverifiable": 12
+      },
+      "claim_counts": {
+        "supported": 124,
+        "partial": 1
+      },
+      "claim_denominator": 125,
+      "severe_unresolved_events": 3,
+      "severe_omissions": 0,
+      "severe_additions": 0
+    },
+    "eval_A1": {
+      "event_count": 16,
+      "obligation_denominator": 78,
+      "obligation_counts": {
+        "preserved": 65,
+        "partial": 1,
+        "unverifiable": 12
+      },
+      "claim_counts": {
+        "supported": 110,
+        "partial": 1
+      },
+      "claim_denominator": 111,
+      "severe_unresolved_events": 3,
+      "severe_omissions": 0,
+      "severe_additions": 0
+    }
+  },
+  "eval_controls": {
+    "C0": {
+      "decisions": {
+        "abstain": 26,
+        "reject": 13
+      },
+      "missing": 9,
+      "ineligible": 1,
+      "eligible_mutations": 12
+    },
+    "D0": {
+      "decisions": {
+        "abstain": 24,
+        "reject": 13,
+        "accept": 2
+      },
+      "missing": 9,
+      "ineligible": 1,
+      "eligible_mutations": 12
+    },
+    "D1": {
+      "decisions": {
+        "abstain": 24,
+        "reject": 13,
+        "accept": 2
+      },
+      "missing": 9,
+      "ineligible": 1,
+      "eligible_mutations": 12
+    }
+  }
+}

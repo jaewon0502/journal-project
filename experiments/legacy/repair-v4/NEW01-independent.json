@@ -1,0 +1,38 @@
+{
+  "case_id": "V4-NEW01",
+  "decision": "hold",
+  "decision_reason": [
+    "잔존 문장7의 공백 인정 표현 중의성",
+    "표 보호문구 및 본문에 없는 L92 추가 반론의 기능상 중요도 미해결"
+  ],
+  "length_rule": {
+    "method": "Python len Unicode code points, 공백·줄바꿈·인용표시 전부 포함",
+    "limit": 900,
+    "before": 850,
+    "after": 896,
+    "before_pass": true,
+    "after_pass": true,
+    "after_margin": 4
+  },
+  "before_after_regression": {
+    "added": [
+      "L42에 근거한 각하 주문 문장"
+    ],
+    "narrowed": [
+      "감축경로·수단 자체의 위반 → 과소보호금지원칙 위반"
+    ],
+    "deleted_propositions": [],
+    "introduced_confirmed_factual_errors": [],
+    "new_semantic_regression_detected": false,
+    "residual_ambiguities": [
+      "before-07 / after-07 공백 인정의 다의성"
+    ],
+    "residual_rationale_omission": [
+      "L92 기각4인의 별도 가정적 반론 미수록"
+    ],
+    "attribution": "헌재 최종주문·4인·5인 귀속 유지",
+    "conditions": "40%의 수치만으로 판단 한계, 2031~2049 공백, 법률 계속적용 조건 유지; 5인 제안의 시행시점 조건은 압축",
+    "temporal_context": "결정일·당시 시한·후속성과 미확인 유지",
+    "confirmed_error_vs_ambiguity": "새 확정 사실오류 미검출은 완전성 통과와 다름. 남은 중의성과 반론 생략 중요도를 이유로 hold."
+  }
+}

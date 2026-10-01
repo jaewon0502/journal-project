@@ -1,0 +1,350 @@
+{
+  "artifact_kind": "sanitized derivative; not original bytes",
+  "snapshot_date": "2026-10-01",
+  "records": [
+    {
+      "event_id": "DEV01",
+      "target_id": "DEV01-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.bea.gov/news/2024/gross-domestic-product-second-quarter-2024-advance-estimate"
+    },
+    {
+      "event_id": "DEV01",
+      "target_id": "DEV01-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.bea.gov/sites/default/files/2024-07/gdp2q24-adv.pdf"
+    },
+    {
+      "event_id": "DEV02",
+      "target_id": "DEV02-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.census.gov/newsroom/press-releases/2024/income-poverty-health-insurance-coverage.html"
+    },
+    {
+      "event_id": "DEV02",
+      "target_id": "DEV02-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www2.census.gov/library/publications/2024/demo/p60-282.pdf"
+    },
+    {
+      "event_id": "DEV03",
+      "target_id": "DEV03-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/september2024"
+    },
+    {
+      "event_id": "DEV03",
+      "target_id": "DEV03-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.ons.gov.uk/download/table?format=csv&uri=/economy/inflationandpriceindices/bulletins/consumerpriceinflation/september2024/0ea0939a.json"
+    },
+    {
+      "event_id": "DEV04",
+      "target_id": "DEV04-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/602us1r35_h3ci.pdf"
+    },
+    {
+      "event_id": "DEV04",
+      "target_id": "DEV04-official_summary",
+      "role": "official_summary",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/602us1r35_h3ci.pdf"
+    },
+    {
+      "event_id": "DEV05",
+      "target_id": "DEV05-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/602us1r43_p860.pdf"
+    },
+    {
+      "event_id": "DEV05",
+      "target_id": "DEV05-official_summary",
+      "role": "official_summary",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/602us1r43_p860.pdf"
+    },
+    {
+      "event_id": "DEV06",
+      "target_id": "DEV06-official_summary",
+      "role": "official_summary",
+      "status": "acquired",
+      "url": "https://supremecourt.uk/uploads/uksc_2022_0064_press_summary_0af73e4878.pdf"
+    },
+    {
+      "event_id": "DEV06",
+      "target_id": "DEV06-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "acquired",
+      "url": "https://supremecourt.uk/uploads/uksc_2022_0064_judgment_c3d44bb244.pdf"
+    },
+    {
+      "event_id": "DEV07",
+      "target_id": "DEV07-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://www.who.int/news/item/25-06-2024-over-3-million-annual-deaths-due-to-alcohol-and-drug-use-majority-among-men"
+    },
+    {
+      "event_id": "DEV07",
+      "target_id": "DEV07-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://iris.who.int/server/api/core/bitstreams/32b161e9-5683-40f5-a1c3-1c92a76d5cda/content"
+    },
+    {
+      "event_id": "DEV08",
+      "target_id": "DEV08-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://science.nasa.gov/missions/dragonfly/nasas-dragonfly-rotorcraft-mission-to-saturns-moon-titan-confirmed/"
+    },
+    {
+      "event_id": "DEV08",
+      "target_id": "DEV08-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://science.nasa.gov/wp-content/uploads/2024/04/dragonfly-inflight.jpg"
+    },
+    {
+      "event_id": "EVAL01",
+      "target_id": "EVAL01-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.bok.or.kr/portal/cmmn/file/fileDown.do?menuNo=200755&atchFileId=2eb89fdb3f60425b83403c36d4566043&fileSn=2"
+    },
+    {
+      "event_id": "EVAL01",
+      "target_id": "EVAL01-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.bok.or.kr/portal/cmmn/file/fileDown.do?menuNo=200755&atchFileId=2eb89fdb3f60425b83403c36d4566043&fileSn=6"
+    },
+    {
+      "event_id": "EVAL01",
+      "target_id": "EVAL01-conference",
+      "role": "conference",
+      "status": "failed",
+      "url": null,
+      "public_redaction_note": "Opaque shortened URL omitted; failed-target status retained. Destination not independently verified."
+    },
+    {
+      "event_id": "EVAL02",
+      "target_id": "EVAL02-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.bls.gov/news.release/archives/empsit_10042024.htm"
+    },
+    {
+      "event_id": "EVAL02",
+      "target_id": "EVAL02-attachment",
+      "role": "attachment",
+      "status": "unknown",
+      "url": null
+    },
+    {
+      "event_id": "EVAL03",
+      "target_id": "EVAL03-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.bea.gov/news/2024/personal-income-and-outlays-august-2024"
+    },
+    {
+      "event_id": "EVAL03",
+      "target_id": "EVAL03-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.bea.gov/sites/default/files/2024-09/pi0824.pdf"
+    },
+    {
+      "event_id": "EVAL04",
+      "target_id": "EVAL04-main",
+      "role": "main",
+      "status": "acquired",
+      "url": "https://www.imf.org/en/Publications/WEO/Issues/2024/10/22/world-economic-outlook-october-2024"
+    },
+    {
+      "event_id": "EVAL04",
+      "target_id": "EVAL04-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.imf.org/-/media/files/publications/weo/2024/october/english/text.pdf"
+    },
+    {
+      "event_id": "EVAL05",
+      "target_id": "EVAL05-main",
+      "role": "main",
+      "status": "partial",
+      "url": "https://www.oecd.org/en/publications/oecd-economic-outlook-volume-2024-issue-2_d8814e8b-en.html"
+    },
+    {
+      "event_id": "EVAL05",
+      "target_id": "EVAL05-attachment",
+      "role": "attachment",
+      "status": "acquired",
+      "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2024/12/oecd-economic-outlook-volume-2024-issue-2_67bb8fac/d8814e8b-en.pdf"
+    },
+    {
+      "event_id": "EVAL06",
+      "target_id": "EVAL06-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/603us1r54_o7jp.pdf"
+    },
+    {
+      "event_id": "EVAL06",
+      "target_id": "EVAL06-official_summary",
+      "role": "official_summary",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/603us1r54_o7jp.pdf"
+    },
+    {
+      "event_id": "EVAL07",
+      "target_id": "EVAL07-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/603us1r57_2dp3.pdf"
+    },
+    {
+      "event_id": "EVAL07",
+      "target_id": "EVAL07-official_summary",
+      "role": "official_summary",
+      "status": "acquired",
+      "url": "https://www.supremecourt.gov/opinions/23pdf/603us1r57_2dp3.pdf"
+    },
+    {
+      "event_id": "EVAL08",
+      "target_id": "EVAL08-official_summary",
+      "role": "official_summary",
+      "status": "failed",
+      "url": "https://www.icj-cij.org/sites/default/files/case-related/192/192-20240524-pre-01-00-en.pdf"
+    },
+    {
+      "event_id": "EVAL08",
+      "target_id": "EVAL08-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "failed",
+      "url": "https://www.icj-cij.org/sites/default/files/case-related/192/192-20240524-ord-01-00-en.pdf"
+    },
+    {
+      "event_id": "EVAL09",
+      "target_id": "EVAL09-official_summary",
+      "role": "official_summary",
+      "status": "failed",
+      "url": "https://www.icj-cij.org/sites/default/files/case-related/186/186-20240719-sum-01-00-en.pdf"
+    },
+    {
+      "event_id": "EVAL09",
+      "target_id": "EVAL09-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "failed",
+      "url": "https://www.icj-cij.org/sites/default/files/case-related/186/186-20240719-adv-01-00-en.pdf"
+    },
+    {
+      "event_id": "EVAL10",
+      "target_id": "EVAL10-official_summary",
+      "role": "official_summary",
+      "status": "failed",
+      "url": "https://hudoc.echr.coe.int/app/conversion/pdf/?library=ECHR&id=003-7919428-11026177&filename=Press-release.pdf"
+    },
+    {
+      "event_id": "EVAL10",
+      "target_id": "EVAL10-official_judgment_order_pdf",
+      "role": "official_judgment_order_pdf",
+      "status": "failed",
+      "url": "https://hudoc.echr.coe.int/app/conversion/pdf/?library=ECHR&id=001-233206&filename=Judgment.pdf"
+    },
+    {
+      "event_id": "EVAL11",
+      "target_id": "EVAL11-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://www.who.int/news/item/14-08-2024-who-director-general-declares-mpox-outbreak-a-public-health-emergency-of-international-concern"
+    },
+    {
+      "event_id": "EVAL11",
+      "target_id": "EVAL11-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://www.who.int/news/item/19-08-2024-first-meeting-of-the-international-health-regulations-%282005%29-emergency-committee-regarding-the-upsurge-of-mpox-2024"
+    },
+    {
+      "event_id": "EVAL12",
+      "target_id": "EVAL12-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://www.who.int/news/item/20-06-2024-chad-eliminates-human-african-trypanosomiasis-as-a-public-health-problem"
+    },
+    {
+      "event_id": "EVAL12",
+      "target_id": "EVAL12-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://iris.who.int/server/api/core/bitstreams/e0fcddd2-c06b-4ba4-8bfd-41235d75528e/content"
+    },
+    {
+      "event_id": "EVAL13",
+      "target_id": "EVAL13-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://www.fda.gov/drugs/news-events-human-drugs/fda-approves-treatment-adults-alzheimers-disease"
+    },
+    {
+      "event_id": "EVAL13",
+      "target_id": "EVAL13-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/761248s000lbl.pdf"
+    },
+    {
+      "event_id": "EVAL14",
+      "target_id": "EVAL14-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-drug-new-mechanism-action-treatment-schizophrenia"
+    },
+    {
+      "event_id": "EVAL14",
+      "target_id": "EVAL14-T2",
+      "role": "core_attachment",
+      "status": "acquired",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/216158s000lbl.pdf"
+    },
+    {
+      "event_id": "EVAL15",
+      "target_id": "EVAL15-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://science.nasa.gov/missions/webb/webb-captures-top-of-iconic-horsehead-nebula-in-unprecedented-detail/"
+    },
+    {
+      "event_id": "EVAL15",
+      "target_id": "EVAL15-T2",
+      "role": "core_attachment",
+      "status": "failed",
+      "url": "https://www.aanda.org/articles/aa/pdf/forth/aa49198-24.pdf"
+    },
+    {
+      "event_id": "EVAL16",
+      "target_id": "EVAL16-T1",
+      "role": "official_main",
+      "status": "acquired",
+      "url": "https://wmo.int/news/media-centre/climate-change-indicators-reached-record-levels-2023-wmo"
+    },
+    {
+      "event_id": "EVAL16",
+      "target_id": "EVAL16-T2",
+      "role": "core_attachment",
+      "status": "partial",
+      "url": "https://library.wmo.int/records/item/68835-state-of-the-global-climate-2023"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "derived": true,
+  "original_freeze_sha256": "bdd6366b793c003b1c094b6fe141b9447320560bc3d16299ec051e7eda915ef4",
+  "at": "2026-10-01T04:53:35.781637+00:00",
+  "status": "T_eval_frozen",
+  "development_amendments": 1,
+  "assigned_events": 4,
+  "assigned_draft_variants": 12,
+  "assigned_realization_methods": 3,
+  "renderer_note": "filename contains _dev but this exact hash is now final-approved for EVAL, no code modification",
+  "original_code_hashes": {
+    "typed_renderer_v2_dev.py": "71e1fcd05c62c9bdd99e5185e232cc323ab98ff30d258a14fe27c3eef775a8d5",
+    "realize_T_v2.py": "950f7e88dc2753ff6adc83c2ec2bce2bde6ad724cb5d17eb360773808e19a736",
+    "patch_guard.py": "e340562d1eb7ecea92a77cf6eec76867df29adf03611612276f998cfc0497a87"
+  },
+  "J_initial_dev02_exclusion": "One original judgment completed; two branches unexecuted after packet validity issue. Three corrected development regression judgments followed."
+}

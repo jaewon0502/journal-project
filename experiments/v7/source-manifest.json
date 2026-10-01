@@ -1,0 +1,171 @@
+{
+  "artifact_type": "derived metadata; no source fulltext",
+  "events": [
+    {
+      "event_id": "DEV01",
+      "split": "DEV",
+      "event_time": {
+        "reference_period": "2024-06",
+        "precision": "month"
+      },
+      "publication_time": {
+        "date": "2024-07-02",
+        "clock_time": "not stated"
+      },
+      "collection_time": "2026-10-01T04:26:08.605990+00:00",
+      "scope": "Overview paragraphs 1–2, extracted text lines 181–182; release date line 163. Later final July17 release excluded.",
+      "original_fixture_sha256": "32e840b62b25de4b1b2a41fb856205e7762b2ca306ccf869826af501dab1e5f4",
+      "sources": [
+        {
+          "id": "DEV01-S1",
+          "url": "https://ec.europa.eu/eurostat/en/web/products-euro-indicators/w/2-02072024-ap",
+          "resolved_url": "https://ec.europa.eu/eurostat/en/web/products-euro-indicators/w/2-02072024-ap",
+          "sha256": "29b925160edda910d4970e806a6747995ff647842e532cf9409f946e0dbef934",
+          "text_sha256": "6a21b6d48d3cb2c0367354771d1211401d03e55fc7158af403a5361f585ac475",
+          "status": "http_200_official_original",
+          "collected_at_utc": "2026-10-01T04:26:08.605990+00:00",
+          "scope": "Overview paragraphs 1–2, extracted text lines 181–182; release date line 163. Later final July17 release excluded.",
+          "attachment_status": "No PDF attachment link found in official source page; no recursive expansion"
+        }
+      ]
+    },
+    {
+      "event_id": "DEV02",
+      "split": "dev",
+      "original_fixture_sha256": "6702a7ab7b28d93aa7b79c9de02d80db98eebb1221d96fbe197b5e44755c997d",
+      "sources": [
+        {
+          "id": "DEV02-case",
+          "url": "https://supremecourt.uk/cases/uksc-2024-0042",
+          "resolved_url": "https://supremecourt.uk/cases/uksc-2024-0042",
+          "sha256": "15b5746143b6e8abcb9d7cc0e4c13f7a836701676ba1c182117e8a0f8def1194",
+          "text_sha256": "84084df23f6fb460cb055d542bc7ab5f1333e4f7423d526d6ef47330b26d1025",
+          "status": 200,
+          "collected_at": "2026-10-01T04:27:11.294788+00:00",
+          "scope": "Case summary and judgment date; not the stale change-log date"
+        },
+        {
+          "id": "DEV02-judgment",
+          "url": "https://supremecourt.uk/uploads/uksc_2024_0042_judgment_aea6c48cee.pdf",
+          "resolved_url": "https://supremecourt.uk/uploads/uksc_2024_0042_judgment_aea6c48cee.pdf",
+          "sha256": "b3deb4e09219e1bd3c4591ff6cc7d17a22c5f97a911f5b765ac6ca5069ba33f4",
+          "text_sha256": "4930a9a8d179235a4cc9f86bbb0cdfcef6f804bae924c2255c2423487f8558ae",
+          "status": 200,
+          "collected_at": "2026-10-01T04:27:12.486481+00:00",
+          "scope": "Authoritative judgment paragraphs 248–264 and 266; whole PDF privately retained"
+        },
+        {
+          "id": "DEV02-summary",
+          "url": "https://supremecourt.uk/uploads/uksc_2024_0042_press_summary_8a42145662.pdf",
+          "resolved_url": "https://supremecourt.uk/uploads/uksc_2024_0042_press_summary_8a42145662.pdf",
+          "sha256": "0eacbf9012113d452ff6a5b70f528a2a5d8db35967333367e27f489a334d8bc1",
+          "text_sha256": "f02292dbd6b934d64d7e9c33d0e9f6035df53c66f5c24e1e0ef1ec869c35803a",
+          "status": 200,
+          "collected_at": "2026-10-01T04:27:13.913408+00:00",
+          "scope": "Official non-authoritative explanatory press summary, pages 2 and 4"
+        }
+      ]
+    },
+    {
+      "event_id": "EVAL01",
+      "split": "EVAL",
+      "event_time": {
+        "reference_period": "2025-Q1",
+        "precision": "quarter"
+      },
+      "publication_time": {
+        "local": "2025-04-30T08:30:00-04:00",
+        "utc": "2025-04-30T12:30:00Z"
+      },
+      "collection_time": "2026-10-01T04:26:09.395794+00:00",
+      "scope": "Historical advance-estimate vintage, currently marked superseded. Main paragraphs lines71–72 and technical note104. One full-release PDF also collected.",
+      "original_fixture_sha256": "5384405ee356d91db47e3df23a9bb54ef5daec6df32e3b0e40ec95fa2597d54d",
+      "sources": [
+        {
+          "id": "EVAL01-S1",
+          "url": "https://www.bea.gov/news/2025/gross-domestic-product-1st-quarter-2025-advance-estimate",
+          "resolved_url": "https://www.bea.gov/news/2025/gross-domestic-product-1st-quarter-2025-advance-estimate",
+          "sha256": "b4c9dbb9fa8f0274f99f2d71c8ce8cc683d288fccbfff8216a553cba51e7d6d5",
+          "text_sha256": "acc72eae224d03006082ab53045195822794f9d420c792bf22332de9a2def0f9",
+          "status": "http_200_official_original",
+          "collected_at_utc": "2026-10-01T04:26:09.395794+00:00",
+          "scope": "Historical advance-estimate vintage, currently marked superseded. Main paragraphs lines71–72 and technical note104. One full-release PDF also collected.",
+          "attachment_status": "One linked full-release PDF collected; expansion stopped"
+        },
+        {
+          "id": "EVAL01-S2",
+          "url": "https://www.bea.gov/sites/default/files/2025-04/gdp1q25-adv.pdf",
+          "sha256": "19dd2f93bafe03a2938ebf537bbd7e389e1335a05faf530733488924e93bc57a",
+          "text_sha256": "66079b1ebc4ede39fa848808058d34033e6012a9938ae7f582559bde79e396e7",
+          "status": "http_200_official_attachment",
+          "scope": "Official full-release PDF; summary GDP evidence page 1, private-inventory technical-note evidence page 4 (1-based PDF pages).",
+          "collected_at_utc": "2026-10-01T04:26:41.600121+00:00"
+        }
+      ]
+    },
+    {
+      "event_id": "EVAL02",
+      "split": "EVAL",
+      "event_time": {
+        "closest_approach": "2024-12-24",
+        "beacon_reception": "late 2024-12-26; timezone unspecified"
+      },
+      "publication_time": {
+        "date": "2024-12-27",
+        "clock_time": "not stated",
+        "page_last_updated": "2025-01-02"
+      },
+      "collection_time": "2026-10-01T04:26:40.399389+00:00",
+      "scope": "Article date Dec27 2024; current official snapshot states Last Updated Jan2 2025. Evidence lines191–192,211. This is not an archived Dec27 capture and does not establish an unchanged historical page.",
+      "original_fixture_sha256": "174b11f6aa93bd8001d592e245a2e971f87ae978e70ce0cc24eeeaabf082c77f",
+      "sources": [
+        {
+          "id": "EVAL02-S1",
+          "url": "https://science.nasa.gov/science-research/heliophysics/nasas-parker-solar-probe-makes-history-with-closest-pass-to-sun/",
+          "resolved_url": "https://science.nasa.gov/science-research/heliophysics/nasas-parker-solar-probe-makes-history-with-closest-pass-to-sun/",
+          "sha256": "0bdcf833f933df13e94959f78848080055ed8f11c8f35536f651168e603ca23a",
+          "text_sha256": "98de9c9f0bef3080eceae3236335b3c335f09d12a556e6b81ba9ccf69ce77187",
+          "status": "http_200_official_original",
+          "collected_at_utc": "2026-10-01T04:26:40.399389+00:00",
+          "scope": "Article date Dec27 2024; current official snapshot states Last Updated Jan2 2025. Evidence lines191–192,211. This is not an archived Dec27 capture and does not establish an unchanged historical page.",
+          "attachment_status": "No PDF attachment link found in official source page; no recursive expansion"
+        }
+      ]
+    },
+    {
+      "event_id": "EVAL03",
+      "split": "eval",
+      "original_fixture_sha256": "4171d5a185ab89551624dc4d630ac13659b34709ed755fe26ad4f808a4895589",
+      "sources": [
+        {
+          "id": "EVAL03-who",
+          "url": "https://www.who.int/news/item/20-10-2024-egypt-is-certified-malaria-free-by-who",
+          "retrieval_url": "https://www.who.int/news/item/20-10-2024-egypt-is-certified-malaria-free-by-who?x=1",
+          "sha256": "6e951076ecfcc16de122975c5cd3a85f91ba84d0425141e8b31c6bf23af487e9",
+          "text_sha256": "f494c44a746d2b5045555ef4ca275ef87d6ae359862e01f14a14a3dfb6298ccc",
+          "status": 200,
+          "collected_at": "2026-10-01T04:27:58.868640+00:00",
+          "scope": "Announcement and certification criteria, text lines 197–209; historical sections retained privately",
+          "retrieval_note": "Canonical URL returned HTTP 403 to urllib on initial attempt. The same official page fetched with ?x=1 and Mozilla User-Agent returned HTTP 200; body title, date and certification criteria checked against the canonical page opened with web tool."
+        }
+      ]
+    },
+    {
+      "event_id": "EVAL04",
+      "split": "eval",
+      "original_fixture_sha256": "30e705fe98a70a3bf175d26ee8a9cabb0214a814a9944a5b9c8d5625b3a0e25d",
+      "sources": [
+        {
+          "id": "EVAL04-esa",
+          "url": "https://www.esa.int/Science_Exploration/Space_Science/Euclid/Euclid_opens_data_treasure_trove_offers_glimpse_of_deep_fields",
+          "retrieval_url": "https://www.esa.int/Science_Exploration/Space_Science/Euclid/Euclid_opens_data_treasure_trove_offers_glimpse_of_deep_fields",
+          "sha256": "f6d8a74f1cb86c59f4991b257ba06a5d2b05520147860548c1eeadb338d1bba2",
+          "text_sha256": "fb25aadca7f1f4044f6842bfb635209b276671c813e6d8ece7ffd606874e10e9",
+          "status": 200,
+          "collected_at": "2026-10-01T04:28:00.624289+00:00",
+          "scope": "19 March 2025 announcement and Notes to editors; current view-count metadata excluded from claims"
+        }
+      ]
+    }
+  ]
+}

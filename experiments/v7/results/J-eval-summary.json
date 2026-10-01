@@ -1,0 +1,198 @@
+{
+  "module": "J packet intervention, not whole-source accuracy",
+  "events": [
+    {
+      "event_id": "EVAL01",
+      "branches": [
+        {
+          "item_id": "aebb59e2f9d968d2",
+          "role": "original",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "b10ccf214fd737958efafaa4ddde2d8019c0d2e154fad1de079685fe5bb7cbe1",
+          "raw_sha256": "58c4899cda76ad56fac8dda8e81e12617c56b627c2d985a6db5f9310daf721a7"
+        },
+        {
+          "item_id": "cda3f8e08ad5f73e",
+          "role": "target_deleted",
+          "expected": "insufficient_evidence",
+          "decision": "insufficient_evidence",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": null,
+          "input_sha256": "7785fd819bee6eeeb3348858dd2bbcd372f97ed5845814ab7bd9cc8ee8f5f015",
+          "raw_sha256": "89b96147af53e90d6c84a4cfa74d7f31a5b5dca2075587ce7e80f6a5dd0e88dd"
+        },
+        {
+          "item_id": "03bbb765402bf027",
+          "role": "irrelevant_deleted",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "1ee739a79236b40c5201aaa4682752a274857a206c16eabb4d2538214110f6c0",
+          "raw_sha256": "f2105a370bd090ba9f95a8a81d16eb9ee3e6a753ec2a9ec7e067f9dbee4dff8a"
+        }
+      ],
+      "triplet_matches": true
+    },
+    {
+      "event_id": "EVAL02",
+      "branches": [
+        {
+          "item_id": "95909f222471ef3d",
+          "role": "original",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "9f5bed09ad16b4fc868d3375f11b845bafa8792c9bcae92a29faac6eb6bfdd99",
+          "raw_sha256": "423ee9f1dcd7e16b53123df28df6d0df675ca4a71168fadcfd159c7202d68f12"
+        },
+        {
+          "item_id": "8f9f80a8535fb022",
+          "role": "target_deleted",
+          "expected": "insufficient_evidence",
+          "decision": "insufficient_evidence",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": null,
+          "input_sha256": "2fe98154cd50316c226e86bbb6cb3603262f6ab98000a574f9f7afc7afb49264",
+          "raw_sha256": "12c76c68a7a20b8b5a8b601e7780fe6f88bef2ab609bc4ab839b5885fcff2fd7"
+        },
+        {
+          "item_id": "7611f00494ab6d39",
+          "role": "irrelevant_deleted",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "97f503afa144d5257e21a6520054e8942437a595abff4074e9c62c4fcedcc111",
+          "raw_sha256": "27eab854be7a41bb0a73d18249520307c218e00446cb05f6d1b8b1ee58b80123"
+        }
+      ],
+      "triplet_matches": true
+    },
+    {
+      "event_id": "EVAL03",
+      "branches": [
+        {
+          "item_id": "0de370a39eff9cc8",
+          "role": "original",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "60eb3e9f30b190d9fbb567ba4eab5851d5928e61ebbce4d57d1fbfc2f5d0c792",
+          "raw_sha256": "d3a0b7cd40e0cd72e9a18d5075b38209ccab18ba359a913fcbfa172278690504"
+        },
+        {
+          "item_id": "43637968f70e18ec",
+          "role": "target_deleted",
+          "expected": "insufficient_evidence",
+          "decision": "insufficient_evidence",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": null,
+          "input_sha256": "f06b9a761c01cfba10e36dc0267d2ca6a6d4a6ff0b7790b41d2a9a6776d0cac5",
+          "raw_sha256": "9d93cfb18bff4371df7fb8683efc860d94ad8df20c950aeca626fff662b4a0da"
+        },
+        {
+          "item_id": "1ecd9d1c38817ee1",
+          "role": "irrelevant_deleted",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "991dc2850e97ff730ecc526f0d846b7abbcaca7ee3ef17525af4b4c0b0d4e639",
+          "raw_sha256": "114ae72540dd8fc0f3ebf2751c8610316fd32b632b148ddb478eeb7b2af0c7cc"
+        }
+      ],
+      "triplet_matches": true
+    },
+    {
+      "event_id": "EVAL04",
+      "branches": [
+        {
+          "item_id": "59fd3298c0da6ad0",
+          "role": "original",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "1daf214500b7faf39aea66d3ccc0f30aa3affbf95493f51750cf292611944e68",
+          "raw_sha256": "6c67c52fcaed6c38eeac049813883a2ca5d82c301349c1f9894e99fb807b9438"
+        },
+        {
+          "item_id": "bb29efc57cecb8fd",
+          "role": "target_deleted",
+          "expected": "insufficient_evidence",
+          "decision": "insufficient_evidence",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": null,
+          "input_sha256": "48421c7c4457d6b4d7f9c472e32add15dfd38e0f0037fc0d51319a48295c9259",
+          "raw_sha256": "4cade2fae0e5073a32515ac2817a2d2bec590e1dbe4b2a28f5170269c5601370"
+        },
+        {
+          "item_id": "aaf742cb6c6f3048",
+          "role": "irrelevant_deleted",
+          "expected": "supported",
+          "decision": "supported",
+          "executed": true,
+          "matches_expected": true,
+          "quote_literal_substring": true,
+          "input_sha256": "4fab15a3ea6d1c3001df84d178b629f7ac121c8056191d0d6a9d713a7bd5c32d",
+          "raw_sha256": "8193967ad6430108cbcd269146d239bd7c41b03f9e028569d3fe541648bae3df"
+        }
+      ],
+      "triplet_matches": true
+    }
+  ],
+  "summary": {
+    "events": 4,
+    "assigned_judgments": 12,
+    "actual_judgments": 12,
+    "triplet_matches": 4,
+    "by_branch": {
+      "irrelevant_deleted": {
+        "assigned": 4,
+        "executed": 4,
+        "matches": 4,
+        "decisions": {
+          "supported": 4
+        }
+      },
+      "original": {
+        "assigned": 4,
+        "executed": 4,
+        "matches": 4,
+        "decisions": {
+          "supported": 4
+        }
+      },
+      "target_deleted": {
+        "assigned": 4,
+        "executed": 4,
+        "matches": 4,
+        "decisions": {
+          "insufficient_evidence": 4
+        }
+      }
+    }
+  },
+  "public_export": {
+    "derived": true,
+    "original_summary_sha256": "3546265bebd814c926d06ecb35e780ea8a82d0bc7be0554b40d982dbda6dc981",
+    "note": "Original score fields retained; quote substring checks cannot be repeated without withheld packets."
+  }
+}

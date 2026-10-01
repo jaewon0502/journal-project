@@ -1,0 +1,303 @@
+{
+  "artifact_kind": "sanitized derivative; not original bytes",
+  "snapshot_date": "2026-10-01",
+  "records": [
+    {
+      "event_id": "DEV01",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV02",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV03",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        },
+        "invalid_or_unknown": 3
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_accept": 1,
+          "decision_abstain": 1,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        },
+        "invalid_or_unknown": 3
+      }
+    },
+    {
+      "event_id": "DEV04",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV05",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV06",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV07",
+      "D0": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_abstain": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    },
+    {
+      "event_id": "DEV08",
+      "D0": {
+        "decision_counts": {
+          "decision_accept": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      },
+      "D1": {
+        "decision_counts": {
+          "decision_accept": 2,
+          "decision_reject": 1
+        },
+        "false_accept": {
+          "numerator": 0,
+          "denominator": 1,
+          "rate": 0.0
+        },
+        "false_reject": {
+          "numerator": 0,
+          "denominator": 2,
+          "rate": 0.0
+        },
+        "invalid_or_unknown": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "scope": "모듈두동결묶음분리집계",
+  "initial_synthetic": {
+    "pass": 12,
+    "total": 12,
+    "pair_pass": 6,
+    "pair_total": 6
+  },
+  "additional_synthetic": {
+    "pass": 5,
+    "total": 6,
+    "pair_pass": 2,
+    "pair_total": 3
+  },
+  "synthetic_total": {
+    "pass": 17,
+    "total": 18
+  },
+  "real_transfer": [
+    {
+      "id": "T01-D",
+      "kind": "real_transfer",
+      "preserve_pass": 5,
+      "preserve_total": 5,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 425,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "T01-general",
+      "kind": "real_transfer",
+      "preserve_pass": 3,
+      "preserve_total": 5,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 354,
+      "length_compliant": true,
+      "strict_pass": false
+    }
+  ],
+  "normal_overediting_initial_flags": 1,
+  "notes": [
+    "M06A flag는근거있는세부추가;의미약화아님",
+    "M09A 실패는책임주체삭제아닌명시적책임범위누락",
+    "동일D-v2만실행한합성은C-D효과추정아님"
+  ]
+}

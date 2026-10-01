@@ -1,0 +1,193 @@
+{
+  "n_items": 8,
+  "n_evaluators": 2,
+  "runs_per_evaluator": 1,
+  "identical_payloads_reverse_order_verified": true,
+  "field_agreement": {
+    "observable": {
+      "agreements": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "source_support": {
+      "agreements": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "attribution_force": {
+      "agreements": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "contextual_importance": {
+      "agreements": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "disposition": {
+      "agreements": 8,
+      "total": 8,
+      "rate": 1.0
+    }
+  },
+  "four_axis_exact_agreement": 1.0,
+  "five_axis_exact_agreement": 1.0,
+  "item_results": [
+    {
+      "id": "Q7R",
+      "a": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "altered",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "b": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "altered",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "disagree_axes": [],
+      "resolution": "issue"
+    },
+    {
+      "id": "Q2N",
+      "a": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "intact",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "b": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "intact",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "disagree_axes": [],
+      "resolution": "issue"
+    },
+    {
+      "id": "Q9C",
+      "a": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "contextual",
+        "disposition": "issue"
+      },
+      "b": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "contextual",
+        "disposition": "issue"
+      },
+      "disagree_axes": [],
+      "resolution": "issue"
+    },
+    {
+      "id": "Q4H",
+      "a": {
+        "observable": "ambiguous",
+        "source_support": "supported",
+        "attribution_force": "ambiguous",
+        "contextual_importance": "ambiguous",
+        "disposition": "hold"
+      },
+      "b": {
+        "observable": "ambiguous",
+        "source_support": "supported",
+        "attribution_force": "ambiguous",
+        "contextual_importance": "ambiguous",
+        "disposition": "hold"
+      },
+      "disagree_axes": [],
+      "resolution": "hold"
+    },
+    {
+      "id": "Q8L",
+      "a": {
+        "observable": "present",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "none",
+        "disposition": "no_issue"
+      },
+      "b": {
+        "observable": "present",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "none",
+        "disposition": "no_issue"
+      },
+      "disagree_axes": [],
+      "resolution": "no_issue"
+    },
+    {
+      "id": "Q1P",
+      "a": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "altered",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "b": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "altered",
+        "contextual_importance": "material",
+        "disposition": "issue"
+      },
+      "disagree_axes": [],
+      "resolution": "issue"
+    },
+    {
+      "id": "Q6T",
+      "a": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "contextual",
+        "disposition": "issue"
+      },
+      "b": {
+        "observable": "absent",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "contextual",
+        "disposition": "issue"
+      },
+      "disagree_axes": [],
+      "resolution": "issue"
+    },
+    {
+      "id": "Q3B",
+      "a": {
+        "observable": "present",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "none",
+        "disposition": "no_issue"
+      },
+      "b": {
+        "observable": "present",
+        "source_support": "supported",
+        "attribution_force": "not_applicable",
+        "contextual_importance": "none",
+        "disposition": "no_issue"
+      },
+      "disagree_axes": [],
+      "resolution": "no_issue"
+    }
+  ],
+  "hold_items": [
+    "Q4H"
+  ],
+  "existing_source_hashes_unchanged": true
+}

@@ -1,0 +1,2476 @@
+{
+  "assigned_case_denominator": 12,
+  "assigned_method_outputs": 36,
+  "cost": null,
+  "duplicate_judgment_ids": [],
+  "event_denominator": 4,
+  "events": [
+    {
+      "event_id": "EVAL01",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-5d999fabfceb9391",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly identifies the advance-estimate vintage, annualized contraction, import subtraction, government decline, investment offset and largest investment-growth contributor.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-5d999fabfceb9391",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+            "original_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-6672d63c09d606a9",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "fe033d7f11e13800a519b9d2d209176f3b909db5b9afcb883d3ae0add6d4e2d7",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The replacement correctly makes investment an offset, together with the source-supported consumer spending and exports. These movements refers coherently to import increase and government decline. Private inventories remain the largest contributor to investment growth.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL01-6672d63c09d606a9",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "fe033d7f11e13800a519b9d2d209176f3b909db5b9afcb883d3ae0add6d4e2d7",
+            "original_sha256": "6672d63c09d606a9dfcb9a80c4fc768a906a92426ca9788faba2ab12e1e94b95",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_extracted",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "50722781cf3bf7e1ef49cc97c76462a18eef68f92490cb45cd2d9482bde31ab4",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-dbb9afcd0f09fa90",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves BEA annualization and vintage, import accounting, government-spending direction, the investment offset and private inventories as largest contributor to investment growth.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-dbb9afcd0f09fa90",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+            "original_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-5d999fabfceb9391",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly identifies the advance-estimate vintage, annualized contraction, import subtraction, government decline, investment offset and largest investment-growth contributor.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-5d999fabfceb9391",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+            "original_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-6672d63c09d606a9",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "d51212c344d0c068431e9fbb5649a3b51452869102f128e2c7a6e8a933f16b79",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "Partly offset corrects the original reversal of investment growth impact. The other GDP accounting and inventory claims are retained and supported.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL01-6672d63c09d606a9",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "d51212c344d0c068431e9fbb5649a3b51452869102f128e2c7a6e8a933f16b79",
+            "original_sha256": "6672d63c09d606a9dfcb9a80c4fc768a906a92426ca9788faba2ab12e1e94b95",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-dbb9afcd0f09fa90",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves BEA annualization and vintage, import accounting, government-spending direction, the investment offset and private inventories as largest contributor to investment growth.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-dbb9afcd0f09fa90",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+            "original_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-5d999fabfceb9391",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly identifies the advance-estimate vintage, annualized contraction, import subtraction, government decline, investment offset and largest investment-growth contributor.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-5d999fabfceb9391",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "8727e93cecb723692d235a4bb921d1cca75e77bd44a8a67e2fbedd6d3c1965ad",
+            "original_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "5d999fabfceb93915380d3acf110ef7888d41f936471a88b499f885b81270771",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-6672d63c09d606a9",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "43a5b88a2e417999c4c45facdb99ee03ca6c977f20d053e20a235c41f87a9140",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "Investment growth offset the decline; it did not deepen it. The replacement restores this direction and retains the government-spending decline and inventory contribution. The extra period before the semicolon is a prose defect, not a factual error.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL01-6672d63c09d606a9",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "43a5b88a2e417999c4c45facdb99ee03ca6c977f20d053e20a235c41f87a9140",
+            "original_sha256": "6672d63c09d606a9dfcb9a80c4fc768a906a92426ca9788faba2ab12e1e94b95",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_rendered",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "adf4768d4f94c61561ce03fe7a7e2b22ba21ad5a1b811a16f7565b7856aabc60",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL01-dbb9afcd0f09fa90",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves BEA annualization and vintage, import accounting, government-spending direction, the investment offset and private inventories as largest contributor to investment growth.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      60,
+                      120
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL01-S1"
+                },
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      48
+                    ]
+                  ],
+                  "mode": "direct PDF text-extract inspection; no PDF rendering or full table audit",
+                  "source_id": "EVAL01-S2"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Historical advance estimate, explicitly superseded. No claim about later GDP vintages. PDF text lines 1–48 independently checked for date, estimate and directional relationships; remaining PDF tables not audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL01-dbb9afcd0f09fa90",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9b123e67c44b458104385731df2c0ef5914c44ef49e2cb6f12b31f6ebb6b7e63",
+            "original_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "dbb9afcd0f09fa90e55def20cb4962d8adff4810045cebe7928226da762e599b",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EVAL02",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 1,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 1,
+            "none": 0,
+            "true": 0
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-362a7a9efd3668a3",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly distinguishes the December 24 pass, the late December 26 safety beacon and the still-forthcoming science downlink.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-362a7a9efd3668a3",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+            "original_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-41ffdae00eb283bd",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves closest-approach date and distance, the later safety and normal-operation beacon, and the outstanding science transmission.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-41ffdae00eb283bd",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+            "original_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-6f9e7b654dc7b982",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "7148de066615899caaeab841f582f27e1fcdac70cd5a45d44ea66fea36667505",
+              "original_error_repaired": "no",
+              "original_source_supported": "no",
+              "rationale": "No repair was made: completed science downlink contradicts the source statement that only safety had been transmitted and data downlink lay ahead. The pass and beacon claims remain supported.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "no",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-6f9e7b654dc7b982",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "7148de066615899caaeab841f582f27e1fcdac70cd5a45d44ea66fea36667505",
+            "original_sha256": "6f9e7b654dc7b982fdc9be283c98edf1d69afc9da26767a28c03a4186e7cba28",
+            "pipeline_hold": true,
+            "pipeline_status": "extractive_ineligible",
+            "preserved_and_source_supported": null,
+            "repair_success": false,
+            "revised_sha256": "6f9e7b654dc7b982fdc9be283c98edf1d69afc9da26767a28c03a4186e7cba28",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "no",
+              "typed_eligible": "yes"
+            },
+            "source_supported": false,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-362a7a9efd3668a3",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly distinguishes the December 24 pass, the late December 26 safety beacon and the still-forthcoming science downlink.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-362a7a9efd3668a3",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+            "original_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-41ffdae00eb283bd",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves closest-approach date and distance, the later safety and normal-operation beacon, and the outstanding science transmission.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-41ffdae00eb283bd",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+            "original_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-6f9e7b654dc7b982",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "26ca1f533994592317b51a571b6d17e8cc02b3fab8ccf9478b19210da15980c8",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The original incorrectly says science downlink was completed, contradicting both the source and its own safety-only clause. Still pending repairs that status without changing dates, distance or beacon meaning.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL02-6f9e7b654dc7b982",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "26ca1f533994592317b51a571b6d17e8cc02b3fab8ccf9478b19210da15980c8",
+            "original_sha256": "6f9e7b654dc7b982fdc9be283c98edf1d69afc9da26767a28c03a4186e7cba28",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "1465909365448c70eae153620c89047f6d952dea03b9bde440cca12b1901608a",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "no",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-362a7a9efd3668a3",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly distinguishes the December 24 pass, the late December 26 safety beacon and the still-forthcoming science downlink.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-362a7a9efd3668a3",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "22e47a0bf67d36a6b522497fe6bb89b3949b633f50586d82f27fc6380e77f770",
+            "original_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "362a7a9efd3668a33b9cdf072f705bfb0fa031c4ce9436ae81a9f5fd5da76b19",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-41ffdae00eb283bd",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase preserves closest-approach date and distance, the later safety and normal-operation beacon, and the outstanding science transmission.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL02-41ffdae00eb283bd",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "caa1145366f24db29b9ff9115c9cecf1ea64d00a60cdac87093814b7498caba9",
+            "original_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "41ffdae00eb283bdf792c0ef04e01376568540054531ac5e547ef196002c65a8",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL02-6f9e7b654dc7b982",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "a3858157e892a54564ba337d05b7e384ff4524a28ae3226cf669ecc4aaede61f",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The replacement correctly anchors planned downlink to the supplied article snapshot and preserves the location-dependent future timing. Article and last-updated dates agree with the snapshot. The period-semicolon sequence is awkward but introduces no factual error.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      188,
+                      232
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL02-S1"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Support is relative to the supplied current snapshot of the Dec 27-dated article, last updated Jan 2. No archived Dec 27 version or precise downlink completion date verified.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL02-6f9e7b654dc7b982",
+            "guard_status": "passed",
+            "intended_kind": "mutation",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "a3858157e892a54564ba337d05b7e384ff4524a28ae3226cf669ecc4aaede61f",
+            "original_sha256": "6f9e7b654dc7b982fdc9be283c98edf1d69afc9da26767a28c03a4186e7cba28",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_rendered",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "812de800bf444fb8e0b0adac5a8321def4580b4fd8acd5e0aeaae33bcbb502a5",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "no",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EVAL03",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 1,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 1,
+            "none": 0,
+            "true": 0
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-0d509a42a55bc060",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly states the announcement, the nationwide indigenous-transmission criterion and duration, and the mandatory capacity and ongoing response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-0d509a42a55bc060",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+            "original_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-5a2afd5573979387",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "da82a31419fbb8e007546ae0707d5b96440c1c9e7ee0f2db0cffa5494b208aa2",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The replacement restores the mandatory capacity to prevent transmission re-establishment. The certification announcement, indigenous nationwide three-year interruption and imported-case response remain intact.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL03-5a2afd5573979387",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "da82a31419fbb8e007546ae0707d5b96440c1c9e7ee0f2db0cffa5494b208aa2",
+            "original_sha256": "5a2afd5573979387182c4575a7cb84578c66bed15f020c95e27f1ec5d9d4961d",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_extracted",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "c7915f3f6b55f5bb6af9462fa3e73aa44d13ed5e339d053169c1ccac1469a308",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-e7047c1fb9e86db5",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase correctly states Egypt, the announcement date, nationwide indigenous transmission interruption for at least three prior consecutive years, prevention capacity, and continued surveillance and imported-case response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-e7047c1fb9e86db5",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+            "original_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-0d509a42a55bc060",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly states the announcement, the nationwide indigenous-transmission criterion and duration, and the mandatory capacity and ongoing response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-0d509a42a55bc060",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+            "original_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-5a2afd5573979387",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "60df4e0067b2c4b2eb9e561c0de5205889f6c3f0d1664f2f2853da84618cab19",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The source requires demonstrated capacity to prevent re-establishment. Changing need not to must repairs the reversed requirement and retains nationwide indigenous transmission, the three-year duration and continuing surveillance.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL03-5a2afd5573979387",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "60df4e0067b2c4b2eb9e561c0de5205889f6c3f0d1664f2f2853da84618cab19",
+            "original_sha256": "5a2afd5573979387182c4575a7cb84578c66bed15f020c95e27f1ec5d9d4961d",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-e7047c1fb9e86db5",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase correctly states Egypt, the announcement date, nationwide indigenous transmission interruption for at least three prior consecutive years, prevention capacity, and continued surveillance and imported-case response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-e7047c1fb9e86db5",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+            "original_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-0d509a42a55bc060",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly states the announcement, the nationwide indigenous-transmission criterion and duration, and the mandatory capacity and ongoing response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-0d509a42a55bc060",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "dd3248b812cb3404a0cf91b12e851f0640626bf350f45b18df82d1d443c6c467",
+            "original_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0d509a42a55bc060c06e6d8ca017d220174b5cb5d741a1dc6b53da7f984d1ef4",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-5a2afd5573979387",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "69311e8df9a6b1d825528e3e3c060a29c365d10ada02cd77a0dd831d64f73be3",
+              "original_error_repaired": "no",
+              "original_source_supported": "no",
+              "rationale": "No repair was made: need not contradicts the mandatory prevention-capacity requirement. The remaining country, date, transmission criteria and surveillance claims are supported.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "no",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-5a2afd5573979387",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "69311e8df9a6b1d825528e3e3c060a29c365d10ada02cd77a0dd831d64f73be3",
+            "original_sha256": "5a2afd5573979387182c4575a7cb84578c66bed15f020c95e27f1ec5d9d4961d",
+            "pipeline_hold": true,
+            "pipeline_status": "unsupported",
+            "preserved_and_source_supported": null,
+            "repair_success": false,
+            "revised_sha256": "5a2afd5573979387182c4575a7cb84578c66bed15f020c95e27f1ec5d9d4961d",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "no"
+            },
+            "source_supported": false,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL03-e7047c1fb9e86db5",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paraphrase correctly states Egypt, the announcement date, nationwide indigenous transmission interruption for at least three prior consecutive years, prevention capacity, and continued surveillance and imported-case response.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      190,
+                      211
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL03-who"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "Judgments concern the announcement and certification criteria in the supplied snapshot; historical elimination narrative and linked materials were not independently audited.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL03-e7047c1fb9e86db5",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "fea42ae2c2fa333b0c8dbf560ddb4988b03dba2cfe420ee5d696244efbfc9a12",
+            "original_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "e7047c1fb9e86db595431397a86e021cd1ae967ada0d34453b22d7b2a2df9555",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EVAL04",
+      "method_counts": {
+        "exact_extractive": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "free": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        },
+        "typed": {
+          "assigned_outputs": 3,
+          "guard_failed": 0,
+          "mutation_denominator": 1,
+          "new_errors_known": 0,
+          "new_errors_unknown_outputs": 0,
+          "normal_equivalent_denominator": 2,
+          "pipeline_hold": 0,
+          "preserved_and_source_supported": {
+            "false": 0,
+            "none": 0,
+            "true": 2
+          },
+          "repair_success": {
+            "false": 0,
+            "none": 0,
+            "true": 1
+          },
+          "unnecessary_edit": {
+            "false": 3,
+            "none": 0,
+            "true": 0
+          }
+        }
+      },
+      "methods": {
+        "exact_extractive": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-0094a44b3acc81e0",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paragraph correctly distinguishes 63.1 square degrees in three deep fields, about 2000 square degrees observed, 14000 planned, and an October 2026 cosmology release scheduled after the preview.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-0094a44b3acc81e0",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+            "original_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-4a2070b436c26217",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly places the planned cosmology release after the March 2025 preview and preserves the deep-field, observed-area and planned-area distinctions.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-4a2070b436c26217",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+            "original_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-def6f04355f784e8",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "9feeaed622f9e4ead1fd6efdfa89ee2c377af0c9e2a45cc6bdc7767eafba49a9",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "Replacing the reversed before relationship with the source future-release statement repairs the chronology. In this paragraph the future tense is read in the March 2025 announcement context, not as independent verification of actual release in October 2026.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL04-def6f04355f784e8",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "9feeaed622f9e4ead1fd6efdfa89ee2c377af0c9e2a45cc6bdc7767eafba49a9",
+            "original_sha256": "def6f04355f784e80b67acfd6f60efb06cda243e287b896b1a8c415882654712",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_extracted",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "409a8b0be96de3bab304e9f36c0f0767f353dc07106edebe7e4b25b60748986b",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "free": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-0094a44b3acc81e0",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paragraph correctly distinguishes 63.1 square degrees in three deep fields, about 2000 square degrees observed, 14000 planned, and an October 2026 cosmology release scheduled after the preview.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-0094a44b3acc81e0",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+            "original_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-4a2070b436c26217",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly places the planned cosmology release after the March 2025 preview and preserves the deep-field, observed-area and planned-area distinctions.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-4a2070b436c26217",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+            "original_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-def6f04355f784e8",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "84418182c8d83226f30839446f598aab645acb741a537c3b4aebb005d013df3a",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "Before reverses the temporal relationship between the March 2025 preview and the planned October 2026 cosmology release. After repairs that relationship while retaining all area and release distinctions.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL04-def6f04355f784e8",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "84418182c8d83226f30839446f598aab645acb741a537c3b4aebb005d013df3a",
+            "original_sha256": "def6f04355f784e80b67acfd6f60efb06cda243e287b896b1a8c415882654712",
+            "pipeline_hold": false,
+            "pipeline_status": "model_patch_guarded",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ],
+        "typed": [
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-0094a44b3acc81e0",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged paragraph correctly distinguishes 63.1 square degrees in three deep fields, about 2000 square degrees observed, 14000 planned, and an October 2026 cosmology release scheduled after the preview.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-0094a44b3acc81e0",
+            "guard_status": "passed",
+            "intended_kind": "equivalent",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "7be8d5f2fa4b1d55095e0c2a5577a582c938fe0d1a308b53e072efc10a87a7e8",
+            "original_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "0094a44b3acc81e05722427952a05ab48f113b26ef747840704ec73561984153",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-4a2070b436c26217",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+              "original_error_repaired": "not_applicable",
+              "original_source_supported": "yes",
+              "rationale": "The unchanged account correctly places the planned cosmology release after the March 2025 preview and preserves the deep-field, observed-area and planned-area distinctions.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": true,
+            "case_id": "EVAL04-4a2070b436c26217",
+            "guard_status": "passed",
+            "intended_kind": "normal",
+            "judge_original_source_supported": "yes",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "f7a751f6f9f4dcfe44ea975f5ff3bc37964bb81c32d43580d1d0e8e330587b81",
+            "original_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "pipeline_hold": false,
+            "pipeline_status": "no_op",
+            "preserved_and_source_supported": true,
+            "repair_success": null,
+            "revised_sha256": "4a2070b436c26217c43d67514bf126cd8ef94e835343c43a41829e12f176977f",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "no",
+              "shared_action": "no_op",
+              "span_approved": "no",
+              "standalone_context_safe": "unknown",
+              "typed_eligible": "no"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          },
+          {
+            "blind_model_judgment": {
+              "case_id": "EVAL04-def6f04355f784e8",
+              "necessary_question_meaning_preserved": "yes",
+              "necessary_question_meaning_rationale": "All fixed-question topics, actors, relevant dates, quantities and distinctions remain represented; incorrect retained answers, where present, are recorded separately as unsupported and unrepaired. No required content was deleted.",
+              "new_factual_errors": [],
+              "opaque_output_id": "97879db0e04689b89f4aad1c829ee649dcac506f17d07efdfc5ecc8274102452",
+              "original_error_repaired": "yes",
+              "original_source_supported": "no",
+              "rationale": "The original reverses release chronology. The replacement explicitly anchors the October 2026 plan as of March 19, 2025, preserving future modality and the distinction from the initial preview.",
+              "read_scope": [
+                {
+                  "line_ranges": [
+                    [
+                      1,
+                      121
+                    ]
+                  ],
+                  "mode": "direct extracted-source text inspection",
+                  "source_id": "EVAL04-esa"
+                }
+              ],
+              "revised_source_supported": "yes",
+              "unjustified_edit": "no",
+              "whole_source_audit": {
+                "limitations": "The supplied extracted page was read, including contextual and notes-to-editors sections. No linked papers, archive products, images or subsequent schedule updates audited; future release is an announced plan, not observed completion.",
+                "performed": false,
+                "scope": "Claim-level audit of every factual assertion in original and revised paragraphs, including unchanged context; not independent verification of every assertion in every source or attachment."
+              },
+              "source_quotes_withheld": true
+            },
+            "byte_preserved": false,
+            "case_id": "EVAL04-def6f04355f784e8",
+            "guard_status": "passed",
+            "intended_kind": "single_relation_reversal",
+            "judge_original_source_supported": "no",
+            "new_factual_error_count": 0,
+            "nominal_kind_vs_judgment_disagreement": false,
+            "opaque_output_id": "97879db0e04689b89f4aad1c829ee649dcac506f17d07efdfc5ecc8274102452",
+            "original_sha256": "def6f04355f784e80b67acfd6f60efb06cda243e287b896b1a8c415882654712",
+            "pipeline_hold": false,
+            "pipeline_status": "mechanical_rendered",
+            "preserved_and_source_supported": null,
+            "repair_success": true,
+            "revised_sha256": "0ed11af05f145836add3ba32f2a403dbf57586c96c6981a4bd51a9fffe883e2c",
+            "semantic_outcome_state": "known",
+            "source_preflight_validity": {
+              "factual_error_confirmed": "yes",
+              "shared_action": "repair",
+              "span_approved": "yes",
+              "standalone_context_safe": "yes",
+              "typed_eligible": "yes"
+            },
+            "source_supported": true,
+            "unnecessary_edit": false
+          }
+        ]
+      }
+    }
+  ],
+  "method_count": 3,
+  "missing_judgment_ids": [],
+  "model_invocations": null,
+  "note": "One judgment may map to multiple methods; unique outputs are not independent model calls or independent event samples.",
+  "outcome_model_raw_files": 1,
+  "phase": "eval",
+  "source_preflight_overrides_model_judgment": false,
+  "statistical_superiority": null,
+  "unexpected_judgment_ids": [],
+  "unique_blind_inputs": 20,
+  "unique_judged_outputs": 20,
+  "public_export": {
+    "derived": true,
+    "original_summary_sha256": "a446007a40b12f964e8e738d8a8637cae624af8bec1e4096ab23c09200fd0b7b",
+    "changes": [
+      "private provenance paths removed",
+      "source quotations removed from evidence",
+      "source file paths replaced by public source IDs"
+    ],
+    "semantic_rejudgment": false
+  }
+}

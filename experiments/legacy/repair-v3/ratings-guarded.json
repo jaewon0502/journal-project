@@ -1,0 +1,99 @@
+{
+  "scope": "post_failure_targeted_regression_not_holdout",
+  "rows": [
+    {
+      "case_id": "EVAL03",
+      "core_preserved": 8,
+      "core_total": 8,
+      "supported": 34,
+      "verifiable": 35,
+      "atomic_claims": 35,
+      "reviewer_major_errors": 2,
+      "adoption_ready": false,
+      "characters": 849,
+      "remaining_regressions": [
+        {
+          "claim_id": "core:SP6",
+          "dimension": "scope",
+          "reason": "이전 초안의 콜드스타트 일부 식품 중개상품 적용 예외와 중단시점을 모두 삭제했다. 원문으로 확인되는 중요한 조건 손실이다.",
+          "evidence": [
+            {
+              "source_id": "SRC061",
+              "line_range": "L111-L114",
+              "summary": "일부 중개상품 적용 및 2023년 1월 중단"
+            }
+          ],
+          "importance": "major"
+        },
+        {
+          "claim_id": "S11C2",
+          "dimension": "speech_force",
+          "reason": "이전 초안은 직접 피해 범위를 공정위가 설명했다고 귀속했다. 수정문은 직접 피해가 한정된다고 단정하여 공정위 판단을 확정 범위처럼 옮겼다.",
+          "evidence": [
+            {
+              "source_id": "SRC061",
+              "line_range": "L205-L207",
+              "summary": "공정위가 소비자 손해도 설명하고 경쟁 입점업체가 직접 타격을 받는다고 볼 수 있다고 판단"
+            }
+          ],
+          "importance": "major"
+        }
+      ]
+    },
+    {
+      "case_id": "EVAL05",
+      "core_preserved": 9,
+      "core_total": 9,
+      "supported": 41,
+      "verifiable": 41,
+      "atomic_claims": 41,
+      "reviewer_major_errors": 3,
+      "adoption_ready": false,
+      "characters": 865,
+      "remaining_regressions": [
+        {
+          "id": "EVAL05-SP2-R",
+          "claim_id": "core:EVAL05-SP2",
+          "dimension": "number",
+          "severity": "important",
+          "reason": "이전 초안의 4월 증가폭 26만1천명과 39개월 만의 최소라는 둔화의 크기·희소성 근거가 모두 사라졌다. 증가폭 축소라는 방향만 남았다.",
+          "evidence": [
+            {
+              "source_id": "SRC037",
+              "line_range": "L5-L6",
+              "summary": "전월 26만1천명 대비 급감 및 39개월 만의 최소"
+            }
+          ]
+        },
+        {
+          "id": "EVAL05-SP3-R",
+          "claim_id": "core:EVAL05-SP3",
+          "dimension": "time",
+          "severity": "important",
+          "reason": "청년 취업자 감소가 19개월 연속이라는 지속성 비판 근거를 삭제했다.",
+          "evidence": [
+            {
+              "source_id": "SRC037",
+              "line_range": "L13",
+              "summary": "2022년 11월부터 19개월 연속 감소"
+            }
+          ]
+        },
+        {
+          "id": "EVAL05-SP4-R",
+          "claim_id": "core:EVAL05-SP4",
+          "dimension": "criticism",
+          "severity": "important",
+          "reason": "2021년 1월 31만4천명 감소 이후 최대 감소폭이라는 심각성 비교 근거를 삭제했다.",
+          "evidence": [
+            {
+              "source_id": "SRC037",
+              "line_range": "L14",
+              "summary": "2021년 1월 이후 최대 감소폭"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "derived": true,
+  "original_raw_sha256": "4c0a7e212f7e993f51630e737ab69aa893899ee9d050baf811b2620e5a3ae4a7",
+  "note": "Actual model-generated patch fields only; source quotations and ancillary evidence omitted. before is a synthetic erroneous clause. Whole-source audit is author self-report, not certification.",
+  "cases": [
+    {
+      "case_id": "DEV01-a1af97ba17f0878f",
+      "decision": "patch",
+      "before": "The June figure was a final confirmed reading.",
+      "end": 145,
+      "start": 99,
+      "after": "The June figure was a flash estimate.",
+      "scoped_accept": "accept",
+      "whole_source_audit": "incomplete"
+    },
+    {
+      "case_id": "DEV02-f831c94465481e76",
+      "decision": "patch",
+      "before": "The interpretation removes discrimination protection for trans people with or without a GRC, including protection on grounds of gender reassignment.",
+      "end": 365,
+      "start": 217,
+      "after": "The interpretation retains discrimination protection for trans people with or without a GRC, including protection on grounds of gender reassignment.",
+      "scoped_accept": "accept",
+      "whole_source_audit": "incomplete"
+    }
+  ]
+}

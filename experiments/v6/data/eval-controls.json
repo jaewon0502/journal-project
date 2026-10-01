@@ -1,0 +1,1716 @@
+{
+  "artifact_kind": "sanitized derivative; not original bytes",
+  "snapshot_date": "2026-10-01",
+  "records": [
+    {
+      "block": "eval1",
+      "event_id": "EVAL01",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "8e680a1024668a8526f397a0ac116961409e11a1030269b0e78aa5e0c98ae416",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5f5ab6c23dedee43f6deb0d1c5b3ef6c10acfe7d2bec915c3f16f633f2632ed0",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "0a884f3e2aeeb278ea0fcb9a3c952a1a26b41848e9d5f1125020ad9893ad56eb",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL01",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "8e680a1024668a8526f397a0ac116961409e11a1030269b0e78aa5e0c98ae416",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5f5ab6c23dedee43f6deb0d1c5b3ef6c10acfe7d2bec915c3f16f633f2632ed0",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "0a884f3e2aeeb278ea0fcb9a3c952a1a26b41848e9d5f1125020ad9893ad56eb",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL01",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "8e680a1024668a8526f397a0ac116961409e11a1030269b0e78aa5e0c98ae416",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5f5ab6c23dedee43f6deb0d1c5b3ef6c10acfe7d2bec915c3f16f633f2632ed0",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "0a884f3e2aeeb278ea0fcb9a3c952a1a26b41848e9d5f1125020ad9893ad56eb",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL02",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "6ccf62dbb0f6153ce223aac0a8287d964847515e22df3508918c704a5631101d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "58d85a6d992650abbb87188f43462e0816e9a4af49a020acde189d4414b0805d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c5fecd5240cf54959c7a995e0dc204b59964f961f7af2915ef8717da270a3d25",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL02",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "6ccf62dbb0f6153ce223aac0a8287d964847515e22df3508918c704a5631101d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "58d85a6d992650abbb87188f43462e0816e9a4af49a020acde189d4414b0805d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c5fecd5240cf54959c7a995e0dc204b59964f961f7af2915ef8717da270a3d25",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL02",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "6ccf62dbb0f6153ce223aac0a8287d964847515e22df3508918c704a5631101d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "58d85a6d992650abbb87188f43462e0816e9a4af49a020acde189d4414b0805d",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c5fecd5240cf54959c7a995e0dc204b59964f961f7af2915ef8717da270a3d25",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL03",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "0cb98bda3ba5af15609bd045cd38420d5245ff37a8ce58de6c6679eac277ab94",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "4c8443c10020ce32744eba47b91843da30f128a83fb67d1d6f6f593c8d5b980e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "944ac2c880d3321b16d17507fb3fa42b46e6a77610830d58d259a0f066b72c42",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL03",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "0cb98bda3ba5af15609bd045cd38420d5245ff37a8ce58de6c6679eac277ab94",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "4c8443c10020ce32744eba47b91843da30f128a83fb67d1d6f6f593c8d5b980e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "944ac2c880d3321b16d17507fb3fa42b46e6a77610830d58d259a0f066b72c42",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL03",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "0cb98bda3ba5af15609bd045cd38420d5245ff37a8ce58de6c6679eac277ab94",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "4c8443c10020ce32744eba47b91843da30f128a83fb67d1d6f6f593c8d5b980e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "944ac2c880d3321b16d17507fb3fa42b46e6a77610830d58d259a0f066b72c42",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL04",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "90251db58f5ee071cc13a32dd841802547d369a55bc1483dcff9bafe6b6f48ea",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f5c2fceb2d369d09b121875530fc4a049393a0653d6781a1c57210b0f03acc9e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c82db2b1fb7076120813dae739dabd2df495f4e09ad9af8f5541d04a9b32de35",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL04",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "90251db58f5ee071cc13a32dd841802547d369a55bc1483dcff9bafe6b6f48ea",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f5c2fceb2d369d09b121875530fc4a049393a0653d6781a1c57210b0f03acc9e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c82db2b1fb7076120813dae739dabd2df495f4e09ad9af8f5541d04a9b32de35",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL04",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "90251db58f5ee071cc13a32dd841802547d369a55bc1483dcff9bafe6b6f48ea",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f5c2fceb2d369d09b121875530fc4a049393a0653d6781a1c57210b0f03acc9e",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "c82db2b1fb7076120813dae739dabd2df495f4e09ad9af8f5541d04a9b32de35",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL05",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "e7c243f7505cf0549d3c41cb499942fad59d842a06bb7c0b2bcc928c3c8f8efb",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d9e8326781585ed588e1a2a6cd30b06451bcdcd594d5c7283ae61d6f227fb4ad",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f213dd7b75d1899c78a51b7cd61429f5e4a50569d5ec90f79638c2b637b560ce",
+          "expected": "reject",
+          "control_state": "invalid",
+          "eligible": false,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": true,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL05",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "e7c243f7505cf0549d3c41cb499942fad59d842a06bb7c0b2bcc928c3c8f8efb",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d9e8326781585ed588e1a2a6cd30b06451bcdcd594d5c7283ae61d6f227fb4ad",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f213dd7b75d1899c78a51b7cd61429f5e4a50569d5ec90f79638c2b637b560ce",
+          "expected": "reject",
+          "control_state": "invalid",
+          "eligible": false,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": true,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL05",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "e7c243f7505cf0549d3c41cb499942fad59d842a06bb7c0b2bcc928c3c8f8efb",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d9e8326781585ed588e1a2a6cd30b06451bcdcd594d5c7283ae61d6f227fb4ad",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "f213dd7b75d1899c78a51b7cd61429f5e4a50569d5ec90f79638c2b637b560ce",
+          "expected": "reject",
+          "control_state": "invalid",
+          "eligible": false,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "invalid_control",
+          "expected_label_known_but_control_ineligible": true,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL06",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "a3330ae3f97780f8b46493a0739ac9cdb6879c1abe384300d4109b422d365a54",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d194d11da645d35e268bf759417fd6f537669a6a07c26dee1f68c2c4c752fc37",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1e04fdeff425434dda6629dc836d726b570e2332072c8a125ed6627938ae9344",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL06",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "a3330ae3f97780f8b46493a0739ac9cdb6879c1abe384300d4109b422d365a54",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d194d11da645d35e268bf759417fd6f537669a6a07c26dee1f68c2c4c752fc37",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1e04fdeff425434dda6629dc836d726b570e2332072c8a125ed6627938ae9344",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL06",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "a3330ae3f97780f8b46493a0739ac9cdb6879c1abe384300d4109b422d365a54",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d194d11da645d35e268bf759417fd6f537669a6a07c26dee1f68c2c4c752fc37",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1e04fdeff425434dda6629dc836d726b570e2332072c8a125ed6627938ae9344",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL07",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f8f1cb77abb97f786bb7f2235048e88e52a786785b68f666995fe279608507bd",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5e8925f9b39d2c01840a01b33101bb9fccd1cfc7d85977015cce8838b4d459f8",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1dbc958b23dd020808def5b5bb000702a1ebdb61d46482f287c5046ce22c7740",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL07",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f8f1cb77abb97f786bb7f2235048e88e52a786785b68f666995fe279608507bd",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5e8925f9b39d2c01840a01b33101bb9fccd1cfc7d85977015cce8838b4d459f8",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1dbc958b23dd020808def5b5bb000702a1ebdb61d46482f287c5046ce22c7740",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL07",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f8f1cb77abb97f786bb7f2235048e88e52a786785b68f666995fe279608507bd",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "5e8925f9b39d2c01840a01b33101bb9fccd1cfc7d85977015cce8838b4d459f8",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "1dbc958b23dd020808def5b5bb000702a1ebdb61d46482f287c5046ce22c7740",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL08",
+      "arm": "D0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL08",
+      "arm": "D1",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval1",
+      "event_id": "EVAL08",
+      "arm": "C0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL09",
+      "arm": "D0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL09",
+      "arm": "D1",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL09",
+      "arm": "C0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL10",
+      "arm": "D0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL10",
+      "arm": "D1",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL10",
+      "arm": "C0",
+      "unavailable_planned_candidates": 3,
+      "run_status": "observed",
+      "controls": []
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL11",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "099376335aeeb954144042cec633d033ef43f921b510b8144ce3e5de554f416a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "accept"
+        },
+        {
+          "opaque_id": "48cef400f04ada28dad674e71e0a1eb8958610d4d96e7ca345b701451057eb6c",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "accept"
+        },
+        {
+          "opaque_id": "4aa498cbedcd8992a359feb8045b5f9694dd5e281db4189f787a7f5521081c60",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL11",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "099376335aeeb954144042cec633d033ef43f921b510b8144ce3e5de554f416a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "accept"
+        },
+        {
+          "opaque_id": "48cef400f04ada28dad674e71e0a1eb8958610d4d96e7ca345b701451057eb6c",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "accept"
+        },
+        {
+          "opaque_id": "4aa498cbedcd8992a359feb8045b5f9694dd5e281db4189f787a7f5521081c60",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL11",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "099376335aeeb954144042cec633d033ef43f921b510b8144ce3e5de554f416a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "48cef400f04ada28dad674e71e0a1eb8958610d4d96e7ca345b701451057eb6c",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "4aa498cbedcd8992a359feb8045b5f9694dd5e281db4189f787a7f5521081c60",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL12",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "c81a1d3a3c97302a9289dea05643834d35c545dba77bbe3621428998949ff6ee",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "dc8e1777ccb1c2ab500dac0b6b4393530711fce40ef631e98e45e04444e80240",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "3c2c8bc480b72f968d8aba16c096228312cf5504c27379bf6093cce2589fb35e",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL12",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "c81a1d3a3c97302a9289dea05643834d35c545dba77bbe3621428998949ff6ee",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "dc8e1777ccb1c2ab500dac0b6b4393530711fce40ef631e98e45e04444e80240",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "3c2c8bc480b72f968d8aba16c096228312cf5504c27379bf6093cce2589fb35e",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL12",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "c81a1d3a3c97302a9289dea05643834d35c545dba77bbe3621428998949ff6ee",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "dc8e1777ccb1c2ab500dac0b6b4393530711fce40ef631e98e45e04444e80240",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "3c2c8bc480b72f968d8aba16c096228312cf5504c27379bf6093cce2589fb35e",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL13",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f2a785ef4a21f3e9035887a9b664c70fa60e7c529fb0ae7917a650d42a8f06e5",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "95c8e86e13a96215b2b57d1eede80fd91d53bd70705c05fcc57eff75364afc05",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "46eb913c3124834cc23e4d72648d67c4ee24ceeb8eb68e1a07959ff889081c58",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL13",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f2a785ef4a21f3e9035887a9b664c70fa60e7c529fb0ae7917a650d42a8f06e5",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "95c8e86e13a96215b2b57d1eede80fd91d53bd70705c05fcc57eff75364afc05",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "46eb913c3124834cc23e4d72648d67c4ee24ceeb8eb68e1a07959ff889081c58",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL13",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "f2a785ef4a21f3e9035887a9b664c70fa60e7c529fb0ae7917a650d42a8f06e5",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "95c8e86e13a96215b2b57d1eede80fd91d53bd70705c05fcc57eff75364afc05",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "46eb913c3124834cc23e4d72648d67c4ee24ceeb8eb68e1a07959ff889081c58",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL14",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "584d7168981bb1a7ca7140ea36bd48fbe96efa133d18e6d37223fa3692200e88",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "47e8dcc869521363efd0b2e26d8bbf2d8c875a001da1332f93c2bf173d2ae421",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d63319b3e34b38003fcbf2aa75963f3396ba4a842cdfb16d69943f629d2ed6d0",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL14",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "584d7168981bb1a7ca7140ea36bd48fbe96efa133d18e6d37223fa3692200e88",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "47e8dcc869521363efd0b2e26d8bbf2d8c875a001da1332f93c2bf173d2ae421",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d63319b3e34b38003fcbf2aa75963f3396ba4a842cdfb16d69943f629d2ed6d0",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL14",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "584d7168981bb1a7ca7140ea36bd48fbe96efa133d18e6d37223fa3692200e88",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "47e8dcc869521363efd0b2e26d8bbf2d8c875a001da1332f93c2bf173d2ae421",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "d63319b3e34b38003fcbf2aa75963f3396ba4a842cdfb16d69943f629d2ed6d0",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL15",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "fe3a84f54b812f35e43e04ebb3a6c7e77358fa8696af1c226fef226c33711d82",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "a4663ab4dcbbea73aa63083d98403f9283f1147c27060d6f376113a872c35722",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "efec6f6147762c75851c173c262dbc70b9860a6d4149a973d1025d679ef0696c",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL15",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "fe3a84f54b812f35e43e04ebb3a6c7e77358fa8696af1c226fef226c33711d82",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "a4663ab4dcbbea73aa63083d98403f9283f1147c27060d6f376113a872c35722",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "efec6f6147762c75851c173c262dbc70b9860a6d4149a973d1025d679ef0696c",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL15",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "fe3a84f54b812f35e43e04ebb3a6c7e77358fa8696af1c226fef226c33711d82",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "a4663ab4dcbbea73aa63083d98403f9283f1147c27060d6f376113a872c35722",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "efec6f6147762c75851c173c262dbc70b9860a6d4149a973d1025d679ef0696c",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL16",
+      "arm": "D0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "5c346b5afba06c7a58cbdb49702277bc58dee2806ed764b119ad77450ba74c2a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "9853c6796fcf8e586822522cb859437c071bb33195fff93a5a4bd945a6796a60",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "b42dc25363495481c551dd454267d16e46e86584c5545c2c5c1c03d9260e8878",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL16",
+      "arm": "D1",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "5c346b5afba06c7a58cbdb49702277bc58dee2806ed764b119ad77450ba74c2a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "9853c6796fcf8e586822522cb859437c071bb33195fff93a5a4bd945a6796a60",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "b42dc25363495481c551dd454267d16e46e86584c5545c2c5c1c03d9260e8878",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    },
+    {
+      "block": "eval2",
+      "event_id": "EVAL16",
+      "arm": "C0",
+      "unavailable_planned_candidates": 0,
+      "run_status": "observed",
+      "controls": [
+        {
+          "opaque_id": "5c346b5afba06c7a58cbdb49702277bc58dee2806ed764b119ad77450ba74c2a",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "normal",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "9853c6796fcf8e586822522cb859437c071bb33195fff93a5a4bd945a6796a60",
+          "expected": "accept",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "equivalent",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "abstain"
+        },
+        {
+          "opaque_id": "b42dc25363495481c551dd454267d16e46e86584c5545c2c5c1c03d9260e8878",
+          "expected": "reject",
+          "control_state": "validated",
+          "eligible": true,
+          "fixture_hash_verified": true,
+          "kind": "mutation",
+          "case_audit_status": "validated_relation_control",
+          "expected_label_known_but_control_ineligible": false,
+          "decision": "reject"
+        }
+      ]
+    }
+  ]
+}

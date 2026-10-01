@@ -1,0 +1,55 @@
+{
+  "type": "supplemental_synthetic_AI_internal",
+  "rows": [
+    {
+      "id": "M07A",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": true
+    },
+    {
+      "id": "M07B",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": true
+    },
+    {
+      "id": "M08A",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": true
+    },
+    {
+      "id": "M08B",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": true
+    },
+    {
+      "id": "M09A",
+      "preserve_pass": 1,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": false
+    },
+    {
+      "id": "M09B",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "strict_pass": true
+    }
+  ],
+  "pass": 5,
+  "total": 6
+}

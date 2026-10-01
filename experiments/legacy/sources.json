@@ -1,0 +1,571 @@
+[
+  {
+    "source_id": "SRC001",
+    "title": "KBS 최저임금 보도",
+    "published_at": "2024-07-12T06:06:00+09:00",
+    "modified_at": "2024-07-12T08:38:00+09:00",
+    "type": "news",
+    "public_url": "https://news.kbs.co.kr/news/pc/view/view.do?ncd=8010015",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC002",
+    "title": "뉴스핌 자영업자·노동계 불만",
+    "published_at": "2024-07-12T13:45:00+09:00",
+    "modified_at": "2024-07-12T13:45:00+09:00",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20240712000578",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC003",
+    "title": "최저임금위원회 보도참고자료 HWPX",
+    "published_at": "2024-07-12",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.minimumwage.go.kr/file/downloadSeq.do?bultnId=4519&fileSeq=1",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC004",
+    "title": "2025년 최저임금은 1만30원…첫 1만 원 돌파, 배경은?",
+    "published_at": "2024-07-12T04:37:41+09:00",
+    "modified_at": "2024-07-31T09:51:31+09:00",
+    "type": "news",
+    "public_url": "https://www.worklaw.co.kr/main2022/view/view.asp?bi_pidx=36888&in_cate=124&in_cate2=0",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC005",
+    "title": "숏팩트 만 나이 통일법 오해와 진실",
+    "published_at": "2023-07-02T00:00:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://v.daum.net/v/6snOoHtn73?f=p",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC006",
+    "title": "SRC006",
+    "published_at": "2023-06-26T14:00:00+09:00",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.korea.kr/common/download.do?fileId=197547026&tblKey=GMN",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC007",
+    "title": "공공돋보기 만 나이 시대 적응법",
+    "published_at": "2023-06-28T12:43:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.00news.co.kr/news/articleView.html?idxno=78666",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC008",
+    "title": "만 나이 시대 열린다 Q&A",
+    "published_at": "2023-06-27T10:18:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.sisajournal.com/news/articleView.html?idxno=266649",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC009",
+    "title": "28일부터 만 나이로 통일…적용 예외는?",
+    "published_at": "2023-06-23T17:00:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.ytn.co.kr/_ln/0103_202306231700475845",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC010",
+    "title": "WHO 아스파탐 발암가능물질 확정…식약처 안전성 문제없어",
+    "published_at": "2023-07-14T09:34:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.dongascience.com/ko/news/60701",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC011",
+    "title": "SRC011",
+    "published_at": "2023-07-13T18:54:00-04:00",
+    "modified_at": "2023-07-13T19:02:00-04:00",
+    "type": "news",
+    "public_url": "https://www.theguardian.com/society/2023/jul/13/aspartame-a-possible-carcinogen-but-safe-to-consume-in-moderation-who-says",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC012",
+    "title": "SRC012",
+    "published_at": "2023-07-14T05:23:00-04:00",
+    "modified_at": "2023-07-14T11:48:00-04:00",
+    "type": "news",
+    "public_url": "https://www.theguardian.com/society/2023/jul/14/aspartame-is-safe-in-limited-amounts-say-experts-after-cancer-warning",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC013",
+    "title": "SRC013",
+    "published_at": "2023-07-14",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC014",
+    "title": "영상 제로콜라에 든 아스파탐 발암가능물질…대신 물 마셔라",
+    "published_at": "2023-07-14T15:25:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.yna.co.kr/view/AKR20230714109000704",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC015",
+    "title": "Korea’s economy beats forecast to grow 1.3 percent in Q1",
+    "published_at": "2024-04-25T08:16:00+09:00",
+    "modified_at": "2024-04-25T10:32:00+09:00",
+    "type": "news",
+    "public_url": "https://www.koreajoongangdaily.com/business/koreas-economy-beats-forecast-to-grow-13-percent-in-q1/10732711",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC016",
+    "title": "GDP rises 1.3% on recovery in exports, construction investment",
+    "published_at": "2024-04-25T16:22:00+09:00",
+    "modified_at": "2024-04-25T17:43:00+09:00",
+    "type": "news",
+    "public_url": "https://www.koreajoongangdaily.com/business/gdp-rises-13-on-recovery-in-exports-construction-investment/12408362",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC017",
+    "title": "한국은행 2024년 1/4분기 실질 국내총생산(속보)",
+    "published_at": "2024-04-25",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?menuNo=201264&nttId=10083748",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC018",
+    "title": "한국은행 2024년 1/4분기 국민소득(잠정)",
+    "published_at": "2024-06-05",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?menuNo=201264&nttId=10084502",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC019",
+    "title": "한국은행 잠정 보도자료 PDF (KDI 미러)",
+    "published_at": "2024-06-05",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://eiec.kdi.re.kr/policy/callDownload.do?dtime=20240618085505&filenum=1&num=252318",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC020",
+    "title": "연합뉴스: 중대재해처벌법 5인 이상 사업장 확대",
+    "published_at": "2024-01-27T06:22:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.yna.co.kr/view/AKR20240126150200530",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC021",
+    "title": "MBC: 3년 유예했는데 또? 정부여당 추가 유예 추진",
+    "published_at": "2023-12-03T20:16:00+09:00",
+    "modified_at": "2023-12-03T20:16:00+09:00",
+    "type": "news",
+    "public_url": "https://imnews.imbc.com/replay/2023/nwdesk/article/6549545_36199.html",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC022",
+    "title": "고용노동부 보령: 중대재해처벌법 확대 적용 안내",
+    "published_at": "2024-01-29",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.moel.go.kr/local/boryeong/info/dataroom/view.do?bbs_seq=20240101829",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC023",
+    "title": "KLRI Serious Accidents Punishment Act English text",
+    "published_at": "2021-01-26",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://elaw.klri.re.kr/eng_mobile/viewer.do?hseq=59952&key=6&type=sogan",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC024",
+    "title": "고용노동부 확대 적용 관련 Q&A PDF",
+    "published_at": "2024-01-29",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.moel.go.kr/local/boryeong/common/downloadFile.do?bbs_id=LOCAL5&bbs_seq=20240101829&file_seq=20240102674",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC025",
+    "title": "아시아경제: 내년 의대 정원 최종 1500명 안팎 증원",
+    "published_at": "2024-05-02T14:18:00+09:00",
+    "modified_at": "2024-05-02T14:51:00+09:00",
+    "type": "news",
+    "public_url": "https://view.asiae.co.kr/article/2024050214184371793",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC026",
+    "title": "의협신문: 의대 모집인원 제출 현황",
+    "published_at": "2024-05-02T16:41:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.doctorsnews.co.kr/news/articleView.html?idxno=154522",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC027",
+    "title": "한경BUSINESS: 내년 의대 정원 1500명 안팎 증원",
+    "published_at": "2024-05-02T15:31:00+09:00",
+    "modified_at": "2024-05-02T16:06:00+09:00",
+    "type": "news",
+    "public_url": "https://magazine.hankyung.com/business/article/202405022426b",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC028",
+    "title": "YTN: 내일 대입 전형 발표…의대 증원·자율전공 확대",
+    "published_at": "2024-05-29T17:10:00+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.ytn.co.kr/_ln/0103_202405291710505584",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC029",
+    "title": "보건복지부: 2025학년도 의대 정원 2000명 증원",
+    "published_at": "2024-02-06",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.korea.kr/news/policyNewsView.do?newsId=148925630",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC030",
+    "title": "교육부: 2025학년도 의대 정원 대학별 배정결과",
+    "published_at": "2024-03-20",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=98414&lev=0&m=020402&opType=N&page=1&s=moe&searchType=null&statusYN=W",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC031",
+    "title": "고물가 속 실질 근로소득 역대 최대폭 감소...쪼그라든 살림살이",
+    "published_at": "2024-05-24T01:17+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.ytn.co.kr/_ln/0102_202405240117266386",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC032",
+    "title": "[친절한 경제] \"내 월급만 빼고 다 올라\"…실질 근로소득 감소세 집계 이래 최대폭",
+    "published_at": "2024-05-24T09:06+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://v.daum.net/v/POn0DrZwEr",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC033",
+    "title": "고물가 여파…가계 실질소득 7년 만에 최대 감소",
+    "published_at": "2024-05-23T18:28+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.yonhapnewstv.co.kr/news/MYH20240523016400641",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC034",
+    "title": "올해 1분기 가구당 월평균 소득 512만 2천원…실질소득 7년 만에 최대 감소",
+    "published_at": "2024-05-27T14:37+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.dailypop.kr/news/articleView.html?idxno=78250",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC035",
+    "title": "2024년 1/4분기 가계동향조사 결과 보도자료 | 가계동향조사 | 물가 · 가계 | 보도자료 | 새소식 : 국가데이터처",
+    "published_at": "2024-05-23",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.mods.go.kr/board.es?act=view&bid=214&list_no=431080&mid=a10301040400",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC036",
+    "title": "5월 취업자 8만↑, 39개월만에 최소폭…\"날씨·휴일 등 영향\"(종합2보) | 연합뉴스",
+    "published_at": "2024-06-12T11:14+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.yna.co.kr/view/AKR20240612018753002",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC037",
+    "title": "5월 취업자 8만명↑…39개월만에 최소폭 증가(종합)",
+    "published_at": "2024-06-12T08:41+09:00",
+    "modified_at": "2024-06-12T08:42+09:00",
+    "type": "news",
+    "public_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4312882",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC038",
+    "title": "5월 취업자 8만명 늘어…청년 고용률 0.7%p↓·실업률 0.9%p↑",
+    "published_at": "2024-06-12T08:03+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://v.daum.net/v/bAmIKBSg34",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC039",
+    "title": "[종합] 5월 취업자 8만명 증가…고용률 63.5%·실업률 3%",
+    "published_at": "2024-06-12T09:05+09:00",
+    "modified_at": "2024-06-12T09:10+09:00",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20240612000103",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC040",
+    "title": "2024년 5월 고용동향",
+    "published_at": "2024-06-12",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.korea.kr/briefing/policyBriefingView.do?newsId=156635174",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC041",
+    "title": "\"하루 8시간 제한 '간헐적 단식', 심혈관질환 사망 위험 91% 높여\"",
+    "published_at": "2024-03-19T11:49+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.dongascience.com/ko/news/64350",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC042",
+    "title": "건강에 좋다더니…\"간헐적 단식, 심혈관질환 사망률 높여\"",
+    "published_at": "2024-03-19T14:40+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.ytn.co.kr/_ln/0104_202403191440015729",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC043",
+    "title": "건강에 좋은 줄 알았던 간헐적 단식…“사망위험 높인다” 반전 결과",
+    "published_at": "2024-03-19T15:42+09:00",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://v.daum.net/v/9TrfAcQ0uL",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC044",
+    "title": "8-hour time-restricted eating linked to a 91% higher risk of cardiovascular death",
+    "published_at": "2024-03-18",
+    "modified_at": "2024-03-19 편집자 주; 연결 포스터 2024-03-27 갱신 명시",
+    "type": "primary",
+    "public_url": "https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC045",
+    "title": "뉴스핌 본회의 기사",
+    "published_at": "2025년03월20일 17:22",
+    "modified_at": "2025년04월02일 15:54",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20250320000945",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC046",
+    "title": "뉴시스 본회의 기사",
+    "published_at": "2025-03-20 17:10:20",
+    "modified_at": "2025-03-20 18:30:23",
+    "type": "news",
+    "public_url": "https://www.newsis.com/view/NISX20250320_0003106817",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC047",
+    "title": "연합뉴스 반대·기권 보도",
+    "published_at": "2025-03-20 18:48",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.yna.co.kr/view/AKR20250320168500001",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC048",
+    "title": "YTN 본회의 현장영상 텍스트",
+    "published_at": "2025-03-20 17:04",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.ytn.co.kr/_ln/0101_202503201704289228",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC049",
+    "title": "복지부 보도자료",
+    "published_at": "2025-03-20",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://m.korea.kr/briefing/pressReleaseView.do?newsId=156679996",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC050",
+    "title": "뉴스핌 본회의 통과",
+    "published_at": "2024년08월28일 14:58",
+    "modified_at": "2024년08월28일 14:58",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20240828000724",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC051",
+    "title": "뉴시스 보증금 기준",
+    "published_at": "2024-08-28 15:08:16",
+    "modified_at": "2024-08-28 15:19:20",
+    "type": "news",
+    "public_url": "https://www.newsis.com/view/NISX20240828_0002866243",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC052",
+    "title": "땅집고 통과 보도",
+    "published_at": "2024-08-28 17:11",
+    "modified_at": "2024-08-28 17:19",
+    "type": "news",
+    "public_url": "https://realty.chosun.com/site/data/html_dir/2024/08/28/2024082801845.html",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC053",
+    "title": "뉴스핌 국토부 입장",
+    "published_at": "2024년08월28일 16:08",
+    "modified_at": "2024년08월28일 16:08",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20240828000871",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC054",
+    "title": "국토부 보도자료 게시면",
+    "published_at": "2024-08-28",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156647728",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC055",
+    "title": "국토부 보도참고자료 PDF 8쪽",
+    "published_at": "2024-08-28",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://www.korea.kr/common/download.do?fileId=197856844&tblKey=GMN",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC056",
+    "title": "참여연대·피해대책위 논평",
+    "published_at": "2024-08-28",
+    "modified_at": null,
+    "type": "response",
+    "public_url": "https://peoplepower21.org/stablelife/1974433",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC057",
+    "title": "머니투데이 전원회의 취재",
+    "published_at": "2024-06-13 14:33",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.mt.co.kr/economy/2024/06/13/2024061314061746027",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC058",
+    "title": "뉴시스 제재 종합",
+    "published_at": "2024-06-13 15:51:02",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.newsis.com/view/NISX20240613_0002771737",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC059",
+    "title": "뉴스핌 제재 기사",
+    "published_at": "2024년06월13일 12:00",
+    "modified_at": "2024년06월13일 12:00",
+    "type": "news",
+    "public_url": "https://www.newspim.com/news/view/20240613000312",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC060",
+    "title": "뉴스워커 쿠팡 입장",
+    "published_at": "2024-06-13 16:03",
+    "modified_at": null,
+    "type": "news",
+    "public_url": "https://www.newsworker.co.kr/news/articleView.html?idxno=335465",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC061",
+    "title": "공정위 제재 브리핑 및 질의응답",
+    "published_at": "2024-06-13",
+    "modified_at": null,
+    "type": "primary",
+    "public_url": "https://m.korea.kr/news/policyNewsView.do?newsId=156635544",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC062",
+    "title": "2024-08-29 헌재 기후소송 2020헌마389등",
+    "type": "primary",
+    "published_at": "페이지에서 별도게시일미확인;선고일과구별",
+    "public_url": "https://www.ccourt.go.kr/jsp/View.jsp?bcIdx=1008482&cbIdx=1195",
+    "url_provenance": "Recovered public-source metadata; no new retrieval performed for this release."
+  },
+  {
+    "source_id": "SRC063",
+    "title": "Citation label retained from generated output; bibliographic metadata unavailable in selected manifests",
+    "public_url": null,
+    "url_provenance": "Missing: no URL in the selected recovered source metadata."
+  },
+  {
+    "source_id": "SRC064",
+    "title": "Citation label retained from generated output; bibliographic metadata unavailable in selected manifests",
+    "public_url": null,
+    "url_provenance": "Missing: no URL in the selected recovered source metadata."
+  }
+]

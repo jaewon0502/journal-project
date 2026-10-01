@@ -1,0 +1,38 @@
+[
+  {
+    "run_id": "NEW02-Patch",
+    "core_preserved": 4,
+    "core_total": 4,
+    "forbidden_violations": 0,
+    "audited_claims": 14,
+    "new_errors": [],
+    "normal_overediting": []
+  },
+  {
+    "run_id": "NEW02-Full",
+    "core_preserved": 4,
+    "core_total": 4,
+    "forbidden_violations": 0,
+    "audited_claims": 14,
+    "new_errors": [],
+    "normal_overediting": []
+  },
+  {
+    "run_id": "NEW01-Patch",
+    "core_preserved": 4,
+    "core_total": 4,
+    "forbidden_violations": 0,
+    "audited_claims": 12,
+    "new_errors": [],
+    "normal_overediting": []
+  },
+  {
+    "run_id": "NEW01-Full",
+    "core_preserved": 4,
+    "core_total": 4,
+    "forbidden_violations": 0,
+    "audited_claims": 12,
+    "new_errors": [],
+    "normal_overediting": []
+  }
+]

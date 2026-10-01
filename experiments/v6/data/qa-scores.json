@@ -1,0 +1,933 @@
+{
+  "artifact_kind": "sanitized derivative; not original bytes",
+  "snapshot_date": "2026-10-01",
+  "records": [
+    {
+      "event_id": "DEV01",
+      "arm": "A0",
+      "output_id": "1b7913008182798bbbfc",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 11,
+      "support_rate": 0.9090909090909091,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 10,
+        "partial": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV01",
+      "arm": "A1",
+      "output_id": "70de3925c17a3127c122",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 9,
+      "support_rate": 0.8888888888888888,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 8,
+        "partial": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 1
+    },
+    {
+      "event_id": "DEV02",
+      "arm": "A0",
+      "output_id": "646fcac52d778d50009e",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 11,
+      "support_rate": 0.9090909090909091,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 10,
+        "unverifiable": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV02",
+      "arm": "A1",
+      "output_id": "793714d3807a4a0606b4",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 12,
+      "support_rate": 0.9166666666666666,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 11,
+        "unverifiable": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV03",
+      "arm": "A1",
+      "output_id": "212280f7893054e7be46",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 8,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 8
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV03",
+      "arm": "A0",
+      "output_id": "5ad4b5d2c45d2a1939b9",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 9,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 9
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV04",
+      "arm": "A1",
+      "output_id": "087f1590d8e8f8208552",
+      "obligation_denominator": 6,
+      "obligation_recall": 0.8333333333333334,
+      "claim_denominator": 14,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 5,
+        "omitted": 1
+      },
+      "claim_counts": {
+        "supported": 14
+      },
+      "severe_omission_count": 1,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV04",
+      "arm": "A0",
+      "output_id": "4d6d3a70acbe499b3e34",
+      "obligation_denominator": 6,
+      "obligation_recall": 0.8333333333333334,
+      "claim_denominator": 17,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 5,
+        "omitted": 1
+      },
+      "claim_counts": {
+        "supported": 17
+      },
+      "severe_omission_count": 1,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV05",
+      "arm": "A1",
+      "output_id": "864faf4a84abfb5f4af9",
+      "obligation_denominator": 6,
+      "obligation_recall": 0.8333333333333334,
+      "claim_denominator": 11,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 5,
+        "partial": 1
+      },
+      "claim_counts": {
+        "supported": 11
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV05",
+      "arm": "A0",
+      "output_id": "a59c1db563931e20371c",
+      "obligation_denominator": 6,
+      "obligation_recall": 0.8333333333333334,
+      "claim_denominator": 13,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 5,
+        "partial": 1
+      },
+      "claim_counts": {
+        "supported": 13
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV06",
+      "arm": "A0",
+      "output_id": "44297fb133d6550bc485",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 14,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 14
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV06",
+      "arm": "A1",
+      "output_id": "c937257feca4f932605c",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 12,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 12
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV07",
+      "arm": "A1",
+      "output_id": "de810537b14e14e48ea9",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 12,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 12
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV07",
+      "arm": "A0",
+      "output_id": "fdcde9b4df989beb16ee",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 11,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 11
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV08",
+      "arm": "A0",
+      "output_id": "0b269234135146167968",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "DEV08",
+      "arm": "A1",
+      "output_id": "7134641cdf16a7099919",
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 9,
+      "support_rate": 1.0,
+      "phase": "dev",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 9
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL01",
+      "arm": "A0",
+      "output_id": "2ac45046daffd3bb7413",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 0.8571428571428571,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 6,
+        "partial": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL01",
+      "arm": "A1",
+      "output_id": "96b41dc6033455da6e0c",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 6,
+      "support_rate": 0.8333333333333334,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 5,
+        "partial": 1
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL02",
+      "arm": "A0",
+      "output_id": "a022715cb25734b7f836",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL02",
+      "arm": "A1",
+      "output_id": "bfeac7685c0efe79236c",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL03",
+      "arm": "A1",
+      "output_id": "58122dbeb174cbeb02ca",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 0.8333333333333334,
+      "claim_denominator": 9,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 5,
+        "partial": 1
+      },
+      "claim_counts": {
+        "supported": 9
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL03",
+      "arm": "A0",
+      "output_id": "88eff264ec7a0b37909d",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL04",
+      "arm": "A0",
+      "output_id": "6cbd3f20f5edfc2f9bbc",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL04",
+      "arm": "A1",
+      "output_id": "8f5c128ee6ecd59af8de",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL05",
+      "arm": "A1",
+      "output_id": "81d4154c114d1fc9d3f1",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL05",
+      "arm": "A0",
+      "output_id": "8e90208c40111eb38b06",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL06",
+      "arm": "A0",
+      "output_id": "13fb7898572019fbabdc",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 15,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 15
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL06",
+      "arm": "A1",
+      "output_id": "6898cc180f1de6177468",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 13,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 13
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL07",
+      "arm": "A1",
+      "output_id": "690a142049b8714c6343",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL07",
+      "arm": "A0",
+      "output_id": "836276ffc598dea56171",
+      "source_unavailable": false,
+      "obligation_denominator": 6,
+      "obligation_recall": 1.0,
+      "claim_denominator": 15,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 6
+      },
+      "claim_counts": {
+        "supported": 15
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL08",
+      "arm": "A1",
+      "output_id": "82331239917d68201926",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL08",
+      "arm": "A0",
+      "output_id": "922be5c8f3191e9b663c",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL09",
+      "arm": "A0",
+      "output_id": "9025369f4b4501bf3fca",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL09",
+      "arm": "A1",
+      "output_id": "965f5b205f6fd55c2f74",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL10",
+      "arm": "A0",
+      "output_id": "2872cf448fd796e571b2",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL10",
+      "arm": "A1",
+      "output_id": "6563c535e9a07830fc07",
+      "source_unavailable": true,
+      "obligation_denominator": 4,
+      "obligation_recall": 0.0,
+      "claim_denominator": 0,
+      "support_rate": null,
+      "support_NA_reason": "source unavailable; access-status statements are not answers to source-fact questions",
+      "phase": "eval",
+      "obligation_counts": {
+        "unverifiable": 4
+      },
+      "claim_counts": {},
+      "severe_omission_count": null,
+      "severe_addition_count": null
+    },
+    {
+      "event_id": "EVAL11",
+      "arm": "A1",
+      "output_id": "253ca38374d8dc23a323",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 6,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 6
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL11",
+      "arm": "A0",
+      "output_id": "c1b9bbc10fbd5433431d",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL12",
+      "arm": "A0",
+      "output_id": "9b9a51a96489156ffefb",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 8,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 8
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL12",
+      "arm": "A1",
+      "output_id": "f4e1ada91632d258e56e",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL13",
+      "arm": "A0",
+      "output_id": "57807976de1b56ce8044",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 14,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 14
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL13",
+      "arm": "A1",
+      "output_id": "c0b63145aa84069623ef",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 13,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 13
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL14",
+      "arm": "A1",
+      "output_id": "0f0bd8187ecdc307b563",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL14",
+      "arm": "A0",
+      "output_id": "e40eac437de07a279f24",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL15",
+      "arm": "A1",
+      "output_id": "1998e4a55863bd50a026",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 6,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 6
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL15",
+      "arm": "A0",
+      "output_id": "397a8a4180c49df41628",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 7,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 7
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL16",
+      "arm": "A1",
+      "output_id": "cf57bb6588992326acba",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 10,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 10
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    },
+    {
+      "event_id": "EVAL16",
+      "arm": "A0",
+      "output_id": "f246db23199dbe9aa91a",
+      "source_unavailable": false,
+      "obligation_denominator": 4,
+      "obligation_recall": 1.0,
+      "claim_denominator": 11,
+      "support_rate": 1.0,
+      "support_NA_reason": null,
+      "phase": "eval",
+      "obligation_counts": {
+        "preserved": 4
+      },
+      "claim_counts": {
+        "supported": 11
+      },
+      "severe_omission_count": 0,
+      "severe_addition_count": 0
+    }
+  ]
+}

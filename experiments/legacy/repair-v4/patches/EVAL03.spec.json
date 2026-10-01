@@ -1,0 +1,22 @@
+{
+  "case": "EVAL03",
+  "source": "../../repair-v3/outputs/EVAL03-Guarded.md",
+  "output": "../outputs/EVAL03-Patched.md",
+  "source_sha256": "564dfd3dbe6bdc5ba706ab4fe41ae0ae38255ebb5a6593a889b7c8e7ebf2c3e4",
+  "evidence_inputs": [],
+  "edits": [
+    {
+      "id": "cold_start_exception",
+      "old": "알고리즘의 직매입·PB 우대와 임직원의 PB 후기·높은 별점 부여가 대상이다.[SRC061:L13-L31]",
+      "new": "알고리즘의 직매입·PB 우대와 임직원의 PB 후기·높은 별점 부여가 대상이다.[SRC061:L13-L31] 다만 공정위에 따르면 콜드스타트는 일부 식품 중개상품에도 적용됐으며 이 적용은 2023년 1월부터 중단됐다.[SRC061:L113-L113]",
+      "evidence": "SRC061:L113"
+    },
+    {
+      "id": "damage_attribution",
+      "old": "직접 피해는 자기상품과 경쟁하는 입점업체로 한정돼",
+      "new": "공정위는 자기상품과 경쟁하는 입점업체가 직접 타격을 받는다고 봤으며",
+      "evidence": "SRC061:L207"
+    }
+  ],
+  "public_note": "Sanitized fixture replay only. Original evidence-input hash checks cannot be rerun without private source packets."
+}

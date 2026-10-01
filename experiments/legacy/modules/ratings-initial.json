@@ -1,0 +1,189 @@
+{
+  "evaluation": "AI_internal_not_human",
+  "rows": [
+    {
+      "id": "M01A",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 20,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M01B",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 27,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M02A",
+      "kind": "synthetic",
+      "preserve_pass": 1,
+      "preserve_total": 1,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 110,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M02B",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 45,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M03A",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 28,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M03B",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 19,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M04A",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 39,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M04B",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 99,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M05A",
+      "kind": "synthetic",
+      "preserve_pass": 1,
+      "preserve_total": 1,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 24,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M05B",
+      "kind": "synthetic",
+      "preserve_pass": 1,
+      "preserve_total": 1,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 92,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M06A",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": true,
+      "characters": 48,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "M06B",
+      "kind": "synthetic",
+      "preserve_pass": 2,
+      "preserve_total": 2,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 48,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "T01-D",
+      "kind": "real_transfer",
+      "preserve_pass": 5,
+      "preserve_total": 5,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 425,
+      "length_compliant": true,
+      "strict_pass": true
+    },
+    {
+      "id": "T01-general",
+      "kind": "real_transfer",
+      "preserve_pass": 3,
+      "preserve_total": 5,
+      "forbid_violations": 0,
+      "normal_overediting": false,
+      "characters": 354,
+      "length_compliant": true,
+      "strict_pass": false
+    }
+  ],
+  "pairs": [
+    {
+      "id": "M01",
+      "pass": true
+    },
+    {
+      "id": "M02",
+      "pass": true
+    },
+    {
+      "id": "M03",
+      "pass": true
+    },
+    {
+      "id": "M04",
+      "pass": true
+    },
+    {
+      "id": "M05",
+      "pass": true
+    },
+    {
+      "id": "M06",
+      "pass": true
+    }
+  ],
+  "synthetic_pass": 12,
+  "synthetic_total": 12,
+  "pair_pass": 6,
+  "pair_total": 6
+}

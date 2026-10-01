@@ -1,0 +1,1827 @@
+{
+  "evaluation_type": "AI_internal_not_human",
+  "rows": [
+    {
+      "run_id": "DEV01-D-v2",
+      "review": "DEV01-regression-v2",
+      "case_id": "DEV01",
+      "arm": "D",
+      "characters": 877,
+      "length_compliant": true,
+      "supported": 49,
+      "verifiable": 50,
+      "support_rate": 0.98,
+      "claim_labels": {
+        "supported": 49,
+        "partial": 1
+      },
+      "core_preserved": 5,
+      "core_total": 10,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 4,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV01-D-v1",
+      "review": "DEV01-v1",
+      "case_id": "DEV01",
+      "arm": "D",
+      "characters": 841,
+      "length_compliant": true,
+      "supported": 25,
+      "verifiable": 25,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 25
+      },
+      "core_preserved": 8,
+      "core_total": 10,
+      "core_rate": 0.8,
+      "core_statuses": {
+        "preserved": 8,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV01-C-v1",
+      "review": "DEV01-v1",
+      "case_id": "DEV01",
+      "arm": "C",
+      "characters": 871,
+      "length_compliant": true,
+      "supported": 25,
+      "verifiable": 25,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 25
+      },
+      "core_preserved": 7,
+      "core_total": 10,
+      "core_rate": 0.7,
+      "core_statuses": {
+        "preserved": 7,
+        "omitted": 2,
+        "partial": 1
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV01-A-v1",
+      "review": "DEV01-v1",
+      "case_id": "DEV01",
+      "arm": "A",
+      "characters": 838,
+      "length_compliant": true,
+      "supported": 24,
+      "verifiable": 24,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 24
+      },
+      "core_preserved": 4,
+      "core_total": 10,
+      "core_rate": 0.4,
+      "core_statuses": {
+        "partial": 4,
+        "preserved": 4,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV01-B-v1",
+      "review": "DEV01-v1",
+      "case_id": "DEV01",
+      "arm": "B",
+      "characters": 849,
+      "length_compliant": true,
+      "supported": 28,
+      "verifiable": 28,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 28
+      },
+      "core_preserved": 4,
+      "core_total": 10,
+      "core_rate": 0.4,
+      "core_statuses": {
+        "partial": 4,
+        "preserved": 4,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 15,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV02-D-v2",
+      "review": "DEV02-regression-v2",
+      "case_id": "DEV02",
+      "arm": "D",
+      "characters": 886,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 35,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 35
+      },
+      "core_preserved": 7,
+      "core_total": 9,
+      "core_rate": 0.7777777777777778,
+      "core_statuses": {
+        "partial": 2,
+        "preserved": 7
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 0,
+      "gate_pass": true,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 15,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV02-C-v1",
+      "review": "DEV02-v1",
+      "case_id": "DEV02",
+      "arm": "C",
+      "characters": 826,
+      "length_compliant": true,
+      "supported": 32,
+      "verifiable": 32,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 32
+      },
+      "core_preserved": 6,
+      "core_total": 9,
+      "core_rate": 0.6666666666666666,
+      "core_statuses": {
+        "preserved": 6,
+        "omitted": 1,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 3,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV02-D-v1",
+      "review": "DEV02-v1",
+      "case_id": "DEV02",
+      "arm": "D",
+      "characters": 881,
+      "length_compliant": true,
+      "supported": 36,
+      "verifiable": 36,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 36
+      },
+      "core_preserved": 7,
+      "core_total": 9,
+      "core_rate": 0.7777777777777778,
+      "core_statuses": {
+        "partial": 1,
+        "preserved": 7,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV02-B-v1",
+      "review": "DEV02-v1",
+      "case_id": "DEV02",
+      "arm": "B",
+      "characters": 771,
+      "length_compliant": true,
+      "supported": 29,
+      "verifiable": 29,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 29
+      },
+      "core_preserved": 1,
+      "core_total": 9,
+      "core_rate": 0.1111111111111111,
+      "core_statuses": {
+        "partial": 7,
+        "omitted": 1,
+        "preserved": 1
+      },
+      "question_statuses": {
+        "partial": 3,
+        "answered": 2
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV02-A-v1",
+      "review": "DEV02-v1",
+      "case_id": "DEV02",
+      "arm": "A",
+      "characters": 825,
+      "length_compliant": true,
+      "supported": 32,
+      "verifiable": 32,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 32
+      },
+      "core_preserved": 1,
+      "core_total": 9,
+      "core_rate": 0.1111111111111111,
+      "core_statuses": {
+        "partial": 7,
+        "omitted": 1,
+        "preserved": 1
+      },
+      "question_statuses": {
+        "partial": 3,
+        "answered": 2
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 17,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV03-D-v2",
+      "review": "DEV03-regression-v2",
+      "case_id": "DEV03",
+      "arm": "D",
+      "characters": 877,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 35,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 35
+      },
+      "core_preserved": 6,
+      "core_total": 8,
+      "core_rate": 0.75,
+      "core_statuses": {
+        "preserved": 6,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 0,
+      "gate_pass": true,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV03-B-v1",
+      "review": "DEV03-v1",
+      "case_id": "DEV03",
+      "arm": "B",
+      "characters": 838,
+      "length_compliant": true,
+      "supported": 22,
+      "verifiable": 24,
+      "support_rate": 0.9166666666666666,
+      "claim_labels": {
+        "supported": 22,
+        "partial": 1,
+        "conflicting": 1
+      },
+      "core_preserved": 1,
+      "core_total": 8,
+      "core_rate": 0.125,
+      "core_statuses": {
+        "preserved": 1,
+        "partial": 5,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV03-A-v1",
+      "review": "DEV03-v1",
+      "case_id": "DEV03",
+      "arm": "A",
+      "characters": 811,
+      "length_compliant": true,
+      "supported": 20,
+      "verifiable": 23,
+      "support_rate": 0.8695652173913043,
+      "claim_labels": {
+        "supported": 20,
+        "contradicted": 1,
+        "partial": 1,
+        "conflicting": 1
+      },
+      "core_preserved": 0,
+      "core_total": 8,
+      "core_rate": 0.0,
+      "core_statuses": {
+        "partial": 6,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "partial": 2,
+        "answered": 3
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 1,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV03-C-v1",
+      "review": "DEV03-v1",
+      "case_id": "DEV03",
+      "arm": "C",
+      "characters": 830,
+      "length_compliant": true,
+      "supported": 25,
+      "verifiable": 26,
+      "support_rate": 0.9615384615384616,
+      "claim_labels": {
+        "supported": 25,
+        "partial": 1
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "preserved": 4,
+        "partial": 2,
+        "omitted": 2
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV03-D-v1",
+      "review": "DEV03-v1",
+      "case_id": "DEV03",
+      "arm": "D",
+      "characters": 872,
+      "length_compliant": true,
+      "supported": 25,
+      "verifiable": 26,
+      "support_rate": 0.9615384615384616,
+      "claim_labels": {
+        "supported": 25,
+        "partial": 1
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 2,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV04-D-v2",
+      "review": "DEV04-regression-v2",
+      "case_id": "DEV04",
+      "arm": "D",
+      "characters": 893,
+      "length_compliant": true,
+      "supported": 36,
+      "verifiable": 36,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 36
+      },
+      "core_preserved": 6,
+      "core_total": 7,
+      "core_rate": 0.8571428571428571,
+      "core_statuses": {
+        "preserved": 6,
+        "partial": 1
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 9,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV04-C-v1",
+      "review": "DEV04-v1",
+      "case_id": "DEV04",
+      "arm": "C",
+      "characters": 897,
+      "length_compliant": true,
+      "supported": 31,
+      "verifiable": 31,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 31
+      },
+      "core_preserved": 6,
+      "core_total": 7,
+      "core_rate": 0.8571428571428571,
+      "core_statuses": {
+        "preserved": 6,
+        "partial": 1
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV04-A-v1",
+      "review": "DEV04-v1",
+      "case_id": "DEV04",
+      "arm": "A",
+      "characters": 808,
+      "length_compliant": true,
+      "supported": 22,
+      "verifiable": 32,
+      "support_rate": 0.6875,
+      "claim_labels": {
+        "supported": 22,
+        "unknown": 10
+      },
+      "core_preserved": 2,
+      "core_total": 7,
+      "core_rate": 0.2857142857142857,
+      "core_statuses": {
+        "preserved": 2,
+        "omitted": 5
+      },
+      "question_statuses": {
+        "unanswered": 3,
+        "partial": 1,
+        "answered": 1
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 16,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV04-D-v1",
+      "review": "DEV04-v1",
+      "case_id": "DEV04",
+      "arm": "D",
+      "characters": 833,
+      "length_compliant": true,
+      "supported": 34,
+      "verifiable": 34,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 34
+      },
+      "core_preserved": 5,
+      "core_total": 7,
+      "core_rate": 0.7142857142857143,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV04-B-v1",
+      "review": "DEV04-v1",
+      "case_id": "DEV04",
+      "arm": "B",
+      "characters": 821,
+      "length_compliant": true,
+      "supported": 21,
+      "verifiable": 27,
+      "support_rate": 0.7777777777777778,
+      "claim_labels": {
+        "supported": 21,
+        "unknown": 6
+      },
+      "core_preserved": 2,
+      "core_total": 7,
+      "core_rate": 0.2857142857142857,
+      "core_statuses": {
+        "preserved": 2,
+        "omitted": 5
+      },
+      "question_statuses": {
+        "unanswered": 3,
+        "partial": 1,
+        "answered": 1
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV05-D-v2",
+      "review": "DEV05-regression-v2",
+      "case_id": "DEV05",
+      "arm": "D",
+      "characters": 888,
+      "length_compliant": true,
+      "supported": 29,
+      "verifiable": 31,
+      "support_rate": 0.9354838709677419,
+      "claim_labels": {
+        "supported": 29,
+        "partial": 2
+      },
+      "core_preserved": 6,
+      "core_total": 8,
+      "core_rate": 0.75,
+      "core_statuses": {
+        "preserved": 6,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV05-D-v1",
+      "review": "DEV05-v1",
+      "case_id": "DEV05",
+      "arm": "D",
+      "characters": 781,
+      "length_compliant": true,
+      "supported": 30,
+      "verifiable": 32,
+      "support_rate": 0.9375,
+      "claim_labels": {
+        "supported": 30,
+        "partial": 2
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 3
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 3,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV05-B-v1",
+      "review": "DEV05-v1",
+      "case_id": "DEV05",
+      "arm": "B",
+      "characters": 806,
+      "length_compliant": true,
+      "supported": 37,
+      "verifiable": 37,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 37
+      },
+      "core_preserved": 3,
+      "core_total": 8,
+      "core_rate": 0.375,
+      "core_statuses": {
+        "preserved": 3,
+        "partial": 5
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 5,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 15,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV05-A-v1",
+      "review": "DEV05-v1",
+      "case_id": "DEV05",
+      "arm": "A",
+      "characters": 829,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 39,
+      "support_rate": 0.8974358974358975,
+      "claim_labels": {
+        "supported": 35,
+        "partial": 4
+      },
+      "core_preserved": 2,
+      "core_total": 8,
+      "core_rate": 0.25,
+      "core_statuses": {
+        "preserved": 2,
+        "partial": 6
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 7,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV05-C-v1",
+      "review": "DEV05-v1",
+      "case_id": "DEV05",
+      "arm": "C",
+      "characters": 787,
+      "length_compliant": true,
+      "supported": 28,
+      "verifiable": 30,
+      "support_rate": 0.9333333333333333,
+      "claim_labels": {
+        "supported": 28,
+        "partial": 2
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "preserved": 4,
+        "partial": 4
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV06-D-v2",
+      "review": "DEV06-regression-v2",
+      "case_id": "DEV06",
+      "arm": "D",
+      "characters": 854,
+      "length_compliant": true,
+      "supported": 41,
+      "verifiable": 41,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 41
+      },
+      "core_preserved": 3,
+      "core_total": 8,
+      "core_rate": 0.375,
+      "core_statuses": {
+        "partial": 4,
+        "omitted": 1,
+        "preserved": 3
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV06-D-v1",
+      "review": "DEV06-v1",
+      "case_id": "DEV06",
+      "arm": "D",
+      "characters": 896,
+      "length_compliant": true,
+      "supported": 40,
+      "verifiable": 40,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 40
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "partial": 3,
+        "omitted": 1,
+        "preserved": 4
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV06-B-v1",
+      "review": "DEV06-v1",
+      "case_id": "DEV06",
+      "arm": "B",
+      "characters": 864,
+      "length_compliant": true,
+      "supported": 29,
+      "verifiable": 32,
+      "support_rate": 0.90625,
+      "claim_labels": {
+        "supported": 29,
+        "contradicted": 3
+      },
+      "core_preserved": 2,
+      "core_total": 8,
+      "core_rate": 0.25,
+      "core_statuses": {
+        "partial": 3,
+        "omitted": 3,
+        "preserved": 2
+      },
+      "question_statuses": {
+        "partial": 4,
+        "answered": 1
+      },
+      "major_changes": 7,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 2,
+      "sentences": 16,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV06-C-v1",
+      "review": "DEV06-v1",
+      "case_id": "DEV06",
+      "arm": "C",
+      "characters": 873,
+      "length_compliant": true,
+      "supported": 32,
+      "verifiable": 32,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 32
+      },
+      "core_preserved": 3,
+      "core_total": 8,
+      "core_rate": 0.375,
+      "core_statuses": {
+        "partial": 5,
+        "preserved": 3
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "DEV06-A-v1",
+      "review": "DEV06-v1",
+      "case_id": "DEV06",
+      "arm": "A",
+      "characters": 898,
+      "length_compliant": true,
+      "supported": 34,
+      "verifiable": 36,
+      "support_rate": 0.9444444444444444,
+      "claim_labels": {
+        "supported": 34,
+        "contradicted": 2
+      },
+      "core_preserved": 2,
+      "core_total": 8,
+      "core_rate": 0.25,
+      "core_statuses": {
+        "partial": 3,
+        "omitted": 3,
+        "preserved": 2
+      },
+      "question_statuses": {
+        "partial": 4,
+        "answered": 1
+      },
+      "major_changes": 7,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 1,
+      "sentences": 17,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL01-A-v2",
+      "review": "EVAL01-v2",
+      "case_id": "EVAL01",
+      "arm": "A",
+      "characters": 820,
+      "length_compliant": true,
+      "supported": 31,
+      "verifiable": 36,
+      "support_rate": 0.8611111111111112,
+      "claim_labels": {
+        "supported": 31,
+        "contradicted": 4,
+        "partial": 1
+      },
+      "core_preserved": 2,
+      "core_total": 8,
+      "core_rate": 0.25,
+      "core_statuses": {
+        "preserved": 2,
+        "partial": 3,
+        "omitted": 3
+      },
+      "question_statuses": {
+        "answered": 1,
+        "unanswered": 2,
+        "partial": 2
+      },
+      "major_changes": 7,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL01-B-v2",
+      "review": "EVAL01-v2",
+      "case_id": "EVAL01",
+      "arm": "B",
+      "characters": 804,
+      "length_compliant": true,
+      "supported": 28,
+      "verifiable": 34,
+      "support_rate": 0.8235294117647058,
+      "claim_labels": {
+        "supported": 28,
+        "contradicted": 4,
+        "partial": 2
+      },
+      "core_preserved": 2,
+      "core_total": 8,
+      "core_rate": 0.25,
+      "core_statuses": {
+        "partial": 3,
+        "preserved": 2,
+        "omitted": 3
+      },
+      "question_statuses": {
+        "answered": 1,
+        "unanswered": 2,
+        "partial": 2
+      },
+      "major_changes": 7,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL01-D-v2",
+      "review": "EVAL01-v2",
+      "case_id": "EVAL01",
+      "arm": "D",
+      "characters": 882,
+      "length_compliant": true,
+      "supported": 41,
+      "verifiable": 41,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 41
+      },
+      "core_preserved": 7,
+      "core_total": 8,
+      "core_rate": 0.875,
+      "core_statuses": {
+        "preserved": 7,
+        "partial": 1
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 0,
+      "gate_pass": true,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 2,
+      "normal_overediting": 0,
+      "sentences": 16,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL01-C-v2",
+      "review": "EVAL01-v2",
+      "case_id": "EVAL01",
+      "arm": "C",
+      "characters": 816,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 35,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 35
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "partial": 3,
+        "preserved": 5
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL02-B-v2",
+      "review": "EVAL02-v2",
+      "case_id": "EVAL02",
+      "arm": "B",
+      "characters": 884,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 35,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 35
+      },
+      "core_preserved": 2,
+      "core_total": 9,
+      "core_rate": 0.2222222222222222,
+      "core_statuses": {
+        "preserved": 2,
+        "partial": 1,
+        "omitted": 6
+      },
+      "question_statuses": {
+        "answered": 1,
+        "partial": 2,
+        "unanswered": 2
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL02-D-v2",
+      "review": "EVAL02-v2",
+      "case_id": "EVAL02",
+      "arm": "D",
+      "characters": 898,
+      "length_compliant": true,
+      "supported": 39,
+      "verifiable": 41,
+      "support_rate": 0.9512195121951219,
+      "claim_labels": {
+        "supported": 39,
+        "partial": 2
+      },
+      "core_preserved": 7,
+      "core_total": 9,
+      "core_rate": 0.7777777777777778,
+      "core_statuses": {
+        "preserved": 7,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL02-C-v2",
+      "review": "EVAL02-v2",
+      "case_id": "EVAL02",
+      "arm": "C",
+      "characters": 859,
+      "length_compliant": true,
+      "supported": 32,
+      "verifiable": 34,
+      "support_rate": 0.9411764705882353,
+      "claim_labels": {
+        "supported": 32,
+        "partial": 2
+      },
+      "core_preserved": 7,
+      "core_total": 9,
+      "core_rate": 0.7777777777777778,
+      "core_statuses": {
+        "preserved": 7,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL02-A-v2",
+      "review": "EVAL02-v2",
+      "case_id": "EVAL02",
+      "arm": "A",
+      "characters": 863,
+      "length_compliant": true,
+      "supported": 33,
+      "verifiable": 33,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 33
+      },
+      "core_preserved": 2,
+      "core_total": 9,
+      "core_rate": 0.2222222222222222,
+      "core_statuses": {
+        "preserved": 2,
+        "partial": 1,
+        "omitted": 6
+      },
+      "question_statuses": {
+        "answered": 1,
+        "partial": 2,
+        "unanswered": 2
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 14,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL03-B-v2",
+      "review": "EVAL03-v2",
+      "case_id": "EVAL03",
+      "arm": "B",
+      "characters": 876,
+      "length_compliant": true,
+      "supported": 32,
+      "verifiable": 32,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 32
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 3
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL03-D-v2",
+      "review": "EVAL03-v2",
+      "case_id": "EVAL03",
+      "arm": "D",
+      "characters": 880,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 36,
+      "support_rate": 0.9722222222222222,
+      "claim_labels": {
+        "supported": 35,
+        "partial": 1
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "preserved": 4,
+        "partial": 4
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 1
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 1,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL03-C-v2",
+      "review": "EVAL03-v2",
+      "case_id": "EVAL03",
+      "arm": "C",
+      "characters": 842,
+      "length_compliant": true,
+      "supported": 29,
+      "verifiable": 29,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 29
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 3
+      },
+      "question_statuses": {
+        "answered": 5
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL03-A-v2",
+      "review": "EVAL03-v2",
+      "case_id": "EVAL03",
+      "arm": "A",
+      "characters": 853,
+      "length_compliant": true,
+      "supported": 34,
+      "verifiable": 34,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 34
+      },
+      "core_preserved": 5,
+      "core_total": 8,
+      "core_rate": 0.625,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 3
+      },
+      "question_statuses": {
+        "answered": 3,
+        "partial": 2
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL04-D-v2",
+      "review": "EVAL04-v2",
+      "case_id": "EVAL04",
+      "arm": "D",
+      "characters": 883,
+      "length_compliant": true,
+      "supported": 40,
+      "verifiable": 42,
+      "support_rate": 0.9523809523809523,
+      "claim_labels": {
+        "supported": 40,
+        "unknown": 1,
+        "partial": 1
+      },
+      "core_preserved": 8,
+      "core_total": 8,
+      "core_rate": 1.0,
+      "core_statuses": {
+        "preserved": 8
+      },
+      "question_statuses": {
+        "answered": 5,
+        "partial": 1
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 2,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 18,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL04-A-v2",
+      "review": "EVAL04-v2",
+      "case_id": "EVAL04",
+      "arm": "A",
+      "characters": 863,
+      "length_compliant": true,
+      "supported": 37,
+      "verifiable": 40,
+      "support_rate": 0.925,
+      "claim_labels": {
+        "supported": 37,
+        "partial": 3
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "partial": 4,
+        "preserved": 4
+      },
+      "question_statuses": {
+        "partial": 4,
+        "answered": 2
+      },
+      "major_changes": 3,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 16,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL04-B-v2",
+      "review": "EVAL04-v2",
+      "case_id": "EVAL04",
+      "arm": "B",
+      "characters": 869,
+      "length_compliant": true,
+      "supported": 36,
+      "verifiable": 39,
+      "support_rate": 0.9230769230769231,
+      "claim_labels": {
+        "supported": 36,
+        "partial": 3
+      },
+      "core_preserved": 4,
+      "core_total": 8,
+      "core_rate": 0.5,
+      "core_statuses": {
+        "partial": 4,
+        "preserved": 4
+      },
+      "question_statuses": {
+        "partial": 4,
+        "answered": 2
+      },
+      "major_changes": 3,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 17,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL04-C-v2",
+      "review": "EVAL04-v2",
+      "case_id": "EVAL04",
+      "arm": "C",
+      "characters": 822,
+      "length_compliant": true,
+      "supported": 36,
+      "verifiable": 36,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 36
+      },
+      "core_preserved": 8,
+      "core_total": 8,
+      "core_rate": 1.0,
+      "core_statuses": {
+        "preserved": 8
+      },
+      "question_statuses": {
+        "answered": 5,
+        "partial": 1
+      },
+      "major_changes": 0,
+      "gate_pass": true,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 15,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL05-A-v2",
+      "review": "EVAL05-v2",
+      "case_id": "EVAL05",
+      "arm": "A",
+      "characters": 836,
+      "length_compliant": true,
+      "supported": 31,
+      "verifiable": 31,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 31
+      },
+      "core_preserved": 4,
+      "core_total": 9,
+      "core_rate": 0.4444444444444444,
+      "core_statuses": {
+        "preserved": 4,
+        "partial": 4,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 2
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 16,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL05-C-v2",
+      "review": "EVAL05-v2",
+      "case_id": "EVAL05",
+      "arm": "C",
+      "characters": 821,
+      "length_compliant": true,
+      "supported": 28,
+      "verifiable": 28,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 28
+      },
+      "core_preserved": 6,
+      "core_total": 9,
+      "core_rate": 0.6666666666666666,
+      "core_statuses": {
+        "preserved": 6,
+        "partial": 2,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 6
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 11,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL05-B-v2",
+      "review": "EVAL05-v2",
+      "case_id": "EVAL05",
+      "arm": "B",
+      "characters": 841,
+      "length_compliant": true,
+      "supported": 29,
+      "verifiable": 29,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 29
+      },
+      "core_preserved": 4,
+      "core_total": 9,
+      "core_rate": 0.4444444444444444,
+      "core_statuses": {
+        "preserved": 4,
+        "partial": 4,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 4,
+        "partial": 2
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL05-D-v2",
+      "review": "EVAL05-v2",
+      "case_id": "EVAL05",
+      "arm": "D",
+      "characters": 879,
+      "length_compliant": true,
+      "supported": 34,
+      "verifiable": 34,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 34
+      },
+      "core_preserved": 5,
+      "core_total": 9,
+      "core_rate": 0.5555555555555556,
+      "core_statuses": {
+        "partial": 3,
+        "preserved": 5,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 6
+      },
+      "major_changes": 2,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL06-C-v2",
+      "review": "EVAL06-v2",
+      "case_id": "EVAL06",
+      "arm": "C",
+      "characters": 774,
+      "length_compliant": true,
+      "supported": 33,
+      "verifiable": 33,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 33
+      },
+      "core_preserved": 5,
+      "core_total": 9,
+      "core_rate": 0.5555555555555556,
+      "core_statuses": {
+        "preserved": 5,
+        "partial": 3,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "answered": 6
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 8,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL06-A-v2",
+      "review": "EVAL06-v2",
+      "case_id": "EVAL06",
+      "arm": "A",
+      "characters": 860,
+      "length_compliant": true,
+      "supported": 35,
+      "verifiable": 35,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 35
+      },
+      "core_preserved": 1,
+      "core_total": 9,
+      "core_rate": 0.1111111111111111,
+      "core_statuses": {
+        "partial": 7,
+        "preserved": 1,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "partial": 2,
+        "answered": 4
+      },
+      "major_changes": 3,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 15,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL06-B-v2",
+      "review": "EVAL06-v2",
+      "case_id": "EVAL06",
+      "arm": "B",
+      "characters": 822,
+      "length_compliant": true,
+      "supported": 34,
+      "verifiable": 35,
+      "support_rate": 0.9714285714285714,
+      "claim_labels": {
+        "partial": 1,
+        "supported": 34
+      },
+      "core_preserved": 1,
+      "core_total": 9,
+      "core_rate": 0.1111111111111111,
+      "core_statuses": {
+        "partial": 7,
+        "preserved": 1,
+        "omitted": 1
+      },
+      "question_statuses": {
+        "partial": 2,
+        "answered": 4
+      },
+      "major_changes": 4,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 13,
+      "cost": null,
+      "tokens": null
+    },
+    {
+      "run_id": "EVAL06-D-v2",
+      "review": "EVAL06-v2",
+      "case_id": "EVAL06",
+      "arm": "D",
+      "characters": 874,
+      "length_compliant": true,
+      "supported": 41,
+      "verifiable": 41,
+      "support_rate": 1.0,
+      "claim_labels": {
+        "supported": 41
+      },
+      "core_preserved": 7,
+      "core_total": 9,
+      "core_rate": 0.7777777777777778,
+      "core_statuses": {
+        "preserved": 7,
+        "partial": 2
+      },
+      "question_statuses": {
+        "answered": 6
+      },
+      "major_changes": 1,
+      "gate_pass": false,
+      "unsupported_additions": 0,
+      "irrelevant_additions": 0,
+      "normal_overediting": 0,
+      "sentences": 12,
+      "cost": null,
+      "tokens": null
+    }
+  ],
+  "problems": []
+}
