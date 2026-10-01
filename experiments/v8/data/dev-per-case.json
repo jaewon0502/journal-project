@@ -1,0 +1,1567 @@
+[
+  {
+    "article_id": "KO031",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "b714a0ca69f1990210f4934ea540ec2db8888d55476aac6db24df441f9069f49",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 30
+      },
+      "source_severity": {
+        "none": 30
+      },
+      "source_paragraphs": {
+        "covered": 15
+      },
+      "output_paragraphs": {
+        "covered": 15
+      },
+      "output_claims": {
+        "supported": 35
+      },
+      "external_verification": {
+        "unknown": 29,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO031",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "b714a0ca69f1990210f4934ea540ec2db8888d55476aac6db24df441f9069f49",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 30
+      },
+      "source_severity": {
+        "none": 30
+      },
+      "source_paragraphs": {
+        "covered": 15
+      },
+      "output_paragraphs": {
+        "covered": 15
+      },
+      "output_claims": {
+        "supported": 35
+      },
+      "external_verification": {
+        "unknown": 29,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO031",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "b714a0ca69f1990210f4934ea540ec2db8888d55476aac6db24df441f9069f49",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 30
+      },
+      "source_severity": {
+        "none": 30
+      },
+      "source_paragraphs": {
+        "covered": 15
+      },
+      "output_paragraphs": {
+        "covered": 15
+      },
+      "output_claims": {
+        "supported": 35
+      },
+      "external_verification": {
+        "unknown": 29,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO031",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "output_sha256": "b714a0ca69f1990210f4934ea540ec2db8888d55476aac6db24df441f9069f49",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 30
+      },
+      "source_severity": {
+        "none": 30
+      },
+      "source_paragraphs": {
+        "covered": 15
+      },
+      "output_paragraphs": {
+        "covered": 15
+      },
+      "output_claims": {
+        "supported": 35
+      },
+      "external_verification": {
+        "unknown": 29,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO015",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "d04b967ec1238bc7a74644dba822804953ffb165c8b8280566bfe5c491e1d100",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 42
+      },
+      "source_severity": {
+        "none": 42
+      },
+      "source_paragraphs": {
+        "covered": 16
+      },
+      "output_paragraphs": {
+        "covered": 16
+      },
+      "output_claims": {
+        "supported": 45
+      },
+      "external_verification": {
+        "supported": 10,
+        "unknown": 34,
+        "not_applicable": 1
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 2,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO015",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "4f64d56af6de38f135909a9345c36af32be218cec12a8368a90b0ad403cc04e1",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 37,
+        "corrected_with_evidence": 4,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 41,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 15,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 16
+      },
+      "output_claims": {
+        "supported": 44
+      },
+      "external_verification": {
+        "supported": 10,
+        "unknown": 34
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO015",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "3887b801e21ce483393d20507a229bcce50a07ba013294933ed5707e8ccbd83f",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 39,
+        "corrected_with_evidence": 2,
+        "omitted": 1
+      },
+      "source_severity": {
+        "none": 41,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 15,
+        "incomplete": 1
+      },
+      "output_paragraphs": {
+        "covered": 16
+      },
+      "output_claims": {
+        "supported": 45
+      },
+      "external_verification": {
+        "supported": 9,
+        "unknown": 35,
+        "not_applicable": 1
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO015",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "output_sha256": "af317e43871af3ad2c2e7877aa975adc66105289630759d26117b2fff5b0d26c",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 41,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 41,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 15,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 16
+      },
+      "output_claims": {
+        "supported": 45
+      },
+      "external_verification": {
+        "supported": 10,
+        "unknown": 34,
+        "not_applicable": 1
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 2,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO016",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "0854cdefd718855e1447cc092d5535d6b94a69c44bed389ae6459af6b62ba092",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 84
+      },
+      "source_severity": {
+        "none": 84
+      },
+      "source_paragraphs": {
+        "covered": 43
+      },
+      "output_paragraphs": {
+        "covered": 43
+      },
+      "output_claims": {
+        "supported": 131
+      },
+      "external_verification": {
+        "unknown": 116,
+        "supported": 9,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 2,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO016",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "0854cdefd718855e1447cc092d5535d6b94a69c44bed389ae6459af6b62ba092",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 84
+      },
+      "source_severity": {
+        "none": 84
+      },
+      "source_paragraphs": {
+        "covered": 43
+      },
+      "output_paragraphs": {
+        "covered": 43
+      },
+      "output_claims": {
+        "supported": 131
+      },
+      "external_verification": {
+        "unknown": 116,
+        "supported": 9,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 2,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO016",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "0854cdefd718855e1447cc092d5535d6b94a69c44bed389ae6459af6b62ba092",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 84
+      },
+      "source_severity": {
+        "none": 84
+      },
+      "source_paragraphs": {
+        "covered": 43
+      },
+      "output_paragraphs": {
+        "covered": 43
+      },
+      "output_claims": {
+        "supported": 131
+      },
+      "external_verification": {
+        "unknown": 116,
+        "supported": 9,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 2,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO016",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "output_sha256": "0854cdefd718855e1447cc092d5535d6b94a69c44bed389ae6459af6b62ba092",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 84
+      },
+      "source_severity": {
+        "none": 84
+      },
+      "source_paragraphs": {
+        "covered": 43
+      },
+      "output_paragraphs": {
+        "covered": 43
+      },
+      "output_claims": {
+        "supported": 131
+      },
+      "external_verification": {
+        "unknown": 116,
+        "supported": 9,
+        "not_applicable": 6
+      },
+      "issues": {
+        "unnecessary_preserved": 2,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO027",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "5c4fc15798971c23e61a22aaeb555869e6924ffc1a18661561fb51edfe0801d3",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 23
+      },
+      "source_severity": {
+        "none": 23
+      },
+      "source_paragraphs": {
+        "covered": 8
+      },
+      "output_paragraphs": {
+        "covered": 8
+      },
+      "output_claims": {
+        "supported": 22
+      },
+      "external_verification": {
+        "unknown": 22
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO027",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "5c4fc15798971c23e61a22aaeb555869e6924ffc1a18661561fb51edfe0801d3",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 23
+      },
+      "source_severity": {
+        "none": 23
+      },
+      "source_paragraphs": {
+        "covered": 8
+      },
+      "output_paragraphs": {
+        "covered": 8
+      },
+      "output_claims": {
+        "supported": 22
+      },
+      "external_verification": {
+        "unknown": 22
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO027",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "5c4fc15798971c23e61a22aaeb555869e6924ffc1a18661561fb51edfe0801d3",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 23
+      },
+      "source_severity": {
+        "none": 23
+      },
+      "source_paragraphs": {
+        "covered": 8
+      },
+      "output_paragraphs": {
+        "covered": 8
+      },
+      "output_claims": {
+        "supported": 22
+      },
+      "external_verification": {
+        "unknown": 22
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO027",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "output_sha256": "5c4fc15798971c23e61a22aaeb555869e6924ffc1a18661561fb51edfe0801d3",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 23
+      },
+      "source_severity": {
+        "none": 23
+      },
+      "source_paragraphs": {
+        "covered": 8
+      },
+      "output_paragraphs": {
+        "covered": 8
+      },
+      "output_claims": {
+        "supported": 22
+      },
+      "external_verification": {
+        "unknown": 22
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN006",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "29d735cd412ea8b4b63bc9b60aa329ad43f738cb9b9430f266ec1d10ee838546",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 63
+      },
+      "source_severity": {
+        "none": 63
+      },
+      "source_paragraphs": {
+        "covered": 21
+      },
+      "output_paragraphs": {
+        "covered": 21
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN006",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "29d735cd412ea8b4b63bc9b60aa329ad43f738cb9b9430f266ec1d10ee838546",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 63
+      },
+      "source_severity": {
+        "none": 63
+      },
+      "source_paragraphs": {
+        "covered": 21
+      },
+      "output_paragraphs": {
+        "covered": 21
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN006",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "29d735cd412ea8b4b63bc9b60aa329ad43f738cb9b9430f266ec1d10ee838546",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 63
+      },
+      "source_severity": {
+        "none": 63
+      },
+      "source_paragraphs": {
+        "covered": 21
+      },
+      "output_paragraphs": {
+        "covered": 21
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN006",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "output_sha256": "29d735cd412ea8b4b63bc9b60aa329ad43f738cb9b9430f266ec1d10ee838546",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 63
+      },
+      "source_severity": {
+        "none": 63
+      },
+      "source_paragraphs": {
+        "covered": 21
+      },
+      "output_paragraphs": {
+        "covered": 21
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN007",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "f76aeccd4c253c15dc795d8c5ecb9361494ba548c5fc821859265bf26dc9a8e5",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 60
+      },
+      "source_severity": {
+        "none": 60
+      },
+      "source_paragraphs": {
+        "covered": 19
+      },
+      "output_paragraphs": {
+        "covered": 19
+      },
+      "output_claims": {
+        "supported": 61
+      },
+      "external_verification": {
+        "unknown": 58,
+        "supported": 3
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 3
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 1
+    }
+  },
+  {
+    "article_id": "EN007",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "5d52a06fddea3ad8408d3b804818730b4ad82302c7a8e3a5604779dce6b164cf",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 60
+      },
+      "source_severity": {
+        "none": 60
+      },
+      "source_paragraphs": {
+        "covered": 19
+      },
+      "output_paragraphs": {
+        "covered": 19
+      },
+      "output_claims": {
+        "supported": 61
+      },
+      "external_verification": {
+        "unknown": 57,
+        "supported": 4
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 3
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN007",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "f76aeccd4c253c15dc795d8c5ecb9361494ba548c5fc821859265bf26dc9a8e5",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 60
+      },
+      "source_severity": {
+        "none": 60
+      },
+      "source_paragraphs": {
+        "covered": 19
+      },
+      "output_paragraphs": {
+        "covered": 19
+      },
+      "output_claims": {
+        "supported": 61
+      },
+      "external_verification": {
+        "unknown": 58,
+        "supported": 3
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 3
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 1
+    }
+  },
+  {
+    "article_id": "EN007",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "output_sha256": "f76aeccd4c253c15dc795d8c5ecb9361494ba548c5fc821859265bf26dc9a8e5",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "counts": {
+      "source_claims": {
+        "preserved": 60
+      },
+      "source_severity": {
+        "none": 60
+      },
+      "source_paragraphs": {
+        "covered": 19
+      },
+      "output_paragraphs": {
+        "covered": 19
+      },
+      "output_claims": {
+        "supported": 61
+      },
+      "external_verification": {
+        "unknown": 58,
+        "supported": 3
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 3
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 1
+    }
+  },
+  {
+    "article_id": "EN008",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "17995d7d66fbcad84109634aa78aff6984c940b2e383eddb494ca29b9f58f7a9",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN008",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "17995d7d66fbcad84109634aa78aff6984c940b2e383eddb494ca29b9f58f7a9",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN008",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "17995d7d66fbcad84109634aa78aff6984c940b2e383eddb494ca29b9f58f7a9",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN008",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "output_sha256": "17995d7d66fbcad84109634aa78aff6984c940b2e383eddb494ca29b9f58f7a9",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN001",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "36c0796617145eea82dd4e1de59067ecf1541adbaea77d5a8a88a5d13398efa0",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 37
+      },
+      "source_severity": {
+        "none": 37
+      },
+      "source_paragraphs": {
+        "covered": 18
+      },
+      "output_paragraphs": {
+        "covered": 18
+      },
+      "output_claims": {
+        "supported": 37
+      },
+      "external_verification": {
+        "unknown": 37
+      },
+      "issues": {
+        "unnecessary_preserved": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN001",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "da20518030dc9fb8a7233c73b731cf70145eb957ab16c09fd248481ba098f248",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 37
+      },
+      "source_severity": {
+        "none": 37
+      },
+      "source_paragraphs": {
+        "covered": 18
+      },
+      "output_paragraphs": {
+        "covered": 18
+      },
+      "output_claims": {
+        "supported": 37
+      },
+      "external_verification": {
+        "unknown": 37
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unnecessary_changed": 1
+      },
+      "reference_errata_count": 3,
+      "unscored_errata_claim_count": 1
+    }
+  },
+  {
+    "article_id": "EN001",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "36c0796617145eea82dd4e1de59067ecf1541adbaea77d5a8a88a5d13398efa0",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 37
+      },
+      "source_severity": {
+        "none": 37
+      },
+      "source_paragraphs": {
+        "covered": 18
+      },
+      "output_paragraphs": {
+        "covered": 18
+      },
+      "output_claims": {
+        "supported": 37
+      },
+      "external_verification": {
+        "unknown": 37
+      },
+      "issues": {
+        "unnecessary_preserved": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN001",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "output_sha256": "36c0796617145eea82dd4e1de59067ecf1541adbaea77d5a8a88a5d13398efa0",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "counts": {
+      "source_claims": {
+        "preserved": 37
+      },
+      "source_severity": {
+        "none": 37
+      },
+      "source_paragraphs": {
+        "covered": 18
+      },
+      "output_paragraphs": {
+        "covered": 18
+      },
+      "output_claims": {
+        "supported": 37
+      },
+      "external_verification": {
+        "unknown": 37
+      },
+      "issues": {
+        "unnecessary_preserved": 2
+      },
+      "reference_errata_count": 1,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO021",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "386d97fb4347f184d61516d7c67c0db842def4e2a41aada05e9e89809311ae5e",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 63
+      },
+      "source_severity": {
+        "none": 63
+      },
+      "source_paragraphs": {
+        "covered": 14
+      },
+      "output_paragraphs": {
+        "covered": 14
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO021",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "76a051444e73a088f907aae99935b5fcac4fd94136f99d25ba9b83d43f2bdf5d",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 62,
+        "omitted": 1
+      },
+      "source_severity": {
+        "none": 62,
+        "major": 1
+      },
+      "source_paragraphs": {
+        "covered": 13,
+        "incomplete": 1
+      },
+      "output_paragraphs": {
+        "covered": 14
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO021",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "2044204b76b3e2d3992436f2096ca54080ce57463ad5b798b3b5f29fa8f9ed2e",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 62,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 62,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 13,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 14
+      },
+      "output_claims": {
+        "supported": 63
+      },
+      "external_verification": {
+        "unknown": 63
+      },
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unknown_unknown": 2
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO024",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "7ec3e7424591975399a50f1d85e5ac095032e4c1e98860dbd128229a29f60dcc",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 79
+      },
+      "source_severity": {
+        "none": 79
+      },
+      "source_paragraphs": {
+        "covered": 27
+      },
+      "output_paragraphs": {
+        "covered": 27
+      },
+      "output_claims": {
+        "supported": 79
+      },
+      "external_verification": {
+        "unknown": 79
+      },
+      "issues": {
+        "unnecessary_preserved": 3,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO024",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "7ec3e7424591975399a50f1d85e5ac095032e4c1e98860dbd128229a29f60dcc",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 79
+      },
+      "source_severity": {
+        "none": 79
+      },
+      "source_paragraphs": {
+        "covered": 27
+      },
+      "output_paragraphs": {
+        "covered": 27
+      },
+      "output_claims": {
+        "supported": 79
+      },
+      "external_verification": {
+        "unknown": 79
+      },
+      "issues": {
+        "unnecessary_preserved": 3,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "KO024",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "7ec3e7424591975399a50f1d85e5ac095032e4c1e98860dbd128229a29f60dcc",
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 79
+      },
+      "source_severity": {
+        "none": 79
+      },
+      "source_paragraphs": {
+        "covered": 27
+      },
+      "output_paragraphs": {
+        "covered": 27
+      },
+      "output_claims": {
+        "supported": 79
+      },
+      "external_verification": {
+        "unknown": 79
+      },
+      "issues": {
+        "unnecessary_preserved": 3,
+        "unknown_unknown": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN025",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "5e08c07c4f9b3b388252582fc0d21869ed6cd1d6e5a7e1333bccd4156004e022",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 82
+      },
+      "source_severity": {
+        "none": 82
+      },
+      "source_paragraphs": {
+        "covered": 35
+      },
+      "output_paragraphs": {
+        "covered": 35
+      },
+      "output_claims": {
+        "supported": 82
+      },
+      "external_verification": {
+        "unknown": 82
+      },
+      "issues": {
+        "unknown_unknown": 1,
+        "unnecessary_preserved": 3
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN025",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "5e08c07c4f9b3b388252582fc0d21869ed6cd1d6e5a7e1333bccd4156004e022",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 82
+      },
+      "source_severity": {
+        "none": 82
+      },
+      "source_paragraphs": {
+        "covered": 35
+      },
+      "output_paragraphs": {
+        "covered": 35
+      },
+      "output_claims": {
+        "supported": 82
+      },
+      "external_verification": {
+        "unknown": 82
+      },
+      "issues": {
+        "unknown_unknown": 1,
+        "unnecessary_preserved": 3
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN025",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "5e08c07c4f9b3b388252582fc0d21869ed6cd1d6e5a7e1333bccd4156004e022",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 82
+      },
+      "source_severity": {
+        "none": 82
+      },
+      "source_paragraphs": {
+        "covered": 35
+      },
+      "output_paragraphs": {
+        "covered": 35
+      },
+      "output_claims": {
+        "supported": 82
+      },
+      "external_verification": {
+        "unknown": 82
+      },
+      "issues": {
+        "unknown_unknown": 1,
+        "unnecessary_preserved": 3
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN016",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "output_sha256": "c8be66aac436add6f23282e7afcf149eff5eba6cd5d4361cc24a3d5b0906267e",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unknown_unknown": 2,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN016",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "output_sha256": "c8be66aac436add6f23282e7afcf149eff5eba6cd5d4361cc24a3d5b0906267e",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unknown_unknown": 2,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  },
+  {
+    "article_id": "EN016",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "output_sha256": "fcee5e0c396a32295f822f64c687c4f2761b8483e1bdf3aa867427d15b77e0a2",
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "counts": {
+      "source_claims": {
+        "preserved": 50
+      },
+      "source_severity": {
+        "none": 50
+      },
+      "source_paragraphs": {
+        "covered": 20
+      },
+      "output_paragraphs": {
+        "covered": 20
+      },
+      "output_claims": {
+        "supported": 50
+      },
+      "external_verification": {
+        "unknown": 50
+      },
+      "issues": {
+        "unknown_unknown": 2,
+        "unnecessary_preserved": 1
+      },
+      "reference_errata_count": 0,
+      "unscored_errata_claim_count": 0
+    }
+  }
+]

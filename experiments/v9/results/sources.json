@@ -1,0 +1,117 @@
+[
+  {
+    "case_id": "V9F-KO01",
+    "language": "KO",
+    "event_group": "danuri-july2022-launch-plan-versus-dec2022-record",
+    "source_type": "government_policy_news_primary_source_transfer",
+    "original_language_basis": "Korean byline and original Korean policy news, not translated version; no translation notice.",
+    "scope_limit": "Government policy news, not an independent newsroom. No generalization to newsroom reporting. Target forecast is author/institutional narration, not a quotation of a named speaker.",
+    "rights": "Article and briefing state KOGL Type 1 text attribution license. Images excluded.",
+    "provisional_relationship": "temporal_plan_vs_outcome_control_not_original_error",
+    "article": {
+      "url": "https://www.korea.kr/news/policyNewsView.do?newsId=148903229",
+      "retrieved_at_utc": "2026-10-01T11:53:01.990198+00:00",
+      "http_status": 200,
+      "html_sha256": "f3472b2aaf0bbe9c19860728ebb8c017676185f75eb05513ded488a7f78fae72",
+      "title": "누리호 성공 이어…이제 달을 향해 쏜다",
+      "published_date": "2022-07-07",
+      "author": "정책브리핑 신주희",
+      "text_sha256": "e7f2cc289ee638f8b4ecd3f0c46e037043db587fc7f14909f25273441a82fbee"
+    },
+    "official": {
+      "url": "https://www.korea.kr/news/policyNewsView.do?newsId=156545293",
+      "retrieved_at_utc": "2026-10-01T11:53:04.179505+00:00",
+      "http_status": 200,
+      "html_sha256": "eacda704a0e3bdd9abcfee672e3b7a64d4baf4064bdf39c062baca0ddf8cc920",
+      "title": "다누리 달궤도 진입 결과",
+      "published_date": "2022-12-29",
+      "author": "과학기술정보통신부; 오태석, 김대관 등 브리핑",
+      "text_sha256": "694fa25bc9e422421d2588205643d097078c29dc8ddab4305fb1e2ee4873c5d5"
+    },
+    "locations": {
+      "article_paragraphs": [
+        "p002",
+        "p024"
+      ],
+      "official_paragraphs": [
+        "p005",
+        "p023"
+      ]
+    }
+  },
+  {
+    "case_id": "V9F-EN01",
+    "language": "EN",
+    "event_group": "artemis1-august2022-conditional-42day-launch-plan",
+    "source_type": "english_newsroom_article_authorized_syndication",
+    "original_language_basis": "English bylined CBS News story with explicit authorized republication notice; not a translation.",
+    "scope_limit": "The 42-day figure is reporter narration grounded in NASA schedule, not a fabricated direct Cabana quote. Official record is contemporaneous planned scope, not an actual flight duration.",
+    "rights": "Publicly accessible full story marked CBS News used with permission. No explicit AI-use prohibition found on acquired article page. Private experiment snapshot only; no redistribution license claimed.",
+    "provisional_relationship": "equivalent_conditional_forecast_control",
+    "article": {
+      "url": "https://spaceflightnow.com/2022/08/22/nasa-managers-give-go-for-artemis-1-launch-after-flight-readiness-review/",
+      "retrieved_at_utc": "2026-10-01T11:53:04.574262+00:00",
+      "http_status": 200,
+      "html_sha256": "c9e5d0f975026709172c2df080461b838e0dc6d207d1fbc3e3fd2c7652d5fdc5",
+      "title": "NASA managers give “go” for Artemis 1 launch after flight readiness review",
+      "published_date": "2022-08-22",
+      "author": "William Harwood; written for CBS News, reproduced by Spaceflight Now with permission",
+      "text_sha256": "0679c81f3ba887e3d8d4665b66eb80332604be7932ed9f9a2889dc9826557433"
+    },
+    "official": {
+      "url": "https://www.nasa.gov/blogs/missions/2022/08/05/artemis-i-final-stage-of-moon-rocket-preparations-underway/",
+      "retrieved_at_utc": "2026-10-01T11:53:05.438108+00:00",
+      "http_status": 200,
+      "html_sha256": "f03ebb5419543db0a3276d61926f2eff85c0fb2591f2d93bd745d04ba7a3bcba",
+      "title": "Artemis I: Final Stage of Moon Rocket Preparations Underway",
+      "published_date": "2022-08-05",
+      "author": "Antonia Jaramillo / NASA",
+      "text_sha256": "3765a8e175cee7b4d59317a325e57fabde20d29b73628f50853353c01f315bd2"
+    },
+    "locations": {
+      "article_paragraphs": [
+        "p003",
+        "p004"
+      ],
+      "official_paragraphs": [
+        "p001"
+      ]
+    }
+  },
+  {
+    "case_id": "REG_EN023",
+    "scope": "exposed regression; v8 snapshot reused, no new URL fetch",
+    "article": {
+      "url": "https://apnews.com/article/heat-record-climate-change-sizzle-el-nino-2a78248322a04b97f417346308d05483",
+      "source_sha256": "3591df7d10dcccb7604b0dc84237e26568c6eff2322fdb96ed5a9e1260b382f1",
+      "published_at": "2026-09-10T02:00:03Z",
+      "fetched_at": "2026-10-01T08:50:08.095729+00:00"
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "url": "https://climate.copernicus.eu/surface-air-temperature-august-2026",
+        "text_sha256": "62077989a8e175586c8206c1bf8918718bebceb4d54e744f4ab3e3924fac88f7",
+        "fetched_at": "2026-10-01T08:58:07.019782+00:00"
+      }
+    ]
+  },
+  {
+    "case_id": "REG_KO011",
+    "scope": "exposed regression; v8 snapshot reused, no new URL fetch",
+    "article": {
+      "url": "https://www.pressian.com/pages/articles/2026093021182974483",
+      "source_sha256": "9d581bc428de78e6af5686ffef7f7c6e24e8e9f3d99c2fff6481b03fbfa8311c",
+      "published_at": "2026-10-01T06:55:08",
+      "fetched_at": "2026-10-01T08:49:04.169313+00:00"
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "url": null,
+        "text_sha256": null,
+        "fetched_at": null
+      }
+    ]
+  }
+]

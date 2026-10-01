@@ -1,0 +1,30 @@
+{
+  "stage": "Post-judgment locator and frozen-denominator correction; original semantic labels retained.",
+  "rows": [
+    {
+      "article_id": "KO031",
+      "original_judgment_sha256": "a0967217332bb5020ef954c7e846d8671ded1dad7f6e7b4502ecb7575b0689a0",
+      "locator_correction_count": 5,
+      "supplemental_claim_count": 0
+    },
+    {
+      "article_id": "KO016",
+      "original_judgment_sha256": "5cea0e24db3226cdbec17df335dc3059f1cd09742ca3f26b14f2b2d4e26859fc",
+      "locator_correction_count": 7,
+      "supplemental_claim_count": 0
+    },
+    {
+      "article_id": "EN001",
+      "original_judgment_sha256": "ccf82f6045d054c9934cd867a4f1d4fe7f1174b3cb6f9db6345cc0f721e3af12",
+      "locator_correction_count": 0,
+      "supplemental_claim_count": 1
+    },
+    {
+      "article_id": "EN007",
+      "original_judgment_sha256": "c8856c001a93bbceb78e023ed34b18a12792df68ecbf85ca1fc84f0c1b50094b",
+      "locator_correction_count": 0,
+      "supplemental_claim_count": 1
+    }
+  ],
+  "limitation": "Exact locator validity is not semantic correctness. Supplemental discoveries do not expand frozen denominators."
+}

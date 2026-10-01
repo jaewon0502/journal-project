@@ -1,0 +1,1025 @@
+{
+  "kind": "AI internal paired judgments; no human/world-truth error-rate inference",
+  "speech": [
+    {
+      "case_id": "REG_EN023",
+      "arm": "NOTE",
+      "changed": true,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "7424b3c73300b4f55d6a427856c82174c8541ddea464bbaca9f6a9cfdd764d47",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "harmless",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SEQ1",
+      "arm": "BASE",
+      "changed": true,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "4151b4b60c01aa8bc7330dfcd83e23c9d01d6d23f3c1b9391df99c8b47be60e4",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "V9F-EN01",
+      "arm": "BASE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "0679c81f3ba887e3d8d4665b66eb80332604be7932ed9f9a2889dc9826557433",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "V9F-EN01",
+      "arm": "NOTE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "0679c81f3ba887e3d8d4665b66eb80332604be7932ed9f9a2889dc9826557433",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SEQ1",
+      "arm": "NOTE",
+      "changed": true,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "d6b27b85146f35735b4b00ec5c8ffc33400b1789b83a60a33b8e7613eb0f2683",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "harmless",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "V9F-KO01",
+      "arm": "BASE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "e7f2cc289ee638f8b4ecd3f0c46e037043db587fc7f14909f25273441a82fbee",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "V9F-KO01",
+      "arm": "NOTE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "e7f2cc289ee638f8b4ecd3f0c46e037043db587fc7f14909f25273441a82fbee",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SEQ2",
+      "arm": "BASE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "ef3b8d53efbca041e779af422886312e89e2019d18df84cc2d76163803726685",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SEQ2",
+      "arm": "NOTE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "ef3b8d53efbca041e779af422886312e89e2019d18df84cc2d76163803726685",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SKQ1",
+      "arm": "BASE",
+      "changed": true,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "fb3711203daa5ff702fbf2eb5ef8fcc9e2c77e1f89c6a27aa887c7435a24d52a",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SKQ2",
+      "arm": "BASE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "54aa768cd0a18245e0c9b2b00f1e09270482088965cea41882bab08da48bfebb",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SKQ2",
+      "arm": "NOTE",
+      "changed": false,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "54aa768cd0a18245e0c9b2b00f1e09270482088965cea41882bab08da48bfebb",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "REG_EN023",
+      "arm": "BASE",
+      "changed": true,
+      "source_preserved_as_prefix": false,
+      "output_sha256": "f710e2aa16563ea1628c490d5d0744fc88adb94ebbdb3a92f5c063afa965d1d8",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "harmless",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "SKQ1",
+      "arm": "NOTE",
+      "changed": true,
+      "source_preserved_as_prefix": true,
+      "output_sha256": "14590c5c8da4c6d600e56664366e312d7c01bd5f8d2dc22174e22de88b4d30b8",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "harmless",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    }
+  ],
+  "gate": [
+    {
+      "case_id": "REG_KO011",
+      "arm": "SELECTIVE",
+      "changed": true,
+      "output_sha256": "2ac5f606fe8c5977a0d39d606858424f3d6f4b8b15c2161fb474d9918b652d8d",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "fail",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "fail",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GK1",
+      "arm": "WHOLE",
+      "changed": false,
+      "output_sha256": "e11b34209f011774b508ad084db1618209d184655609469464c0f4929692bf9d",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "fail",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "fail",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GK1",
+      "arm": "SELECTIVE",
+      "changed": true,
+      "output_sha256": "1ff3c8a32782bea1da52437cf55630a5d580f570d5379ffaf2871af09c6bcbe3",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "pass",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "REG_KO011",
+      "arm": "WHOLE",
+      "changed": false,
+      "output_sha256": "9d581bc428de78e6af5686ffef7f7c6e24e8e9f3d99c2fff6481b03fbfa8311c",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "fail",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "fail",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "fail"
+          },
+          "new_harm_severity": [
+            "minor"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "GE4",
+      "arm": "WHOLE",
+      "changed": false,
+      "output_sha256": "97a344f0f17cc5193bf4b33f3c69f2d4f74fc700bc92c1f4ef41f3314a717cfb",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GE4",
+      "arm": "SELECTIVE",
+      "changed": false,
+      "output_sha256": "97a344f0f17cc5193bf4b33f3c69f2d4f74fc700bc92c1f4ef41f3314a717cfb",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "fail",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GK3",
+      "arm": "WHOLE",
+      "changed": false,
+      "output_sha256": "560fa8d894c97c832ef65d26cd866641dc723bfbdfd83e261785d69844fa986a",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "not_applicable",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "not_applicable",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GK3",
+      "arm": "SELECTIVE",
+      "changed": false,
+      "output_sha256": "560fa8d894c97c832ef65d26cd866641dc723bfbdfd83e261785d69844fa986a",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "not_applicable",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "not_applicable",
+            "remaining_error_disclosure": "not_applicable"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GE2",
+      "arm": "SELECTIVE",
+      "changed": true,
+      "output_sha256": "861428f5e252bd3b08422ec903532da38d7754db5e3b6e10307d9df835348819",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "unknown",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "success",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "fail",
+            "scope_time_alignment": "unknown",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    },
+    {
+      "case_id": "GE2",
+      "arm": "WHOLE",
+      "changed": false,
+      "output_sha256": "38a41302f91f484f92f89752df963bf532e685f23fd8b3dbad92aac1cbcca464",
+      "ratings": [
+        {
+          "reader": "A",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "fail",
+            "scope_time_alignment": "pass",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        },
+        {
+          "reader": "B",
+          "task_resolution": "failed",
+          "statuses": {
+            "speech_fidelity": "pass",
+            "external_grounding": "fail",
+            "scope_time_alignment": "unknown",
+            "protected_meanings": "pass",
+            "unnecessary_change": "none",
+            "dependency_consistency": "pass",
+            "remaining_error_disclosure": "pass"
+          },
+          "new_harm_severity": []
+        }
+      ]
+    }
+  ],
+  "accounting": {
+    "source_cases": 12,
+    "speech_cases": 7,
+    "gate_cases": 5,
+    "real_new_cases": 2,
+    "exposed_regressions": 2,
+    "authored_synthetic_cases": 8,
+    "native_generated_speech_responses": 14,
+    "gate_proposals_reused_actual": 1,
+    "gate_proposals_authored": 4,
+    "native_dependency_audits": 5,
+    "native_patch_audits": 5,
+    "native_final_gate_audits": 5,
+    "unique_outcomes": 18,
+    "paired_readings": 36,
+    "speech_arm_observations": 14,
+    "gate_arm_observations": 10,
+    "targeted_followup_source_audits": 1,
+    "mechanical_tests": 17,
+    "cross_family_runs": 0,
+    "complete": true,
+    "count_unit_warning": "Gate outputs are deterministic selection over authored/reused patches, not newly generated model article responses. No-op release is not repair."
+  },
+  "paired_disagreements": [
+    {
+      "subset": "speech",
+      "metric": "unnecessary_change",
+      "A": "harmless",
+      "B": "none",
+      "case_conditions": [
+        {
+          "case_id": "REG_EN023",
+          "condition": "NOTE"
+        }
+      ]
+    },
+    {
+      "subset": "speech",
+      "metric": "unnecessary_change",
+      "A": "harmless",
+      "B": "none",
+      "case_conditions": [
+        {
+          "case_id": "SEQ1",
+          "condition": "NOTE"
+        }
+      ]
+    },
+    {
+      "subset": "speech",
+      "metric": "external_grounding",
+      "A": "pass",
+      "B": "unknown",
+      "case_conditions": [
+        {
+          "case_id": "V9F-KO01",
+          "condition": "BASE"
+        },
+        {
+          "case_id": "V9F-KO01",
+          "condition": "NOTE"
+        }
+      ]
+    },
+    {
+      "subset": "speech",
+      "metric": "unnecessary_change",
+      "A": "none",
+      "B": "harmless",
+      "case_conditions": [
+        {
+          "case_id": "REG_EN023",
+          "condition": "BASE"
+        }
+      ]
+    },
+    {
+      "subset": "speech",
+      "metric": "unnecessary_change",
+      "A": "harmless",
+      "B": "none",
+      "case_conditions": [
+        {
+          "case_id": "SKQ1",
+          "condition": "NOTE"
+        }
+      ]
+    },
+    {
+      "subset": "gate",
+      "metric": "remaining_error_disclosure",
+      "A": "pass",
+      "B": "fail",
+      "case_conditions": [
+        {
+          "case_id": "REG_KO011",
+          "condition": "WHOLE"
+        }
+      ]
+    },
+    {
+      "subset": "gate",
+      "metric": "external_grounding",
+      "A": "unknown",
+      "B": "fail",
+      "case_conditions": [
+        {
+          "case_id": "GE2",
+          "condition": "SELECTIVE"
+        }
+      ]
+    },
+    {
+      "subset": "gate",
+      "metric": "scope_time_alignment",
+      "A": "pass",
+      "B": "unknown",
+      "case_conditions": [
+        {
+          "case_id": "GE2",
+          "condition": "SELECTIVE"
+        }
+      ]
+    },
+    {
+      "subset": "gate",
+      "metric": "scope_time_alignment",
+      "A": "pass",
+      "B": "unknown",
+      "case_conditions": [
+        {
+          "case_id": "GE2",
+          "condition": "WHOLE"
+        }
+      ]
+    }
+  ],
+  "release_note": "Status-only derivative of original paired ratings; narrative judgments withheld. Repeated identical case/output rows share the same pair of readings. Original ratings were not retroactively changed."
+}

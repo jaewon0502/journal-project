@@ -1,0 +1,28 @@
+{
+  "case_id": "SEQ2",
+  "language": "EN",
+  "kind": "authored_synthetic",
+  "source": "The fictional institute reported that 0.5% of respondents in its June 2024 survey reported an adverse reaction. Respondents were adult volunteers; causation was not established.",
+  "source_sha256": "ef3b8d53efbca041e779af422886312e89e2019d18df84cc2d76163803726685",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "Fictional June 2024 table: 5 of 1,000 adult volunteers reported an adverse reaction. A separate 2025 survey recorded 8 of 1,000.",
+      "status": "authored fixture; not real-world evidence"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "BASE",
+      "output": "The fictional institute reported that 0.5% of respondents in its June 2024 survey reported an adverse reaction. Respondents were adult volunteers; causation was not established.",
+      "output_sha256": "ef3b8d53efbca041e779af422886312e89e2019d18df84cc2d76163803726685",
+      "origin": "actual_generated_response"
+    },
+    {
+      "condition": "NOTE",
+      "output": "The fictional institute reported that 0.5% of respondents in its June 2024 survey reported an adverse reaction. Respondents were adult volunteers; causation was not established.",
+      "output_sha256": "ef3b8d53efbca041e779af422886312e89e2019d18df84cc2d76163803726685",
+      "origin": "actual_generated_response"
+    }
+  ]
+}

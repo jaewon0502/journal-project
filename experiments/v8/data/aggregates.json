@@ -1,0 +1,1039 @@
+[
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 132
+      },
+      "source_severity": {
+        "none": 132
+      },
+      "source_paragraphs": {
+        "covered": 55
+      },
+      "output_paragraphs": {
+        "covered": 55
+      },
+      "output_claims": {
+        "supported": 132
+      },
+      "external_verification": {
+        "unknown": 132
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 132
+      },
+      "source_severity": {
+        "none": 132
+      },
+      "source_paragraphs": {
+        "covered": 55
+      },
+      "output_paragraphs": {
+        "covered": 55
+      },
+      "output_claims": {
+        "supported": 132
+      },
+      "external_verification": {
+        "unknown": 132
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "confirmation",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 132
+      },
+      "source_severity": {
+        "none": 132
+      },
+      "source_paragraphs": {
+        "covered": 55
+      },
+      "output_paragraphs": {
+        "covered": 55
+      },
+      "output_claims": {
+        "supported": 132
+      },
+      "external_verification": {
+        "unknown": 132
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 123
+      },
+      "source_severity": {
+        "none": 123
+      },
+      "source_paragraphs": {
+        "covered": 40
+      },
+      "output_paragraphs": {
+        "covered": 40
+      },
+      "output_claims": {
+        "supported": 124
+      },
+      "external_verification": {
+        "supported": 4,
+        "unknown": 120
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 1,
+    "counts": {
+      "source_claims": {
+        "preserved": 123
+      },
+      "source_severity": {
+        "none": 123
+      },
+      "source_paragraphs": {
+        "covered": 40
+      },
+      "output_paragraphs": {
+        "covered": 40
+      },
+      "output_claims": {
+        "supported": 124
+      },
+      "external_verification": {
+        "supported": 3,
+        "unknown": 121
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 1,
+    "counts": {
+      "source_claims": {
+        "preserved": 123
+      },
+      "source_severity": {
+        "none": 123
+      },
+      "source_paragraphs": {
+        "covered": 40
+      },
+      "output_paragraphs": {
+        "covered": 40
+      },
+      "output_claims": {
+        "supported": 124
+      },
+      "external_verification": {
+        "supported": 3,
+        "unknown": 121
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "organization",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 1,
+    "counts": {
+      "source_claims": {
+        "preserved": 123
+      },
+      "source_severity": {
+        "none": 123
+      },
+      "source_paragraphs": {
+        "covered": 40
+      },
+      "output_paragraphs": {
+        "covered": 40
+      },
+      "output_claims": {
+        "supported": 124
+      },
+      "external_verification": {
+        "supported": 3,
+        "unknown": 121
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 3,
+    "unscored_errata_claim_count": 1,
+    "counts": {
+      "source_claims": {
+        "preserved": 87
+      },
+      "source_severity": {
+        "none": 87
+      },
+      "source_paragraphs": {
+        "covered": 38
+      },
+      "output_paragraphs": {
+        "covered": 38
+      },
+      "output_claims": {
+        "supported": 87
+      },
+      "external_verification": {
+        "unknown": 87
+      },
+      "issues": {
+        "unnecessary_changed": 1,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 87
+      },
+      "source_severity": {
+        "none": 87
+      },
+      "source_paragraphs": {
+        "covered": 38
+      },
+      "output_paragraphs": {
+        "covered": 38
+      },
+      "output_claims": {
+        "supported": 87
+      },
+      "external_verification": {
+        "unknown": 87
+      },
+      "issues": {
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 87
+      },
+      "source_severity": {
+        "none": 87
+      },
+      "source_paragraphs": {
+        "covered": 38
+      },
+      "output_paragraphs": {
+        "covered": 38
+      },
+      "output_claims": {
+        "supported": 87
+      },
+      "external_verification": {
+        "unknown": 87
+      },
+      "issues": {
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "EN",
+    "phase": "relations",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 87
+      },
+      "source_severity": {
+        "none": 87
+      },
+      "source_paragraphs": {
+        "covered": 38
+      },
+      "output_paragraphs": {
+        "covered": 38
+      },
+      "output_claims": {
+        "supported": 87
+      },
+      "external_verification": {
+        "unknown": 87
+      },
+      "issues": {
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "omitted": 1,
+        "preserved": 141
+      },
+      "source_severity": {
+        "major": 1,
+        "none": 141
+      },
+      "source_paragraphs": {
+        "covered": 40,
+        "incomplete": 1
+      },
+      "output_paragraphs": {
+        "covered": 41
+      },
+      "output_claims": {
+        "supported": 142
+      },
+      "external_verification": {
+        "unknown": 142
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 141,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 141,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 40,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 41
+      },
+      "output_claims": {
+        "supported": 142
+      },
+      "external_verification": {
+        "unknown": 142
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "confirmation",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 0,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 142
+      },
+      "source_severity": {
+        "none": 142
+      },
+      "source_paragraphs": {
+        "covered": 41
+      },
+      "output_paragraphs": {
+        "covered": 41
+      },
+      "output_claims": {
+        "supported": 142
+      },
+      "external_verification": {
+        "unknown": 142
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 4
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 4,
+        "preserved": 67,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 71,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 30,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 31
+      },
+      "output_claims": {
+        "supported": 79
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 10,
+        "unknown": 63
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "arm": "LOCAL",
+    "config_id": "block_base",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 71,
+        "unknown": 1
+      },
+      "source_severity": {
+        "none": 71,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 30,
+        "uncertain": 1
+      },
+      "output_paragraphs": {
+        "covered": 31
+      },
+      "output_claims": {
+        "supported": 80
+      },
+      "external_verification": {
+        "not_applicable": 7,
+        "supported": 10,
+        "unknown": 63
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 1,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 2,
+        "omitted": 1,
+        "preserved": 69
+      },
+      "source_severity": {
+        "none": 71,
+        "unknown": 1
+      },
+      "source_paragraphs": {
+        "covered": 30,
+        "incomplete": 1
+      },
+      "output_paragraphs": {
+        "covered": 31
+      },
+      "output_claims": {
+        "supported": 80
+      },
+      "external_verification": {
+        "not_applicable": 7,
+        "supported": 9,
+        "unknown": 64
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "organization",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 72
+      },
+      "source_severity": {
+        "none": 72
+      },
+      "source_paragraphs": {
+        "covered": 31
+      },
+      "output_paragraphs": {
+        "covered": 31
+      },
+      "output_claims": {
+        "supported": 80
+      },
+      "external_verification": {
+        "not_applicable": 7,
+        "supported": 10,
+        "unknown": 63
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 2
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 107
+      },
+      "source_severity": {
+        "none": 107
+      },
+      "source_paragraphs": {
+        "covered": 51
+      },
+      "output_paragraphs": {
+        "covered": 51
+      },
+      "output_claims": {
+        "supported": 153
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 9,
+        "unknown": 138
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 107
+      },
+      "source_severity": {
+        "none": 107
+      },
+      "source_paragraphs": {
+        "covered": 51
+      },
+      "output_paragraphs": {
+        "covered": 51
+      },
+      "output_claims": {
+        "supported": 153
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 9,
+        "unknown": 138
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "arm": "LOCAL",
+    "config_id": "whole_relation",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 107
+      },
+      "source_severity": {
+        "none": 107
+      },
+      "source_paragraphs": {
+        "covered": 51
+      },
+      "output_paragraphs": {
+        "covered": 51
+      },
+      "output_claims": {
+        "supported": 153
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 9,
+        "unknown": 138
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "DEV",
+    "language": "KO",
+    "phase": "relations",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 2,
+    "reference_errata_count": 2,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 107
+      },
+      "source_severity": {
+        "none": 107
+      },
+      "source_paragraphs": {
+        "covered": 51
+      },
+      "output_paragraphs": {
+        "covered": 51
+      },
+      "output_claims": {
+        "supported": 153
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 9,
+        "unknown": 138
+      },
+      "issues": {
+        "unknown_unknown": 3,
+        "unnecessary_preserved": 3
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "EN",
+    "phase": "evaluation",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 24,
+    "reference_errata_count": 11,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 7,
+        "distorted": 1,
+        "omitted": 1,
+        "preserved": 1323,
+        "unknown": 3
+      },
+      "source_severity": {
+        "major": 1,
+        "minor": 1,
+        "none": 1330,
+        "unknown": 3
+      },
+      "source_paragraphs": {
+        "covered": 489,
+        "incomplete": 1,
+        "uncertain": 3
+      },
+      "output_paragraphs": {
+        "covered": 493
+      },
+      "output_claims": {
+        "supported": 1342,
+        "unknown": 1
+      },
+      "external_verification": {
+        "contradicted": 1,
+        "supported": 58,
+        "unknown": 1284
+      },
+      "issues": {
+        "necessary_failed": 2,
+        "necessary_success": 4,
+        "unknown_unknown": 36,
+        "unnecessary_changed": 4,
+        "unnecessary_preserved": 20
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "EN",
+    "phase": "evaluation",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 24,
+    "reference_errata_count": 11,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 9,
+        "preserved": 1324,
+        "unknown": 2
+      },
+      "source_severity": {
+        "none": 1333,
+        "unknown": 2
+      },
+      "source_paragraphs": {
+        "covered": 493
+      },
+      "output_paragraphs": {
+        "covered": 493
+      },
+      "output_claims": {
+        "supported": 1340,
+        "unknown": 1
+      },
+      "external_verification": {
+        "contradicted": 1,
+        "supported": 54,
+        "unknown": 1286
+      },
+      "issues": {
+        "necessary_failed": 1,
+        "necessary_success": 4,
+        "necessary_unknown": 1,
+        "unknown_unknown": 36,
+        "unnecessary_changed": 3,
+        "unnecessary_preserved": 21
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "EN",
+    "phase": "evaluation",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 24,
+    "reference_errata_count": 10,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 1335
+      },
+      "source_severity": {
+        "none": 1335
+      },
+      "source_paragraphs": {
+        "covered": 493
+      },
+      "output_paragraphs": {
+        "covered": 493
+      },
+      "output_claims": {
+        "contradicted": 3,
+        "supported": 1337
+      },
+      "external_verification": {
+        "contradicted": 2,
+        "not_applicable": 1,
+        "supported": 59,
+        "unknown": 1278
+      },
+      "issues": {
+        "necessary_failed": 6,
+        "unknown_unknown": 36,
+        "unnecessary_preserved": 24
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "KO",
+    "phase": "evaluation",
+    "arm": "FULLREWRITE",
+    "config_id": "canonical",
+    "observations": 24,
+    "reference_errata_count": 4,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 6,
+        "preserved": 943
+      },
+      "source_severity": {
+        "none": 949
+      },
+      "source_paragraphs": {
+        "covered": 355,
+        "incomplete": 4
+      },
+      "output_paragraphs": {
+        "covered": 359
+      },
+      "output_claims": {
+        "supported": 1005
+      },
+      "external_verification": {
+        "contradicted": 1,
+        "not_applicable": 7,
+        "supported": 30,
+        "unknown": 967
+      },
+      "issues": {
+        "necessary_failed": 2,
+        "necessary_success": 5,
+        "unknown_unknown": 26,
+        "unnecessary_changed": 5,
+        "unnecessary_preserved": 22
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "KO",
+    "phase": "evaluation",
+    "arm": "LOCAL",
+    "config_id": "whole_base",
+    "observations": 24,
+    "reference_errata_count": 6,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "corrected_with_evidence": 3,
+        "preserved": 946
+      },
+      "source_severity": {
+        "none": 949
+      },
+      "source_paragraphs": {
+        "covered": 355,
+        "incomplete": 4
+      },
+      "output_paragraphs": {
+        "covered": 359
+      },
+      "output_claims": {
+        "supported": 1006
+      },
+      "external_verification": {
+        "not_applicable": 6,
+        "supported": 30,
+        "unknown": 970
+      },
+      "issues": {
+        "necessary_failed": 4,
+        "necessary_success": 3,
+        "unknown_unknown": 26,
+        "unnecessary_changed": 2,
+        "unnecessary_preserved": 25
+      }
+    }
+  },
+  {
+    "split": "EVAL",
+    "language": "KO",
+    "phase": "evaluation",
+    "arm": "ORIGINAL",
+    "config_id": "canonical",
+    "observations": 24,
+    "reference_errata_count": 7,
+    "unscored_errata_claim_count": 0,
+    "counts": {
+      "source_claims": {
+        "preserved": 949
+      },
+      "source_severity": {
+        "none": 949
+      },
+      "source_paragraphs": {
+        "covered": 355,
+        "incomplete": 4
+      },
+      "output_paragraphs": {
+        "covered": 359
+      },
+      "output_claims": {
+        "contradicted": 4,
+        "supported": 1001
+      },
+      "external_verification": {
+        "contradicted": 1,
+        "not_applicable": 13,
+        "supported": 27,
+        "unknown": 964
+      },
+      "issues": {
+        "necessary_failed": 7,
+        "unknown_unknown": 26,
+        "unnecessary_preserved": 27
+      }
+    }
+  }
+]

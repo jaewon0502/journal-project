@@ -1,0 +1,28 @@
+{
+  "case_id": "SKQ2",
+  "language": "KO",
+  "kind": "authored_synthetic",
+  "source": "가상 연구소는 2024년 6월 조사에서 응답자의 0.5%가 이상반응을 보고했다고 밝혔다. 조사대상은 성인 자원자이며 원인관계를 확정하지 않았다.",
+  "source_sha256": "54aa768cd0a18245e0c9b2b00f1e09270482088965cea41882bab08da48bfebb",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "가상 같은 2024년 6월 조사표: 성인 자원자 1,000명 중 5명이 이상반응을 보고했다. 2025년 별도 조사에서는 8명/1,000명이 보고했다.",
+      "status": "authored fixture; not real-world evidence"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "BASE",
+      "output": "가상 연구소는 2024년 6월 조사에서 응답자의 0.5%가 이상반응을 보고했다고 밝혔다. 조사대상은 성인 자원자이며 원인관계를 확정하지 않았다.",
+      "output_sha256": "54aa768cd0a18245e0c9b2b00f1e09270482088965cea41882bab08da48bfebb",
+      "origin": "actual_generated_response"
+    },
+    {
+      "condition": "NOTE",
+      "output": "가상 연구소는 2024년 6월 조사에서 응답자의 0.5%가 이상반응을 보고했다고 밝혔다. 조사대상은 성인 자원자이며 원인관계를 확정하지 않았다.",
+      "output_sha256": "54aa768cd0a18245e0c9b2b00f1e09270482088965cea41882bab08da48bfebb",
+      "origin": "actual_generated_response"
+    }
+  ]
+}

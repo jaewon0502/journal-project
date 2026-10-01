@@ -1,0 +1,67 @@
+{
+  "scope": "Separate schematic probes, not real-article performance. Four authored pairs; proposed clean KO controls were not independently established clean.",
+  "rows": [
+    {
+      "language": "EN",
+      "arm": "FULLREWRITE",
+      "issues": {
+        "unnecessary_preserved": 2,
+        "necessary_success": 2
+      }
+    },
+    {
+      "language": "EN",
+      "arm": "LOCAL",
+      "issues": {
+        "unnecessary_preserved": 2,
+        "necessary_success": 2
+      }
+    },
+    {
+      "language": "EN",
+      "arm": "ORIGINAL",
+      "issues": {
+        "unnecessary_preserved": 2,
+        "necessary_failed": 2
+      }
+    },
+    {
+      "language": "KO",
+      "arm": "FULLREWRITE",
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unnecessary_changed": 1,
+        "necessary_success": 2
+      }
+    },
+    {
+      "language": "KO",
+      "arm": "LOCAL",
+      "issues": {
+        "unnecessary_preserved": 1,
+        "unnecessary_changed": 1,
+        "necessary_success": 2
+      }
+    },
+    {
+      "language": "KO",
+      "arm": "ORIGINAL",
+      "issues": {
+        "unnecessary_preserved": 2,
+        "necessary_failed": 2
+      }
+    }
+  ],
+  "clean_control_changed_articles": {
+    "KO": {
+      "FULLREWRITE": 2,
+      "LOCAL": 2,
+      "denominator": 2
+    },
+    "EN": {
+      "FULLREWRITE": 0,
+      "LOCAL": 0,
+      "denominator": 2
+    }
+  }
+}

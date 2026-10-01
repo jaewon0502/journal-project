@@ -1,0 +1,28 @@
+{
+  "case_id": "SEQ1",
+  "language": "EN",
+  "kind": "authored_synthetic",
+  "source": "Fictional council report: Spokesperson Lee stated that the 2024 pilot enrolled 120 people. Lee said it was not a census. The residents association criticized the exclusion of some applicants.",
+  "source_sha256": "feed28ae3477c8425981b01d2e48e066872d9d0499353c5028c916605e8222c8",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "Fictional final 2024 pilot register: 102 unique participants after deduplication. No recording of Lee is available; the report is the only supplied account of the statement.",
+      "status": "authored fixture; not real-world evidence"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "BASE",
+      "output": "Fictional council report: Spokesperson Lee stated that the 2024 pilot enrolled 120 people. Lee said it was not a census. The residents association criticized the exclusion of some applicants.\n\nEditorial note: The supplied final 2024 pilot register lists 102 unique participants after deduplication. The report is the only supplied account of Lee’s statement; no recording is available. The supplied evidence does not explain the difference between the reported enrollment count of 120 and the final deduplicated count of 102.",
+      "output_sha256": "4151b4b60c01aa8bc7330dfcd83e23c9d01d6d23f3c1b9391df99c8b47be60e4",
+      "origin": "actual_generated_response"
+    },
+    {
+      "condition": "NOTE",
+      "output": "Fictional council report: Spokesperson Lee stated that the 2024 pilot enrolled 120 people. Lee said it was not a census. The residents association criticized the exclusion of some applicants.\n\nEditorial verification note: The supplied fictional final 2024 pilot register records 102 unique participants after deduplication, whereas the report attributes a figure of 120 enrolled people to Lee for that pilot. The register’s deduplicated participant total differs from the reported enrollment figure; the supplied evidence does not explain whether their counting definitions account for the difference. No recording of Lee is supplied, so the register does not establish different words or a corrected number spoken by Lee. The final register’s date is unspecified. Lee’s statement that the pilot was not a census and the association’s criticism of applicant exclusions remain as reported.",
+      "output_sha256": "d6b27b85146f35735b4b00ec5c8ffc33400b1789b83a60a33b8e7613eb0f2683",
+      "origin": "actual_generated_response"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "case_id": "GE2",
+  "language": "EN",
+  "kind": "authored_gate_fixture_not_model_generation",
+  "source": "In the fictional trial, 10 of 100 volunteers responded, or 10%. The report calls this a prelimnary result.",
+  "source_sha256": "38a41302f91f484f92f89752df963bf532e685f23fd8b3dbad92aac1cbcca464",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "Fictional final tally: 20 responses out of 200 volunteers (10%). The result remains preliminary."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "start": 24,
+      "end": 26,
+      "before": "10",
+      "after": "20"
+    },
+    {
+      "id": "p2",
+      "start": 30,
+      "end": 44,
+      "before": "100 volunteers",
+      "after": "250 volunteers"
+    },
+    {
+      "id": "p3",
+      "start": 88,
+      "end": 98,
+      "before": "prelimnary",
+      "after": "preliminary"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "WHOLE",
+      "output": "In the fictional trial, 10 of 100 volunteers responded, or 10%. The report calls this a prelimnary result.",
+      "output_sha256": "38a41302f91f484f92f89752df963bf532e685f23fd8b3dbad92aac1cbcca464",
+      "origin": "deterministic_gate_output"
+    },
+    {
+      "condition": "SELECTIVE",
+      "output": "In the fictional trial, 10 of 100 volunteers responded, or 10%. The report calls this a preliminary result.",
+      "output_sha256": "861428f5e252bd3b08422ec903532da38d7754db5e3b6e10307d9df835348819",
+      "origin": "deterministic_gate_output"
+    }
+  ],
+  "selected_provisional": [
+    "p3"
+  ],
+  "components": [
+    [
+      "p1",
+      "p2"
+    ],
+    [
+      "p3"
+    ]
+  ],
+  "released": true
+}

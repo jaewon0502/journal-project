@@ -1,0 +1,31 @@
+{
+  "case_id": "GE4",
+  "language": "EN",
+  "kind": "authored_gate_fixture_not_model_generation",
+  "source": "The fictional clerk said the preliminary count was 50. The source also lists totals of 20 and 20 as 50; the underlying register is unavailable.",
+  "source_sha256": "97a344f0f17cc5193bf4b33f3c69f2d4f74fc700bc92c1f4ef41f3314a717cfb",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "Fictional evidence note: no underlying register or recording is available. The internal arithmetic is inconsistent, but which recorded number is wrong is unknown."
+    }
+  ],
+  "patches": [],
+  "conditions": [
+    {
+      "condition": "WHOLE",
+      "output": "The fictional clerk said the preliminary count was 50. The source also lists totals of 20 and 20 as 50; the underlying register is unavailable.",
+      "output_sha256": "97a344f0f17cc5193bf4b33f3c69f2d4f74fc700bc92c1f4ef41f3314a717cfb",
+      "origin": "deterministic_gate_output"
+    },
+    {
+      "condition": "SELECTIVE",
+      "output": "The fictional clerk said the preliminary count was 50. The source also lists totals of 20 and 20 as 50; the underlying register is unavailable.",
+      "output_sha256": "97a344f0f17cc5193bf4b33f3c69f2d4f74fc700bc92c1f4ef41f3314a717cfb",
+      "origin": "deterministic_gate_output"
+    }
+  ],
+  "selected_provisional": [],
+  "components": [],
+  "released": true
+}
