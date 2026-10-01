@@ -1,0 +1,44 @@
+{
+  "DEV_KO": {
+    "articles": 6,
+    "claims": 321,
+    "issues": {
+      "unknown": 9,
+      "unnecessary": 9
+    },
+    "custodian_field_corrections": 2,
+    "coverage_gaps": 0
+  },
+  "DEV_EN": {
+    "articles": 6,
+    "claims": 342,
+    "issues": {
+      "unnecessary": 9,
+      "unknown": 6
+    },
+    "custodian_field_corrections": 5,
+    "coverage_gaps": 1
+  },
+  "EVAL_KO": {
+    "articles": 24,
+    "claims": 949,
+    "issues": {
+      "unnecessary": 27,
+      "necessary": 7,
+      "unknown": 26
+    },
+    "custodian_field_corrections": 35,
+    "coverage_gaps": 4
+  },
+  "EVAL_EN": {
+    "articles": 24,
+    "claims": 1335,
+    "issues": {
+      "unknown": 36,
+      "necessary": 6,
+      "unnecessary": 24
+    },
+    "custodian_field_corrections": 73,
+    "coverage_gaps": 34
+  }
+}

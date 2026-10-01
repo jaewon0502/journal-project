@@ -8,8 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PATTERNS = {
     'environment_path': re.compile(r'/(?:work' + r'space|tmp|home/agent)/'),
     'private_library_identity': re.compile(r'libfile' + r'_[0-9a-f]+|file_' + r'0000[0-9a-f]+'),
-    'private_resource': re.compile(r'(?:sediment|oai-library)://|chatgpt[.]com/space/'),
-    'internal_orchestration': re.compile(r'codex_' + r'delegation|source_thread_' + r'id|<multi_agent_' + r'role>'),
+    'private_resource': re.compile(r'(?:sediment|oai-library)://|chatgpt[.]com/space/|chatgpt[.]com/api/' + r'library/'),
+    'internal_orchestration': re.compile(r'codex_' + r'delegation|source_thread_' + r'id|<multi_agent_' + r'role>|collaboration[.]spawn_' + r'agent|fork_' + r'turns'),
     'credential': re.compile(r'gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
 }
 FORBIDDEN_SUFFIXES = {'.pdf', '.docx', '.har', '.pem', '.key', '.p12', '.zip'}
@@ -23,7 +23,7 @@ def main():
         if path == ROOT / '.git':
             continue
         rel = path.relative_to(ROOT).as_posix()
-        if path.suffix.lower() in FORBIDDEN_SUFFIXES or path.name.startswith('.env'):
+        if path.suffix.lower() in FORBIDDEN_SUFFIXES or path.name.startswith('.env') or 'prompts' in path.relative_to(ROOT).parts:
             errors.append(f'{rel}: excluded public artifact type')
             continue
         try:

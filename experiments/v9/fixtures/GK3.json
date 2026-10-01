@@ -1,0 +1,51 @@
+{
+  "case_id": "GK3",
+  "language": "KO",
+  "kind": "authored_gate_fixture_not_model_generation",
+  "source": "가상 위원회는 2024년 조사 참여자가 100명이라고 밝혔다. 참여자는 모두 성인이었다.",
+  "source_sha256": "560fa8d894c97c832ef65d26cd866641dc723bfbdfd83e261785d69844fa986a",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "가상 보충자료: 2025년 별도 조사는 120명. 2024년 원명부는 공개되지 않았다. 두 조사 참여자의 중복 여부는 알 수 없다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "start": 20,
+      "end": 27,
+      "before": "2024년",
+      "after": "2025년"
+    },
+    {
+      "id": "p2",
+      "start": 48,
+      "end": 54,
+      "before": "100명",
+      "after": "120명"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "WHOLE",
+      "output": "가상 위원회는 2024년 조사 참여자가 100명이라고 밝혔다. 참여자는 모두 성인이었다.",
+      "output_sha256": "560fa8d894c97c832ef65d26cd866641dc723bfbdfd83e261785d69844fa986a",
+      "origin": "deterministic_gate_output"
+    },
+    {
+      "condition": "SELECTIVE",
+      "output": "가상 위원회는 2024년 조사 참여자가 100명이라고 밝혔다. 참여자는 모두 성인이었다.",
+      "output_sha256": "560fa8d894c97c832ef65d26cd866641dc723bfbdfd83e261785d69844fa986a",
+      "origin": "deterministic_gate_output"
+    }
+  ],
+  "selected_provisional": [],
+  "components": [
+    [
+      "p1",
+      "p2"
+    ]
+  ],
+  "released": true
+}

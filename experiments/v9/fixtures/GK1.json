@@ -1,0 +1,55 @@
+{
+  "case_id": "GK1",
+  "language": "KO",
+  "kind": "authored_gate_fixture_not_model_generation",
+  "source": "금리 차이는 1.2%다. 지난달 금리는 3.0%, 이번 달은 3.4%로 0.3%포인트 올랐다. 검찰은 A사를 기소했으며 A사는 혐의를 부인했다.",
+  "source_sha256": "e11b34209f011774b508ad084db1618209d184655609469464c0f4929692bf9d",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "가상 통계표: 두 금리의 차이는 1.2%포인트. 월별 금리 원자료는 제공하지 않는다. 가상 법원 접수기록: 기소 상태, 판결 없음."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "start": 17,
+      "end": 24,
+      "before": "1.2%다",
+      "after": "1.2%포인트다"
+    },
+    {
+      "id": "p2",
+      "start": 117,
+      "end": 132,
+      "before": "기소했으며",
+      "after": "유죄판결했으며"
+    }
+  ],
+  "conditions": [
+    {
+      "condition": "WHOLE",
+      "output": "금리 차이는 1.2%다. 지난달 금리는 3.0%, 이번 달은 3.4%로 0.3%포인트 올랐다. 검찰은 A사를 기소했으며 A사는 혐의를 부인했다.",
+      "output_sha256": "e11b34209f011774b508ad084db1618209d184655609469464c0f4929692bf9d",
+      "origin": "deterministic_gate_output"
+    },
+    {
+      "condition": "SELECTIVE",
+      "output": "금리 차이는 1.2%포인트다. 지난달 금리는 3.0%, 이번 달은 3.4%로 0.3%포인트 올랐다. 검찰은 A사를 기소했으며 A사는 혐의를 부인했다.",
+      "output_sha256": "1ff3c8a32782bea1da52437cf55630a5d580f570d5379ffaf2871af09c6bcbe3",
+      "origin": "deterministic_gate_output"
+    }
+  ],
+  "selected_provisional": [
+    "p1"
+  ],
+  "components": [
+    [
+      "p1"
+    ],
+    [
+      "p2"
+    ]
+  ],
+  "released": true
+}

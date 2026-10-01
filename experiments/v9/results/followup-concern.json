@@ -1,0 +1,19 @@
+{
+  "case_id": "REG_EN023",
+  "arm": "BASE",
+  "finding_type": "source-fidelity/evidence-sufficiency candidate; world truth unresolved",
+  "concern": "Output replaces article Aug22 record statement with official Aug24/25 peak. Later higher maximum does not establish Aug22 was not earlier record. Original temporal proposition removed without direct falsification evidence.",
+  "existing_reader_ratings": "A and B success; raw retained; do not retroactively overwrite",
+  "planned_audit_at_concern_time": "source-grounded targeted review without prior votes; not human adjudication",
+  "completed_followup": {
+    "status": "completed",
+    "type": "targeted_source_audit_not_human_gold",
+    "evidence_boundary": "Supplied source/candidate/evidence excerpts and metadata only; no external retrieval in this follow-up.",
+    "replacement_proposition_support": "supported_with_series_equivalence_limit",
+    "removed_original_proposition_disproved": "not_conclusively_disproved",
+    "removal_as_demonstrated_correction": "insufficiently_justified",
+    "world_truth_of_original_event": "unknown",
+    "original_paired_ratings_modified": false,
+    "public_form": "status summary; narrative raw judgments and quotations withheld"
+  }
+}

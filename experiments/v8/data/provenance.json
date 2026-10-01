@@ -1,0 +1,23 @@
+{
+  "kind": "Public derivatives of actual recorded AI results, not new model execution.",
+  "original_aggregates": [
+    {
+      "artifact": "dev-final-results.json",
+      "original_sha256": "f3595e5efc13393edb0c7952cc30cf8a6de3df289538a24fa5d5d2197c78431e",
+      "public_derivative": "dev-per-case.json",
+      "transformation": "Whitelist case/arm/config/language/split/output hash and numeric counts; add allocation phase; replace supplemental claim text by count; omit private evaluation identifiers."
+    },
+    {
+      "artifact": "eval-final-results.json",
+      "original_sha256": "18ecc58bbb0d35a1648052300259ec7f9fa8028772f64fad6bae73537a0e6f19",
+      "public_derivative": "eval-per-case.json",
+      "transformation": "Whitelist case/arm/config/language/split/output hash and numeric counts; add allocation phase; replace supplemental claim text by count; omit private evaluation identifiers."
+    }
+  ],
+  "code_lineage": "Core v8 integrity modules retained byte-for-byte; patch_guard inherits v7 byte-preservation checks. No model runner or prompts included.",
+  "limits": [
+    "AI-only judgments, not human gold labels.",
+    "Exact deployed model, seed, effort, tokens and costs unknown.",
+    "Original artifacts preserved outside this public package."
+  ]
+}

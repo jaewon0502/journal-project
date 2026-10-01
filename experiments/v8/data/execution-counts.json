@@ -1,0 +1,18 @@
+{
+  "generation_responses": {
+    "DEV": 32,
+    "EVAL": 96,
+    "SYNTH": 16
+  },
+  "unique_judgments": {
+    "DEV": 20,
+    "EVAL": 81,
+    "SYNTH": 15
+  },
+  "arm_observations": {
+    "DEV": 44,
+    "EVAL": 144,
+    "SYNTH": 24
+  },
+  "unknown_exact_context_count": true
+}
