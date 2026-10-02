@@ -1,0 +1,76 @@
+{
+  "packet_id": "aec02212156395beb714af2f",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement occurs in the displayed output; both are held.",
+      "anchor": "actual_output: an increase of 3%. The meeting is on Friday."
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output reproduces the supplied source unchanged.",
+      "anchor": "actual_output: an increase of 3%. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both nonempty proposed replacements are absent from the displayed output.",
+      "anchor": "actual_receipt.held_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The displayed output retains the incorrect increase unit and Friday despite E1 and E2 stipulating percentage points and Saturday.",
+      "anchor": "E1; E2; actual_output: 3% / Friday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Neither was selected or applied",
+      "reason": "Explicitly excludes applied edits."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The displayed local output is unchanged.",
+      "reason": "Explicitly states unchanged output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "were both held",
+      "reason": "Explicitly says both proposals were held."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "does not resolve those issues or establish factual correctness",
+      "reason": "Accurately limits factual correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "",
+      "reason": "Annotation does not report whether external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Two meaning issues therefore remain in the displayed text",
+      "reason": "Names both remaining issues and their displayed expressions."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "No explicit statement that external publication did not occur."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

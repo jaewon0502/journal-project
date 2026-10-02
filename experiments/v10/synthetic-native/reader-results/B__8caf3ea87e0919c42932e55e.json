@@ -1,0 +1,52 @@
+{
+  "packet_id": "8caf3ea87e0919c42932e55e",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "additional_meaning_losses": [],
+  "patch_decisions": [
+    {
+      "id": "p1",
+      "decision": "approved",
+      "reason": "The addition reproduces E1 measurement and its explicit speech-evidence limitation; original report is wholly retained.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "The claimed exact value conflicts with measured value if treated as a measurement; what was said remains unknown. The candidate distinguishes these propositions.",
+      "source_anchor": "said the increase was exactly 0.02 units.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "actual_patch_state": "changed",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "qualified_retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "The analyst said the increase was exactly 0.02 units.",
+    "The unrounded measured increase was 0.016 units. The supplied evidence contains no recording or transcript of the analyst.",
+    "These are different exact values, although 0.016 rounds to 0.02 to two decimal places.",
+    "The patch is proposed, not finally released."
+  ],
+  "reason": "The body addition and separate note distinguish the two exact values while retaining reported speech and explicitly refusing to certify what the analyst said. The arithmetic rounding statement is sound. Candidate application and lack of final release are compatible. The target asks whether the distinction is made, which is determinable; speech truth is separately unknown.",
+  "limitations": [
+    "No analyst recording or transcript; actual speech cannot be verified.",
+    "Single-sentence original has no additional beyond-target passage."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "The analyst said the increase was exactly 0.02 units.",
+      "meaning": "Preserves attribution, reported exactness, amount and unit without silently converting speech to the measurement."
+    }
+  ],
+  "admission": "approved"
+}

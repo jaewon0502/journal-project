@@ -1,0 +1,32 @@
+{
+  "packet_id": "8cd4b2e9c6e904f8b5e99194",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+      "reason": "The receipt selects p1 and rejects p2. Output changes the percentage wording but retains Friday. The annotation accurately describes partial local application and its counts."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "no",
+      "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개",
+      "reason": "The annotation does not quote or identify Friday or the E2 Saturday evidence. Its generic unresolved-reference notice is insufficient; q1 is recoverable only from the common input."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+      "reason": "The annotation limits approval to the local review gate and explicitly withholds factual verification and question adjudication. Any quoted concern is attributed to the supplied review, not independently certified."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "The receipt is not a no-op.",
+      "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+    }
+  },
+  "missing_issue_ids": [
+    "q1"
+  ],
+  "recovery_basis": "common_input_only",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

@@ -1,0 +1,375 @@
+{
+  "experiment": "known-issue transfer regression; not discovery or holdout",
+  "frozen_hashes": {
+    "matched": 12,
+    "total": 12
+  },
+  "input_fairness": {
+    "common_fields_identical_except_id_and_repair_goal_representation": true,
+    "same_condition_repeats_identical_except_id": true,
+    "fact_slot_equivalence": "Frozen manual semantic mapping rechecked; not an automated proof of semantic identity.",
+    "starting_article_exact_previous_EN_EVAL_B_candidate": true,
+    "original_schema_questions_and_eligible_evidence_reused": true,
+    "source_scope": "Frozen Monetary Policy Summary, 12 paragraphs; not full meeting minutes or report."
+  },
+  "prelaunch_status_note": "Frozen allocation-map and hashes status values are prelaunch snapshots. Four writer outputs and eight complete reviews establish subsequent completion; snapshots were not rewritten.",
+  "runs": [
+    {
+      "run": "F1",
+      "condition": "F",
+      "repeat": 1,
+      "launch_order": 1,
+      "patches": 2,
+      "application": "applied",
+      "all_starting_text_retained": true,
+      "narrative_words": 530,
+      "requested_cap": 900,
+      "exceeds_cap": false,
+      "start_utc": "2026-10-02T01:53:45+00:00",
+      "end_utc": "2026-10-02T01:54:37+00:00",
+      "wall_seconds": 52.0,
+      "reviews": [
+        {
+          "reviewer": "A",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        },
+        {
+          "reviewer": "B",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        }
+      ]
+    },
+    {
+      "run": "T1",
+      "condition": "T",
+      "repeat": 1,
+      "launch_order": 2,
+      "patches": 2,
+      "application": "applied",
+      "all_starting_text_retained": true,
+      "narrative_words": 566,
+      "requested_cap": 900,
+      "exceeds_cap": false,
+      "start_utc": "2026-10-02T01:53:59+00:00",
+      "end_utc": "2026-10-02T01:54:49+00:00",
+      "wall_seconds": 50.0,
+      "reviews": [
+        {
+          "reviewer": "A",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        },
+        {
+          "reviewer": "B",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        }
+      ]
+    },
+    {
+      "run": "T2",
+      "condition": "T",
+      "repeat": 2,
+      "launch_order": 3,
+      "patches": 2,
+      "application": "applied",
+      "all_starting_text_retained": true,
+      "narrative_words": 560,
+      "requested_cap": 900,
+      "exceeds_cap": false,
+      "start_utc": "2026-10-02T01:54:12+00:00",
+      "end_utc": "2026-10-02T01:54:58+00:00",
+      "wall_seconds": 46.0,
+      "reviews": [
+        {
+          "reviewer": "A",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        },
+        {
+          "reviewer": "B",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        }
+      ]
+    },
+    {
+      "run": "F2",
+      "condition": "F",
+      "repeat": 2,
+      "launch_order": 4,
+      "patches": 2,
+      "application": "applied",
+      "all_starting_text_retained": true,
+      "narrative_words": 501,
+      "requested_cap": 900,
+      "exceeds_cap": false,
+      "start_utc": "2026-10-02T01:54:27+00:00",
+      "end_utc": "2026-10-02T01:55:15+00:00",
+      "wall_seconds": 48.0,
+      "reviews": [
+        {
+          "reviewer": "A",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        },
+        {
+          "reviewer": "B",
+          "complete": true,
+          "target_assessments": [
+            {
+              "target_id": "G1",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            },
+            {
+              "target_id": "G2",
+              "final_article_presence": "covered",
+              "source_support": "supported",
+              "finding_mention": true,
+              "answer_mention": true
+            }
+          ],
+          "supported_target_count": 2,
+          "target_denominator": 2,
+          "patches_assessed": 2,
+          "new_harms": 0,
+          "all_patches_warranted": true,
+          "patch_flags": {
+            "collateral_loss": 0,
+            "unsupported_strengthening": 0,
+            "unnecessary_edit": 0
+          }
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "writers": 4,
+    "patches_applied": 8,
+    "complete_reviews": 8,
+    "patch_review_assessments": 16,
+    "target_review_assessments": 16,
+    "covered_and_supported_target_review_assessments": 16,
+    "demonstrated_new_harms_reported": 0,
+    "over_budget_outputs": 0
+  },
+  "conditions": {
+    "F": {
+      "runs": 2,
+      "runs_with_both_targets_covered_supported_by_each_reviewer": 2,
+      "run_target_coverage": {
+        "covered": 4,
+        "denominator": 4
+      }
+    },
+    "T": {
+      "runs": 2,
+      "runs_with_both_targets_covered_supported_by_each_reviewer": 2,
+      "run_target_coverage": {
+        "covered": 4,
+        "denominator": 4
+      }
+    }
+  },
+  "timing": {
+    "writer_window_seconds": 90.0,
+    "sum_writer_wall_seconds": 196.0,
+    "overlapping_runs": true,
+    "meaning": "Per-writer elapsed clock duration, not latency benchmark or CPU time. Review timestamps unavailable; file mtime is not an execution timer.",
+    "model_deployment_seed_cost": "unavailable; cannot independently verify model configuration identity from these metadata"
+  },
+  "interpretation": {
+    "typed_format_advantage": "No evidence here: F and T both succeed in 2/2 runs.",
+    "prior_comparison": "Explicit repair goals and extra attention occur in both conditions; improvement over reused candidate cannot identify typed-format effect.",
+    "T2_global_comparator": "Both reviewers accept contextual implicit global comparison in source; no separate quantified global-inflation estimate is established.",
+    "T2_Q3": "A accepts observed-versus-hypothetical contrast; B flags chronology wording limit. Neither finds demonstrated new final-article harm.",
+    "remaining_limits": [
+      "One previously exposed article, two already supplied targets, two runs per condition; no generalization or inferential significance.",
+      "Both reviewers inspect the same frozen reference; agreement is not independent truth or proof that the reference is gold.",
+      "Unchanged starting claims outside summary support remain unresolved; source silence is not falsity.",
+      "Representation length/layout and attention cannot be fully separated.",
+      "Raw findings and QA mentions are reported separately and never substitute for article coverage."
+    ]
+  },
+  "length_measurement": "Same narrative field selection as code/output_lengths.py. Includes every patch after and justification, excludes before, anchor quotes, identifiers and JSON keys; no truncation or rerun."
+}

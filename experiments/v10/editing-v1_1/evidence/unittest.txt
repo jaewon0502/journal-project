@@ -1,0 +1,16 @@
+test_annotation_and_byte_tampering_fail (test_delivery.DeliveryTests.test_annotation_and_byte_tampering_fail) ... ok
+test_dependency_one_factor (test_delivery.DeliveryTests.test_dependency_one_factor) ... ok
+test_exact_preimage_and_dependency_forgery_rejected (test_delivery.DeliveryTests.test_exact_preimage_and_dependency_forgery_rejected) ... ok
+test_independent_good_bad (test_delivery.DeliveryTests.test_independent_good_bad) ... ok
+test_missing_wrong_hash_malformed_final_holds (test_delivery.DeliveryTests.test_missing_wrong_hash_malformed_final_holds) ... ok
+test_new_error_requires_new_final_hash (test_delivery.DeliveryTests.test_new_error_requires_new_final_hash) ... ok
+test_noop_normal_still_requires_audit (test_delivery.DeliveryTests.test_noop_normal_still_requires_audit) ... ok
+test_uncertainty_one_factor (test_delivery.DeliveryTests.test_uncertainty_one_factor) ... ok
+test_unrelated_preexisting_does_not_block (test_delivery.DeliveryTests.test_unrelated_preexisting_does_not_block) ... ok
+test_utf8_minimal_hunks_keep_unchanged_context (test_delivery.DeliveryTests.test_utf8_minimal_hunks_keep_unchanged_context) ... ok
+test_whole_rollback_never_copies_completion_prose (test_delivery.DeliveryTests.test_whole_rollback_never_copies_completion_prose) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.011s
+
+OK

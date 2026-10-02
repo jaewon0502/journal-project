@@ -1,0 +1,150 @@
+{
+  "id": "KO011",
+  "purpose": "regression_only",
+  "source_sha256": "9d581bc428de78e6af5686ffef7f7c6e24e8e9f3d99c2fff6481b03fbfa8311c",
+  "source_url": "https://www.pressian.com/pages/articles/2026093021182974483",
+  "publication": "2026-10-01T06:55:08",
+  "fetched_at": "2026-10-01T08:49:04.169313+00:00",
+  "not_gold": true,
+  "coverage": "선별 보호표; 전수목록 아님. 원문 독립검토 필요.",
+  "rows": [
+    {
+      "id": "K01",
+      "paragraph": "P003",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 305,
+        "end": 310
+      },
+      "short_evidence": "4.62%",
+      "preserve": "4.62→4.76와 증가량0.12의 충돌을 노출한 채 보존",
+      "why": "어느 숫자가 잘못됐는지 산술만으로 결정 불가",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "internal_arithmetic_conflict",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "K02",
+      "paragraph": "P018",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 2091,
+        "end": 2096
+      },
+      "short_evidence": "1.19%",
+      "preserve": "예대금리차의 숫자와 단위를 분리; 1.19·1.43은 금리차 문맥",
+      "why": "단위 정정이 숫자 진실 전체를 보증하지 않음",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "unit_conflict",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "K03",
+      "paragraph": "P014",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1745,
+        "end": 1750
+      },
+      "short_evidence": "4.40%",
+      "preserve": "전체 대출4.40과 수신3.21의 비교 범위",
+      "why": "P018 차이1.19 산술 검증에 필요한 의존 문단",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "none_observed",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "K04",
+      "paragraph": "P015",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1788,
+        "end": 1793
+      },
+      "short_evidence": "3.21%",
+      "preserve": "수신금리 연3.21 및 전월과 같음",
+      "why": "변경없는 정상 대조와 단위 의존",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "none_observed",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "K05",
+      "paragraph": "P009",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1093,
+        "end": 1105
+      },
+      "short_evidence": "해석된다",
+      "preserve": "관측치가 아닌 기자의 원인 해석 강도",
+      "why": "추정적 해석을 확인된 원인으로 바꾸면 안 됨",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "world_truth_unverified",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "K06",
+      "paragraph": "P003",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 270,
+        "end": 293
+      },
+      "short_evidence": "신규 취급액 기준",
+      "preserve": "통계 모집단과 기준; 8월 관측과 30일 발표 구분",
+      "why": "잔액 기준이나 기사 발행일과 혼동 방지",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "exact_official_record_missing",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    }
+  ]
+}

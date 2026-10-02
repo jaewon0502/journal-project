@@ -1,0 +1,32 @@
+{
+  "packet_id": "23c079601c067d9e3a4da925",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "적용 2개, 제외·원복 0개, 보류 0개.",
+      "reason": "The output changes the percentage-point wording and meeting day while preserving the attendance-total sentence. The receipt selects p1 and p2 and the annotation accurately describes both patches as locally applied."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "no",
+      "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다.",
+      "reason": "The annotation only gives an unadjudicated reference count and generic uncertainty. It does not identify a1, the unchanged 8-and-5 total-14 sentence, or E3. Those details are recoverable only from the common packet."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+      "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "적용 2개",
+      "reason": "This is an applied case with a supplied unresolved issue, not an empty-issue unchanged no-op."
+    }
+  },
+  "missing_issue_ids": [
+    "a1"
+  ],
+  "recovery_basis": "common_input_only",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

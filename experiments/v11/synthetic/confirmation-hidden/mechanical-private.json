@@ -1,0 +1,50 @@
+[
+  {
+    "case_id": "d75d0e3fb2eb",
+    "failure": "corrupt_output",
+    "mutation": "append U+0021 to actual_output after receipt issuance",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  },
+  {
+    "case_id": "d75d0e3fb2eb",
+    "failure": "stale_receipt",
+    "mutation": "replace receipt output_sha256 by the source_sha256 while retaining full-output bytes",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  },
+  {
+    "case_id": "d75d0e3fb2eb",
+    "failure": "partial_write",
+    "mutation": "retain only p1 after-bytes in actual_output while keeping the full-output receipt",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  },
+  {
+    "case_id": "19b2afea4862",
+    "failure": "corrupt_output",
+    "mutation": "append U+0021 to actual_output after receipt issuance",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  },
+  {
+    "case_id": "19b2afea4862",
+    "failure": "stale_receipt",
+    "mutation": "replace receipt output_sha256 by the source_sha256 while retaining full-output bytes",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  },
+  {
+    "case_id": "19b2afea4862",
+    "failure": "partial_write",
+    "mutation": "retain only p1 after-bytes in actual_output while keeping the full-output receipt",
+    "expected_verification": "reject",
+    "expected_release": "hold",
+    "do_not_count_as_additional_underlying_case": true
+  }
+]

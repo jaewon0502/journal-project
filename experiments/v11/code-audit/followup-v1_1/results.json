@@ -1,0 +1,61 @@
+{
+  "native_plus_prior_01_to_05": {
+    "run": 14,
+    "failures": 0,
+    "errors": 0
+  },
+  "size_contract_changed": true,
+  "original_check06_preserved_as_original_failure": true,
+  "boundary": [
+    {
+      "target": 2097151,
+      "audit_bytes": 2095242,
+      "mint_bytes": 2097151,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097152,
+      "audit_bytes": 2095243,
+      "mint_bytes": 2097152,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097153,
+      "audit_bytes": 2095244,
+      "exception": "ValueError: receipt exceeds shared byte limit or is not bytes"
+    }
+  ],
+  "nested": [
+    {
+      "depth": 3000,
+      "structured": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "depth": 10000,
+      "uncaught": "RecursionError: maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    }
+  ],
+  "original_large_followup": "ValueError: receipt exceeds shared byte limit or is not bytes",
+  "receipt_freeze": {
+    "files": 34,
+    "unchanged": true
+  },
+  "receipt-v1_1_freeze": {
+    "files": 39,
+    "unchanged": true
+  }
+}

@@ -6,3 +6,7 @@ __pycache__/
 .env.*
 private/
 local-sources/
+
+# Authored synthetic calibration labels, not private real-source artifacts.
+!experiments/v10/calibration/private/
+!experiments/v10/calibration/private/expected.json

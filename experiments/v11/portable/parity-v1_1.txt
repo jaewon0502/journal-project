@@ -1,0 +1,118 @@
+{
+  "version": "v1_1",
+  "synthetic_cases": 10,
+  "reference_comparison": true,
+  "rows": [
+    {
+      "lang": "EN",
+      "state": "applied",
+      "receipt_sha256": "fff5c6a3b1b5d80eacf05248ae4d3e04584a5a8e815493d0aa04dfcad2fea6a8",
+      "output_sha256": "fea4c5ce720c1d6a1cbc47c1607cc4ea172a69de8948e76d67910120597950fc",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "EN",
+      "state": "partial",
+      "receipt_sha256": "29c49fb5e4baf17518c6c3e923aadde2905414bc1672be9cc3af016534be0d68",
+      "output_sha256": "a760b0e1e5180903bce545f6444f0b986012105a194d02b2f909452d6b287dff",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "EN",
+      "state": "rolledback",
+      "receipt_sha256": "222e1b01e8223db52d1be674d9830644b733395fb07b274a41b6b16fdbf20625",
+      "output_sha256": "c8687a08aa5d6ed2044328fa6a697ab8e96dc34291e8c2034ae8c38e6fcc6d65",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "EN",
+      "state": "no-op",
+      "receipt_sha256": "b4dacb0f00523e5515cdb156c6c0824d34ad1a224ea035a3899a6697e98cf028",
+      "output_sha256": "c8687a08aa5d6ed2044328fa6a697ab8e96dc34291e8c2034ae8c38e6fcc6d65",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "EN",
+      "state": "abstained",
+      "receipt_sha256": "098b73d57fa1262294b6a06339771c6c16d05cfcacbce1eae370356e4f6ebe71",
+      "output_sha256": "c8687a08aa5d6ed2044328fa6a697ab8e96dc34291e8c2034ae8c38e6fcc6d65",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "KO",
+      "state": "applied",
+      "receipt_sha256": "cb3976e2e53432c0962e0f49fdd47db2a4a73ee8f4a9f42f0b02d30827f05da9",
+      "output_sha256": "b89d3bacb734d07aef316c0cf665e156a0ceebf374d8be1ba3009b34acc73b0b",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "KO",
+      "state": "partial",
+      "receipt_sha256": "f61cc055536de451d5e22b60f699ea6f49b842dfe35a127e2774ea397cb79ce6",
+      "output_sha256": "ddac14033241f2003185f6d2e8c63393c7c5f0370afbff45025fdca9ce9ca46f",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "KO",
+      "state": "rolledback",
+      "receipt_sha256": "b95310400b3a69149e9ba9bb56b18f5f0591dd43fe0df80a117bf676db173a83",
+      "output_sha256": "ff22d858c6a624ba72a8d2341933b8741ebc79167578bed79ae97560bcb631a0",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "KO",
+      "state": "no-op",
+      "receipt_sha256": "e3ca8da40c708a5ef03cf98a9596940244aa244bc243b99caf74793d0b71a5d4",
+      "output_sha256": "ff22d858c6a624ba72a8d2341933b8741ebc79167578bed79ae97560bcb631a0",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    },
+    {
+      "lang": "KO",
+      "state": "abstained",
+      "receipt_sha256": "f91bf4258e9171a43080e5480e82f64d8d6ba5f6cc9a256c19a4cf1ff6dcb5d7",
+      "output_sha256": "ff22d858c6a624ba72a8d2341933b8741ebc79167578bed79ae97560bcb631a0",
+      "portable_roundtrip": true,
+      "actual_inputs_equal": true,
+      "receipt_bytes_equal": true,
+      "annotations_equal": true
+    }
+  ],
+  "provenance": {
+    "version_label": "v1_1",
+    "original_receipt_sha256": "aa9f90eae4045e3263a2e4338fccbc354241d8f99fa5f8bcda15d41c66507ad0",
+    "executed_receipt_sha256": "0115af286c3ab7eeec5b8e2e5363f821ea4ef0e735d3327438f798c164fd1c3c",
+    "in_memory_replacement_count": 1,
+    "replacement": "V10 = Path('/historical-research/journal-v11/portable/dependencies/delivery.py')",
+    "dependencies": {
+      "dependencies/delivery.py": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "dependencies/vendor/selective_rollback.py": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a"
+    }
+  }
+}

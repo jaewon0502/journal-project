@@ -1,0 +1,9 @@
+{
+  "input_id": "88b1c16a46ec",
+  "text": "The displayed local output is unchanged from the source: attendance rises from 21% to 24%, a difference of 3 percentage points, and the meeting remains on Friday. No patches were proposed or applied, and none were rejected, rolled back, or held. The unchanged candidate was locally released as a no-op. The supplied fictional scenario supports both statements and identifies no unresolved meaning issue.",
+  "limitations": [
+    "This note covers only the supplied local output and scenario evidence; no external publication occurred.",
+    "Overall factual accuracy and real-world facts were not independently verified, and question resolution was not adjudicated."
+  ],
+  "declared_scope": "displayed_local_output"
+}

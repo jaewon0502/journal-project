@@ -1,0 +1,38 @@
+{
+  "input_id": "3c2c6fbd3a6be4122a4f2923",
+  "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "protection_inventory": [
+    {
+      "id": "P1",
+      "source_anchor": "관측소는",
+      "meaning": "기록 주장을 발표한 주체가 관측소라는 귀속을 보존한다.",
+      "outside_reference": true
+    },
+    {
+      "id": "P2",
+      "source_anchor": "6월 8일 수위가 당시 최고 기록을 세웠다고",
+      "meaning": "주장은 6월 8일 수위와 그 당시까지의 최고 기록에 관한 것으로, 이후에도 최고 기록이었다는 뜻으로 바꾸지 않는다.",
+      "outside_reference": true
+    },
+    {
+      "id": "P3",
+      "source_anchor": "발표했다",
+      "meaning": "원문이 관측소의 발표를 보도한다는 사실과 발표 내용의 실제 진위를 구분한다. 발표 날짜는 원문에 명시되어 있지 않다.",
+      "outside_reference": true
+    }
+  ],
+  "patches": [],
+  "dependencies": [],
+  "reader_note": "아니요. E1의 6월 10일 최고 수위 8.2m 기록만으로 6월 8일 당시 최고 기록 주장이 틀렸다고 확정할 수 없습니다. 나중의 최고 기록은 앞선 당시 기록과 양립할 수 있습니다. 근거가 있는 수정은 없어 원문을 그대로 두었으며 적용한 변경은 없습니다. 6월 8일 수위와 그 이전 최고 수위가 없어 당시 기록 여부는 확인되지 않습니다.",
+  "target_response": "no_change_needed",
+  "unresolved": [
+    "6월 8일 수위 및 그 이전 최고 수위가 제공되지 않아 6월 8일 당시 최고 기록 여부는 검증할 수 없다.",
+    "E1은 관측소가 실제로 해당 발표를 했는지 별도로 확인해 주지 않는다."
+  ],
+  "self_check": {
+    "original_statement_retention": "원문 전체와 변경 없는 후보를 양방향으로 대조했다. 관측소의 발표 귀속, 6월 8일 수위, 당시 최고 기록이라는 모든 의미를 그대로 보존했으며 새 주장을 추가하지 않았다.",
+    "scope_time_comparison": "6월 8일 당시 기록 주장과 6월 10일 이후 기록을 구분했다. E1에는 비교에 필요한 6월 8일 수위와 이전 최고 수위가 없으며 원문의 발표 시점도 특정하지 않았다.",
+    "criticism_and_counterargument": "원문에 비판이나 반론은 없다. 관측소의 발표를 이후 자료로 부정하거나 발표 내용을 바꾸지 않았다.",
+    "outside_patch_unchanged": true
+  }
+}

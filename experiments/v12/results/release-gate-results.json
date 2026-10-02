@@ -1,0 +1,219 @@
+{
+  "scope": "Post-experiment deterministic delivery replay; not model outputs or independent experiments.",
+  "limitation": "Fallback retains original omissions and errors; acceptance is not semantic correctness.",
+  "core_scores_unchanged": true,
+  "output_count": 10,
+  "actual_review_count": 20,
+  "counts": {
+    "hold": 10
+  },
+  "rows": [
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "version": "v1",
+      "packet_id": "d4cd2cb427a66c946b552271",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:reference_assessments_unknown",
+        "reviewer_1:unanswered_scope_unknown",
+        "reviewer_2:reference_assessments_unknown",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 6,
+      "original_retained": true
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "version": "v1",
+      "packet_id": "ab59af64c3470b1df309f39f",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:reference_assessments_unknown",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 4,
+      "original_retained": true
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "version": "v1",
+      "packet_id": "e04940ff183338f5fe772428",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_supported_harm",
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:patch_6:meaning_loss_not_no",
+        "reviewer_1:patch_6:overediting_not_no",
+        "reviewer_1:patch_6:unsupported_new_meaning",
+        "reviewer_1:reference_assessments_unknown",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_2:any_supported_harm",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:patch_6:meaning_loss_not_no",
+        "reviewer_2:patch_6:overediting_not_no",
+        "reviewer_2:patch_6:unsupported_new_meaning",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_2:unlisted_findings_require_resolution",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 8,
+      "original_retained": true
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "version": "v1",
+      "packet_id": "031d406ace128460ad52cad9",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_supported_harm",
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:patch_7:meaning_loss_not_no",
+        "reviewer_1:patch_7:overediting_not_no",
+        "reviewer_1:patch_7:unsupported_new_meaning",
+        "reviewer_1:patch_8:meaning_loss_not_no",
+        "reviewer_1:patch_8:overediting_not_no",
+        "reviewer_1:patch_8:unsupported_new_meaning",
+        "reviewer_1:reference_assessments_unknown",
+        "reviewer_1:unanswered_scope_unknown",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_2:any_supported_harm",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:patch_7:meaning_loss_not_no",
+        "reviewer_2:patch_7:overediting_not_no",
+        "reviewer_2:patch_7:unsupported_new_meaning",
+        "reviewer_2:patch_8:location_correct_not_yes",
+        "reviewer_2:patch_8:meaning_loss_not_no",
+        "reviewer_2:patch_8:overediting_not_no",
+        "reviewer_2:patch_8:unsupported_new_meaning",
+        "reviewer_2:patch_8:warranted_not_yes",
+        "reviewer_2:reference_assessments_unknown",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_2:unlisted_findings_require_resolution",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 8,
+      "original_retained": true
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "version": "v2",
+      "packet_id": "b08605eacf27764a4995a290",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_supported_harm",
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:patch_2:meaning_loss_not_no",
+        "reviewer_1:patch_2:overediting_not_no",
+        "reviewer_1:patch_2:unsupported_new_meaning",
+        "reviewer_1:reference_assessments_unknown",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:reference_assessments_unknown",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 5,
+      "original_retained": true
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "version": "v2",
+      "packet_id": "59a6106d81739f599e2c483f",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_supported_harm",
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:patch_2:meaning_loss_not_no",
+        "reviewer_1:patch_2:overediting_not_no",
+        "reviewer_1:patch_2:unsupported_new_meaning",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 5,
+      "original_retained": true
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "version": "v2",
+      "packet_id": "4fc1204e8feb6b0ed2b488eb",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_2:unlisted_findings_require_resolution",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 5,
+      "original_retained": true
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "version": "v2",
+      "packet_id": "8e610b71dcbe8ed3092dc4c2",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:unanswered_scope_unknown",
+        "reviewer_1:unlisted_findings_require_resolution",
+        "reviewer_2:reference_assessments_unknown",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_2:unlisted_findings_require_resolution",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 9,
+      "original_retained": true
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "version": "v2",
+      "packet_id": "1ffe0b658d220e5ffc0073af",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_1:unanswered_scope_unknown",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:reference_assessments_unknown",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 3,
+      "original_retained": true
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "version": "v2",
+      "packet_id": "01a93f2bbfdf5011d82094e3",
+      "status": "hold",
+      "reasons": [
+        "reviewer_1:any_unresolved_material_issue",
+        "reviewer_2:any_unresolved_material_issue",
+        "reviewer_2:unanswered_scope_unknown",
+        "reviewer_disagreement"
+      ],
+      "patch_count": 3,
+      "original_retained": true
+    }
+  ]
+}

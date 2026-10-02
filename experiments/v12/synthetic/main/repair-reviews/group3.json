@@ -1,0 +1,156 @@
+[
+  {
+    "review_id": "9ca8fb823a49717d94",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "A sponsor",
+        "predicted",
+        "had not yet been compiled",
+        "did not endorse that prediction",
+        "on Friday"
+      ],
+      "original_candidate": [
+        "A sponsor predicted",
+        "the director withheld endorsement",
+        "booking totals were not yet compiled",
+        "a Friday ticket-sales update"
+      ],
+      "patched_candidate": [
+        "A sponsor predicted",
+        "the director withheld endorsement",
+        "a Friday ticket-sales update"
+      ]
+    },
+    "reason": "The unchanged candidate preserves the sponsor attribution, unconfirmed demand, director nonendorsement, and planned Friday update. No contradiction or unsupported certainty requires repair."
+  },
+  {
+    "review_id": "6afda0cdecb3e17a83",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "코드가 없는 자료에서는 줄지 않았다",
+        "등록 오류율은 기존 절차와 같았다",
+        "분류 코드가 있는 자료에만"
+      ],
+      "original_candidate": [
+        "사전 분류 코드 여부와 무관하게 등록 시간이 줄었고"
+      ],
+      "patched_candidate": [
+        "코드가 있는 자료에서는 등록 시간이 줄었지만 코드가 없는 자료에서는 줄지 않았고"
+      ]
+    },
+    "reason": "The original incorrectly extends the time reduction to uncoded material. The patch restores the coded-material condition and absence of reduction for uncoded material, preserving unchanged error rates and the limited rollout."
+  },
+  {
+    "review_id": "4174bdb273fc6f3f39",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "지난해 가을",
+        "올해 봄 경사로를 설치해",
+        "비판이 정당했다고",
+        "그 과거 비판을 반박하는 근거가 되지는 않는다"
+      ],
+      "original_candidate": [
+        "지난해 가을 없던 경사로가 올해 봄 설치되어",
+        "비판이 정당했으며",
+        "올해의 개선이 그 비판을 반박하지 못한다고"
+      ],
+      "patched_candidate": [
+        "비판이 정당했으며",
+        "올해의 개선이 그 비판을 반박하지 못한다고"
+      ]
+    },
+    "reason": "The unchanged candidate correctly separates past inaccessibility from current ramp access and attributes to the committee both the justified historical criticism and the inability of later improvements to rebut it."
+  },
+  {
+    "review_id": "2852b8757d862722dc",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "줄어들 수 있다고 전망했다",
+        "감소를 보장하지 않았으며",
+        "다음 분기의 실측 자료가 없었다",
+        "다음 분기가 끝난 뒤"
+      ],
+      "original_candidate": [
+        "반드시 줄어든다고 보장했다"
+      ],
+      "patched_candidate": [
+        "줄어들 수 있다고 전망했으나 감소를 보장하지는 않았다"
+      ]
+    },
+    "reason": "The original converts a possible future reduction into an explicit guarantee contrary to the source. The patch restores forecast uncertainty and non-guarantee while retaining the lack of measured data and disclosure after the quarter ends."
+  },
+  {
+    "review_id": "fe25a9a23f2a7ca1de",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "only when a request arrived before the costume was dispatched",
+        "did not change which alterations were eligible",
+        "extend the same waiver rules for one further month"
+      ],
+      "original_candidate": [
+        "only for requests received before dispatch",
+        "left eligibility unchanged",
+        "extended the same rules for one month"
+      ],
+      "patched_candidate": [
+        "only for requests received before dispatch",
+        "extended the same rules for one month"
+      ]
+    },
+    "reason": "The unchanged candidate preserves the before-dispatch condition, unchanged eligibility, and one-month continuation decision. Its concise extension wording reasonably summarizes that decision without claiming separate implementation details."
+  },
+  {
+    "review_id": "df887b6c01ecdd7cb5",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "nine days this June",
+        "six days in May",
+        "twelve days in June of the previous year",
+        "the year-to-year improvement did not contradict the slowdown since May"
+      ],
+      "original_candidate": [
+        "annual improvement refuted the monthly slowdown"
+      ],
+      "patched_candidate": [
+        "annual improvement did not refute the monthly slowdown"
+      ]
+    },
+    "reason": "The figures and time comparisons are accurate, but the original reverses the panel conclusion by treating annual improvement as refutation of the monthly slowdown. Adding the negation fully repairs that reversal while preserving the justified customer criticism and management attribution."
+  }
+]

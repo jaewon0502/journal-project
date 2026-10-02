@@ -1,0 +1,104 @@
+{
+  "frozen_at": "2026-10-02T01:03:29.116001+00:00",
+  "decision": "One DEV-based B-only boundary gate adaptation. A unchanged. No further adaptation after this lock. B-v2 vs A is a composite treatment, not isolated gate effect. Two B-v2 DEV reruns are exposed regression. Four EVAL runs are fresh writer contexts.",
+  "gate_sha256": "bac24b19a95d4fd911fdaee5f5b8183f31cbb36c7554fe03756a9e47f9c4656a",
+  "v1_lock_sha256": "1dfb8adc5f4e26ee1b6e115aef470eac16fd8d10b24e1a71d7eb941c89ee1f41",
+  "rows": [
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "input_id": "38d5edc5a91b4edb17507d34",
+      "split": "development",
+      "language": "KO",
+      "input_sha256": "f82a15a9fec420695259b15b8b7423fec843008c4de6e4ebb9de9c93cb56bd83",
+      "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+      "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+      "previous_input_id": "088d7390d4359ea589b69407",
+      "run_plan": "unchanged A; reuse v1 development output only"
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "input_id": "77c17b415a3e6380cb8da833",
+      "split": "development",
+      "language": "KO",
+      "input_sha256": "1ae27bc1b6e092d3b9220928f759e1ccaf75ceffd7f9f32f69c02609aa70fcfc",
+      "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+      "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+      "previous_input_id": "ef01c1c27fd3418ca0e1d3be",
+      "run_plan": "run"
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "input_id": "c95347c0da9a8bfa99af0fa4",
+      "split": "development",
+      "language": "EN",
+      "input_sha256": "fd2a94d4519a7cc725ab537a71e040f86e2619c78c80179337eb734bf482ebc1",
+      "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+      "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+      "previous_input_id": "e54d797342e6b80fbea0299d",
+      "run_plan": "unchanged A; reuse v1 development output only"
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "input_id": "d020bd701650da951576fccd",
+      "split": "development",
+      "language": "EN",
+      "input_sha256": "c81c75d9b41de93d6dea5b23789c9daccacc049f51e5dfcc382995d716c68cfe",
+      "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+      "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+      "previous_input_id": "ede155dad512a3d7d433676c",
+      "run_plan": "run"
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "input_id": "c437a544c3c8c4ff39ae7f3d",
+      "split": "locked_evaluation",
+      "language": "KO",
+      "input_sha256": "9a1aca917cc408986eac040653352638f496de85bcbaa17053453b8a74bab865",
+      "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+      "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+      "previous_input_id": "09b9e16b8e2b9ba573189c47",
+      "run_plan": "run"
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "input_id": "0cb0917c57864cfa4be1121e",
+      "split": "locked_evaluation",
+      "language": "KO",
+      "input_sha256": "e536c950e1dce89fb22af7cb78188c3249e91488e52e797a50d2ee9930d84876",
+      "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+      "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+      "previous_input_id": "35029351d5b635ce665b2d2c",
+      "run_plan": "run"
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "input_id": "ec8450119a3653826b876bd1",
+      "split": "locked_evaluation",
+      "language": "EN",
+      "input_sha256": "38ce9c758c89c2736a3a06c48975a1648e2e793305bef140c73cc5e9c3c642f9",
+      "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+      "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd",
+      "previous_input_id": "88e5f92ef7091664c6fd762e",
+      "run_plan": "run"
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "input_id": "21bae782c8af373f772865fa",
+      "split": "locked_evaluation",
+      "language": "EN",
+      "input_sha256": "b7d519832fbb51a163d1681656bb42b7550fad09fd0856e80ba097b09da4b914",
+      "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+      "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd",
+      "previous_input_id": "16bcba6a2c008dfef0a8ad56",
+      "run_plan": "run"
+    }
+  ]
+}

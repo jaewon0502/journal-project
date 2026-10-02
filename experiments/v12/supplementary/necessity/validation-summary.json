@@ -1,0 +1,34 @@
+{
+  "module": "supplementary-necessity",
+  "stage": "independent pre-classification validation",
+  "status": "eligible",
+  "synthetic_items": 6,
+  "independent_synthetic_bases": 3,
+  "planned_classification_outputs": 12,
+  "independent_judgments_saved_before_author_labels": true,
+  "classifier_outputs_seen": false,
+  "eligibility_checks": {
+    "all_manifest_file_hashes_match": true,
+    "constant_detector_prompt": true,
+    "constant_detector_schema": true,
+    "detector_item_matches_source_collection": true,
+    "detector_inputs_no_author_labels_or_pair_mapping": true,
+    "all_explicitly_fictional": true,
+    "all_pairs_only_intended_factor": true,
+    "all_expectations_independently_agree": true,
+    "manifest_freeze_hash_matches": true
+  },
+  "items_eligible": 6,
+  "ambiguous_items": 0,
+  "expectation_disagreements": 0,
+  "faithful_criticism_normal_control_valid": true,
+  "actual_legal_claims_present": false,
+  "blocking_issues": [],
+  "limitations": [
+    "Six synthetic items across three independent bases; validation is not a performance estimate.",
+    "AI-authored expectations and independent AI validation do not create externally adjudicated ground truth.",
+    "Paired items share source text and are not independent real-world cases."
+  ],
+  "frozen_material_modified": false,
+  "private_content_or_item_labels_included": false
+}

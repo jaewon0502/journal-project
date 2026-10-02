@@ -1,0 +1,33 @@
+{
+  "packet_id": "d26a4fb780ef5a629b9831e7",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+      "reason": "Output equals source; neither proposed patch is selected and both are rejected in the receipt. In context, no patches present refers to their absence from the local output."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "no",
+      "short_anchor": "There are 1 finding references with unadjudicated resolution",
+      "reason": "The annotation gives only a reference count and general uncertainty. It does not identify 3% versus E1 or Friday versus E2; both concerns require the common input."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+      "reason": "The annotation reports local gate release and expressly avoids factual verification, adjudication, and external publication. Attribution of supplied unresolved concerns is not certification of their truth."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "The receipt is not a no-op.",
+      "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+    }
+  },
+  "missing_issue_ids": [
+    "q1",
+    "q2"
+  ],
+  "recovery_basis": "common_input_only",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

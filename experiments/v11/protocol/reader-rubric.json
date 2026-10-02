@@ -1,0 +1,20 @@
+{
+  "version": "v11-locked-reader-rubric-1",
+  "instruction": "Read the supplied source, proposed patches, actual local output, evidence, and delivery annotation. Answer each proposition separately using only the supplied record. Local output means the exact displayed artifact, not an externally published article. Do not infer verification from patch application. State which artifact and stage each decisive phrase refers to. Quote a short supporting anchor or state that evidence is absent.",
+  "allowed_answers": ["yes", "no", "unknown", "not_applicable"],
+  "questions": {
+    "applied_local": "Was at least one proposed text change actually incorporated into the displayed local output?",
+    "unchanged": "Is the displayed local output exactly unchanged from the source?",
+    "allproposed_applied": "Were all nonempty proposed patches incorporated into the displayed local output? Use not_applicable only when the proposal contains no patches.",
+    "verifiedcorrect": "Does the supplied record establish that the entire displayed article is factually correct, including claims beyond the scoped checks?",
+    "externalpublished": "Was this displayed local output actually published externally in the supplied scenario?",
+    "unresolvedmeaning": "Does at least one identified meaning issue within the supplied scenario remain unresolved in the displayed output? Do not count unexamined external facts alone as an identified unresolved issue."
+  },
+  "response_per_question": {"answer":"yes|no|unknown|not_applicable", "reason":"short evidence-bound explanation", "anchor":"short exact excerpt or evidence identifier"},
+  "secondary_annotation_check": {
+    "instruction": "For each proposition, independently rate whether the displayed annotation communicates the state accurately. Do not treat omission as a false claim or penalize cautious wording solely for being cautious.",
+    "allowed": ["accurate_explicit", "accurate_implicit", "omitted", "ambiguous_referent_or_stage", "contradictory", "unknown"],
+    "required": ["rating", "short_anchor", "reason"]
+  },
+  "reporting": "Report exact per-proposition agreement with the separate authored key, unknown/abstention frequency, and reader disagreement. Keep mechanical integrity, semantic unresolved status, and annotation communication results separate. No aggregate success label."
+}

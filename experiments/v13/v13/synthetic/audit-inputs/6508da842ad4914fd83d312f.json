@@ -1,0 +1,44 @@
+{
+  "audit_id": "6508da842ad4914fd83d312f",
+  "source_documents": [
+    {
+      "id": "S1",
+      "url": null,
+      "paragraphs": [
+        {
+          "id": "S1.p1",
+          "text": "가상의 여울군은 2026년 9월 10일 하천 관찰센터 조성 사업의 변경 계획을 발표했다."
+        },
+        {
+          "id": "S1.p2",
+          "text": "이번 군비 편성안은 4억 원이며 군은 이를 의회에 제출할 예정이라고 밝혔다."
+        },
+        {
+          "id": "S1.p3",
+          "text": "설계안은 관찰실 한 곳과 보행 연결로를 포함하고 기존 주차장 확장은 포함하지 않는다."
+        },
+        {
+          "id": "S1.p4",
+          "text": "군은 12월 31일까지 하천 점용 허가를 받는 경우에만 이듬해 3월에 센터를 개관할 수 있다고 설명했다."
+        },
+        {
+          "id": "S1.p5",
+          "text": "발표일 현재 허가 신청은 접수됐지만 허가 여부는 결정되지 않았다."
+        },
+        {
+          "id": "S1.p6",
+          "text": "군은 허가가 늦어지면 개관 일정을 다시 정해 공지하겠다고 덧붙였다."
+        }
+      ]
+    }
+  ],
+  "source_scope_note": "전적으로 허구로 작성한 2026년 9월 10일 변경 계획 발표 기록이다. 예산 편성안과 허가 진행 상태는 그 발표일 기준이다.",
+  "original_article": "여울군은 9월 10일 하천 관찰센터 조성 사업의 변경 계획을 발표했다. 군이 의회에 제출할 군비 편성안은 6억 원이다. 설계안에는 관찰실과 보행 연결로가 들어간다. 군은 12월 31일까지 하천 점용 허가를 받는 경우에만 이듬해 3월에 센터를 개관할 수 있다고 밝혔다. 발표일 현재 허가 여부는 결정되지 않았다.",
+  "reader_questions": [
+    "제시된 자료의 범위에서 기사에 필요한 사실 수정은 무엇인가?",
+    "각 제안은 근거에 부합하며 수정 대상 이외의 의미와 인접 문장의 관계를 보존하는가?",
+    "각 제안을 적용하거나 보류할 때 남는 불확실성과 필요한 다른 제안이 있는가?"
+  ],
+  "candidate_article": "여울군은 9월 10일 하천 관찰센터 조성 사업의 변경 계획을 발표했다. 군이 의회에 제출할 군비 편성안은 6억 원이다. 설계안에는 관찰실과 보행 연결로가 들어간다. 군은 12월 31일까지 하천 점용 허가를 받는 경우에만 이듬해 3월에 센터를 개관할 수 있다고 밝혔다. 발표일 현재 허가 여부는 결정되지 않았다.",
+  "instruction": "Read only allocated audit packet. This is an independent AI semantic audit, not a human validation. You receive full eligible sources, original, reader questions and one delivered candidate; no gate label, author expectations or initial judgments. Do not search sibling packets/files/web. Check full source and original before assessing the candidate, including surrounding relations. Identify actual changed spans yourself. Separate existing original unsupported claims from new introduced claims. Missing facts not in source are unverified, not refuted. Treat source statement, attributed criticism, forecasts, and established observation separately. Do not count unchanged original errors as introduced harms. A source-reported criticism is not false because negative; preserve actor, target, scope and intensity.\n\nJudge each actual change: exact short evidence anchors, whether warranted/supported, whether original untargeted meaning/conditions/attribution/time/comparison/responsibility/criticism is lost, whether neighboring or long-distance relations make a new unsupported implication. Record supported beneficial corrections delivered and needed corrections still absent. If safety cannot be decided from source, mark unknown instead of approval. Say whether all original/source paragraphs were read; this is a report, not proof of complete semantic coverage. No single composite quality score.\n\nReturn JSON: audit_id, complete:boolean, read_complete:boolean, read_source_paragraph_ids:[], original_paragraphs_read:boolean, changes:[{id,before,after,warranted:yes/no/unknown,evidence_support:yes/no/unknown,introduced_material_harm:yes/no/unknown,harm_dimensions:[],source_anchors:[],original_anchors:[],candidate_anchors:[],reason}], original_residual_issues:[{issue,evidence_status,reason}], criticism_preservation:{status:preserved/lost/not_applicable/unknown,reason}, full_context_safety:safe/material_harm/unknown, normal_noop:boolean, unmet_required_answers:[], uncertainties:[], release_recommendation:release/hold, reason. Release requires no introduced material harm or unknown safety. It need not resolve all original shortcomings. No-change original may be safe relative to original while not accurate; clearly state this. If there are no changes, don't fabricate patch judgments.\n"
+}

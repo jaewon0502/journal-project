@@ -1,0 +1,36 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "7ae5e67958e1a4fb425713b4608ead96270eebfeb69f9d539533450f60172e02",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "15eac252f966484bce43cc04479cc47db7d719b5c01541df5068f60f8bff260c",
+    "issues": [
+      {
+        "evidence_span": {
+          "end_byte": 134,
+          "evidence_id": "E3",
+          "sha256": "2195991ab987d4a33cd0148548e62f075ba28bad197c9e90662a1b20bb864af6",
+          "start_byte": 0,
+          "text": "The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence."
+        },
+        "id": "a1",
+        "kind": "arithmetic",
+        "output_span": {
+          "end_byte": 159,
+          "sha256": "d8f0adb0073b23cf7da9bd929736e896f9fa505facd23c0b6320f3045ad995c9",
+          "start_byte": 111,
+          "text": "참석자는 8명과 5명으로 총 14명이다."
+        },
+        "review_status": "reported_unresolved"
+      }
+    ],
+    "language": "KO",
+    "output_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+    "receipt_sha256": "7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f",
+    "rendered_text": "[\"a1\"] 산술\n출력 인용: \"참석자는 8명과 5명으로 총 14명이다.\"\n근거 인용: \"The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "[\"a1\"] 산술\n출력 인용: \"참석자는 8명과 5명으로 총 14명이다.\"\n근거 인용: \"The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다.",
+  "combined_text": "제안된 모든 패치가 로컬 출력에 반영되었습니다. 적용 2개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Candidate SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Receipt SHA-256: 7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f.\n\n[\"a1\"] 산술\n출력 인용: \"참석자는 8명과 5명으로 총 14명이다.\"\n근거 인용: \"The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다."
+}

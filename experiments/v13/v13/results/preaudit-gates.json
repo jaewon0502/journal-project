@@ -1,0 +1,524 @@
+{
+  "status": "pre-final-audit;not-certified-delivery",
+  "rows": [
+    {
+      "bundle_id": "a9f3b6",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "review 1: warranted=no",
+          "review 2: warranted=no",
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "8649aa3953e8e67bd935ad57",
+      "delivered_sha256": "48254e82d9d7329c387e3f3fe9c37f35d2c300b933634c99b11a9f6037c02604"
+    },
+    {
+      "bundle_id": "a9f3b6",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": [
+          "review 1: warranted=no",
+          "review 2: warranted=no"
+        ]
+      },
+      "audit_id": "c608a8869d3c85681b3ed6f2",
+      "delivered_sha256": "cd0044d4c3eb3d968c27fd280fb3aa4718843717d14afd373a6a3f6d91fb8c70"
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 0,
+      "accepted_ids": [],
+      "held_ids": [],
+      "status": "no_op",
+      "bundle_reasons": [],
+      "reasons": {},
+      "audit_id": "956a7d6e3749814171d10fb7",
+      "delivered_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5"
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 0,
+      "accepted_ids": [],
+      "held_ids": [],
+      "status": "no_op",
+      "bundle_reasons": [],
+      "reasons": {},
+      "audit_id": "956a7d6e3749814171d10fb7",
+      "delivered_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5"
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=no",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 2: warranted=no",
+          "review 2: evidence_support=no",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no",
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "6508da842ad4914fd83d312f",
+      "delivered_sha256": "1d6ed8506272521d4156671c164884ed2c5341a36a3bec61e7531c57b191abc4"
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=no",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 2: warranted=no",
+          "review 2: evidence_support=no",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no"
+        ]
+      },
+      "audit_id": "c2251874d0df315dfa35018d",
+      "delivered_sha256": "11a8c1728f49313279201dd3a0494fc365ad8e874957d466724a27de572eeb62"
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "bundle_reasons": [
+        "review 1: unresolved background issue B2",
+        "review 2: unresolved background issue B2"
+      ],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=unknown",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 1: mapped material/unknown issue B2",
+          "review 2: warranted=no",
+          "review 2: evidence_support=unknown",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no",
+          "review 2: mapped material/unknown issue B2",
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "ffdec0044edd171b337691e1",
+      "delivered_sha256": "9d2f27d82e674d41cb1aae60c91641a22366f2610f01855b125cd221f6d36d84"
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=unknown",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 1: mapped material/unknown issue B2",
+          "review 2: warranted=no",
+          "review 2: evidence_support=unknown",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no",
+          "review 2: mapped material/unknown issue B2"
+        ]
+      },
+      "audit_id": "5357018ef8bc2ceaa0bb7eca",
+      "delivered_sha256": "8805928064f1bd9d3725a8d2eb9f4a57453e78df8838a6a6f214ddb51f98e54d"
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=no",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 2: warranted=no",
+          "review 2: evidence_support=no",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no",
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "4228c5b2b48fdd9e7a4aee8d",
+      "delivered_sha256": "73afb3b289d60dbfe67ea98530b1272d8c218baa87a452fde682d04459e3b504"
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": [
+          "review 1: warranted=no",
+          "review 1: evidence_support=no",
+          "review 1: preserves_untargeted_meaning=no",
+          "review 1: context_safe=no",
+          "review 2: warranted=no",
+          "review 2: evidence_support=no",
+          "review 2: preserves_untargeted_meaning=no",
+          "review 2: context_safe=no"
+        ]
+      },
+      "audit_id": "2d67a9e89e6b35dace78ea34",
+      "delivered_sha256": "d24a5cc650d7796be75b6b707b387fde3aac75b65880b79660f40720acd23694"
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "bundle_reasons": [
+        "review 1: unresolved background issue B3",
+        "review 2: unresolved background issue B3"
+      ],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "45b0ba8ebb57d45e2bb565e0",
+      "delivered_sha256": "ceb94b2968e48f796d6d283b1bc2fa7d6eea4642bb01cdea594c9197f7bda471"
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1",
+        "P2"
+      ],
+      "held_ids": [],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": []
+      },
+      "audit_id": "142d661e324ca435774aa8e2",
+      "delivered_sha256": "b18a493a60df4283fc18d57f32d7869005ce3042346583e41edd0d1f1edfac80"
+    },
+    {
+      "bundle_id": "4b272a88ea0ba855b27a82d2",
+      "kind": "real",
+      "gate": "G0",
+      "proposals": 9,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "status": "held",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "strict whole-bundle hold"
+        ],
+        "P3": [
+          "strict whole-bundle hold"
+        ],
+        "P4": [
+          "review 1: warranted=no",
+          "review 2: warranted=no",
+          "strict whole-bundle hold"
+        ],
+        "P5": [
+          "strict whole-bundle hold"
+        ],
+        "P6": [
+          "review 1: warranted=no",
+          "review 2: warranted=no",
+          "strict whole-bundle hold"
+        ],
+        "P7": [
+          "strict whole-bundle hold"
+        ],
+        "P8": [
+          "review 1: warranted=no",
+          "review 2: warranted=no",
+          "strict whole-bundle hold"
+        ],
+        "P9": [
+          "review 1: warranted=no",
+          "review 2: warranted=no",
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "f82e0ae5ca2787a9466a5fed",
+      "delivered_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7"
+    },
+    {
+      "bundle_id": "4b272a88ea0ba855b27a82d2",
+      "kind": "real",
+      "gate": "G1",
+      "proposals": 9,
+      "accepted_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P5",
+        "P7"
+      ],
+      "held_ids": [
+        "P4",
+        "P6",
+        "P8",
+        "P9"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [],
+        "P2": [],
+        "P3": [],
+        "P4": [
+          "review 1: warranted=no",
+          "review 2: warranted=no"
+        ],
+        "P5": [],
+        "P6": [
+          "review 1: warranted=no",
+          "review 2: warranted=no"
+        ],
+        "P7": [],
+        "P8": [
+          "review 1: warranted=no",
+          "review 2: warranted=no"
+        ],
+        "P9": [
+          "review 1: warranted=no",
+          "review 2: warranted=no"
+        ]
+      },
+      "audit_id": "5882f56c556daebc6436c357",
+      "delivered_sha256": "edd7f94e9df376355546475f18819c2da5155cb9332275ab02bc9d4192dca4f2"
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "kind": "real",
+      "gate": "G0",
+      "proposals": 8,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "status": "held",
+      "bundle_reasons": [
+        "review 1: unresolved background issue B2",
+        "review 1: unresolved background issue B3",
+        "review 1: unresolved background issue B4",
+        "review 2: unresolved background issue B2",
+        "review 2: unresolved background issue B3",
+        "review 2: unresolved background issue B4"
+      ],
+      "reasons": {
+        "P1": [
+          "dependency held: P6",
+          "strict whole-bundle hold"
+        ],
+        "P2": [
+          "dependency held: P6",
+          "strict whole-bundle hold"
+        ],
+        "P3": [
+          "dependency held: P6",
+          "strict whole-bundle hold"
+        ],
+        "P4": [
+          "dependency held: P6",
+          "strict whole-bundle hold"
+        ],
+        "P5": [
+          "dependency held: P6",
+          "strict whole-bundle hold"
+        ],
+        "P6": [
+          "review 2: context_safe=unknown",
+          "review 2: mapped material/unknown issue B2",
+          "strict whole-bundle hold"
+        ],
+        "P7": [
+          "strict whole-bundle hold"
+        ],
+        "P8": [
+          "strict whole-bundle hold"
+        ]
+      },
+      "audit_id": "15ac0a53049a0fe3363f55b7",
+      "delivered_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf"
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "kind": "real",
+      "gate": "G1",
+      "proposals": 8,
+      "accepted_ids": [
+        "P7",
+        "P8"
+      ],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "status": "proposed_delivery",
+      "bundle_reasons": [],
+      "reasons": {
+        "P1": [
+          "dependency held: P6"
+        ],
+        "P2": [
+          "dependency held: P6"
+        ],
+        "P3": [
+          "dependency held: P6"
+        ],
+        "P4": [
+          "dependency held: P6"
+        ],
+        "P5": [
+          "dependency held: P6"
+        ],
+        "P6": [
+          "review 2: context_safe=unknown",
+          "review 2: mapped material/unknown issue B2"
+        ],
+        "P7": [],
+        "P8": []
+      },
+      "audit_id": "c797d49f0c6d6066ff89235e",
+      "delivered_sha256": "6d85559d51aeb38349358fd0f0536d7b2d038c6b54fceb9503a5006748e85735"
+    }
+  ],
+  "unique_audit_candidates": 15,
+  "time_utc": "2026-10-02T02:22:35.126178+00:00"
+}

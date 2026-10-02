@@ -1,0 +1,36 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "40fe89d077da2c97172ba5fe9d87c70ea31649a87590c06d6cb45e738255ff76",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "f11ad1a5e8b0edaad05404875da59112f4b52ad99ae72d390a84f24a433910f1",
+    "issues": [
+      {
+        "evidence_span": {
+          "end_byte": 3,
+          "evidence_id": "E1",
+          "sha256": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9",
+          "start_byte": 0,
+          "text": "bar"
+        },
+        "id": "I1",
+        "kind": "question_comparison",
+        "output_span": {
+          "end_byte": 3,
+          "sha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+          "start_byte": 0,
+          "text": "foo"
+        },
+        "review_status": "reported_unresolved"
+      }
+    ],
+    "language": "EN",
+    "output_sha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+    "receipt_sha256": "3fb0b9bdd1228ff6f3de8060b3ae171e5744fd04af59003b370b1741eae95d50",
+    "rendered_text": "[\"I1\"] Question comparison\nOutput quote: \"foo\"\nEvidence quote: \"bar\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "[\"I1\"] Question comparison\nOutput quote: \"foo\"\nEvidence quote: \"bar\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.",
+  "combined_text": "No change was requested; the unchanged local output passed the supplied review. Applied 0; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae. Candidate SHA-256: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae. Receipt SHA-256: 3fb0b9bdd1228ff6f3de8060b3ae171e5744fd04af59003b370b1741eae95d50.\n\n[\"I1\"] Question comparison\nOutput quote: \"foo\"\nEvidence quote: \"bar\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim."
+}

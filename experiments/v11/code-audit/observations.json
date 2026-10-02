@@ -1,0 +1,45 @@
+{
+  "01": {
+    "result": "pass",
+    "checks": "changed output, candidate substituted for output, swapped output/candidate, stale store retrieval"
+  },
+  "02": {
+    "result": "pass",
+    "output": "a b C",
+    "selected": [
+      "p3"
+    ],
+    "rejected": [
+      "p1",
+      "p2"
+    ],
+    "status": "partial"
+  },
+  "03": {
+    "result": "pass",
+    "prose_marker_absent": true,
+    "semantic_truth": "not_independently_verified",
+    "question_resolution": "not_adjudicated"
+  },
+  "04": {
+    "result": "pass",
+    "checks": "fsync exception propagated; short object not repaired; symlink and hardlink put/get rejected; targets unchanged"
+  },
+  "05": {
+    "result": "pass",
+    "returned": {
+      "status": "verification_failed",
+      "receipt_sha256": null,
+      "text": "Verification failed. No completion or application claim is available."
+    }
+  },
+  "06": {
+    "result": "failure",
+    "patch_audit_bytes": 1590340,
+    "receipt_bytes": 6890933,
+    "verified": true,
+    "emitted_status": "verification_failed",
+    "put_returned_address": "0d6b2a0f863c84849c3414335b385d7e2fc9caf276b9334d9d4ab2224bf6d13b",
+    "get": "ValueError: unsafe store object"
+  }
+}

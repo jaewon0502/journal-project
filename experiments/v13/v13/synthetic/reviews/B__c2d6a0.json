@@ -1,0 +1,90 @@
+{
+  "bundle_id": "c2d6a0",
+  "input_sha256": "1f657315d334b245c97c1e00273448ccb531dc5d4f40ab947530816a86500dcf",
+  "source_sha256": "3c11e4c0a40439d2e7b563a001e95055529470b0373fcf9733dbce782c1dcdf6",
+  "original_sha256": "1d6ed8506272521d4156671c164884ed2c5341a36a3bec61e7531c57b191abc4",
+  "patches_sha256": "b15f3d227c0bd17220bfd201b1d27da2386fda07c43d0120664d7138853ecf6a",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "이번 군비 편성안은 4억 원이며 군은 이를 의회에 제출할 예정이라고 밝혔다."
+        },
+        {
+          "document_id": "original",
+          "quote": "군이 의회에 제출할 군비 편성안은 6억 원이다."
+        }
+      ],
+      "reason": "The original incorrectly gives the proposed county appropriation as 600 million won; the source specifies 400 million won. This exact numerical correction retains the proposal status, county attribution and intended council submission. Its unique original span does not overlap P2. No other patch is required; the simultaneous candidate’s opening-date problem is independently localized to P2 and does not alter this budget correction.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "no",
+      "evidence_support": "no",
+      "preserves_untargeted_meaning": "no",
+      "context_safe": "no",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p4",
+          "quote": "군은 12월 31일까지 하천 점용 허가를 받는 경우에만 이듬해 3월에 센터를 개관할 수 있다고 설명했다."
+        },
+        {
+          "document_id": "S1.p5",
+          "quote": "발표일 현재 허가 신청은 접수됐지만 허가 여부는 결정되지 않았다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "군은 허가가 늦어지면 개관 일정을 다시 정해 공지하겠다고 덧붙였다."
+        },
+        {
+          "document_id": "original",
+          "quote": "군은 12월 31일까지 하천 점용 허가를 받는 경우에만 이듬해 3월에 센터를 개관할 수 있다고 밝혔다. 발표일 현재 허가 여부는 결정되지 않았다."
+        }
+      ],
+      "reason": "The original accurately states a conditional possibility. P2 removes the December 31 permit deadline and necessary permit condition, and strengthens a possible March opening into an unqualified announced opening. The evidence expressly preserves both permit uncertainty and potential rescheduling, so this is neither a necessary correction nor supported simplification. The candidate retains the adjacent sentence that permission remains undecided; without the condition the connection between that uncertainty and the opening schedule is lost. P1 does not cure this problem, and no offered dependency can make P2 safe. Application itself is valid: the before span is exact and unique, the replacement expresses the assessed unconditional claim, and there is no overlap or reported application error.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "이번 군비 편성안은 4억 원이며 군은 이를 의회에 제출할 예정이라고 밝혔다."
+        },
+        {
+          "document_id": "original",
+          "quote": "군이 의회에 제출할 군비 편성안은 6억 원이다."
+        }
+      ],
+      "reason": "The original budget amount conflicts with the supplied announcement. P1 resolves this material factual error in the candidate while preserving that the amount is a proposed appropriation."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "The material candidate risk is fully localized to P2: the loss of the permit condition and corresponding distortion of the adjacent unresolved-permit statement. No additional unlocalized new or edit-related material risk was identified after reviewing the full candidate and both patches.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "The necessary factual correction is P1’s budget change from 600 million to 400 million won. P2 instead removes supported conditional meaning from an already accurate sentence; its problem persists when both patches are applied. No patch dependencies or application errors were found. Findings are limited to the fictional September 10, 2026 announcement; later budget or permit developments are outside the supplied evidence. This independent review is not a final safety audit."
+}

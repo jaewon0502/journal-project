@@ -1,0 +1,955 @@
+{
+  "executed_at": "2026-10-01T23:17:38.638783+00:00",
+  "cases": [
+    {
+      "case_id": "d75d0e3fb2eb",
+      "language": "KO",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "actual_output_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "3853396f68d2de73326cc68b30c1f42086f85a3cb1a2a39b2ac3e801b739bbe1",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            }
+          ],
+          "dependency_sha256": "a6e17a613366412b5f5b1b7a8e7ff08b14fb0ff94fed66e801801161f6223cbf",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "c105de65081b59ecd5f133847b41918eb01745d64ba5a428fd5c5fd9eaa08cb7"
+          ],
+          "patch_audit_sha256": "f0539b0c9c7804ae85489052a0fbe577cc043760e3c7d74eb4bde1dbf216315f",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "c105de65081b59ecd5f133847b41918eb01745d64ba5a428fd5c5fd9eaa08cb7",
+              "next_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+              "next_selected_ids": [
+                "p1",
+                "p2"
+              ],
+              "released": true,
+              "reviewed_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+              "reviewed_ids": [
+                "p1",
+                "p2"
+              ]
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+        "output_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+        "policy": "selective",
+        "proposal_sha256": "2c2a9f2d02f30e1b920ada308397483758082486f49bdcbd04300ced6e776cd4",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "status": "applied"
+      },
+      "receipt_sha256": "ee105a374e98f3de57ff3ed73b40b6095401c0fc83ee8ea8ab816e0012006db3",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "ee105a374e98f3de57ff3ed73b40b6095401c0fc83ee8ea8ab816e0012006db3",
+        "text": "제안된 모든 패치가 로컬 출력에 반영되었습니다. 적용 2개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 0개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee. Candidate SHA-256: 80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee. Receipt SHA-256: ee105a374e98f3de57ff3ed73b40b6095401c0fc83ee8ea8ab816e0012006db3."
+      },
+      "annotation_length": 601,
+      "length_unit": "characters",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "a7e87c69b904",
+      "language": "KO",
+      "source_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "actual_output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "9b9d236db725dcd44721e4a2f429faa9b7c369ea3feaa7b86ac4ba2ab7abd88f",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [],
+        "candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "decision_provenance": {
+          "components": [],
+          "dependency_sha256": "3b8bbe4aeba70ec745820c156f0590527883d85f516b583c8b78d023830b0385",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "981bfbbf50016e415d364eece14c23c323bb2aa227ec472d74232aacfc7f9eae"
+          ],
+          "patch_audit_sha256": "e40928a9b31b8f13044138a37c78b66d648c6efb098c7922d96fc727f8a6015a",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "981bfbbf50016e415d364eece14c23c323bb2aa227ec472d74232aacfc7f9eae",
+              "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+              "next_selected_ids": [],
+              "released": true,
+              "reviewed_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+              "reviewed_ids": []
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "policy": "selective",
+        "proposal_sha256": "1d3c87093dc4223b496a69e9793e45af521e500642cc69241c3501a8593896ca",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "status": "no-op"
+      },
+      "receipt_sha256": "922a48548dfb6794a975909ff7a490418f140283676e4e448ea44c54b868fecd",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "922a48548dfb6794a975909ff7a490418f140283676e4e448ea44c54b868fecd",
+        "text": "수정 요청이 없어 원문과 같은 로컬 출력이 제공된 검토를 통과했습니다. 적용 0개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 0개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Candidate SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Receipt SHA-256: 922a48548dfb6794a975909ff7a490418f140283676e4e448ea44c54b868fecd."
+      },
+      "annotation_length": 614,
+      "length_unit": "characters",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "bd569abe2ca0",
+      "language": "KO",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "actual_output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "f1bb4bb12cd89075b33531823d722734a8c8c1223a2d5ad99a34bf2a45411a1f",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [
+          "p1"
+        ],
+        "candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "component_patch_rejected",
+              "state": "rolledback"
+            }
+          ],
+          "dependency_sha256": "a6e17a613366412b5f5b1b7a8e7ff08b14fb0ff94fed66e801801161f6223cbf",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "ca7690a3248fb1100ea000c16abecc6f0f0e85c56e799d0c86b0cf4c7212f20d"
+          ],
+          "patch_audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "ca7690a3248fb1100ea000c16abecc6f0f0e85c56e799d0c86b0cf4c7212f20d",
+              "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+              "next_selected_ids": [
+                "p1"
+              ],
+              "released": true,
+              "reviewed_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+              "reviewed_ids": [
+                "p1"
+              ]
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+        "policy": "selective",
+        "proposal_sha256": "2c2a9f2d02f30e1b920ada308397483758082486f49bdcbd04300ced6e776cd4",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [
+          "p2"
+        ],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [
+          "p1"
+        ],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "status": "partial"
+      },
+      "receipt_sha256": "87ca9d5798571bf3a2604102bd02c1007db444b211f8cdf9a6866d566b1bf315",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "87ca9d5798571bf3a2604102bd02c1007db444b211f8cdf9a6866d566b1bf315",
+        "text": "제안된 패치 일부가 로컬 출력에 반영되었고 나머지는 제외 또는 보류되었습니다. 적용 1개, 제외·원복 1개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Candidate SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Receipt SHA-256: 87ca9d5798571bf3a2604102bd02c1007db444b211f8cdf9a6866d566b1bf315."
+      },
+      "annotation_length": 618,
+      "length_unit": "characters",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "53d89f874761",
+      "language": "KO",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "actual_output_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "0fca2a5fced8f14cb23eacb412c4dec91744109c51b4d657fb3b37ed38638187",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [],
+        "candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1",
+                "p2"
+              ],
+              "reason": "component_patch_rejected",
+              "state": "rolledback"
+            }
+          ],
+          "dependency_sha256": "aad14d4116811b872fcc46e78efaed55cfe11cee8515794010e0ba916e6385c0",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "ef688392bad1fe83092c9f7bcb45533374251382a1ae92a836f0bb5df1f465f9"
+          ],
+          "patch_audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "ef688392bad1fe83092c9f7bcb45533374251382a1ae92a836f0bb5df1f465f9",
+              "next_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+              "next_selected_ids": [],
+              "released": true,
+              "reviewed_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+              "reviewed_ids": []
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "output_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "policy": "selective",
+        "proposal_sha256": "2c2a9f2d02f30e1b920ada308397483758082486f49bdcbd04300ced6e776cd4",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [
+          "p1",
+          "p2"
+        ],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+        "status": "rolledback"
+      },
+      "receipt_sha256": "8ce5b6c9880ecee85cad075d1a9fe1fe2b2d5ca0e23a6a0653a4cb92c0e03b14",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "8ce5b6c9880ecee85cad075d1a9fe1fe2b2d5ca0e23a6a0653a4cb92c0e03b14",
+        "text": "원문이 로컬 출력이며 제안된 패치는 반영되지 않았습니다. 적용 0개, 제외·원복 2개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786. Candidate SHA-256: 8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786. Receipt SHA-256: 8ce5b6c9880ecee85cad075d1a9fe1fe2b2d5ca0e23a6a0653a4cb92c0e03b14."
+      },
+      "annotation_length": 606,
+      "length_unit": "characters",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "2351c7060c84",
+      "language": "KO",
+      "source_sha256": "af1a9b6bd10155bb218e67c64f6f76d069a13d3646534aa6efa62e9be80483f0",
+      "actual_output_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "3d4df3f3c42f1d6c4f1812588b23bcbd1411727dfe0d2d48c5cc6f1164784922",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            }
+          ],
+          "dependency_sha256": "1724da5c6ef1368cd145d068a2e3741eb2524545d352663f2daac16319555ce2",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "9d68a8994a600611702fc88fd57a6dcfdc719d208a9a709f733da81a101c7ac0"
+          ],
+          "patch_audit_sha256": "de8a428a1fcd43474fae20a4236ad7d351101aec55e242646f89c972e9d0441d",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "9d68a8994a600611702fc88fd57a6dcfdc719d208a9a709f733da81a101c7ac0",
+              "next_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+              "next_selected_ids": [
+                "p1",
+                "p2"
+              ],
+              "released": true,
+              "reviewed_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+              "reviewed_ids": [
+                "p1",
+                "p2"
+              ]
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "de8a428a1fcd43474fae20a4236ad7d351101aec55e242646f89c972e9d0441d",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E3",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+        "output_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+        "policy": "selective",
+        "proposal_sha256": "ec2d45e5812fd76f4c1678956ce24224bbd0b2d45968c3278ab505371253254f",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "af1a9b6bd10155bb218e67c64f6f76d069a13d3646534aa6efa62e9be80483f0",
+        "status": "applied"
+      },
+      "receipt_sha256": "7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f",
+        "text": "제안된 모든 패치가 로컬 출력에 반영되었습니다. 적용 2개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Candidate SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Receipt SHA-256: 7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f."
+      },
+      "annotation_length": 601,
+      "length_unit": "characters",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "19b2afea4862",
+      "language": "EN",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "actual_output_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "6a6917d08b2c821867a95f66920c9fb1f06268016836869cbecd2629597e0053",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "candidate_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            }
+          ],
+          "dependency_sha256": "79e0534e55177197bbca15f392fd5895605cb664dfd97c2f9003183e9142c79d",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "185890d5963d7925e7f6f8f3cd27ff3ff1e3e8e0ce3b7a4e3433314b5cad5ab2"
+          ],
+          "patch_audit_sha256": "b77ae3b5e9c08a52f4d76d1d01b7d6189ee3957f5b9bbaee6994a85218b873f4",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "185890d5963d7925e7f6f8f3cd27ff3ff1e3e8e0ce3b7a4e3433314b5cad5ab2",
+              "next_candidate_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+              "next_selected_ids": [
+                "p1",
+                "p2"
+              ],
+              "released": true,
+              "reviewed_candidate_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+              "reviewed_ids": [
+                "p1",
+                "p2"
+              ]
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+        "output_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+        "policy": "selective",
+        "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [
+          "p1",
+          "p2"
+        ],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "status": "applied"
+      },
+      "receipt_sha256": "1cd8c41d05dc53ae07d478f202899c402fcf8a1b27c4d92771182b7c9046c7fe",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "1cd8c41d05dc53ae07d478f202899c402fcf8a1b27c4d92771182b7c9046c7fe",
+        "text": "All proposed patches are present in the local output. Applied 2; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251. Candidate SHA-256: 5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251. Receipt SHA-256: 1cd8c41d05dc53ae07d478f202899c402fcf8a1b27c4d92771182b7c9046c7fe."
+      },
+      "annotation_length": 118,
+      "length_unit": "words",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "88b1c16a46ec",
+      "language": "EN",
+      "source_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "actual_output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "9c6dd41cff3073899bd08b5a55c863d6aa8ab1b396f61ec994469f11834ad9fb",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [],
+        "candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "decision_provenance": {
+          "components": [],
+          "dependency_sha256": "082cfc0bcd733b730c72022f42f0d11456b4198f23449a72e73cb908c50f528d",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f"
+          ],
+          "patch_audit_sha256": "35483c2632bfb701877b405574fd7e0ef7230a10fe7ea04143f4e06e851b7622",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f",
+              "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+              "next_selected_ids": [],
+              "released": true,
+              "reviewed_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+              "reviewed_ids": []
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "policy": "selective",
+        "proposal_sha256": "6c7172261b3dbcd4ec87406ce18cbea84833ca667c268ce736702f91ed5043c3",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "status": "no-op"
+      },
+      "receipt_sha256": "92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36",
+        "text": "No change was requested; the unchanged local output passed the supplied review. Applied 0; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Candidate SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Receipt SHA-256: 92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36."
+      },
+      "annotation_length": 121,
+      "length_unit": "words",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "8e039edfc1e3",
+      "language": "EN",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "actual_output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "d216fb3ca91d7a79887589a4a38b4472c18b0463dc5801f0d195b89294125c2e",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [
+          "p1"
+        ],
+        "candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "exact_candidate_approved",
+              "state": "applied"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "component_patch_rejected",
+              "state": "rolledback"
+            }
+          ],
+          "dependency_sha256": "79e0534e55177197bbca15f392fd5895605cb664dfd97c2f9003183e9142c79d",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "8fdc66309fbbc7f497c03ebdaadac049608831bb32469626962fbb6b8867aff0"
+          ],
+          "patch_audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "8fdc66309fbbc7f497c03ebdaadac049608831bb32469626962fbb6b8867aff0",
+              "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+              "next_selected_ids": [
+                "p1"
+              ],
+              "released": true,
+              "reviewed_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+              "reviewed_ids": [
+                "p1"
+              ]
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+        "policy": "selective",
+        "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [
+          "p2"
+        ],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [
+          "p1"
+        ],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "status": "partial"
+      },
+      "receipt_sha256": "edd21ff4127d892f75ac74c26b4ec99ddb49f21b4118f8f05cf4cf6d70fbccd8",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "edd21ff4127d892f75ac74c26b4ec99ddb49f21b4118f8f05cf4cf6d70fbccd8",
+        "text": "Some proposed patches are present in the local output; others were excluded or held. Applied 1; excluded or rolled back 1; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 1 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Candidate SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Receipt SHA-256: edd21ff4127d892f75ac74c26b4ec99ddb49f21b4118f8f05cf4cf6d70fbccd8."
+      },
+      "annotation_length": 123,
+      "length_unit": "words",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "d6736be620d4",
+      "language": "EN",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "actual_output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "18f62db7b0e84879d9b95183645f57607e27653554418f2aee1dc0cad56c19cb",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [],
+        "candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1",
+                "p2"
+              ],
+              "reason": "component_patch_rejected",
+              "state": "rolledback"
+            }
+          ],
+          "dependency_sha256": "3c8cffe26c8814b0c99697f7d2e7a4e1dbfeb3fc66cb9eb653c313cb2309daca",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "978a340243b61f2a1d1e33f7ca1d3289f58a9842ed967a800c17a86c5e75b326"
+          ],
+          "patch_audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "978a340243b61f2a1d1e33f7ca1d3289f58a9842ed967a800c17a86c5e75b326",
+              "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+              "next_selected_ids": [],
+              "released": true,
+              "reviewed_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+              "reviewed_ids": []
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [],
+        "locally_released": true,
+        "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "policy": "selective",
+        "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [
+          "p1",
+          "p2"
+        ],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "status": "rolledback"
+      },
+      "receipt_sha256": "852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4",
+        "text": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 1 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Candidate SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Receipt SHA-256: 852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4."
+      },
+      "annotation_length": 121,
+      "length_unit": "words",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    },
+    {
+      "case_id": "240d01b3906c",
+      "language": "EN",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "actual_output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "matches_locked_output": true,
+      "receipt": {
+        "actual_result_sha256": "b22df2a30beb0c729f0960e1b60070b3d5138233c918d637ed1e5cb084b18a48",
+        "authentication": "not_established_by_hashes",
+        "candidate_selected_ids": [],
+        "candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "decision_provenance": {
+          "components": [
+            {
+              "id": "component-1",
+              "patch_ids": [
+                "p1"
+              ],
+              "reason": "patch_or_dependency_uncertain",
+              "state": "held"
+            },
+            {
+              "id": "component-2",
+              "patch_ids": [
+                "p2"
+              ],
+              "reason": "patch_or_dependency_uncertain",
+              "state": "held"
+            }
+          ],
+          "dependency_sha256": "79e0534e55177197bbca15f392fd5895605cb664dfd97c2f9003183e9142c79d",
+          "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+          "final_audit_sha256": [
+            "d44260f19de76aa884329fab40a3bb790605d27c8ec4d9a8b4fa4e9d89dca239"
+          ],
+          "patch_audit_sha256": "fc06bbb30e1a78e041b574d53209bca99b4c3d9d34142a23df0746bbbdaa7658",
+          "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+          "transitions": [
+            {
+              "audit_sha256": "d44260f19de76aa884329fab40a3bb790605d27c8ec4d9a8b4fa4e9d89dca239",
+              "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+              "next_selected_ids": [],
+              "released": false,
+              "reviewed_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+              "reviewed_ids": []
+            }
+          ]
+        },
+        "evidence_scope": "supplied_local_bytes_and_audits_only",
+        "external_publication_performed": false,
+        "finding_references": [
+          {
+            "audit_sha256": "fc06bbb30e1a78e041b574d53209bca99b4c3d9d34142a23df0746bbbdaa7658",
+            "basis": "proposal_finding_not_resolution_evidence",
+            "evidence_ids": [
+              "E1",
+              "E2",
+              "E4"
+            ],
+            "pointer": "/preexisting_findings/0",
+            "state": "resolution_not_adjudicated"
+          }
+        ],
+        "held_ids": [
+          "p1",
+          "p2"
+        ],
+        "locally_released": false,
+        "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "policy": "selective",
+        "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+        "publication_scope": "local_output_only",
+        "question_resolution": "not_adjudicated",
+        "rejected_ids": [],
+        "schema": "journal-v11.applied-patch-receipt.v1",
+        "selected_ids": [],
+        "semantic_truth": "not_independently_verified",
+        "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+        "status": "abstained"
+      },
+      "receipt_sha256": "f997036c9841ba2855d21c8f2ef48cbdada7b5c6ad528fca5b79c635874174ba",
+      "annotation": {
+        "status": "verified",
+        "receipt_sha256": "f997036c9841ba2855d21c8f2ef48cbdada7b5c6ad528fca5b79c635874174ba",
+        "text": "Delivery abstained from applying changes; the original source is the local output. Applied 0; excluded or rolled back 0; held 2. The supplied review gate did not release a changed local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 1 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Candidate SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Receipt SHA-256: f997036c9841ba2855d21c8f2ef48cbdada7b5c6ad528fca5b79c635874174ba."
+      },
+      "annotation_length": 124,
+      "length_unit": "words",
+      "within_limit": true,
+      "authoring_type": "deterministic_code_not_model_output"
+    }
+  ],
+  "mechanical_mutations": [
+    {
+      "case_id": "d75d0e3fb2eb",
+      "failure": "corrupt_output",
+      "mutation": "append U+0021 to actual_output after receipt issuance",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "검증 실패. 완료 또는 적용 여부를 확인할 수 없습니다."
+      },
+      "matches_locked_expected": true
+    },
+    {
+      "case_id": "d75d0e3fb2eb",
+      "failure": "stale_receipt",
+      "mutation": "replace receipt output_sha256 by the source_sha256 while retaining full-output bytes",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "검증 실패. 완료 또는 적용 여부를 확인할 수 없습니다."
+      },
+      "matches_locked_expected": true
+    },
+    {
+      "case_id": "d75d0e3fb2eb",
+      "failure": "partial_write",
+      "mutation": "retain only p1 after-bytes in actual_output while keeping the full-output receipt",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "검증 실패. 완료 또는 적용 여부를 확인할 수 없습니다."
+      },
+      "matches_locked_expected": true
+    },
+    {
+      "case_id": "19b2afea4862",
+      "failure": "corrupt_output",
+      "mutation": "append U+0021 to actual_output after receipt issuance",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      },
+      "matches_locked_expected": true
+    },
+    {
+      "case_id": "19b2afea4862",
+      "failure": "stale_receipt",
+      "mutation": "replace receipt output_sha256 by the source_sha256 while retaining full-output bytes",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      },
+      "matches_locked_expected": true
+    },
+    {
+      "case_id": "19b2afea4862",
+      "failure": "partial_write",
+      "mutation": "retain only p1 after-bytes in actual_output while keeping the full-output receipt",
+      "expected_verification": "reject",
+      "expected_release": "hold",
+      "do_not_count_as_additional_underlying_case": true,
+      "observed": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      },
+      "matches_locked_expected": true
+    }
+  ],
+  "native_model_outputs_in_this_script": 0,
+  "fixed_case_count": 10,
+  "all_replays_match": true,
+  "all_mutations_rejected": true
+}

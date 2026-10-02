@@ -1,0 +1,23 @@
+{
+  "source_sha256": "0e7622c5b4848ace82fd1bce8f80df6dc172024c60ff31dd40a961f79a6bfa76",
+  "proposal_sha256": "6a3bb0717f9854e287939f8d8bcc3af04307f7c6f2c7189fee3a942d80957a0d",
+  "candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+  "selected_ids": [
+    "p1"
+  ],
+  "packet_id": "b4226bcd20bba3d1f5a821e6",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "approved",
+  "findings": [],
+  "explanation_grounding": "pass",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "Bank deposit/loan rate spread and magnitude 1.20 retained; only unit corrected.",
+    "Ledger explicitly records local p1 application and no external publication change."
+  ],
+  "remaining_uncertainty": [],
+  "reason": "Approve unit correction directly supported by 4.20% minus 3.00%. No freeform explanation is attached; the exact retained ledger accurately distinguishes local application from external publication."
+}

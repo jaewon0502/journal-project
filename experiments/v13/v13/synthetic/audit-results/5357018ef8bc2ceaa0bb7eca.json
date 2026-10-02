@@ -1,0 +1,53 @@
+{
+  "audit_id": "5357018ef8bc2ceaa0bb7eca",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [
+    {
+      "id": "C1",
+      "before": "동쪽 지점의 저녁 소음은 43데시벨",
+      "after": "동쪽 지점의 저녁 소음은 42데시벨",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [
+        {
+          "id": "S1.p3",
+          "text": "9월 14일 측정한 동쪽 지점은 42데시벨, 남쪽 지점은 44데시벨이었다."
+        }
+      ],
+      "original_anchors": [
+        "9월 14일 동쪽 지점의 저녁 소음은 43데시벨, 남쪽은 44데시벨로 측정됐다."
+      ],
+      "candidate_anchors": [
+        "9월 14일 동쪽 지점의 저녁 소음은 42데시벨, 남쪽은 44데시벨로 측정됐다."
+      ],
+      "reason": "The sole change corrects the east measurement from 43 to the source-reported 42 decibels. Date, south measurement, three-site prerequisite, planned rather than established start date, and absence of a north measurement remain intact. Both old and corrected east values are below 45; the correction does not establish compliance at all three sites or approval."
+    }
+  ],
+  "original_residual_issues": [],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither source nor article contains attributed criticism."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": false,
+  "unmet_required_answers": [],
+  "uncertainties": [
+    "The north measurement and whether it was completed are unverified in the supplied interim record (S1.p4).",
+    "Fulfillment of all three-site conditions and approval of regular evening operation are unverified (S1.p6); neither the original nor candidate asserts them.",
+    "October 1 is a stated preparation target, not a confirmed opening. No subsequent records are supplied."
+  ],
+  "release_recommendation": "release",
+  "reason": "The supported beneficial correction is delivered and no required factual correction remains absent within this source scope. Full source and original were read. The candidate preserves the distinction between a three-site operating condition and the institute’s target date; it does not convert missing north-site evidence into failure or success. Explicitly adding the absence of a compliance or approval confirmation could clarify uncertainty, but its existing omission is not a new harm or an unsupported assertion."
+}

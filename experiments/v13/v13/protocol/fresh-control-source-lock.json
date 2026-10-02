@@ -1,0 +1,86 @@
+{
+  "status": "acquired_and_frozen",
+  "bundle_id": "fresh-bennu-reuters-20250129",
+  "locked_at": "2026-10-02T02:39:33.423815+00:00",
+  "private_packet_path": "/historical-research/journal-v13-private/fresh-control/source-packet.json",
+  "article_url": "https://www.reuters.com/science/building-blocks-life-found-samples-asteroid-bennu-2025-01-29/",
+  "primary_url": "https://www.nasa.gov/news-release/nasas-asteroid-bennu-sample-reveals-mix-of-lifes-ingredients/",
+  "article_published_at": "2025-01-29T16:08:00Z",
+  "article_updated_date": "2025-01-29",
+  "primary_published_date": "2025-01-29",
+  "primary_updated_date": "2025-02-03",
+  "collected_at": "2026-10-02T02:39:33.423815+00:00",
+  "reported_event_dates": {
+    "research_findings_announcement": "2025-01-29",
+    "sample_collection": "2020 (article narrative); October 2020 (article caption)",
+    "sample_return": "2023 (article narrative); 2023-09-24 (article caption)"
+  },
+  "source_scope_note": "Exactly one journalistic article: the full Reuters headline, byline, publication/update line, full initial image caption, three summary bullets, all 18 article-body paragraphs, and reporting/editing credit from the directly opened publisher page (snapshot lines 151–192). Omitted only navigation, duplicate/truncated carousel caption, newsletter sign-up, licensing/standards links and recommendations. Exactly one eligible official primary document: NASA news release 25-013, complete release text from headline through media contacts, including metadata, image caption, translation link, all scientific narrative and mission/curation/program paragraphs, and mission link (snapshot lines 244–294). No character or paragraph count truncation. Paragraph IDs preserve source order. The NASA release is an official institutional summary of two research papers, not the complete papers, underlying data or independent validation. Neither paper nor supplements were acquired or supplied. Current snapshots collected 2026-10-02; Reuters reports publication/update 2025-01-29, NASA publication 2025-01-29 and last update 2025-02-03, so the NASA snapshot may include changes after article publication. Images/video pixels and audio were not supplied; displayed caption text is included. Raw page outputs and NASA HTTP HTML are retained privately.",
+  "article_characters": 5391,
+  "source_paragraph_count": 38,
+  "original_sha256": "3743271deb096e5b745745af87a4066b772cb272ad808f5f7a2209e60aa6dedc",
+  "source_sha256": "937e520434b81bb6c90bb36dda5e7660409ca453e72a0f6afddc546cd90da5dc",
+  "packet_sha256": "6f8aa65826d40b3fbd5cb5df52f95cc0ca5a8ea611a229de6aca3f8bc09aff32",
+  "files": {
+    "acquisition-log.json": {
+      "sha256": "9af16fefb1f932171d880b5e077a042ba6962cf8a59317f5ccc4de942c22a770",
+      "bytes": 3221
+    },
+    "build_packet.py": {
+      "sha256": "539b6a276b348bcc2587c2ffd6dfb045a596ddf86a9e4e4a659b77b76a4e202b",
+      "bytes": 9494
+    },
+    "nasa-full-release.txt": {
+      "sha256": "b212d7d52eec1e960bbe1482c44a85b05f5a7efd9fac5920b97fb9881c753d7d",
+      "bytes": 7163
+    },
+    "nasa-web-raw.json": {
+      "sha256": "115506f6428dafca80e36e132b4fbe680da124e53982f328a211579af33dd0be",
+      "bytes": 24707
+    },
+    "nasa.html": {
+      "sha256": "d40621d280d75351704ceb4e71b827f97c72b917146db36b6aef3e897b107db9",
+      "bytes": 289629
+    },
+    "reuters-full-article.txt": {
+      "sha256": "f533a7f5529f1528fa02db74c95da4f517b0a46b7231e09eacd67b5f8eb06b8e",
+      "bytes": 5392
+    },
+    "reuters-web-raw.json": {
+      "sha256": "b49be5d8541a28ac52e9c070e74b10f08d5ab79efd903dee94471541e5764891",
+      "bytes": 19398
+    },
+    "source-packet.json": {
+      "sha256": "6f8aa65826d40b3fbd5cb5df52f95cc0ca5a8ea611a229de6aca3f8bc09aff32",
+      "bytes": 23481
+    }
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "text": "What event/findings/status does the article report, for what sample/population/object?"
+    },
+    {
+      "id": "Q2",
+      "text": "What do the supplied sources establish and not establish, including observation vs causal/proven outcome?"
+    },
+    {
+      "id": "Q3",
+      "text": "Which conditions, uncertainty, chronology, comparisons and attributed interpretations are necessary to understand that report?"
+    }
+  ],
+  "candidate_count": 2,
+  "accepted_article_count": 1,
+  "known_defect_labels_supplied": false,
+  "patch_field_present": false,
+  "freshness_check": {
+    "method": "rg across /workspace JSON/Markdown/text files for exact Reuters title or NASA URL slug; only newly acquired fresh-control raw snapshots matched",
+    "result": "No prior Journal case matches found",
+    "limitation": "Filesystem check and parent-provided prior-case exclusions; not a claim about inaccessible external experiments"
+  },
+  "remaining_limitations": [
+    "NASA official release rather than complete papers",
+    "NASA last update follows Reuters publication",
+    "Reuters raw HTTP returned 401; full direct-page web tool text is the retained article acquisition artifact"
+  ]
+}

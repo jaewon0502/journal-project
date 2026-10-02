@@ -1,0 +1,76 @@
+{
+  "packet_id": "06c47bb534e6515b64921a14",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both replacements appear in the displayed local output.",
+      "anchor": "actual_output: 3 percentage points / Saturday"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit and day differ from the source.",
+      "anchor": "source: 3% / Friday; actual_output: 3 percentage points / Saturday"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both supplied patches are incorporated in the displayed output.",
+      "anchor": "actual_receipt.selected_ids: [p1, p2]; actual_output"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "Both identified issues agree with E1 and E2 after editing; no other issue is identified.",
+      "anchor": "E1; E2; actual_output: 3 percentage points / Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Describes review topics, not actual patch incorporation."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Does not compare displayed output with source."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "The numerical difference is 3 percentage points, and the schedule points to Saturday.",
+      "reason": "States scenario facts but does not say which proposed patches were applied."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "External fact verification and publication are separate matters.",
+      "reason": "Separating matters does not report whole-article verification status."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "External fact verification and publication are separate matters.",
+      "reason": "Separating publication from review does not report whether publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Does not relate the identified issues to their remaining or resolved state in the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both proposed changes actually reached the output and both identified meaning issues are resolved; annotation gives only review topics."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

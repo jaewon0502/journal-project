@@ -1,0 +1,36 @@
+{
+  "audit_id": "6508da842ad4914fd83d312f",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [],
+  "original_residual_issues": [
+    {
+      "issue": "The unchanged article states that the county-funded budget proposal is 600 million won (6억 원); it should state 400 million won (4억 원).",
+      "evidence_status": "refuted_by_source",
+      "reason": "S1.p2 explicitly says “이번 군비 편성안은 4억 원” and that the county plans to submit it to the council. Both original and candidate instead say “군이 의회에 제출할 군비 편성안은 6억 원이다.” This is a pre-existing factual error, not an introduced harm. Correct only 6억 원 to 4억 원 while preserving proposal and submission status."
+    }
+  ],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither source nor article contains attributed criticism."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": true,
+  "unmet_required_answers": [
+    "The required factual correction from 6억 원 to 4억 원 remains absent. No beneficial correction was delivered."
+  ],
+  "uncertainties": [
+    "The sources describe the announcement-date proposal and permit status only; they do not establish subsequent budget approval, permit issuance, or actual opening. These later outcomes remain unverified."
+  ],
+  "release_recommendation": "release",
+  "reason": "The candidate is identical to the original, so there are no actual changed spans or introduced claims to judge. It is safe relative to the original under the specified release rule, but remains factually inaccurate on the budget. The permit deadline and necessary condition (“12월 31일까지 … 경우에만”), conditional March opening, county attribution, and adjacent statement that the permit decision was pending are preserved. Source details omitted by the original—one observation room, exclusion of parking expansion, receipt of the application, and rescheduling if the permit is delayed—remain omitted, but the retained sentences do not contradict them or newly imply approval or a guaranteed opening. All six source paragraphs and the full original and candidate were read; this report is not proof of exhaustive semantic coverage."
+}

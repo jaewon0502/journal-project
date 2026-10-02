@@ -1,0 +1,164 @@
+{
+  "version": "initial-method-1",
+  "frozen_at_utc": "2026-10-02T00:45:51.413370+00:00",
+  "detector_outputs_seen": false,
+  "detectors_launched": false,
+  "counts": {
+    "base_contexts": 6,
+    "candidates": 12,
+    "procedure_items": 24,
+    "development": {
+      "base_contexts": 3,
+      "ko_bases": 1,
+      "en_bases": 2,
+      "procedure_items": 12
+    },
+    "heldout": {
+      "base_contexts": 3,
+      "ko_bases": 2,
+      "en_bases": 1,
+      "procedure_items": 12
+    }
+  },
+  "fixed_source_only_questions_sha256": "e787ed33a84ddb063fa64c6fb9b2f08342eac86d694ecb4127fa5cdcdfd56937",
+  "original_candidate_inputs_sha256": "f169df05841759b50e3315d6ff414ba69c050ca2427a7f1dc4e026d39cf7e908",
+  "shared_artifacts_sha256": {
+    "shared_instruction.txt": "21045657a2ad8d0207f5e7dbdd8c5ecb250c758acdaf669aac1cbfc61463835c",
+    "H0_method.txt": "124b665fd9fbda3b0d2aef00a716f147572b9c02e91a8e2164294213a83e08b5",
+    "H1_method.txt": "d7a75e81d2badcc2a6143245df1a4d8ef1e0b6bab53041ee14a2d4d8832cbf42",
+    "output_schema.json": "119870d35d1de84c7d06f6dff644e703fccfff5b555db346c9882abf2684a57e",
+    "experiment_protocol.md": "1ce28cc898f51d0deb5adf1588aa95ad141550f3545b88976b89da0c766e5929"
+  },
+  "exact_input_hashes": [
+    {
+      "packet_id": "r_07eb50efc7f267d6",
+      "split": "heldout",
+      "sha256": "91ee400fc8be4a17747048d258ae9fb51dedf5f0d71eb6674bc48e17b23eca13"
+    },
+    {
+      "packet_id": "r_1a791687e070e978",
+      "split": "heldout",
+      "sha256": "cd65084f3c1490ccec43a7c28c129b4329e82b19d3b6a46fe6a093f40decb96e"
+    },
+    {
+      "packet_id": "r_1bf4db00e52b6121",
+      "split": "heldout",
+      "sha256": "0cc9346d09dddfe0331a62706254123cf2e15616de25d3bfc6561c8b4ff055bb"
+    },
+    {
+      "packet_id": "r_207817628140f63e",
+      "split": "heldout",
+      "sha256": "9a3c5c38b7367be93f623ce7ecb0f94b4123569807dafb5b552a56d9568cff2f"
+    },
+    {
+      "packet_id": "r_292aac8413f81ce6",
+      "split": "heldout",
+      "sha256": "bc217a9756eb030cdbadf979802427220e810745b19102d897e9fc179cd9c547"
+    },
+    {
+      "packet_id": "r_3359d46b5e1b5930",
+      "split": "development",
+      "sha256": "1105d0dfc32f19ba8d95f1a613a88176629a0ed1711cea862bc626795aa368f3"
+    },
+    {
+      "packet_id": "r_342849133e6d3525",
+      "split": "heldout",
+      "sha256": "7a76adc6a6fd0963299caf7b4a9a786b3bfb71ffcc562ad7cb706bf3e2926d0f"
+    },
+    {
+      "packet_id": "r_36ac16ef15a87853",
+      "split": "development",
+      "sha256": "c42171255ba754d0807a9f50c2d05d70dd921a66ad3bbe3fe2cda456586d8d9b"
+    },
+    {
+      "packet_id": "r_441e589c9e3f14db",
+      "split": "development",
+      "sha256": "24ea8b4bc19b3bad500bf69a522f2bbb47856ab654f36b8979dc0a79e943fda1"
+    },
+    {
+      "packet_id": "r_47d5e21368d56f63",
+      "split": "heldout",
+      "sha256": "a5ebe43c3658876b9041a62651948fad11c33de75fe85a01b0dba7a10dfca6ac"
+    },
+    {
+      "packet_id": "r_4d0570f287c7ffd1",
+      "split": "development",
+      "sha256": "460eb952f5f4ec573003cdecf9e5e381eb16051451356cddaef1df9fcf808d31"
+    },
+    {
+      "packet_id": "r_5802ee0591ba9a88",
+      "split": "development",
+      "sha256": "0d0539fd2fbcaa834b670797f89dc66e2c0f45dc3eefc971d549393702ead754"
+    },
+    {
+      "packet_id": "r_6123c6d350b259e7",
+      "split": "development",
+      "sha256": "539ac2ed5765af086a24d98a155ff466e7a68d71c5438c6cb45a9f43012cfe31"
+    },
+    {
+      "packet_id": "r_6b77a0cfe51b944f",
+      "split": "development",
+      "sha256": "c502d4469ef0dc6287a66090631d8beb098ecaf1af9dc35684a3e477827093f5"
+    },
+    {
+      "packet_id": "r_7b4fbf47f2075766",
+      "split": "development",
+      "sha256": "0a3999adc33b80070ca7a2bd27f48fca8a12c029292c44b14fd4908c9e15b8d0"
+    },
+    {
+      "packet_id": "r_8930990df190b712",
+      "split": "development",
+      "sha256": "5ef8ef4490ada9acc0d7938ba23dcf9515eebd812d717a29336bd87cf80e7b09"
+    },
+    {
+      "packet_id": "r_92f23232f9363bf1",
+      "split": "development",
+      "sha256": "87db260f1cd41703437ea279288fbbb2727ad343f8138b62c64f6eb63b6220fb"
+    },
+    {
+      "packet_id": "r_b30dd2994b49387e",
+      "split": "heldout",
+      "sha256": "8e2a078d67fc981f07fb56bc2963684634108835157e8268befa51edf08d5a05"
+    },
+    {
+      "packet_id": "r_c773c403d775f43e",
+      "split": "development",
+      "sha256": "a8e921f9cf40e414b0285763497ba9654c6a201c72e8b50b2478caf0bfc085b6"
+    },
+    {
+      "packet_id": "r_c9be8e360a975c24",
+      "split": "heldout",
+      "sha256": "e18141d051d4c44ba3a2c1600333b5b26e94296c90615e4bd1c7b1093e3f2053"
+    },
+    {
+      "packet_id": "r_d7fd580c597007f4",
+      "split": "heldout",
+      "sha256": "71565fd784b268c9bd768d5458773741b6658942cee54742b1fcd1b17477222f"
+    },
+    {
+      "packet_id": "r_e8357f043a9439c8",
+      "split": "heldout",
+      "sha256": "6123984b0247e5b8a369d15ad28eb7f9b91c62a40112b8f217d0383a5a989983"
+    },
+    {
+      "packet_id": "r_f31e61ee24d704bc",
+      "split": "development",
+      "sha256": "91eb061d16caf6ad5144c0088f465c18fae23b5714d37d8f958f13b53b8fdd65"
+    },
+    {
+      "packet_id": "r_f797304555860ca9",
+      "split": "heldout",
+      "sha256": "ff4604f6dd82d4664c6742980ce7b2f26afe6bb76d0625b01171a253e02e0add"
+    }
+  ],
+  "limitations": [
+    "Six authored synthetic base contexts, three per language, with twelve authored candidates; not real-news outcomes or natural error discovery.",
+    "The source-first questions were frozen before that separate agent inspected candidates; the original candidate files had already been authored. Do not claim questions predate candidate authoring.",
+    "The independent validator accepted all six normal/mutant pairs, but three mutants contain internal tension that can shortcut source-grounded detection; numerical anchors also make one reversal conspicuous.",
+    "H1 adds nineteen independently source-generated QA records across the six sources, plus explicit answer-agreement and two-direction counterexample instructions. This is an information-plus-procedure intervention with additional preprocessing, not a pure equal-token prompt effect.",
+    "Both procedures share the underlying source, fixed broad question, candidate, output schema, output limit and required native runtime configuration. H1 necessarily has longer input; input-token and preprocessing costs must be reported separately.",
+    "The development/heldout split is deterministic by base ID within language, not random or balanced by error factor; each split has only three base contexts. Candidate roles and procedures are correlated within each base.",
+    "Validation was separate-agent same-AI review, not human validation. The author, questionmaker and detector roles must be distinguished.",
+    "Same-runtime/model conclusions cannot establish external validity, large-sample accuracy, generation-quality improvements, or a winning architecture."
+  ]
+}

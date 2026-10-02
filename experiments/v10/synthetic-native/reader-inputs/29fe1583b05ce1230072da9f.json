@@ -1,0 +1,22 @@
+{
+  "packet_id": "29fe1583b05ce1230072da9f",
+  "source": "The pilot reduced processing time by 7%.",
+  "candidate": "The pilot reduced processing time by 7%.",
+  "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The available report excerpt gives final processing time as 93 seconds but omits the baseline."
+    }
+  ],
+  "target_question": "Can the 7% reduction be verified from the supplied report?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "patches": [],
+  "delivery": {
+    "artifact_status": "constructed_candidate_under_review_not_final_release",
+    "actual_applied_to_candidate_ids": [],
+    "reader_note": "No. The supplied report excerpt gives a final processing time of 93 seconds but no baseline, so the 7% reduction cannot be verified. A 100-second baseline would yield a 7% reduction, but that baseline is not supplied. No replacement patches are proposed; the original sentence remains unchanged because the evidence does not establish a correction. The baseline and claimed reduction remain unresolved."
+  }
+}

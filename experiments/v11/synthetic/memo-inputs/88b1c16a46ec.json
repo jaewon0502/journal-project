@@ -1,0 +1,68 @@
+{
+  "input_id": "88b1c16a46ec",
+  "language": "EN",
+  "source": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "proposed_patches": [],
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "actual_receipt": {
+    "actual_result_sha256": "9c6dd41cff3073899bd08b5a55c863d6aa8ab1b396f61ec994469f11834ad9fb",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "decision_provenance": {
+      "components": [],
+      "dependency_sha256": "082cfc0bcd733b730c72022f42f0d11456b4198f23449a72e73cb908c50f528d",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f"
+      ],
+      "patch_audit_sha256": "35483c2632bfb701877b405574fd7e0ef7230a10fe7ea04143f4e06e851b7622",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f",
+          "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "next_selected_ids": [],
+          "released": true,
+          "reviewed_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "policy": "selective",
+    "proposal_sha256": "6c7172261b3dbcd4ec87406ce18cbea84833ca667c268ce736702f91ed5043c3",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "status": "no-op"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "provenance": "locked authored synthetic scenario; code replayed and checked against independently locked actual output; review identities not authenticated."
+}

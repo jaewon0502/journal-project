@@ -1,0 +1,42 @@
+{
+  "schema": "journal-v11.receipt-freeze.v1",
+  "scope": "initial candidate; four developer examples and designated prior v10 evidence only",
+  "files": {
+    "INTERFACE.md": "67f9334c352f310a9adb7976f390711d56d54c84b2c5ccbab21b1c77378ca41e",
+    "README.md": "900ab9a8d281f4df7c708d0ed02b9454830c0dd0df880a5b4142efc9b61905c1",
+    "developer_examples/dev-01-applied-EN-inputs.json": "3a351d971b818e7d6f3c770252d5b10f5bed529c8bba305601b5252bbbb2cc43",
+    "developer_examples/dev-01-applied-EN.json": "2b69acd5ca06a2e3818a61a975c7c0a027b66cbbcdc1110b25e38f8d386d725d",
+    "developer_examples/dev-02-partial-KO-inputs.json": "c80b9508146ce3c9103a306cac24734216561d0d14b1353324dc7a410a85788a",
+    "developer_examples/dev-02-partial-KO.json": "a3921cce0b024bcdb84dcd34dc48c25d50aceacecda31f70b927fe1d71777b06",
+    "developer_examples/dev-03-rolledback-EN-inputs.json": "3f91fee0d2b96adfbe0dc37075f2a41ad1f87969d32f477ad09f34e745e2c546",
+    "developer_examples/dev-03-rolledback-EN.json": "c61f93c081a4831767e0240bc29133d2ccbfce76fb9d253472487d8805efdfc6",
+    "developer_examples/dev-04-no-op-KO-inputs.json": "651959424fb0152cd3445beb02838aa29d565314afc78e0b59f2a8eb65da2717",
+    "developer_examples/dev-04-no-op-KO.json": "a9d451be507d0583f6aeccfea236658db2477bc723e84bcc4bc17a3dadf33fd9",
+    "evidence/25a01f3a9c8795125f5534e2-actual.json": "dd092b6038b59e61ca8a7f94dbd24dced86fd9dc1dbcea8dc7f928ee8c9d7543",
+    "evidence/25a01f3a9c8795125f5534e2-hold.json": "d8d4c4ad44dc0500dc90fa504ec9ee7bedaa4982b17266795add619eb4f4ff57",
+    "evidence/25a01f3a9c8795125f5534e2-source_only.json": "119fb0b49d7a717996dc68c8e42c195e704bd3838a0335e8a88697d25df1b91e",
+    "evidence/f12a64e6ead7b66dbfa6f9ac-actual.json": "c70366936789861dc89567f1875de97705874723313b1a72ad3d0f0ac4376edc",
+    "evidence/f12a64e6ead7b66dbfa6f9ac-hold.json": "643a60379e9b919440a9a8101116c337252dec0b2744c20fc24f9a144e72b790",
+    "evidence/f12a64e6ead7b66dbfa6f9ac-source_only.json": "e134d82022c92de29632203e08a067fdc4e58a011cb451c627148899422ee948",
+    "evidence/replay-summary.json": "02c1ebf819889e303ecb7f74543a75c050c4aebf1c97f4f08d08b25c86403b4b",
+    "evidence/unittest.txt": "d5b15591521ac830fb560d353ad375180a6482c636d6f062ca8ee35cf389dc2b",
+    "objects/.receipt-store": "fd15ed2deba136acdc16bfdd6bc12011c970520f3c362287eaa2881179d3c7ab",
+    "objects/0184d2d5f1f0080fcd916418078f6e815b1493a8ebd6c0fa7fb4c4ba0c2c9b7a.json": "0184d2d5f1f0080fcd916418078f6e815b1493a8ebd6c0fa7fb4c4ba0c2c9b7a",
+    "objects/222e1b01e8223db52d1be674d9830644b733395fb07b274a41b6b16fdbf20625.json": "222e1b01e8223db52d1be674d9830644b733395fb07b274a41b6b16fdbf20625",
+    "objects/239a7e48807a92504e6e5fcad5c2452791d4713930fb2a7e70de82891c0ba8f3.json": "239a7e48807a92504e6e5fcad5c2452791d4713930fb2a7e70de82891c0ba8f3",
+    "objects/a77fc8d81960871fc14f3efba1093f0bb3918800cf47dec639e0dbade2daa5da.json": "a77fc8d81960871fc14f3efba1093f0bb3918800cf47dec639e0dbade2daa5da",
+    "objects/b029c0bd47bf7397214f98fc1c7fc24e8a5815759ee1bf254a182de6b41b8100.json": "b029c0bd47bf7397214f98fc1c7fc24e8a5815759ee1bf254a182de6b41b8100",
+    "objects/d6b43d6c9e1cf592780658d6ddee26b3f24a210c31fabc18d4b35e05fda43ba0.json": "d6b43d6c9e1cf592780658d6ddee26b3f24a210c31fabc18d4b35e05fda43ba0",
+    "objects/d938a721d3612ca3cde77a284dd526508e61d6f05be8a32456f7182fd9b78644.json": "d938a721d3612ca3cde77a284dd526508e61d6f05be8a32456f7182fd9b78644",
+    "objects/e3ca8da40c708a5ef03cf98a9596940244aa244bc243b99caf74793d0b71a5d4.json": "e3ca8da40c708a5ef03cf98a9596940244aa244bc243b99caf74793d0b71a5d4",
+    "objects/f61cc055536de451d5e22b60f699ea6f49b842dfe35a127e2774ea397cb79ce6.json": "f61cc055536de451d5e22b60f699ea6f49b842dfe35a127e2774ea397cb79ce6",
+    "objects/fff5c6a3b1b5d80eacf05248ae4d3e04584a5a8e815493d0aa04dfcad2fea6a8.json": "fff5c6a3b1b5d80eacf05248ae4d3e04584a5a8e815493d0aa04dfcad2fea6a8",
+    "receipt.py": "d1f5924f3a7098a6b5317c15a719b84c3d44b9b5436956f93d3b6b8c04c5749c",
+    "reproduce.py": "4a0584294728f81e4159a420c66d96095ad5f8293b99d991f7f408afd62ec5c1",
+    "test_receipt.py": "12d28a76da056403618566d264c514066ec4ca2f819b082f1cf6ee8812fff5b2"
+  },
+  "legacy_dependencies": {
+    "/historical-research/journal-v10/editing-v1_1/delivery.py": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+    "/historical-research/journal-v10/editing-v1_1/vendor/selective_rollback.py": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a"
+  }
+}

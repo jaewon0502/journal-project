@@ -1,0 +1,33 @@
+{
+  "audit_id": "2d67a9e89e6b35dace78ea34",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": ["S1.p1", "S1.p2", "S1.p3", "S1.p4", "S1.p5", "S1.p6"],
+  "original_paragraphs_read": true,
+  "changes": [
+    {
+      "id": "change_1",
+      "before": "9곳",
+      "after": "7곳",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [{"paragraph_id": "S1.p2", "text": "최종 납품 계약을 맺은 업체가 7곳이며 예비 협상에 참여한 2곳은 계약 업체에 포함되지 않는다"}],
+      "original_anchors": ["재단에 따르면 최종 납품 계약을 맺은 업체는 9곳이다."],
+      "candidate_anchors": ["재단에 따르면 최종 납품 계약을 맺은 업체는 7곳이다."],
+      "reason": "유일한 실제 변경은 최종 계약 업체 수를 9곳에서 7곳으로 수정한 것이다. 자료가 계약 업체 7곳과 계약에 포함되지 않는 예비 협상 업체 2곳을 명시하므로 원문의 수치 오류를 정확히 바로잡는다. 재단에 대한 출처 귀속, 최종 계약이라는 범위, 설명회 시점은 유지된다. 인접한 장비 호환성 비판이나 조사 중이라는 문장과 결합해 새로운 원인 또는 책임 판단을 만들지 않는다."
+    }
+  ],
+  "original_residual_issues": [],
+  "criticism_preservation": {
+    "status": "preserved",
+    "reason": "서린학부모연대가 재단의 호환성 미검증 발주로 수업 혼란이 발생했다고 비판했다는 문장이 그대로 유지된다. 비판 주체, 대상, 원인 지적과 강도가 보존되며, 재단의 서류 검토 및 교실 환경 시험 미실시 답변과 원인 조사 중이라는 후속 문장도 유지되어 비판을 확정된 조사 결론으로 바꾸지 않는다."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": false,
+  "unmet_required_answers": [],
+  "uncertainties": ["수업 혼란의 실제 원인은 자료에서도 조사 중으로 남아 있다. 후보 기사는 이를 그대로 표시하며, 학부모연대의 원인 지적을 독립적으로 확정하지 않는다."],
+  "release_recommendation": "release",
+  "reason": "전체 자료 6개 문단, 범위 설명, 원문 전체 및 후보 전체를 읽었다. 필요한 사실 수정인 계약 업체 수 9곳→7곳이 제공되었고 다른 의미나 문장 간 관계의 손실, 새로 도입된 중대한 해악은 발견되지 않았다. 자료의 계약 금액·납품 일정 불변 및 예비 협상 업체 수가 기사에서 생략되어 있지만, 현재 기사의 정확성을 위해 반드시 추가해야 하는 수정은 아니다. 제공된 자료 범위에서 미해결 원문 오류나 추가 필수 수정은 확인되지 않는다. 이 결과는 독립적인 AI 의미 검토 보고이며 완전한 의미 검증의 증명은 아니다."
+}

@@ -1,0 +1,142 @@
+{
+  "case_id": "KO_dependent",
+  "source": "가 나 다",
+  "proposal_raw": "{\"patches\": [{\"after\": \"각\", \"before\": \"가\", \"end\": 3, \"id\": \"A\", \"start\": 0}, {\"after\": \"낙\", \"before\": \"나\", \"end\": 7, \"id\": \"B\", \"start\": 4}, {\"after\": \"닥\", \"before\": \"다\", \"end\": 11, \"id\": \"C\", \"start\": 8}], \"preimage_sha256\": \"e726c9b62c3c0c8b6efc1588fc23174cfdbd68f80c798024aef8802198f4a6a3\", \"writer_id\": \"writer\"}",
+  "dependency_raw": "{\"auditor_id\": \"dependency\", \"complete\": true, \"pairs\": [{\"ids\": [\"A\", \"B\"], \"relation\": \"dependent\"}, {\"ids\": [\"A\", \"C\"], \"relation\": \"independent\"}, {\"ids\": [\"B\", \"C\"], \"relation\": \"independent\"}], \"patch_ids\": [\"A\", \"B\", \"C\"], \"proposal_sha256\": \"af9638b15c3fe26fdd78feb57f016e4d3593db69190cf240c6580ae99451a2d7\", \"read_complete\": true, \"source_sha256\": \"e726c9b62c3c0c8b6efc1588fc23174cfdbd68f80c798024aef8802198f4a6a3\"}",
+  "patch_audit_raw": "{\"auditor_id\": \"patch\", \"complete\": true, \"patch_decisions\": [{\"decision\": \"approved\", \"id\": \"A\"}, {\"decision\": \"rejected\", \"id\": \"B\"}, {\"decision\": \"approved\", \"id\": \"C\"}], \"preexisting_findings\": [], \"proposal_sha256\": \"af9638b15c3fe26fdd78feb57f016e4d3593db69190cf240c6580ae99451a2d7\", \"read_complete\": true, \"source_sha256\": \"e726c9b62c3c0c8b6efc1588fc23174cfdbd68f80c798024aef8802198f4a6a3\"}",
+  "final_audit_raw": [
+    "{\"auditor_id\": \"final\", \"candidate_sha256\": \"88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024\", \"complete\": true, \"decision\": \"approved\", \"findings\": [], \"proposal_sha256\": \"af9638b15c3fe26fdd78feb57f016e4d3593db69190cf240c6580ae99451a2d7\", \"read_complete\": true, \"selected_ids\": [\"C\"], \"source_sha256\": \"e726c9b62c3c0c8b6efc1588fc23174cfdbd68f80c798024aef8802198f4a6a3\", \"whole_candidate_reviewed\": true}"
+  ],
+  "output": "가 나 닥",
+  "delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "e726c9b62c3c0c8b6efc1588fc23174cfdbd68f80c798024aef8802198f4a6a3",
+    "output_sha256": "88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024",
+    "proposal_sha256": "af9638b15c3fe26fdd78feb57f016e4d3593db69190cf240c6580ae99451a2d7",
+    "dependency_sha256": "e39d8859733ec7332c1e7dc55215b67f6082abfefda2cf92e16c5c0efedd8d76",
+    "patch_audit_sha256": "a1fd6066aab019224bbe9727e3636c8a7cd0fb40b10f08f7c7e4546b5d5f1d24",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "applied",
+    "released": true,
+    "source_equals_output": false,
+    "initial_candidate_sha256": "88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024",
+    "final_candidate_sha256": "88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024",
+    "applied_ids": [
+      "C"
+    ],
+    "components": [
+      {
+        "id": "component-1",
+        "patch_ids": [
+          "A",
+          "B"
+        ],
+        "state": "rolledback",
+        "reason": "component_patch_rejected"
+      },
+      {
+        "id": "component-2",
+        "patch_ids": [
+          "C"
+        ],
+        "state": "applied",
+        "reason": "exact_candidate_approved"
+      }
+    ],
+    "patches": [
+      {
+        "id": "A",
+        "component_id": "component-1",
+        "state": "rolledback",
+        "source_span": [
+          0,
+          3
+        ],
+        "output_span": [
+          0,
+          3
+        ],
+        "before_sha256": "64ee5293d31bc58b72d76ae9a86a902e90442428e29f24f4ecb257ba841cdd36",
+        "proposed_after_sha256": "45ec909f30174e6585c67833638ece2b73752a2e17b142f2071d058792f16c89",
+        "actual_sha256": "64ee5293d31bc58b72d76ae9a86a902e90442428e29f24f4ecb257ba841cdd36",
+        "local_hunks": [
+          {
+            "start": 0,
+            "end": 3,
+            "before_sha256": "64ee5293d31bc58b72d76ae9a86a902e90442428e29f24f4ecb257ba841cdd36",
+            "after_sha256": "45ec909f30174e6585c67833638ece2b73752a2e17b142f2071d058792f16c89"
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "component_id": "component-1",
+        "state": "rolledback",
+        "source_span": [
+          4,
+          7
+        ],
+        "output_span": [
+          4,
+          7
+        ],
+        "before_sha256": "1098bbe54520ab2a367cb44888f829c7bb843cf525e6721b99f022c9953abd4d",
+        "proposed_after_sha256": "7702598fa74bf40a41a3f835a0ce75c1ff4b2a72d910797cf6b986799d50d34d",
+        "actual_sha256": "1098bbe54520ab2a367cb44888f829c7bb843cf525e6721b99f022c9953abd4d",
+        "local_hunks": [
+          {
+            "start": 4,
+            "end": 7,
+            "before_sha256": "1098bbe54520ab2a367cb44888f829c7bb843cf525e6721b99f022c9953abd4d",
+            "after_sha256": "7702598fa74bf40a41a3f835a0ce75c1ff4b2a72d910797cf6b986799d50d34d"
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "component_id": "component-2",
+        "state": "applied",
+        "source_span": [
+          8,
+          11
+        ],
+        "output_span": [
+          8,
+          11
+        ],
+        "before_sha256": "822b7db6f6886f5724136aec4851d66efcc46d0125b5d4b406caabb9fc630a38",
+        "proposed_after_sha256": "41ab617b436ec424a24649c7371af952062e0223045676b2ac8666a51d6a1178",
+        "actual_sha256": "41ab617b436ec424a24649c7371af952062e0223045676b2ac8666a51d6a1178",
+        "local_hunks": [
+          {
+            "start": 8,
+            "end": 11,
+            "before_sha256": "822b7db6f6886f5724136aec4851d66efcc46d0125b5d4b406caabb9fc630a38",
+            "after_sha256": "41ab617b436ec424a24649c7371af952062e0223045676b2ac8666a51d6a1178"
+          }
+        ]
+      }
+    ],
+    "final_audit_history": [
+      {
+        "audit_sha256": "688f609ffdd9aa981f83efdd35f539b2532d10f62aac8ecafb788887c41d144b",
+        "reviewed_candidate_sha256": "88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024",
+        "reviewed_ids": [
+          "C"
+        ],
+        "released": true,
+        "next_candidate_sha256": "88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024",
+        "next_selected_ids": [
+          "C"
+        ]
+      }
+    ],
+    "unresolved": [],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 적용. 의존 컴포넌트 적용 1개, 원복 1개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 0개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 88fd6b67d322f323da40dc43f5d4d91b8ef20c27ed2ef021982a9ed75e1f6024. 기계적 검증은 의미 증명이 아님."
+  },
+  "one_factor_reference": "KO_independent_good_bad",
+  "factor": "dependent",
+  "not_semantic_proof": true
+}

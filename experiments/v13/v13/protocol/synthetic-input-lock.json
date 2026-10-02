@@ -1,0 +1,46 @@
+{
+  "version": "v13",
+  "artifact_role": "synthetic_authored_input_lock",
+  "synthetic": true,
+  "actual_model_edit_outputs": false,
+  "encoding": "UTF-8",
+  "hash_algorithm": "SHA-256",
+  "bundles": [
+    {
+      "bundle_id": "b7e2c9",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/b7e2c9.json",
+      "sha256": "6d563a3ce2efa0197b1527adefbf0920a6048f1fad99979ff8635fef3118d359",
+      "bytes": 2507
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/f4a8d1.json",
+      "sha256": "d6b562666b36191cadcb07ebaebc9888205ecd484c9e599c4f6697ba1b96a916",
+      "bytes": 2787
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/c2d6a0.json",
+      "sha256": "1f657315d334b245c97c1e00273448ccb531dc5d4f40ab947530816a86500dcf",
+      "bytes": 2903
+    },
+    {
+      "bundle_id": "a9f3b6",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/a9f3b6.json",
+      "sha256": "bc8626b106036c2e2ad15bfadb00434aa0c726e01bc1c5dad510dae578fb8505",
+      "bytes": 3047
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/e6b1d4.json",
+      "sha256": "1a2e3291941420a39b8f13a8673f7ec5831500bcda94c5c0661dea383b21fd1f",
+      "bytes": 3246
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "path": "/historical-research/journal-v13-private/synthetic-inputs/d0c7e5.json",
+      "sha256": "fbf015fe119a40b75dcc9ffbd3bc7db84db6a4b54fc685d78fe51018b14ceedf",
+      "bytes": 3115
+    }
+  ]
+}

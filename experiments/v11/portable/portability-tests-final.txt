@@ -1,0 +1,8 @@
+test_external_engine_environment_override_refused (__main__.PortableTests.test_external_engine_environment_override_refused) ... ok
+test_missing_future_version_is_explicit (__main__.PortableTests.test_missing_future_version_is_explicit) ... skipped 'v1_2 has since been bundled'
+test_relocated_bundle_never_reads_legacy_absolute_path (__main__.PortableTests.test_relocated_bundle_never_reads_legacy_absolute_path) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.134s
+
+OK (skipped=1)

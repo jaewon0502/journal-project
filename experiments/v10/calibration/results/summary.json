@@ -1,0 +1,914 @@
+{
+  "study": "v10 authored evaluator calibration",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "counts": {
+    "authored_minimal_pairs": 6,
+    "unique_packets": 12,
+    "reader_responses": 24,
+    "axes": 7,
+    "paired_axis_cells": 84,
+    "native_writer_outputs": 0
+  },
+  "design": "A/B separate contexts in the same runtime; not cross-model or human adjudication. Prior authorship and access independence must be established by parent run records, not inferred from these JSON files.",
+  "validation_errors": [],
+  "axis_statistics": {
+    "actual_patch_state": {
+      "agreement_count": 12,
+      "paired_denominator": 12,
+      "agreement_fraction": "12/12",
+      "agreement_pct": 100.0,
+      "authored_expectation_match": {
+        "A": {
+          "count": 12,
+          "denominator": 12
+        },
+        "B": {
+          "count": 12,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "unchanged": 10,
+          "changed": 2
+        },
+        "B": {
+          "unchanged": 10,
+          "changed": 2
+        }
+      }
+    },
+    "delivery_consistency": {
+      "agreement_count": 11,
+      "paired_denominator": 12,
+      "agreement_fraction": "11/12",
+      "agreement_pct": 91.6667,
+      "authored_expectation_match": {
+        "A": {
+          "count": 10,
+          "denominator": 12
+        },
+        "B": {
+          "count": 9,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "pass": 9,
+          "not_applicable": 1,
+          "fail": 2
+        },
+        "B": {
+          "pass": 8,
+          "not_applicable": 2,
+          "fail": 2
+        }
+      }
+    },
+    "original_statement_retention": {
+      "agreement_count": 12,
+      "paired_denominator": 12,
+      "agreement_fraction": "12/12",
+      "agreement_pct": 100.0,
+      "authored_expectation_match": {
+        "A": {
+          "count": 11,
+          "denominator": 12
+        },
+        "B": {
+          "count": 11,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "retained": 10,
+          "removed_or_replaced": 2
+        },
+        "B": {
+          "retained": 10,
+          "removed_or_replaced": 2
+        }
+      }
+    },
+    "targeted_question_resolution": {
+      "agreement_count": 11,
+      "paired_denominator": 12,
+      "agreement_fraction": "11/12",
+      "agreement_pct": 91.6667,
+      "authored_expectation_match": {
+        "A": {
+          "count": 12,
+          "denominator": 12
+        },
+        "B": {
+          "count": 11,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "resolved": 5,
+          "unresolved": 7
+        },
+        "B": {
+          "resolved": 6,
+          "unresolved": 6
+        }
+      }
+    },
+    "source_sufficiency": {
+      "agreement_count": 11,
+      "paired_denominator": 12,
+      "agreement_fraction": "11/12",
+      "agreement_pct": 91.6667,
+      "authored_expectation_match": {
+        "A": {
+          "count": 12,
+          "denominator": 12
+        },
+        "B": {
+          "count": 11,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "sufficient": 8,
+          "insufficient": 4
+        },
+        "B": {
+          "sufficient": 7,
+          "insufficient": 5
+        }
+      }
+    },
+    "truth_status": {
+      "agreement_count": 11,
+      "paired_denominator": 12,
+      "agreement_fraction": "11/12",
+      "agreement_pct": 91.6667,
+      "authored_expectation_match": {
+        "A": {
+          "count": 12,
+          "denominator": 12
+        },
+        "B": {
+          "count": 11,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "supported_in_packet": 5,
+          "unknown": 4,
+          "contradicted_in_packet": 3
+        },
+        "B": {
+          "supported_in_packet": 4,
+          "unknown": 5,
+          "contradicted_in_packet": 3
+        }
+      }
+    },
+    "abstain": {
+      "agreement_count": 11,
+      "paired_denominator": 12,
+      "agreement_fraction": "11/12",
+      "agreement_pct": 91.6667,
+      "authored_expectation_match": {
+        "A": {
+          "count": 12,
+          "denominator": 12
+        },
+        "B": {
+          "count": 11,
+          "denominator": 12
+        }
+      },
+      "label_distribution": {
+        "A": {
+          "false": 8,
+          "true": 4
+        },
+        "B": {
+          "false": 7,
+          "true": 5
+        }
+      }
+    }
+  },
+  "exact_all_axis_packet_agreement": {
+    "count": 9,
+    "denominator": 12
+  },
+  "unknown_and_uncertain": {
+    "A": {
+      "truth_unknown": 4,
+      "source_insufficient": 4,
+      "abstain_true": 4,
+      "patch_indeterminate": 0,
+      "delivery_ambiguous": 0,
+      "retention_indeterminate": 0,
+      "target_indeterminate": 0
+    },
+    "B": {
+      "truth_unknown": 5,
+      "source_insufficient": 5,
+      "abstain_true": 5,
+      "patch_indeterminate": 0,
+      "delivery_ambiguous": 0,
+      "retention_indeterminate": 0,
+      "target_indeterminate": 0
+    }
+  },
+  "construct_concerns": [
+    {
+      "packet_ids": [
+        "0a8e720b2cf44b85355b6c54"
+      ],
+      "class": "authored_candidate_unlicensed_comparison",
+      "status": "construct_contamination_identified",
+      "raw_anchor": "6월 10일의 더 높은 기록만으로",
+      "diagnosis": "Both raw reasons note June 8 level is absent, so higher is an additional unsupported comparison. Intended clean bounded response is not fully clean. A/B still agree on unknown and exact epistemic-question resolution; delivery pass versus not_applicable differs.",
+      "action": "Retain frozen packet/key and all scores. Do not call the authored good variant fully validated; a future version may remove higher before a new run."
+    },
+    {
+      "packet_ids": [
+        "66c79d324860b23e9a4da144"
+      ],
+      "class": "question_vs_repair_construct_mismatch",
+      "status": "authored_expectation_not_unique",
+      "raw_anchor": "최종 기사에 금리차 단위 수정이 실제 반영되었으며 전달문이 이를 정확히 설명하는가?",
+      "diagnosis": "Question asks whether repair was applied and accurately reported, while key rationale presumes an instruction to apply it. B resolves status inquiry with truthful nonapplication; A requires implemented correction. Both agree unchanged, delivery pass, and unit contradicted. Neither rates actual repair complete.",
+      "action": "Keep target-resolution disagreement. Do not count B resolved as acceptance of successful repair or silently change key."
+    },
+    {
+      "packet_ids": [
+        "cd6de257991961fb055dc2e6"
+      ],
+      "class": "axis_referent_and_artifact_boundary_underspecified",
+      "status": "authored_expectation_not_unique",
+      "raw_anchor": "Does the final note distinguish the reported exact 0.02 statement from the measured 0.016 increase, without claiming to verify the speech?",
+      "diagnosis": "A evaluates source sufficiency/truth of requested note distinction; B evaluates actual attributed speech, remaining unknown. Both resolve exact note question and explicitly state speech is unverified. Both call article statement retained, while key labels qualified_retained because separate delivery qualifies it.",
+      "action": "Report three epistemic-axis disagreements plus shared key mismatch on retention; no reviewer correction. Future schema should label proposition referent and candidate-only versus candidate-plus-delivery retention."
+    },
+    {
+      "packet_ids": [
+        "843659addf26983df9bd4a24"
+      ],
+      "class": "delivery_axis_applicability_underspecified",
+      "status": "shared_key_mismatch",
+      "raw_anchor": "The measurement was published on Tuesday.",
+      "diagnosis": "Both reviewers use not_applicable for delivery consistency because no artifact-state claim is made. Authored key uses pass; absence of implementation claim is not defined tightly enough by frozen rubric to force pass.",
+      "action": "Retain key comparison as non-gold diagnostic; no inferred evaluator error."
+    },
+    {
+      "packet_ids": [
+        "c5057d9ee7b59fbfe777681c"
+      ],
+      "class": "delivery_scope_verification_vs_artifact_state",
+      "status": "shared_key_mismatch",
+      "raw_anchor": "The supplied evidence verifies the 7% reduction.",
+      "diagnosis": "Both reviewers rate delivery fail for unsupported verification; key pass used a narrow edit-state reading. Both agree the source is insufficient and 7% truth unknown rather than contradicted. Frozen rubric does not fully specify whether verification claims belong in this delivery axis.",
+      "action": "Preserve all labels; report schema boundary ambiguity and avoid calling agreed reviewer concern an error."
+    },
+    {
+      "packet_ids": [
+        "65adbd2a1f1c2f34dc678d9c"
+      ],
+      "class": "minimal_pair_multiple_semantic_changes",
+      "status": "construct_limit",
+      "raw_anchor": "관측소는 6월 10일 수위가 최고 기록을 세웠다고 발표했다.",
+      "diagnosis": "Both reviewers note the added observatory announcement attribution lacks direct evidence in addition to earlier-date replacement. This variant tests multiple coupled propositions rather than perfectly isolating only date substitution.",
+      "action": "Keep result but bound single-cause interpretation; no post-hoc exclusion or regenerated candidate."
+    }
+  ],
+  "case_rows": [
+    {
+      "packet_id": "96f4167db8fba7fa8edf10d2",
+      "pair": "rebuttal",
+      "variant": "retain",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "Candidate preserves both the committee's denial of the all-failed rumor and its affirmative report that five passed; supplied announcement supports those separate propositions.",
+        "B": "The unchanged candidate preserves the committee's rejection of the rumor and its affirmative claim of five acceptances; E1 supports both attribution and polarity."
+      }
+    },
+    {
+      "packet_id": "e965806ef848d8daa8f5ae62",
+      "pair": "sufficiency",
+      "variant": "complete",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "The reduction is (100-93)/100 = 7%, supporting the preserved statement and delivery's verification claim.",
+        "B": "The reported decrease is (100−93)/100 = 7%, directly verifying the unchanged proposition."
+      }
+    },
+    {
+      "packet_id": "cd6de257991961fb055dc2e6",
+      "pair": "numeric_quote",
+      "variant": "target",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "qualified_retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [
+        "source_sufficiency",
+        "truth_status",
+        "abstain"
+      ],
+      "expectation_differences": {
+        "A": [
+          "original_statement_retention"
+        ],
+        "B": [
+          "original_statement_retention",
+          "source_sufficiency",
+          "truth_status",
+          "abstain"
+        ]
+      },
+      "reasons": {
+        "A": "The exact target is the note's distinction, which is supported: it separates the article's reported speech from the differing unrounded measurement and does not verify actual speech. Whether the analyst actually said this remains unknown.",
+        "B": "The delivery explicitly and correctly distinguishes the preserved report from the measured value and acknowledges the speech evidence limit, resolving the exact question. E1 establishes the measurement but cannot verify the attributed exact words; the numerical discrepancy alone does not refute the speech report."
+      }
+    },
+    {
+      "packet_id": "65adbd2a1f1c2f34dc678d9c",
+      "pair": "earlier_record",
+      "variant": "replacement",
+      "A": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "B": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "authored_expectation": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "Delivery accurately says the date was changed, but its rationale is unsupported. A later record does not disprove an earlier then-record. June 10 measurement is supported; the June 8 claim's truth and the observatory's announcement of June 10 are not established.",
+        "B": "The date really was changed, consistent with the delivery's action claim, but a later record cannot establish that June 8 was not a record at that time. The deletion rationale and replacement announcement attribution lack evidence; the candidate does not acknowledge that limit."
+      }
+    },
+    {
+      "packet_id": "62f27b46fa24c4f9847bbaed",
+      "pair": "rebuttal",
+      "variant": "flip",
+      "A": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "changed",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "removed_or_replaced",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "The sentence was shortened as delivery says, but the candidate converts the denied rumor into the committee's own assertion, directly contradicting E1. The evidence suffices to determine that the requested propositions were not preserved.",
+        "B": "The artifact was shortened as delivery says, but it converts a denied rumor into the committee's affirmative assertion. E1 directly contradicts that attributed assertion, so preservation fails and the target concern remains unresolved."
+      }
+    },
+    {
+      "packet_id": "66c79d324860b23e9a4da144",
+      "pair": "delivery",
+      "variant": "proposal",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [
+        "targeted_question_resolution"
+      ],
+      "expectation_differences": {
+        "A": [],
+        "B": [
+          "targeted_question_resolution"
+        ]
+      },
+      "reasons": {
+        "A": "The final article retains the percent unit despite E1 establishing percentage points. Delivery honestly acknowledges nonapplication, so it passes consistency while the requested implemented unit correction remains undone.",
+        "B": "The candidate retains the incorrect percent unit; E1 establishes percentage points. For the exact implementation-and-reporting question, the delivery explicitly answers that the correction was not applied, accurately reflecting the unchanged artifact. This resolves implementation status without fixing the factual unit error."
+      }
+    },
+    {
+      "packet_id": "843659addf26983df9bd4a24",
+      "pair": "numeric_quote",
+      "variant": "other",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "not_applicable",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "not_applicable",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [
+          "delivery_consistency"
+        ],
+        "B": [
+          "delivery_consistency"
+        ]
+      },
+      "reasons": {
+        "A": "The unrelated publication-day note does not distinguish reported speech from measurement or state the speech-evidence limit. Actual speech and the asserted publication day are unknown; measurement 0.016 is supported. Delivery makes no claim about implementing or retaining an artifact edit.",
+        "B": "The delivery provides no artifact-state claim and does not distinguish the preserved speech report from the measurement or acknowledge the speech evidence limit. The measurement is supported, but the speech attribution and Tuesday publication claim cannot be verified."
+      }
+    },
+    {
+      "packet_id": "0a8e720b2cf44b85355b6c54",
+      "pair": "earlier_record",
+      "variant": "bounded",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "not_applicable",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "disagreement_axes": [
+        "delivery_consistency"
+      ],
+      "expectation_differences": {
+        "A": [],
+        "B": [
+          "delivery_consistency"
+        ]
+      },
+      "reasons": {
+        "A": "Delivery appropriately refuses to infer that the earlier then-record was false from a later record, resolving the evidence-limit question while preserving the source. The original June 8 record and attributed announcement remain unverified. Calling June 10 higher also lacks a supplied June 8 comparison value.",
+        "B": "The candidate preserves the historical claim. The delivery correctly states that a subsequent record cannot refute an earlier record-at-the-time, resolving the evidence-sufficiency question while leaving June 8 truth unknown. It makes no explicit implementation claim. Its description of the later record as higher is not numerically established against the absent June 8 level."
+      }
+    },
+    {
+      "packet_id": "c5057d9ee7b59fbfe777681c",
+      "pair": "sufficiency",
+      "variant": "missing",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "fail",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "fail",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "insufficient",
+        "truth_status": "unknown",
+        "abstain": true
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [
+          "delivery_consistency"
+        ],
+        "B": [
+          "delivery_consistency"
+        ]
+      },
+      "reasons": {
+        "A": "The candidate preserves the claim, but delivery falsely describes it as verified. A final time without a baseline cannot establish a percentage reduction. The 7% claim is unknown, not contradicted.",
+        "B": "The unchanged 7% statement is preserved, but the delivery incorrectly describes it as verified by the packet. Without a baseline the percentage reduction is undetermined, rather than disproven; the exact question is not answered with a grounded verdict or evidence limit."
+      }
+    },
+    {
+      "packet_id": "7e7985075c7937a56d592297",
+      "pair": "delivery",
+      "variant": "completion",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "fail",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "fail",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "fail",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "contradicted_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "The candidate still uses percent, contradicting the supplied percentage-point evidence. Delivery explicitly claims a completed unit repair that the unchanged artifact does not implement.",
+        "B": "The candidate still uses percent, contradicting both E1's percentage-point unit and the delivery's explicit completed-repair claim. The requested correction and accurate report of its implementation remain unresolved."
+      }
+    },
+    {
+      "packet_id": "841859cd188379b31a02ba63",
+      "pair": "followup_question",
+      "variant": "second",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "unresolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "The retained May 2 claim and delivery's dated confirmation are supported, but neither answers the exact May 9 cumulative question. E2 supplies the determinate answer of 15.",
+        "B": "The retained May 2 statement and its confirmation are supported, and delivery matches leaving it unchanged. But the explicit target is the cumulative May 9 count, which E2 establishes as 15; neither candidate nor delivery gives that answer. Target nonresponse does not make the retained May 2 statement false."
+      }
+    },
+    {
+      "packet_id": "183e013ece49c11f830e2493",
+      "pair": "followup_question",
+      "variant": "first",
+      "A": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "B": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "authored_expectation": {
+        "actual_patch_state": "unchanged",
+        "delivery_consistency": "pass",
+        "original_statement_retention": "retained",
+        "targeted_question_resolution": "resolved",
+        "source_sufficiency": "sufficient",
+        "truth_status": "supported_in_packet",
+        "abstain": false
+      },
+      "disagreement_axes": [],
+      "expectation_differences": {
+        "A": [],
+        "B": []
+      },
+      "reasons": {
+        "A": "The candidate and delivery answer the specified May 2 cutoff with 12, supported by the complete May 2 minutes and consistent with the subsequent cumulative total of 15 after three additional approvals.",
+        "B": "The exact May 2 question is answered as 12, supported by the complete May 2 minutes and consistent with the later three additions bringing the total to 15. The artifact remains unchanged as the delivery indicates."
+      }
+    }
+  ],
+  "raw_manifest": [
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__96f4167db8fba7fa8edf10d2.json",
+      "sha256": "214492d0741ed01bb27600e083b6949bab2970bd3e6e85f1520533e802b8e404"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__96f4167db8fba7fa8edf10d2.json",
+      "sha256": "2006581dc5d938946bc87812e7ae12672484c89ba7ee490cd6bcc2bba3e35588"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__e965806ef848d8daa8f5ae62.json",
+      "sha256": "4f85d65b290da35244361d896f211738693a5dcf3c711bb8b2c44ea74244af5c"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__e965806ef848d8daa8f5ae62.json",
+      "sha256": "bb3a13ffafc646ae1fb4bf88b43f2370ec311d64b1e2d57dce786ad9685a0858"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__cd6de257991961fb055dc2e6.json",
+      "sha256": "8619c9bc1b3d8b84ba460b313e5976516659475dca4acdd8586bc525d16e7b34"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__cd6de257991961fb055dc2e6.json",
+      "sha256": "86787b571fe020ee14ef2470b8b0d8539462d70280b18f0d92a903242627d643"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__65adbd2a1f1c2f34dc678d9c.json",
+      "sha256": "5482e7cf3053d45a34f018fb6e738ef7529805c70afda72068ba0ac84bba00ec"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__65adbd2a1f1c2f34dc678d9c.json",
+      "sha256": "d84314f72efebddcfa9d6b6bb849c105a6e588e24b146053189d464bd91eb45c"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__62f27b46fa24c4f9847bbaed.json",
+      "sha256": "61106fce8128f00c6f7871062e4530239eb753b153f874a1aca2af8e8de9ba3d"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__62f27b46fa24c4f9847bbaed.json",
+      "sha256": "05af91e5929f87429b4d725410020542e7ecd05fd6db1ea29fbae89edeaf50b2"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__66c79d324860b23e9a4da144.json",
+      "sha256": "7f83bb05bf548349b06887411183e6a0700223bfd32a017c7469a9f0148343eb"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__66c79d324860b23e9a4da144.json",
+      "sha256": "255aae0fad654bdff4ac2c10dcc8b51ea6000c1ebc402beaea1416f775743104"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__843659addf26983df9bd4a24.json",
+      "sha256": "e08c30615e6f131999856da5b00cb9508170cb9b242d731761e02ad4d86a20e0"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__843659addf26983df9bd4a24.json",
+      "sha256": "51bde21a73030d1abd838dc7812fb529c5b138ecb866287e5a35a0a398afe4a6"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__0a8e720b2cf44b85355b6c54.json",
+      "sha256": "323e6fbbc0d92a5c8e211f1501d0f7584919b7a32582da021848d7ab6ce25c80"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__0a8e720b2cf44b85355b6c54.json",
+      "sha256": "3b70d2071e1b84f3ef60d703bbd984f1e022cfb5ff08f3ad1a95dc0f85ae7bc7"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__c5057d9ee7b59fbfe777681c.json",
+      "sha256": "9659df9c62a10dba90a92967b2bb2a891cbdaf66a873e958b71d98bfb06dfc34"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__c5057d9ee7b59fbfe777681c.json",
+      "sha256": "8a9900f7b88f7791f3e2f882f4f509f3b902e765dfb54ee4048c0b9c27ad26cf"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__7e7985075c7937a56d592297.json",
+      "sha256": "ba7a417ac4414af0e59b5839c620c44f0621bb3fcedc879f4701073a4dcb6723"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__7e7985075c7937a56d592297.json",
+      "sha256": "0fb5b04b6ccfaff8001d56dd36a6679bd31c30f897f69ee3444d3134f68cc46f"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__841859cd188379b31a02ba63.json",
+      "sha256": "139d55d73370bc59a1da23d288e976f4286d1c0d7ba1d943f946105652d99e79"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__841859cd188379b31a02ba63.json",
+      "sha256": "5572619033989320bdc93b56916f07d6e422755118494e998e50ef074b36b913"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/A__183e013ece49c11f830e2493.json",
+      "sha256": "4ce4346d125d8acaddcbffc0a71958ff115bd85506d972534c8dd2a80a6a03b8"
+    },
+    {
+      "path": "/historical-research/journal-v10-private/calibration-results/B__183e013ece49c11f830e2493.json",
+      "sha256": "9a5963aaaea71bac3bbdfe250016d9ad54f404baf36a89465fbbd14447c6fdd3"
+    }
+  ],
+  "limitations": [
+    "Authored expected labels are comparison references, not gold or independently adjudicated truth.",
+    "Calibration candidates are authored, not native writer outputs; this is no intervention efficacy estimate.",
+    "Twelve dependent pair-member packets are not twelve independent real-world samples.",
+    "Original v9 tasks/targets differ; do not calculate agreement improvement from v9 versus v10.",
+    "No post-hoc relabeling, rubric change, exclusion or lowering of thresholds. Unknown and uncertain labels remain distinct."
+  ]
+}

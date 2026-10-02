@@ -1,0 +1,21 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s journal-v11/receipt-v1_1 -v",
+  "exit_code": 0,
+  "test_methods": 12,
+  "elapsed_seconds": 56.073,
+  "observation": "Recorded from completed exec session 48451; all 9 inherited and 3 size-contract tests passed.",
+  "real_receipt_boundaries_bytes": [
+    2097151,
+    2097152,
+    2097153
+  ],
+  "boundary_results": [
+    "mint/verify/KO+EN render/store/get success",
+    "mint/verify/KO+EN render/store/get success",
+    "mint rejected before writing"
+  ],
+  "oversized_patch_audit_bytes": 1590340,
+  "oversized_patch_audit_finding_count": 30000,
+  "oversized_expansion_result": "mint rejected at shared 2 MiB byte bound",
+  "original_frozen_manifest_sha256": "a56e17bf8b57b8e15e7436614445fdf0f307f10b33c13dd788cbae7e991d4462"
+}

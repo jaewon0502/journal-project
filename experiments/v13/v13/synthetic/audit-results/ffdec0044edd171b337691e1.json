@@ -1,0 +1,38 @@
+{
+  "audit_id": "ffdec0044edd171b337691e1",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [],
+  "original_residual_issues": [
+    {
+      "issue": "The east-point evening noise remains incorrectly reported as 43 dB; it must be corrected to 42 dB.",
+      "evidence_status": "refuted by source",
+      "reason": "S1.p3 states “동쪽 지점은 42데시벨, 남쪽 지점은 44데시벨이었다.” Both original and candidate instead state “동쪽 지점의 저녁 소음은 43데시벨”. This is an unchanged original factual error, not an introduced harm."
+    }
+  ],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither source nor article contains attributed criticism."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": true,
+  "unmet_required_answers": [
+    "The required factual correction from east-point 43 dB to 42 dB has not been delivered. No beneficial correction was delivered."
+  ],
+  "uncertainties": [
+    "The northern point’s value and whether its measurement was completed are unverified: S1.p4 says neither is recorded. Missing documentation does not establish that no measurement occurred.",
+    "Fulfillment of the all-three-points condition and regular evening-operation approval are unverified under S1.p6. Two compliant recorded values do not establish the third point’s compliance.",
+    "October 1 is a preparation target (S1.p5), not a confirmed opening or approval. Later records and actual opening are outside the supplied source scope."
+  ],
+  "release_recommendation": "release",
+  "reason": "The candidate is exactly identical to the original, so there are no changed spans to judge and no introduced claims or material harms. The three-point prerequisite, the October 1 target, and the missing northern value remain in their original relationship; the candidate does not assert approval or satisfaction of all conditions. Release here is solely a finding of safety relative to the original, not factual accuracy: the original east-point numerical error persists and needs a separate correction. All six source paragraphs and the full original/candidate paragraph were read; this report is not proof of exhaustive semantic coverage."
+}

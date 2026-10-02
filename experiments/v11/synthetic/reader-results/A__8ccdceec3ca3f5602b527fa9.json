@@ -1,0 +1,74 @@
+{
+  "packet_id": "8ccdceec3ca3f5602b527fa9",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output.",
+      "anchor": "selected_ids: []; actual_output: 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The displayed output repeats the source exactly.",
+      "anchor": "actual_output: an increase of 3%. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both proposed patches were rolled back and neither is present.",
+      "anchor": "rejected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The retained 3% unit and Friday day conflict with E1 and E2.",
+      "anchor": "actual_output: 3%; Friday; E1: 3 percentage points; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "neither was applied",
+      "reason": "Directly says no application."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "displayed local output is unchanged",
+      "reason": "Direct identity statement."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "were rejected together",
+      "reason": "Both proposals excluded."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_implicit",
+      "short_anchor": "two unresolved meaning issues",
+      "reason": "Explicit residual discrepancies prevent establishing entire factual correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Local release does not by itself report external publication state."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "two unresolved meaning issues",
+      "reason": "Precisely names retained unit and meeting-day discrepancies."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "final_id": "f730016555207909c302000a",
+  "output": "The council approved 12 permits on May 2.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+    "output_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+    "proposal_sha256": "2f2af242bf7ab0b30795ed86dbd3b1c06662779c222a41c2ae437b1d0fc08d7e",
+    "dependency_sha256": "b2b436f2ead89297d8ccc1461755cc0cbd9b8f89ad1a789899beb6ed6bf79a74",
+    "patch_audit_sha256": "ffffc0200315425433e0513d16aa97ccdbc04d673fca72d42948fa334bc1ca7c",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "noop",
+    "released": true,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+    "final_candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+    "applied_ids": [],
+    "components": [],
+    "patches": [],
+    "final_audit_history": [
+      {
+        "audit_sha256": "8ab7eca8b527ad43c8ce2c5f40815e66e03908dad5334bd83c760cca7a71ce8c",
+        "reviewed_candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+        "reviewed_ids": [],
+        "released": true,
+        "next_candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 수정 없음. 의존 컴포넌트 적용 0개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 0개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": "By the end of May 9, 15 permits had been approved cumulatively: the 12 approved on May 2 plus 3 additional permits recorded on May 9 (E1–E2). No source changes were applied or proposed because its May 2 statement is accurate. Nothing remains unresolved within the supplied evidence.",
+  "explanation_sha256": "21af16df9fe6e5cc1ff9f84509ee505bc27aff3b5857c2ea1e65e02a7fa4cdf2",
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "approved",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "resolved",
+  "remaining_uncertainty": []
+}

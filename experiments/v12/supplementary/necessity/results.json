@@ -1,0 +1,641 @@
+{
+  "module": "supplementary-necessity",
+  "design": "controlled synthetic mechanism probe; no actual rewrite outputs",
+  "counts": {
+    "synthetic_items": 6,
+    "independent_synthetic_bases": 3,
+    "pairs": 3,
+    "classifications": 12,
+    "new_real_cases": 0,
+    "actual_rewrite_outputs": 0
+  },
+  "checks": {
+    "manifest_freeze": true,
+    "frozen_files": true,
+    "six_items": true,
+    "constant_prompt_schema": true,
+    "input_collection_equal": true,
+    "no_labels_in_detector_packets": true,
+    "three_one_factor_pairs": true,
+    "two_outputs_each": true,
+    "orchestrator_record_covers_fresh_tasks": true,
+    "all_output_schema_valid": true,
+    "all_quotes_exact_in_named_field": true
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "item_ids": [
+        "285cf1155fdc3469d7ee6681",
+        "696e705f4d8426a7a1e00fc3"
+      ],
+      "changed_fields": [
+        "reader_question"
+      ],
+      "one_factor_verified": true,
+      "exact_condition_deletion": null
+    },
+    {
+      "pair": 2,
+      "item_ids": [
+        "f09b014f3d4927e89ac2bb38",
+        "0ce5a7e0ec02731911b92d52"
+      ],
+      "changed_fields": [
+        "reader_question"
+      ],
+      "one_factor_verified": true,
+      "exact_condition_deletion": null
+    },
+    {
+      "pair": 3,
+      "item_ids": [
+        "0e0d2a253a6004ba748256e3",
+        "206a6e985b3915af8102500c"
+      ],
+      "changed_fields": [
+        "candidate"
+      ],
+      "one_factor_verified": true,
+      "exact_condition_deletion": true
+    }
+  ],
+  "comparison_to_provisional_ai_expectations": {
+    "full_five_field_matches": 12,
+    "total_classifications": 12,
+    "per_field_matches": {
+      "source_meaning_error": 12,
+      "original_meaning_loss": 12,
+      "required_answer_missing": 12,
+      "optional_context_absence": 12,
+      "decision": 12
+    },
+    "mismatches": [],
+    "interpretation": "Concordance only, not accuracy against human ground truth."
+  },
+  "repeat_five_field_agreement_items": 6,
+  "evidence_check": {
+    "exact_quotes": 47,
+    "total_quotes": 47,
+    "method": "nonempty exact substring in the explicitly named source field; does not by itself prove semantic validity"
+  },
+  "preclassification_validation": {
+    "recorded_before_labels": true,
+    "validator_saw_outputs": false,
+    "label_disagreements": {},
+    "ambiguous_items": [],
+    "provenance_limit": "Order is attested in saved records, not independently authenticated by this checker."
+  },
+  "fresh_context_provenance": {
+    "basis": "Executor statement based on actual native independent-context invocation calls",
+    "record_sha256": "ce8962a2f1dbeceef7a2532ec1d9db32a2315d7b09f9c2702111ad63516f3169",
+    "record_status": "orchestrator record of actual native spawn calls, not independent authentication of isolation or internal model calls",
+    "context_inheritance": "none",
+    "tasks": [
+      "review-role-a1",
+      "review-role-a2",
+      "review-role-a3",
+      "review-role-a4",
+      "review-role-a5",
+      "review-role-a6",
+      "review-role-b1",
+      "review-role-b2",
+      "review-role-b3",
+      "review-role-b4",
+      "review-role-b5",
+      "review-role-b6"
+    ],
+    "number_to_item": {
+      "1": "0ce5a7e0ec02731911b92d52",
+      "2": "0e0d2a253a6004ba748256e3",
+      "3": "206a6e985b3915af8102500c",
+      "4": "285cf1155fdc3469d7ee6681",
+      "5": "696e705f4d8426a7a1e00fc3",
+      "6": "f09b014f3d4927e89ac2bb38"
+    },
+    "model_or_effort_override": false,
+    "independent_context_authentication": false,
+    "limitation": "Bare result JSON proves two outputs per item only; no independent session, seed, or exact model-version attestation."
+  },
+  "classifications": [
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "repeat": "A",
+      "file_sha256": "39f1e273b93de0edae044f0a0158529b9f18adb79240c55c7c979ea157326dfd",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "녹음기 대여 기간은 대여일부터 12일이다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "이 사업에서 녹음기를 며칠 동안 빌릴 수 있는가?",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "repeat": "A",
+      "file_sha256": "ef0b720ff299ba8bdda7aa219ad65b77cf86b9e9c213bf8b5a959b846de8a355",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": false,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": false,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "repeat": "A",
+      "file_sha256": "097be2b98e5aabc047666c6acdafc59c50bb110b71d8e820c7bfe5815f64b526",
+      "observed": {
+        "source_meaning_error": true,
+        "original_meaning_loss": true,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": true,
+        "original_meaning_loss": true,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "등록 회원이 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "repeat": "A",
+      "file_sha256": "4323ef4069960318c1041b72053a01f5c1c018461bfbc105d9459ac9dc45c1d3",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "candidate",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "어떤 사업이 시작됐고 참여 단체들은 무엇을 비판했는가?",
+          "exact_substring": true
+        },
+        {
+          "field": "source",
+          "quote": "신청 대상은 새봄시에 등록된 비영리 동아리다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "repeat": "A",
+      "file_sha256": "11135eaa8ae17dd27cd3707e53a3a10497aa996df890ba726d43526a15d8cda9",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "신청 대상은 새봄시에 등록된 비영리 동아리다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "이 사업의 신청 대상은 누구인가?",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "repeat": "A",
+      "file_sha256": "0d82735903b986287f4a35c9ec382e3398452a0b6492b7f344f1fdcd0cb73b2f",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "candidate",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "문화관이 시작한 사업은 무엇이며 그 목적은 무엇인가?",
+          "exact_substring": true
+        },
+        {
+          "field": "source",
+          "quote": "녹음기 대여 기간은 대여일부터 12일이다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "repeat": "B",
+      "file_sha256": "0661f52f5c4f57cd9483d7edff6d30abf7363b67f6136ac0129fe132472fce54",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "녹음기 대여 기간은 대여일부터 12일이다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "이 사업에서 녹음기를 며칠 동안 빌릴 수 있는가?",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "repeat": "B",
+      "file_sha256": "a35c01465b605e17086a9d3fc4cbff5b6e082f633243166cd8da0600d11c03c1",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": false,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": false,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "repeat": "B",
+      "file_sha256": "4937da6ab633b2fdd1684b5ca5383cbe8aa41e57164bf385c064175af93440c6",
+      "observed": {
+        "source_meaning_error": true,
+        "original_meaning_loss": true,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": true,
+        "original_meaning_loss": true,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "source",
+          "quote": "등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "등록 회원이 안전교육을 이수한 경우에만",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate",
+          "quote": "등록 회원이 공용 절단기를 사용할 수 있다고 안내했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "repeat": "B",
+      "file_sha256": "74d7e95c9b0072cd90b6599ab3332f10ce178b6158e09c684626aa1fbaef5b81",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "candidate",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "어떤 사업이 시작됐고 참여 단체들은 무엇을 비판했는가?",
+          "exact_substring": true
+        },
+        {
+          "field": "source",
+          "quote": "신청 대상은 새봄시에 등록된 비영리 동아리다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "repeat": "B",
+      "file_sha256": "e6a9637249b3dd6be6ea26e3916f6225c1853d02c79ac74b9192f04350254938",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "candidate",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "이 사업의 신청 대상은 누구인가?",
+          "exact_substring": true
+        },
+        {
+          "field": "source",
+          "quote": "신청 대상은 새봄시에 등록된 비영리 동아리다.",
+          "exact_substring": true
+        }
+      ]
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "repeat": "B",
+      "file_sha256": "6300ab773e5a67bb5f70ad9b1ae068b353a3d6ca109b72576bfbce4f8ab7fd1c",
+      "observed": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "differences": {},
+      "schema_errors": [],
+      "evidence": [
+        {
+          "field": "candidate",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "original_article",
+          "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+          "exact_substring": true
+        },
+        {
+          "field": "reader_question",
+          "quote": "문화관이 시작한 사업은 무엇이며 그 목적은 무엇인가?",
+          "exact_substring": true
+        },
+        {
+          "field": "source",
+          "quote": "녹음기 대여 기간은 대여일부터 12일이다.",
+          "exact_substring": true
+        }
+      ]
+    }
+  ],
+  "old_main_metrics_changed": false,
+  "limitations": [
+    "AI-authored provisional expectations and AI validation are not human gold.",
+    "Six paired synthetic items are not 12 independent cases or new real data.",
+    "Prompt explicitly defines distinctions; this is a mechanism probe, not a method-performance estimate.",
+    "No rewritten article was generated or tested; patch is a classification decision.",
+    "No post-result expected-label edits; future contested expectations must remain marked ambiguous."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "packet_id": "e4c8d42f3040037734429949",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output.",
+      "anchor": "selected_ids: []; actual_output: 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The displayed output repeats the source exactly.",
+      "anchor": "actual_output: an increase of 3%. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both proposed patches were rolled back and neither is present.",
+      "anchor": "rejected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The retained 3% unit and Friday day conflict with E1 and E2.",
+      "anchor": "actual_output: 3%; Friday; E1: 3 percentage points; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "no proposed patches are present",
+      "reason": "In context this refers to their absence from output, not absence of proposals."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The original source is the local output",
+      "reason": "Direct identity statement."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "excluded or rolled back 2",
+      "reason": "Both proposed replacements excluded."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Factual truth is not independently verified",
+      "reason": "Reports verification limitation."
+    },
+    "externalpublished": {
+      "rating": "accurate_implicit",
+      "short_anchor": "No external article or publication was changed",
+      "reason": "Context communicates local-only action, phrased in terms of external alteration."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Unadjudicated finding references do not report the concrete final-output discrepancy; saying references alone do not establish an error is not a denial that evidence identifies one."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both concrete issues remain: 3% should be 3 percentage points and Friday conflicts with the Saturday schedule."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

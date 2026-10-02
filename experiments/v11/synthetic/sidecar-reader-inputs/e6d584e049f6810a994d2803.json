@@ -1,0 +1,135 @@
+{
+  "packet_id": "e6d584e049f6810a994d2803",
+  "language": "KO",
+  "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다. 참석자는 8명과 5명으로 총 14명이다.",
+  "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 토요일에 열린다. 참석자는 8명과 5명으로 총 14명이다.",
+  "existing_receipt": {
+    "actual_result_sha256": "3d4df3f3c42f1d6c4f1812588b23bcbd1411727dfe0d2d48c5cc6f1164784922",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [
+      "p1",
+      "p2"
+    ],
+    "candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1"
+          ],
+          "reason": "exact_candidate_approved",
+          "state": "applied"
+        },
+        {
+          "id": "component-2",
+          "patch_ids": [
+            "p2"
+          ],
+          "reason": "exact_candidate_approved",
+          "state": "applied"
+        }
+      ],
+      "dependency_sha256": "1724da5c6ef1368cd145d068a2e3741eb2524545d352663f2daac16319555ce2",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "9d68a8994a600611702fc88fd57a6dcfdc719d208a9a709f733da81a101c7ac0"
+      ],
+      "patch_audit_sha256": "de8a428a1fcd43474fae20a4236ad7d351101aec55e242646f89c972e9d0441d",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "9d68a8994a600611702fc88fd57a6dcfdc719d208a9a709f733da81a101c7ac0",
+          "next_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+          "next_selected_ids": [
+            "p1",
+            "p2"
+          ],
+          "released": true,
+          "reviewed_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+          "reviewed_ids": [
+            "p1",
+            "p2"
+          ]
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [
+      {
+        "audit_sha256": "de8a428a1fcd43474fae20a4236ad7d351101aec55e242646f89c972e9d0441d",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E3",
+          "E4"
+        ],
+        "pointer": "/preexisting_findings/0",
+        "state": "resolution_not_adjudicated"
+      }
+    ],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+    "output_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+    "policy": "selective",
+    "proposal_sha256": "ec2d45e5812fd76f4c1678956ce24224bbd0b2d45968c3278ab505371253254f",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [
+      "p1",
+      "p2"
+    ],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "af1a9b6bd10155bb218e67c64f6f76d069a13d3646534aa6efa62e9be80483f0",
+    "status": "applied"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.",
+      "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd"
+    },
+    {
+      "id": "E2",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.",
+      "sha256": "b7ce86ef7dc97c03cdddf94c25d74784d772f20d79950bb9d05e0ce38253522f"
+    },
+    {
+      "id": "E3",
+      "text": "The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.",
+      "sha256": "2195991ab987d4a33cd0148548e62f075ba28bad197c9e90662a1b20bb864af6"
+    },
+    {
+      "id": "E4",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts.",
+      "sha256": "3368116d4d9bf54a7a66955df872cdf8de7dbb2998b2361497350763d8cdcad6"
+    }
+  ],
+  "supplied_issue_assertions": [
+    {
+      "id": "a1",
+      "kind": "arithmetic",
+      "review_status": "reported_unresolved",
+      "output_span": {
+        "start_byte": 111,
+        "end_byte": 159,
+        "text": "참석자는 8명과 5명으로 총 14명이다.",
+        "sha256": "d8f0adb0073b23cf7da9bd929736e896f9fa505facd23c0b6320f3045ad995c9"
+      },
+      "evidence_span": {
+        "evidence_id": "E3",
+        "start_byte": 0,
+        "end_byte": 134,
+        "text": "The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.",
+        "sha256": "2195991ab987d4a33cd0148548e62f075ba28bad197c9e90662a1b20bb864af6"
+      }
+    }
+  ],
+  "scope": "Already exposed authored synthetic regression; supplied issues are not gold and do not establish complete coverage.",
+  "displayed_annotation": "제안된 모든 패치가 로컬 출력에 반영되었습니다. 적용 2개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Candidate SHA-256: 83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8. Receipt SHA-256: 7a5bb8ade2c3cfcb37a1b659d20fdfb7fde37e5bfc6aa676e037de69855d706f.\n\n[\"a1\"] 산술\n출력 인용: \"참석자는 8명과 5명으로 총 14명이다.\"\n근거 인용: \"The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다."
+}

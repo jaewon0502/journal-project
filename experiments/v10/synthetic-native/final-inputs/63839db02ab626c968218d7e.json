@@ -1,0 +1,31 @@
+{
+  "packet_id": "63839db02ab626c968218d7e",
+  "source": "The pilot reduced processing time by 7%.",
+  "candidate": "The pilot reduced processing time by 7%.",
+  "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "proposal_sha256": "339b7dd50ec4c34c78dac7aaa7222b477a5e8ea97d42f024d5e9d50e0f36738a",
+  "candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "selected_ids": [],
+  "patches": [],
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The available report excerpt gives final processing time as 93 seconds but omits the baseline."
+    }
+  ],
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "target_question": "Can the 7% reduction be verified from the supplied report?",
+  "local_artifact_ledger": {
+    "scope": "this local candidate only; no external article/publication was changed",
+    "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "applied_to_local_candidate_ids": [],
+    "external_publication_changed": false,
+    "freeform_explanation_attached": true,
+    "explanation_suppressed_reason": null,
+    "changes": []
+  },
+  "separate_explanation": "No. The supplied report excerpt gives a final processing time of 93 seconds but no baseline, so the 7% reduction cannot be verified. A 100-second baseline would yield a 7% reduction, but that baseline is not supplied. No replacement patches are proposed; the original sentence remains unchanged because the evidence does not establish a correction. The baseline and claimed reduction remain unresolved.",
+  "delivery_contract": "Final machine delivery status will report release/hold from your exact-hash verdict. Grounded explanation is either exactly this string or absent; no publication is performed."
+}

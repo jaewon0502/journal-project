@@ -1,0 +1,649 @@
+{
+  "schema_version": "v12-evaluation-extension-provenance-audit-1",
+  "created_at": "2026-10-02T01:34:05.230881+00:00",
+  "scope": "Locked evaluation only; existing four v2 writer outputs, two frozen packets and all corresponding source-first curator, article-comparison and prewriter counteraudit records. No web, new writer output, model-method revision, or fixed-score change.",
+  "role": "Post hoc provenance countercheck of existing blind reviewers proposed extensions; not a new independent blind review.",
+  "decision_rule": "Accept only supported consequential natural-article discrepancy absent from both frozen reference (including bundled/provenance records) and prewriter task annotations. Excluded-listed and new atom labels do not qualify.",
+  "counts": {
+    "cases": 2,
+    "writer_outputs": 4,
+    "writer_finding_items": 22,
+    "formal_reviewer_unlisted_entries": 6,
+    "unique_formal_unlisted_propositions": 2,
+    "screening_proposition_rows": 15,
+    "accepted_extensions": 0,
+    "unresolved_novelty_candidates": 0,
+    "accepted_by_condition": {
+      "A": 0,
+      "B": 0
+    },
+    "accepted_overlap": 0,
+    "accepted_union": 0,
+    "dedicated_inaccuracy_not_standalone_but_preannotated": 1,
+    "listed_materiality_disputes_retained": 4
+  },
+  "additional_controls": [
+    {
+      "kind": "third_audit_residual_context",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Purpose of conditional parental-leave extension",
+      "source_paragraph": "KE-P1-015",
+      "article_paragraph": "KE-A-004",
+      "evidence_status": "supported source rationale; article omission observable",
+      "materiality": "not established as necessary to overview; writer Q answers acknowledge it",
+      "provenance": "Prewriter independent inventory I13 already notes rationale absence. Third-audit residual label is not a writer-discovered unlisted defect.",
+      "extension_decision": "reject"
+    },
+    {
+      "kind": "remaining_frozen_omissions",
+      "case_id": "EN-EVAL-01",
+      "reference_ids": [
+        "R07",
+        "R24"
+      ],
+      "reason": "Observed household expectations and relative UK impact are prelisted; mentions in writer question answers do not create new extension atoms or automatically establish patched-article coverage."
+    },
+    {
+      "kind": "new_writer_induced_harm",
+      "count_in_accepted_article_discoveries": 0,
+      "reason": "Method-output defects are a separate provenance class. None accepted here; all four third audits report no supported new candidate harm. No source absence was converted into an article-error finding."
+    },
+    {
+      "kind": "post_hoc_new_labels",
+      "reason": "The reviewer unlisted labels and this audit are post hoc labels of naturally occurring content. They neither make the underlying content artificial nor establish novelty. No hidden perturbation belongs to these real-article counts."
+    }
+  ],
+  "sensitivity": {
+    "accepted_union": [],
+    "comparison_performed": false,
+    "reason": "No accepted extension union exists; extension sensitivity is not applicable. Original-reference scores and denominators remain unchanged. Zero is a verified count in this bounded audit, not an unknown-error recall rate.",
+    "frozen_counts": {
+      "KO-EVAL-01": {
+        "atoms": 21,
+        "eligible_required": 14,
+        "eligible_omission": 4,
+        "excluded_required": 7,
+        "unknown": 4
+      },
+      "EN-EVAL-01": {
+        "atoms": 25,
+        "eligible_required": 17,
+        "eligible_omission": 4,
+        "excluded_required": 8,
+        "unknown": 1
+      }
+    }
+  },
+  "blockers": [],
+  "limitations": [
+    "Internal same-family review cannot exclude shared blind spots.",
+    "Historical frozen packets only; Korean appendix relies on frozen visual transcription, English summary does not verify every broader report claim.",
+    "Zero means no additional defects verified within the audited sample under the preregistered novelty rule; it does not imply exhaustive truth or no remaining article defects."
+  ],
+  "candidate_screen": [
+    {
+      "id": "E01",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Old spousal-leave deadline governs claiming rather than completed use.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F1"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F3"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": true,
+      "frozen_reference_ids": [
+        "R12"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material: action governed by deadline changes rights interpretation",
+      "provenance_class": "prewriter_annotated_correction_without_standalone_atom",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Explicitly annotated by curator S12, independent inventory I5 and counteraudit S12; frozen R12 preserves the distinction in scoring scope and nested provenance. Lack of a dedicated error atom does not satisfy absence from reference and annotations."
+    },
+    {
+      "id": "E02",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Leave allowance is calculated per child.",
+      "writer_occurrences": [
+        {
+          "condition": "B",
+          "finding_id": "F1"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": true,
+      "frozen_reference_ids": [
+        "R09"
+      ],
+      "evidence_status": "supported",
+      "materiality": "useful scope precision; necessity disputed by third audit",
+      "provenance_class": "listed_scope_component",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Already encoded in curator S09, source-first S09, independent inventory I2 and frozen R09. Isolating the component after writing is post hoc atomization, not discovery absent from annotations."
+    },
+    {
+      "id": "E03",
+      "case_id": "KO-EVAL-01",
+      "proposition": "SME workers receive longer government support for spousal leave.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F2"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F4"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R21"
+      ],
+      "evidence_status": "supported",
+      "materiality": "unknown requiredness: meaningful financial scope; frozen counterchallenge unresolved",
+      "provenance_class": "excluded_but_listed",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Supported source fact and baseline absence were recorded before writing. Exclusion from eligible denominators is not absence from frozen reference. Retain unresolved materiality and original scores."
+    },
+    {
+      "id": "E04",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Extended parental leave requires supporting documents to employer.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F3"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F2"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R11"
+      ],
+      "evidence_status": "supported",
+      "materiality": "unknown requiredness: accurate procedural step, possibly optional in overview",
+      "provenance_class": "excluded_but_listed",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Supported source fact and baseline absence were recorded before writing. Exclusion from eligible denominators is not absence from frozen reference. Retain unresolved materiality and original scores."
+    },
+    {
+      "id": "E05",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Minimum childcare reduced-hours period becomes shorter.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F4"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F6"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R20"
+      ],
+      "evidence_status": "supported",
+      "materiality": "unknown requiredness: practical access change; frozen counterchallenge unresolved",
+      "provenance_class": "excluded_but_listed",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Supported source fact and baseline absence were recorded before writing. Exclusion from eligible denominators is not absence from frozen reference. Retain unresolved materiality and original scores."
+    },
+    {
+      "id": "E06",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Employer confidentiality duty accompanies infertility leave.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F7"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F9"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R07"
+      ],
+      "evidence_status": "supported",
+      "materiality": "unknown requiredness: privacy protection; frozen counterchallenge unresolved",
+      "provenance_class": "excluded_but_listed",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Supported source fact and baseline absence were recorded before writing. Exclusion from eligible denominators is not absence from frozen reference. Retain unresolved materiality and original scores."
+    },
+    {
+      "id": "E07",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Physician-diagnosed high-risk pregnancy exception applies throughout pregnancy.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F5"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F7"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R14"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Ordinary unprimed finding of a prewriter frozen-reference omission; not a previously unlisted extension."
+    },
+    {
+      "id": "E08",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Childcare reduced hours count toward annual leave.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F6"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F8"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R18"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Ordinary unprimed finding of a prewriter frozen-reference omission; not a previously unlisted extension."
+    },
+    {
+      "id": "E09",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Pregnancy reduced hours count toward annual leave.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F6"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F8"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R19"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Ordinary unprimed finding of a prewriter frozen-reference omission; not a previously unlisted extension."
+    },
+    {
+      "id": "E10",
+      "case_id": "KO-EVAL-01",
+      "proposition": "Childcare reduced-hours allowance has a one-year base and three-year maximum.",
+      "writer_occurrences": [
+        {
+          "condition": "B",
+          "finding_id": "F5"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R13"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Ordinary unprimed finding of a prewriter frozen-reference omission; not a previously unlisted extension."
+    },
+    {
+      "id": "E11",
+      "case_id": "EN-EVAL-01",
+      "proposition": "Add explicit disinflation rationale to the lead.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F1"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F1"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R04",
+        "R11",
+        "R14"
+      ],
+      "evidence_status": "supported",
+      "materiality": "no new material omission established: article later attributes cut to easing inflation",
+      "provenance_class": "listed_optional_or_already_covered_context",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "R04, R11 and preserved Bailey rationale R14 already cover this issue; prewriter inventory I02 explicitly considered the framing. Supported source wording does not make repetition in lead a new defect."
+    },
+    {
+      "id": "E12",
+      "case_id": "EN-EVAL-01",
+      "proposition": "Policy remains restrictive following the cut and depends on inflation risks.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F2"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F1"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R03"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Restrictive stance and continuation condition are already in frozen R03. B adds the stance without the full continuation condition; fixed coverage judgments remain unchanged."
+    },
+    {
+      "id": "E13",
+      "case_id": "EN-EVAL-01",
+      "proposition": "Supply/persistence and demand-weakness scenarios are illustrative alternatives.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F3"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F3"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R09"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material under frozen scope",
+      "provenance_class": "frozen_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Already an eligible omission under R09; scenario subcomponents are not new reference extensions."
+    },
+    {
+      "id": "E14",
+      "case_id": "EN-EVAL-01",
+      "proposition": "Future monetary policy has no predetermined path.",
+      "writer_occurrences": [
+        {
+          "condition": "A",
+          "finding_id": "F3"
+        },
+        {
+          "condition": "B",
+          "finding_id": "F3"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R03"
+      ],
+      "evidence_status": "supported",
+      "materiality": "material but already bundled in frozen R03",
+      "provenance_class": "listed_component_of_eligible_omission",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Curator S009 and frozen R03 encode this qualification. Separate post hoc labeling does not create a previously unlisted atom or alter denominator."
+    },
+    {
+      "id": "E15",
+      "case_id": "EN-EVAL-01",
+      "proposition": "Observed CPI declined between February and March.",
+      "writer_occurrences": [
+        {
+          "condition": "B",
+          "finding_id": "F2"
+        }
+      ],
+      "formal_reviewer_unlisted_candidate": false,
+      "frozen_reference_ids": [
+        "R06"
+      ],
+      "evidence_status": "supported",
+      "materiality": "optional factual comparison under frozen scope",
+      "provenance_class": "listed_optional_context",
+      "extension_decision": "reject",
+      "previously_unlisted": false,
+      "reason": "Source-first S006, curator S006, counteraudit inventory I08 and frozen R06 already list the comparison; no new material error established by omission of exact observations."
+    }
+  ],
+  "provenance_summary": {
+    "E01": [
+      "Curator article comparison S12 explicitly distinguishes old claim and new use.",
+      "Independent counteraudit I5 explicitly identifies the article mismatch.",
+      "Counteraudit comparison S12 calls it a correction.",
+      "Frozen R12 scoring scope and nested provenance preserve the distinction."
+    ],
+    "E02": [
+      "Source-first and article-comparison S09 include per-child scope.",
+      "Independent inventory I2 and frozen R09 include the same scope."
+    ],
+    "file_inventory": [
+      {
+        "artifact": "protocol/PREREGISTRATION.md",
+        "sha256": "8902091a04d623d06a41dca951be725e00a0574fa1ce941933d9ea30970ca71a"
+      },
+      {
+        "artifact": "results/review-scoreboard.json",
+        "sha256": "0ba322b09160b5b7cad9e96b29092fdd9c73701af2261d6a291b18ab11821b75"
+      },
+      {
+        "artifact": "candidates-v2/01a93f2bbfdf5011d82094e3.json",
+        "sha256": "84edfb331710e2031e7318f137ef86a96a10869d683ce8787519394f2ce1039c"
+      },
+      {
+        "artifact": "candidates-v2/1ffe0b658d220e5ffc0073af.json",
+        "sha256": "fd81b31689d98f02556d203be7fdb35508ba1d231d87027a70969bd20e47ba4d"
+      },
+      {
+        "artifact": "candidates-v2/4fc1204e8feb6b0ed2b488eb.json",
+        "sha256": "6066dc6b9e7f10dc5f7a57e9fb89453f2a5f5a2278469eac5216458fd4af873c"
+      },
+      {
+        "artifact": "candidates-v2/8e610b71dcbe8ed3092dc4c2.json",
+        "sha256": "645ca2fbe2b73c85e37360e8b7d9948e8515219bf18c7831ee3f8459abea8dcf"
+      },
+      {
+        "artifact": "counteraudit/en/EN-EVAL-01.independent-inventory.json",
+        "sha256": "3ebc98ed629ac36bad08089daad235027cf47accf130a2d78bebf3aa36259cc9"
+      },
+      {
+        "artifact": "counteraudit/en/EN-EVAL-01.raw-counteraudit.json",
+        "sha256": "917df2953cd0465a490373e2de5e6f93415a65e94611f9de100b8ec16abe7d8e"
+      },
+      {
+        "artifact": "counteraudit/ko/KO-EVAL-01.independent-inventory.json",
+        "sha256": "652744e1612729d2b5cbc2fc0a9787ac517dfab8b260cacc0decbf5d7232a2fc"
+      },
+      {
+        "artifact": "counteraudit/ko/KO-EVAL-01.raw-counteraudit.json",
+        "sha256": "bb04768999bb1df5b80bc2ce01bdd6e82b664ba73cd312a855eff014369db3fc"
+      },
+      {
+        "artifact": "frozen-reference/EN-EVAL-01.frozen-reference.json",
+        "sha256": "f9ef192753e59f109baf28592e2d8eaba082265d79c9bc8c884b9801cefca662"
+      },
+      {
+        "artifact": "frozen-reference/KO-EVAL-01.frozen-reference.json",
+        "sha256": "6458cde7d06c554299b05dfa94649d1a84d7b1b5a0c2b4a41273e1c9e82c7098"
+      },
+      {
+        "artifact": "reference-inputs/EN-EVAL-01.article.json",
+        "sha256": "6db6c4801e42373e89343bbdf484e195a6b5cb20ad17bebb14d36bf37d8bf890"
+      },
+      {
+        "artifact": "reference-inputs/EN-EVAL-01.primary.json",
+        "sha256": "9e560187eff7c9b2c61aa5df8e22e703f1da5de6139642e36c4eb2e56ac59932"
+      },
+      {
+        "artifact": "reference-inputs/KO-EVAL-01.article.json",
+        "sha256": "186366ae28573315d190351df165adfde52f790f4589843f9af126a2f2f46118"
+      },
+      {
+        "artifact": "reference-inputs/KO-EVAL-01.primary.json",
+        "sha256": "41247029c4ea3f4076f82bc9f2badb152cdf306a741b2c75efcfb4b5f860df36"
+      },
+      {
+        "artifact": "references/en/EN-EVAL-01.reference.json",
+        "sha256": "91d0deddbc0fe7028d8f64c1a619ce1a12edcec60e2ceeff95e7a10389185267"
+      },
+      {
+        "artifact": "references/en/source-first-EN-EVAL-01.json",
+        "sha256": "67dfed4d75a0a995262f1b0ea1f52efe45dffd5353561603562c1a2b95732965"
+      },
+      {
+        "artifact": "references/ko/KO-EVAL-01.reference.json",
+        "sha256": "1e625a814fcf76175ee6b3e212cc330d732d2dd718536fec9bfe223fccb1fdd6"
+      },
+      {
+        "artifact": "references/ko/source-first-KO-EVAL-01.json",
+        "sha256": "ed8c88b57db779bec345acedbbe8245ab22848d5afc28740e139ae6969e2f167"
+      },
+      {
+        "artifact": "review-map-v2-locked_evaluation.json",
+        "sha256": "588dc15ec296bc95e6bb53d31dc7628a65472ad04ded05e0fe2aad2345ec2f9c"
+      },
+      {
+        "artifact": "reviewer-inputs-v2/01a93f2bbfdf5011d82094e3.json",
+        "sha256": "e12b6083216bcf0bb31b2f8e51b9c2d53db39fee762e95b702ece2152002d61c"
+      },
+      {
+        "artifact": "reviewer-inputs-v2/1ffe0b658d220e5ffc0073af.json",
+        "sha256": "2765f1e1fa4ea7c17ada97eba5f87a594fe23f00deaa6c4205b21151b8679732"
+      },
+      {
+        "artifact": "reviewer-inputs-v2/4fc1204e8feb6b0ed2b488eb.json",
+        "sha256": "b2cb0828d679a4d784689aa44ab21016f0dd88a8b38f107b616774efb46de1cb"
+      },
+      {
+        "artifact": "reviewer-inputs-v2/8e610b71dcbe8ed3092dc4c2.json",
+        "sha256": "12c7afa0ea938045cca533da9f8a1deee42dbd14f4c400746e7f3370f4bce0e3"
+      },
+      {
+        "artifact": "reviewer-results-v2/A__01a93f2bbfdf5011d82094e3.json",
+        "sha256": "16de027a06856203ccec4f0050d2176cb91c9203544b801670c7cbc2e4c759f6"
+      },
+      {
+        "artifact": "reviewer-results-v2/A__1ffe0b658d220e5ffc0073af.json",
+        "sha256": "d68957bc717bb75546dbf6dfb48d5920bb0b6af84f847f371180dc36952479bf"
+      },
+      {
+        "artifact": "reviewer-results-v2/A__4fc1204e8feb6b0ed2b488eb.json",
+        "sha256": "4ffc7560e66dbe06e5254c4c435ca2b148d6a3034d35aea697633db8b62a94e4"
+      },
+      {
+        "artifact": "reviewer-results-v2/A__8e610b71dcbe8ed3092dc4c2.json",
+        "sha256": "d992b65bf7970aca1a966221ee5dcfd373f36a7f50ef274b898d398a3daf2d7c"
+      },
+      {
+        "artifact": "reviewer-results-v2/B__01a93f2bbfdf5011d82094e3.json",
+        "sha256": "2b551db1a48d943fdca8191a5051399474b73b5d7f505ac8452f69fea347c538"
+      },
+      {
+        "artifact": "reviewer-results-v2/B__1ffe0b658d220e5ffc0073af.json",
+        "sha256": "fbbef3257c172db7f1dbba587c20e7321dade8d00bd3d990eb75e57fdb9841bb"
+      },
+      {
+        "artifact": "reviewer-results-v2/B__4fc1204e8feb6b0ed2b488eb.json",
+        "sha256": "2e6de00470b5d9756bc6e92a6d20604a66b3d42d323cf045b80cb8380902a6c2"
+      },
+      {
+        "artifact": "reviewer-results-v2/B__8e610b71dcbe8ed3092dc4c2.json",
+        "sha256": "23177741a74dbfc9c2f0a3aa177d0db9531f8e4874267c15d85b4039593639bd"
+      },
+      {
+        "artifact": "third-results-v2/01a93f2bbfdf5011d82094e3.audit.json",
+        "sha256": "846e191277da06f25cbc0ab61165a10f6387b6a30365cce7436043b452801e1f"
+      },
+      {
+        "artifact": "third-results-v2/01a93f2bbfdf5011d82094e3.source-first.json",
+        "sha256": "81cacacfbd25e8b2ca45b1f6a2ccb1727919a40e47919280edd4773815288112"
+      },
+      {
+        "artifact": "third-results-v2/1ffe0b658d220e5ffc0073af.audit.json",
+        "sha256": "3a7c7c6d721c0034a7faa2e5602bad65cbd2782772f466c76dd091ab74935c59"
+      },
+      {
+        "artifact": "third-results-v2/1ffe0b658d220e5ffc0073af.source-first.json",
+        "sha256": "bea41163c3e23ede8eda394cde1408286c8e3365c01853593b3710ca7f4cd04d"
+      },
+      {
+        "artifact": "third-results-v2/4fc1204e8feb6b0ed2b488eb.audit.json",
+        "sha256": "ddc8aadf621ef59ebf21b897bef0dbeaa788f1d21e3757bfe0e4df8c973a4c4b"
+      },
+      {
+        "artifact": "third-results-v2/4fc1204e8feb6b0ed2b488eb.source-first.json",
+        "sha256": "b9c273acee6a1c65f10b9595dc882fa3b01aec3080db08e0e6e286b73c81dbb1"
+      },
+      {
+        "artifact": "third-results-v2/8e610b71dcbe8ed3092dc4c2.audit.json",
+        "sha256": "f18a329b6d16243013e9e9126d3b1ce5d6affc18ad9aeb2ef01d819b5bf27c18"
+      },
+      {
+        "artifact": "third-results-v2/8e610b71dcbe8ed3092dc4c2.source-first.json",
+        "sha256": "796e3a0d12a93f1dd0a897722dcb58ec6d0efa1cf052b9ae25b29adc5e2c25e4"
+      },
+      {
+        "artifact": "writer-map-v2.json",
+        "sha256": "94b51db122bd35e7db4859b09a3554fedf60de0f49c722fa199b9ce4042d3835"
+      },
+      {
+        "artifact": "writer-results-v2/0cb0917c57864cfa4be1121e.json",
+        "sha256": "fcfba0405aca5b1f965414d11597a74ea0c90d6e4217639ae3e5d43cdbfe4184"
+      },
+      {
+        "artifact": "writer-results-v2/21bae782c8af373f772865fa.json",
+        "sha256": "d53794b6fb033e921c3cd9e1b3e59c6feccf9ac62f0ef5c7b74c95a607a76475"
+      },
+      {
+        "artifact": "writer-results-v2/c437a544c3c8c4ff39ae7f3d.json",
+        "sha256": "821c21db99ff28a12df42ad938dff716a5dbaf2298c0b8303ccbb3a386786d4b"
+      },
+      {
+        "artifact": "writer-results-v2/ec8450119a3653826b876bd1.json",
+        "sha256": "d6c570e60373857f2e8b517cc01780bebf8c97f1c25fda015f98032db41e6dd4"
+      }
+    ]
+  },
+  "private_evidence_artifact": "journal-v12-private/extensions/evaluation-audit.json"
+}

@@ -1,0 +1,59 @@
+--- receipt/receipt.py
++++ receipt-v1_1/receipt.py
+@@ -19,6 +19,14 @@
+ exec(compile(raw, str(V10), 'exec'), v10.__dict__)
+ engine = v10.engine
+ 
++# One byte contract shared by minting, replay, rendering and persistence.
++MAX_RECEIPT_BYTES = engine.MAX_BYTES
++
++def bounded_receipt_bytes(raw):
++    require(type(raw) is bytes and len(raw) <= MAX_RECEIPT_BYTES,
++            "receipt exceeds shared byte limit or is not bytes")
++    return raw
++
+ def canonical(value):
+     return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode()
+ 
+@@ -26,6 +34,8 @@
+ class Receipt:
+     """Immutable canonical bytes; callers cannot mutate a dict behind its address."""
+     raw: bytes
++    def __post_init__(self):
++        bounded_receipt_bytes(self.raw)
+     @property
+     def address(self): return digest(self.raw)
+ 
+@@ -84,6 +94,7 @@
+ 
+ def verify(receipt, *args, **kwargs):
+     require(type(receipt) is Receipt and type(receipt.raw) is bytes, 'invalid receipt type')
++    bounded_receipt_bytes(receipt.raw)
+     expected = build(*args, **kwargs)
+     require(receipt.raw == expected.raw, 'receipt differs from exact replay')
+     return True
+@@ -91,7 +102,7 @@
+ 
+ def _text(receipt, lang):
+     """Private fixed-template renderer; exported emit always replays before use."""
+-    r = engine.parse(receipt.raw)
++    r = engine.parse(bounded_receipt_bytes(receipt.raw))
+     require(lang in ('EN', 'KO'), 'unsupported language')
+     counts = (len(r['selected_ids']), len(r['rejected_ids']), len(r['held_ids']))
+     if lang == 'EN':
+@@ -168,11 +179,13 @@
+         fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=self.fd)
+         try:
+             s = os.fstat(fd)
+-            require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1 and s.st_size <= 4*1024*1024,
++            require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1 and s.st_size <= MAX_RECEIPT_BYTES,
+                     'unsafe store object')
+-            with os.fdopen(fd, 'rb', closefd=False) as f: return f.read()
++            with os.fdopen(fd, 'rb', closefd=False) as f:
++                return bounded_receipt_bytes(f.read(MAX_RECEIPT_BYTES + 1))
+         finally: os.close(fd)
+     def _exclusive(self, name, raw):
++        bounded_receipt_bytes(raw)
+         fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o400, dir_fd=self.fd)
+         try:
+             with os.fdopen(fd, 'wb', closefd=False) as f: f.write(raw); f.flush(); os.fsync(fd)

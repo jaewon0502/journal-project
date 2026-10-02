@@ -1,0 +1,14 @@
+Calibration raw paired agreement: {'actual_patch_state': 12, 'delivery_consistency': 11, 'original_statement_retention': 12, 'targeted_question_resolution': 11, 'source_sufficiency': 11, 'truth_status': 11, 'abstain': 11} denominator= 12
+Natural+synthetic initial agreement from disclosed projection: {'actual_patch_state': 9, 'delivery_consistency': 8, 'original_statement_retention': 7, 'targeted_question_resolution': 9, 'source_sufficiency': 8, 'truth_status': 9, 'abstain': 9} denominator= 9
+Final local states: {'local_released': 8, 'local_held': 1, 'released_edited': 3, 'released_unchanged': 5, 'applied_patch_count': 4}
+NOTE: natural full raw judgments not redistributed; these counts do not independently re-adjudicate their truth.
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.017s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK

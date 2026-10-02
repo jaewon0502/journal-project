@@ -1,0 +1,25 @@
+{
+  "frozen_at_utc": "2026-10-02T00:36:09.800177+00:00",
+  "detector_outputs_seen": false,
+  "detectors_launched": false,
+  "pretest_validation": "PENDING independent audit; frozen author expectations are not a substitute for validation",
+  "counts": {
+    "base_contexts": 6,
+    "candidate_items": 12,
+    "ko_base_contexts": 3,
+    "en_base_contexts": 3
+  },
+  "private_files": {
+    "authoring_criteria.json": "b8fd4dd53b02641ffd060abdbb6e5a665b288da4b04a8854c4099a904d931231",
+    "source_reference.json": "bbfe9d71946434c7a57c1eb1c112921181340af1eb885ce35e34e8f687f1808e",
+    "source_only.jsonl": "6baf5ca5e91c2ca62e60b1ddb41d6b2addc73c65fc905c874ead7ee21bba5b24",
+    "source_freeze.json": "8dfe65b7d028cb0175177b92f046ea86db36ffb7a3ad3258f9ac0be05dda7622",
+    "frozen_pairs.json": "43962075370d1951932d30f5ec25387cd1ab23c573b8aef63eaf7d8dd726e481",
+    "private_mapping.json": "44ba230241bc3f09bba97276fa32d21e5bb1cdd39acad1f53c5b2818c5eeb700"
+  },
+  "public_files": {
+    "detector_inputs.jsonl": "f169df05841759b50e3315d6ff414ba69c050ca2427a7f1dc4e026d39cf7e908",
+    "detector_instruction.txt": "456b6f82fd9d45ebc5ec2fb59586ee159ed409a06f3118ddf559b4c071f90803",
+    "README.md": "01af6ef9ae4511ceac9360ea6caa0ad42d37f719d2760a2709db80f1cba0b951"
+  }
+}

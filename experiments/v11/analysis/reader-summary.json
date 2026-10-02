@@ -1,0 +1,2126 @@
+{
+  "scope": "Recorded AI reader judgments only; no new adjudication. Authored key is preserved and is not gold.",
+  "underlying_scenarios": 10,
+  "case_dependency": "Ten language/state variants of one fictional library setting, not ten independent real-world events.",
+  "packets": 30,
+  "reader_judgments": 60,
+  "judgments_per_condition": 20,
+  "readers": [
+    "A",
+    "B"
+  ],
+  "questions": [
+    "applied_local",
+    "unchanged",
+    "allproposed_applied",
+    "verifiedcorrect",
+    "externalpublished",
+    "unresolvedmeaning"
+  ],
+  "key_sha256_unchanged": "62c458f138fd7faafea0aa5f2a29019df58045bd9ba488d42b41147616a20c6e",
+  "all_packet_and_annotation_hashes_match": true,
+  "same_common_input_hash_within_all_10_cases": true,
+  "conditions": {
+    "AUTHOR_PROPOSAL": {
+      "by_question": {
+        "applied_local": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "ambiguous_referent_or_stage": 2,
+            "omitted": 18
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "ambiguous_referent_or_stage": 1,
+                "omitted": 9
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "ambiguous_referent_or_stage": 1,
+                "omitted": 9
+              }
+            }
+          }
+        },
+        "unchanged": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "ambiguous_referent_or_stage": 2,
+            "omitted": 18
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "ambiguous_referent_or_stage": 1,
+                "omitted": 9
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "ambiguous_referent_or_stage": 1,
+                "omitted": 9
+              }
+            }
+          }
+        },
+        "allproposed_applied": {
+          "answers": {
+            "no": 10,
+            "not_applicable": 4,
+            "yes": 6
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "omitted": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            }
+          }
+        },
+        "verifiedcorrect": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 0,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_implicit": 1,
+            "omitted": 19
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_implicit": 1,
+                "omitted": 9
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            }
+          }
+        },
+        "externalpublished": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "omitted": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            }
+          }
+        },
+        "unresolvedmeaning": {
+          "answers": {
+            "no": 8,
+            "yes": 12
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_implicit": 4,
+            "omitted": 16
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_implicit": 2,
+                "omitted": 8
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_implicit": 2,
+                "omitted": 8
+              }
+            }
+          }
+        }
+      },
+      "unsupported_claim_items": 0,
+      "judgments_with_unsupported_claims": 0,
+      "judgments_with_meaning_details_absent": 20,
+      "annotation_ratings_all_questions": {
+        "accurate_implicit": 5,
+        "ambiguous_referent_or_stage": 4,
+        "omitted": 111
+      },
+      "length_by_language": {
+        "KO": {
+          "unit": "characters",
+          "n": 5,
+          "min": 30,
+          "max": 85,
+          "median": 85,
+          "mean": 74
+        },
+        "EN": {
+          "unit": "whitespace_words",
+          "n": 5,
+          "min": 13,
+          "max": 30,
+          "median": 30,
+          "mean": 26.6
+        }
+      }
+    },
+    "NATIVE_FINAL": {
+      "by_question": {
+        "applied_local": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            }
+          }
+        },
+        "unchanged": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 11,
+            "accurate_implicit": 9
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 5,
+                "accurate_implicit": 5
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 6,
+                "accurate_implicit": 4
+              }
+            }
+          }
+        },
+        "allproposed_applied": {
+          "answers": {
+            "no": 10,
+            "not_applicable": 4,
+            "yes": 6
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            }
+          }
+        },
+        "verifiedcorrect": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 0,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 4,
+            "accurate_implicit": 8,
+            "omitted": 8
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 2,
+                "accurate_implicit": 4,
+                "omitted": 4
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 2,
+                "accurate_implicit": 4,
+                "omitted": 4
+              }
+            }
+          }
+        },
+        "externalpublished": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 6,
+            "omitted": 14
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 3,
+                "omitted": 7
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 3,
+                "omitted": 7
+              }
+            }
+          }
+        },
+        "unresolvedmeaning": {
+          "answers": {
+            "no": 8,
+            "yes": 12
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 18,
+            "accurate_implicit": 2
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 9,
+                "accurate_implicit": 1
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 9,
+                "accurate_implicit": 1
+              }
+            }
+          }
+        }
+      },
+      "unsupported_claim_items": 0,
+      "judgments_with_unsupported_claims": 0,
+      "judgments_with_meaning_details_absent": 4,
+      "annotation_ratings_all_questions": {
+        "accurate_explicit": 79,
+        "accurate_implicit": 19,
+        "omitted": 22
+      },
+      "length_by_language": {
+        "KO": {
+          "unit": "characters",
+          "n": 5,
+          "min": 213,
+          "max": 307,
+          "median": 260,
+          "mean": 254.4
+        },
+        "EN": {
+          "unit": "whitespace_words",
+          "n": 5,
+          "min": 63,
+          "max": 92,
+          "median": 90,
+          "mean": 81
+        }
+      }
+    },
+    "RECEIPT_FINAL": {
+      "by_question": {
+        "applied_local": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            }
+          }
+        },
+        "unchanged": {
+          "answers": {
+            "no": 10,
+            "yes": 10
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 10,
+            "accurate_implicit": 10
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 5,
+                "accurate_implicit": 5
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "yes": 5
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 5,
+                "accurate_implicit": 5
+              }
+            }
+          }
+        },
+        "allproposed_applied": {
+          "answers": {
+            "no": 10,
+            "not_applicable": 4,
+            "yes": 6
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 19,
+            "accurate_implicit": 1
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 9,
+                "accurate_implicit": 1
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 5,
+                "not_applicable": 2,
+                "yes": 3
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            }
+          }
+        },
+        "verifiedcorrect": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 0,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 0,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 10
+              }
+            }
+          }
+        },
+        "externalpublished": {
+          "answers": {
+            "no": 20
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "accurate_explicit": 10,
+            "accurate_implicit": 10
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 5,
+                "accurate_implicit": 5
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 10
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "accurate_explicit": 5,
+                "accurate_implicit": 5
+              }
+            }
+          }
+        },
+        "unresolvedmeaning": {
+          "answers": {
+            "no": 8,
+            "yes": 12
+          },
+          "key_exact_matches": 20,
+          "denominator": 20,
+          "annotation_ratings": {
+            "omitted": 20
+          },
+          "by_reader": {
+            "A": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            },
+            "B": {
+              "answers": {
+                "no": 4,
+                "yes": 6
+              },
+              "key_exact_matches": 10,
+              "denominator": 10,
+              "annotation_ratings": {
+                "omitted": 10
+              }
+            }
+          }
+        }
+      },
+      "unsupported_claim_items": 0,
+      "judgments_with_unsupported_claims": 0,
+      "judgments_with_meaning_details_absent": 20,
+      "annotation_ratings_all_questions": {
+        "accurate_explicit": 79,
+        "accurate_implicit": 21,
+        "omitted": 20
+      },
+      "length_by_language": {
+        "KO": {
+          "unit": "characters",
+          "n": 5,
+          "min": 601,
+          "max": 618,
+          "median": 606,
+          "mean": 608
+        },
+        "EN": {
+          "unit": "whitespace_words",
+          "n": 5,
+          "min": 118,
+          "max": 124,
+          "median": 121,
+          "mean": 121.4
+        }
+      }
+    }
+  },
+  "key_mismatches": [
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "3b4bcc712c8871d7ae229d55",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "3b4bcc712c8871d7ae229d55",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "a8f79be0ed8f9c88e8818cec",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "a8f79be0ed8f9c88e8818cec",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "c64beb61a9bc9d7a8324a308",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "c64beb61a9bc9d7a8324a308",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "05469c52e94e37ea6a6ef0e6",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "05469c52e94e37ea6a6ef0e6",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "61506924a04f31fd3e026846",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "61506924a04f31fd3e026846",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "06c47bb534e6515b64921a14",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "06c47bb534e6515b64921a14",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "9a1fed21ee360b04e5912f0e",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "9a1fed21ee360b04e5912f0e",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "09d1f70e63f789b26f0605b4",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "09d1f70e63f789b26f0605b4",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "f8be2a8278352de6eb523d12",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "f8be2a8278352de6eb523d12",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "c348726119a50b9319f348ce",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "c348726119a50b9319f348ce",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "9af02c8beaf592052ad18f1a",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "9af02c8beaf592052ad18f1a",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "eabb6457f6560a58b8e52b5b",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "eabb6457f6560a58b8e52b5b",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "e668fe4c7456b6e78a6000b0",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "e668fe4c7456b6e78a6000b0",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "b994541b47b8c72de504782f",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "b994541b47b8c72de504782f",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "4290568c57766ef218453eef",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "4290568c57766ef218453eef",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "fbdff9fe88221a38821a0ebc",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "fbdff9fe88221a38821a0ebc",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "65cbbdd7297ba9895a8d95d7",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "65cbbdd7297ba9895a8d95d7",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "8ccdceec3ca3f5602b527fa9",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "8ccdceec3ca3f5602b527fa9",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "aec02212156395beb714af2f",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "B",
+      "packet_id": "aec02212156395beb714af2f",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "3a88ac8919fef00da225c753",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "3a88ac8919fef00da225c753",
+      "case_id": "d75d0e3fb2eb",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "7d59da63ac8f2a5f3842cdb2",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "7d59da63ac8f2a5f3842cdb2",
+      "case_id": "a7e87c69b904",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "becc1f1619224b2be57ff4e2",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "becc1f1619224b2be57ff4e2",
+      "case_id": "bd569abe2ca0",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "34bd0b54fe17ec23f02f99dd",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "34bd0b54fe17ec23f02f99dd",
+      "case_id": "53d89f874761",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "a17928dd31c73cc0801c11a9",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "a17928dd31c73cc0801c11a9",
+      "case_id": "2351c7060c84",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "9e96781524cb5d8bac43f5be",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "9e96781524cb5d8bac43f5be",
+      "case_id": "19b2afea4862",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "2a4ffeb27dc8789602c69741",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "2a4ffeb27dc8789602c69741",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "1d3d36d5efa73c6e7d73e21b",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "1d3d36d5efa73c6e7d73e21b",
+      "case_id": "8e039edfc1e3",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "e4c8d42f3040037734429949",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "e4c8d42f3040037734429949",
+      "case_id": "d6736be620d4",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "4d2e2101e4f6419e25497e76",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "4d2e2101e4f6419e25497e76",
+      "case_id": "240d01b3906c",
+      "question": "verifiedcorrect",
+      "authored_expected": "unknown",
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    }
+  ],
+  "reader_disagreements": [
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "packet_id": "9a1fed21ee360b04e5912f0e",
+      "case_id": "88b1c16a46ec",
+      "question": "verifiedcorrect",
+      "field": "annotation_checks",
+      "A": {
+        "rating": "accurate_implicit",
+        "short_anchor": "within the supplied review scope",
+        "reason": "Limits the no-change judgment to review scope rather than asserting full factual verification."
+      },
+      "B": {
+        "rating": "omitted",
+        "short_anchor": "I found no reason to change the wording within the supplied review scope.",
+        "reason": "A review judgment does not report this proposition about delivered output or publication."
+      }
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "packet_id": "c348726119a50b9319f348ce",
+      "case_id": "d75d0e3fb2eb",
+      "question": "unchanged",
+      "field": "annotation_checks",
+      "A": {
+        "rating": "accurate_implicit",
+        "short_anchor": "“금요일”에서 “토요일”로 바뀌었고",
+        "reason": "Actual replacement entails change."
+      },
+      "B": {
+        "rating": "accurate_explicit",
+        "short_anchor": "바뀌었고 나머지 문구는 유지되었습니다",
+        "reason": "States precise changes and retained rest."
+      }
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "packet_id": "2a4ffeb27dc8789602c69741",
+      "case_id": "88b1c16a46ec",
+      "question": "allproposed_applied",
+      "field": "annotation_checks",
+      "A": {
+        "rating": "accurate_implicit",
+        "short_anchor": "No change was requested",
+        "reason": "Communicates absence of requested proposed edits, supporting not_applicable."
+      },
+      "B": {
+        "rating": "accurate_explicit",
+        "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+        "reason": "Communicates all applied, none applied, or no requested changes as appropriate."
+      }
+    }
+  ],
+  "unsupported_claim_records": [],
+  "meaning_omission_records": [
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "3b4bcc712c8871d7ae229d55",
+      "case_id": "d75d0e3fb2eb",
+      "recorded_absent_details": [
+        "Both final replacements satisfy the identified unit and schedule checks."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "3b4bcc712c8871d7ae229d55",
+      "case_id": "d75d0e3fb2eb",
+      "recorded_absent_details": [
+        "The displayed output incorporates both replacements and satisfies the two identified checks."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "a8f79be0ed8f9c88e8818cec",
+      "case_id": "a7e87c69b904",
+      "recorded_absent_details": [
+        "The specific checked facts—3 percentage points and Friday—are not named."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "a8f79be0ed8f9c88e8818cec",
+      "case_id": "a7e87c69b904",
+      "recorded_absent_details": [
+        "The existing percentage-point unit and Friday schedule already satisfy E1 and E2; these specific reasons are absent."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "c64beb61a9bc9d7a8324a308",
+      "case_id": "bd569abe2ca0",
+      "recorded_absent_details": [
+        "Final output fixes the unit but retains Friday against the Saturday schedule."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "c64beb61a9bc9d7a8324a308",
+      "case_id": "bd569abe2ca0",
+      "recorded_absent_details": [
+        "The displayed output fixes the percentage-point unit but retains Friday despite the Saturday schedule."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "05469c52e94e37ea6a6ef0e6",
+      "case_id": "53d89f874761",
+      "recorded_absent_details": [
+        "Both proposals were rolled back; displayed output remains unchanged with incorrect unit and Friday."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "05469c52e94e37ea6a6ef0e6",
+      "case_id": "53d89f874761",
+      "recorded_absent_details": [
+        "The displayed text still says 3% rather than 3 percentage points and Friday rather than the scenario-stipulated Saturday."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "61506924a04f31fd3e026846",
+      "case_id": "2351c7060c84",
+      "recorded_absent_details": [
+        "Both patches were applied, but the untouched disjoint attendee counts 8 and 5 still total 14 incorrectly; annotation omits this identified remaining issue."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "61506924a04f31fd3e026846",
+      "case_id": "2351c7060c84",
+      "recorded_absent_details": [
+        "The output still gives 14 for disjoint counts 8 and 5; E3 establishes the remaining sum error (13 is correct)."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "06c47bb534e6515b64921a14",
+      "case_id": "19b2afea4862",
+      "recorded_absent_details": [
+        "Both proposed changes actually reached the output and both identified meaning issues are resolved; annotation gives only review topics."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "06c47bb534e6515b64921a14",
+      "case_id": "19b2afea4862",
+      "recorded_absent_details": [
+        "Both identified meaning issues are resolved in the displayed output under E1 and E2."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "9a1fed21ee360b04e5912f0e",
+      "case_id": "88b1c16a46ec",
+      "recorded_absent_details": [
+        "No explicit final-output/no-op state or absence of proposed patches and external publication is communicated."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "9a1fed21ee360b04e5912f0e",
+      "case_id": "88b1c16a46ec",
+      "recorded_absent_details": [
+        "The annotation does not identify the supported percentage-point unit and Friday schedule."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+      "case_id": "8e039edfc1e3",
+      "recorded_absent_details": [
+        "Final output fixes the unit but retains Friday against the Saturday schedule."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+      "case_id": "8e039edfc1e3",
+      "recorded_absent_details": [
+        "The displayed output fixes the percentage-point unit but retains Friday despite the Saturday schedule."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "09d1f70e63f789b26f0605b4",
+      "case_id": "d6736be620d4",
+      "recorded_absent_details": [
+        "Neither correction reached output: the 3% unit and Friday date both remain inconsistent with scenario facts."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "09d1f70e63f789b26f0605b4",
+      "case_id": "d6736be620d4",
+      "recorded_absent_details": [
+        "Neither replacement is in the displayed output; both 3% and Friday remain inconsistent with E1 and E2."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "A",
+      "packet_id": "f8be2a8278352de6eb523d12",
+      "case_id": "240d01b3906c",
+      "recorded_absent_details": [
+        "Both proposed patches were held; output is unchanged and still has both identified unit/day issues."
+      ]
+    },
+    {
+      "condition": "AUTHOR_PROPOSAL",
+      "reader": "B",
+      "packet_id": "f8be2a8278352de6eb523d12",
+      "case_id": "240d01b3906c",
+      "recorded_absent_details": [
+        "The displayed text still says 3% rather than 3 percentage points and Friday rather than the scenario-stipulated Saturday."
+      ]
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "b994541b47b8c72de504782f",
+      "case_id": "2351c7060c84",
+      "recorded_absent_details": [
+        "External publication did not occur, but annotation does not state that."
+      ]
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "4290568c57766ef218453eef",
+      "case_id": "19b2afea4862",
+      "recorded_absent_details": [
+        "Whole-article verification limitation from E4 is not stated."
+      ]
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "fbdff9fe88221a38821a0ebc",
+      "case_id": "88b1c16a46ec",
+      "recorded_absent_details": [
+        "The annotation does not communicate E4 whole-article verification limitation or absence of external publication."
+      ]
+    },
+    {
+      "condition": "NATIVE_FINAL",
+      "reader": "A",
+      "packet_id": "aec02212156395beb714af2f",
+      "case_id": "240d01b3906c",
+      "recorded_absent_details": [
+        "No explicit statement that external publication did not occur."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "3a88ac8919fef00da225c753",
+      "case_id": "d75d0e3fb2eb",
+      "recorded_absent_details": [
+        "Both identified scenario checks are resolved in final output: 3 percentage points and Saturday."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "3a88ac8919fef00da225c753",
+      "case_id": "d75d0e3fb2eb",
+      "recorded_absent_details": [
+        "Both displayed replacements satisfy E1 and E2, so neither identified meaning issue remains."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "7d59da63ac8f2a5f3842cdb2",
+      "case_id": "a7e87c69b904",
+      "recorded_absent_details": [
+        "The unchanged source already satisfies the identified difference-unit and Friday-schedule checks."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "7d59da63ac8f2a5f3842cdb2",
+      "case_id": "a7e87c69b904",
+      "recorded_absent_details": [
+        "E1 and E2 already agree with the source and displayed output; no identified issue remains."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "becc1f1619224b2be57ff4e2",
+      "case_id": "bd569abe2ca0",
+      "recorded_absent_details": [
+        "The final text retains Friday, conflicting with the stipulated Saturday schedule; the unit was corrected."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "becc1f1619224b2be57ff4e2",
+      "case_id": "bd569abe2ca0",
+      "recorded_absent_details": [
+        "The percentage-point unit is corrected, but Friday remains despite the stipulated Saturday schedule."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "34bd0b54fe17ec23f02f99dd",
+      "case_id": "53d89f874761",
+      "recorded_absent_details": [
+        "The displayed output still misstates the increase unit and meeting day under E1/E2."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "34bd0b54fe17ec23f02f99dd",
+      "case_id": "53d89f874761",
+      "recorded_absent_details": [
+        "The displayed text still says 3% rather than 3 percentage points and Friday rather than the scenario-stipulated Saturday."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "a17928dd31c73cc0801c11a9",
+      "case_id": "2351c7060c84",
+      "recorded_absent_details": [
+        "The unchanged attendee sentence incorrectly totals disjoint counts 8 and 5 as 14 rather than 13."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "a17928dd31c73cc0801c11a9",
+      "case_id": "2351c7060c84",
+      "recorded_absent_details": [
+        "The output still gives 14 for disjoint counts 8 and 5; E3 establishes the remaining sum error (13 is correct)."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "9e96781524cb5d8bac43f5be",
+      "case_id": "19b2afea4862",
+      "recorded_absent_details": [
+        "Both concrete unit/day issues are resolved within the supplied scenario; annotation does not communicate that semantic result."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "9e96781524cb5d8bac43f5be",
+      "case_id": "19b2afea4862",
+      "recorded_absent_details": [
+        "Both identified meaning issues are resolved in the displayed output under E1 and E2."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "2a4ffeb27dc8789602c69741",
+      "case_id": "88b1c16a46ec",
+      "recorded_absent_details": [
+        "The source already satisfies the unit and Friday schedule checks, with no identified remaining issue."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "2a4ffeb27dc8789602c69741",
+      "case_id": "88b1c16a46ec",
+      "recorded_absent_details": [
+        "E1 and E2 support the unchanged text, with no identified unresolved meaning issue."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "1d3d36d5efa73c6e7d73e21b",
+      "case_id": "8e039edfc1e3",
+      "recorded_absent_details": [
+        "The final text still says Friday despite the scenario schedule specifying Saturday."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "1d3d36d5efa73c6e7d73e21b",
+      "case_id": "8e039edfc1e3",
+      "recorded_absent_details": [
+        "The unit is corrected, but Friday remains in the displayed output despite E2 specifying Saturday."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "e4c8d42f3040037734429949",
+      "case_id": "d6736be620d4",
+      "recorded_absent_details": [
+        "Both concrete issues remain: 3% should be 3 percentage points and Friday conflicts with the Saturday schedule."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "e4c8d42f3040037734429949",
+      "case_id": "d6736be620d4",
+      "recorded_absent_details": [
+        "The unchanged displayed 3% and Friday conflict with E1 and E2; these are actual identified remaining issues, not merely unexamined claims."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "A",
+      "packet_id": "4d2e2101e4f6419e25497e76",
+      "case_id": "240d01b3906c",
+      "recorded_absent_details": [
+        "The displayed output retains both the incorrect 3% increase expression and Friday despite E1/E2."
+      ]
+    },
+    {
+      "condition": "RECEIPT_FINAL",
+      "reader": "B",
+      "packet_id": "4d2e2101e4f6419e25497e76",
+      "case_id": "240d01b3906c",
+      "recorded_absent_details": [
+        "The displayed text still says 3% rather than 3 percentage points and Friday rather than the scenario-stipulated Saturday."
+      ]
+    }
+  ],
+  "raw_response_provenance": [
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__3b4bcc712c8871d7ae229d55.json",
+      "sha256": "2392a42dcadc2cb4f6f44a712590d06f4579c5e5c73e9e8434cf6f50610bfdce"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__3b4bcc712c8871d7ae229d55.json",
+      "sha256": "d3f59ebac61779043eb1517623885d058248f414dac6574cf7ca31063fa8655e"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__c348726119a50b9319f348ce.json",
+      "sha256": "a293396bf95bb66f0fa82acb2dd951f7838ae94d1dc643a80e0662591c3cc64a"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__c348726119a50b9319f348ce.json",
+      "sha256": "03696b004c41b2e8726a800a04888b552d656b5d44b2a7352a4a2e549c2c0daa"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__3a88ac8919fef00da225c753.json",
+      "sha256": "bb5b437e164494fbd0e9f9e2aa07a0d0ffb22a40fad31163c937cd67cb48c55c"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__3a88ac8919fef00da225c753.json",
+      "sha256": "1a8dd00984b4acc2c927f134379ccc38f1522d04aa8ec501d87b8a5fc92209b7"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__a8f79be0ed8f9c88e8818cec.json",
+      "sha256": "70a37433c3eafae88183fe61db206078b21d81e2493af7dc59941aa53c7f8c53"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__a8f79be0ed8f9c88e8818cec.json",
+      "sha256": "47fa33dfb1d8613cf9cdd0077437d9f63078c4ec63c0d8b5c6ce6cf08b968a18"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__9af02c8beaf592052ad18f1a.json",
+      "sha256": "0e23b99812f426138b3ba7243cc4846eabf492c755ccc35a82bed84e3e54b393"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__9af02c8beaf592052ad18f1a.json",
+      "sha256": "c1f4d724a0b66d949b0f398f4968157875f517011ad15a17eb500dc7caeb7b45"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__7d59da63ac8f2a5f3842cdb2.json",
+      "sha256": "265a705907878284c621a3fd097f5c9711521e71232c6d9fb9e801175fe7f5f5"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__7d59da63ac8f2a5f3842cdb2.json",
+      "sha256": "5bc311fc4ade3d4a3bd9c6d743df6adb3eef59b8ff803101e1656a77db998ab9"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__c64beb61a9bc9d7a8324a308.json",
+      "sha256": "fc00bca13d7152addb512a16fce2840b51ab6dbbd7800153c4f7d490420f3e98"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__c64beb61a9bc9d7a8324a308.json",
+      "sha256": "dc6f21047b8299623044d514a19fb6242adb9de4180da95f8d6dfa166fa27a17"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__eabb6457f6560a58b8e52b5b.json",
+      "sha256": "eb91ec938b226d5664a33198d2222156b475b423e461f2982f00a34589360b4c"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__eabb6457f6560a58b8e52b5b.json",
+      "sha256": "cb5d6fa5fce088744d23bdf56aca38f2b1543f872bae573a4f52d5c502ad5d13"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__becc1f1619224b2be57ff4e2.json",
+      "sha256": "0a9fac02977f6e8c69cec2d443e1c30611079a1794ba0f92afa4870bc30b484f"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__becc1f1619224b2be57ff4e2.json",
+      "sha256": "e554223204d8b73a2dcce8d02538e592f275c2024b045ef4c484a5e19c0d6212"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__05469c52e94e37ea6a6ef0e6.json",
+      "sha256": "4686d0653e1bd1e5a05fb6969a3d6e15808deec057db888856797821d6e60f36"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__05469c52e94e37ea6a6ef0e6.json",
+      "sha256": "fb190d8131a4b6f59b92023b5802d96d07652d34c80a7e15d37053a639553f8b"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__e668fe4c7456b6e78a6000b0.json",
+      "sha256": "90037e665085603248a7cc4b4c427254b9f7590483050821fe361fbcfa215618"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__e668fe4c7456b6e78a6000b0.json",
+      "sha256": "6e0e73f3927ffd7c0963f6f2b9a737834296e02a793e576fe46414c075b0fb0c"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__34bd0b54fe17ec23f02f99dd.json",
+      "sha256": "c365b2a7c4dce913af2696a160557d35ab7902c6c17c1d3f17e83c4dc1866f97"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__34bd0b54fe17ec23f02f99dd.json",
+      "sha256": "3725a07509c71d00458b56c0979f2463c86d3afdff11c01748a62ba154ff20fb"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__61506924a04f31fd3e026846.json",
+      "sha256": "92c325e06c377768ef20d1c87eaf407fa661630e5a6f1fe6a0fe953447bda80f"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__61506924a04f31fd3e026846.json",
+      "sha256": "33070f68f321bc0499cdae4ed631c81ac715d9beb8ff89a26a56a32fcc51afa0"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__b994541b47b8c72de504782f.json",
+      "sha256": "c064448995b14c31fa4f655d0403a2ccf760eb46d015e54539033825b82e64e4"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__b994541b47b8c72de504782f.json",
+      "sha256": "89ad7fe4b91aeeb83b4b80f3351292c86ad658a9a2ba8caaab05b6dc4d317661"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__a17928dd31c73cc0801c11a9.json",
+      "sha256": "83a2e2181034af18c92f7d8de89c1151d3746e244b6e65fd2050e6b196e48c2a"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__a17928dd31c73cc0801c11a9.json",
+      "sha256": "834243ed36fff1552e11ec6b0ff7ce6dc41c35c0a90eae371ed2e5247492a337"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__06c47bb534e6515b64921a14.json",
+      "sha256": "3390b27a2c5da4c924e07b455ec359ed76ba9956837292072a99db50aaba6aa7"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__06c47bb534e6515b64921a14.json",
+      "sha256": "877db6892734d1de4748f27a9dedf42fef57465ade297d2233d987e267531e7b"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__4290568c57766ef218453eef.json",
+      "sha256": "6398e15a81c1716cef8735c9927fb186263d71ab7f03de43fd23e766c6a84719"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__4290568c57766ef218453eef.json",
+      "sha256": "4fe4368a8570b660eaa185eb6eee954e55fb601986a24ff25e05144615a67980"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__9e96781524cb5d8bac43f5be.json",
+      "sha256": "2ae871523fa0347f82cdcfd401f130b13c4c98686d0b1e3b91c3abb568795500"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__9e96781524cb5d8bac43f5be.json",
+      "sha256": "110ab5d8b5270cf46fc85018c4678ec269951c087dc0102c094688e1793cc325"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__9a1fed21ee360b04e5912f0e.json",
+      "sha256": "f2254e895b40584c256ade731a3a80cbdac8a974a39690325c030d0c27fdbda1"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__9a1fed21ee360b04e5912f0e.json",
+      "sha256": "2d0d27bcbe01b3b5fa7d42b37246020ec29d52cc2a2bc5ecaa1ecf555dd867e1"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__fbdff9fe88221a38821a0ebc.json",
+      "sha256": "52756c95cfd227389593b02f78a2b9f66cb66cea1d28285080513fa0c21c1702"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__fbdff9fe88221a38821a0ebc.json",
+      "sha256": "029f66ab828896a14252380e48377884e06271329cffe487342ba81ef21a0625"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__2a4ffeb27dc8789602c69741.json",
+      "sha256": "fb08cd41a28ba537fbc6e69a768d238eb6e19af0449a7e006862f454389eb9a9"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__2a4ffeb27dc8789602c69741.json",
+      "sha256": "0c031949e3e45f2480376b3390af4b158d4b13de38fc454fe1b7fece7190806e"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__1609fcb5d2bd3bd3d45f46a2.json",
+      "sha256": "377e3a16e74c68e6c8896b5024e0b2018ec338405f9392bf453c41c957e0809b"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__1609fcb5d2bd3bd3d45f46a2.json",
+      "sha256": "941e02e33407b25dcb7b2f43501cc0574137d831fad8624997d9d51fa08ea279"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__65cbbdd7297ba9895a8d95d7.json",
+      "sha256": "590ad9bf0213e06bf45f6a91b164c1cc22c53c4df590c11208e6349f2699f36d"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__65cbbdd7297ba9895a8d95d7.json",
+      "sha256": "ffd69032851ceadf40af2203932edc6b735132b9e97315216c1ad601d7fd5b4e"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__1d3d36d5efa73c6e7d73e21b.json",
+      "sha256": "474ac642cb5a42a5e0b5a662821ff1a440005f9b20f88614cada36971988c9d8"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__1d3d36d5efa73c6e7d73e21b.json",
+      "sha256": "e07a0da138c5feeb70c8a1f048cd7146425b9d3e998f1d588bf6535a8d9c3473"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__09d1f70e63f789b26f0605b4.json",
+      "sha256": "9865d56f08ca8343cdca180bc6b5dec89ac3739802eb44bbe0281fee77479ab4"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__09d1f70e63f789b26f0605b4.json",
+      "sha256": "89ba23dff44d338bfe75ae5eda68ca1127048c22c019f785f451e0f7fdeb0ec8"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__8ccdceec3ca3f5602b527fa9.json",
+      "sha256": "93d83dc54cc1cbd3a29971792b1137169f63e58f76c6b81a61755ad8dd9d423f"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__8ccdceec3ca3f5602b527fa9.json",
+      "sha256": "63496125ebd66237f37d2d0833f84d4d605b62d2049ca1ecd7b06a549303a178"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__e4c8d42f3040037734429949.json",
+      "sha256": "1927c91aba2a9039d36cd3c5c06c64e7521d666cfa3eb7b58193cbfb365ac5cc"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__e4c8d42f3040037734429949.json",
+      "sha256": "e5682c858821390617ae71acf02936765477736276d78f8d91d1f7e842535450"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__f8be2a8278352de6eb523d12.json",
+      "sha256": "cc24f8cb6457c69bc95bace52538529b7a9d8b5184bb129c0530230c64849ba6"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__f8be2a8278352de6eb523d12.json",
+      "sha256": "ed8bdea6fd9fc74eb908daa51b431d53ba916c6eecbc7b4dd9ff072b8930c502"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__aec02212156395beb714af2f.json",
+      "sha256": "f4ae39e79a91ac15209a92d5320337775d2aad2c4b6d2ebe1c6bd1bac9a44770"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__aec02212156395beb714af2f.json",
+      "sha256": "1337d4023b65bae6fc57b60fdda49865ed9cd57a1483c116d8cb3e9e8bcd4645"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/A__4d2e2101e4f6419e25497e76.json",
+      "sha256": "5189b7650580a32576e53d376fa1372ec5a3450507c1af0a3b1c74644a020071"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/reader-results/B__4d2e2101e4f6419e25497e76.json",
+      "sha256": "b7bb8f964a0c3ba75ae7254d7af746142b7f476ee9fefb0717eb9e51bdb52efc"
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "visibility": "PRIVATE; withhold until independent validator commits own answers",
+  "provenance": "Provisional AI-authored expectations; not ground truth, classifications, or performance results",
+  "pairs": [
+    {
+      "private_base_id": "invented-ko-1",
+      "item_ids": [
+        "285cf1155fdc3469d7ee6681",
+        "696e705f4d8426a7a1e00fc3"
+      ],
+      "controlled_factor": "reader_question only",
+      "faithful_critical_statement_control": true
+    },
+    {
+      "private_base_id": "invented-ko-2",
+      "item_ids": [
+        "f09b014f3d4927e89ac2bb38",
+        "0ce5a7e0ec02731911b92d52"
+      ],
+      "controlled_factor": "reader_question only",
+      "faithful_critical_statement_control": false
+    },
+    {
+      "private_base_id": "invented-ko-3",
+      "item_ids": [
+        "0e0d2a253a6004ba748256e3",
+        "206a6e985b3915af8102500c"
+      ],
+      "controlled_factor": "candidate: remove only the material safety-training condition",
+      "faithful_critical_statement_control": false
+    }
+  ],
+  "items": [
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "justification": "후보는 원문과 같아 원문 의미를 보존하고 자료와 모순되지 않는다. 자료에만 있는 신청 대상은 새봄시에 등록된 비영리 동아리다. 이 사실은 현재의 사업 요지 질문에는 필요하지 않아 선택 맥락 누락만 해당한다. 참여 단체의 비판은 자료와 원문에 그대로 귀속되어 있어 정상 통제 사례다.",
+      "evidence": {
+        "source": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다. 신청 대상은 새봄시에 등록된 비영리 동아리다.",
+        "original_article": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+        "candidate": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+        "reader_question": "어떤 사업이 시작됐고 참여 단체들은 무엇을 비판했는가?"
+      }
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "justification": "후보는 원문과 같아 원문 의미를 보존하고 자료와 모순되지 않는다. 자료에만 있는 신청 대상은 새봄시에 등록된 비영리 동아리다. 이 사실은 독자 질문에 직접 답하는 필수 정보이므로 필수 답 누락이며, 제공 자료로 보완할 수 있다. 참여 단체의 비판은 자료와 원문에 그대로 귀속되어 있어 정상 통제 사례다.",
+      "evidence": {
+        "source": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다. 신청 대상은 새봄시에 등록된 비영리 동아리다.",
+        "original_article": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+        "candidate": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+        "reader_question": "이 사업의 신청 대상은 누구인가?"
+      }
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": true,
+        "decision": "accept"
+      },
+      "justification": "후보는 원문과 같아 원문 의미를 보존하고 자료와 모순되지 않는다. 자료에만 있는 녹음기 대여 기간은 대여일부터 12일이다. 이 사실은 현재의 사업 요지 질문에는 필요하지 않아 선택 맥락 누락만 해당한다.",
+      "evidence": {
+        "source": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다. 녹음기 대여 기간은 대여일부터 12일이다.",
+        "original_article": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+        "candidate": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+        "reader_question": "문화관이 시작한 사업은 무엇이며 그 목적은 무엇인가?"
+      }
+    },
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "justification": "후보는 원문과 같아 원문 의미를 보존하고 자료와 모순되지 않는다. 자료에만 있는 녹음기 대여 기간은 대여일부터 12일이다. 이 사실은 독자 질문에 직접 답하는 필수 정보이므로 필수 답 누락이며, 제공 자료로 보완할 수 있다.",
+      "evidence": {
+        "source": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다. 녹음기 대여 기간은 대여일부터 12일이다.",
+        "original_article": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+        "candidate": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+        "reader_question": "이 사업에서 녹음기를 며칠 동안 빌릴 수 있는가?"
+      }
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": false,
+        "original_meaning_loss": false,
+        "required_answer_missing": false,
+        "optional_context_absence": false,
+        "decision": "accept"
+      },
+      "justification": "후보는 자료 및 원문과 동일하며 회원 자격과 안전교육 이수 조건을 모두 전달한다. 독자 질문에도 완전히 답한다.",
+      "evidence": {
+        "source": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+        "original_article": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+        "candidate": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+        "reader_question": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?"
+      }
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "status": "provisional AI-authored expectation; not adjudicated and not a model result",
+      "expected": {
+        "source_meaning_error": true,
+        "original_meaning_loss": true,
+        "required_answer_missing": true,
+        "optional_context_absence": false,
+        "decision": "patch"
+      },
+      "justification": "안전교육 이수라는 사용의 필수 조건을 삭제해 모든 등록 회원이 사용할 수 있는 것으로 주장을 넓혔다. 원문 조건을 잃었고 독자 질문의 조건 부분에도 답하지 못한다. 자료로 조건을 복원할 수 있다.",
+      "evidence": {
+        "source": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+        "original_article": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+        "candidate": "별모래제작소는 등록 회원이 공용 절단기를 사용할 수 있다고 안내했다.",
+        "reader_question": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?"
+      }
+    }
+  ]
+}

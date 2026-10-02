@@ -1,0 +1,15 @@
+{
+  "packet_id": "0a8e720b2cf44b85355b6c54",
+  "language": "KO",
+  "source": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "6월 10일 최고 수위 8.2m가 기록됐다. 이 발췌문에는 6월 8일 수위나 그 이전 최고 수위가 없다."
+    }
+  ],
+  "target_question": "6월 10일 자료만으로 원문의 6월 8일 당시 기록 주장이 틀렸다고 확정할 수 있는가?",
+  "candidate": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "delivery": "6월 10일의 더 높은 기록만으로 6월 8일이 당시 기록이 아니었다고 판단할 수 없다.",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events."
+}

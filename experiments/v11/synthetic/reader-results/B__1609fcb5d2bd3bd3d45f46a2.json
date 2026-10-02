@@ -1,0 +1,74 @@
+{
+  "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Displayed output incorporates p1, changing the increase to percentage points.",
+      "anchor": "selected_ids: [p1]; actual_output: 3 percentage points / 3%포인트"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit differs from the source.",
+      "anchor": "p1: 3% → 3 percentage points / 3%포인트"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "p2 was rejected; the output retains Friday rather than Saturday.",
+      "anchor": "rejected_ids: [p2]; actual_output: Friday / 금요일"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "E2 stipulates Saturday but displayed output retains Friday. Rejection does not settle this discrepancy.",
+      "anchor": "E2: The fictional meeting schedule says Saturday."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "The review topic is named, but no application outcome is given."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No comparison between displayed output and source is made."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No disposition of the proposed patches is given."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Calling external verification a separate matter does not state whether article-wide correctness is established."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Calling publication a separate matter leaves actual publication status unstated."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "It states the arithmetic and schedule evidence but does not connect them to retained or corrected wording in the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The displayed output fixes the percentage-point unit but retains Friday despite the Saturday schedule."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

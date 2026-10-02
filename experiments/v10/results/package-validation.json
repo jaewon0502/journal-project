@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-10-01T23:02:42.638710+00:00",
+  "portable_temp_run_exit": 0,
+  "known_full_source_matches": [],
+  "scope": "Allowlist + exact full known source detection, not a universal copyright/security scanner. Natural raw source/candidate/inventory/judgments omitted; authored synthetic raw included.",
+  "files_scanned_at_validation_step": 162,
+  "count_scope": "Snapshot before this validation record, later audit closure and final package metadata were added; not final archive entry count."
+}

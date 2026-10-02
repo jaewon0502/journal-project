@@ -1,0 +1,98 @@
+{
+  "artifact_role": "author_expectations_not_human_gold",
+  "labels": {
+    "b7e2c9": {
+      "author_intent": "normal_noedit_attributed_criticism",
+      "patch_expectations": {},
+      "normal_noop": true,
+      "notes": "원문은 자료 범위와 자발 설문의 한계를 유지한다. 단체 비판은 명확하게 귀속되어 있으며 원인 단정으로 바뀌지 않는다."
+    },
+    "f4a8d1": {
+      "author_intent": "supported_corrections_unrelated_original_gap",
+      "patch_expectations": {
+        "P1": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        },
+        "P2": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        }
+      },
+      "background_issues": [
+        {
+          "anchor": "센터는 지난해 주말 이용객이 전년보다 늘었다고 밝힌 바 있다.",
+          "status": "unverified_in_supplied_sources_not_refuted",
+          "affects_patch_ids": [],
+          "reason": "과거 이용객 통계는 이번 모집 공간 수와 신청 마감일을 뒷받침하거나 제한하지 않는다. 두 수정은 이 문장을 확장하지 않는다."
+        }
+      ]
+    },
+    "c2d6a0": {
+      "author_intent": "mixed_supported_and_condition_removal",
+      "patch_expectations": {
+        "P1": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        },
+        "P2": {
+          "safety": "unsafe",
+          "depends_on": [],
+          "reason": "예정 개관은 기한 내 허가라는 명시적 조건에 달려 있다. 허가 미결정 문장을 남겨도 조건 삭제는 복원되지 않는다."
+        }
+      }
+    },
+    "a9f3b6": {
+      "author_intent": "cross_patch_referent_dependency",
+      "patch_expectations": {
+        "P1": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        },
+        "P2": {
+          "safety": "supported_in_combination_unsafe_isolated",
+          "depends_on": [
+            "P1"
+          ],
+          "reason": "P1과 함께 적용하면 이 기업들은 공개 동의 25곳이다. P2 단독 적용은 신청 40곳 전부의 실제 공개를 새로 주장하여 비동의 15곳은 공개하지 않았다는 명시적 자료에 어긋난다. 원문은 잘못된 대상 범위만 주장했고 P2는 실제 공개 사건을 덧붙인다."
+        }
+      },
+      "notes": "P1 단독은 이미 동의한 25곳에 재동의를 받지 않았다는 다음 문장과 양립한다. 두 앵커는 연속 문장이지만 겹치지 않는다."
+    },
+    "e6b1d4": {
+      "author_intent": "criticism_weakening_with_numeric_correction",
+      "patch_expectations": {
+        "P1": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        },
+        "P2": {
+          "safety": "unsafe",
+          "depends_on": [],
+          "reason": "발주 책임과 수업 혼란의 인과를 지적한 명시적 비판을 일반 절차 보완 제안으로 바꾸어 강도와 책임을 삭제한다. 비판의 사실 확정을 요구하는 것과 발언 내용을 정확히 귀속하는 것은 별개다."
+        }
+      }
+    },
+    "d0c7e5": {
+      "author_intent": "unresolved_material_condition",
+      "patch_expectations": {
+        "P1": {
+          "safety": "supported_warranted",
+          "depends_on": []
+        },
+        "P2": {
+          "safety": "unknown_support_unsafe_to_assert",
+          "depends_on": [],
+          "reason": "북쪽 값과 승인 정보가 없어 전 지점 조건 충족 여부를 알 수 없다. 두 지점 통과를 세 지점 충족과 확정 일정으로 확대한다. 북쪽이 초과했거나 승인이 거부됐다고 단정할 근거도 없다."
+        }
+      }
+    }
+  },
+  "limitations": [
+    "All six cases were newly authored as fictional fixtures; proposed patches are authored stimuli, not sampled model outputs.",
+    "A single author designed both source facts and expected safety relations; this does not provide independent ground truth or representative prevalence.",
+    "The scope, size and natural-language ambiguity of these short fixtures limit generalization; reviewers may disagree and cases must not be relabeled to improve reported results.",
+    "The cross-patch example intentionally tests a demonstrable antecedent dependency. It may be ambiguous whether an additive date clarification is necessary; that warrantedness judgment must remain open for independent review.",
+    "No grading, gate decisions, reviewer judgments or generated edited articles are supplied."
+  ]
+}

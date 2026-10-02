@@ -1,0 +1,76 @@
+{
+  "packet_id": "4290568c57766ef218453eef",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both replacements appear in the displayed local output.",
+      "anchor": "actual_output: 3 percentage points / Saturday"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit and day differ from the source.",
+      "anchor": "source: 3% / Friday; actual_output: 3 percentage points / Saturday"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both supplied patches are incorporated in the displayed output.",
+      "anchor": "actual_receipt.selected_ids: [p1, p2]; actual_output"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "Both identified issues agree with E1 and E2 after editing; no other issue is identified.",
+      "anchor": "E1; E2; actual_output: 3 percentage points / Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The displayed local output incorporates both proposed changes",
+      "reason": "Explicitly states actual output incorporation."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "“3%” becomes “3 percentage points,” and “Friday” becomes “Saturday.”",
+      "reason": "Specified replacements imply output differs from source."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Both patches were applied",
+      "reason": "Explicitly reports all proposed patches applied."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "",
+      "reason": "Annotation does not state whether entire-article factual correctness is established."
+    },
+    "externalpublished": {
+      "rating": "accurate_explicit",
+      "short_anchor": "no external publication occurred",
+      "reason": "Explicitly states absence of external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No unresolved meaning issue is identified in the supplied record.",
+      "reason": "Accurately states that the identified checks are resolved."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Whole-article verification limitation from E4 is not stated."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

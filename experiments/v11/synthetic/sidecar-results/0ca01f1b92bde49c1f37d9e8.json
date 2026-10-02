@@ -1,0 +1,54 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "7966991226f6f6d1a4395facafdc1a1ee40ff099b3199eb9e2eb2a2ce3fead6e",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "f2c2d322d16e12fc83de2dcda61e393215cda38f27328a8356d4af7ee7c108f9",
+    "issues": [
+      {
+        "evidence_span": {
+          "end_byte": 132,
+          "evidence_id": "E1",
+          "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd",
+          "start_byte": 0,
+          "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+        },
+        "id": "q1",
+        "kind": "question_comparison",
+        "output_span": {
+          "end_byte": 58,
+          "sha256": "d1e1d77ec17c3b55a3a1c4fd8458c91ece57671e1e49964e8549eb7d3f10e741",
+          "start_byte": 56,
+          "text": "3%"
+        },
+        "review_status": "reported_unresolved"
+      },
+      {
+        "evidence_span": {
+          "end_byte": 126,
+          "evidence_id": "E2",
+          "sha256": "b7ce86ef7dc97c03cdddf94c25d74784d772f20d79950bb9d05e0ce38253522f",
+          "start_byte": 0,
+          "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+        },
+        "id": "q2",
+        "kind": "question_comparison",
+        "output_span": {
+          "end_byte": 84,
+          "sha256": "e21f3f372a46d4be7b49f6809fc91baefeadae004af06485518e124a142c0271",
+          "start_byte": 78,
+          "text": "Friday"
+        },
+        "review_status": "reported_unresolved"
+      }
+    ],
+    "language": "EN",
+    "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "receipt_sha256": "852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4",
+    "rendered_text": "[\"q1\"] Question comparison\nOutput quote: \"3%\"\nEvidence quote: \"The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.\n\n[\"q2\"] Question comparison\nOutput quote: \"Friday\"\nEvidence quote: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "[\"q1\"] Question comparison\nOutput quote: \"3%\"\nEvidence quote: \"The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.\n\n[\"q2\"] Question comparison\nOutput quote: \"Friday\"\nEvidence quote: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.",
+  "combined_text": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 1 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Candidate SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Receipt SHA-256: 852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4.\n\n[\"q1\"] Question comparison\nOutput quote: \"3%\"\nEvidence quote: \"The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.\n\n[\"q2\"] Question comparison\nOutput quote: \"Friday\"\nEvidence quote: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim."
+}

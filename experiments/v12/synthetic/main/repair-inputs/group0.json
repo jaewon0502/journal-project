@@ -1,0 +1,134 @@
+{
+  "instruction": "Independently judge source vs original and patched candidate; do not assume detector right or source questions exhaustive. For every item return review_id, original_verdict faithful/inconsistent/unknown, detector_verdict_supported yes/no/unknown, patch_warranted yes/no/not_applicable/unknown, repaired yes/no/not_applicable/unknown, introduced_error yes/no/unknown, unnecessary_edit yes/no/unknown, short exact source/candidate anchors and reason. Faithful unchanged candidates are valid. Assess criticism/conditions/time/attribution and do not invent real-world facts.",
+  "items": [
+    {
+      "review_id": "722eddb03a7e76427e",
+      "language": "en",
+      "source": "A sponsor of the fictional Alderwick Puppet Festival predicted that its opening show would sell out. The festival director said the booking totals had not yet been compiled and did not endorse that prediction. The director said a ticket-sales update would be issued on Friday.",
+      "fixed_question": "What is currently known about demand for the Alderwick Puppet Festival opening show, and what update is planned?",
+      "original_candidate": "The director predicted a sold-out opening show; the director withheld endorsement, said booking totals were not yet compiled, and planned a Friday ticket-sales update.",
+      "detector_output": {
+        "verdict": "inconsistent",
+        "issues": [
+          {
+            "id": "1",
+            "source_anchor": "A sponsor of the fictional Alderwick Puppet Festival predicted that its opening show would sell out.",
+            "candidate_anchor": "The director predicted a sold-out opening show",
+            "reason": "The prediction came from a sponsor, not the director."
+          }
+        ],
+        "patches": [
+          {
+            "id": "1",
+            "before": "The director predicted",
+            "after": "A sponsor predicted"
+          }
+        ],
+        "unresolved": []
+      },
+      "patched_candidate": "A sponsor predicted a sold-out opening show; the director withheld endorsement, said booking totals were not yet compiled, and planned a Friday ticket-sales update.",
+      "application_status": "applied"
+    },
+    {
+      "review_id": "c6282b077b5dff2f14",
+      "language": "ko",
+      "source": "도담기록관은 새 묶음 등록 기능을 시험했다. 사전에 분류 코드가 붙은 자료에서는 등록 시간이 줄었지만, 코드가 없는 자료에서는 줄지 않았다. 두 종류의 자료 모두 등록 오류율은 기존 절차와 같았다. 기록관은 분류 코드가 있는 자료에만 새 기능을 적용하고, 나머지 자료에는 기존 절차를 유지하기로 했다.",
+      "fixed_question": "도담기록관의 새 등록 기능 시험은 어떤 결과를 냈으며, 기록관은 앞으로 어떻게 운영하기로 했는가?",
+      "original_candidate": "사전 분류 코드가 있는 자료에서만 등록 시간이 줄었고, 두 자료 유형 모두 오류율은 기존 절차와 같았다. 기록관은 코드가 있는 자료에만 새 기능을 적용하고 나머지는 기존 절차를 유지하기로 했다.",
+      "detector_output": {
+        "verdict": "faithful",
+        "issues": [],
+        "patches": [],
+        "unresolved": []
+      },
+      "patched_candidate": "사전 분류 코드가 있는 자료에서만 등록 시간이 줄었고, 두 자료 유형 모두 오류율은 기존 절차와 같았다. 기록관은 코드가 있는 자료에만 새 기능을 적용하고 나머지는 기존 절차를 유지하기로 했다.",
+      "application_status": "applied"
+    },
+    {
+      "review_id": "5ded06a2cccf04a76d",
+      "language": "ko",
+      "source": "가온공연장에는 지난해 가을 휠체어 관객이 사용할 수 있는 출입 경사로가 없었다. 공연장은 올해 봄 경사로를 설치해 현재는 휠체어 관객이 그 경로로 출입할 수 있다. 운영 검토위원회는 지난해 가을의 접근성 부족을 지적한 관객의 비판이 정당했다고 판단했다. 위원회는 올해의 개선이 그 과거 비판을 반박하는 근거가 되지는 않는다고 덧붙였다.",
+      "fixed_question": "가온공연장의 접근성은 어떻게 달라졌고, 검토위원회는 관객의 비판을 어떻게 평가했는가?",
+      "original_candidate": "지난해 가을 없던 경사로가 올해 봄 설치되어 현재는 휠체어 출입이 가능하다. 검토위원회는 지난해 가을의 접근성 비판이 정당했으며, 올해의 개선이 그 비판을 반박한다고 판단했다.",
+      "detector_output": {
+        "verdict": "inconsistent",
+        "issues": [
+          {
+            "id": "i1",
+            "source_anchor": "위원회는 올해의 개선이 그 과거 비판을 반박하는 근거가 되지는 않는다고 덧붙였다.",
+            "candidate_anchor": "올해의 개선이 그 비판을 반박한다고 판단했다.",
+            "reason": "올해의 개선이 과거 비판의 반박 근거가 되지 않는다는 위원회의 판단을 반대로 서술했다."
+          }
+        ],
+        "patches": [
+          {
+            "id": "i1",
+            "before": "올해의 개선이 그 비판을 반박한다고",
+            "after": "올해의 개선이 그 비판을 반박하는 근거가 되지는 않는다고"
+          }
+        ],
+        "unresolved": []
+      },
+      "patched_candidate": "지난해 가을 없던 경사로가 올해 봄 설치되어 현재는 휠체어 출입이 가능하다. 검토위원회는 지난해 가을의 접근성 비판이 정당했으며, 올해의 개선이 그 비판을 반박하는 근거가 되지는 않는다고 판단했다.",
+      "application_status": "applied"
+    },
+    {
+      "review_id": "2353a1a4dcff0a57fb",
+      "language": "ko",
+      "source": "누리수리센터의 운영 자문팀은 새 접수 방식을 검토한 뒤, 다음 분기에 수리 대기 건수가 줄어들 수 있다고 전망했다. 자문팀은 감소를 보장하지 않았으며, 검토 당시에는 다음 분기의 실측 자료가 없었다. 센터는 다음 분기가 끝난 뒤 실제 대기 건수를 공개하겠다고 밝혔다.",
+      "fixed_question": "누리수리센터의 새 접수 방식에 관해 현재 제시된 판단과 향후 확인 계획은 무엇인가?",
+      "original_candidate": "운영 자문팀은 다음 분기 수리 대기 건수가 줄어들 수 있다고 전망했다. 당시 그 분기의 실측 자료는 없었으며, 센터는 분기 종료 뒤 실제 대기 건수를 공개할 계획이다.",
+      "detector_output": {
+        "verdict": "faithful",
+        "issues": [],
+        "patches": [],
+        "unresolved": []
+      },
+      "patched_candidate": "운영 자문팀은 다음 분기 수리 대기 건수가 줄어들 수 있다고 전망했다. 당시 그 분기의 실측 자료는 없었으며, 센터는 분기 종료 뒤 실제 대기 건수를 공개할 계획이다.",
+      "application_status": "applied"
+    },
+    {
+      "review_id": "0fe1befc78f6f3cb94",
+      "language": "en",
+      "source": "The fictional Fenwick Costume Exchange tested a fee waiver for alterations. The alteration fee was waived only when a request arrived before the costume was dispatched; requests received after dispatch still carried the usual fee. The trial did not change which alterations were eligible. The exchange decided to extend the same waiver rules for one further month.",
+      "fixed_question": "What did the Fenwick Costume Exchange trial offer, and what did the exchange decide to do next?",
+      "original_candidate": "The trial waived alteration fees for requests received both before and after dispatch and left eligibility unchanged. The exchange extended the same rules for one month.",
+      "detector_output": {
+        "verdict": "inconsistent",
+        "issues": [
+          {
+            "id": "i1",
+            "source_anchor": "The alteration fee was waived only when a request arrived before the costume was dispatched; requests received after dispatch still carried the usual fee.",
+            "candidate_anchor": "waived alteration fees for requests received both before and after dispatch",
+            "reason": "The waiver applied only before dispatch; requests after dispatch still incurred the usual fee."
+          }
+        ],
+        "patches": [
+          {
+            "id": "i1",
+            "before": "both before and after dispatch",
+            "after": "only before dispatch"
+          }
+        ],
+        "unresolved": []
+      },
+      "patched_candidate": "The trial waived alteration fees for requests received only before dispatch and left eligibility unchanged. The exchange extended the same rules for one month.",
+      "application_status": "applied"
+    },
+    {
+      "review_id": "fe8312f8a68328bcae",
+      "language": "en",
+      "source": "At the fictional Bracken Repair Cooperative, average turnaround was nine days this June, compared with six days in May and twelve days in June of the previous year. Customers complained that service had slowed since May. Management cited the improvement from the previous June as a rebuttal. A review panel found the customers’ month-to-month criticism justified: the year-to-year improvement did not contradict the slowdown since May.",
+      "fixed_question": "How did Bracken Repair Cooperative turnaround change, and how did the review panel assess the dispute?",
+      "original_candidate": "June turnaround was nine days, slower than May’s six but faster than the previous June’s twelve. Customers criticized the monthly slowdown, while management cited annual improvement. The panel upheld the customers’ criticism and concluded that annual improvement did not refute the monthly slowdown.",
+      "detector_output": {
+        "verdict": "faithful",
+        "issues": [],
+        "patches": [],
+        "unresolved": []
+      },
+      "patched_candidate": "June turnaround was nine days, slower than May’s six but faster than the previous June’s twelve. Customers criticized the monthly slowdown, while management cited annual improvement. The panel upheld the customers’ criticism and concluded that annual improvement did not refute the monthly slowdown.",
+      "application_status": "applied"
+    }
+  ]
+}

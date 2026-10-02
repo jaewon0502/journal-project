@@ -1,0 +1,164 @@
+{
+  "status": "PASS_WITH_STATED_LIMITATIONS",
+  "created_utc": "2026-10-02T02:08:15.536377+00:00",
+  "scope": "Independent re-review of revised main report, prior findings, supplementary result artifacts and all eight raw transfer reviews. No new experiment, semantic rescoring, method or criteria change. No report or raw-score edit. No natural-source quotations reproduced.",
+  "reviewed_artifacts": [
+    {
+      "path": "/historical-research/journal-v12/REPORT.md",
+      "sha256": "71ab37c790a6361ab6ee947f646c50c8e43e1660472c2784da458199eec87b4d"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/report-review.json",
+      "sha256": "060373fc402325c5f3a127e9a1cc5921a1bd9838b3869293a00a0fe7e475b2a0"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/metric-limitations.md",
+      "sha256": "70d4547e50a0891b8d5e948e4ac2bab04487892486cd30e7084b1d2c74610957"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/additional-metrics.json",
+      "sha256": "d7d210df47fbd73815c4af269db276065f126635c35c80f331f62cd5c12a61f1"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/extensions-development.json",
+      "sha256": "1405db42956a3208703123b600a267a0ec71c1e4bf20a8b8caec8af725cb8781"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/extensions-evaluation.json",
+      "sha256": "ba087037e0302e4c14180ee837a646f08c6d43dd87a5a3fbfdc3b02b5cbc8e6a"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/release-gate-results.json",
+      "sha256": "dabfee5de6ce51395184ef970af6e58185aabe5e67f93875b2058031d16e8567"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/scope/RESULTS.md",
+      "sha256": "13f8998c1e6c8b1d3c02bc83f8473e1e417cc5975edbd24225c67ddbb5263a4f"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/scope/results.json",
+      "sha256": "71637b1db58831d15f6468edbbc8bf82d6c28e11c3ae4a77f49d87f2be08b0f7"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/necessity/RESULTS.md",
+      "sha256": "50f52501ecd5dcb9895e25d30c9e2a4234e0e4184f07d7d97551e17c774d0c2c"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/necessity/results.json",
+      "sha256": "c4f5b2b6fdc863a8951ae95c7af4529b89ac804db09d146561cbb069063a5155"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/transfer/protocol.md",
+      "sha256": "ca0879f33299e3c885d7c0d84e617f8b0dabbb20767538f5f46844a3272c31f0"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/transfer/mechanical-results.json",
+      "sha256": "06c88dab0bcb4237e05f2d9705e31f4650bf1866f214f710ff97310e860e7219"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/A__7da15e4a14289e3e51a30b45.json",
+      "sha256": "0e875283e688afb811f40088e7a53b973726c9181b30ebf761d26fa1c3d8e783"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/A__5ecd8913dc37d284f109814e.json",
+      "sha256": "e73a08bb790a53b76c65b47ed7e7008c688499f239ced1b35d0908e8a9454b47"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/A__e295cc873769cdc1a6e5cf30.json",
+      "sha256": "9ed45505207ab56cc690744ae19037aa344cb83b5c9000421cadefdc9db1876d"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/B__5ecd8913dc37d284f109814e.json",
+      "sha256": "463dbd1b153e6acd022a1ab84d0f84eee4ec86676d9ca550defe1ef60cf727cb"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/A__766507d0a11060dea4d7e12b.json",
+      "sha256": "24ad6c20f16c3ff0137563e372bc0d3ca346fb5f947851a1bb1d5885d652f373"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/B__766507d0a11060dea4d7e12b.json",
+      "sha256": "53756d1a912363ca86f64b660e1497fd8bb96ba46f1e9eb4e13b6a3fe5f8e89b"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/B__e295cc873769cdc1a6e5cf30.json",
+      "sha256": "5c3aa7df708d4c723017fb83e98da7310fbe51af482d06a7bd99016c77c243b0"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/transfer/reviewer-results/B__7da15e4a14289e3e51a30b45.json",
+      "sha256": "076a9b7e7b056fc80ed504e1d1bbbe27b9844b360d600f27bff9afca516b35d2"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/transfer/RESULTS.md",
+      "sha256": "de858fd7f2cf6b699b2202f0b232c2ce743237fc5063dd3fd8f7d8f14611a725"
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/transfer/results.json",
+      "sha256": "718e67343eb32c324b16f713cfb8e471e4fe7cb819f51a589e47c6575b645d5c"
+    }
+  ],
+  "unchanged_frozen_artifacts": [
+    {
+      "path": "/historical-research/journal-v12/protocol/PREREGISTRATION.md",
+      "same_as_initial_review": true
+    },
+    {
+      "path": "/historical-research/journal-v12/results/independent-validation.json",
+      "same_as_initial_review": true
+    },
+    {
+      "path": "/historical-research/journal-v12/results/review-scoreboard.json",
+      "same_as_initial_review": true
+    }
+  ],
+  "initial_review_resolution": {
+    "RR01": "Resolved: main report explains identical KO original scored 9/14 versus 8/14 due to R09 rating variation and disallows treatment-effect interpretation. Supplement also records EN R25 baseline inconsistency.",
+    "RR02": "Resolved as reporting: raw additional metrics and their unresolved semantic denominators are explicit. Partial and unsupported finding judgments retained; eight overlapping loss/overediting rows become five distinct patches rather than sixteen harms. Direction-specific unsupported additions and narrow normal-text overediting remain unresolved openly.",
+    "RR03": "Resolved: categorical editor-mindreading removed; observed deletion rationale, lack of refutation and disputed importance separated.",
+    "RC01": "Resolved: KO single-atom difference identified as R13, and sensitivity discussion classifies duration rule optional; frozen 3/4 versus 4/4 is not objective superiority.",
+    "extension_status": "New provenance audits support zero accepted additional natural-article defects under the bounded preannotation novelty definition; ordinary unprimed frozen-reference findings are explicitly distinct. No accepted union means no expanded score, not zero unknown-error recall."
+  },
+  "scope_clarifications": [],
+  "verified_new_claims": {
+    "counts": "Ten main real writer outputs plus four scope and four transfer outputs equals eighteen saved real writer outputs on four distinct real articles. Scope has eight reviews and twenty-two patches; transfer eight reviews and eight patches. Twelve necessity classifications are synthetic and are not rewrites.",
+    "scope": "OLD and EXPANDED each two runs on one exposed science case. Old nineteen paragraphs are exact prefix of expanded sixty-two. Expanded corrects exact lower boundary in 2/2; qualitative comparison retained in 2/2 each. These dimensions and residual-causal-framing counts match scope/results.json and are not a single success rate.",
+    "necessity": "Three synthetic bases, six items, twelve classifications, zero rewrites; all provisional expected classifications match and forty-seven named-field literal anchors pass. AI labels and explicit definitions limit interpretation.",
+    "transfer": "All eight raw reviews are complete and give both targets covered and supported, hence four candidates each 2/2 with two correlated reviewers. Every review has an empty new_harms list. Report correctly distinguishes remaining starting-article verification limits from new patch harm.",
+    "format_effect": "F and T each succeed in both repeats. Extra explicit target attention is common to both and differs from baseline. Report expressly rejects typed-format superiority, fresh discovery and held-out generalization.",
+    "release_gate": "release-gate-results.json reports ten main-output replay decisions, all hold. These deterministic decisions are not new models, quality scores or successful repairs, and fallback retains original defects.",
+    "frozen_vs_supplement": "Main report preserves original scores, denominators, same-family limitation and separation of baseline, source supplementation, known-target regression and authored mechanism checks."
+  },
+  "delivery_dependencies": [],
+  "remaining_limits": [
+    "Semantic duplicate findings, narrow normal-text overediting and direction-specific unsupported-addition totals are still not fully adjudicated; the revised report now says so.",
+    "Zero extensions is bounded provenance classification, not exhaustive defect absence.",
+    "Same-family reviewers and repeats are not independent human validation or independent article samples.",
+    "Identical baseline rating inconsistency remains a substantive evaluation limitation despite transparent reporting.",
+    "Whole-article truth and actual reader harm are not established by local target recovery."
+  ],
+  "changes_made": [
+    "Created results/report-final-review.json only."
+  ],
+  "resolved_final_corrections": [
+    {
+      "id": "FR01",
+      "location": "REPORT.md, transfer regression section, paragraph on eight reviews",
+      "issue": "The text describes a T output as relying on context for its global comparison. Both T candidate P2 replacements explicitly state the comparison with global impacts. The cited T-2 review limitation instead concerns interpreting the comparator in the source, especially lack of a separate quantified global-inflation comparison. Candidate explicitness and source support scope are being conflated.",
+      "evidence_paths": [
+        "journal-v12-private/supplementary/transfer/writer-results/16df5ab2355736d58d1aef18.json patches P2",
+        "journal-v12-private/supplementary/transfer/writer-results/8f75d2d099970038bc5afc95.json patches P2",
+        "journal-v12-private/supplementary/transfer/reviewer-results/A__e295cc873769cdc1a6e5cf30.json unresolved_issues source_comparison_limit",
+        "journal-v12-private/supplementary/transfer/reviewer-results/B__e295cc873769cdc1a6e5cf30.json unresolved_issues answer_wording_limit"
+      ],
+      "correction": "Say that the source global comparator is inferred from its surrounding discussion and no quantified global-inflation comparison is established; the outputs make the comparator explicit. Separately retain the T-2 Q3 chronology wording concern, which is about the QA answer and not demonstrated final-article harm. Do not downgrade supported 2/2 scores.",
+      "resolution": "Verified current report now attributes the comparison caveat to source context and separately preserves T-2 Q3 concern. No downgrade or score change."
+    }
+  ],
+  "must_fix": [],
+  "final_checks": {
+    "detailed_scope_review_lock": "Main report explicitly discloses detailed instrument locked after writer start and first OLD completion, with non-independent output-unread attestation.",
+    "brief_source_quotes": "Four short natural-source snippets, locations, protected relations and confidence/interpretive qualifications added. No long natural-source text in report.",
+    "transfer_results": "RESULTS.md now exists; inspected and consistent with four writer outputs, eight complete reviews, sixteen covered/supported target judgments, eight applied patches and no detected new article harms.",
+    "remaining_substantive_claim_corrections": 0
+  },
+  "report_sha256": "71ab37c790a6361ab6ee947f646c50c8e43e1660472c2784da458199eec87b4d"
+}

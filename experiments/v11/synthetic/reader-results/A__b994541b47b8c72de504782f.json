@@ -1,0 +1,76 @@
+{
+  "packet_id": "b994541b47b8c72de504782f",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both proposed unit and day replacements occur in the local output.",
+      "anchor": "actual_output: 3%포인트 / 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit and meeting day differ from the source.",
+      "anchor": "source: 3% / 금요일; actual_output: 3%포인트 / 토요일"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both proposed patches occur in the displayed output.",
+      "anchor": "actual_receipt.selected_ids: [p1, p2]; actual_output"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The disjoint counts 8 and 5 still incorrectly total 14; E3 identifies this untouched issue.",
+      "anchor": "E3; actual_output: 참석자는 8명과 5명으로 총 14명이다."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다.",
+      "reason": "Explicit application to displayed final local output."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "‘금요일’에서 ‘토요일’로 바뀌었습니다.",
+      "reason": "Specified changed day implies output is not unchanged."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다.",
+      "reason": "Explicit all proposed edits applied."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "수정 적용이 글 전체의 사실 정확성이나 문제 해결을 뜻하지는 않습니다.",
+      "reason": "Explicit full-article correctness limitation, supported by the named remaining error."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "",
+      "reason": "Annotation does not report whether external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "총 14명이라는 오류가 남아 있습니다.",
+      "reason": "Explicit remaining arithmetic error and correct total 13."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "External publication did not occur, but annotation does not state that."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

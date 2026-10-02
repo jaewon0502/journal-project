@@ -13,5 +13,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install research validation dependency
+        run: python -m pip install -r requirements-research.txt
       - name: Offline artifact and regression checks
         run: python tools/run_checks.py

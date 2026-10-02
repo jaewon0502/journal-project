@@ -1,0 +1,37 @@
+{
+  "01": "pass: changed output, candidate substitution, fully rehashed forged upstream receipt rejected",
+  "02": {
+    "pass": true,
+    "rejected_variants": 10
+  },
+  "03": "pass: empty list explicitly not all-resolved; quoted assertions caveated; source/output/receipt/container unchanged; rewritten rendered prose rejected",
+  "04": [
+    {
+      "language": "EN",
+      "target": 400,
+      "status": "verified"
+    },
+    {
+      "language": "EN",
+      "target": 401,
+      "status": "verification_failed"
+    },
+    {
+      "language": "KO",
+      "target": 1600,
+      "status": "verified"
+    },
+    {
+      "language": "KO",
+      "target": 1601,
+      "status": "verification_failed"
+    }
+  ],
+  "05": "pass: span/issue/evidence limits refuse; changed valid input invalidates old sidecar; changed containing file refuses",
+  "06": "pass: sidecar/portable sibling layout works after relocation with original legacy and frozen receipt paths forbidden",
+  "summary": {
+    "run": 6,
+    "failures": 0,
+    "errors": 0
+  }
+}

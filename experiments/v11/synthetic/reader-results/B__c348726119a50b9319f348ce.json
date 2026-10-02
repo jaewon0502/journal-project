@@ -1,0 +1,72 @@
+{
+  "packet_id": "c348726119a50b9319f348ce",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "The displayed output contains both proposed replacements.",
+      "anchor": "actual_output: 3%포인트; 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "Both increase unit and meeting day differ from source.",
+      "anchor": "p1 and p2; actual_output: 3%포인트; 토요일"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both nonempty proposals appear in the displayed output and are selected.",
+      "anchor": "selected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The displayed percentage-point unit and Saturday agree with E1 and E2. No other identified issue is supplied.",
+      "anchor": "E1; E2; actual_output: 3%포인트; 토요일"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다",
+      "reason": "Explicit final-output application."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "바뀌었고 나머지 문구는 유지되었습니다",
+      "reason": "States precise changes and retained rest."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "두 수정이 모두",
+      "reason": "States all proposals applied."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Scoped scenario consistency is stated but lack of article-wide establishment is not."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Local application is stated without an external publication status."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_implicit",
+      "short_anchor": "3%포인트이며, 회의 일정은 토요일",
+      "reason": "The stated final replacements and matching scenario facts communicate resolution of both identified issues."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

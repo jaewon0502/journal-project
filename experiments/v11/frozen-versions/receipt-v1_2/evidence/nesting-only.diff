@@ -1,0 +1,74 @@
+--- receipt-v1_1/receipt.py
++++ receipt-v1_2/receipt.py
+@@ -21,6 +21,35 @@
+ 
+ # One byte contract shared by minting, replay, rendering and persistence.
+ MAX_RECEIPT_BYTES = engine.MAX_BYTES
++MAX_JSON_NESTING = 64
++
++def bounded_json_nesting(raw):
++    """Nonrecursive resource preflight; ordinary syntax errors stay with v10.
++
++    Count JSON object/array containers, ignoring quoted text and escapes.
++    Depth above 64 fails before the recursive JSON decoder is invoked.
++    This does not catch arbitrary RecursionError from application code.
++    """
++    require(type(raw) is bytes and len(raw) <= engine.MAX_BYTES,
++            "expected bounded raw JSON bytes")
++    depth, quoted, escaped = 0, False, False
++    for byte in raw:
++        if quoted:
++            if escaped:
++                escaped = False
++            elif byte == 92:
++                escaped = True
++            elif byte == 34:
++                quoted = False
++        elif byte == 34:
++            quoted = True
++        elif byte in (91, 123):
++            depth += 1
++            require(depth <= MAX_JSON_NESTING, "JSON container nesting exceeds supported limit")
++        elif byte in (93, 125):
++            # Invalid extra closers cannot offset later excessive nesting.
++            depth = max(0, depth - 1)
++    return raw
+ 
+ def bounded_receipt_bytes(raw):
+     require(type(raw) is bytes and len(raw) <= MAX_RECEIPT_BYTES,
+@@ -35,7 +64,7 @@
+     """Immutable canonical bytes; callers cannot mutate a dict behind its address."""
+     raw: bytes
+     def __post_init__(self):
+-        bounded_receipt_bytes(self.raw)
++        bounded_json_nesting(bounded_receipt_bytes(self.raw))
+     @property
+     def address(self): return digest(self.raw)
+ 
+@@ -50,6 +79,8 @@
+     """
+     finals = tuple(final_audits)
+     require(all(type(x) is bytes for x in finals), 'raw audit bytes required')
++    for raw_input in (proposal_raw, dependency_raw, patch_audit_raw, *finals):
++        bounded_json_nesting(raw_input)
+     v10.verify_delivery(actual_output, actual_result, source, proposal_raw,
+                         dependency_raw, patch_audit_raw, finals, policy=policy)
+     initial = engine.propose_selection(source, proposal_raw, dependency_raw, patch_audit_raw)
+@@ -94,7 +125,7 @@
+ 
+ def verify(receipt, *args, **kwargs):
+     require(type(receipt) is Receipt and type(receipt.raw) is bytes, 'invalid receipt type')
+-    bounded_receipt_bytes(receipt.raw)
++    bounded_json_nesting(bounded_receipt_bytes(receipt.raw))
+     expected = build(*args, **kwargs)
+     require(receipt.raw == expected.raw, 'receipt differs from exact replay')
+     return True
+@@ -102,7 +133,7 @@
+ 
+ def _text(receipt, lang):
+     """Private fixed-template renderer; exported emit always replays before use."""
+-    r = engine.parse(bounded_receipt_bytes(receipt.raw))
++    r = engine.parse(bounded_json_nesting(bounded_receipt_bytes(receipt.raw)))
+     require(lang in ('EN', 'KO'), 'unsupported language')
+     counts = (len(r['selected_ids']), len(r['rejected_ids']), len(r['held_ids']))
+     if lang == 'EN':

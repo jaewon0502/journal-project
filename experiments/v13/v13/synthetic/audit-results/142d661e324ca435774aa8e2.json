@@ -1,0 +1,80 @@
+{
+  "audit_id": "142d661e324ca435774aa8e2",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [
+    {
+      "id": "c1",
+      "before": "14곳",
+      "after": "11곳",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [
+        {
+          "id": "S1.p2",
+          "text": "센터가 직접 운영하는 11곳"
+        }
+      ],
+      "original_anchors": [
+        "참여 공간은 센터가 직접 운영하는 14곳이다."
+      ],
+      "candidate_anchors": [
+        "참여 공간은 센터가 직접 운영하는 11곳이다."
+      ],
+      "reason": "Corrects the participating venue count to the explicit source count while retaining direct center operation as the scope. No neighboring or distant sentence broadens that scope to private venues."
+    },
+    {
+      "id": "c2",
+      "before": "9월 18일",
+      "after": "9월 20일",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [
+        {
+          "id": "S1.p3",
+          "text": "신청서는 9월 20일 오후 6시까지 접수하고, 접수순이 아니라 별도 추첨으로 참여 팀을 정한다."
+        }
+      ],
+      "original_anchors": [
+        "신청서는 9월 18일 오후 6시까지 접수하며 참여 팀은 추첨으로 정한다."
+      ],
+      "candidate_anchors": [
+        "신청서는 9월 20일 오후 6시까지 접수하며 참여 팀은 추첨으로 정한다."
+      ],
+      "reason": "Corrects the deadline date, preserving the 6 p.m. cutoff and lottery selection. It introduces no suggestion of first-come selection and does not alter the October trial period or fees."
+    }
+  ],
+  "original_residual_issues": [
+    {
+      "issue": "The unchanged claim that the center previously announced increased year-over-year weekend attendance last year remains unverified.",
+      "evidence_status": "unverified, not refuted",
+      "reason": "Original and candidate both say “센터는 지난해 주말 이용객이 전년보다 늘었다고 밝힌 바 있다.” S1.p6 says this notice provides no visitor statistics, and the scope note excludes past announcements and visitor statistics. The supplied material cannot establish or disprove that separate past attributed announcement. Verification from an additional source, or an explicit qualification/removal if strict source-only reporting is required, remains necessary; it is not a newly introduced harm."
+    }
+  ],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither the source nor the original contains attributed criticism."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": false,
+  "unmet_required_answers": [],
+  "uncertainties": [
+    "Whether the center made the past attendance announcement and whether its underlying comparison is accurate cannot be determined from this packet.",
+    "The notice’s planned September 22 individual notification is not included in either article; this omission does not contradict the source or become a new error through either correction."
+  ],
+  "release_recommendation": "release",
+  "reason": "Both actual changes deliver the factual corrections established by the supplied notice: 14 to 11 participating center-operated spaces and September 18 to September 20 for the application deadline. The announcement, lottery, October duration, and existing fees retain their original meaning and relations. No introduced material harm or unknown change safety was found. Release is relative to the original and does not validate the unchanged historical attendance claim. All six source paragraphs and the full original and candidate were read; this is an independent AI semantic assessment, not proof of exhaustive semantic coverage."
+}

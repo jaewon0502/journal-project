@@ -1,0 +1,30 @@
+{
+  "packet_id": "d8ae4cb0628b1d4785202a8a",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+      "reason": "Source and output match; selected, rejected, and held lists are empty, and receipt status is no-op. The annotation preserves that local state."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "not_applicable",
+      "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+      "reason": "The supplied issue list is empty. This judgment does not establish that all possible issues are resolved."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+      "reason": "Passing the supplied local review is distinguished from factual verification or external publication; no all-resolved claim is made."
+    },
+    "noop_overcorrection": {
+      "answer": "no",
+      "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+      "reason": "The annotation neither proposes a replacement nor implies that the unchanged text must be corrected. Its uncertainty disclaimer is not a correction."
+    }
+  },
+  "missing_issue_ids": [],
+  "recovery_basis": "not_applicable",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

@@ -1,0 +1,5463 @@
+{
+  "schema_version": "1.0",
+  "status": "DESCRIPTIVE_WITH_UNRESOLVED_ADJUDICATION",
+  "raw_verdicts_and_frozen_criteria_changed": false,
+  "review_rows": 20,
+  "distinct_outputs": 10,
+  "scope": "Ten real outputs, including two exposed v2 development B reruns. Authored tests excluded. No source quotations.",
+  "rules": {
+    "precision": "supported/(supported+unsupported); partial/unknown excluded and shown. Zero denominator -> null.",
+    "unique": "Transitive duplicate_of roots among supported rows only; not semantic adjudication.",
+    "patch_harm": "Do not equate new_assertion=yes with unsupported meaning. Raw loss and overediting=yes are observed tags; union counted once per patch. P8 prose strengthening is explicitly separate bounded post-hoc coding.",
+    "scope": "Judge-defined component inventories differ; no pooled coverage inference or component-equivalence assumption.",
+    "baseline": "Compare identical article hashes; do not silently repair fixed-denominator scores."
+  },
+  "per_output_per_judge": [
+    {
+      "output_id": "v1/KO-DEV-01/A",
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "034accc8cbe53c0708595d512531a4920c74416ec2296faec9ab9aedce51e044",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 5,
+          "unsupported": 0,
+          "partial": 2,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 5,
+          "denominator": 5,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 2,
+        "duplicate_of_unique_supported": 5,
+        "duplicate_links": [
+          {
+            "atomic_id": "F1b",
+            "duplicate_of": "F1a"
+          }
+        ],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": "F1a"
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4b",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R16"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R04"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 6,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 6
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 6
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 6,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 1,
+          "partial": 1,
+          "unknown": 2
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 1,
+          "partial|acknowledged=False": 1,
+          "unknown|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 1,
+          "denominator": 1,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 3,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/KO-DEV-01/A",
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "f29efafa1e4dccf705b8c18dc49d37631f9535a3a50b120899398a7b63b3ed14",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 6,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 6,
+        "duplicate_links": [
+          {
+            "atomic_id": "F1b",
+            "duplicate_of": "F1a"
+          }
+        ],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": "F1a"
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4b",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R16"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R04"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 6,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 6
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 6
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 6,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 6,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 3,
+        "status_counts": {
+          "partial": 1,
+          "unknown": 2
+        },
+        "status_by_acknowledgment": {
+          "partial|acknowledged=False": 1,
+          "unknown|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 0,
+          "denominator": 0,
+          "ratio": null
+        },
+        "partial_unknown_excluded": 3,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q1",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/KO-DEV-01/B",
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "e2777ec15877fb80f2fd958b8ec1d21b26264194ffaeefef1c2f6d55fd85c65d",
+      "writer_finding_items": 4,
+      "findings": {
+        "atomic_total": 4,
+        "verdict_counts": {
+          "supported": 3,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 3,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02",
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 4,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 4
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 4
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 4,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 4,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 3,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 3,
+          "partial": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 3,
+          "partial|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/KO-DEV-01/B",
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "7743c04720faedbbb74921bbff6ae3823ff20538637a082639ad11ef35f946ed",
+      "writer_finding_items": 4,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 4,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 4,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2b",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 4,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 4
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 4
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 4,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 4,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 3,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 2,
+          "partial": 1,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "partial|acknowledged=True": 1,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 2,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/EN-DEV-01/A",
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "466c7d7368521f9d37c09b9da91293365b70906fc59ef25d162bb8daba79d1c3",
+      "writer_finding_items": 4,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 6,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 6,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R16",
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2b",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R06",
+              "R10"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 8,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 6,
+          "no_new_assertion_flag": 1,
+          "unknown_direction_specific_support": 1
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 7,
+          "yes": 1
+        },
+        "overediting": {
+          "numerator": 1,
+          "denominator": 8,
+          "ratio": 0.125
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P6"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 1,
+          "denominator": 8,
+          "ratio": 0.125
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "no",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "no_new_assertion_flag",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 5,
+        "status_counts": {
+          "answered": 3,
+          "partial": 1,
+          "unanswered": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 3,
+          "partial|acknowledged=True": 1,
+          "unanswered|acknowledged=False": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 3,
+          "denominator": 4,
+          "ratio": 0.75
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unanswered",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 5,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/EN-DEV-01/A",
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "43eb3bcb3079a402862c864f006c9d7c76634f7ed5a8ec04cac60d08d8ee1f6f",
+      "writer_finding_items": 4,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 6,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 6,
+          "denominator": 6,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 6,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07",
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R16",
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2b",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R10"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09",
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 8,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5,
+          "no_new_assertion_flag": 2,
+          "unknown_direction_specific_support": 1
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 7,
+          "yes": 1
+        },
+        "overediting": {
+          "numerator": 1,
+          "denominator": 8,
+          "ratio": 0.125
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P6"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 1,
+          "denominator": 8,
+          "ratio": 0.125
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "no",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "no_new_assertion_flag",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "no",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "no_new_assertion_flag",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 2,
+          "partial": 1,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "partial|acknowledged=True": 1,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 2,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/EN-DEV-01/B",
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "a22b45d5fc1906b9fe3d0654df477c1a5c79c1f5abd73304611eec436fdf6419",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 7,
+          "unsupported": 0,
+          "partial": 0,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 7,
+          "denominator": 7,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 0,
+        "duplicate_of_unique_supported": 7,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5b",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 8,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5,
+          "no_new_assertion_flag": 1,
+          "unknown_direction_specific_support": 2
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [
+          "P8"
+        ],
+        "meaning_loss_counts": {
+          "no": 6,
+          "yes": 2
+        },
+        "overediting": {
+          "numerator": 2,
+          "denominator": 8,
+          "ratio": 0.25
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P7",
+          "P8"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 2,
+          "denominator": 8,
+          "ratio": 0.25
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "no",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "no_new_assertion_flag",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3",
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": true,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting",
+              "unsupported_strengthening_bounded_prose_indicator"
+            ]
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 5,
+        "status_counts": {
+          "answered": 1,
+          "partial": 2,
+          "unanswered": 1,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 1,
+          "partial|acknowledged=False": 1,
+          "partial|acknowledged=True": 1,
+          "unanswered|acknowledged=True": 1,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 1,
+          "denominator": 2,
+          "ratio": 0.5
+        },
+        "partial_unknown_excluded": 3,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 5,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v1/EN-DEV-01/B",
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "19e0fa05190d6179dcd7e9c0d7b463555e90fd1168ebb9652f5083dde4a402be",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 7,
+        "verdict_counts": {
+          "supported": 7,
+          "unsupported": 0,
+          "partial": 0,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 7,
+          "denominator": 7,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 0,
+        "duplicate_of_unique_supported": 7,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5b",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 8,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5,
+          "no_new_assertion_flag": 1,
+          "unknown_direction_specific_support": 2
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [
+          "P8"
+        ],
+        "meaning_loss_counts": {
+          "no": 6,
+          "yes": 2
+        },
+        "overediting": {
+          "numerator": 2,
+          "denominator": 8,
+          "ratio": 0.25
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P7",
+          "P8"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 2,
+          "denominator": 8,
+          "ratio": 0.25
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "no",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "no_new_assertion_flag",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3",
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "no",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "no",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": true,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting",
+              "unsupported_strengthening_bounded_prose_indicator"
+            ]
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 4,
+        "status_counts": {
+          "partial": 1,
+          "unanswered": 2,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "partial|acknowledged=True": 1,
+          "unanswered|acknowledged=False": 1,
+          "unanswered|acknowledged=True": 1,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 0,
+          "denominator": 2,
+          "ratio": 0.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q2",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unanswered",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-DEV-01/B",
+      "version": "v2",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "60f5a117ce0d715eb9ec3efe5d007ac9061b7077b9047cdee1ce8f5b584ec9f4",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 4,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 4,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R04"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 4,
+          "unknown_direction_specific_support": 1
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 4,
+          "yes": 1
+        },
+        "overediting": {
+          "numerator": 1,
+          "denominator": 5,
+          "ratio": 0.2
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P2"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 1,
+          "denominator": 5,
+          "ratio": 0.2
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 2,
+          "partial": 2
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "partial|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 2,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-DEV-01/B",
+      "version": "v2",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "0ddeb6516dd1bcd2418f099695317577feee8f3fc9ba79c85c69f669c6e3a32d",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 4,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 4,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R06",
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R04"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 5
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 3,
+        "status_counts": {
+          "answered": 2,
+          "partial": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "partial|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 2,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-DEV-01/B",
+      "version": "v2",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "A",
+      "raw_review_sha256": "e46e5c08dbc54bd4d8cb26d766c8c55ae31938d0407362a549963e18c5003f9b",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 6,
+        "verdict_counts": {
+          "supported": 5,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 5,
+          "denominator": 5,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 5,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07",
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R16",
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 4,
+          "unknown_direction_specific_support": 1
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 4,
+          "yes": 1
+        },
+        "overediting": {
+          "numerator": 1,
+          "denominator": 5,
+          "ratio": 0.2
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [
+          "P2"
+        ],
+        "observed_harm_union_rate": {
+          "numerator": 1,
+          "denominator": 5,
+          "ratio": 0.2
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "yes",
+            "overediting": "yes",
+            "evidence_justifies_difference": "no",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "unknown_direction_specific_support",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": [
+              "meaning_loss",
+              "overediting"
+            ]
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3",
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 3,
+          "partial": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 3,
+          "partial|acknowledged=False": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-DEV-01/B",
+      "version": "v2",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "split": "development",
+      "judge": "B",
+      "raw_review_sha256": "a91111d027fab0351785dc8957d1cd7ac3f6584e14c753198ad18242a1b8873a",
+      "writer_finding_items": 5,
+      "findings": {
+        "atomic_total": 6,
+        "verdict_counts": {
+          "supported": 5,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 5,
+          "denominator": 5,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 5,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R02"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R08"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 5
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3",
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 3,
+        "status_counts": {
+          "answered": 3
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 3
+        },
+        "answered_among_assessable": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 0,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-EVAL-01/A",
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "judge": "A",
+      "raw_review_sha256": "4ffc7560e66dbe06e5254c4c435ca2b148d6a3034d35aea697633db8b62a94e4",
+      "writer_finding_items": 7,
+      "findings": {
+        "atomic_total": 8,
+        "verdict_counts": {
+          "supported": 7,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 7,
+          "denominator": 7,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 7,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R21",
+              "R12"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "partial",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R20"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6a",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R18"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6b",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R19"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F7a",
+            "writer_finding_id": "F7",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 5
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5",
+              "F6"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F7"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 3,
+          "partial": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 3,
+          "partial|acknowledged=False": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-EVAL-01/A",
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "judge": "B",
+      "raw_review_sha256": "2e6de00470b5d9756bc6e92a6d20604a66b3d42d323cf045b80cb8380902a6c2",
+      "writer_finding_items": 7,
+      "findings": {
+        "atomic_total": 8,
+        "verdict_counts": {
+          "supported": 8,
+          "unsupported": 0,
+          "partial": 0,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 8,
+          "denominator": 8,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 0,
+        "duplicate_of_unique_supported": 8,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R21"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R20"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6a",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R18"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6b",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R19"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F7a",
+            "writer_finding_id": "F7",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 5,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 5
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 5
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 5,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1",
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5",
+              "F6"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F7"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 2,
+        "status_counts": {
+          "partial": 1,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "partial|acknowledged=False": 1,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 0,
+          "denominator": 0,
+          "ratio": null
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 1,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q3",
+            "status": "partial",
+            "acknowledged_by_writer": false
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-EVAL-01/B",
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "judge": "A",
+      "raw_review_sha256": "d992b65bf7970aca1a966221ee5dcfd373f36a7f50ef274b898d398a3daf2d7c",
+      "writer_finding_items": 9,
+      "findings": {
+        "atomic_total": 10,
+        "verdict_counts": {
+          "supported": 10,
+          "unsupported": 0,
+          "partial": 0,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 10,
+          "denominator": 10,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 0,
+        "duplicate_of_unique_supported": 10,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R12"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R21"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R13"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6a",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R20"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F7a",
+            "writer_finding_id": "F7",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F8a",
+            "writer_finding_id": "F8",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R18"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F8b",
+            "writer_finding_id": "F8",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R19"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F9a",
+            "writer_finding_id": "F9",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 9,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 9
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 9
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 9,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 9,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F6"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F7"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F8"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P9",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F9"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 3,
+        "status_counts": {
+          "answered": 1,
+          "unknown": 2
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 1,
+          "unknown|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 1,
+          "denominator": 1,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/KO-EVAL-01/B",
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "judge": "B",
+      "raw_review_sha256": "23177741a74dbfc9c2f0a3aa177d0db9531f8e4874267c15d85b4039593639bd",
+      "writer_finding_items": 9,
+      "findings": {
+        "atomic_total": 10,
+        "verdict_counts": {
+          "supported": 8,
+          "unsupported": 0,
+          "partial": 2,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 8,
+          "denominator": 8,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 2,
+        "duplicate_of_unique_supported": 8,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "inaccuracy",
+            "reference_ids": [
+              "R12"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F4a",
+            "writer_finding_id": "F4",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R21",
+              "R12"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F5a",
+            "writer_finding_id": "F5",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R13"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F6a",
+            "writer_finding_id": "F6",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R20"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F7a",
+            "writer_finding_id": "F7",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F8a",
+            "writer_finding_id": "F8",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R18"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F8b",
+            "writer_finding_id": "F8",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R19"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F9a",
+            "writer_finding_id": "F9",
+            "verdict": "partial",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R07"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 9,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 9
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 9
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 9,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 9,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P4",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F4"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P5",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F5"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P6",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F6"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P7",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F7"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P8",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F8"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P9",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F9"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 2,
+        "component_count": 3,
+        "status_counts": {
+          "answered": 1,
+          "unknown": 2
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 1,
+          "unknown|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 1,
+          "denominator": 1,
+          "ratio": 1.0
+        },
+        "partial_unknown_excluded": 2,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-EVAL-01/A",
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "judge": "A",
+      "raw_review_sha256": "d68957bc717bb75546dbf6dfb48d5920bb0b6af84f847f371180dc36952479bf",
+      "writer_finding_items": 3,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 4,
+          "unsupported": 0,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 4,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "already_present",
+            "reference_ids": [
+              "R04",
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 3,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 3
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 3
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 4,
+        "status_counts": {
+          "answered": 1,
+          "unanswered": 2,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 1,
+          "unanswered|acknowledged=True": 2,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 1,
+          "denominator": 3,
+          "ratio": 0.3333333333333333
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-EVAL-01/A",
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "split": "locked_evaluation",
+      "judge": "B",
+      "raw_review_sha256": "fbbef3257c172db7f1dbba587c20e7321dade8d00bd3d990eb75e57fdb9841bb",
+      "writer_finding_items": 3,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 3,
+          "unsupported": 1,
+          "partial": 1,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 3,
+          "denominator": 4,
+          "ratio": 0.75
+        },
+        "excluded_partial_unknown": 1,
+        "duplicate_of_unique_supported": 3,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "unsupported",
+            "category": "already_present",
+            "reference_ids": [
+              "R04",
+              "R14"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "already_present",
+            "reference_ids": [
+              "R11"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 3,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 3
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 3
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "partial",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 5,
+        "status_counts": {
+          "answered": 2,
+          "unanswered": 2,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "unanswered|acknowledged=True": 2,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 4,
+          "ratio": 0.5
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 5,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-EVAL-01/B",
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "judge": "A",
+      "raw_review_sha256": "16de027a06856203ccec4f0050d2176cb91c9203544b801670c7cbc2e4c759f6",
+      "writer_finding_items": 3,
+      "findings": {
+        "atomic_total": 5,
+        "verdict_counts": {
+          "supported": 3,
+          "unsupported": 0,
+          "partial": 2,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 3,
+          "denominator": 3,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 2,
+        "duplicate_of_unique_supported": 3,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F1b",
+            "writer_finding_id": "F1",
+            "verdict": "partial",
+            "category": "already_present",
+            "reference_ids": [
+              "R04"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "partial",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 3,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 3
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 3
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 5,
+        "status_counts": {
+          "answered": 2,
+          "partial": 1,
+          "unanswered": 2
+        },
+        "status_by_acknowledgment": {
+          "answered|acknowledged=True": 2,
+          "partial|acknowledged=True": 1,
+          "unanswered|acknowledged=True": 2
+        },
+        "answered_among_assessable": {
+          "numerator": 2,
+          "denominator": 4,
+          "ratio": 0.5
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q1",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q2",
+            "status": "partial",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 4,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 5,
+            "question_id": "Q3",
+            "status": "answered",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    },
+    {
+      "output_id": "v2/EN-EVAL-01/B",
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "split": "locked_evaluation",
+      "judge": "B",
+      "raw_review_sha256": "2b551db1a48d943fdca8191a5051399474b73b5d7f505ac8452f69fea347c538",
+      "writer_finding_items": 3,
+      "findings": {
+        "atomic_total": 4,
+        "verdict_counts": {
+          "supported": 4,
+          "unsupported": 0,
+          "partial": 0,
+          "unknown": 0
+        },
+        "supported_precision": {
+          "numerator": 4,
+          "denominator": 4,
+          "ratio": 1.0
+        },
+        "excluded_partial_unknown": 0,
+        "duplicate_of_unique_supported": 4,
+        "duplicate_links": [],
+        "semantic_unique_supported": null,
+        "ledger": [
+          {
+            "atomic_id": "F1a",
+            "writer_finding_id": "F1",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F2a",
+            "writer_finding_id": "F2",
+            "verdict": "supported",
+            "category": "nonmaterial_context",
+            "reference_ids": [
+              "R06"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3a",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R09"
+            ],
+            "duplicate_of": null
+          },
+          {
+            "atomic_id": "F3b",
+            "writer_finding_id": "F3",
+            "verdict": "supported",
+            "category": "omission",
+            "reference_ids": [
+              "R03"
+            ],
+            "duplicate_of": null
+          }
+        ]
+      },
+      "patches": {
+        "total": 3,
+        "new_meaning_structured_counts": {
+          "justified_new_meaning": 3
+        },
+        "unsupported_new_meaning_final_metric": null,
+        "bounded_prose_strengthening_patch_ids": [],
+        "meaning_loss_counts": {
+          "no": 3
+        },
+        "overediting": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "overediting_excluded": 0,
+        "deduplicated_observed_harm_patch_ids": [],
+        "observed_harm_union_rate": {
+          "numerator": 0,
+          "denominator": 3,
+          "ratio": 0.0
+        },
+        "ledger": [
+          {
+            "patch_id": "P1",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F1"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P2",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F2"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          },
+          {
+            "patch_id": "P3",
+            "warranted": "yes",
+            "new_assertion": "yes",
+            "meaning_loss": "no",
+            "overediting": "no",
+            "evidence_justifies_difference": "yes",
+            "location_correct": "yes",
+            "repairs_identified_issue": "yes",
+            "writer_finding_ids": [
+              "F3"
+            ],
+            "new_meaning_support_from_structured_fields": "justified_new_meaning",
+            "bounded_prose_strengthening_indicator": false,
+            "harm_tags": []
+          }
+        ]
+      },
+      "unanswered_scope": {
+        "writer_declared_entry_count": 1,
+        "component_count": 3,
+        "status_counts": {
+          "unanswered": 2,
+          "unknown": 1
+        },
+        "status_by_acknowledgment": {
+          "unanswered|acknowledged=True": 2,
+          "unknown|acknowledged=True": 1
+        },
+        "answered_among_assessable": {
+          "numerator": 0,
+          "denominator": 2,
+          "ratio": 0.0
+        },
+        "partial_unknown_excluded": 1,
+        "silent_unanswered_or_partial": 0,
+        "ledger": [
+          {
+            "component_index": 1,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 2,
+            "question_id": "Q3",
+            "status": "unanswered",
+            "acknowledged_by_writer": true
+          },
+          {
+            "component_index": 3,
+            "question_id": "Q2",
+            "status": "unknown",
+            "acknowledged_by_writer": true
+          }
+        ]
+      }
+    }
+  ],
+  "paired_same_version_B_minus_A": [
+    {
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "judge": "A",
+      "supported_count_B_minus_A": -2,
+      "duplicate_of_unique_supported_B_minus_A": -2,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 0
+    },
+    {
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "judge": "B",
+      "supported_count_B_minus_A": -2,
+      "duplicate_of_unique_supported_B_minus_A": -2,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 0
+    },
+    {
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "judge": "A",
+      "supported_count_B_minus_A": 1,
+      "duplicate_of_unique_supported_B_minus_A": 1,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 1
+    },
+    {
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "judge": "B",
+      "supported_count_B_minus_A": 1,
+      "duplicate_of_unique_supported_B_minus_A": 1,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 1
+    },
+    {
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "judge": "A",
+      "supported_count_B_minus_A": 3,
+      "duplicate_of_unique_supported_B_minus_A": 3,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 0
+    },
+    {
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "judge": "B",
+      "supported_count_B_minus_A": 0,
+      "duplicate_of_unique_supported_B_minus_A": 0,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 0
+    },
+    {
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "judge": "A",
+      "supported_count_B_minus_A": -1,
+      "duplicate_of_unique_supported_B_minus_A": -1,
+      "precision_B_minus_A": 0.0,
+      "observed_harm_patch_count_B_minus_A": 0
+    },
+    {
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "judge": "B",
+      "supported_count_B_minus_A": 1,
+      "duplicate_of_unique_supported_B_minus_A": 1,
+      "precision_B_minus_A": 0.25,
+      "observed_harm_patch_count_B_minus_A": 0
+    }
+  ],
+  "cross_judge_patch_unions": {
+    "v1/KO-DEV-01/A": {
+      "patch_count": 6,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v1/KO-DEV-01/B": {
+      "patch_count": 4,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v1/EN-DEV-01/A": {
+      "patch_count": 8,
+      "any_judge_observed_harm_patches": [
+        {
+          "patch_id": "P6",
+          "judges": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "count": 1,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v1/EN-DEV-01/B": {
+      "patch_count": 8,
+      "any_judge_observed_harm_patches": [
+        {
+          "patch_id": "P7",
+          "judges": [
+            "A",
+            "B"
+          ]
+        },
+        {
+          "patch_id": "P8",
+          "judges": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "count": 2,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/KO-DEV-01/B": {
+      "patch_count": 5,
+      "any_judge_observed_harm_patches": [
+        {
+          "patch_id": "P2",
+          "judges": [
+            "A"
+          ]
+        }
+      ],
+      "count": 1,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/EN-DEV-01/B": {
+      "patch_count": 5,
+      "any_judge_observed_harm_patches": [
+        {
+          "patch_id": "P2",
+          "judges": [
+            "A"
+          ]
+        }
+      ],
+      "count": 1,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/KO-EVAL-01/A": {
+      "patch_count": 5,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/KO-EVAL-01/B": {
+      "patch_count": 9,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/EN-EVAL-01/A": {
+      "patch_count": 3,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    },
+    "v2/EN-EVAL-01/B": {
+      "patch_count": 3,
+      "any_judge_observed_harm_patches": [],
+      "count": 0,
+      "interpretation": "Distinct patch IDs, not independent errors or consensus adjudication."
+    }
+  },
+  "same_article_original_presence_disagreements": [
+    {
+      "case_id": "EN-EVAL-01",
+      "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd",
+      "reference_id": "R25",
+      "observations": [
+        {
+          "output_id": "v2/EN-EVAL-01/A",
+          "condition": "A",
+          "judge": "A",
+          "original_presence": "absent"
+        },
+        {
+          "output_id": "v2/EN-EVAL-01/A",
+          "condition": "A",
+          "judge": "B",
+          "original_presence": "partial"
+        },
+        {
+          "output_id": "v2/EN-EVAL-01/B",
+          "condition": "B",
+          "judge": "A",
+          "original_presence": "partial"
+        },
+        {
+          "output_id": "v2/EN-EVAL-01/B",
+          "condition": "B",
+          "judge": "B",
+          "original_presence": "partial"
+        }
+      ],
+      "interpretation": "Same original article; baseline rating inconsistency, not a text-change effect."
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+      "reference_id": "R09",
+      "observations": [
+        {
+          "output_id": "v2/KO-EVAL-01/A",
+          "condition": "A",
+          "judge": "A",
+          "original_presence": "covered"
+        },
+        {
+          "output_id": "v2/KO-EVAL-01/A",
+          "condition": "A",
+          "judge": "B",
+          "original_presence": "covered"
+        },
+        {
+          "output_id": "v2/KO-EVAL-01/B",
+          "condition": "B",
+          "judge": "A",
+          "original_presence": "partial"
+        },
+        {
+          "output_id": "v2/KO-EVAL-01/B",
+          "condition": "B",
+          "judge": "B",
+          "original_presence": "partial"
+        }
+      ],
+      "interpretation": "Same original article; baseline rating inconsistency, not a text-change effect."
+    }
+  ],
+  "input_sha256": {
+    "journal-v12-private/review-map-v1-development.json": "bf24de975a53d27a489c37e407277674068a9a2a5a26680c87f9bcc524d36b37",
+    "journal-v12-private/writer-results-v1/088d7390d4359ea589b69407.json": "0a98cc44600afd28adc25c041b9be435e08dad102dcf9d62b7382207db322dd8",
+    "journal-v12-private/reviewer-results-v1/A__d4cd2cb427a66c946b552271.json": "034accc8cbe53c0708595d512531a4920c74416ec2296faec9ab9aedce51e044",
+    "journal-v12-private/reviewer-results-v1/B__d4cd2cb427a66c946b552271.json": "f29efafa1e4dccf705b8c18dc49d37631f9535a3a50b120899398a7b63b3ed14",
+    "journal-v12-private/writer-results-v1/ef01c1c27fd3418ca0e1d3be.json": "9a067e274bc0bd8a7ce0f34284a4dd8ce736a5a8a1ac8f040135e67ecce5f90b",
+    "journal-v12-private/reviewer-results-v1/A__ab59af64c3470b1df309f39f.json": "e2777ec15877fb80f2fd958b8ec1d21b26264194ffaeefef1c2f6d55fd85c65d",
+    "journal-v12-private/reviewer-results-v1/B__ab59af64c3470b1df309f39f.json": "7743c04720faedbbb74921bbff6ae3823ff20538637a082639ad11ef35f946ed",
+    "journal-v12-private/writer-results-v1/e54d797342e6b80fbea0299d.json": "5dd27f0fae8347b9d309eb78f8cc5191c96c3c16cc8a633468d798a374e7913a",
+    "journal-v12-private/reviewer-results-v1/A__e04940ff183338f5fe772428.json": "466c7d7368521f9d37c09b9da91293365b70906fc59ef25d162bb8daba79d1c3",
+    "journal-v12-private/reviewer-results-v1/B__e04940ff183338f5fe772428.json": "43eb3bcb3079a402862c864f006c9d7c76634f7ed5a8ec04cac60d08d8ee1f6f",
+    "journal-v12-private/writer-results-v1/ede155dad512a3d7d433676c.json": "74cd71a49df3b8ef769c837b751541ea6cc8d20a80242e8ed14cc4524245b781",
+    "journal-v12-private/reviewer-results-v1/A__031d406ace128460ad52cad9.json": "a22b45d5fc1906b9fe3d0654df477c1a5c79c1f5abd73304611eec436fdf6419",
+    "journal-v12-private/reviewer-results-v1/B__031d406ace128460ad52cad9.json": "19e0fa05190d6179dcd7e9c0d7b463555e90fd1168ebb9652f5083dde4a402be",
+    "journal-v12-private/review-map-v2-development.json": "8189c3b0a965769262018803c2db6a565babd7da997a97f1f124a257bba36f75",
+    "journal-v12-private/writer-results-v2/77c17b415a3e6380cb8da833.json": "34294c53ec4886e71460fcb0968def63e1318879f75b7ecfadeebde42ad93081",
+    "journal-v12-private/reviewer-results-v2/A__b08605eacf27764a4995a290.json": "60f5a117ce0d715eb9ec3efe5d007ac9061b7077b9047cdee1ce8f5b584ec9f4",
+    "journal-v12-private/reviewer-results-v2/B__b08605eacf27764a4995a290.json": "0ddeb6516dd1bcd2418f099695317577feee8f3fc9ba79c85c69f669c6e3a32d",
+    "journal-v12-private/writer-results-v2/d020bd701650da951576fccd.json": "424519d426e466d729db0ffed996c76b1e99b611ea442fc46b203dca144a4ea0",
+    "journal-v12-private/reviewer-results-v2/A__59a6106d81739f599e2c483f.json": "e46e5c08dbc54bd4d8cb26d766c8c55ae31938d0407362a549963e18c5003f9b",
+    "journal-v12-private/reviewer-results-v2/B__59a6106d81739f599e2c483f.json": "a91111d027fab0351785dc8957d1cd7ac3f6584e14c753198ad18242a1b8873a",
+    "journal-v12-private/review-map-v2-locked_evaluation.json": "588dc15ec296bc95e6bb53d31dc7628a65472ad04ded05e0fe2aad2345ec2f9c",
+    "journal-v12-private/writer-results-v2/c437a544c3c8c4ff39ae7f3d.json": "821c21db99ff28a12df42ad938dff716a5dbaf2298c0b8303ccbb3a386786d4b",
+    "journal-v12-private/reviewer-results-v2/A__4fc1204e8feb6b0ed2b488eb.json": "4ffc7560e66dbe06e5254c4c435ca2b148d6a3034d35aea697633db8b62a94e4",
+    "journal-v12-private/reviewer-results-v2/B__4fc1204e8feb6b0ed2b488eb.json": "2e6de00470b5d9756bc6e92a6d20604a66b3d42d323cf045b80cb8380902a6c2",
+    "journal-v12-private/writer-results-v2/0cb0917c57864cfa4be1121e.json": "fcfba0405aca5b1f965414d11597a74ea0c90d6e4217639ae3e5d43cdbfe4184",
+    "journal-v12-private/reviewer-results-v2/A__8e610b71dcbe8ed3092dc4c2.json": "d992b65bf7970aca1a966221ee5dcfd373f36a7f50ef274b898d398a3daf2d7c",
+    "journal-v12-private/reviewer-results-v2/B__8e610b71dcbe8ed3092dc4c2.json": "23177741a74dbfc9c2f0a3aa177d0db9531f8e4874267c15d85b4039593639bd",
+    "journal-v12-private/writer-results-v2/ec8450119a3653826b876bd1.json": "d6c570e60373857f2e8b517cc01780bebf8c97f1c25fda015f98032db41e6dd4",
+    "journal-v12-private/reviewer-results-v2/A__1ffe0b658d220e5ffc0073af.json": "d68957bc717bb75546dbf6dfb48d5920bb0b6af84f847f371180dc36952479bf",
+    "journal-v12-private/reviewer-results-v2/B__1ffe0b658d220e5ffc0073af.json": "fbbef3257c172db7f1dbba587c20e7321dade8d00bd3d990eb75e57fdb9841bb",
+    "journal-v12-private/writer-results-v2/21bae782c8af373f772865fa.json": "d53794b6fb033e921c3cd9e1b3e59c6feccf9ac62f0ef5c7b74c95a607a76475",
+    "journal-v12-private/reviewer-results-v2/A__01a93f2bbfdf5011d82094e3.json": "16de027a06856203ccec4f0050d2176cb91c9203544b801670c7cbc2e4c759f6",
+    "journal-v12-private/reviewer-results-v2/B__01a93f2bbfdf5011d82094e3.json": "2b551db1a48d943fdca8191a5051399474b73b5d7f505ac8452f69fea347c538"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "packet_id": "a8f79be0ed8f9c88e8818cec",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "The proposal is empty and displayed source and output are identical.",
+      "anchor": "proposed_patches: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Both displayed texts have the same percentage-point unit and Friday schedule.",
+      "anchor": "actual_output: 3%포인트; 금요일"
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "No patches were proposed.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The unchanged text satisfies both identified scenario checks; unknown external facts do not create an identified issue.",
+      "anchor": "E1; E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Finding no reason to change is a review judgment, not a report of actual application."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No reason to change does not explicitly report the final text stayed identical."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "It does not say the proposal is empty."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The limited review judgment does not establish or deny whole-article verification."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No publication statement."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_implicit",
+      "short_anchor": "제시된 검토 범위에서 문구를 바꿀 이유를 찾지 못했다",
+      "reason": "Within the stated review scope this communicates no identified remaining reason for a meaning correction."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The specific checked facts—3 percentage points and Friday—are not named."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

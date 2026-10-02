@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-10-02T00:58:09.417136+00:00",
+  "event": "Root accidentally displayed first45 lines of private mapping while reading protocol. Three heldout item label rows and partial fourth exposed; no source/candidate text or outputs read.",
+  "exposed_ids": [
+    "r_07eb50efc7f267d6",
+    "r_1a791687e070e978",
+    "r_1bf4db00e52b6121",
+    "r_207817628140f63e"
+  ],
+  "mitigation": "No synthetic method adaptation. H0/H1 stay exactly experiment_lock versions. All detector contexts remain blind. Do not claim root stayed fully heldout-label blind. Real evaluation packets and reference content remain unopened."
+}

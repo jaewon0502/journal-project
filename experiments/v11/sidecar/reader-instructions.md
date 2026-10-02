@@ -1,0 +1,7 @@
+Read only the supplied opaque packet paths and this instruction/rubric. Do not open condition mappings, expected answers, implementation, prior outputs, or reports. These are authored synthetic scenarios, not true news events. The supplied issue list is an existing review assertion; it is not gold or an independently proven fact.
+
+For every packet, read all common input and displayed annotation. Use the frozen reader-rubric.json. Assess concrete_issue_recoverable from the annotation, separately from what you can reconstruct using common input. An empty supplied issue list is not proof that no issue exists. Annotation may accurately quote a supplied concern without certifying it. State no-op means no local text change, not verified truth. Do not infer expected answers from writing style.
+
+Write one JSON per packet with packet_id, answers (each four rubric question names maps to answer, short_anchor, reason), missing_issue_ids (array), recovery_basis (annotation|common_input_only|not_applicable|unknown), additional_concerns (array), complete:true, read_complete:true. Answers are yes|no|unknown|not_applicable. Keep observed omissions, false assertions, and disagreement separate. Do not change any supplied material. No external lookup.
+
+This is one fixed review pass, not a new writing or editing task. Preserve uncertainty; no score optimization or majority assumption. Same native runtime, no model override. Output file prefix is provided by root.

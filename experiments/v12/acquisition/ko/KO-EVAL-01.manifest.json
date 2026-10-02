@@ -1,0 +1,47 @@
+{
+  "case_id": "KO-EVAL-01",
+  "language": "ko",
+  "split": "locked_evaluation",
+  "packet_sha256": "e3ff503bfc09187d5bf2794deabfc9f4a3c22c143413b279a1449eb744a999a9",
+  "packet_md_sha256": "d97758e8c64f100f2554ba096b9d3db115c35b661732f44cdfff84b102e91638",
+  "packet_text_characters": 5715,
+  "documents": [
+    {
+      "requested_url": "https://www.khan.co.kr/article/202502111114001",
+      "final_url": "https://www.khan.co.kr/article/202502111114001",
+      "status": 200,
+      "fetched_at": "2026-10-02T00:31:57.941270+00:00",
+      "source_id": "KE-A",
+      "title": "맞벌이 부부 육아휴직 합산 최대 3년 가능···오는 23일부터 시행",
+      "published_at": "2025-02-11T11:14:00+09:00",
+      "event_dates": [
+        "2025-02-11",
+        "2025-02-23"
+      ],
+      "scope": "Full article headline and body prose with two captions; image pixels, ads, navigation, related articles and comments excluded. Page reports updated 2025-02-11 15:02 KST. No length truncation.",
+      "raw_sha256": "9b5fae50fb911ba136a53459d034a93722efca79bb2f824c9c6f93ee3283f44f",
+      "text_sha256": "5e58d5342acb35b3ee58eba12dcc00cb77a1c745106538a19ffd1881e0ea45ee",
+      "text_characters": 1447,
+      "paragraph_count": 12
+    },
+    {
+      "requested_url": "https://www.moel.go.kr/common/downloadFile.do?file_seq=20250200722&bbs_seq=17495&bbs_id=12&file_ext=pdf",
+      "final_url": "https://www.moel.go.kr/common/downloadFile.do?file_seq=20250200722&bbs_seq=17495&bbs_id=12&file_ext=pdf",
+      "status": 200,
+      "fetched_at": "2026-10-02T00:32:36.192331+00:00",
+      "source_id": "KE-P1",
+      "title": "임신초기 유산·사산 휴가 5→10일로 확대, 임신·출산·육아 지원 강화",
+      "published_at": "2025-02-11T08:00:00+09:00",
+      "event_dates": [
+        "2025-02-11",
+        "2025-02-23"
+      ],
+      "scope": "Complete four-page MOEL release: pages 1–2 extracted using pdftotext -layout, all table entries retained; pages 3–4 image-based appendices visually read and transcribed with table relationships, labeled as transcription; illustrations and decorative logos not verbalized. Raw PDF and page-3/4 renders retained. No length truncation.",
+      "raw_sha256": "30472fc299102ccafb9c71ce82a8574ca7928d81a999c70d750b8dd1eb695af4",
+      "text_sha256": "18fb42cf24530f4691240c2874387ecf5a222a72d8aa444182ee6663b5fb191e",
+      "text_characters": 4268,
+      "paragraph_count": 26
+    }
+  ],
+  "read_check": "All selected article prose, primary prose and two image appendix pages read by acquisition agent; no audit judgments produced."
+}

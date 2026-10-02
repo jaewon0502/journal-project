@@ -1,0 +1,25 @@
+{
+  "input_id": "d751d02a9ccf200645c565e3",
+  "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "protection_inventory": [
+    {
+      "id": "P1",
+      "source_anchor": "The pilot reduced processing time by 7%.",
+      "meaning": "Retain the claim about the pilot, processing-time reduction, and 7% magnitude; missing baseline evidence does not establish that this claim is false.",
+      "outside_reference": true
+    }
+  ],
+  "patches": [],
+  "dependencies": [],
+  "reader_note": "No. The supplied report excerpt gives a final processing time of 93 seconds but no baseline, so the 7% reduction cannot be verified. A 100-second baseline would yield a 7% reduction, but that baseline is not supplied. No replacement patches are proposed; the original sentence remains unchanged because the evidence does not establish a correction. The baseline and claimed reduction remain unresolved.",
+  "target_response": "unresolved",
+  "unresolved": [
+    "The baseline processing time is absent from E1, preventing verification or correction of the claimed 7% reduction."
+  ],
+  "self_check": {
+    "original_statement_retention": "The entire original sentence is retained without alteration; no supported replacement percentage can be inferred.",
+    "scope_time_comparison": "The final value of 93 seconds alone does not define a reduction percentage; no baseline or additional comparison period has been invented.",
+    "criticism_and_counterargument": "The original contains no criticism, rebuttal, or attributed speech.",
+    "outside_patch_unchanged": true
+  }
+}

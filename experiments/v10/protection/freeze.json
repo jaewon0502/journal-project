@@ -1,0 +1,12 @@
+{
+  "frozen_files": {
+    "KO011.protection.json": "1efe957e1fc65a32a89ffcae1e8c293ecf7d02fcc338f12888e07eda6142ef88",
+    "EN023.protection.json": "845563ccbb17a02662691bc8150d1b39469a602750de7c265e5f39283b21bb7c",
+    "NASA2024.writer-packet.json": "b3d1c21f527c2c2a6e13b4b3c0d434191d021ae3c034fe247024c7fc855ab5cd",
+    "NASA2024.packet.json": "e3f33427a939cc145a0c81abdfa27e83e8703766437fc54ecebf66a60483ae49",
+    "NASA2024.body.txt": "83a5843a37846dc1ed8028c042fa2e78c83f5dc0806b55b8f1bc8b1b9c116c3e"
+  },
+  "not_gold": true,
+  "manifest_verified_at": "2026-10-01T22:39:55.623486+00:00",
+  "timestamp_note": "파일 작성 당시 정확한 freeze 시각은 기록하지 않음; 이 시각은 manifest hash 재확인 시각."
+}

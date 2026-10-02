@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-02T02:44:29.884660+00:00",
+  "writer_proposal_count": 1,
+  "actual_writer_output": true,
+  "application_errors": {},
+  "files": {
+    "source-packet.json": "6f8aa65826d40b3fbd5cb5df52f95cc0ca5a8ea611a229de6aca3f8bc09aff32",
+    "source-first-reference.json": "2e81f951abb5382b04d6bceb246bd0bf2b5954f54fcf278a38b6dbf4b5612469",
+    "writer-input.json": "ea8dac848ecf058fa64b9210cba1d41d13fb25dd59d4461a6d303be93e5de158",
+    "writer-output.json": "57651599e3811bc430a7e4804538f5bc2c04fcbb4f0190900278d1ae7e4d11f5",
+    "bundle.json": "05ac646a6ea6d4c18986d1c2c6229c245b04e5e7ba9637f49a0579b45bc09979",
+    "review-input.json": "956adf90e9945bd7942b8fbcd37cf9d9f6c55500f462675c349ebde80dd40cc2"
+  }
+}

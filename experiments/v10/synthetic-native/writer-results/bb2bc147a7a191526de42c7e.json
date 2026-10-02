@@ -1,0 +1,23 @@
+{
+  "input_id": "bb2bc147a7a191526de42c7e",
+  "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+  "protection_inventory": [
+    {
+      "id": "P1",
+      "source_anchor": "The council approved 12 permits on May 2.",
+      "meaning": "Retain the council as actor, approval of 12 permits, and the May 2 event date. E1 confirms this complete source statement; the later cumulative count does not contradict it.",
+      "outside_reference": true
+    }
+  ],
+  "patches": [],
+  "dependencies": [],
+  "reader_note": "By the end of May 9, 15 permits had been approved cumulatively: the 12 approved on May 2 plus 3 additional permits recorded on May 9 (E1–E2). No source changes were applied or proposed because its May 2 statement is accurate. Nothing remains unresolved within the supplied evidence.",
+  "target_response": "no_change_needed",
+  "unresolved": [],
+  "self_check": {
+    "original_statement_retention": "The complete original consists of one sentence. The unchanged candidate retains its actor, count, action and date, and introduces no article claims.",
+    "scope_time_comparison": "The source gives approvals on May 2; the target asks for a cumulative total through May 9. E2 supplies the later total without invalidating the earlier event.",
+    "criticism_and_counterargument": "The original contains no criticism, attributed speech or counterargument.",
+    "outside_patch_unchanged": true
+  }
+}

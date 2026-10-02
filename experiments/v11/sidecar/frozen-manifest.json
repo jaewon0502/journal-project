@@ -1,0 +1,40 @@
+{
+  "schema": "journal-v11.sidecar-freeze.v1",
+  "scope": "implementation, developer examples/tests, public contract/addendum only; exposed regression module; no hidden case or reader access",
+  "files": {
+    "README.md": "a0991cea45507d081cd9a9f107dd13c0f65f88034b57337c971753252db3f665",
+    "contract.md": "771651902950dc9a383387e8f3908be308d317c93862df4890abfe690b411d34",
+    "developer-replay/1/input.json": "dca6bf8f95b3c1ff0279b2552fc17d5ccdba54b7583acd6bf386a840c554208c",
+    "developer-replay/1/receipt.json": "7e6147178baa4a93b073d61e7a2f6fb67c21ccedb3d62a352768dd852aa9521f",
+    "developer-replay/1/result.json": "1b79744e427c24efd7dd75a863756907dc7c2baa303ae815d31e8d3e1d2d33f7",
+    "developer-replay/2/input.json": "3525ffb0d032ac52402c72ec09249ce304edb18788b060f0bbb1077c701240f1",
+    "developer-replay/2/receipt.json": "7e6147178baa4a93b073d61e7a2f6fb67c21ccedb3d62a352768dd852aa9521f",
+    "developer-replay/2/result.json": "5f1a3295c0b6becaedea8e3679c03289348c6fa6b86829daed574e06e119cb54",
+    "evidence/developer-replay-summary.json": "f8170887aebf3c00968cf16b0ce040b9a2cc71bf7980963af2747ccc4b1198ca",
+    "evidence/receipt-freezes-preserved.json": "b33ceb1810a4f89c9ac7842f4a1d7296199dc93a97e1f18a224d2998ada24276",
+    "evidence/unittest.txt": "43ae5dde63639d75d3dadffad9e43d84f60dd1c8cd5fa3b8b8bd5efa2e040743",
+    "examples/input-1.json": "645023306b5541cc182164ba0be945ad31b6040f520b33cf52e8b023735efcb2",
+    "examples/input-2.json": "85e9ef46f7879c9a6427b0ee93d1f0b9304e4a95a25b3d3c9b7456dbca814583",
+    "examples/receipt-1.json": "2e0ea46cd12890288357a28487d86ea52ce40335fb5de6f9d87ee2f09c47916a",
+    "examples/receipt-2.json": "2e0ea46cd12890288357a28487d86ea52ce40335fb5de6f9d87ee2f09c47916a",
+    "interface-addendum-lock.json": "8380759a4e3787fb8fc4ffea7bc0052cbd51e9ec9ff2f9b232c534e6e06ec398",
+    "interface-addendum.md": "8df222ecebabd0e5f486a6fa35f765507b0adf1eb0f8e69f7db44a20e545b17b",
+    "reproduce.py": "35b01fd742e6566e3d70872a3f412d23ba5c4db0e5f437cfcc3b1928e84edbcb",
+    "sidecar.py": "f9dd8f82b65392910f716e780d64aafe483245afcb886973cc3f5ba71b45f034",
+    "test_sidecar.py": "c5a6ae9a4686e5778ddb448bc849a9f2eb1af5668dc1966343bb941903dc7f53"
+  },
+  "portable_dependencies": {
+    "loader.py": "5180d8eb5c293a1bd7888ef37b33f89fcf129ccd0c281fc21a4cb6b67223bc99",
+    "bundle-manifest.json": "d3a26ad82f9d9750bb14f4975ce960237dcebaf3e5c2460f747c25a7845c7d42",
+    "candidates/v1_3/receipt.py": "3f3a4dc118c4311bd0adef8fe4893cd6d1340ce1e490b445febb7d13464a6014",
+    "dependencies/delivery.py": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+    "dependencies/vendor/selective_rollback.py": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a"
+  },
+  "excluded_orchestration": [
+    "run_regression.py",
+    "reader-instructions.md",
+    "reader-rubric.json",
+    "input-lock.json",
+    "future results"
+  ]
+}

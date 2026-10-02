@@ -1,0 +1,31 @@
+{
+  "runtime_recursion_limit": 1000,
+  "rows": [
+    {
+      "version": "v11",
+      "depth": 10000,
+      "final_audit_bytes": 20010,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.1",
+      "depth": 10000,
+      "final_audit_bytes": 20010,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "depth": 10000,
+      "final_audit_bytes": 20010,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    }
+  ],
+  "no_external_calls": true,
+  "no_hidden_cases_read": true
+}

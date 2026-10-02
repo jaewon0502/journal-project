@@ -1,0 +1,165 @@
+[
+  {
+    "case_id": "d75d0e3fb2eb",
+    "private_kind": "full",
+    "expected": {
+      "applied_local": "yes",
+      "unchanged": "no",
+      "allproposed_applied": "yes",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "no"
+    },
+    "expected_applied_ids": [
+      "p1",
+      "p2"
+    ],
+    "one_factor_parent_kind": null,
+    "changed_input_factor": "baseline"
+  },
+  {
+    "case_id": "a7e87c69b904",
+    "private_kind": "normal",
+    "expected": {
+      "applied_local": "no",
+      "unchanged": "yes",
+      "allproposed_applied": "not_applicable",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "no"
+    },
+    "expected_applied_ids": [],
+    "one_factor_parent_kind": null,
+    "changed_input_factor": "separate normal no-edit control"
+  },
+  {
+    "case_id": "bd569abe2ca0",
+    "private_kind": "partial",
+    "expected": {
+      "applied_local": "yes",
+      "unchanged": "no",
+      "allproposed_applied": "no",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [
+      "p1"
+    ],
+    "one_factor_parent_kind": "full",
+    "changed_input_factor": "p2 review approval becomes rejection (output/receipt mechanically follow)"
+  },
+  {
+    "case_id": "53d89f874761",
+    "private_kind": "dependent",
+    "expected": {
+      "applied_local": "no",
+      "unchanged": "yes",
+      "allproposed_applied": "no",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [],
+    "one_factor_parent_kind": "partial",
+    "changed_input_factor": "dependency grouping only (output/receipt mechanically follow)"
+  },
+  {
+    "case_id": "2351c7060c84",
+    "private_kind": "preexisting",
+    "expected": {
+      "applied_local": "yes",
+      "unchanged": "no",
+      "allproposed_applied": "yes",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [
+      "p1",
+      "p2"
+    ],
+    "one_factor_parent_kind": "full",
+    "changed_input_factor": "one unrelated preexisting arithmetic-error sentence added"
+  },
+  {
+    "case_id": "19b2afea4862",
+    "private_kind": "full",
+    "expected": {
+      "applied_local": "yes",
+      "unchanged": "no",
+      "allproposed_applied": "yes",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "no"
+    },
+    "expected_applied_ids": [
+      "p1",
+      "p2"
+    ],
+    "one_factor_parent_kind": null,
+    "changed_input_factor": "baseline"
+  },
+  {
+    "case_id": "88b1c16a46ec",
+    "private_kind": "normal",
+    "expected": {
+      "applied_local": "no",
+      "unchanged": "yes",
+      "allproposed_applied": "not_applicable",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "no"
+    },
+    "expected_applied_ids": [],
+    "one_factor_parent_kind": null,
+    "changed_input_factor": "separate normal no-edit control"
+  },
+  {
+    "case_id": "8e039edfc1e3",
+    "private_kind": "partial",
+    "expected": {
+      "applied_local": "yes",
+      "unchanged": "no",
+      "allproposed_applied": "no",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [
+      "p1"
+    ],
+    "one_factor_parent_kind": "full",
+    "changed_input_factor": "p2 review approval becomes rejection (output/receipt mechanically follow)"
+  },
+  {
+    "case_id": "d6736be620d4",
+    "private_kind": "dependent",
+    "expected": {
+      "applied_local": "no",
+      "unchanged": "yes",
+      "allproposed_applied": "no",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [],
+    "one_factor_parent_kind": "partial",
+    "changed_input_factor": "dependency grouping only (output/receipt mechanically follow)"
+  },
+  {
+    "case_id": "240d01b3906c",
+    "private_kind": "abstain",
+    "expected": {
+      "applied_local": "no",
+      "unchanged": "yes",
+      "allproposed_applied": "no",
+      "verifiedcorrect": "unknown",
+      "externalpublished": "no",
+      "unresolvedmeaning": "yes"
+    },
+    "expected_applied_ids": [],
+    "one_factor_parent_kind": "full",
+    "changed_input_factor": "review-certainty field changes both patch decisions to unknown (output/receipt follow)"
+  }
+]

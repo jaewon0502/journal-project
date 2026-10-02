@@ -1,0 +1,50 @@
+{
+  "executed_at": "2026-10-01T23:58:13.040848+00:00",
+  "scope": "Exposed regression, not new holdout",
+  "rows": [
+    {
+      "input_id": "79814d8015a14d2c85d0e553",
+      "case_id": "bd569abe2ca0",
+      "language": "KO",
+      "exposed_regression_kind": "partial",
+      "input_sha256": "032375a4e77a345b35b156c19163567e23d86bc8766b919389169be26e832642",
+      "issue_count": 1,
+      "status": "verified",
+      "result_sha256": "f174241fa2bd4bfe1c6c2591f2afbf6ae8a094a7fcd105fdcd4627ab52cd30e3",
+      "original_receipt_unchanged": true
+    },
+    {
+      "input_id": "0ca01f1b92bde49c1f37d9e8",
+      "case_id": "d6736be620d4",
+      "language": "EN",
+      "exposed_regression_kind": "dependent",
+      "input_sha256": "f2c2d322d16e12fc83de2dcda61e393215cda38f27328a8356d4af7ee7c108f9",
+      "issue_count": 2,
+      "status": "verified",
+      "result_sha256": "088eff91674e552f6a3214afe413c1168824681dcfd27b5961bb0ec610950d9a",
+      "original_receipt_unchanged": true
+    },
+    {
+      "input_id": "e7cb04f0501bbb7c3a791efa",
+      "case_id": "2351c7060c84",
+      "language": "KO",
+      "exposed_regression_kind": "preexisting",
+      "input_sha256": "15eac252f966484bce43cc04479cc47db7d719b5c01541df5068f60f8bff260c",
+      "issue_count": 1,
+      "status": "verified",
+      "result_sha256": "93ea42d154a4c5a828706e64a8ed188c4ea2f067e9f8083274769ea81fc445d7",
+      "original_receipt_unchanged": true
+    },
+    {
+      "input_id": "c4b84e7013df1a8289b4df32",
+      "case_id": "88b1c16a46ec",
+      "language": "EN",
+      "exposed_regression_kind": "normal",
+      "input_sha256": "05e672a58035bb6dd472a7167aac72ca768fc56581debc05663f27278c28be69",
+      "issue_count": 0,
+      "status": "verified",
+      "result_sha256": "4a4184c8e9d239b797022effb4c3694ea33a2c5a02d8d0d4c9a7e22b178ad3bc",
+      "original_receipt_unchanged": true
+    }
+  ]
+}

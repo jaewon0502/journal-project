@@ -1,0 +1,21 @@
+{
+  "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "proposal_sha256": "cc6ec4c359ae5530e086d4c933fda5e9edc2bd75f7f1096991b93b906d36e387",
+  "candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "selected_ids": [],
+  "packet_id": "fc625e459d55379b1f8eb41f",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "approved",
+  "findings": [],
+  "explanation_grounding": "pass",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "All-failed claim retained as a rumor explicitly rejected by the committee.",
+    "Five-passed claim remains attributed to the committee; denial relationship retained."
+  ],
+  "remaining_uncertainty": [],
+  "reason": "Approve unchanged source and explanation: evidence supports the precise attribution and refutation relationship. No unsupported endorsement of the rejected rumor or correction claim."
+}

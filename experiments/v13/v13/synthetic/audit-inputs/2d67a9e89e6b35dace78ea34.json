@@ -1,0 +1,44 @@
+{
+  "audit_id": "2d67a9e89e6b35dace78ea34",
+  "source_documents": [
+    {
+      "id": "S1",
+      "url": null,
+      "paragraphs": [
+        {
+          "id": "S1.p1",
+          "text": "가상의 서린교육재단은 2026년 9월 12일 방과후 수업 장비 구매에 관한 설명회를 열었다."
+        },
+        {
+          "id": "S1.p2",
+          "text": "재단은 최종 납품 계약을 맺은 업체가 7곳이며 예비 협상에 참여한 2곳은 계약 업체에 포함되지 않는다고 밝혔다."
+        },
+        {
+          "id": "S1.p3",
+          "text": "계약 금액과 납품 일정은 설명회 당일 변경되지 않았다."
+        },
+        {
+          "id": "S1.p4",
+          "text": "서린학부모연대는 설명회에서 “재단이 호환성을 검증하지 않은 채 장비를 발주해 교실 수업을 혼란에 빠뜨렸다”고 비판했다."
+        },
+        {
+          "id": "S1.p5",
+          "text": "재단은 발주 전 서류 검토는 했지만 교실 환경에서의 호환성 시험은 하지 않았다고 답했다."
+        },
+        {
+          "id": "S1.p6",
+          "text": "재단은 수업 혼란의 원인은 조사 중이며 9월 말까지 현장 시험 계획을 내겠다고 밝혔다."
+        }
+      ]
+    }
+  ],
+  "source_scope_note": "전적으로 허구로 작성한 설명회 발언 기록이다. 학부모연대의 원인 지적은 해당 단체의 비판이며 재단의 조사 결론을 대신하지 않는다.",
+  "original_article": "서린교육재단은 9월 12일 방과후 수업 장비 구매에 관한 설명회를 열었다. 재단에 따르면 최종 납품 계약을 맺은 업체는 9곳이다. 서린학부모연대는 재단이 호환성을 검증하지 않은 채 장비를 발주해 교실 수업을 혼란에 빠뜨렸다고 비판했다. 재단은 서류 검토는 했으나 교실 환경에서의 호환성 시험은 하지 않았다고 답했다. 재단은 수업 혼란의 원인을 조사 중이며 9월 말까지 현장 시험 계획을 내겠다고 밝혔다.",
+  "reader_questions": [
+    "제시된 자료의 범위에서 기사에 필요한 사실 수정은 무엇인가?",
+    "각 제안은 근거에 부합하며 수정 대상 이외의 의미와 인접 문장의 관계를 보존하는가?",
+    "각 제안을 적용하거나 보류할 때 남는 불확실성과 필요한 다른 제안이 있는가?"
+  ],
+  "candidate_article": "서린교육재단은 9월 12일 방과후 수업 장비 구매에 관한 설명회를 열었다. 재단에 따르면 최종 납품 계약을 맺은 업체는 7곳이다. 서린학부모연대는 재단이 호환성을 검증하지 않은 채 장비를 발주해 교실 수업을 혼란에 빠뜨렸다고 비판했다. 재단은 서류 검토는 했으나 교실 환경에서의 호환성 시험은 하지 않았다고 답했다. 재단은 수업 혼란의 원인을 조사 중이며 9월 말까지 현장 시험 계획을 내겠다고 밝혔다.",
+  "instruction": "Read only allocated audit packet. This is an independent AI semantic audit, not a human validation. You receive full eligible sources, original, reader questions and one delivered candidate; no gate label, author expectations or initial judgments. Do not search sibling packets/files/web. Check full source and original before assessing the candidate, including surrounding relations. Identify actual changed spans yourself. Separate existing original unsupported claims from new introduced claims. Missing facts not in source are unverified, not refuted. Treat source statement, attributed criticism, forecasts, and established observation separately. Do not count unchanged original errors as introduced harms. A source-reported criticism is not false because negative; preserve actor, target, scope and intensity.\n\nJudge each actual change: exact short evidence anchors, whether warranted/supported, whether original untargeted meaning/conditions/attribution/time/comparison/responsibility/criticism is lost, whether neighboring or long-distance relations make a new unsupported implication. Record supported beneficial corrections delivered and needed corrections still absent. If safety cannot be decided from source, mark unknown instead of approval. Say whether all original/source paragraphs were read; this is a report, not proof of complete semantic coverage. No single composite quality score.\n\nReturn JSON: audit_id, complete:boolean, read_complete:boolean, read_source_paragraph_ids:[], original_paragraphs_read:boolean, changes:[{id,before,after,warranted:yes/no/unknown,evidence_support:yes/no/unknown,introduced_material_harm:yes/no/unknown,harm_dimensions:[],source_anchors:[],original_anchors:[],candidate_anchors:[],reason}], original_residual_issues:[{issue,evidence_status,reason}], criticism_preservation:{status:preserved/lost/not_applicable/unknown,reason}, full_context_safety:safe/material_harm/unknown, normal_noop:boolean, unmet_required_answers:[], uncertainties:[], release_recommendation:release/hold, reason. Release requires no introduced material harm or unknown safety. It need not resolve all original shortcomings. No-change original may be safe relative to original while not accurate; clearly state this. If there are no changes, don't fabricate patch judgments.\n"
+}

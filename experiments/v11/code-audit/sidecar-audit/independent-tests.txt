@@ -1,0 +1,11 @@
+test_01_stale_and_self_consistent_forged_receipts (__main__.SidecarAudit.test_01_stale_and_self_consistent_forged_receipts) ... ok
+test_02_forged_evidence_and_utf8_anchors (__main__.SidecarAudit.test_02_forged_evidence_and_utf8_anchors) ... ok
+test_03_empty_list_and_verbatim_provenance (__main__.SidecarAudit.test_03_empty_list_and_verbatim_provenance) ... ok
+test_04_exact_and_over_display_budget (__main__.SidecarAudit.test_04_exact_and_over_display_budget) ... ok
+test_05_limits_and_complete_reverification (__main__.SidecarAudit.test_05_limits_and_complete_reverification) ... ok
+test_06_portable_layout (__main__.SidecarAudit.test_06_portable_layout) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.141s
+
+OK

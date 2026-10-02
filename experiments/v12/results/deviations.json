@@ -1,0 +1,30 @@
+{
+  "updated_at": "2026-10-02T01:09:40.141726+00:00",
+  "items": [
+    {
+      "id": "D01",
+      "detail": "EN topics assigned DEV science / EVAL bank before writer outputs rather than literal first eligible acquisition chronology.",
+      "impact": "Selection not randomized; descriptive sample only."
+    },
+    {
+      "id": "D02",
+      "detail": "Opaque hash IDs and cross-case reviewer groups used; actual per-reviewer display order was fixed KO then EN, not randomized. Opposite condition launch order retained by language.",
+      "impact": "Order and method-inference effects remain. Labels hidden, output procedure may be inferable."
+    },
+    {
+      "id": "D03",
+      "detail": "Root inadvertently saw three heldout synthetic item label rows and partial fourth before final synthetic no-adaptation lock; no candidate/source text seen in that view.",
+      "impact": "Detector contexts remain blind; root not fully label-blind. Synthetic procedures stayed unchanged."
+    },
+    {
+      "id": "D04",
+      "detail": "B received one DEV-based patch-boundary gate; A unchanged. Two extra B development outputs retained as exposed regressions.",
+      "impact": "Heldout A/B tests composite procedure, not isolated reverse-coverage or gate effect. Reruns are not new cases."
+    },
+    {
+      "id": "D05",
+      "detail": "H1 includes source-generated QA not given to H0, including English QA for Korean items.",
+      "impact": "Preprocessing/input length/auxiliary language part of intervention, not matched-token prompt effect."
+    }
+  ]
+}

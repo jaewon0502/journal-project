@@ -1,0 +1,14 @@
+test_aliases_prose_and_receipt_tampering (test_receipt.ReceiptTests.test_aliases_prose_and_receipt_tampering) ... ok
+test_all_actual_values_bound (test_receipt.ReceiptTests.test_all_actual_values_bound) ... ok
+test_empty_unapproved_abstains (test_receipt.ReceiptTests.test_empty_unapproved_abstains) ... ok
+test_source_only_separate_candidate (test_receipt.ReceiptTests.test_source_only_separate_candidate) ... ok
+test_stale_or_malformed_audit_abstains (test_receipt.ReceiptTests.test_stale_or_malformed_audit_abstains) ... ok
+test_states_and_language (test_receipt.ReceiptTests.test_states_and_language) ... ok
+test_store_hardlink_and_fifo_rejected (test_receipt.ReceiptTests.test_store_hardlink_and_fifo_rejected) ... ok
+test_store_rejects_symlinks_and_legacy (test_receipt.ReceiptTests.test_store_rejects_symlinks_and_legacy) ... ok
+test_store_roundtrip_and_collision (test_receipt.ReceiptTests.test_store_roundtrip_and_collision) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.030s
+
+OK

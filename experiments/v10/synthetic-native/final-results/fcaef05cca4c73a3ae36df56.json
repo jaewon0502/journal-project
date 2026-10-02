@@ -1,0 +1,31 @@
+{
+  "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "proposal_sha256": "66da2f0564939181d7cb4cfe03665ff4af6ee14305dc33ec2cc162368e8b647e",
+  "candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "selected_ids": [],
+  "packet_id": "fcaef05cca4c73a3ae36df56",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "approved",
+  "findings": [
+    {
+      "id": "inherited_earlier_record_unknown",
+      "description": "Original June 8 then-record assertion cannot be verified from evidence omitting June 8 and prior levels; this inherited limit is explicitly disclosed.",
+      "relation": "preexisting_independent",
+      "patch_ids": []
+    }
+  ],
+  "explanation_grounding": "pass",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "Observatory attribution, June 8 date and at-that-time record scope retained.",
+    "June 10 later 8.2m record distinguished from proof about an earlier record."
+  ],
+  "remaining_uncertainty": [
+    "June 8 level and preceding highest level absent.",
+    "Original reported observatory announcement is not independently verified by the June 10 excerpt."
+  ],
+  "reason": "Approve unchanged source with grounded answer that later record evidence does not establish the earlier assertion false. Historical truth remains unresolved and no correction is claimed."
+}

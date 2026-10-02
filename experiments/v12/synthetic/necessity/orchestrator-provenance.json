@@ -1,0 +1,114 @@
+{
+  "recorded_at": "2026-10-02T01:49:36.468315+00:00",
+  "status": "orchestrator record of actual native spawn calls, not independent authentication of isolation or internal model calls",
+  "rows": [
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "replicate": "A",
+      "task_name": "review-role-a1",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__0ce5a7e0ec02731911b92d52.json"
+    },
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "replicate": "B",
+      "task_name": "review-role-b1",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__0ce5a7e0ec02731911b92d52.json"
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "replicate": "A",
+      "task_name": "review-role-a2",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__0e0d2a253a6004ba748256e3.json"
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "replicate": "B",
+      "task_name": "review-role-b2",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__0e0d2a253a6004ba748256e3.json"
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "replicate": "A",
+      "task_name": "review-role-a3",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__206a6e985b3915af8102500c.json"
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "replicate": "B",
+      "task_name": "review-role-b3",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__206a6e985b3915af8102500c.json"
+    },
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "replicate": "A",
+      "task_name": "review-role-a4",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__285cf1155fdc3469d7ee6681.json"
+    },
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "replicate": "B",
+      "task_name": "review-role-b4",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__285cf1155fdc3469d7ee6681.json"
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "replicate": "A",
+      "task_name": "review-role-a5",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__696e705f4d8426a7a1e00fc3.json"
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "replicate": "B",
+      "task_name": "review-role-b5",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__696e705f4d8426a7a1e00fc3.json"
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "replicate": "A",
+      "task_name": "review-role-a6",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/A__f09b014f3d4927e89ac2bb38.json"
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "replicate": "B",
+      "task_name": "review-role-b6",
+      "context_inheritance": "none",
+      "model_override": null,
+      "effort_override": null,
+      "expected_output": "classifier-results/B__f09b014f3d4927e89ac2bb38.json"
+    }
+  ]
+}

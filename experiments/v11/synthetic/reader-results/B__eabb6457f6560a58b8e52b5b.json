@@ -1,0 +1,72 @@
+{
+  "packet_id": "eabb6457f6560a58b8e52b5b",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Displayed output incorporates p1, changing the increase to percentage points.",
+      "anchor": "selected_ids: [p1]; actual_output: 3 percentage points / 3%포인트"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit differs from the source.",
+      "anchor": "p1: 3% → 3 percentage points / 3%포인트"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "p2 was rejected; the output retains Friday rather than Saturday.",
+      "anchor": "rejected_ids: [p2]; actual_output: Friday / 금요일"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "E2 stipulates Saturday but displayed output retains Friday. Rejection does not settle this discrepancy.",
+      "anchor": "E2: The fictional meeting schedule says Saturday."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "p1만 적용되어",
+      "reason": "States p1 incorporation into final local result."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "3%포인트로 바뀌었습니다",
+      "reason": "A stated replacement entails nonidentity with source."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "p1만 적용되어; p2의 ... 변경은 거부·롤백되어",
+      "reason": "States only one of two applied."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_implicit",
+      "short_anchor": "최종 결과의 금요일 표기와 일정 사이의 불일치는 남아 있습니다",
+      "reason": "An explicit remaining factual discrepancy rules out established entire correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No external publication status is stated."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "불일치는 남아 있습니다",
+      "reason": "Explicitly relates retained Friday to supplied Saturday schedule."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

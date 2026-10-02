@@ -1,0 +1,122 @@
+{
+  "bundle_id": "d0c7e5",
+  "input_sha256": "fbf015fe119a40b75dcc9ffbd3bc7db84db6a4b54fc685d78fe51018b14ceedf",
+  "source_sha256": "7c205a5d62ab9d3db77706eb7d122c9ccaa1aba71e99a662de857a08df3ef17c",
+  "original_sha256": "9d2f27d82e674d41cb1aae60c91641a22366f2610f01855b125cd221f6d36d84",
+  "patches_sha256": "7e20f9e4f1ba0219f124d6d0a8c18dd0060375b745cfb409ba2390d73929297b",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p3",
+          "quote": "9월 14일 측정한 동쪽 지점은 42데시벨, 남쪽 지점은 44데시벨이었다."
+        },
+        {
+          "document_id": "original",
+          "quote": "9월 14일 동쪽 지점의 저녁 소음은 43데시벨, 남쪽은 44데시벨로 측정됐다."
+        }
+      ],
+      "reason": "The original eastern measurement is 43 dB, while the source explicitly gives 42 dB for the same date and location. P1 corrects only that number and preserves the southern measurement, threshold, timing and attribution. Its exact before span is unique and does not overlap P2. P1 requires no other patch. In the simultaneous candidate it remains a supported measurement correction; it does not establish compliance at the unreported northern point or validate P2.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "no",
+      "evidence_support": "unknown",
+      "preserves_untargeted_meaning": "no",
+      "context_safe": "no",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "운영 협약은 경계 측정 지점 세 곳 모두에서 저녁 소음이 45데시벨 이하여야 정규 저녁 운영을 시작할 수 있다고 정했다."
+        },
+        {
+          "document_id": "S1.p4",
+          "quote": "중간 기록에는 북쪽 지점의 측정값이나 측정 완료 여부가 기재되지 않았다."
+        },
+        {
+          "document_id": "S1.p5",
+          "quote": "연구소는 정규 저녁 운영을 10월 1일에 시작하는 것을 목표로 준비 중이라고 썼다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "중간 기록에는 세 지점 조건을 충족했다는 확인이나 정규 저녁 운영 승인 여부가 기재되지 않았다."
+        },
+        {
+          "document_id": "original",
+          "quote": "연구소는 10월 1일 정규 저녁 운영 시작을 목표로 준비하고 있다."
+        },
+        {
+          "document_id": "original",
+          "quote": "중간 기록에는 북쪽 지점의 측정값이 제시되지 않았다."
+        }
+      ],
+      "reason": "The original accurately reports a target and preparation. There is no necessary correction warranting conversion into an established start and an assertion that all three conditions were met. The supplied record neither reports northern measurement/completion nor confirms compliance or approval; the truth of those added assertions remains unknown rather than disproved by silence. The edit removes the target qualification and introduces both certainty and a causal claim of fulfilled conditions, so it fails to preserve meaning. It is contextually unsafe beside the all-three-points prerequisite and the sentence acknowledging the absent northern value. Correcting the eastern value with P1 cannot establish the missing third measurement or approval. No proposed patch supplies a dependency that makes P2 safe; dependency analysis is complete. The replacement is mechanically valid: its before span is exact and unique, its after text expresses the assessed stronger claim, and it has no overlap conflict.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "S1.p3",
+          "quote": "9월 14일 측정한 동쪽 지점은 42데시벨, 남쪽 지점은 44데시벨이었다."
+        },
+        {
+          "document_id": "original",
+          "quote": "동쪽 지점의 저녁 소음은 43데시벨,"
+        }
+      ],
+      "reason": "The original misstates the eastern numerical measurement. P1 resolves this discrepancy in the candidate, although both values are below the threshold."
+    },
+    {
+      "id": "B2",
+      "status": "unresolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P2"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "S1.p4",
+          "quote": "중간 기록에는 북쪽 지점의 측정값이나 측정 완료 여부가 기재되지 않았다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "중간 기록에는 세 지점 조건을 충족했다는 확인이나 정규 저녁 운영 승인 여부가 기재되지 않았다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "운영 협약은 경계 측정 지점 세 곳 모두에서 저녁 소음이 45데시벨 이하여야 정규 저녁 운영을 시작할 수 있다고 정했다."
+        }
+      ],
+      "reason": "The record leaves northern measurement/completion, three-point compliance and approval unspecified. This is a source limitation that the original does not turn into a positive compliance claim. It directly affects P2 because the proposed causal and definite-start assertions require evidence absent from this record. Neither P1 nor the two reported low measurements resolves it."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "The material new risk in the full candidate is localized to P2 and its mapped evidence gap. No additional unlocalized material edit-related risk or unresolved dependency is identified. This does not assert that the simultaneous candidate is safe.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "The entire wrapper, original, source scope, patches, full candidate and schema were read. P1 supplies the needed numerical correction. P2 changes a supported goal into unsupported all-point compliance and a definite start; no available dependency remedies this. With P2 omitted, the record still cannot establish northern results, approval or eventual operation, but the original target wording accurately preserves that uncertainty. No later events were inferred. Candidate application errors are empty, and both replacements are unique and nonoverlapping. This is an independent review, not a final safety audit."
+}

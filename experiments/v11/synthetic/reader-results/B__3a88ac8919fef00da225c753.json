@@ -1,0 +1,74 @@
+{
+  "packet_id": "3a88ac8919fef00da225c753",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "The displayed output contains both proposed replacements.",
+      "anchor": "actual_output: 3%포인트; 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "Both increase unit and meeting day differ from source.",
+      "anchor": "p1 and p2; actual_output: 3%포인트; 토요일"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both nonempty proposals appear in the displayed output and are selected.",
+      "anchor": "selected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The displayed percentage-point unit and Saturday agree with E1 and E2. No other identified issue is supplied.",
+      "anchor": "E1; E2; actual_output: 3%포인트; 토요일"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 모든 패치가 로컬 출력에 반영되었습니다",
+      "reason": "States actual incorporation."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "적용 2개",
+      "reason": "Applied nonempty changes imply changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 모든 패치",
+      "reason": "Explicitly states all applied."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Factual truth is not independently verified / 사실의 진위는 독립적으로 검증되지 않았고",
+      "reason": "Explicitly limits verification instead of claiming article-wide correctness."
+    },
+    "externalpublished": {
+      "rating": "accurate_implicit",
+      "short_anchor": "No external article or publication was changed / 외부 기사나 게시물은 수정하지 않았습니다",
+      "reason": "The local-only context and denial of external changes communicate no external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "It accurately says the audit does not adjudicate resolution, but omits the output-specific result obtainable from E1/E2; cautious audit wording is not itself false."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both displayed replacements satisfy E1 and E2, so neither identified meaning issue remains."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

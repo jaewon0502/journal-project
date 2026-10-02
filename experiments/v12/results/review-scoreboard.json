@@ -1,0 +1,1678 @@
+[
+  {
+    "version": "v1",
+    "case_id": "KO-DEV-01",
+    "condition": "A",
+    "input_id": "088d7390d4359ea589b69407",
+    "split": "development",
+    "language": "KO",
+    "input_sha256": "a410debd3637da9820ec45d9c781c5194e579e92549b5574a110ee8c7320480a",
+    "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+    "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+    "packet_id": "d4cd2cb427a66c946b552271",
+    "writer_raw_sha256": "0a98cc44600afd28adc25c041b9be435e08dad102dcf9d62b7382207db322dd8",
+    "review_input_sha256": "c89ea2f398474e1671e2781c2dc7f2897aca08578bba453e398ff7cd90f8431a",
+    "candidate_sha256": "8d40e5c882d236b3121230821212ad2e9041bb716defeec190f12236bab93b16",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 5,
+    "patch_count": 6,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "034accc8cbe53c0708595d512531a4920c74416ec2296faec9ab9aedce51e044",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 5,
+          "partial": 2,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "f29efafa1e4dccf705b8c18dc49d37631f9535a3a50b120899398a7b63b3ed14",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 11,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 6,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 6,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R04",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v1",
+    "case_id": "KO-DEV-01",
+    "condition": "B",
+    "input_id": "ef01c1c27fd3418ca0e1d3be",
+    "split": "development",
+    "language": "KO",
+    "input_sha256": "fc6742cd42c35c168431ce7a70ccd79ababa1c140d478f403582cd2ef19e2954",
+    "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+    "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+    "packet_id": "ab59af64c3470b1df309f39f",
+    "writer_raw_sha256": "9a067e274bc0bd8a7ce0f34284a4dd8ce736a5a8a1ac8f040135e67ecce5f90b",
+    "review_input_sha256": "7ec015966ada479490fa887f66572f90efd0991908b1408c4bb6b6bbb042a5e8",
+    "candidate_sha256": "efbc92024a40b4612c1c3f1b91c9337cbc60913e5720ddcd375e58bfab961002",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 4,
+    "patch_count": 4,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "e2777ec15877fb80f2fd958b8ec1d21b26264194ffaeefef1c2f6d55fd85c65d",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 3,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "7743c04720faedbbb74921bbff6ae3823ff20538637a082639ad11ef35f946ed",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 4,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 4,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R04",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "no"
+      },
+      {
+        "reference_id": "R12",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "no"
+      },
+      {
+        "reference_id": "R13",
+        "field": "writer_identified",
+        "A": "yes",
+        "B": "no"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v1",
+    "case_id": "EN-DEV-01",
+    "condition": "A",
+    "input_id": "e54d797342e6b80fbea0299d",
+    "split": "development",
+    "language": "EN",
+    "input_sha256": "8ab892aaba7f55ab22031df3cf39b9d106b5cb4ca761fd105c3a2012446de6bf",
+    "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+    "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+    "packet_id": "e04940ff183338f5fe772428",
+    "writer_raw_sha256": "5dd27f0fae8347b9d309eb78f8cc5191c96c3c16cc8a633468d798a374e7913a",
+    "review_input_sha256": "d0dfcc6a19a42daf1b6976bf2cb8b3e139314d6cb1897975d0aa099624ef437e",
+    "candidate_sha256": "e4b887ac5e9aba40016b0560ef8aef6ccb41cac1d2b8892b379615cd4857cdb1",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 4,
+    "patch_count": 8,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "466c7d7368521f9d37c09b9da91293365b70906fc59ef25d162bb8daba79d1c3",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 6,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 8,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 7,
+            "no": 1,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 1,
+            "no": 7,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 1,
+            "no": 7,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 8,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "43eb3bcb3079a402862c864f006c9d7c76634f7ed5a8ec04cac60d08d8ee1f6f",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 11,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 6,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 8,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 6,
+            "no": 2,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 1,
+            "no": 7,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 1,
+            "no": 7,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 7,
+            "no": 0,
+            "partial": 1,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R01",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "no"
+      },
+      {
+        "reference_id": "R04",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "no"
+      },
+      {
+        "reference_id": "R15",
+        "field": "writer_identified",
+        "A": "yes",
+        "B": "no"
+      },
+      {
+        "reference_id": "R16",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      },
+      {
+        "reference_id": "R16",
+        "field": "semantic_answer_match",
+        "A": "partial",
+        "B": "yes"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v1",
+    "case_id": "EN-DEV-01",
+    "condition": "B",
+    "input_id": "ede155dad512a3d7d433676c",
+    "split": "development",
+    "language": "EN",
+    "input_sha256": "ec044e8cbddbb13e02cb2498836b7a5dbc846daf64b4a6c2520eb46c5016afd7",
+    "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+    "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+    "packet_id": "031d406ace128460ad52cad9",
+    "writer_raw_sha256": "74cd71a49df3b8ef769c837b751541ea6cc8d20a80242e8ed14cc4524245b781",
+    "review_input_sha256": "428c57bd2faa025420c3558081b7cb030c5dca5f9d5c24a2a12fce2d642d8b08",
+    "candidate_sha256": "bc33890eac93aa2e98ae85db2593ba9457798889f792168e9e01002a70a00b86",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 5,
+    "patch_count": 8,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "a22b45d5fc1906b9fe3d0654df477c1a5c79c1f5abd73304611eec436fdf6419",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 8,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 7,
+          "partial": 0,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 8,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 7,
+            "no": 1,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 2,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 2,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 5,
+            "no": 0,
+            "partial": 3,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "19e0fa05190d6179dcd7e9c0d7b463555e90fd1168ebb9652f5083dde4a402be",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 7,
+          "partial": 0,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 7,
+            "no": 1,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 7,
+            "no": 1,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 2,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 2,
+            "no": 6,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 7,
+            "no": 0,
+            "partial": 1,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R06",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      },
+      {
+        "reference_id": "R06",
+        "field": "semantic_answer_match",
+        "A": "partial",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R08",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      },
+      {
+        "reference_id": "R08",
+        "field": "semantic_answer_match",
+        "A": "partial",
+        "B": "yes"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "KO-DEV-01",
+    "condition": "B",
+    "input_id": "77c17b415a3e6380cb8da833",
+    "split": "development",
+    "language": "KO",
+    "input_sha256": "1ae27bc1b6e092d3b9220928f759e1ccaf75ceffd7f9f32f69c02609aa70fcfc",
+    "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+    "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+    "previous_input_id": "ef01c1c27fd3418ca0e1d3be",
+    "run_plan": "run",
+    "packet_id": "b08605eacf27764a4995a290",
+    "writer_raw_sha256": "34294c53ec4886e71460fcb0968def63e1318879f75b7ecfadeebde42ad93081",
+    "review_input_sha256": "d90c7ac01e9358e5af970a32aabed63a7a4dea3aeeed7078be3ebcc22902b914",
+    "candidate_sha256": "686c8db006ebb4ac5152a1a31fbd2f1b058328b93fdc7a87076d3a4d1c575662",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 5,
+    "patch_count": 5,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "60f5a117ce0d715eb9ec3efe5d007ac9061b7077b9047cdee1ce8f5b584ec9f4",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 9,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 4,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 1,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 1,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 4,
+            "no": 0,
+            "partial": 1,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "0ddeb6516dd1bcd2418f099695317577feee8f3fc9ba79c85c69f669c6e3a32d",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 9,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 4,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 4,
+            "no": 0,
+            "partial": 1,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R01",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R03",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R10",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R12",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R13",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "EN-DEV-01",
+    "condition": "B",
+    "input_id": "d020bd701650da951576fccd",
+    "split": "development",
+    "language": "EN",
+    "input_sha256": "c81c75d9b41de93d6dea5b23789c9daccacc049f51e5dfcc382995d716c68cfe",
+    "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+    "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+    "previous_input_id": "ede155dad512a3d7d433676c",
+    "run_plan": "run",
+    "packet_id": "59a6106d81739f599e2c483f",
+    "writer_raw_sha256": "424519d426e466d729db0ffed996c76b1e99b611ea442fc46b203dca144a4ea0",
+    "review_input_sha256": "5acc2e5bb483e4f80c11bad68258005b04f4fd06c27f06ba9ae0b22724fd78bc",
+    "candidate_sha256": "16c9c794344308c129e9650035c6dd09726fe2d263c971635bcf55278ddb1e83",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 5,
+    "patch_count": 5,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "e46e5c08dbc54bd4d8cb26d766c8c55ae31938d0407362a549963e18c5003f9b",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 10,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 5,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 1,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 1,
+            "no": 4,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": true,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "a91111d027fab0351785dc8957d1cd7ac3f6584e14c753198ad18242a1b8873a",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 11,
+        "required_denom": 11,
+        "original_covered": 6,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 5,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R01",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R04",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R06",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      },
+      {
+        "reference_id": "R06",
+        "field": "semantic_answer_match",
+        "A": "partial",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R11",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R15",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R16",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R17",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "KO-EVAL-01",
+    "condition": "A",
+    "input_id": "c437a544c3c8c4ff39ae7f3d",
+    "split": "locked_evaluation",
+    "language": "KO",
+    "input_sha256": "9a1aca917cc408986eac040653352638f496de85bcbaa17053453b8a74bab865",
+    "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+    "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+    "previous_input_id": "09b9e16b8e2b9ba573189c47",
+    "run_plan": "run",
+    "packet_id": "4fc1204e8feb6b0ed2b488eb",
+    "writer_raw_sha256": "821c21db99ff28a12df42ad938dff716a5dbaf2298c0b8303ccbb3a386786d4b",
+    "review_input_sha256": "b2cb0828d679a4d784689aa44ab21016f0dd88a8b38f107b616774efb46de1cb",
+    "candidate_sha256": "75807bef667d7010a15a116f2d9c27102f17b998db3be880d5c5387824717da8",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 7,
+    "patch_count": 5,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "4ffc7560e66dbe06e5254c4c435ca2b148d6a3034d35aea697633db8b62a94e4",
+        "omission_identified": 3,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 13,
+        "required_denom": 14,
+        "original_covered": 9,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 7,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "2e6de00470b5d9756bc6e92a6d20604a66b3d42d323cf045b80cb8380902a6c2",
+        "omission_identified": 3,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 13,
+        "required_denom": 14,
+        "original_covered": 9,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 8,
+          "partial": 0,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 5,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 5,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R01",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R02",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R05",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R06",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R08",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R09",
+        "field": "writer_identified",
+        "A": "partial",
+        "B": "yes"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "KO-EVAL-01",
+    "condition": "B",
+    "input_id": "0cb0917c57864cfa4be1121e",
+    "split": "locked_evaluation",
+    "language": "KO",
+    "input_sha256": "e536c950e1dce89fb22af7cb78188c3249e91488e52e797a50d2ee9930d84876",
+    "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+    "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+    "previous_input_id": "35029351d5b635ce665b2d2c",
+    "run_plan": "run",
+    "packet_id": "8e610b71dcbe8ed3092dc4c2",
+    "writer_raw_sha256": "fcfba0405aca5b1f965414d11597a74ea0c90d6e4217639ae3e5d43cdbfe4184",
+    "review_input_sha256": "12c7afa0ea938045cca533da9f8a1deee42dbd14f4c400746e7f3370f4bce0e3",
+    "candidate_sha256": "a02ab544a1ed14af1d4f1eed151dd5c94b350131a004454f72832684b0095a20",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 9,
+    "patch_count": 9,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "d992b65bf7970aca1a966221ee5dcfd373f36a7f50ef274b898d398a3daf2d7c",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 14,
+        "required_denom": 14,
+        "original_covered": 8,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 10,
+          "partial": 0,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 9,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 9,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "23177741a74dbfc9c2f0a3aa177d0db9531f8e4874267c15d85b4039593639bd",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 14,
+        "required_denom": 14,
+        "original_covered": 8,
+        "eligibility_challenges": [
+          "R12",
+          "R09",
+          "R16"
+        ],
+        "finding_verdicts": {
+          "supported": 8,
+          "partial": 2,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 9,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 9,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 9,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": false
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R09",
+        "field": "eligibility_agreement",
+        "A": "agree",
+        "B": "challenge"
+      },
+      {
+        "reference_id": "R12",
+        "field": "eligibility_agreement",
+        "A": "agree",
+        "B": "challenge"
+      },
+      {
+        "reference_id": "R16",
+        "field": "eligibility_agreement",
+        "A": "agree",
+        "B": "challenge"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "EN-EVAL-01",
+    "condition": "A",
+    "input_id": "ec8450119a3653826b876bd1",
+    "split": "locked_evaluation",
+    "language": "EN",
+    "input_sha256": "38ce9c758c89c2736a3a06c48975a1648e2e793305bef140c73cc5e9c3c642f9",
+    "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+    "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd",
+    "previous_input_id": "88e5f92ef7091664c6fd762e",
+    "run_plan": "run",
+    "packet_id": "1ffe0b658d220e5ffc0073af",
+    "writer_raw_sha256": "d6c570e60373857f2e8b517cc01780bebf8c97f1c25fda015f98032db41e6dd4",
+    "review_input_sha256": "2765f1e1fa4ea7c17ada97eba5f87a594fe23f00deaa6c4205b21151b8679732",
+    "candidate_sha256": "8098aafef34ff7ff5a1d8df38d97173fecaf145ec0d12dc586b9629330e9cf44",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 3,
+    "patch_count": 3,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "d68957bc717bb75546dbf6dfb48d5920bb0b6af84f847f371180dc36952479bf",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 15,
+        "required_denom": 17,
+        "original_covered": 13,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 4,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "fbbef3257c172db7f1dbba587c20e7321dade8d00bd3d990eb75e57fdb9841bb",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 15,
+        "required_denom": 17,
+        "original_covered": 13,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 3,
+          "partial": 1,
+          "unknown": 0,
+          "unsupported": 1
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 2,
+            "no": 0,
+            "partial": 1,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R16",
+        "field": "writer_identified",
+        "A": "yes",
+        "B": "no"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  },
+  {
+    "version": "v2",
+    "case_id": "EN-EVAL-01",
+    "condition": "B",
+    "input_id": "21bae782c8af373f772865fa",
+    "split": "locked_evaluation",
+    "language": "EN",
+    "input_sha256": "b7d519832fbb51a163d1681656bb42b7550fad09fd0856e80ba097b09da4b914",
+    "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+    "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd",
+    "previous_input_id": "16bcba6a2c008dfef0a8ad56",
+    "run_plan": "run",
+    "packet_id": "01a93f2bbfdf5011d82094e3",
+    "writer_raw_sha256": "d53794b6fb033e921c3cd9e1b3e59c6feccf9ac62f0ef5c7b74c95a607a76475",
+    "review_input_sha256": "e12b6083216bcf0bb31b2f8e51b9c2d53db39fee762e95b702ece2152002d61c",
+    "candidate_sha256": "b9c4379c5477b991925d991550a4bfbfd901c88300c4e4806e6dca71f963a9e7",
+    "application_status": "applied",
+    "application_error": null,
+    "finding_items": 3,
+    "patch_count": 3,
+    "provisional_denominator_fixed": true,
+    "scores": [
+      {
+        "judge": "A",
+        "raw_sha256": "16de027a06856203ccec4f0050d2176cb91c9203544b801670c7cbc2e4c759f6",
+        "omission_identified": 4,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 14,
+        "required_denom": 17,
+        "original_covered": 13,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 3,
+          "partial": 2,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      },
+      {
+        "judge": "B",
+        "raw_sha256": "2b551db1a48d943fdca8191a5051399474b73b5d7f505ac8452f69fea347c538",
+        "omission_identified": 2,
+        "omission_denom": 4,
+        "candidate_covered_semantic_match": 15,
+        "required_denom": 17,
+        "original_covered": 13,
+        "eligibility_challenges": [],
+        "finding_verdicts": {
+          "supported": 4,
+          "partial": 0,
+          "unknown": 0,
+          "unsupported": 0
+        },
+        "patch_verdicts": {
+          "warranted": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "new_assertion": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "meaning_loss": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "overediting": {
+            "yes": 0,
+            "no": 3,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          },
+          "repairs_identified_issue": {
+            "yes": 3,
+            "no": 0,
+            "partial": 0,
+            "unknown": 0,
+            "not_applicable": 0
+          }
+        },
+        "overall_flags": {
+          "any_supported_harm": false,
+          "any_unresolved_material_issue": true
+        }
+      }
+    ],
+    "reference_field_disagreements": [
+      {
+        "reference_id": "R03",
+        "field": "candidate_presence",
+        "A": "partial",
+        "B": "covered"
+      },
+      {
+        "reference_id": "R03",
+        "field": "semantic_answer_match",
+        "A": "partial",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R07",
+        "field": "writer_identified",
+        "A": "yes",
+        "B": "partial"
+      },
+      {
+        "reference_id": "R12",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R13",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R15",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R17",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R21",
+        "field": "writer_identified",
+        "A": "no",
+        "B": "yes"
+      },
+      {
+        "reference_id": "R24",
+        "field": "writer_identified",
+        "A": "yes",
+        "B": "partial"
+      }
+    ],
+    "warning": "New_assertion=yes alone is not harm: warranted evidence-backed additions also create assertions. Do not sum as harmful patches."
+  }
+]

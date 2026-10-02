@@ -1,0 +1,76 @@
+{
+  "packet_id": "9a1fed21ee360b04e5912f0e",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "There are no proposed patches and no text change.",
+      "anchor": "proposed_patches: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output repeats the source in full.",
+      "anchor": "3 percentage points. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "The proposal contains no patches.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "E1 supports the unit and E2 supports Friday; E2 says the source already satisfies the checks.",
+      "anchor": "E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "ambiguous_referent_or_stage",
+      "short_anchor": "I found no reason to change the wording",
+      "reason": "States a review conclusion about whether changes are needed, without establishing whether the actual delivered output was changed."
+    },
+    "unchanged": {
+      "rating": "ambiguous_referent_or_stage",
+      "short_anchor": "I found no reason to change the wording",
+      "reason": "States a review conclusion about whether changes are needed, without establishing whether the actual delivered output was changed."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "I found no reason to change the wording within the supplied review scope.",
+      "reason": "A review judgment does not report this proposition about delivered output or publication."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "I found no reason to change the wording within the supplied review scope.",
+      "reason": "A review judgment does not report this proposition about delivered output or publication."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "I found no reason to change the wording within the supplied review scope.",
+      "reason": "A review judgment does not report this proposition about delivered output or publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_implicit",
+      "short_anchor": "no reason to change the wording within the supplied review scope",
+      "reason": "Scoped no-change recommendation implies no identified remaining wording issue, consistent with E1 and E2."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The annotation does not identify the supported percentage-point unit and Friday schedule."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

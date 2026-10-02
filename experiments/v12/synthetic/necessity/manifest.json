@@ -1,0 +1,64 @@
+{
+  "module": "supplementary-necessity",
+  "freeze_version": 1,
+  "created_utc": "2026-10-02T01:35:40.280841+00:00",
+  "status": "frozen design; no classifier outputs",
+  "item_count": 6,
+  "independent_bases": 3,
+  "variants_per_base": 2,
+  "planned_classifications_per_item": 2,
+  "planned_classification_outputs": 12,
+  "labels_visibility": "private; provisional AI-authored",
+  "files": [
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/0ce5a7e0ec02731911b92d52.json",
+      "sha256": "f3c8890c452296aafdc6cd8dcba5ad520ba7a7a5c2e9ed33b4cabfcaf224ebce",
+      "bytes": 4391
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/0e0d2a253a6004ba748256e3.json",
+      "sha256": "b08a46729be9c532f0b30a3aa87cb6814474504528a0dd36ab8e97449514e644",
+      "bytes": 4135
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/206a6e985b3915af8102500c.json",
+      "sha256": "eac40f8cc594d950c99948aec31634eb97a7f2a13a35cfbea7e73e9e3a010a3f",
+      "bytes": 4096
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/285cf1155fdc3469d7ee6681.json",
+      "sha256": "aa193acdecf0e3692625f69d5a5084e42024b9234a9aeafd508cd183f52ef7d0",
+      "bytes": 4266
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/696e705f4d8426a7a1e00fc3.json",
+      "sha256": "711ee0138d48a6f2ba35476bebf34b2acb2f598f0846ee009588b196e257b91a",
+      "bytes": 4234
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/inputs/f09b014f3d4927e89ac2bb38.json",
+      "sha256": "6701ee95d7e5b85df60ac9ed9e491a3cf5adbb0c3423d222ec732754a5f613c1",
+      "bytes": 4399
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/source-and-task-only.json",
+      "sha256": "c5b3578cc534e287fd7e8b44ffb4b4614b1b76d1ddfe7588c55475e7aaa8efff",
+      "bytes": 5714
+    },
+    {
+      "path": "/historical-research/journal-v12-private/supplementary/necessity/author-labels.json",
+      "sha256": "5b101d9fd6011460b9259a9ac955c827af6113c93a8cd78259a350cb6decffb7",
+      "bytes": 9688
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/necessity/protocol.md",
+      "sha256": "e3a9b46f72a2e167c4985a59aceb61f76e95887494e9e9dd0d6ee2ed9049a693",
+      "bytes": 3241
+    },
+    {
+      "path": "/historical-research/journal-v12/supplementary/necessity/input-hashes.json",
+      "sha256": "d7ef8ed746850f0717ee54a5fdc0d398dddc88ffa8de6cdc2915539d47eb6484",
+      "bytes": 993
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "case_id": "KO-DEV-01",
+  "language": "ko",
+  "split": "development",
+  "packet_sha256": "a14c37f8962418568def7355a8d3abeaefa217b17211d3317c3a97a083e62e43",
+  "packet_md_sha256": "61b25681dc2eaaded3303c81786f87a293d6e2901abacd078ca5e4934e2cc59d",
+  "packet_text_characters": 4937,
+  "documents": [
+    {
+      "requested_url": "https://www.yna.co.kr/view/AKR20250529054700002",
+      "final_url": "https://www.yna.co.kr/view/AKR20250529054700002",
+      "status": 200,
+      "fetched_at": "2026-10-02T00:30:52.263586+00:00",
+      "content_type": "text/html;charset=UTF-8",
+      "source_id": "KD-A",
+      "title": "한은, 기준금리 2.50%로 0.25%p 인하…소비·투자 살린다(종합)",
+      "published_at": "2025-05-29T09:53:00+09:00",
+      "event_dates": [
+        "2025-05-29"
+      ],
+      "scope": "Full headline/subheadings and all prose paragraphs in story-news, including available image captions and reporter contact; excludes copyright/utility footer, navigation, advertisements, image pixels and graphics. No text length truncation.",
+      "raw_sha256": "ce387286f4f60607097a4257d92e285276b1f3afd689b5ac714cbe50417aacf4",
+      "text_sha256": "b190038ec67677f89eb795079325612abda01e50de8d1c81e17eea70378a12ed",
+      "text_characters": 3009,
+      "paragraph_count": 27
+    },
+    {
+      "requested_url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?menuNo=200690&nttId=10091639",
+      "final_url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?menuNo=200690&nttId=10091639",
+      "status": 200,
+      "fetched_at": "2026-10-02T00:30:51.686402+00:00",
+      "content_type": "text/html;charset=utf-8",
+      "source_id": "KD-P1",
+      "title": "통화정책방향(2025.5.29)",
+      "published_at": "2025-05-29",
+      "event_dates": [
+        "2025-05-29"
+      ],
+      "scope": "Complete HTML policy-statement body (title plus six policy paragraphs); attachments, related pages, video and historical statistics not included. No length truncation.",
+      "raw_sha256": "cf458fcda50c306da80ec494a25c335e75d1da769c81441d4b7a2a1977d53195",
+      "text_sha256": "796121120764b7f5d6da4ed6cb5973792406d44723e00a1dec41b247416e8a56",
+      "text_characters": 1928,
+      "paragraph_count": 7
+    }
+  ],
+  "read_check": "All selected article prose, primary prose and two image appendix pages read by acquisition agent; no audit judgments produced."
+}

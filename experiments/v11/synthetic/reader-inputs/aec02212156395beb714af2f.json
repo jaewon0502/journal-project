@@ -1,0 +1,116 @@
+{
+  "packet_id": "aec02212156395beb714af2f",
+  "language": "EN",
+  "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+  "proposed_patches": [
+    {
+      "id": "p1",
+      "before": "3%",
+      "after": "3 percentage points",
+      "start_byte": 56,
+      "end_byte": 58
+    },
+    {
+      "id": "p2",
+      "before": "Friday",
+      "after": "Saturday",
+      "start_byte": 78,
+      "end_byte": 84
+    }
+  ],
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+  "actual_receipt": {
+    "actual_result_sha256": "b22df2a30beb0c729f0960e1b60070b3d5138233c918d637ed1e5cb084b18a48",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1"
+          ],
+          "reason": "patch_or_dependency_uncertain",
+          "state": "held"
+        },
+        {
+          "id": "component-2",
+          "patch_ids": [
+            "p2"
+          ],
+          "reason": "patch_or_dependency_uncertain",
+          "state": "held"
+        }
+      ],
+      "dependency_sha256": "79e0534e55177197bbca15f392fd5895605cb664dfd97c2f9003183e9142c79d",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "d44260f19de76aa884329fab40a3bb790605d27c8ec4d9a8b4fa4e9d89dca239"
+      ],
+      "patch_audit_sha256": "fc06bbb30e1a78e041b574d53209bca99b4c3d9d34142a23df0746bbbdaa7658",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "d44260f19de76aa884329fab40a3bb790605d27c8ec4d9a8b4fa4e9d89dca239",
+          "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+          "next_selected_ids": [],
+          "released": false,
+          "reviewed_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [
+      {
+        "audit_sha256": "fc06bbb30e1a78e041b574d53209bca99b4c3d9d34142a23df0746bbbdaa7658",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E4"
+        ],
+        "pointer": "/preexisting_findings/0",
+        "state": "resolution_not_adjudicated"
+      }
+    ],
+    "held_ids": [
+      "p1",
+      "p2"
+    ],
+    "locally_released": false,
+    "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "policy": "selective",
+    "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "status": "abstained"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "annotation": "The displayed local output is unchanged. The proposed replacements of “3%” with “3 percentage points” and “Friday” with “Saturday” were both held because the patches or their dependencies were uncertain. Neither was selected or applied; the process abstained without local release. Two meaning issues therefore remain in the displayed text: within the supplied fictional scenario, the change from 21% to 24% is 3 percentage points, and the stipulated meeting day is Saturday, while the output still says “3%” and “Friday.” The hold decision does not resolve those issues or establish factual correctness.",
+  "scope": "Authored bounded scenario; no real-world factual article or publication. Judge the displayed local artifact and record, not author intent."
+}

@@ -1,0 +1,125 @@
+test_aliases_prose_and_receipt_tampering (test_receipt.ReceiptTests.test_aliases_prose_and_receipt_tampering) ... ok
+test_all_actual_values_bound (test_receipt.ReceiptTests.test_all_actual_values_bound) ... ok
+test_empty_unapproved_abstains (test_receipt.ReceiptTests.test_empty_unapproved_abstains) ... ok
+test_source_only_separate_candidate (test_receipt.ReceiptTests.test_source_only_separate_candidate) ... ok
+test_stale_or_malformed_audit_abstains (test_receipt.ReceiptTests.test_stale_or_malformed_audit_abstains) ... ok
+test_states_and_language (test_receipt.ReceiptTests.test_states_and_language) ... ok
+test_store_hardlink_and_fifo_rejected (test_receipt.ReceiptTests.test_store_hardlink_and_fifo_rejected) ... ok
+test_store_rejects_symlinks_and_legacy (test_receipt.ReceiptTests.test_store_rejects_symlinks_and_legacy) ... ok
+test_store_roundtrip_and_collision (test_receipt.ReceiptTests.test_store_roundtrip_and_collision) ... ok
+test_actual_twenty_thousand_byte_reproduction (test_nesting_contract.NestingContractTests.test_actual_twenty_thousand_byte_reproduction) ... ok
+test_all_raw_input_paths_and_forged_receipt (test_nesting_contract.NestingContractTests.test_all_raw_input_paths_and_forged_receipt) ... ok
+test_genuine_valid_json_at_and_beyond_supported_depth (test_nesting_contract.NestingContractTests.test_genuine_valid_json_at_and_beyond_supported_depth) ... ok
+test_programming_recursion_error_is_not_hidden (test_nesting_contract.NestingContractTests.test_programming_recursion_error_is_not_hidden) ... ok
+test_string_brackets_and_escaped_quotes_do_not_count (test_nesting_contract.NestingContractTests.test_string_brackets_and_escaped_quotes_do_not_count) ... ok
+test_complete_depth65_utf16_utf32_cannot_mint (test_encoding_contract.EncodingContractTests.test_complete_depth65_utf16_utf32_cannot_mint) ... ok
+test_raw_nul_and_invalid_utf8_all_input_boundaries (test_encoding_contract.EncodingContractTests.test_raw_nul_and_invalid_utf8_all_input_boundaries) ... ok
+test_utf16_utf32_endian_bom_variants_deep_fail_closed (test_encoding_contract.EncodingContractTests.test_utf16_utf32_endian_bom_variants_deep_fail_closed) ... ok
+test_utf8_korean_escapes_escaped_nul_and_optional_bom (test_encoding_contract.EncodingContractTests.test_utf8_korean_escapes_escaped_nul_and_optional_bom) ... ok
+test_real_near_exact_and_above_boundary (test_size_contract.SizeContractTests.test_real_near_exact_and_above_boundary) ... ok
+test_oversized_bypass_rejected_before_store_write (test_size_contract.SizeContractTests.test_oversized_bypass_rejected_before_store_write) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.383s
+
+OK
+{
+  "native_run": 20,
+  "native_failures": 0,
+  "native_errors": 0,
+  "large_30000_case": "not redundantly rerun; v1.1 rejection already independently confirmed",
+  "encoding_checks": [
+    {
+      "encoding": "utf-8",
+      "actual_container_depth": 65,
+      "bytes": 560,
+      "depth65_mint": "ValueError: JSON container nesting exceeds supported limit",
+      "deep_bytes": 20024,
+      "deep_guard": "ValueError: JSON container nesting exceeds supported limit",
+      "deep_emit": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "encoding": "utf-16",
+      "actual_container_depth": 65,
+      "bytes": 1122,
+      "depth65_mint": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
+      "deep_bytes": 40050,
+      "deep_guard": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
+      "deep_emit": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "encoding": "utf-16-be",
+      "actual_container_depth": 65,
+      "bytes": 1120,
+      "depth65_mint": "ValueError: JSON bytes must be UTF-8 without raw NUL bytes",
+      "deep_bytes": 40048,
+      "deep_guard": "ValueError: JSON bytes must be UTF-8 without raw NUL bytes",
+      "deep_emit": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "encoding": "utf-32",
+      "actual_container_depth": 65,
+      "bytes": 2244,
+      "depth65_mint": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
+      "deep_bytes": 80100,
+      "deep_guard": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
+      "deep_emit": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    }
+  ],
+  "string_cases": [
+    {
+      "input_bytes": 813,
+      "accepted": true
+    },
+    {
+      "input_bytes": 133,
+      "accepted": true
+    },
+    {
+      "input_bytes": 135,
+      "accepted": true
+    },
+    {
+      "input_bytes": 36,
+      "accepted": true
+    }
+  ],
+  "extra_closers_cannot_cancel_depth": true,
+  "unrelated_programming_recursion_visible": true,
+  "receipt_freeze": {
+    "files": 34,
+    "unchanged": true,
+    "manifest_sha256": "a56e17bf8b57b8e15e7436614445fdf0f307f10b33c13dd788cbae7e991d4462"
+  },
+  "receipt-v1_1_freeze": {
+    "files": 39,
+    "unchanged": true,
+    "manifest_sha256": "85b9ebbe9953787302cd83f9313ba0d688f98ec7e89fe43ca6764c3d40b28b3f"
+  },
+  "receipt-v1_2_freeze": {
+    "files": 47,
+    "unchanged": true,
+    "manifest_sha256": "b2b840e295405d298b9c5ba50a84ade1ccbb9ddfdb2ecfc8ceef63bf18c5d499"
+  },
+  "receipt-v1_3_freeze": {
+    "files": 55,
+    "unchanged": true,
+    "manifest_sha256": "7ad693ff4da32daaeefa18c120746af8cb6f2b1308dbadd7a9732aeddd570777"
+  }
+}

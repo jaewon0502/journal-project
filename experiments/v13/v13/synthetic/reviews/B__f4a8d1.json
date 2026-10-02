@@ -1,0 +1,128 @@
+{
+  "bundle_id": "f4a8d1",
+  "input_sha256": "d6b562666b36191cadcb07ebaebc9888205ecd484c9e599c4f6697ba1b96a916",
+  "source_sha256": "026800620a9634448908c9ff5d2b9de5bc54ece16947abb374b1bc038b775b33",
+  "original_sha256": "ceb94b2968e48f796d6d283b1bc2fa7d6eea4642bb01cdea594c9197f7bda471",
+  "patches_sha256": "ace4be480d52d318998a95898bc068e6c8ae010f4295302396c56c16b6f7b798",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "공지에 적힌 참여 공간은 센터가 직접 운영하는 11곳이며 지역의 민간 공연장은 포함하지 않는다."
+        },
+        {
+          "document_id": "original",
+          "quote": "참여 공간은 센터가 직접 운영하는 14곳이다."
+        }
+      ],
+      "reason": "The source explicitly gives 11 directly operated spaces, contradicting the original 14. This exact unique replacement changes only the count and retains the operator and participation scope. It neither changes the application schedule nor connects the space count to the separate historical attendance assertion. Its span does not overlap P2, and the simultaneous candidate has no interaction requiring P2 or another dependency.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p3",
+          "quote": "신청서는 9월 20일 오후 6시까지 접수하고, 접수순이 아니라 별도 추첨으로 참여 팀을 정한다."
+        },
+        {
+          "document_id": "original",
+          "quote": "신청서는 9월 18일 오후 6시까지 접수하며 참여 팀은 추첨으로 정한다."
+        }
+      ],
+      "reason": "The source explicitly sets September 20 at 6 p.m.; September 18 is a factual error. The unique exact span corrects only the date, retaining the time and adjoining lottery selection clause. The source also places result notification on September 22, so the corrected deadline is coherent with the source chronology and October trial. P1 changes a separate count; neither it nor the unchanged attendance claim is a prerequisite for this correction. No overlapping span or candidate interaction is present.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "참여 공간은 센터가 직접 운영하는 14곳이다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "센터가 직접 운영하는 11곳"
+        }
+      ],
+      "reason": "The original materially overstates participating spaces. P1 resolves this discrepancy in the supplied candidate."
+    },
+    {
+      "id": "B2",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P2"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "신청서는 9월 18일 오후 6시까지 접수하며"
+        },
+        {
+          "document_id": "S1.p3",
+          "quote": "신청서는 9월 20일 오후 6시까지 접수하고"
+        }
+      ],
+      "reason": "The original deadline is two days early, materially affecting application information. P2 resolves it in the candidate."
+    },
+    {
+      "id": "B3",
+      "status": "unresolved",
+      "material": "unknown",
+      "affects_patch_ids": [],
+      "unrelated_to_edits": "yes",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "센터는 지난해 주말 이용객이 전년보다 늘었다고 밝힌 바 있다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "이 공지는 이번 대관 시험의 모집 절차만 설명하고 이용객 통계는 제공하지 않는다."
+        },
+        {
+          "document_id": "original",
+          "quote": "참여 공간은 센터가 직접 운영하는 14곳이다."
+        },
+        {
+          "document_id": "original",
+          "quote": "신청서는 9월 18일 오후 6시까지 접수하며 참여 팀은 추첨으로 정한다."
+        }
+      ],
+      "reason": "The supplied recruitment notice and disclosed scope cannot verify or refute the separate claim about a prior center announcement of year-over-year weekend attendance growth. Its factual materiality remains uncertain without historical evidence. This unchanged claim is unrelated to the edits: it gives no rationale, condition, causal explanation, numerical basis, or temporal dependency for either the participating-space count or the current application deadline. Its adjacency to the application sentence adds no such relation, and both corrections are independently supported by the recruitment notice. No proposed patch depends on resolving this historical evidence gap."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "No unresolved new or edit-related material candidate risk is identified. Both corrections are independent, source-supported substitutions with preserved surrounding relations. The historical attendance assertion remains an original evidence limitation, without a dependency or relational connection to either edit.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "The entire wrapper, all source paragraphs, scope note, original article, questions, two patches and simultaneous candidate were read. Correcting the count to 11 and the deadline to September 20 is warranted; withholding either leaves its independently documented original error. There are no reported or detected application errors or required dependencies. The unchanged historical attendance claim cannot be verified from this notice, and absence of evidence here does not establish it is false. No additional correction is established from that gap. This independent review is not a final safety audit."
+}

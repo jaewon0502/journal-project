@@ -1,0 +1,22 @@
+{
+  "packet_id": "51824b8ed7f901e15a2ee82b",
+  "source": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "candidate": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "6월 10일 최고 수위 8.2m가 기록됐다. 이 발췌문에는 6월 8일 수위나 그 이전 최고 수위가 없다."
+    }
+  ],
+  "target_question": "6월 10일 자료만으로 원문의 6월 8일 당시 기록 주장이 틀렸다고 확정할 수 있는가?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "patches": [],
+  "delivery": {
+    "artifact_status": "constructed_candidate_under_review_not_final_release",
+    "actual_applied_to_candidate_ids": [],
+    "reader_note": "아니요. E1의 6월 10일 최고 수위 8.2m 기록만으로 6월 8일 당시 최고 기록 주장이 틀렸다고 확정할 수 없습니다. 나중의 최고 기록은 앞선 당시 기록과 양립할 수 있습니다. 근거가 있는 수정은 없어 원문을 그대로 두었으며 적용한 변경은 없습니다. 6월 8일 수위와 그 이전 최고 수위가 없어 당시 기록 여부는 확인되지 않습니다."
+  }
+}

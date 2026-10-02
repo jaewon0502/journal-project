@@ -1,0 +1,51 @@
+{
+  "packet_id": "8caf3ea87e0919c42932e55e",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "actual_patch_state": "changed",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "qualified_retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "The analyst said the increase was exactly 0.02 units.",
+    "The unrounded measured increase was 0.016 units.",
+    "The supplied evidence contains no recording or transcript of the analyst.",
+    "The patch is proposed, not finally released."
+  ],
+  "reason": "Both body addition and separate note distinguish reported exact value from unrounded measurement and expressly avoid verifying actual speech. The rounding explanation is correct. Candidate implementation is consistent with proposed release status. Supported truth concerns the distinction, not actual spoken words.",
+  "additional_meaning_losses": [],
+  "limitations": [
+    "Speech authenticity unknown without recording or transcript; source is one sentence."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "The analyst said the increase was exactly 0.02 units.",
+      "meaning": "Original attribution and exactness claim retained as a report; measured value is a separate assertion."
+    }
+  ],
+  "patch_decisions": [
+    {
+      "id": "p1",
+      "decision": "approved",
+      "reason": "E1 supports 0.016 unrounded and the absence of speech evidence; addition preserves the entire report without deletion.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Actual words remain unknown; exact 0.02 and measured 0.016 differ although two-place rounding yields 0.02.",
+      "source_anchor": "exactly 0.02 units",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "admission": "approved"
+}

@@ -1,0 +1,14 @@
+{
+  "locked_at": "2026-10-02T00:37:24.472120+00:00",
+  "acquisition_only": true,
+  "annotations_created": false,
+  "packet_full_text_read": true,
+  "read_scope": "Every paragraph of both source-only packets read; raw outside-scope source content is not asserted fully read or eligible.",
+  "files": {
+    "EN-DEV-source-only.json": "7e8d47a0f2c8a34d4640d92d9b04fd7b94788e1d64a780f6df0d3c19ad522329",
+    "EN-EVAL-source-only.json": "f665f58d0d33f1a6eaa714fee13dd0632bf9b80d2718bf1fb68367eeeb9acf47",
+    "EN-DEV-packet.txt": "2a8848c9d7927a35013836f86a000c74d9da4a8ab53ab5aca0c06f98a3083768",
+    "EN-EVAL-packet.txt": "a7d56624a723b4ecb8c9f0a109cd6b1881e1344f68c6c9b79c4054fd1e5493e7"
+  },
+  "public_manifest_sha256": "079ad01d06bf52d97879c302dd49ba73446c7f69d551799c95fed5a9f3192001"
+}

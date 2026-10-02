@@ -1,0 +1,61 @@
+{
+  "locked_at_utc": "2026-10-01T23:50:12.470337+00:00",
+  "scope": "4 already exposed regression cases; not new holdout",
+  "cases": 4,
+  "planned_packets": 8,
+  "planned_reader_judgments": 16,
+  "files": [
+    {
+      "path": "/historical-research/journal-v11/sidecar/contract.md",
+      "sha256": "771651902950dc9a383387e8f3908be308d317c93862df4890abfe690b411d34"
+    },
+    {
+      "path": "/historical-research/journal-v11/sidecar/examples/input-1.json",
+      "sha256": "645023306b5541cc182164ba0be945ad31b6040f520b33cf52e8b023735efcb2"
+    },
+    {
+      "path": "/historical-research/journal-v11/sidecar/examples/input-2.json",
+      "sha256": "85e9ef46f7879c9a6427b0ee93d1f0b9304e4a95a25b3d3c9b7456dbca814583"
+    },
+    {
+      "path": "/historical-research/journal-v11/sidecar/examples/receipt-1.json",
+      "sha256": "2e0ea46cd12890288357a28487d86ea52ce40335fb5de6f9d87ee2f09c47916a"
+    },
+    {
+      "path": "/historical-research/journal-v11/sidecar/examples/receipt-2.json",
+      "sha256": "2e0ea46cd12890288357a28487d86ea52ce40335fb5de6f9d87ee2f09c47916a"
+    },
+    {
+      "path": "/historical-research/journal-v11/sidecar/reader-rubric.json",
+      "sha256": "05f9a4c83cb8fe081de9c9003f8bf1c4fb27af3c80f94986ecb57c26c5d66bef"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/0ca01f1b92bde49c1f37d9e8.json",
+      "sha256": "f2c2d322d16e12fc83de2dcda61e393215cda38f27328a8356d4af7ee7c108f9"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/79814d8015a14d2c85d0e553.json",
+      "sha256": "032375a4e77a345b35b156c19163567e23d86bc8766b919389169be26e832642"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/build_locked.py",
+      "sha256": "9ee0ac1212d62b1b056f8aa2d4384313ed0dedfd50a8d37a0ce938d5815e5dd8"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/c4b84e7013df1a8289b4df32.json",
+      "sha256": "05e672a58035bb6dd472a7167aac72ca768fc56581debc05663f27278c28be69"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/e7cb04f0501bbb7c3a791efa.json",
+      "sha256": "15eac252f966484bce43cc04479cc47db7d719b5c01541df5068f60f8bff260c"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/expected-private.json",
+      "sha256": "5a4637e16c3c6686327ef4183b70f153af9dbb627aaf8d58f1d392076161a1f5"
+    },
+    {
+      "path": "/historical-research/journal-v11-private/sidecar-inputs/map-private.json",
+      "sha256": "b6586e1a2a5b1bec2fb2768a89b51b0cc72e0bc81498a892786ca71039e3f693"
+    }
+  ]
+}

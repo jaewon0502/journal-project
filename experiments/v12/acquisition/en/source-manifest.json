@@ -1,0 +1,133 @@
+{
+  "version": "journal-v12-en-acquisition-1",
+  "created_at": "2026-10-02T00:35:56.102701+00:00",
+  "selection_basis": "Fresh ordinary English news articles in distinct subject areas selected for direct full-article access and directly readable primary evidence, not for a known error. Development/evaluation assignment made at acquisition before any method outputs or reference annotations.",
+  "packets": [
+    {
+      "packet_id": "EN-DEV",
+      "language": "en",
+      "split": "development",
+      "packet_text_characters": 18944,
+      "source_only_sha256": "7e8d47a0f2c8a34d4640d92d9b04fd7b94788e1d64a780f6df0d3c19ad522329",
+      "source_only_private_file": "EN-DEV-source-only.json",
+      "documents": [
+        {
+          "document_id": "EN-DEV-A",
+          "role": "article",
+          "title": "Alzheimer's Disease Could Be Slowed by Taking as Few as 5,000 Steps a Day",
+          "url": "https://www.sciencealert.com/alzheimers-disease-could-be-slowed-by-taking-as-few-as-5000-steps-a-day",
+          "final_url": "https://www.sciencealert.com/alzheimers-disease-could-be-slowed-by-taking-as-few-as-5000-steps-a-day",
+          "publication_date": "2025-11-04",
+          "event_date": "2025-11-03",
+          "fetched_at": "2026-10-02T00:32:50.971651+00:00",
+          "http_status": 200,
+          "raw_file": "en_dev2_article.html",
+          "raw_sha256": "83dc0b600138ef561e1a7dc3ec7abf7dbf96a4267103c33eddfd378f1d1d3719",
+          "text_file": "EN-DEV-A.txt",
+          "text_sha256": "0c856824f1ff933677590350ed8154196eb32d6d14da1964f4a9e4e95c1dbbb7",
+          "text_chars": 2984,
+          "scope": "Complete headline and all 14 editorial body paragraphs. Removed only one related-story link, empty promotional paragraph, ad scripts, malformed embedded-video attributes, navigation and site chrome. No article-body truncation.",
+          "authors": [
+            "Michelle Starr"
+          ],
+          "publication_machine_timestamp": "2025-11-03T16:00:49+00:00",
+          "publication_date_note": "Visible article date is 04 November 2025; machine metadata timestamp is 3 November UTC. Both retained without resolving publisher timezone."
+        },
+        {
+          "document_id": "EN-DEV-S",
+          "role": "primary",
+          "title": "[Natural-source excerpt withheld; original retained privately.]",
+          "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC12705434/unicode",
+          "final_url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC12705434/unicode",
+          "publication_date": "2025-11-03",
+          "event_date": "2025-11-03",
+          "fetched_at": "2026-10-02T00:33:39.501912+00:00",
+          "http_status": 200,
+          "raw_file": "en_dev2_primary_bioc.html",
+          "raw_sha256": "94a970fe6233b1d1563d997024b38afff366dad1d083f698c4072e584606bbc3",
+          "text_file": "EN-DEV-S.txt",
+          "text_sha256": "31dfda3351968fa6c22b04faaec3d693fc33f677eb466edc4c8302ebe41c546c",
+          "text_chars": 15960,
+          "scope": "Complete title, both Abstract passages, entire Discussion section (all 10 prose paragraphs), Methods heading, complete Participants subsection and complete Physical activity subsection. Source BioC passage indices (zero-based): 0,1,2,37–52. Excludes Introduction, Results, all other Methods subsections, tables, figures, supplements, references, and back matter. Full XML retained privately; excluded material is not eligible evidence in the main packet.",
+          "canonical_url": "https://www.nature.com/articles/s41591-025-03955-6",
+          "repository_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705434/",
+          "doi": "10.1038/s41591-025-03955-6",
+          "source_passage_indices_zero_based": [
+            0,
+            1,
+            2,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52
+          ],
+          "transport_format": "Official NCBI BioC XML; raw filename retains acquisition .html suffix but content is XML."
+        }
+      ]
+    },
+    {
+      "packet_id": "EN-EVAL",
+      "language": "en",
+      "split": "locked_evaluation",
+      "packet_text_characters": 9308,
+      "source_only_sha256": "f665f58d0d33f1a6eaa714fee13dd0632bf9b80d2718bf1fb68367eeeb9acf47",
+      "source_only_private_file": "EN-EVAL-source-only.json",
+      "documents": [
+        {
+          "document_id": "EN-EVAL-A",
+          "role": "article",
+          "title": "[Natural-source excerpt withheld; original retained privately.]",
+          "url": "https://www.theguardian.com/business/2025/may/08/uk-interest-rates-cut-bank-of-england-uk-economy-trump-tariffs",
+          "final_url": "https://www.theguardian.com/business/2025/may/08/uk-interest-rates-cut-bank-of-england-uk-economy-trump-tariffs",
+          "publication_date": "2025-05-08T17:17:05.000Z",
+          "event_date": "2025-05-08",
+          "fetched_at": "2026-10-02T00:35:54.147244+00:00",
+          "http_status": 200,
+          "raw_file": "en_eval_article.html",
+          "raw_sha256": "f7ca802cc0cd254475e3da03208e6cc45ab49deabc6b642cbf73928f2a490f82",
+          "text_file": "EN-EVAL-A.txt",
+          "text_sha256": "fd43bf5439d356e3f5cfa52d374aad68e8913cf4e56e509853ca7fde8f44e5f2",
+          "text_chars": 5139,
+          "scope": "Complete headline, standfirst, and all 26 editorial body paragraphs. Removed only newsletter promotion (3 paragraphs), navigation, dynamic related stories, captions and site chrome. No article-body truncation.",
+          "authors": [
+            "Phillip Inman",
+            "Heather Stewart"
+          ],
+          "modified_at": "2025-05-08T18:31:21.000Z"
+        },
+        {
+          "document_id": "EN-EVAL-S",
+          "role": "primary",
+          "title": "Monetary Policy Summary, May 2025",
+          "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
+          "final_url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
+          "publication_date": "2025-05-08",
+          "event_date": "2025-05-07",
+          "fetched_at": "2026-10-02T00:35:55.216954+00:00",
+          "http_status": 200,
+          "raw_file": "en_eval_primary.html",
+          "raw_sha256": "1b705189ad3c53d8cd6ed123fc5403b1eb1c77d3eae1c345fbcfe91305fde0f3",
+          "text_file": "EN-EVAL-S.txt",
+          "text_sha256": "ff91d2390c5450318a726f4ef231dfe0b57e98ada9962e9e04116f1d3fd359bc",
+          "text_chars": 4169,
+          "scope": "Complete Monetary Policy Summary section, heading and every paragraph, only. The separately headed meeting minutes, related links, news cards, voting-history workbook, and May Monetary Policy Report are outside packet scope. Full fetched HTML retained privately, not eligible evidence beyond this extracted section.",
+          "event_description": "MPC meeting ending 7 May 2025; decision published 8 May 2025."
+        }
+      ]
+    }
+  ],
+  "public_release_rule": "Metadata, URLs, hashes and scope statements only; full copyrighted text remains in the private acquisition directory.",
+  "copyright_note": "Sources are captured for private evaluation; public manifest contains no full article text."
+}

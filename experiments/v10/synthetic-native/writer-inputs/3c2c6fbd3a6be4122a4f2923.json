@@ -1,0 +1,18 @@
+{
+  "language": "KO",
+  "source": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "6월 10일 최고 수위 8.2m가 기록됐다. 이 발췌문에는 6월 8일 수위나 그 이전 최고 수위가 없다."
+    }
+  ],
+  "target_question": "6월 10일 자료만으로 원문의 6월 8일 당시 기록 주장이 틀렸다고 확정할 수 있는가?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "packet_id": "937ccb77b9e2ecc1514f0a62",
+  "task": "Produce the minimally revised article and a separate delivery note addressing the target question. Preserve material source meanings and attributed statements; identify uncertainty rather than inventing evidence. Inspect the complete supplied source. If no supported change is appropriate, a no-op with a specific explanation is allowed. State what was actually applied and what remains unresolved.",
+  "reference_protection": [],
+  "original_input_sha256": "e3f150d30773f600c81c1c18970feade22c76cd937c799a775b7e4e64d16ecba",
+  "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+  "input_id": "3c2c6fbd3a6be4122a4f2923"
+}

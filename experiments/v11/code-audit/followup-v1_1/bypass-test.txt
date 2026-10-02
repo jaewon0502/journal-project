@@ -1,0 +1,6 @@
+test_oversized_bypass_rejected_before_store_write (test_size_contract.SizeContractTests.test_oversized_bypass_rejected_before_store_write) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+OK

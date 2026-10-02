@@ -1,0 +1,132 @@
+test_aliases_prose_and_receipt_tampering (test_receipt.ReceiptTests.test_aliases_prose_and_receipt_tampering) ... ok
+test_all_actual_values_bound (test_receipt.ReceiptTests.test_all_actual_values_bound) ... ok
+test_empty_unapproved_abstains (test_receipt.ReceiptTests.test_empty_unapproved_abstains) ... ok
+test_source_only_separate_candidate (test_receipt.ReceiptTests.test_source_only_separate_candidate) ... ok
+test_stale_or_malformed_audit_abstains (test_receipt.ReceiptTests.test_stale_or_malformed_audit_abstains) ... ok
+test_states_and_language (test_receipt.ReceiptTests.test_states_and_language) ... ok
+test_store_hardlink_and_fifo_rejected (test_receipt.ReceiptTests.test_store_hardlink_and_fifo_rejected) ... ok
+test_store_rejects_symlinks_and_legacy (test_receipt.ReceiptTests.test_store_rejects_symlinks_and_legacy) ... ok
+test_store_roundtrip_and_collision (test_receipt.ReceiptTests.test_store_roundtrip_and_collision) ... ok
+test_01_stale_and_intermediate_binding (independent_followup.IndependentChecks.test_01_stale_and_intermediate_binding) ... ok
+test_02_dependency_rejection_then_fresh_partial (independent_followup.IndependentChecks.test_02_dependency_rejection_then_fresh_partial) ... ok
+test_03_types_failure_templates_and_prose (independent_followup.IndependentChecks.test_03_types_failure_templates_and_prose) ... ok
+test_04_write_once_incomplete_and_unsafe_store (independent_followup.IndependentChecks.test_04_write_once_incomplete_and_unsafe_store) ... ok
+test_05_deep_malformed_final_returns_fixed_failure (independent_followup.IndependentChecks.test_05_deep_malformed_final_returns_fixed_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.043s
+
+OK
+{
+  "native_plus_prior_01_to_05": {
+    "run": 14,
+    "failures": 0,
+    "errors": 0
+  },
+  "size_contract_changed": true,
+  "original_check06_preserved_as_original_failure": true,
+  "boundary": [
+    {
+      "target": 2097151,
+      "audit_bytes": 2095242,
+      "mint_bytes": 2097151,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097152,
+      "audit_bytes": 2095243,
+      "mint_bytes": 2097152,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097153,
+      "audit_bytes": 2095244,
+      "exception": "ValueError: receipt exceeds shared byte limit or is not bytes"
+    }
+  ],
+  "nested": [
+    {
+      "depth": 3000,
+      "structured": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "depth": 10000,
+      "uncaught": "RecursionError: maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    }
+  ]
+}
+{
+  "native_plus_prior_01_to_05": {
+    "run": 14,
+    "failures": 0,
+    "errors": 0
+  },
+  "size_contract_changed": true,
+  "original_check06_preserved_as_original_failure": true,
+  "boundary": [
+    {
+      "target": 2097151,
+      "audit_bytes": 2095242,
+      "mint_bytes": 2097151,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097152,
+      "audit_bytes": 2095243,
+      "mint_bytes": 2097152,
+      "verify": true,
+      "emit": [
+        "verified",
+        "verified"
+      ],
+      "roundtrip": true
+    },
+    {
+      "target": 2097153,
+      "audit_bytes": 2095244,
+      "exception": "ValueError: receipt exceeds shared byte limit or is not bytes"
+    }
+  ],
+  "nested": [
+    {
+      "depth": 3000,
+      "structured": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "depth": 10000,
+      "uncaught": "RecursionError: maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    }
+  ],
+  "original_large_followup": "ValueError: receipt exceeds shared byte limit or is not bytes",
+  "receipt_freeze": {
+    "files": 34,
+    "unchanged": true
+  },
+  "receipt-v1_1_freeze": {
+    "files": 39,
+    "unchanged": true
+  }
+}

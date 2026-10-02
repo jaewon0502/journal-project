@@ -1,0 +1,9 @@
+{
+  "corrected_at": "2026-10-02T01:53:13.930185+00:00",
+  "stage": "before writer launch and before outputs",
+  "correction": "Clarified intentional reuse of the starting candidate while excluding prior writer JSON, prior question answers, other candidates and grader verdicts. No input, target or experiment design change.",
+  "previous_protocol_sha256": "99f3c3215efcd5097d63c9a8ddd848246359e16dba1941ddd84b59fc82d6247a",
+  "previous_hash_manifest_sha256": "736ce0dd1cfcdd922531e2994a5113df919bacb9fbc82afd4dbb20f1b6ec490b",
+  "inputs_unchanged": true,
+  "targets_unchanged": true
+}

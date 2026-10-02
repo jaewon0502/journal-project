@@ -1,0 +1,74 @@
+{
+  "packet_id": "65cbbdd7297ba9895a8d95d7",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "The displayed output incorporates p1, changing the increase unit.",
+      "anchor": "actual_output: 3 percentage points"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The output changes the source increase unit.",
+      "anchor": "p1: 3% -> 3 percentage points"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "The output retains Friday, so proposed p2 was not incorporated.",
+      "anchor": "actual_output: Friday; rejected_ids: [p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The final output retains Friday while E2 stipulates Saturday; rejection is not resolution.",
+      "anchor": "actual_output: Friday; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "displayed local output applies p1",
+      "reason": "Reports actual p1 incorporation."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "replacing ‘3%’ with ‘3 percentage points,’",
+      "reason": "Replacement entails changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Only p1 was selected",
+      "reason": "Explicitly excludes all-proposed application."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_implicit",
+      "short_anchor": "meeting date remains an identified meaning issue",
+      "reason": "A remaining discrepancy precludes establishing entire correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Locally released does not report whether external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "schedule says Saturday, while the displayed text says Friday",
+      "reason": "Precisely identifies residual final-output discrepancy."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

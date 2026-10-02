@@ -1,0 +1,101 @@
+{
+  "final_id": "b4226bcd20bba3d1f5a821e6",
+  "output": "은행의 예대금리차는 1.20%포인트다.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "0e7622c5b4848ace82fd1bce8f80df6dc172024c60ff31dd40a961f79a6bfa76",
+    "output_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+    "proposal_sha256": "6a3bb0717f9854e287939f8d8bcc3af04307f7c6f2c7189fee3a942d80957a0d",
+    "dependency_sha256": "a96cd562a19143bb7baa8d2e6054cc0942be6e8bdf64fcf47644a7ceebcd205c",
+    "patch_audit_sha256": "7981d10d0acc1e9463625f5434f26aae67c56b8f8e94641911e7d8bbc7537a2c",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "applied",
+    "released": true,
+    "source_equals_output": false,
+    "initial_candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+    "final_candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+    "applied_ids": [
+      "p1"
+    ],
+    "components": [
+      {
+        "id": "component-1",
+        "patch_ids": [
+          "p1"
+        ],
+        "state": "applied",
+        "reason": "exact_candidate_approved"
+      }
+    ],
+    "patches": [
+      {
+        "id": "p1",
+        "component_id": "component-1",
+        "state": "applied",
+        "source_span": [
+          29,
+          34
+        ],
+        "output_span": [
+          29,
+          43
+        ],
+        "before_sha256": "c2cb2558a44a4c344e102dd2b1e9bcd5031f0afa80ea9d5c6099143f053ee50c",
+        "proposed_after_sha256": "201022ef888fb4f1c34b4a217ed3163326d415abd84ebca4cd0a1de374bbf724",
+        "actual_sha256": "201022ef888fb4f1c34b4a217ed3163326d415abd84ebca4cd0a1de374bbf724",
+        "local_hunks": [
+          {
+            "start": 34,
+            "end": 34,
+            "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "after_sha256": "e5f25ab092abca34b47c379282059146e5a8dd35e8c94a29a7a9b7d3b29bdd26"
+          }
+        ]
+      }
+    ],
+    "final_audit_history": [
+      {
+        "audit_sha256": "0d4f5bd0b8190a09d8fc9db26d38ab4c7c331aabd26092ff2566060a9a576223",
+        "reviewed_candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+        "reviewed_ids": [
+          "p1"
+        ],
+        "released": true,
+        "next_candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+        "next_selected_ids": [
+          "p1"
+        ]
+      }
+    ],
+    "unresolved": [
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "7981d10d0acc1e9463625f5434f26aae67c56b8f8e94641911e7d8bbc7537a2c",
+        "pointer": "/preexisting_findings/0",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "7981d10d0acc1e9463625f5434f26aae67c56b8f8e94641911e7d8bbc7537a2c",
+        "pointer": "/preexisting_findings/1",
+        "evidence_ids": [
+          "E1"
+        ]
+      }
+    ],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 적용. 의존 컴포넌트 적용 1개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 2개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": null,
+  "explanation_sha256": null,
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "approved",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "resolved",
+  "remaining_uncertainty": []
+}

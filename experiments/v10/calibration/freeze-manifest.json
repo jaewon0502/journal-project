@@ -1,0 +1,102 @@
+{
+  "frozen_at_utc": "2026-10-01T22:38:59.595481+00:00",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "counts": {
+    "evaluator_calibration_minimal_pairs": 6,
+    "authored_calibration_packets": 12,
+    "native_writer_input_packets": 6,
+    "KO_writer_inputs": 3,
+    "EN_writer_inputs": 3
+  },
+  "accounting_warning": "Calibration authored outputs are not native writer outcomes and must not count toward intervention effectiveness. Writer inputs are a separate six-case set derived from pair sources.",
+  "files": [
+    {
+      "path": "rubric.json",
+      "sha256": "72211a53ed8888e6309e3bb7549aea7943fb01c849fefe4bcf0fd52a028eaeb3"
+    },
+    {
+      "path": "run-order.json",
+      "sha256": "c0bc203ebcfea4c321ca9be901270afce48e4447e2a20f148bc84b9f081773dd"
+    },
+    {
+      "path": "packets/0a8e720b2cf44b85355b6c54.json",
+      "sha256": "96f016d32cc23373e368ebccf82b5fb23b92232264ce004fe8190ad1e8c9eccc"
+    },
+    {
+      "path": "packets/183e013ece49c11f830e2493.json",
+      "sha256": "30d102d980769bd7c2285a2903b2aa6451450d89ec950eb8e84c5da085de7ea0"
+    },
+    {
+      "path": "packets/62f27b46fa24c4f9847bbaed.json",
+      "sha256": "bce74d7221581787fb38a70db5cfd152c3c77ba3a5c7bd35ddc6a75ff2092ea4"
+    },
+    {
+      "path": "packets/65adbd2a1f1c2f34dc678d9c.json",
+      "sha256": "a290751d5715d3dd6f12ad1daf1ef53fb4e4a48016f0ff3acebb0b5fb5c9ec44"
+    },
+    {
+      "path": "packets/66c79d324860b23e9a4da144.json",
+      "sha256": "9ca8f4f6e81ba662e04dcac9d10ae38c68c9c2aa8345a82113777183ffd75e96"
+    },
+    {
+      "path": "packets/7e7985075c7937a56d592297.json",
+      "sha256": "df8f6b4fd5e6713bcf0d3291da947656680424285f0f2b83528cdb9a23513097"
+    },
+    {
+      "path": "packets/841859cd188379b31a02ba63.json",
+      "sha256": "7b7a820e37d34cd55f69bbc39b93d1872609945ec5f9882d1696f0e84154e37f"
+    },
+    {
+      "path": "packets/843659addf26983df9bd4a24.json",
+      "sha256": "f8eaefce30a6da0ded8dc024b3a665826045bc1876f0f440419cdaea90893329"
+    },
+    {
+      "path": "packets/96f4167db8fba7fa8edf10d2.json",
+      "sha256": "bd9e3d129cfa131308f3adcc295232496983329998ea31d7f356ceb9da9a9f72"
+    },
+    {
+      "path": "packets/c5057d9ee7b59fbfe777681c.json",
+      "sha256": "cb615b79cfadccd054b091459fb6405a3acb660c360db5f0cafe573f02ead162"
+    },
+    {
+      "path": "packets/cd6de257991961fb055dc2e6.json",
+      "sha256": "9721f5285cd72e8e7b86b2b54c1a44c05ab3e0777d934759d1c9ceee4d123cd0"
+    },
+    {
+      "path": "packets/e965806ef848d8daa8f5ae62.json",
+      "sha256": "da75af64016167e2ebbdcbbfa7bc2be9089ac23f54a5708a3b5e642aa7ed7d7f"
+    },
+    {
+      "path": "writer-inputs/3d43980ef7ef5ade22b8eb3b.json",
+      "sha256": "636c31ee40360692b0fa61d2aba6e410a041954dbc782374fc664c40b4866b53"
+    },
+    {
+      "path": "writer-inputs/459a283fa0463064e8dd444c.json",
+      "sha256": "37458e2f64f8612aeea0bef4db18688d849084197085cb6ecc8956a75430604f"
+    },
+    {
+      "path": "writer-inputs/807712af1b63c31c819db810.json",
+      "sha256": "e55c9246b95fdeea02ed8fa889dd807bf5d9a8a6a037acdbad228a3a0d7cc650"
+    },
+    {
+      "path": "writer-inputs/937ccb77b9e2ecc1514f0a62.json",
+      "sha256": "e3f150d30773f600c81c1c18970feade22c76cd937c799a775b7e4e64d16ecba"
+    },
+    {
+      "path": "writer-inputs/a109a16b167e313805f7dbae.json",
+      "sha256": "72fae248290d19f9f867a705c67ad2aeced952a4c6b47ff34f19fc203bcbe253"
+    },
+    {
+      "path": "writer-inputs/d8dc8d48792d596fe01b4bf7.json",
+      "sha256": "8aa7a30e03bb9bee79f9f3ecbeb45b6a8553de7609bce023ffb26e81cea0f377"
+    },
+    {
+      "path": "private/expected.json",
+      "sha256": "8df730bc632d2b52558f14f16c219cf8c58bd68af34dd24929d572cf7a75ae47"
+    },
+    {
+      "path": "private/writer-map.json",
+      "sha256": "7b5135ac39e7e43f3b7b0adc0c2c5dce59e159666d201ac8260f5b5bfe85f7d1"
+    }
+  ]
+}

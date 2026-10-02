@@ -1,0 +1,30 @@
+{
+  "packet_id": "5f6bc52b6ff8990e2bd897b8",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+      "reason": "Output equals source; neither proposed patch is selected and both are rejected in the receipt. In context, no patches present refers to their absence from the local output."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "yes",
+      "short_anchor": "[\"q1\"] Output quote: \"3%\"; [\"q2\"] Output quote: \"Friday\"",
+      "reason": "Both output spans are quoted and paired with their supplied evidence: E1 describes a 3-percentage-point difference and E2 stipulates Saturday. Each is explicitly reported as an unresolved review claim."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+      "reason": "The annotation reports local gate release and expressly avoids factual verification, adjudication, and external publication. Attribution of supplied unresolved concerns is not certification of their truth."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "The receipt is not a no-op.",
+      "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+    }
+  },
+  "missing_issue_ids": [],
+  "recovery_basis": "annotation",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

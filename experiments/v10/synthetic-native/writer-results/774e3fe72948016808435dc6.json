@@ -1,0 +1,41 @@
+{
+  "input_id": "774e3fe72948016808435dc6",
+  "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+  "protection_inventory": [
+    {
+      "id": "P1",
+      "source_anchor": "The analyst said",
+      "meaning": "Preserve the attribution as reported; the evidence does not verify what the analyst said.",
+      "outside_reference": true
+    },
+    {
+      "id": "P2",
+      "source_anchor": "the increase was exactly 0.02 units",
+      "meaning": "Preserve the reported exact value and units without silently substituting the measured value or recasting the claim as rounded.",
+      "outside_reference": true
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "before": "The analyst said the increase was exactly 0.02 units.",
+      "after": "The analyst said the increase was exactly 0.02 units. The supplied measurement evidence gives an unrounded increase of 0.016 units; it contains no recording or transcript of the analyst.",
+      "evidence_ids": [
+        "E1"
+      ],
+      "reason": "Add a separately attributed measurement clarification while retaining the reported statement and making the lack of speech verification explicit."
+    }
+  ],
+  "dependencies": [],
+  "reader_note": "The proposed candidate retains the reported statement that the increase was exactly 0.02 units and adds a separate clarification that the supplied unrounded measurement is 0.016 units. These are different exact values, although 0.016 rounds to 0.02 to two decimal places. The packet provides no recording or transcript, so it cannot verify what the analyst actually said. The patch is proposed, not finally released.",
+  "target_response": "resolved_in_packet",
+  "unresolved": [
+    "Whether the analyst actually made the reported statement cannot be verified from the supplied evidence."
+  ],
+  "self_check": {
+    "original_statement_retention": "The entire original sentence, including the analyst attribution and the word exactly, is retained verbatim. The only added material is the separately attributed evidence clarification.",
+    "scope_time_comparison": "The measurement is an unrounded increase in the same units. No time, population, or event details are supplied or invented; rounding does not establish the reported exact claim or authenticate speech.",
+    "criticism_and_counterargument": "No criticism or rebuttal occurs in the source. The distinction between the reported claim and measurement is preserved.",
+    "outside_patch_unchanged": true
+  }
+}

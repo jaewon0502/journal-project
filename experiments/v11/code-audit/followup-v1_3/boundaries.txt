@@ -1,0 +1,1 @@
+PASS: 8 encoding bypass variants; 8 malformed/NUL variants across four input paths and both languages; 8 corrupt-store reads; 6 Korean no-op boundary cases

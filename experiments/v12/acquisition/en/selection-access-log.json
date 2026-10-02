@@ -1,0 +1,174 @@
+{
+  "created_at": "2026-10-02T00:37:24.472120+00:00",
+  "selection_pool": [
+    {
+      "candidate": "Guardian Bank of England 8 May 2025",
+      "url": "https://www.theguardian.com/business/2025/may/08/uk-interest-rates-cut-bank-of-england-uk-economy-trump-tariffs",
+      "status": "selected_locked_evaluation",
+      "reason": "Ordinary policy reporting; direct full article and complete official decision summary readable; distinct domain from development science.",
+      "known_error_screen": "Not performed."
+    },
+    {
+      "candidate": "TIME coffee/healthy aging 3 June 2025",
+      "url": "https://time.com/7290877/coffee-health-women-aging-benefits/",
+      "status": "excluded_access",
+      "reason": "Article fully readable, but primary linked release and publisher abstract/PDF all blocked; search snippets not substituted."
+    },
+    {
+      "candidate": "ScienceAlert walking/Alzheimer’s November 2025",
+      "url": "https://www.sciencealert.com/alzheimers-disease-could-be-slowed-by-taking-as-few-as-5000-steps-a-day",
+      "status": "selected_development",
+      "reason": "Ordinary science reporting; complete article directly readable and official NCBI BioC primary XML accessible. Entire abstract and discussion plus two methods subsections fit a bounded packet.",
+      "known_error_screen": "Not performed."
+    },
+    {
+      "candidate": "ScienceNews mice hibernation/memory",
+      "url": "https://www.sciencenews.org/article/memories-survive-hibernation-brain-cell",
+      "status": "search_surfaced_not_screened",
+      "reason": "Not pursued after accessible ScienceAlert/NCBI pair found."
+    }
+  ],
+  "search_queries": [
+    "site.theguardian.com science 2025 study coffee healthy ageing observational",
+    "site.theguardian.com 2025 Bank England interest rates cut 4.25 May",
+    "coffee healthy aging women June 2025 study nutrition.org",
+    "site.theguardian.com 2025 coffee healthy ageing",
+    "site.sciencealert.com 2025 coffee women 47",
+    "coffee healthy aging site:nutrition.org",
+    "Coffee may help women nutrition.org",
+    "Coffee may help women 2025",
+    "Drinking coffee linked with healthy aging in women",
+    "Sara Mahdavi June 2, 2025 nutrition.org",
+    "site.sciencenews.org 2025 mice study memory sleep",
+    "site.sciencealert.com 2025 study walking dementia BMJ",
+    "Physical activity as a modifiable risk factor in preclinical PMC",
+    "site.massgeneralbrigham.org 3,000 2025"
+  ],
+  "search_use": "Web search used for discovery only. Search result snippets were never substituted for article/primary packet text. Other surfaced search results were not access-screened or evaluated.",
+  "scope_choice": "Full article plus bounded complete primary sections chosen before any method output. Selection does not establish accuracy, inaccuracy, or materiality of any article claim.",
+  "source_only_rule": "Curators, writers and graders must use identical source-only packet scope. Out-of-packet raw evidence ineligible for main scores.",
+  "freshness_audit_sha256": "c08045b0f02159bc837b193f6c9680d9e051dd51c8660412f5a14dfa12a2388e",
+  "access": [
+    {
+      "url": "https://www.sciencealert.com/alzheimers-disease-could-be-slowed-by-taking-as-few-as-5000-steps-a-day",
+      "final_url": "https://www.sciencealert.com/alzheimers-disease-could-be-slowed-by-taking-as-few-as-5000-steps-a-day",
+      "fetched_at": "2026-10-02T00:32:50.971651+00:00",
+      "status": 200,
+      "raw_sha256": "83dc0b600138ef561e1a7dc3ec7abf7dbf96a4267103c33eddfd378f1d1d3719",
+      "semantic_access": "Readable content retrieved"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41591-025-03955-6",
+      "final_url": "https://www.nature.com/articles/s41591-025-03955-6",
+      "fetched_at": "2026-10-02T00:32:51.505357+00:00",
+      "status": 200,
+      "raw_sha256": "32ed63159c77e21ee19ca1b9aa3213ccf0218eb59539560b132a8e68ef0e18ea",
+      "semantic_access": "Client Challenge only; no primary article text"
+    },
+    {
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC12705434/unicode",
+      "final_url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC12705434/unicode",
+      "fetched_at": "2026-10-02T00:33:39.501912+00:00",
+      "status": 200,
+      "raw_sha256": "94a970fe6233b1d1563d997024b38afff366dad1d083f698c4072e584606bbc3",
+      "semantic_access": "Readable content retrieved"
+    },
+    {
+      "url": "https://www.massgeneralbrigham.org/en/about/newsroom/press-releases/physical-activity-may-slow-alzheimers-disease",
+      "final_url": "https://news.massgeneralbrigham.org",
+      "fetched_at": "2026-10-02T00:33:20.825010+00:00",
+      "status": 200,
+      "raw_sha256": "e2a12bc32ccce777c171e30f97b1c275f450f0ca8cbdcf50bb024a193ee25010",
+      "semantic_access": "Redirect to newsroom home page; not intended release"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41591-025-03955-6?error=cookies_not_supported&code=bfd00e18-ddd7-4800-8439-25a0b2b96a36",
+      "final_url": "https://www.nature.com/articles/s41591-025-03955-6?error=cookies_not_supported&code=bfd00e18-ddd7-4800-8439-25a0b2b96a36",
+      "fetched_at": "2026-10-02T00:33:38.884013+00:00",
+      "status": 200,
+      "raw_sha256": "32ed63159c77e21ee19ca1b9aa3213ccf0218eb59539560b132a8e68ef0e18ea",
+      "semantic_access": "Client Challenge only; no primary article text"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705434/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705434/",
+      "fetched_at": "2026-10-02T00:33:19.171685+00:00",
+      "status": 200,
+      "raw_sha256": "6ff834ad67eb11244a3965babb608a74c37f3236712b5befc3e9953622b072bf",
+      "semantic_access": "reCAPTCHA challenge only; no primary article text"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705434/?report=xml",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12705434/?report=xml",
+      "fetched_at": "2026-10-02T00:33:40.112703+00:00",
+      "status": 200,
+      "raw_sha256": "65538afb3cc68fdd44e413f7bb7d93f7f0214f41dd68aeba1de7ea6cc3f09881",
+      "semantic_access": "reCAPTCHA challenge only; no primary article text"
+    },
+    {
+      "url": "https://time.com/7290877/coffee-health-women-aging-benefits/",
+      "final_url": "https://time.com/7290877/coffee-health-women-aging-benefits/",
+      "fetched_at": "2026-10-02T00:31:19.532412+00:00",
+      "status": 200,
+      "raw_sha256": "37b8a8e5f9a2bb2d1e0f7673308c366455cc871121d0df0dc6e98571603d7f6e",
+      "semantic_access": "Readable content retrieved"
+    },
+    {
+      "url": "https://cdn.nutrition.org/article/S2475-2991%2825%2901522-7/fulltext",
+      "final_url": "https://cdn.nutrition.org/article/S2475-2991%2825%2901522-7/fulltext",
+      "fetched_at": "2026-10-02T00:31:20.216498+00:00",
+      "status": 403,
+      "raw_sha256": "039d7f657195a36b2308dd15901d958924709fdde1927b866505cb53bdf9cd82",
+      "semantic_access": "Blocked"
+    },
+    {
+      "url": "https://www.eurekalert.org/news-releases/1084789",
+      "final_url": "https://www.eurekalert.org/news-releases/1084789",
+      "fetched_at": "2026-10-02T00:31:46.465682+00:00",
+      "status": 403,
+      "raw_sha256": "58bf2215b395dcac74c009aa98701854e43cbe54a1cd3a95fee6a647ca9910d4",
+      "semantic_access": "Blocked"
+    },
+    {
+      "url": "https://www.theguardian.com/business/2025/may/08/uk-interest-rates-cut-bank-of-england-uk-economy-trump-tariffs",
+      "final_url": "https://www.theguardian.com/business/2025/may/08/uk-interest-rates-cut-bank-of-england-uk-economy-trump-tariffs",
+      "fetched_at": "2026-10-02T00:35:54.147244+00:00",
+      "status": 200,
+      "raw_sha256": "f7ca802cc0cd254475e3da03208e6cc45ab49deabc6b642cbf73928f2a490f82",
+      "transport": "curl",
+      "semantic_access": "Readable content retrieved"
+    },
+    {
+      "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
+      "final_url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
+      "fetched_at": "2026-10-02T00:35:55.216954+00:00",
+      "status": 200,
+      "raw_sha256": "1b705189ad3c53d8cd6ed123fc5403b1eb1c77d3eae1c345fbcfe91305fde0f3",
+      "transport": "curl",
+      "semantic_access": "Readable content retrieved"
+    },
+    {
+      "url": "https://nutrition.org/?s=brewed+longevity",
+      "status": 403,
+      "result": "Blocked; not packet evidence",
+      "fetched_at_approx": "2026-10-02T00:32:00Z",
+      "semantic_access": "Blocked"
+    },
+    {
+      "url": "https://nutrition.org/brewed-for-longevity-drinking-coffee-linked-with-healthy-aging-in-women/",
+      "status": 403,
+      "result": "Blocked; not packet evidence",
+      "fetched_at_approx": "2026-10-02T00:32:00Z",
+      "semantic_access": "Blocked"
+    },
+    {
+      "url": "https://cdn.nutrition.org/article/S2475-2991%2825%2901522-7/pdf",
+      "status": 403,
+      "result": "Blocked; not packet evidence",
+      "fetched_at_approx": "2026-10-02T00:32:00Z",
+      "semantic_access": "Blocked"
+    }
+  ],
+  "prior_manifest_files_scanned": 168,
+  "prior_exact_url_matches": []
+}

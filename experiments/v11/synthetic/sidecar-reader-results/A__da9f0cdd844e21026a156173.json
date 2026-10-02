@@ -1,0 +1,30 @@
+{
+  "packet_id": "da9f0cdd844e21026a156173",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+      "reason": "The output applies the percentage-point change while retaining Friday. The receipt selects p1 and rejects p2; the annotation accurately reports partial local application and zero held patches."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "yes",
+      "short_anchor": "[\"q1\"] 질문 비교; 출력 인용: \"금요일\"",
+      "reason": "The annotation quotes the retained Friday span and supplied evidence saying the fictional meeting schedule is Saturday. It attributes unresolved status to the supplied review and disclaims independent verification."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+      "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "적용 1개, 제외·원복 1개",
+      "reason": "This is partial application with a supplied unresolved issue, not an unchanged empty-issue no-op."
+    }
+  },
+  "missing_issue_ids": [],
+  "recovery_basis": "annotation",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

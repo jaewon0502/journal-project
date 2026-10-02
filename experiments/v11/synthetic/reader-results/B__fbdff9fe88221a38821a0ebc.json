@@ -1,0 +1,74 @@
+{
+  "packet_id": "fbdff9fe88221a38821a0ebc",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "There are no proposed patches and no text change.",
+      "anchor": "proposed_patches: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output repeats the source in full.",
+      "anchor": "3 percentage points. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "The proposal contains no patches.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "E1 supports the unit and E2 supports Friday; E2 says the source already satisfies the checks.",
+      "anchor": "E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No patches were proposed or applied",
+      "reason": "Directly reports actual local application."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The displayed local output is unchanged from the source",
+      "reason": "States unchanged output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No patches were proposed or applied",
+      "reason": "Reports the complete proposal disposition."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "The supplied fictional scenario supports",
+      "reason": "Scenario support is scoped; the annotation does not state the absence of whole-article verification."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "local output",
+      "reason": "Identifying a local output or local release does not explicitly exclude an additional external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "identifies no unresolved meaning issue.",
+      "reason": "Reports the identified meaning status of the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

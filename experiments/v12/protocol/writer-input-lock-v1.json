@@ -1,0 +1,86 @@
+{
+  "frozen_at": "2026-10-02T00:45:20.555544+00:00",
+  "rows": [
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "input_id": "088d7390d4359ea589b69407",
+      "split": "development",
+      "language": "KO",
+      "input_sha256": "a410debd3637da9820ec45d9c781c5194e579e92549b5574a110ee8c7320480a",
+      "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+      "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f"
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "input_id": "ef01c1c27fd3418ca0e1d3be",
+      "split": "development",
+      "language": "KO",
+      "input_sha256": "fc6742cd42c35c168431ce7a70ccd79ababa1c140d478f403582cd2ef19e2954",
+      "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+      "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f"
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "input_id": "e54d797342e6b80fbea0299d",
+      "split": "development",
+      "language": "EN",
+      "input_sha256": "8ab892aaba7f55ab22031df3cf39b9d106b5cb4ca761fd105c3a2012446de6bf",
+      "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+      "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf"
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "input_id": "ede155dad512a3d7d433676c",
+      "split": "development",
+      "language": "EN",
+      "input_sha256": "ec044e8cbddbb13e02cb2498836b7a5dbc846daf64b4a6c2520eb46c5016afd7",
+      "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+      "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf"
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "input_id": "09b9e16b8e2b9ba573189c47",
+      "split": "locked_evaluation",
+      "language": "KO",
+      "input_sha256": "faef47e90e773a699ea5e275cec287feb7af4ff328c74b7efdb19e2b8067e970",
+      "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+      "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7"
+    },
+    {
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "input_id": "35029351d5b635ce665b2d2c",
+      "split": "locked_evaluation",
+      "language": "KO",
+      "input_sha256": "5246933a9d1e0d71585c45f59126c6f549f7549fa509d31a6137a77cf676eab3",
+      "common_input_sha256": "7d7cc3044a845d27cc68d8c91252c8779f89343ec4a6d77f207495e59fa3c8b0",
+      "article_text_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7"
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "input_id": "88e5f92ef7091664c6fd762e",
+      "split": "locked_evaluation",
+      "language": "EN",
+      "input_sha256": "f76183760604f8b07acd488be6fb3cc267a79b934c0a8bcbffb7c38227a17539",
+      "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+      "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd"
+    },
+    {
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "input_id": "16bcba6a2c008dfef0a8ad56",
+      "split": "locked_evaluation",
+      "language": "EN",
+      "input_sha256": "4afc53ef6cc5c7bf21c59a38e0787543f60d97662e59853818c867a8e6d1b586",
+      "common_input_sha256": "0c03aacdc11b4e85d7ccbfd687174a6ab132b6806b2618c64f1b90bb4d3be651",
+      "article_text_sha256": "78c1a63cd841dc5aaa64c93000f4cf5444ca9607672a49743dfa9959c9e0fefd"
+    }
+  ],
+  "instruction_scope": "A/B differ only method_instruction and opaque input_id; paired common hash identical. No curator labels provided."
+}

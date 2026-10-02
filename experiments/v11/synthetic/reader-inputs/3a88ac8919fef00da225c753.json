@@ -1,0 +1,113 @@
+{
+  "packet_id": "3a88ac8919fef00da225c753",
+  "language": "KO",
+  "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+  "proposed_patches": [
+    {
+      "id": "p1",
+      "before": "3%",
+      "after": "3%포인트",
+      "start_byte": 51,
+      "end_byte": 53
+    },
+    {
+      "id": "p2",
+      "before": "금요일",
+      "after": "토요일",
+      "start_byte": 78,
+      "end_byte": 87
+    }
+  ],
+  "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 토요일에 열린다.",
+  "actual_receipt": {
+    "actual_result_sha256": "3853396f68d2de73326cc68b30c1f42086f85a3cb1a2a39b2ac3e801b739bbe1",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [
+      "p1",
+      "p2"
+    ],
+    "candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1"
+          ],
+          "reason": "exact_candidate_approved",
+          "state": "applied"
+        },
+        {
+          "id": "component-2",
+          "patch_ids": [
+            "p2"
+          ],
+          "reason": "exact_candidate_approved",
+          "state": "applied"
+        }
+      ],
+      "dependency_sha256": "a6e17a613366412b5f5b1b7a8e7ff08b14fb0ff94fed66e801801161f6223cbf",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "c105de65081b59ecd5f133847b41918eb01745d64ba5a428fd5c5fd9eaa08cb7"
+      ],
+      "patch_audit_sha256": "f0539b0c9c7804ae85489052a0fbe577cc043760e3c7d74eb4bde1dbf216315f",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "c105de65081b59ecd5f133847b41918eb01745d64ba5a428fd5c5fd9eaa08cb7",
+          "next_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+          "next_selected_ids": [
+            "p1",
+            "p2"
+          ],
+          "released": true,
+          "reviewed_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+          "reviewed_ids": [
+            "p1",
+            "p2"
+          ]
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+    "output_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+    "policy": "selective",
+    "proposal_sha256": "2c2a9f2d02f30e1b920ada308397483758082486f49bdcbd04300ced6e776cd4",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [
+      "p1",
+      "p2"
+    ],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+    "status": "applied"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "annotation": "제안된 모든 패치가 로컬 출력에 반영되었습니다. 적용 2개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 0개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee. Candidate SHA-256: 80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee. Receipt SHA-256: ee105a374e98f3de57ff3ed73b40b6095401c0fc83ee8ea8ab816e0012006db3.",
+  "scope": "Authored bounded scenario; no real-world factual article or publication. Judge the displayed local artifact and record, not author intent."
+}

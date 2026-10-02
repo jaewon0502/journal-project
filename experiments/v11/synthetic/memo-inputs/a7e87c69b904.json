@@ -1,0 +1,68 @@
+{
+  "input_id": "a7e87c69b904",
+  "language": "KO",
+  "source": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 금요일에 열린다.",
+  "proposed_patches": [],
+  "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 금요일에 열린다.",
+  "actual_receipt": {
+    "actual_result_sha256": "9b9d236db725dcd44721e4a2f429faa9b7c369ea3feaa7b86ac4ba2ab7abd88f",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+    "decision_provenance": {
+      "components": [],
+      "dependency_sha256": "3b8bbe4aeba70ec745820c156f0590527883d85f516b583c8b78d023830b0385",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "981bfbbf50016e415d364eece14c23c323bb2aa227ec472d74232aacfc7f9eae"
+      ],
+      "patch_audit_sha256": "e40928a9b31b8f13044138a37c78b66d648c6efb098c7922d96fc727f8a6015a",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "981bfbbf50016e415d364eece14c23c323bb2aa227ec472d74232aacfc7f9eae",
+          "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+          "next_selected_ids": [],
+          "released": true,
+          "reviewed_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+    "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+    "policy": "selective",
+    "proposal_sha256": "1d3c87093dc4223b496a69e9793e45af521e500642cc69241c3501a8593896ca",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+    "status": "no-op"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "provenance": "locked authored synthetic scenario; code replayed and checked against independently locked actual output; review identities not authenticated."
+}

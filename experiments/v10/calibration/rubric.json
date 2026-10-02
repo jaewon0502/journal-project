@@ -1,0 +1,90 @@
+{
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "status": "frozen_before_fresh_evaluation",
+  "unit": "one supplied source, candidate, delivery and explicit target question; dimensions must not be conflated",
+  "scope": "Evidence sufficiency in supplied packet; not independent world truth, human adjudication, or model-general error rate.",
+  "axes": {
+    "actual_patch_state": {
+      "values": [
+        "unchanged",
+        "changed",
+        "indeterminate"
+      ],
+      "rule": "Compare source to candidate directly; delivery claims do not implement patches."
+    },
+    "delivery_consistency": {
+      "values": [
+        "pass",
+        "fail",
+        "ambiguous",
+        "not_applicable"
+      ],
+      "rule": "Does delivery correctly describe the actual final artifact? Explicit completed repair with unchanged relevant text fails. Explicit unimplemented proposal passes. Unqualified proposed-patch wording is ambiguous, not automatically completion."
+    },
+    "original_statement_retention": {
+      "values": [
+        "retained",
+        "qualified_retained",
+        "removed_or_replaced",
+        "indeterminate"
+      ],
+      "rule": "Evaluate the target proposition and inspect full text for additional losses. Preservation does not establish truth. A reference list is not exhaustive gold."
+    },
+    "targeted_question_resolution": {
+      "values": [
+        "resolved",
+        "unresolved",
+        "indeterminate"
+      ],
+      "rule": "Does candidate plus delivery answer this exact question with an evidence-grounded correction, explicit supported distinction, or appropriately stated evidential limit? An unrelated accurate note is unresolved. Distinguishing a preserved speaker report from external data can resolve a discrepancy question without proving what was spoken."
+    },
+    "source_sufficiency": {
+      "values": [
+        "sufficient",
+        "insufficient",
+        "conflicting",
+        "not_applicable"
+      ],
+      "rule": "Evaluate evidence separately for each asserted target proposition, deletion rationale, date, scope, and attribution. Later higher record does not disprove an earlier record. Unknown truth is never promoted to true or false."
+    },
+    "truth_status": {
+      "values": [
+        "supported_in_packet",
+        "contradicted_in_packet",
+        "unknown",
+        "not_applicable"
+      ],
+      "rule": "Only supplied authored or archived evidence. Truth of report, fidelity to original, and fidelity to actual spoken words are separate. Do not equate insufficient with contradicted."
+    },
+    "abstain": {
+      "values": [
+        true,
+        false
+      ],
+      "rule": "True when the requested factual verdict cannot be determined; name the missing evidence. This does not prevent deciding demonstrable delivery mismatch or target nonresponse."
+    }
+  },
+  "required_output": {
+    "packet_id": "string",
+    "rubric_id": "string",
+    "actual_patch_state": "enum",
+    "delivery_consistency": "enum",
+    "original_statement_retention": "enum",
+    "targeted_question_resolution": "enum",
+    "source_sufficiency": "enum",
+    "truth_status": "enum",
+    "abstain": "boolean",
+    "evidence_anchors": [
+      "exact relevant source/candidate/evidence/delivery excerpts"
+    ],
+    "reason": "short proposition-specific explanation",
+    "additional_meaning_losses": [
+      "open-ended findings; empty is not completeness certification"
+    ],
+    "limitations": [
+      "missing evidence"
+    ]
+  },
+  "aggregation": "Report each axis separately. No overall success override and no relaxed thresholds. Report unknown/abstention counts separately; exclude unknown factual labels from determinate factual denominators. Abstention can be appropriate while correction remains undone. Compare judgments only with same target/rubric; do not overwrite v9 labels.",
+  "blind_protocol": "Fresh evaluator must not author cases, implement candidate outputs, see expected/private, comparison, original votes, pair IDs, or this build script. Give only rubric.json and packets/<opaque>.json, separately and in fixed shuffled order. No browsing required; all synthetic evidence is authored and bounded."
+}

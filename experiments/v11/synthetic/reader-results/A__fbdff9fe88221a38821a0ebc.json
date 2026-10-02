@@ -1,0 +1,76 @@
+{
+  "packet_id": "fbdff9fe88221a38821a0ebc",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "There are no proposed patches and the output is unchanged.",
+      "anchor": "proposed_patches: []; actual_receipt.status: no-op"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output exactly reproduces source, including the already-correct unit and Friday.",
+      "anchor": "actual_output: 3 percentage points. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "Proposal contains no patches.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The source already satisfies the two identified checks; no additional issue is identified.",
+      "anchor": "E2: The source already satisfies the stated checks.; E1"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No patches were proposed or applied",
+      "reason": "Explicitly excludes applied edits."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The displayed local output is unchanged from the source",
+      "reason": "Explicitly states unchanged output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No patches were proposed",
+      "reason": "Explicitly gives the condition for not_applicable."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "",
+      "reason": "Annotation does not state whether entire-article factual correctness is established."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "",
+      "reason": "Annotation does not report whether external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "identifies no unresolved meaning issue",
+      "reason": "Accurately reports the supplied scenario has no remaining identified issue."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The annotation does not communicate E4 whole-article verification limitation or absence of external publication."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

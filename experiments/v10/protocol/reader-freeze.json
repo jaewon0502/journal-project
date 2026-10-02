@@ -1,0 +1,8 @@
+{
+  "frozen_at": "2026-10-01T22:45:13.162884+00:00",
+  "files": {
+    "protocol/reader-v1.md": "ea18d2c348514b71f893c93141eab54fd79f8ff9b8d8ca82f47cce7ea76fe9bc",
+    "evaluation/rubric.json": "72211a53ed8888e6309e3bb7549aea7943fb01c849fefe4bcf0fd52a028eaeb3",
+    "protocol/candidate-manifest.json": "15e7193869d8a9fa0c4faf51f9ba0e85c1bbba3d119ffcdb70c3be621784c04d"
+  }
+}

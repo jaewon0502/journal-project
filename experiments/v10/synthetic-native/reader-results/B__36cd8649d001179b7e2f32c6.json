@@ -1,0 +1,62 @@
+{
+  "packet_id": "36cd8649d001179b7e2f32c6",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "additional_meaning_losses": [],
+  "patch_decisions": [
+    {
+      "id": "p1",
+      "decision": "approved",
+      "reason": "E1 explicitly supports percentage points; magnitude and bank-spread attribution remain intact.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "The source uses percent for an interest-rate difference; this error is fixed in the candidate, not still present.",
+      "source_anchor": "1.20%",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [
+    {
+      "id": "N1",
+      "description": "Separate delivery note leaves candidate application unclear despite the visibly changed candidate. If actual application refers only to publication, its caution is acceptable; if it includes this candidate, it is false. Clarification is needed.",
+      "relation": "unknown",
+      "patch_ids": [
+        "p1"
+      ],
+      "location": "reader_note"
+    }
+  ],
+  "actual_patch_state": "changed",
+  "delivery_consistency": "ambiguous",
+  "original_statement_retention": "qualified_retained",
+  "targeted_question_resolution": "unresolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "은행의 예대금리차는 1.20%다.",
+    "은행의 예대금리차는 1.20%포인트다.",
+    "예대금리차는 4.20% - 3.00% = 1.20%포인트다.",
+    "이 JSON에는 단위 수정 제안만 기록했으며, 기사 원문이나 발행본에 실제 적용한 것은 아니다. 실제 반영 여부는 확인되지 않았다."
+  ],
+  "reason": "The candidate visibly implements the correct unit. The note correctly avoids claiming publication, but its claim that only a proposal is recorded and application is unconfirmed does not clearly distinguish the changed candidate from the unchanged original/publication. Thus the factual unit is resolved while the requested accurate implementation account remains ambiguous. No evidence establishes an external publication edit.",
+  "limitations": [
+    "No publication artifact is supplied.",
+    "The delivery contract distinguishes proposals from final release, but unqualified actual-application wording does not identify its referent."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "은행의 예대금리차는 1.20%다.",
+      "meaning": "Retains the bank interest-spread quantity 1.20 and fixes only its unit."
+    }
+  ],
+  "admission": "unknown"
+}

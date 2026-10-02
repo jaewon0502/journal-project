@@ -1,0 +1,12 @@
+[
+  {
+    "directory": "/historical-research/journal-v11/receipt",
+    "manifest_sha256": "a56e17bf8b57b8e15e7436614445fdf0f307f10b33c13dd788cbae7e991d4462",
+    "mismatches": []
+  },
+  {
+    "directory": "/historical-research/journal-v11/receipt-v1_1",
+    "manifest_sha256": "85b9ebbe9953787302cd83f9313ba0d688f98ec7e89fe43ca6764c3d40b28b3f",
+    "mismatches": []
+  }
+]

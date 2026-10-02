@@ -1,0 +1,76 @@
+{
+  "packet_id": "f8be2a8278352de6eb523d12",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output; selected_ids is empty.",
+      "anchor": "an increase of 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The entire displayed output repeats the source.",
+      "anchor": "an increase of 3%; Friday"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both nonempty proposals remain unapplied in the displayed output.",
+      "anchor": "selected_ids: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The displayed output retains the wrong increase unit and Friday despite E1 and E2 stipulating percentage points and Saturday.",
+      "anchor": "an increase of 3%; Friday; E1; E2"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Review scope and suggested facts do not state actual incorporation or final output meaning status."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Review scope and suggested facts do not state actual incorporation or final output meaning status."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Review scope and suggested facts do not state actual incorporation or final output meaning status."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "External fact verification and publication are separate matters.",
+      "reason": "Separating the topic does not report whether full verification or external publication occurred."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "External fact verification and publication are separate matters.",
+      "reason": "Separating the topic does not report whether full verification or external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "The review addresses the increase unit and meeting day.",
+      "reason": "Review scope and suggested facts do not state actual incorporation or final output meaning status."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The displayed text still says 3% rather than 3 percentage points and Friday rather than the scenario-stipulated Saturday."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

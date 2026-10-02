@@ -1,0 +1,6 @@
+{
+  "input_id": "19b2afea4862",
+  "text": "All proposed patches are present in the local output. Applied 2; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251. Candidate SHA-256: 5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251. Receipt SHA-256: 1cd8c41d05dc53ae07d478f202899c402fcf8a1b27c4d92771182b7c9046c7fe.",
+  "receipt_sha256": "1cd8c41d05dc53ae07d478f202899c402fcf8a1b27c4d92771182b7c9046c7fe",
+  "generator": "deterministic frozen code"
+}
