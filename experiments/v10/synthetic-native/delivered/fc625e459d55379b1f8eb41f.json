@@ -1,0 +1,42 @@
+{
+  "final_id": "fc625e459d55379b1f8eb41f",
+  "output": "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+    "output_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+    "proposal_sha256": "cc6ec4c359ae5530e086d4c933fda5e9edc2bd75f7f1096991b93b906d36e387",
+    "dependency_sha256": "52f056e5683650fecddb5ed730896b0fd2ae0c52f12b655f405d40b135e040f2",
+    "patch_audit_sha256": "3c6f8eb8b7f9519d76f36cde042f786f85ac6859ad1a862639ada06e45a7157c",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "noop",
+    "released": true,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+    "final_candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+    "applied_ids": [],
+    "components": [],
+    "patches": [],
+    "final_audit_history": [
+      {
+        "audit_sha256": "33a4224f6e54d5c42743ccad4c8848fefcd48b82ccf6689b1d656eb6515b8ae3",
+        "reviewed_candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+        "reviewed_ids": [],
+        "released": true,
+        "next_candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 수정 없음. 의존 컴포넌트 적용 0개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 0개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": "원문은 위원회가 부정한 주장인 ‘모든 신청자가 탈락했다’와 위원회 자신의 주장인 ‘5명이 합격했다’를 정확히 구분하여 보존합니다. 두 내용과 반박 관계가 E1에 부합하므로 변경을 적용하지 않았습니다. 제공된 자료 범위에서 이 질문과 관련해 미해결된 사항은 없습니다.",
+  "explanation_sha256": "245e260769426d2bafab884378e8c70e9be3ef8c85471ea3549a71fca5e6a98f",
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "approved",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "resolved",
+  "remaining_uncertainty": []
+}

@@ -1,0 +1,26 @@
+{
+  "frozen_at": "2026-10-02T01:53:13.930185+00:00",
+  "status": "prepared; no writers launched",
+  "order": [
+    "F",
+    "T",
+    "T",
+    "F"
+  ],
+  "private_allocation_published": false,
+  "sha256": {
+    "private/allocation-map.json": "8de8e7064288a2bda3aaf9a71f8431f797bbb30793e0122b2eb43371315e41a8",
+    "private/build_transfer.py": "92d4040e6ef03793789da62ad767f1da5736ba621e2207f7b195b4d1a30bbb24",
+    "private/fact-content-equivalence.json": "f26a6a5779d408526a40698ee651fc4a826ffd2dd5c41b0acc02dd9940aa6306",
+    "private/target-coverage-reference.json": "e57d42d4ad72b67d12635b27de07b47884215d2a249db79add5c907b1af40007",
+    "private/validation.json": "1eb044206dc2780048cb1c5dfc8a4eb6394da6132590fe778663c466b5df7417",
+    "private/writer-execution.txt": "725278dda75821303cd78b17660c74f7331a173b772bfc365adf7d4d0898a756",
+    "private/writer-inputs/16df5ab2355736d58d1aef18.json": "851319cc25ae641bf01e293042cbecd44a438ddb2d3fac0f105c3dbf163979ff",
+    "private/writer-inputs/674467d6a1caa99f9d1e504b.json": "e9a4a164b5043dd7f4e030ae150644fa21b87133ff4d2034587623410ccf1f3c",
+    "private/writer-inputs/8f75d2d099970038bc5afc95.json": "f3a2fdafede5081b2975a0f94ee120efc82a1dbbe0888beac865451e7346f6d0",
+    "private/writer-inputs/98813e949e07eabf1cea95f3.json": "fc91f96d7b5f73583a073a323e978e561bd30857081ddada1343e142b7eb038c",
+    "public/protocol.md": "ca0879f33299e3c885d7c0d84e617f8b0dabbb20767538f5f46844a3272c31f0",
+    "public/prelaunch-correction.json": "c33ed4b888193e6b0c02d14d5cf4c8ba159cf63ac291dc2e4de65db8b22c5b16"
+  },
+  "prelaunch_correction": "public/prelaunch-correction.json"
+}

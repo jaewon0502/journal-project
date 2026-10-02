@@ -1,0 +1,161 @@
+{
+  "artifact_role": "Provisional author-expectation comparison after immutable independent source-first assessment; AI internal test-design validation, not human gold",
+  "source_first_artifact": "/historical-research/journal-v13-private/synthetic-validation-source-first.json",
+  "source_first_sha256": "78e73f52702d94afec23a500ea00de64f90676af868afa1e9e1bb75b41341372",
+  "sequence": "Source-first assessment written successfully, then author labels read, then this comparison written. Source-first artifact not edited.",
+  "grader_results_read": false,
+  "cases": [
+    {
+      "bundle_id": "a9f3b6",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "supported_in_combination_unsafe_isolated",
+          "independent_warranted": "unknown",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": "Safety agrees: unsafe alone, safe with P1. Necessary-correction warrantedness stays unknown; author limitations independently acknowledge this ambiguity."
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "normal_control_agreement": true,
+      "patch_comparisons": [],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unsafe",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unknown_support_unsafe_to_assert",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": "Evidence support=no means this supplied record does not support the assertion; it does not mean the northern condition is known false."
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unsafe",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    }
+  ],
+  "summary": {
+    "cases": 6,
+    "patches": 10,
+    "normal_noop_controls": 1,
+    "independently_warranted_supported_corrections": 6,
+    "unsafe_proposed_edits": 3,
+    "conditional_safe_addition_with_unknown_warrantedness": 1,
+    "safety_relations_agree_count": 10,
+    "dependency_relations_agree_count": 10,
+    "unresolved_warrantedness": [
+      "a9f3b6:P2"
+    ],
+    "invalidated_or_removed_cases": []
+  },
+  "limitations": [
+    "Author expectations are provisional authored labels, not independent human gold.",
+    "Safety relation agreement is a design comparison, not performance accuracy, precision, or a gate result.",
+    "All six fixtures and ten proposals stay in denominator; source incompleteness and warrantedness ambiguity remain explicit.",
+    "No fixture, source, proposal, or author label was edited or relabeled.",
+    "Evidence-support enum distinguishes support in supplied record from truth outside the record."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "bundle_id": "b7e2c9",
+  "input_sha256": "6d563a3ce2efa0197b1527adefbf0920a6048f1fad99979ff8635fef3118d359",
+  "source_sha256": "861844f770d144090709fe3ee3b646c43bd266044d7e1632480a5e19709fdbd8",
+  "original_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5",
+  "patches_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [],
+  "background_issues": [],
+  "global_material_risk": "no",
+  "global_risk_reason": "No patches are proposed, the full candidate exactly matches the original, and no application errors are reported. There is no newly introduced or edit-related material risk or dependency to localize.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "Read the complete supplied wrapper, including all six source paragraphs, scope note, original, questions, empty proposal array, full candidate, application-error object, instructions and schema. Within this expressly fictional source scope, no necessary factual or meaning correction is identified. The original accurately preserves the August trial on two routes, September 8 attribution, 61 of 86 voluntary survey responses, criticism about nighttime users, the absence of separate nighttime counts, consideration rather than commitment to an October survey, and the budget-review condition for permanent installation. The abbreviated August date does not contradict the exact trial dates, and the final future decision statement does not assert installation was approved. The survey does not establish population-wide effectiveness, nighttime outcomes remain unmeasured, the additional survey remains under consideration, and permanent installation remains undecided; the article does not claim otherwise. There are no proposed patches, patch dependencies, candidate interactions, or application errors to assess. This is an independent review of the supplied materials, not a final safety audit."
+}

@@ -1,0 +1,30 @@
+{
+  "source_meaning_error": false,
+  "original_meaning_loss": false,
+  "required_answer_missing": false,
+  "optional_context_absence": true,
+  "decision": "accept",
+  "evidence": [
+    {
+      "field": "candidate",
+      "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+      "supports": "자료와 일치하며 사업의 내용과 목적 및 목적 발언의 귀속을 모두 보존한다."
+    },
+    {
+      "field": "original_article",
+      "quote": "달여울문화관은 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업을 시작했다. 문화관은 주민이 동네의 소리를 기록하도록 돕는 것이 목적이라고 밝혔다.",
+      "supports": "후보가 원문과 동일하므로 원문의 중요한 의미나 조건, 귀속이 손실되지 않았다."
+    },
+    {
+      "field": "reader_question",
+      "quote": "문화관이 시작한 사업은 무엇이며 그 목적은 무엇인가?",
+      "supports": "후보는 주민에게 휴대용 녹음기를 빌려주는 소리채집 사업과 동네 소리 기록을 돕는 목적을 모두 제시한다."
+    },
+    {
+      "field": "source",
+      "quote": "녹음기 대여 기간은 대여일부터 12일이다.",
+      "supports": "후보에 빠진 추가 사실이지만 원문에 없고 사업과 목적을 묻는 질문에 답하는 데 필요하지 않은 선택 맥락이다."
+    }
+  ],
+  "reason": "후보는 자료에 어긋나거나 주장을 부당하게 넓히지 않아 source_meaning_error는 false다. 원문과 동일하여 original_meaning_loss도 false다. 사업과 목적에 대한 질문에 필요한 정보를 모두 포함하므로 required_answer_missing은 false다. 자료의 대여 기간은 빠졌지만 원문 의미 보존과 질문의 답에 필요하지 않으므로 optional_context_absence는 true다. 세 오류 항목이 모두 false이고 선택 맥락 누락만 있으므로 accept로 판정한다."
+}

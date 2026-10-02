@@ -1,0 +1,15 @@
+{
+  "frozen_at": "2026-10-02T00:45:47.680110+00:00",
+  "scope": "Development method v1; source packet and reference locks separate",
+  "files": {
+    "protocol/evaluator-schema.json": "d8f62e1aca40120846b5ee806d31076b042cf7f092ed9da7d02158425a874fb2",
+    "protocol/output-schema.json": "149a181be1d4fd5fc0d7a1389cdced93c9e294230025615818d8000bf9310433",
+    "protocol/runtime-and-scoring.md": "aec6716fde8fd1e83165c71276ce85c676f9e7c70e4aff1675d8a7cc02cc1e5b",
+    "protocol/scoring-template.csv": "a330cdc6691e845c42b709860d3d51eb789f915be716f537bcd8bc497c8ce156",
+    "protocol/deviations-and-approaches.md": "93fbdc3a8299951dcfafd58347f0fddf7b541d0525b0e308f426a0ff46558a3b",
+    "protocol/PREREGISTRATION.md": "8902091a04d623d06a41dca951be725e00a0574fa1ce941933d9ea30970ca71a",
+    "protocol/condition-prompts.md": "292d1a63b197a1e9cc5b1877bc49325e54b2f60cea2d6c22513a6bd938cbccf1",
+    "protocol/third-audit.md": "2549b8af5af8fdd9efc891d41dd3d058e39092c2e6af793903496965275c4db0",
+    "code/apply_exact.py": "95ca81f7271d9770936f4ce94cd894491d543cc4c5805accdaf7bef84d3d434a"
+  }
+}

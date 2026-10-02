@@ -1,0 +1,13 @@
+# Source-scope supplementary reviewer
+
+Use only this packet's original article, allowed evidence, writer output and applied candidate. No other outputs, allocation labels, archive or prior verdicts. The protocol fixed the six dimensions before generation; do not import facts from a larger source if absent here. Original article statements may be preserved as attributed and unverified; source silence is not refutation. Newly available source detail is not automatically mandatory. Audit all proposed patches and original protected relations, not only writer findings. Check every supplied paragraph; record IDs and actual cross-paragraph relations examined.
+
+Return JSON with packet_id, dimensions (one row for each of low_step_range, low_vs_moderate_comparison, endpoint_distinctions, amyloid_condition, causal_status, tracker_attribution_modality), patch_assessments, additional_detail_capability, unanswered_scope, inspected_paragraph_ids, relation_pairs, complete and read_complete.
+
+For each dimension give original proposition, candidate proposition, patch_ids, preservation (preserved|justified_change|partial|lost|unknown), article_anchor, allowed_source_receipts, candidate_anchor, new_claim_support (supported|unsupported|partial|no_new_claim|unknown), explicit_vs_implicit, reason. Separate numerical range from its associated outcome. Qualitative ordering is not a direct pairwise statistical test. Compare low vs inactive separately from low vs moderate. Do not transfer significance or effect sizes between tau, cognition and function. Observational estimates do not establish intervention effects. Distinguish measured baseline amyloid from amyloid buildup over followup.
+
+For each patch give patch_id, warranted (yes|no|unknown), collateral_loss (yes|no|unknown), unsupported_strengthening (yes|no|unknown), unnecessary_edit (yes|no|unknown), supported_repair (yes|partial|no|unknown), exact short receipts and reason. Evidence-supported correction can legitimately change original meaning; preserving bytes is not enough.
+
+For additional_detail_capability give named detail, present_in_allowed_source (yes|no|unknown), used_in_candidate (yes|no), candidate_supported (yes|no|not_assessable|unknown), and reason. Unknown detail absent from allowed evidence is not a writer error. A correct new number without a supplied receipt is not evidence-supported success.
+
+Use brief grounded statements, no hidden reasoning. No single success score. Report uncertainty honestly. Findings that differ only in wording must not become duplicate successes. Preserve all assessments, do not repair the writer output.

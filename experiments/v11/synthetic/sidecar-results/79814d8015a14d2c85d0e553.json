@@ -1,0 +1,36 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "99771ed9f53c95d7ba8fd1d9cb43a37e7e899e0f18733f0f2e64f3d762e6454e",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "032375a4e77a345b35b156c19163567e23d86bc8766b919389169be26e832642",
+    "issues": [
+      {
+        "evidence_span": {
+          "end_byte": 126,
+          "evidence_id": "E2",
+          "sha256": "b7ce86ef7dc97c03cdddf94c25d74784d772f20d79950bb9d05e0ce38253522f",
+          "start_byte": 0,
+          "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+        },
+        "id": "q1",
+        "kind": "question_comparison",
+        "output_span": {
+          "end_byte": 96,
+          "sha256": "a594e9b583050ec46ff96c92e61e26cb111f568bb104bc3c2ce18144be13d161",
+          "start_byte": 87,
+          "text": "금요일"
+        },
+        "review_status": "reported_unresolved"
+      }
+    ],
+    "language": "KO",
+    "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+    "receipt_sha256": "87ca9d5798571bf3a2604102bd02c1007db444b211f8cdf9a6866d566b1bf315",
+    "rendered_text": "[\"q1\"] 질문 비교\n출력 인용: \"금요일\"\n근거 인용: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "[\"q1\"] 질문 비교\n출력 인용: \"금요일\"\n근거 인용: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다.",
+  "combined_text": "제안된 패치 일부가 로컬 출력에 반영되었고 나머지는 제외 또는 보류되었습니다. 적용 1개, 제외·원복 1개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Candidate SHA-256: 84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958. Receipt SHA-256: 87ca9d5798571bf3a2604102bd02c1007db444b211f8cdf9a6866d566b1bf315.\n\n[\"q1\"] 질문 비교\n출력 인용: \"금요일\"\n근거 인용: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\n제공된 검토는 이 문제를 미해결로 보고합니다. 이 보조표가 그 주장을 독립 검증하지는 않습니다."
+}

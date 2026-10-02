@@ -1,0 +1,1 @@
+Read the source and candidate, check their consistency in answering the fixed broad question, and identify any materially unsupported claim or omission. If there is an established mismatch, propose the smallest repair that restores agreement with the source.

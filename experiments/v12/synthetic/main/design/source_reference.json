@@ -1,0 +1,154 @@
+{
+  "created_at_utc": "2026-10-02T00:36:09.798789+00:00",
+  "cases": [
+    {
+      "base_id": "s_27c18f",
+      "language": "ko",
+      "source": "도담기록관은 새 묶음 등록 기능을 시험했다. 사전에 분류 코드가 붙은 자료에서는 등록 시간이 줄었지만, 코드가 없는 자료에서는 줄지 않았다. 두 종류의 자료 모두 등록 오류율은 기존 절차와 같았다. 기록관은 분류 코드가 있는 자료에만 새 기능을 적용하고, 나머지 자료에는 기존 절차를 유지하기로 했다.",
+      "question": "도담기록관의 새 등록 기능 시험은 어떤 결과를 냈으며, 기록관은 앞으로 어떻게 운영하기로 했는가?",
+      "source_answer": "등록 시간은 사전 분류 코드가 있는 자료에서만 줄었고, 두 자료 유형의 오류율은 기존 절차와 같았다. 새 기능은 코드가 있는 자료에만 적용하고 나머지는 기존 절차를 유지한다.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "사전에 분류 코드가 붙은 자료에서는 등록 시간이 줄었지만, 코드가 없는 자료에서는 줄지 않았다.",
+          "required": "등록 시간 단축은 사전 코드가 있는 자료에 한정된다."
+        },
+        {
+          "id": "a2",
+          "quote": "두 종류의 자료 모두 등록 오류율은 기존 절차와 같았다.",
+          "required": "두 유형 모두 오류율은 변하지 않았다."
+        },
+        {
+          "id": "a3",
+          "quote": "기록관은 분류 코드가 있는 자료에만 새 기능을 적용하고, 나머지 자료에는 기존 절차를 유지하기로 했다.",
+          "required": "적용 범위와 나머지 자료의 처리 방침을 모두 보존한다."
+        }
+      ]
+    },
+    {
+      "base_id": "s_b619a0",
+      "language": "ko",
+      "source": "누리수리센터의 운영 자문팀은 새 접수 방식을 검토한 뒤, 다음 분기에 수리 대기 건수가 줄어들 수 있다고 전망했다. 자문팀은 감소를 보장하지 않았으며, 검토 당시에는 다음 분기의 실측 자료가 없었다. 센터는 다음 분기가 끝난 뒤 실제 대기 건수를 공개하겠다고 밝혔다.",
+      "question": "누리수리센터의 새 접수 방식에 관해 현재 제시된 판단과 향후 확인 계획은 무엇인가?",
+      "source_answer": "운영 자문팀은 다음 분기 수리 대기 건수가 줄어들 가능성을 제시했을 뿐 보장하지 않았다. 당시 다음 분기 실측 자료는 없었고, 센터는 그 분기 종료 후 실제 건수를 공개할 계획이다.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "다음 분기에 수리 대기 건수가 줄어들 수 있다고 전망했다.",
+          "required": "자문팀의 주장은 감소 가능성에 대한 전망이다."
+        },
+        {
+          "id": "a2",
+          "quote": "자문팀은 감소를 보장하지 않았으며, 검토 당시에는 다음 분기의 실측 자료가 없었다.",
+          "required": "확실성을 부여하지 않으며 실측 부재를 보존한다."
+        },
+        {
+          "id": "a3",
+          "quote": "센터는 다음 분기가 끝난 뒤 실제 대기 건수를 공개하겠다고 밝혔다.",
+          "required": "분기 종료 후 공개 계획이다."
+        }
+      ]
+    },
+    {
+      "base_id": "s_4ac731",
+      "language": "ko",
+      "source": "가온공연장에는 지난해 가을 휠체어 관객이 사용할 수 있는 출입 경사로가 없었다. 공연장은 올해 봄 경사로를 설치해 현재는 휠체어 관객이 그 경로로 출입할 수 있다. 운영 검토위원회는 지난해 가을의 접근성 부족을 지적한 관객의 비판이 정당했다고 판단했다. 위원회는 올해의 개선이 그 과거 비판을 반박하는 근거가 되지는 않는다고 덧붙였다.",
+      "question": "가온공연장의 접근성은 어떻게 달라졌고, 검토위원회는 관객의 비판을 어떻게 평가했는가?",
+      "source_answer": "지난해 가을 없던 경사로가 올해 봄 설치되어 지금은 휠체어 출입이 가능하다. 위원회는 지난해 가을 접근성 부족에 대한 비판이 정당했으며 현재의 개선으로 그 비판을 반박할 수 없다고 판단했다.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "가온공연장에는 지난해 가을 휠체어 관객이 사용할 수 있는 출입 경사로가 없었다.",
+          "required": "과거의 접근성 결함이다."
+        },
+        {
+          "id": "a2",
+          "quote": "공연장은 올해 봄 경사로를 설치해 현재는 휠체어 관객이 그 경로로 출입할 수 있다.",
+          "required": "현재 접근성 개선은 인정한다."
+        },
+        {
+          "id": "a3",
+          "quote": "운영 검토위원회는 지난해 가을의 접근성 부족을 지적한 관객의 비판이 정당했다고 판단했다.",
+          "required": "출처에 근거한 정당한 비판을 삭제하거나 약화하지 않는다."
+        },
+        {
+          "id": "a4",
+          "quote": "위원회는 올해의 개선이 그 과거 비판을 반박하는 근거가 되지는 않는다고 덧붙였다.",
+          "required": "현재 개선과 과거 비판 사이의 반박 불성립을 보존한다."
+        }
+      ]
+    },
+    {
+      "base_id": "s_d093f2",
+      "language": "en",
+      "source": "The fictional Fenwick Costume Exchange tested a fee waiver for alterations. The alteration fee was waived only when a request arrived before the costume was dispatched; requests received after dispatch still carried the usual fee. The trial did not change which alterations were eligible. The exchange decided to extend the same waiver rules for one further month.",
+      "question": "What did the Fenwick Costume Exchange trial offer, and what did the exchange decide to do next?",
+      "source_answer": "The trial waived alteration fees only for requests received before dispatch; later requests retained the usual fee. Alteration eligibility was unchanged. The exchange extended those same rules for one month.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "The alteration fee was waived only when a request arrived before the costume was dispatched; requests received after dispatch still carried the usual fee.",
+          "required": "Only pre-dispatch requests receive the fee benefit; later requests do not."
+        },
+        {
+          "id": "a2",
+          "quote": "The trial did not change which alterations were eligible.",
+          "required": "Eligibility is unchanged."
+        },
+        {
+          "id": "a3",
+          "quote": "The exchange decided to extend the same waiver rules for one further month.",
+          "required": "The same rules continue for one month."
+        }
+      ]
+    },
+    {
+      "base_id": "s_08eb64",
+      "language": "en",
+      "source": "A sponsor of the fictional Alderwick Puppet Festival predicted that its opening show would sell out. The festival director said the booking totals had not yet been compiled and did not endorse that prediction. The director said a ticket-sales update would be issued on Friday.",
+      "question": "What is currently known about demand for the Alderwick Puppet Festival opening show, and what update is planned?",
+      "source_answer": "A sponsor predicted a sellout. The director did not endorse the forecast, said booking totals were not yet compiled, and planned a Friday ticket-sales update.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "A sponsor of the fictional Alderwick Puppet Festival predicted that its opening show would sell out.",
+          "required": "The sellout prediction belongs to a sponsor."
+        },
+        {
+          "id": "a2",
+          "quote": "The festival director said the booking totals had not yet been compiled and did not endorse that prediction.",
+          "required": "No compiled totals; the director withheld endorsement."
+        },
+        {
+          "id": "a3",
+          "quote": "The director said a ticket-sales update would be issued on Friday.",
+          "required": "Friday update planned by director."
+        }
+      ]
+    },
+    {
+      "base_id": "s_e514b8",
+      "language": "en",
+      "source": "At the fictional Bracken Repair Cooperative, average turnaround was nine days this June, compared with six days in May and twelve days in June of the previous year. Customers complained that service had slowed since May. Management cited the improvement from the previous June as a rebuttal. A review panel found the customers’ month-to-month criticism justified: the year-to-year improvement did not contradict the slowdown since May.",
+      "question": "How did Bracken Repair Cooperative turnaround change, and how did the review panel assess the dispute?",
+      "source_answer": "June turnaround of nine days was slower than May’s six days but faster than the previous June’s twelve. Customers criticized the monthly slowdown; management cited annual improvement. The panel upheld the monthly criticism and found annual improvement did not refute it.",
+      "anchors": [
+        {
+          "id": "a1",
+          "quote": "average turnaround was nine days this June, compared with six days in May and twelve days in June of the previous year.",
+          "required": "Both comparison periods and all three values are distinct."
+        },
+        {
+          "id": "a2",
+          "quote": "Customers complained that service had slowed since May. Management cited the improvement from the previous June as a rebuttal.",
+          "required": "Preserve both positions and their different baselines."
+        },
+        {
+          "id": "a3",
+          "quote": "A review panel found the customers’ month-to-month criticism justified: the year-to-year improvement did not contradict the slowdown since May.",
+          "required": "The panel upheld the criticism and rejected the baseline-switching rebuttal."
+        }
+      ]
+    }
+  ]
+}

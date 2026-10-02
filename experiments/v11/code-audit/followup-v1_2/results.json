@@ -1,0 +1,95 @@
+{
+  "native_run": 16,
+  "native_failures": 0,
+  "native_errors": 0,
+  "large_30000_case": "not redundantly rerun; v1.1 rejection already independently confirmed",
+  "encoding_checks": [
+    {
+      "encoding": "utf-8",
+      "actual_container_depth": 65,
+      "bytes": 560,
+      "depth65_mint": "ValueError: JSON container nesting exceeds supported limit",
+      "deep_bytes": 20024,
+      "deep_guard": "ValueError: JSON container nesting exceeds supported limit",
+      "deep_emit": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "encoding": "utf-16",
+      "actual_container_depth": 65,
+      "bytes": 1122,
+      "depth65_mint": "accepted",
+      "depth65_emit": "verified",
+      "deep_bytes": 40050,
+      "deep_guard": "accepted",
+      "deep_emit": {
+        "uncaught": "RecursionError",
+        "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+      }
+    },
+    {
+      "encoding": "utf-16-be",
+      "actual_container_depth": 65,
+      "bytes": 1120,
+      "depth65_mint": "accepted",
+      "depth65_emit": "verified",
+      "deep_bytes": 40048,
+      "deep_guard": "accepted",
+      "deep_emit": {
+        "uncaught": "RecursionError",
+        "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+      }
+    },
+    {
+      "encoding": "utf-32",
+      "actual_container_depth": 65,
+      "bytes": 2244,
+      "depth65_mint": "accepted",
+      "depth65_emit": "verified",
+      "deep_bytes": 80100,
+      "deep_guard": "accepted",
+      "deep_emit": {
+        "uncaught": "RecursionError",
+        "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+      }
+    }
+  ],
+  "string_cases": [
+    {
+      "input_bytes": 813,
+      "accepted": true
+    },
+    {
+      "input_bytes": 133,
+      "accepted": true
+    },
+    {
+      "input_bytes": 135,
+      "accepted": true
+    },
+    {
+      "input_bytes": 36,
+      "accepted": true
+    }
+  ],
+  "extra_closers_cannot_cancel_depth": true,
+  "unrelated_programming_recursion_visible": true,
+  "receipt_freeze": {
+    "files": 34,
+    "unchanged": true,
+    "manifest_sha256": "a56e17bf8b57b8e15e7436614445fdf0f307f10b33c13dd788cbae7e991d4462"
+  },
+  "receipt-v1_1_freeze": {
+    "files": 39,
+    "unchanged": true,
+    "manifest_sha256": "85b9ebbe9953787302cd83f9313ba0d688f98ec7e89fe43ca6764c3d40b28b3f"
+  },
+  "receipt-v1_2_freeze": {
+    "files": 47,
+    "unchanged": true,
+    "manifest_sha256": "b2b840e295405d298b9c5ba50a84ade1ccbb9ddfdb2ecfc8ceef63bf18c5d499"
+  }
+}

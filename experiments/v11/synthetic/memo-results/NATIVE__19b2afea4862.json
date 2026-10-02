@@ -1,0 +1,9 @@
+{
+  "input_id": "19b2afea4862",
+  "text": "The displayed local output incorporates both proposed changes: “3%” becomes “3 percentage points,” and “Friday” becomes “Saturday.” The attendance endpoints, 21% and 24%, remain unchanged. Both patches were applied; none were held, excluded, or rolled back. The supplied fictional scenario supports the percentage-point difference and specifies Saturday for the meeting. No unresolved meaning issue is identified in the supplied record. This was a local release only; no external publication occurred.",
+  "limitations": [
+    "The evidence is limited to the supplied local output, receipt, and authored scenario; it does not establish real-world facts or overall article accuracy.",
+    "Patch approval does not independently verify semantic truth or adjudicate question resolution. Review identities are not authenticated."
+  ],
+  "declared_scope": "displayed_local_output"
+}

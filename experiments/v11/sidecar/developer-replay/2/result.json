@@ -1,0 +1,17 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "b726479cec542e585e9fa7cb0049758fdde8b4bc836bff14ee6713f4e6890583",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "1bc99254838bb9c242fa54e6987624ae8482f1257340ad6a0440c302f666fde5",
+    "issues": [],
+    "language": "KO",
+    "output_sha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+    "receipt_sha256": "3fb0b9bdd1228ff6f3de8060b3ae171e5744fd04af59003b370b1741eae95d50",
+    "rendered_text": "제공된 미해결 문제 목록은 비어 있습니다. 모든 문제가 해결됐다는 뜻은 아닙니다.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "제공된 미해결 문제 목록은 비어 있습니다. 모든 문제가 해결됐다는 뜻은 아닙니다.",
+  "combined_text": "수정 요청이 없어 원문과 같은 로컬 출력이 제공된 검토를 통과했습니다. 적용 0개, 제외·원복 0개, 보류 0개. 제공된 검토 게이트가 이 로컬 출력을 승인했습니다. 후보문은 별도 로컬 산출물입니다. 외부 기사나 게시물은 수정하지 않았습니다. 근거 범위는 제공된 로컬 바이트와 감사 기록뿐입니다. 원문의 미확인 명제는 출력과 후보문에 남아 있을 수 있습니다. 패치 적용은 사실의 진위나 질문 해결을 증명하지 않습니다. 사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다. 해결 여부를 판정하지 않은 감사 참조 0개가 있으며, 잔존 오류 확정은 아닙니다. 해시는 바이트를 연결하지만 작성자나 검토자의 신원을 인증하지 않습니다. Output SHA-256: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae. Candidate SHA-256: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae. Receipt SHA-256: 3fb0b9bdd1228ff6f3de8060b3ae171e5744fd04af59003b370b1741eae95d50.\n\n제공된 미해결 문제 목록은 비어 있습니다. 모든 문제가 해결됐다는 뜻은 아닙니다."
+}

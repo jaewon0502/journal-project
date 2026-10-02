@@ -1,0 +1,69 @@
+{
+  "final_id": "63839db02ab626c968218d7e",
+  "output": "The pilot reduced processing time by 7%.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "output_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "proposal_sha256": "339b7dd50ec4c34c78dac7aaa7222b477a5e8ea97d42f024d5e9d50e0f36738a",
+    "dependency_sha256": "baf3975df5c0d2695ea1a06ecc59f95a7334331d118af4433ba0cf40541bb9a1",
+    "patch_audit_sha256": "e6d0d6f65f2476385227b7216e1594150259ae18ec74a349f653140ddedfc97a",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "noop",
+    "released": true,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "final_candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+    "applied_ids": [],
+    "components": [],
+    "patches": [],
+    "final_audit_history": [
+      {
+        "audit_sha256": "ef2d708ec3757bb4ba752368dabceefc38b2ad59e1891ede8d738aa57c709026",
+        "reviewed_candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+        "reviewed_ids": [],
+        "released": true,
+        "next_candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e6d0d6f65f2476385227b7216e1594150259ae18ec74a349f653140ddedfc97a",
+        "pointer": "/preexisting_findings/0",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e6d0d6f65f2476385227b7216e1594150259ae18ec74a349f653140ddedfc97a",
+        "pointer": "/preexisting_findings/1",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "final_finding_requires_resolution_evidence",
+        "audit_sha256": "ef2d708ec3757bb4ba752368dabceefc38b2ad59e1891ede8d738aa57c709026",
+        "pointer": "/findings/0"
+      }
+    ],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 수정 없음. 의존 컴포넌트 적용 0개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 3개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": "No. The supplied report excerpt gives a final processing time of 93 seconds but no baseline, so the 7% reduction cannot be verified. A 100-second baseline would yield a 7% reduction, but that baseline is not supplied. No replacement patches are proposed; the original sentence remains unchanged because the evidence does not establish a correction. The baseline and claimed reduction remain unresolved.",
+  "explanation_sha256": "2c8b2c07983ce735bad08e32f156e7ff39d9027bf230f125a3dbafbef8819f41",
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "approved",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "resolved",
+  "remaining_uncertainty": [
+    "Baseline and actual percentage reduction remain unknown."
+  ]
+}

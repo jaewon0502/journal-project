@@ -1,0 +1,30 @@
+{
+  "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "proposal_sha256": "339b7dd50ec4c34c78dac7aaa7222b477a5e8ea97d42f024d5e9d50e0f36738a",
+  "candidate_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+  "selected_ids": [],
+  "packet_id": "63839db02ab626c968218d7e",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "approved",
+  "findings": [
+    {
+      "id": "inherited_baseline_missing",
+      "description": "Original 7% reduction cannot be verified without baseline; the unchanged source claim remains an explicitly disclosed inherited limit.",
+      "relation": "preexisting_independent",
+      "patch_ids": []
+    }
+  ],
+  "explanation_grounding": "pass",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "Pilot, processing-time metric and 7% claim retained unchanged.",
+    "Explanation distinguishes hypothetical 100-second baseline from supplied 93-second endpoint."
+  ],
+  "remaining_uncertainty": [
+    "Baseline and actual percentage reduction remain unknown."
+  ],
+  "reason": "Approve no-op with explicit inability-to-verify answer. The target verification question is answered; the underlying reduction remains unresolved and no correction success is claimed."
+}

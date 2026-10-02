@@ -1,0 +1,1195 @@
+{
+  "status": "audits_complete_with_source_fidelity_exception",
+  "posthoc_challenge": {
+    "preregistered": false,
+    "records": 2,
+    "record_sha256": {
+      "modality-challenge-A.json": "d0180b52aa486f4223e61390519e8b1e51b1d0d3d2c02766af9f790d6819ed46",
+      "modality-challenge-B.json": "a6191ef3dae282fccafef3865390fedfb362dcffeb806937be428c3e48bb339d"
+    },
+    "release_relative_to_original": true,
+    "literal_modality_strengthening": true,
+    "qualification": "Both targeted reviews retain release while acknowledging source-fidelity loss. Materiality is interpretive, not reader-outcome evidence. Raw primary audits are unchanged."
+  },
+  "scope": {
+    "bundles": 8,
+    "authored_synthetic_bundles": 6,
+    "authored_synthetic_patches": 10,
+    "exposed_real_regression_bundles": 2,
+    "saved_real_patches": 17,
+    "initial_review_records": 16,
+    "initial_patch_assessments": 54,
+    "gate_bundle_rows": 16,
+    "unique_final_candidate_audits": 15,
+    "raw_final_audit_atomic_changes": 14,
+    "unit_warning": "Stage records are not independent cases. Atomic changes are not proposal counts."
+  },
+  "aggregates": [
+    {
+      "kind": "synthetic",
+      "gate": "G0",
+      "bundles": 6,
+      "proposals": 10,
+      "preaudit_accepted_patches": 0,
+      "raw_audit_eligible_patches": 0,
+      "confirmed_patch_ids_count": 0,
+      "provisional_patch_count": 0,
+      "normal_noop_bundles": 1,
+      "held_categories": {
+        "strict_bundle_only": 6,
+        "supported_unwarranted": 1,
+        "review_assessed_unsafe": 3
+      }
+    },
+    {
+      "kind": "synthetic",
+      "gate": "G1",
+      "bundles": 6,
+      "proposals": 10,
+      "preaudit_accepted_patches": 6,
+      "raw_audit_eligible_patches": 6,
+      "confirmed_patch_ids_count": 6,
+      "provisional_patch_count": 0,
+      "normal_noop_bundles": 1,
+      "held_categories": {
+        "supported_unwarranted": 1,
+        "review_assessed_unsafe": 3
+      }
+    },
+    {
+      "kind": "real",
+      "gate": "G0",
+      "bundles": 2,
+      "proposals": 17,
+      "preaudit_accepted_patches": 0,
+      "raw_audit_eligible_patches": 0,
+      "confirmed_patch_ids_count": 0,
+      "provisional_patch_count": 0,
+      "normal_noop_bundles": 0,
+      "held_categories": {
+        "strict_bundle_only": 7,
+        "supported_unwarranted": 4,
+        "dependency_closure": 5,
+        "unresolved_unknown": 1
+      }
+    },
+    {
+      "kind": "real",
+      "gate": "G1",
+      "bundles": 2,
+      "proposals": 17,
+      "preaudit_accepted_patches": 7,
+      "raw_audit_eligible_patches": 7,
+      "confirmed_patch_ids_count": 7,
+      "provisional_patch_count": 0,
+      "normal_noop_bundles": 0,
+      "held_categories": {
+        "supported_unwarranted": 4,
+        "dependency_closure": 5,
+        "unresolved_unknown": 1
+      }
+    }
+  ],
+  "rows": [
+    {
+      "bundle_id": "4b272a88ea0ba855b27a82d2",
+      "kind": "real",
+      "gate": "G0",
+      "proposals": 9,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8",
+        "P9"
+      ],
+      "status": "held",
+      "audit_id": "f82e0ae5ca2787a9466a5fed",
+      "delivered_sha256": "1aa89d6eb78a034f0ab63fb77f44fd6f89d9c4c8f9d5f0cd818ae0884c11c9c7",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P7",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P8",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P9",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no",
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 4,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "4b272a88ea0ba855b27a82d2",
+      "kind": "real",
+      "gate": "G1",
+      "proposals": 9,
+      "accepted_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P5",
+        "P7"
+      ],
+      "held_ids": [
+        "P4",
+        "P6",
+        "P8",
+        "P9"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "5882f56c556daebc6436c357",
+      "delivered_sha256": "edd7f94e9df376355546475f18819c2da5155cb9332275ab02bc9d4192dca4f2",
+      "held_classification": [
+        {
+          "patch_id": "P4",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no"
+          ]
+        },
+        {
+          "patch_id": "P8",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no"
+          ]
+        },
+        {
+          "patch_id": "P9",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 5,
+        "supported_warranted_atomic_changes": 5,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 3,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P5",
+        "P7"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P5",
+        "P7"
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "kind": "real",
+      "gate": "G0",
+      "proposals": 8,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "status": "held",
+      "audit_id": "15ac0a53049a0fe3363f55b7",
+      "delivered_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "primary_category": "unresolved_unknown",
+          "unknown_fields": [
+            "context_safe"
+          ],
+          "reasons": [
+            "review 2: context_safe=unknown",
+            "review 2: mapped material/unknown issue B2",
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P7",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P8",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 5,
+        "unmet_required_answer_count": 2,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "kind": "real",
+      "gate": "G1",
+      "proposals": 8,
+      "accepted_ids": [
+        "P7",
+        "P8"
+      ],
+      "held_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "c797d49f0c6d6066ff89235e",
+      "delivered_sha256": "6d85559d51aeb38349358fd0f0536d7b2d038c6b54fceb9503a5006748e85735",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "primary_category": "dependency_closure",
+          "unknown_fields": [],
+          "reasons": [
+            "dependency held: P6"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "primary_category": "unresolved_unknown",
+          "unknown_fields": [
+            "context_safe"
+          ],
+          "reasons": [
+            "review 2: context_safe=unknown",
+            "review 2: mapped material/unknown issue B2"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 3,
+        "supported_warranted_atomic_changes": 3,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 5,
+        "unmet_required_answer_count": 2,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P7",
+        "P8"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P7",
+        "P8"
+      ]
+    },
+    {
+      "bundle_id": "a9f3b6",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "audit_id": "8649aa3953e8e67bd935ad57",
+      "delivered_sha256": "48254e82d9d7329c387e3f3fe9c37f35d2c300b933634c99b11a9f6037c02604",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no",
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 2,
+        "unmet_required_answer_count": 1,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "a9f3b6",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "c608a8869d3c85681b3ed6f2",
+      "delivered_sha256": "cd0044d4c3eb3d968c27fd280fb3aa4718843717d14afd373a6a3f6d91fb8c70",
+      "held_classification": [
+        {
+          "patch_id": "P2",
+          "primary_category": "supported_unwarranted",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 2: warranted=no"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 1,
+        "supported_warranted_atomic_changes": 1,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 0,
+      "accepted_ids": [],
+      "held_ids": [],
+      "status": "no_op",
+      "audit_id": "956a7d6e3749814171d10fb7",
+      "delivered_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5",
+      "held_classification": [],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "preserved"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 0,
+      "accepted_ids": [],
+      "held_ids": [],
+      "status": "no_op",
+      "audit_id": "956a7d6e3749814171d10fb7",
+      "delivered_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5",
+      "held_classification": [],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "preserved"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "audit_id": "6508da842ad4914fd83d312f",
+      "delivered_sha256": "1d6ed8506272521d4156671c164884ed2c5341a36a3bec61e7531c57b191abc4",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=no",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 2: warranted=no",
+            "review 2: evidence_support=no",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no",
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 1,
+        "unmet_required_answer_count": 1,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "c2251874d0df315dfa35018d",
+      "delivered_sha256": "11a8c1728f49313279201dd3a0494fc365ad8e874957d466724a27de572eeb62",
+      "held_classification": [
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=no",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 2: warranted=no",
+            "review 2: evidence_support=no",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 1,
+        "supported_warranted_atomic_changes": 1,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "audit_id": "ffdec0044edd171b337691e1",
+      "delivered_sha256": "9d2f27d82e674d41cb1aae60c91641a22366f2610f01855b125cd221f6d36d84",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [
+            "evidence_support"
+          ],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=unknown",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 1: mapped material/unknown issue B2",
+            "review 2: warranted=no",
+            "review 2: evidence_support=unknown",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no",
+            "review 2: mapped material/unknown issue B2",
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 1,
+        "unmet_required_answer_count": 1,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "5357018ef8bc2ceaa0bb7eca",
+      "delivered_sha256": "8805928064f1bd9d3725a8d2eb9f4a57453e78df8838a6a6f214ddb51f98e54d",
+      "held_classification": [
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [
+            "evidence_support"
+          ],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=unknown",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 1: mapped material/unknown issue B2",
+            "review 2: warranted=no",
+            "review 2: evidence_support=unknown",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no",
+            "review 2: mapped material/unknown issue B2"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 1,
+        "supported_warranted_atomic_changes": 1,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "audit_id": "4228c5b2b48fdd9e7a4aee8d",
+      "delivered_sha256": "73afb3b289d60dbfe67ea98530b1272d8c218baa87a452fde682d04459e3b504",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=no",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 2: warranted=no",
+            "review 2: evidence_support=no",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no",
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 1,
+        "unmet_required_answer_count": 1,
+        "criticism_preservation": "preserved"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [
+        "P2"
+      ],
+      "status": "proposed_delivery",
+      "audit_id": "2d67a9e89e6b35dace78ea34",
+      "delivered_sha256": "d24a5cc650d7796be75b6b707b387fde3aac75b65880b79660f40720acd23694",
+      "held_classification": [
+        {
+          "patch_id": "P2",
+          "primary_category": "review_assessed_unsafe",
+          "unknown_fields": [],
+          "reasons": [
+            "review 1: warranted=no",
+            "review 1: evidence_support=no",
+            "review 1: preserves_untargeted_meaning=no",
+            "review 1: context_safe=no",
+            "review 2: warranted=no",
+            "review 2: evidence_support=no",
+            "review 2: preserves_untargeted_meaning=no",
+            "review 2: context_safe=no"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 1,
+        "supported_warranted_atomic_changes": 1,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 0,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "preserved"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "kind": "synthetic",
+      "gate": "G0",
+      "proposals": 2,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1",
+        "P2"
+      ],
+      "status": "held",
+      "audit_id": "45b0ba8ebb57d45e2bb565e0",
+      "delivered_sha256": "ceb94b2968e48f796d6d283b1bc2fa7d6eea4642bb01cdea594c9197f7bda471",
+      "held_classification": [
+        {
+          "patch_id": "P1",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "primary_category": "strict_bundle_only",
+          "unknown_fields": [],
+          "reasons": [
+            "strict whole-bundle hold"
+          ]
+        }
+      ],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 0,
+        "supported_warranted_atomic_changes": 0,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 3,
+        "unmet_required_answer_count": 1,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_unchanged_original",
+      "confirmed_patch_ids": [],
+      "raw_audit_eligible_patch_ids": []
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "kind": "synthetic",
+      "gate": "G1",
+      "proposals": 2,
+      "accepted_ids": [
+        "P1",
+        "P2"
+      ],
+      "held_ids": [],
+      "status": "proposed_delivery",
+      "audit_id": "142d661e324ca435774aa8e2",
+      "delivered_sha256": "b18a493a60df4283fc18d57f32d7869005ce3042346583e41edd0d1f1edfac80",
+      "held_classification": [],
+      "raw_final_audit": {
+        "release_recommendation": "release",
+        "full_context_safety": "safe",
+        "release_eligible": true,
+        "atomic_changes": 2,
+        "supported_warranted_atomic_changes": 2,
+        "introduced_material_harm_count": 0,
+        "unknown_change_safety_count": 0,
+        "residual_original_issue_count": 1,
+        "unmet_required_answer_count": 0,
+        "criticism_preservation": "not_applicable"
+      },
+      "post_audit_disposition": "eligible_patch_delivery",
+      "confirmed_patch_ids": [
+        "P1",
+        "P2"
+      ],
+      "raw_audit_eligible_patch_ids": [
+        "P1",
+        "P2"
+      ]
+    }
+  ],
+  "initial_patch_review_disagreements": [
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P1",
+      "field": "dependencies",
+      "values": [
+        [
+          "P2",
+          "P6"
+        ],
+        [
+          "P2",
+          "P3",
+          "P4",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P2",
+      "field": "dependencies",
+      "values": [
+        [
+          "P6"
+        ],
+        [
+          "P3",
+          "P4",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P3",
+      "field": "dependencies",
+      "values": [
+        [
+          "P6"
+        ],
+        [
+          "P4",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P4",
+      "field": "dependencies",
+      "values": [
+        [],
+        [
+          "P3",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P5",
+      "field": "dependencies",
+      "values": [
+        [],
+        [
+          "P4",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P6",
+      "field": "context_safe",
+      "values": [
+        "yes",
+        "unknown"
+      ]
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "patch_id": "P6",
+      "field": "dependencies",
+      "values": [
+        [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5"
+        ],
+        [
+          "P4"
+        ]
+      ]
+    }
+  ],
+  "mechanical_checks": {
+    "exact_gate_replays": 8,
+    "unique_audit_records_checked": 15,
+    "unique_exact_final_source_anchors": 22,
+    "nonexact_final_audit_anchor_count": 2,
+    "meaning_warning": "Exact anchors, hashes and declared reading coverage do not prove semantic safety."
+  },
+  "limits": [
+    "No human gold standard or independent human audit. Author labels remain provisional.",
+    "No controlled model version, seed or cost comparison; native agent default runtime.",
+    "G0 is a normalized new whole-bundle review rule, not bit-exact v12 replay.",
+    "All proposals and rationales were shared across gates; rationales can prime reviewers.",
+    "Six synthetic fixtures and two exposed regressions do not estimate generalization.",
+    "Preserve source gaps: absent eligible evidence is unverified, not refuted.",
+    "Raw final audit EN C3 accepts firmer generalizability wording; targeted challenge is separate evidence, not a rewrite of that verdict.",
+    "No composite quality score or precision estimate."
+  ],
+  "posthoc_operational_repair": {
+    "included_in_primary_metrics": false,
+    "preregistered": false,
+    "independent_writer_generation": false,
+    "novel_issue_detection": false,
+    "author": "root assistant explicit one-phrase edit",
+    "audit_id": "ce8cc9dc3f56c3390fe14daf",
+    "before": "this limits generalizability.",
+    "after": "this may limit generalizability.",
+    "candidate_sha256": "195d577546846ba86a0817ad5faf2add452f797fb5f0759689bc3c58252e6bf8",
+    "single_phrase_change_verified": true,
+    "release_recommendation": "release",
+    "full_context_safety": "safe",
+    "introduced_material_harm": [
+      "no"
+    ],
+    "qualification": "Separate operational source-fidelity repair of a known issue, outside preregistered one-pass experiment. Whole-article residual limitations remain. No new independent case or frozen gate improvement."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "journal-v11.issue-sidecar-input.v1",
+  "input_id": "c4b84e7013df1a8289b4df32",
+  "language": "EN",
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+  "receipt_address": {
+    "path": "/historical-research/journal-v11-private/memo-inputs/88b1c16a46ec.json",
+    "json_pointer": "/actual_receipt",
+    "file_sha256": "84910e377bed96e4c093e3408aa90fc519c5cc8e2fd1fe0167b2a4d138d3154d",
+    "receipt_sha256": "92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.",
+      "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd"
+    },
+    {
+      "id": "E2",
+      "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks.",
+      "sha256": "adf96ff43db9d75ebb49389524b29a5e4f4e1dbe2221438131e48e64b5d5269a"
+    },
+    {
+      "id": "E4",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts.",
+      "sha256": "3368116d4d9bf54a7a66955df872cdf8de7dbb2998b2361497350763d8cdcad6"
+    }
+  ],
+  "issues": []
+}

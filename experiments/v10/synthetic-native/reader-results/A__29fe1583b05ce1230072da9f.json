@@ -1,0 +1,41 @@
+{
+  "packet_id": "29fe1583b05ce1230072da9f",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "insufficient",
+  "truth_status": "unknown",
+  "abstain": true,
+  "evidence_anchors": [
+    "The pilot reduced processing time by 7%.",
+    "The available report excerpt gives final processing time as 93 seconds but omits the baseline.",
+    "A 100-second baseline would yield a 7% reduction, but that baseline is not supplied."
+  ],
+  "reason": "The separate note correctly answers the verification question with an evidential limit. The numerical reduction itself remains unknown, not false. The hypothetical baseline is explicitly conditional and arithmetically correct.",
+  "additional_meaning_losses": [],
+  "limitations": [
+    "No baseline processing time; no independent verification beyond authored E1. Single-sentence source."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "The pilot reduced processing time by 7%.",
+      "meaning": "Retains the claimed pilot effect and magnitude without pretending to establish them."
+    }
+  ],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Body claim cannot be verified from the final time alone; this insufficiency is inherited and accurately disclosed.",
+      "source_anchor": "reduced processing time by 7%",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "admission": "approved"
+}

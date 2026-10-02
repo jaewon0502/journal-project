@@ -1,0 +1,12 @@
+{
+  "frozen_at": "2026-10-02T01:00:08.185556+00:00",
+  "decision": "No adaptation; development verdicts 12/12 matched author labels, but semantic repair validation still pending. Label exposure deviation separately recorded.",
+  "sha256": {
+    "shared_instruction.txt": "21045657a2ad8d0207f5e7dbdd8c5ecb250c758acdaf669aac1cbfc61463835c",
+    "output_schema.json": "119870d35d1de84c7d06f6dff644e703fccfff5b555db346c9882abf2684a57e",
+    "H0_method.txt": "124b665fd9fbda3b0d2aef00a716f147572b9c02e91a8e2164294213a83e08b5",
+    "H1_method.txt": "d7a75e81d2badcc2a6143245df1a4d8ef1e0b6bab53041ee14a2d4d8832cbf42",
+    "experiment_protocol.md": "1ce28cc898f51d0deb5adf1588aa95ad141550f3545b88976b89da0c766e5929",
+    "experiment_lock.json": "8267c62e8eb5909cc6657bd281f49c79281d04ea33793c5292499a2c228752e5"
+  }
+}

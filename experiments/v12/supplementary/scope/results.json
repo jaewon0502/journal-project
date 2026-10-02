@@ -1,0 +1,3343 @@
+{
+  "module": "v12-supplementary-scope",
+  "status": "completed_analysis_only",
+  "main_v12_scores_changed": false,
+  "design": {
+    "case": "EN-DEV exposed targeted regression diagnostic",
+    "method": "frozen B-v2",
+    "conditions": {
+      "OLD": 2,
+      "EXPANDED": 2
+    },
+    "same_article_and_procedure_fields": true,
+    "compared_invariant_fields": [
+      "language",
+      "questions",
+      "article",
+      "source_text_construction",
+      "article_text_sha256",
+      "shared_instruction",
+      "narrative_cap",
+      "output_schema",
+      "method_instruction"
+    ],
+    "old_evidence_prefix_exact": true,
+    "sole_intended_manipulation": "allowable evidence scope and truthful provenance metadata",
+    "primary_paragraphs": {
+      "OLD": 19,
+      "EXPANDED": 62
+    },
+    "input_bytes": {
+      "OLD": 30632,
+      "EXPANDED": 64713
+    },
+    "launch_order": [
+      "OLD-1",
+      "EXPANDED-1",
+      "EXPANDED-2",
+      "OLD-2"
+    ],
+    "execution_intervals_overlap": true,
+    "runtime_model_effort": "inherited per all four records; exact identities/settings unavailable, equality not independently established",
+    "version_seed_cost": "unknown",
+    "limitations": [
+      "one exposed case, two repeats per condition",
+      "evidence informativeness and input length/attention confounded",
+      "stochastic variation not identifiable separately with four outputs",
+      "not fresh discovery, no statistical significance or general guarantee"
+    ]
+  },
+  "lock_checks": [
+    {
+      "path": "journal-v12/supplementary/scope/protocol.md",
+      "matches": true
+    },
+    {
+      "path": "journal-v12/supplementary/scope/input-manifest.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/allocation-map.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/source-manifest.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/EN-DEV-S-expanded.txt",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/fb688b6b2fd47574538e180e.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/3b83a46307a5bf7ab93396fd.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/72560b94734c8104ad67f0ca.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/351bb0a5f134b921d2373423.json",
+      "matches": true
+    },
+    {
+      "path": "journal-v12/supplementary/scope/reviewer-instruction.md",
+      "matches": true
+    }
+  ],
+  "length_policy": "Identical field selection to code/output_lengths.py: findings description/materiality/status/limits; patches after/justification; question answers answer/remaining_unknown; unanswered_scope/no_change_reason/declared_limits. Nested string values joined with newline. Excludes before, anchors, IDs and keys; all replacement after text counts. No rerun/truncation or new success threshold.",
+  "timing_policy": "Clock-recorded writer task end minus start, seconds; not API latency, token throughput or cost. Clock precision is seconds. Overlapping task times must not be summed as experiment wall time.",
+  "runs": [
+    {
+      "run_order": 1,
+      "input_id": "fb688b6b2fd47574538e180e",
+      "condition": "OLD",
+      "repeat": 1,
+      "packet_id": "53af90b36401d8ee3ba4a898",
+      "application_status": "applied",
+      "patches": 7,
+      "writer_sha256": "ecaa975dba2a0bf0ac1ffa89778c267618824dcbf17e077ec66fc9b53a27adf6",
+      "candidate_sha256": "2314c6359a143ccf6419fae7bf322643fefa65bb7be953c4902b23a282c1d6af",
+      "label": "OLD-1",
+      "writer_hash_verified": true,
+      "task_clock": {
+        "start_utc": "2026-10-02T01:35:58Z",
+        "end_utc": "2026-10-02T01:37:27Z",
+        "elapsed_seconds": 89.0,
+        "clock_source": "clock.curr_time",
+        "api_latency": null,
+        "cost": null
+      },
+      "output_lengths": {
+        "total_json_characters": 13291,
+        "total_json_whitespace_words": 1534,
+        "narrative_characters": 5163,
+        "narrative_whitespace_words": 688,
+        "requested_cap": 900,
+        "exceeds_requested_cap": false
+      },
+      "finding_count": 5,
+      "question_answer_ids": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "finding_patch_links": [
+        {
+          "patch_id": "P1",
+          "finding_ids": [
+            "F1",
+            "F2"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "finding_ids": [
+            "F1",
+            "F2"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "finding_ids": [
+            "F3",
+            "F4"
+          ]
+        },
+        {
+          "patch_id": "P7",
+          "finding_ids": [
+            "F1",
+            "F5"
+          ]
+        }
+      ],
+      "analysis_notes_by_dimension": [
+        "원 기사 저구간 유지; 정확한 하한은 허용 자료로 독립 검증 불가. 수치 미교정을 실패로 취급하지 않음.",
+        "저–중 정성적 순서 보존. 직접 쌍대 유의성이나 수치 차이 주장은 없음.",
+        "tau·인지와 amyloid 결과 구분. 기능 결과의 추가는 의무 아님.",
+        "기저 amyloid 조건 추가; 추적 중 축적 결과와 구분.",
+        "도입부를 포함해 주요 인과 표현 수정. 두 평가자 모두 정당한 변경 판정.",
+        "저자 귀속과 가능성 표현 유지; 독립적인 tracker 효능 검증은 아님."
+      ],
+      "judges": {
+        "A": {
+          "review_sha256": "78b6079cec6d36961cf61d67615095ad46b522138cc9c0ae49e62da82d5dc01a",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "partial",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "원 기사 저구간 유지; 정확한 하한은 허용 자료로 독립 검증 불가. 수치 미교정을 실패로 취급하지 않음."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "partial",
+              "original_span_ids": [
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P011",
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P005",
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서 보존. 직접 쌍대 유의성이나 수치 차이 주장은 없음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P2",
+                "P5",
+                "P6"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P002",
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008",
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "tau·인지와 amyloid 결과 구분. 기능 결과의 추가는 의무 아님."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1",
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P002",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 추적 중 축적 결과와 구분."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P6",
+                "P7"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P003",
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P013",
+                "EN-DEV-A-P014"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P013"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "도입부를 포함해 주요 인과 표현 수정. 두 평가자 모두 정당한 변경 판정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P7"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저자 귀속과 가능성 표현 유지; 독립적인 tracker 효능 검증은 아님."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "partial"
+            },
+            {
+              "patch_id": "P6",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P7",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact low-activity 3,000–5,000 step band",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate endpoint-specific statistical tests",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Low versus inactive 34%–40% slower cognitive and functional decline over nine years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Exact moderate category 5,001–7,500 and tau/cognition plateau",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Elevated baseline amyloid condition",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Baseline-only exposure and seven-day requested pedometer wear",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "172 participants with longitudinal tau PET",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "241 participants with longitudinal amyloid PET",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Median cognitive follow-up 9.3 years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Cognition PACC5 versus function CDR-SOB and 84% versus 40% tau mediation",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Reverse causality and need for randomized trials",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Cohort demographics and vascular exclusions",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Author recommendation that trackers monitor and encourage benefits",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Prevalence one in three over age 85",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": {
+            "article": [
+              "EN-DEV-A-P001",
+              "EN-DEV-A-P002",
+              "EN-DEV-A-P003",
+              "EN-DEV-A-P004",
+              "EN-DEV-A-P005",
+              "EN-DEV-A-P006",
+              "EN-DEV-A-P007",
+              "EN-DEV-A-P008",
+              "EN-DEV-A-P009",
+              "EN-DEV-A-P010",
+              "EN-DEV-A-P011",
+              "EN-DEV-A-P012",
+              "EN-DEV-A-P013",
+              "EN-DEV-A-P014",
+              "EN-DEV-A-P015"
+            ],
+            "allowed_primary_evidence": [
+              "EN-DEV-S-P001",
+              "EN-DEV-S-P002",
+              "EN-DEV-S-P003",
+              "EN-DEV-S-P004",
+              "EN-DEV-S-P005",
+              "EN-DEV-S-P006",
+              "EN-DEV-S-P007",
+              "EN-DEV-S-P008",
+              "EN-DEV-S-P009",
+              "EN-DEV-S-P010",
+              "EN-DEV-S-P011",
+              "EN-DEV-S-P012",
+              "EN-DEV-S-P013",
+              "EN-DEV-S-P014",
+              "EN-DEV-S-P015",
+              "EN-DEV-S-P016",
+              "EN-DEV-S-P017",
+              "EN-DEV-S-P018",
+              "EN-DEV-S-P019"
+            ],
+            "displayed_candidate": [
+              "paragraph_001",
+              "paragraph_002",
+              "paragraph_003",
+              "paragraph_004",
+              "paragraph_005",
+              "paragraph_006",
+              "paragraph_007",
+              "paragraph_008",
+              "paragraph_009",
+              "paragraph_010",
+              "paragraph_011",
+              "paragraph_012",
+              "paragraph_013",
+              "paragraph_014",
+              "paragraph_015"
+            ]
+          },
+          "relation_pair_count": 9
+        },
+        "B": {
+          "review_sha256": "775990b83a30aaafaf10e90e6027c6406113398988d0d52f3090f7a70696cd86",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "원 기사 저구간 유지; 정확한 하한은 허용 자료로 독립 검증 불가. 수치 미교정을 실패로 취급하지 않음."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011",
+                "EN-DEV-S-P014"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서 보존. 직접 쌍대 유의성이나 수치 차이 주장은 없음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P2",
+                "P5",
+                "P6"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P002"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P005",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "tau·인지와 amyloid 결과 구분. 기능 결과의 추가는 의무 아님."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1",
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P002",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 추적 중 축적 결과와 구분."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P7"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P013"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "도입부를 포함해 주요 인과 표현 수정. 두 평가자 모두 정당한 변경 판정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P7"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저자 귀속과 가능성 표현 유지; 독립적인 tracker 효능 검증은 아님."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P6",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P7",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "yes",
+              "unnecessary_edit": "no",
+              "supported_repair": "partial"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact low-step cutoff",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "unknown"
+            },
+            {
+              "named_detail": "Exact moderate category 5,001–7,500",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Low versus inactive: 34%–40% slower cognitive and functional decline over 9 years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low versus moderate statistical comparison",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Endpoint-specific tau/cognition/function estimates and confidence intervals",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "172 longitudinal tau participants",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "241 longitudinal amyloid participants",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Baseline-only activity measurement and seven-day wear request",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "At least four valid pedometer days, exclusion of <100 or >30,000 steps",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Median cognitive follow-up 9.3 years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "PACC5 versus CDR-SOB mediation, 84% versus 40%",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Elevated baseline amyloid condition",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Reverse causality and future randomized trials",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Selective cohort and vascular exclusions",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Wearable-tracker monitoring and encouragement recommendation attributed to authors",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "unknown"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019"
+          ],
+          "relation_pair_count": 10
+        }
+      },
+      "categorical_disagreements": [
+        {
+          "dimension": "low_step_range",
+          "fields": {
+            "preservation": {
+              "A": "justified_change",
+              "B": "preserved"
+            },
+            "new_claim_support": {
+              "A": "partial",
+              "B": "no_new_claim"
+            }
+          }
+        },
+        {
+          "dimension": "low_vs_moderate_comparison",
+          "fields": {
+            "preservation": {
+              "A": "justified_change",
+              "B": "preserved"
+            },
+            "new_claim_support": {
+              "A": "partial",
+              "B": "supported"
+            }
+          }
+        },
+        {
+          "dimension": "causal_status",
+          "fields": {
+            "patch_ids": {
+              "A": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P6",
+                "P7"
+              ],
+              "B": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P7"
+              ]
+            }
+          }
+        },
+        {
+          "patch_id": "P5",
+          "fields": {
+            "supported_repair": {
+              "A": "partial",
+              "B": "yes"
+            }
+          }
+        },
+        {
+          "patch_id": "P7",
+          "fields": {
+            "unsupported_strengthening": {
+              "A": "no",
+              "B": "yes"
+            },
+            "supported_repair": {
+              "A": "yes",
+              "B": "partial"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "run_order": 2,
+      "input_id": "3b83a46307a5bf7ab93396fd",
+      "condition": "EXPANDED",
+      "repeat": 1,
+      "packet_id": "d3cca65fc4b8e60d173c9766",
+      "application_status": "applied",
+      "patches": 5,
+      "writer_sha256": "6ecc6158c93e9ad2d2079f52f80871f95d20661543d6a35e5727fe05fe36bcaa",
+      "candidate_sha256": "c035796c0d5f40b63f63d1d8933a945c0e79aca31a7a6f330cedb4cf899f71ed",
+      "label": "EXPANDED-1",
+      "writer_hash_verified": true,
+      "task_clock": {
+        "start_utc": "2026-10-02 01:36:14 UTC",
+        "end_utc": "2026-10-02 01:37:41 UTC",
+        "elapsed_seconds": 87.0,
+        "clock_source": "not specified in sidecar; recorded UTC start/end",
+        "api_latency": null,
+        "cost": null
+      },
+      "output_lengths": {
+        "total_json_characters": 12669,
+        "total_json_whitespace_words": 1434,
+        "narrative_characters": 4830,
+        "narrative_whitespace_words": 638,
+        "requested_cap": 900,
+        "exceeds_requested_cap": false
+      },
+      "finding_count": 6,
+      "question_answer_ids": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "finding_patch_links": [
+        {
+          "patch_id": "P1",
+          "finding_ids": [
+            "F1",
+            "F2",
+            "F3"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "finding_ids": [
+            "F4"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "finding_ids": [
+            "F5"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "finding_ids": [
+            "F6"
+          ]
+        }
+      ],
+      "analysis_notes_by_dimension": [
+        "허용 자료로 저구간 하한 3,000→3,001 교정; tau·인지 연결도 유지.",
+        "저–중 정성적 순서 유지; 비활동군 대비를 별도로 제시. 직접 쌍대 검정으로 강화하지 않음.",
+        "tau·인지·기능 간 효과량/유의성 전이 없음. 기능 상세는 선택적.",
+        "기저 amyloid 조건 추가; 조건의 배타적 적용 대상이라는 주장 아님.",
+        "본문의 인과 표현 교정; 도입부의 질병 진행 억제/충분성/손쉬운 개입 함의 잔존. 두 평가자는 정당한 변경으로 분류하면서 이 잔존 위험을 명시.",
+        "귀속 및 가능성 보존; 자료의 침묵을 반박으로 해석하지 않음."
+      ],
+      "judges": {
+        "A": {
+          "review_sha256": "29ed60e11251b327e4353bf8d39cee46b7d42644410af183a5075d9c0fdaddbd",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P047",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "허용 자료로 저구간 하한 3,000→3,001 교정; tau·인지 연결도 유지."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P045",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서 유지; 비활동군 대비를 별도로 제시. 직접 쌍대 검정으로 강화하지 않음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P1",
+                "P3"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P008"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P031",
+                "EN-DEV-S-P044",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "tau·인지·기능 간 효과량/유의성 전이 없음. 기능 상세는 선택적."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P047",
+                "EN-DEV-S-P053"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 조건의 배타적 적용 대상이라는 주장 아님."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P4"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P041"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문의 인과 표현 교정; 도입부의 질병 진행 억제/충분성/손쉬운 개입 함의 잔존. 두 평가자는 정당한 변경으로 분류하면서 이 잔존 위험을 명시."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P2",
+                "P4"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P009"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "귀속 및 가능성 보존; 자료의 침묵을 반박으로 해석하지 않음."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact four step categories and inactive comparator",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate pairwise significance",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Low activity endpoint-specific significance",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Nine-year model-estimated cognitive and functional percentage differences",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Model-estimated time to cognitive and functional thresholds",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Exact participant counts per step stratum",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Imaging sample sizes and tau timing",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Baseline activity protocol and limitations",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Selected cohort demographics and exclusions",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Reverse causality and sensitivity analyses",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Tau mediation of cognition versus function",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Continuous baseline amyloid modeling and independent activity associations",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Tracker intervention effectiveness and exact author attribution",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Alzheimer prevalence and cure status",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019",
+            "EN-DEV-S-P020",
+            "EN-DEV-S-P021",
+            "EN-DEV-S-P022",
+            "EN-DEV-S-P023",
+            "EN-DEV-S-P024",
+            "EN-DEV-S-P025",
+            "EN-DEV-S-P026",
+            "EN-DEV-S-P027",
+            "EN-DEV-S-P028",
+            "EN-DEV-S-P029",
+            "EN-DEV-S-P030",
+            "EN-DEV-S-P031",
+            "EN-DEV-S-P032",
+            "EN-DEV-S-P033",
+            "EN-DEV-S-P034",
+            "EN-DEV-S-P035",
+            "EN-DEV-S-P036",
+            "EN-DEV-S-P037",
+            "EN-DEV-S-P038",
+            "EN-DEV-S-P039",
+            "EN-DEV-S-P040",
+            "EN-DEV-S-P041",
+            "EN-DEV-S-P042",
+            "EN-DEV-S-P043",
+            "EN-DEV-S-P044",
+            "EN-DEV-S-P045",
+            "EN-DEV-S-P046",
+            "EN-DEV-S-P047",
+            "EN-DEV-S-P048",
+            "EN-DEV-S-P049",
+            "EN-DEV-S-P050",
+            "EN-DEV-S-P051",
+            "EN-DEV-S-P052",
+            "EN-DEV-S-P053",
+            "EN-DEV-S-P054",
+            "EN-DEV-S-P055",
+            "EN-DEV-S-P056",
+            "EN-DEV-S-P057",
+            "EN-DEV-S-P058",
+            "EN-DEV-S-P059",
+            "EN-DEV-S-P060",
+            "EN-DEV-S-P061",
+            "EN-DEV-S-P062"
+          ],
+          "relation_pair_count": 15
+        },
+        "B": {
+          "review_sha256": "5cc5729cd4f9bb555f56da019222b21371c603bc88b01729505537765f72d8d4",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P047",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "허용 자료로 저구간 하한 3,000→3,001 교정; tau·인지 연결도 유지."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P045",
+                "EN-DEV-S-P047"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서 유지; 비활동군 대비를 별도로 제시. 직접 쌍대 검정으로 강화하지 않음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P1",
+                "P3"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P008"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P025",
+                "EN-DEV-S-P031",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "tau·인지·기능 간 효과량/유의성 전이 없음. 기능 상세는 선택적."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P009"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P033",
+                "EN-DEV-S-P036",
+                "EN-DEV-S-P047"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 조건의 배타적 적용 대상이라는 주장 아님."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P4"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P041"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문의 인과 표현 교정; 도입부의 질병 진행 억제/충분성/손쉬운 개입 함의 잔존. 두 평가자는 정당한 변경으로 분류하면서 이 잔존 위험을 명시."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P4"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "귀속 및 가능성 보존; 자료의 침묵을 반박으로 해석하지 않음."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact inactive/low/moderate/active boundaries",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Low versus inactive endpoint-specific estimates and significance",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate pairwise significance",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Nine-year modeled cognitive and functional changes and percentages",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Modeled time to cognitive/functional thresholds",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Imaging sample sizes, tau follow-up and delayed first scan",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Baseline pedometer timing and validity requirement",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Cohort selection and generalizability",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Reverse causality and sensitivity analyses",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Continuous baseline-amyloid modeling and independent activity associations",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Exact step-stratum sample counts",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Tracker encouragement effectiveness or independent confirmation of author recommendation",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Statistical mediation percentages for cognition and function",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019",
+            "EN-DEV-S-P020",
+            "EN-DEV-S-P021",
+            "EN-DEV-S-P022",
+            "EN-DEV-S-P023",
+            "EN-DEV-S-P024",
+            "EN-DEV-S-P025",
+            "EN-DEV-S-P026",
+            "EN-DEV-S-P027",
+            "EN-DEV-S-P028",
+            "EN-DEV-S-P029",
+            "EN-DEV-S-P030",
+            "EN-DEV-S-P031",
+            "EN-DEV-S-P032",
+            "EN-DEV-S-P033",
+            "EN-DEV-S-P034",
+            "EN-DEV-S-P035",
+            "EN-DEV-S-P036",
+            "EN-DEV-S-P037",
+            "EN-DEV-S-P038",
+            "EN-DEV-S-P039",
+            "EN-DEV-S-P040",
+            "EN-DEV-S-P041",
+            "EN-DEV-S-P042",
+            "EN-DEV-S-P043",
+            "EN-DEV-S-P044",
+            "EN-DEV-S-P045",
+            "EN-DEV-S-P046",
+            "EN-DEV-S-P047",
+            "EN-DEV-S-P048",
+            "EN-DEV-S-P049",
+            "EN-DEV-S-P050",
+            "EN-DEV-S-P051",
+            "EN-DEV-S-P052",
+            "EN-DEV-S-P053",
+            "EN-DEV-S-P054",
+            "EN-DEV-S-P055",
+            "EN-DEV-S-P056",
+            "EN-DEV-S-P057",
+            "EN-DEV-S-P058",
+            "EN-DEV-S-P059",
+            "EN-DEV-S-P060",
+            "EN-DEV-S-P061",
+            "EN-DEV-S-P062"
+          ],
+          "relation_pair_count": 15
+        }
+      },
+      "categorical_disagreements": [
+        {
+          "dimension": "low_vs_moderate_comparison",
+          "fields": {
+            "preservation": {
+              "A": "justified_change",
+              "B": "preserved"
+            }
+          }
+        },
+        {
+          "dimension": "endpoint_distinctions",
+          "fields": {
+            "preservation": {
+              "A": "preserved",
+              "B": "justified_change"
+            }
+          }
+        },
+        {
+          "dimension": "tracker_attribution_modality",
+          "fields": {
+            "patch_ids": {
+              "A": [
+                "P2",
+                "P4"
+              ],
+              "B": [
+                "P4"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "run_order": 3,
+      "input_id": "72560b94734c8104ad67f0ca",
+      "condition": "EXPANDED",
+      "repeat": 2,
+      "packet_id": "a4bbb3bc33a7adae1ac9dff0",
+      "application_status": "applied",
+      "patches": 3,
+      "writer_sha256": "e25a1367000c3d19a983d9c8f534e91f9a2bedf61c3ea75f3574cf2bd0c27b3d",
+      "candidate_sha256": "35eeb20cdff9a6a397add9c5d168e7f045c02501d0c3d64bac44bc11f2ca49f2",
+      "label": "EXPANDED-2",
+      "writer_hash_verified": true,
+      "task_clock": {
+        "start_utc": "2026-10-02 01:36:28 UTC",
+        "end_utc": "2026-10-02 01:38:04 UTC",
+        "elapsed_seconds": 96.0,
+        "clock_source": "not specified in sidecar; recorded UTC start/end",
+        "api_latency": null,
+        "cost": null
+      },
+      "output_lengths": {
+        "total_json_characters": 12910,
+        "total_json_whitespace_words": 1463,
+        "narrative_characters": 4793,
+        "narrative_whitespace_words": 627,
+        "requested_cap": 900,
+        "exceeds_requested_cap": false
+      },
+      "finding_count": 6,
+      "question_answer_ids": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "finding_patch_links": [
+        {
+          "patch_id": "P1",
+          "finding_ids": [
+            "F1",
+            "F2",
+            "F3"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "finding_ids": [
+            "F4",
+            "F5"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "finding_ids": [
+            "F1",
+            "F6"
+          ]
+        }
+      ],
+      "analysis_notes_by_dimension": [
+        "저구간 하한 3,001로 근거 있는 교정; 연관된 tau·인지 결과 유지.",
+        "저–중 정성적 순서와 비활동군 기준 분리 유지. 직접 쌍대 유의성 주장 없음.",
+        "결과별 구분 유지; 기능의 비유의성을 tau나 인지로 전이하지 않음.",
+        "기저 amyloid 조건 추가; 저구간은 앞 문단의 조건을 문맥상 이어받음.",
+        "본문 수정은 지지되나 제목과 도입부의 개입 함의 잔존. 양 평가자 모두 부분 교정 판정.",
+        "저자 귀속/가능성 보존; 측정 근거를 tracker 개입 효과로 바꾸지 않음."
+      ],
+      "judges": {
+        "A": {
+          "review_sha256": "f5723c2d69e5781dac2ed2187436768f270ea0e218b0216916a1c6a5100e1323",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P047"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저구간 하한 3,001로 근거 있는 교정; 연관된 tau·인지 결과 유지."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P045",
+                "EN-DEV-S-P047"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서와 비활동군 기준 분리 유지. 직접 쌍대 유의성 주장 없음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P1",
+                "P2"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P009"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P023",
+                "EN-DEV-S-P025",
+                "EN-DEV-S-P031",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "결과별 구분 유지; 기능의 비유의성을 tau나 인지로 전이하지 않음."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P033",
+                "EN-DEV-S-P036",
+                "EN-DEV-S-P047",
+                "EN-DEV-S-P053"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 저구간은 앞 문단의 조건을 문맥상 이어받음."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P3"
+              ],
+              "preservation": "partial",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P041"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문 수정은 지지되나 제목과 도입부의 개입 함의 잔존. 양 평가자 모두 부분 교정 판정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P3"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저자 귀속/가능성 보존; 측정 근거를 tracker 개입 효과로 바꾸지 않음."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "partial"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact step category boundaries",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Low versus inactive endpoint significance",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low versus moderate statistical test",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Endpoint-specific nine-year estimates and relative differences",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Estimated time to cognitive/functional thresholds",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Baseline-only requested seven-day pedometer window",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Scan subsets and median tau follow-up",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "First tau scan delay and other endpoint follow-up times",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Reverse causality, sensitivity robustness, generalizability",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Continuous baseline amyloid modeling and independent effects",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Mediation with separate cognition/function proportions",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Step-stratum participant counts and external supplementary cells",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Exact tracker recommendation and authors attribution",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019",
+            "EN-DEV-S-P020",
+            "EN-DEV-S-P021",
+            "EN-DEV-S-P022",
+            "EN-DEV-S-P023",
+            "EN-DEV-S-P024",
+            "EN-DEV-S-P025",
+            "EN-DEV-S-P026",
+            "EN-DEV-S-P027",
+            "EN-DEV-S-P028",
+            "EN-DEV-S-P029",
+            "EN-DEV-S-P030",
+            "EN-DEV-S-P031",
+            "EN-DEV-S-P032",
+            "EN-DEV-S-P033",
+            "EN-DEV-S-P034",
+            "EN-DEV-S-P035",
+            "EN-DEV-S-P036",
+            "EN-DEV-S-P037",
+            "EN-DEV-S-P038",
+            "EN-DEV-S-P039",
+            "EN-DEV-S-P040",
+            "EN-DEV-S-P041",
+            "EN-DEV-S-P042",
+            "EN-DEV-S-P043",
+            "EN-DEV-S-P044",
+            "EN-DEV-S-P045",
+            "EN-DEV-S-P046",
+            "EN-DEV-S-P047",
+            "EN-DEV-S-P048",
+            "EN-DEV-S-P049",
+            "EN-DEV-S-P050",
+            "EN-DEV-S-P051",
+            "EN-DEV-S-P052",
+            "EN-DEV-S-P053",
+            "EN-DEV-S-P054",
+            "EN-DEV-S-P055",
+            "EN-DEV-S-P056",
+            "EN-DEV-S-P057",
+            "EN-DEV-S-P058",
+            "EN-DEV-S-P059",
+            "EN-DEV-S-P060",
+            "EN-DEV-S-P061",
+            "EN-DEV-S-P062"
+          ],
+          "relation_pair_count": 14
+        },
+        "B": {
+          "review_sha256": "32e7de04b68a9758dd8df234b664224f26aefd6faa45926c57429720541f03a0",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P047",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저구간 하한 3,001로 근거 있는 교정; 연관된 tau·인지 결과 유지."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P045",
+                "EN-DEV-S-P047"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 순서와 비활동군 기준 분리 유지. 직접 쌍대 유의성 주장 없음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P1",
+                "P2"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P008"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P025",
+                "EN-DEV-S-P031",
+                "EN-DEV-S-P044",
+                "EN-DEV-S-P048"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "결과별 구분 유지; 기능의 비유의성을 tau나 인지로 전이하지 않음."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P1"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P033",
+                "EN-DEV-S-P036",
+                "EN-DEV-S-P048",
+                "EN-DEV-S-P053"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "기저 amyloid 조건 추가; 저구간은 앞 문단의 조건을 문맥상 이어받음."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P3"
+              ],
+              "preservation": "partial",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P041"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문 수정은 지지되나 제목과 도입부의 개입 함의 잔존. 양 평가자 모두 부분 교정 판정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P2",
+                "P3"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P009"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저자 귀속/가능성 보존; 측정 근거를 tracker 개입 효과로 바꾸지 않음."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "partial"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact step-category boundaries",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Endpoint-specific low-versus-inactive statistics",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate statistical test",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Nine-year endpoint-specific modeled percentage differences",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Modeled times to cognitive and functional thresholds",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Baseline-only requested seven-day pedometer period",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Scan sample sizes and median tau follow-up",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Minimum four valid pedometer days and excluded extreme counts",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Sensitivity analyses and cohort generalizability",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Step-stratum sample counts and full characteristics",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Authors’ tracker encouragement proposal independently confirmed",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Continuous amyloid modeling and independent tau/cognitive associations",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Mediation percentages and mechanisms",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019",
+            "EN-DEV-S-P020",
+            "EN-DEV-S-P021",
+            "EN-DEV-S-P022",
+            "EN-DEV-S-P023",
+            "EN-DEV-S-P024",
+            "EN-DEV-S-P025",
+            "EN-DEV-S-P026",
+            "EN-DEV-S-P027",
+            "EN-DEV-S-P028",
+            "EN-DEV-S-P029",
+            "EN-DEV-S-P030",
+            "EN-DEV-S-P031",
+            "EN-DEV-S-P032",
+            "EN-DEV-S-P033",
+            "EN-DEV-S-P034",
+            "EN-DEV-S-P035",
+            "EN-DEV-S-P036",
+            "EN-DEV-S-P037",
+            "EN-DEV-S-P038",
+            "EN-DEV-S-P039",
+            "EN-DEV-S-P040",
+            "EN-DEV-S-P041",
+            "EN-DEV-S-P042",
+            "EN-DEV-S-P043",
+            "EN-DEV-S-P044",
+            "EN-DEV-S-P045",
+            "EN-DEV-S-P046",
+            "EN-DEV-S-P047",
+            "EN-DEV-S-P048",
+            "EN-DEV-S-P049",
+            "EN-DEV-S-P050",
+            "EN-DEV-S-P051",
+            "EN-DEV-S-P052",
+            "EN-DEV-S-P053",
+            "EN-DEV-S-P054",
+            "EN-DEV-S-P055",
+            "EN-DEV-S-P056",
+            "EN-DEV-S-P057",
+            "EN-DEV-S-P058",
+            "EN-DEV-S-P059",
+            "EN-DEV-S-P060",
+            "EN-DEV-S-P061",
+            "EN-DEV-S-P062"
+          ],
+          "relation_pair_count": 13
+        }
+      },
+      "categorical_disagreements": [
+        {
+          "dimension": "low_vs_moderate_comparison",
+          "fields": {
+            "preservation": {
+              "A": "preserved",
+              "B": "justified_change"
+            }
+          }
+        },
+        {
+          "dimension": "tracker_attribution_modality",
+          "fields": {
+            "patch_ids": {
+              "A": [
+                "P3"
+              ],
+              "B": [
+                "P2",
+                "P3"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "run_order": 4,
+      "input_id": "351bb0a5f134b921d2373423",
+      "condition": "OLD",
+      "repeat": 2,
+      "packet_id": "f781251ff2168e28cd38a4ba",
+      "application_status": "applied",
+      "patches": 7,
+      "writer_sha256": "c48253bbdfce3dc36322f3b2e16ffe58d664cd017365ccc67dcaf096fa1cd92a",
+      "candidate_sha256": "0b4a952baa78d27e8465d8b28b91cb7723e677f9c54a05d8105cbc8cd9c1c43f",
+      "label": "OLD-2",
+      "writer_hash_verified": true,
+      "task_clock": {
+        "start_utc": "2026-10-02 01:36:42 UTC",
+        "end_utc": "2026-10-02 01:38:09 UTC",
+        "elapsed_seconds": 87.0,
+        "clock_source": "not specified in sidecar; recorded UTC start/end",
+        "api_latency": null,
+        "cost": null
+      },
+      "output_lengths": {
+        "total_json_characters": 13408,
+        "total_json_whitespace_words": 1508,
+        "narrative_characters": 4979,
+        "narrative_whitespace_words": 643,
+        "requested_cap": 900,
+        "exceeds_requested_cap": false
+      },
+      "finding_count": 5,
+      "question_answer_ids": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ],
+      "finding_patch_links": [
+        {
+          "patch_id": "P1",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P2",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P3",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P4",
+          "finding_ids": [
+            "F1"
+          ]
+        },
+        {
+          "patch_id": "P5",
+          "finding_ids": [
+            "F1",
+            "F2"
+          ]
+        },
+        {
+          "patch_id": "P6",
+          "finding_ids": [
+            "F3",
+            "F4"
+          ]
+        },
+        {
+          "patch_id": "P7",
+          "finding_ids": [
+            "F1",
+            "F5"
+          ]
+        }
+      ],
+      "analysis_notes_by_dimension": [
+        "원 기사의 저구간임을 한정해 유지; 하한 미검증은 실패 아님. 결과 연결은 앞 문단을 통한 암묵적 보존.",
+        "저–중 정성적 관계 보존; 직접 쌍대 유의성으로 강화하지 않음.",
+        "결과 간 효과량/유의성 전이 없음. 도입부 단백질 표현은 덜 구체적.",
+        "본문에 기저 amyloid 조건 추가; 도입부는 덜 한정됨.",
+        "대부분 인과 표현 교정하나 도입부의 걷기 개입 효과 함의 잔존. 양 평가자 부분 교정.",
+        "귀속 및 가능성 그대로 보존; 독립 검증되지 않은 기사 보고로 유지 가능."
+      ],
+      "judges": {
+        "A": {
+          "review_sha256": "fb699d2e3ad8fd83a5f23d1c6ad115235b7d4bac937e2f8f658d27baa8e8d920",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "partial",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "원 기사의 저구간임을 한정해 유지; 하한 미검증은 실패 아님. 결과 연결은 앞 문단을 통한 암묵적 보존."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P011",
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011",
+                "EN-DEV-S-P014"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 관계 보존; 직접 쌍대 유의성으로 강화하지 않음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P5",
+                "P6"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P009",
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P002",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008",
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "결과 간 효과량/유의성 전이 없음. 도입부 단백질 표현은 덜 구체적."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P002",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문에 기저 amyloid 조건 추가; 도입부는 덜 한정됨."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P7"
+              ],
+              "preservation": "partial",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001",
+                "EN-DEV-A-P002",
+                "EN-DEV-A-P003",
+                "EN-DEV-A-P004",
+                "EN-DEV-A-P007",
+                "EN-DEV-A-P010",
+                "EN-DEV-A-P011",
+                "EN-DEV-A-P012",
+                "EN-DEV-A-P013",
+                "EN-DEV-A-P014"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P013"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "대부분 인과 표현 교정하나 도입부의 걷기 개입 효과 함의 잔존. 양 평가자 부분 교정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P7"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "귀속 및 가능성 그대로 보존; 독립 검증되지 않은 기사 보고로 유지 가능."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P6",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P7",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact low-step category boundaries",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Moderate plateau at 5,001–7,500 steps/day",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Low versus inactive: 34%–40% slower cognitive and functional decline over 9 years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate pairwise test or endpoint-specific significance",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Low-versus-inactive tau-specific numerical effect or significance",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "PACC5 and CDR-SOB mediation: 84% and 40%",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Functional decline endpoint measured by CDR-SOB",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Baseline-only activity, seven requested days",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Pedometer validity: at least four days and exclusion of <100 or >30,000 steps",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Amyloid/tau imaging subsets: 241/172",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Median cognitive follow-up 9.3 years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Reverse-causality sensitivity analyses",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Population selection and generalizability limitations",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Exact tracker recommendation attributed to authors",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Prevalence, no cure, pleasant stroll and journal publication",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019",
+            "C-P001",
+            "C-P002",
+            "C-P003",
+            "C-P004",
+            "C-P005",
+            "C-P006",
+            "C-P007",
+            "C-P008",
+            "C-P009",
+            "C-P010",
+            "C-P011",
+            "C-P012",
+            "C-P013",
+            "C-P014"
+          ],
+          "relation_pair_count": 20
+        },
+        "B": {
+          "review_sha256": "8879e363a02302d449d6b521d3da30e9081fa57e002a9e77e74ca54bc9fa491c",
+          "complete": true,
+          "read_complete": true,
+          "dimensions": [
+            {
+              "dimension": "low_step_range",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "partial",
+              "original_span_ids": [
+                "EN-DEV-A-P012"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "원 기사의 저구간임을 한정해 유지; 하한 미검증은 실패 아님. 결과 연결은 앞 문단을 통한 암묵적 보존."
+            },
+            {
+              "dimension": "low_vs_moderate_comparison",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "partial",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P011",
+                "EN-DEV-S-P014"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "저–중 정성적 관계 보존; 직접 쌍대 유의성으로 강화하지 않음."
+            },
+            {
+              "dimension": "endpoint_distinctions",
+              "patch_ids": [
+                "P5",
+                "P6"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P009"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008",
+                "EN-DEV-S-P011"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "결과 간 효과량/유의성 전이 없음. 도입부 단백질 표현은 덜 구체적."
+            },
+            {
+              "dimension": "amyloid_condition",
+              "patch_ids": [
+                "P5"
+              ],
+              "preservation": "justified_change",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P010"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P002",
+                "EN-DEV-S-P007",
+                "EN-DEV-S-P008"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "본문에 기저 amyloid 조건 추가; 도입부는 덜 한정됨."
+            },
+            {
+              "dimension": "causal_status",
+              "patch_ids": [
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P5",
+                "P7"
+              ],
+              "preservation": "partial",
+              "new_claim_support": "supported",
+              "original_span_ids": [
+                "EN-DEV-A-P001"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P010",
+                "EN-DEV-S-P013"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "대부분 인과 표현 교정하나 도입부의 걷기 개입 효과 함의 잔존. 양 평가자 부분 교정."
+            },
+            {
+              "dimension": "tracker_attribution_modality",
+              "patch_ids": [
+                "P7"
+              ],
+              "preservation": "preserved",
+              "new_claim_support": "no_new_claim",
+              "original_span_ids": [
+                "EN-DEV-A-P013"
+              ],
+              "allowed_source_receipt_ids": [
+                "EN-DEV-S-P013",
+                "EN-DEV-S-P019"
+              ],
+              "candidate_anchor_present": true,
+              "analyst_quote_free_rationale": "귀속 및 가능성 그대로 보존; 독립 검증되지 않은 기사 보고로 유지 가능."
+            }
+          ],
+          "patch_assessments": [
+            {
+              "patch_id": "P1",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P2",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P3",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P4",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P5",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P6",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            },
+            {
+              "patch_id": "P7",
+              "warranted": "yes",
+              "collateral_loss": "no",
+              "unsupported_strengthening": "no",
+              "unnecessary_edit": "no",
+              "supported_repair": "yes"
+            }
+          ],
+          "additional_detail_capability": [
+            {
+              "named_detail": "Exact low-activity cutoffs",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Moderate range 5,001–7,500 and tau/cognitive plateau",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Direct low-versus-moderate statistical tests",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Low versus inactive: 34%–40% slower cognitive and functional decline over nine years",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Endpoint-specific low-versus-inactive tau significance and exact effects",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Functional decline distinct from cognitive decline; tau mediation 84% versus 40%",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Elevated baseline amyloid condition",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "No baseline as well as longitudinal amyloid association",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Baseline-only activity, requested seven days, imaging subsets 241/172",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Pedometer valid-day criteria and minimum four days",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Reverse causality, selected cohort, trials needed",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "yes",
+              "candidate_supported": "yes"
+            },
+            {
+              "named_detail": "Median cognitive follow-up 9.3 years and sensitivity analyses",
+              "present_in_allowed_source": "yes",
+              "used_in_candidate": "no",
+              "candidate_supported": "not_assessable"
+            },
+            {
+              "named_detail": "Attributed tracker encouragement recommendation",
+              "present_in_allowed_source": "no",
+              "used_in_candidate": "yes",
+              "candidate_supported": "not_assessable"
+            }
+          ],
+          "inspected_paragraph_ids": [
+            "EN-DEV-A-P001",
+            "EN-DEV-A-P002",
+            "EN-DEV-A-P003",
+            "EN-DEV-A-P004",
+            "EN-DEV-A-P005",
+            "EN-DEV-A-P006",
+            "EN-DEV-A-P007",
+            "EN-DEV-A-P008",
+            "EN-DEV-A-P009",
+            "EN-DEV-A-P010",
+            "EN-DEV-A-P011",
+            "EN-DEV-A-P012",
+            "EN-DEV-A-P013",
+            "EN-DEV-A-P014",
+            "EN-DEV-A-P015",
+            "EN-DEV-S-P001",
+            "EN-DEV-S-P002",
+            "EN-DEV-S-P003",
+            "EN-DEV-S-P004",
+            "EN-DEV-S-P005",
+            "EN-DEV-S-P006",
+            "EN-DEV-S-P007",
+            "EN-DEV-S-P008",
+            "EN-DEV-S-P009",
+            "EN-DEV-S-P010",
+            "EN-DEV-S-P011",
+            "EN-DEV-S-P012",
+            "EN-DEV-S-P013",
+            "EN-DEV-S-P014",
+            "EN-DEV-S-P015",
+            "EN-DEV-S-P016",
+            "EN-DEV-S-P017",
+            "EN-DEV-S-P018",
+            "EN-DEV-S-P019"
+          ],
+          "relation_pair_count": 14
+        }
+      },
+      "categorical_disagreements": [
+        {
+          "dimension": "low_vs_moderate_comparison",
+          "fields": {
+            "new_claim_support": {
+              "A": "no_new_claim",
+              "B": "partial"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "condition_counts_by_judge": {
+    "OLD": {
+      "A": {
+        "low_step_range": {
+          "preservation": {
+            "justified_change": 1,
+            "preserved": 1
+          },
+          "new_claim_support": {
+            "partial": 2
+          }
+        },
+        "low_vs_moderate_comparison": {
+          "preservation": {
+            "justified_change": 1,
+            "preserved": 1
+          },
+          "new_claim_support": {
+            "partial": 1,
+            "no_new_claim": 1
+          }
+        },
+        "endpoint_distinctions": {
+          "preservation": {
+            "justified_change": 1,
+            "preserved": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "amyloid_condition": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "causal_status": {
+          "preservation": {
+            "justified_change": 1,
+            "partial": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "tracker_attribution_modality": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "no_new_claim": 2
+          }
+        }
+      },
+      "B": {
+        "low_step_range": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "no_new_claim": 1,
+            "partial": 1
+          }
+        },
+        "low_vs_moderate_comparison": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "supported": 1,
+            "partial": 1
+          }
+        },
+        "endpoint_distinctions": {
+          "preservation": {
+            "justified_change": 1,
+            "preserved": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "amyloid_condition": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "causal_status": {
+          "preservation": {
+            "justified_change": 1,
+            "partial": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "tracker_attribution_modality": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "no_new_claim": 2
+          }
+        }
+      }
+    },
+    "EXPANDED": {
+      "A": {
+        "low_step_range": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "low_vs_moderate_comparison": {
+          "preservation": {
+            "justified_change": 1,
+            "preserved": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "endpoint_distinctions": {
+          "preservation": {
+            "preserved": 1,
+            "justified_change": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "amyloid_condition": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "causal_status": {
+          "preservation": {
+            "justified_change": 1,
+            "partial": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "tracker_attribution_modality": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "no_new_claim": 2
+          }
+        }
+      },
+      "B": {
+        "low_step_range": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "low_vs_moderate_comparison": {
+          "preservation": {
+            "preserved": 1,
+            "justified_change": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "endpoint_distinctions": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "amyloid_condition": {
+          "preservation": {
+            "justified_change": 2
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "causal_status": {
+          "preservation": {
+            "justified_change": 1,
+            "partial": 1
+          },
+          "new_claim_support": {
+            "supported": 2
+          }
+        },
+        "tracker_attribution_modality": {
+          "preservation": {
+            "preserved": 2
+          },
+          "new_claim_support": {
+            "no_new_claim": 2
+          }
+        }
+      }
+    }
+  },
+  "descriptive_common_and_extra_evidence_counts": {
+    "denominator_per_condition": 2,
+    "supported_exact_low_boundary_correction": {
+      "OLD": {
+        "count": null,
+        "status": "unavailable/not assessed, not failure"
+      },
+      "EXPANDED": 2
+    },
+    "low_vs_moderate_qualitative_relation_retained": {
+      "OLD": 2,
+      "EXPANDED": 2
+    },
+    "endpoint_effect_or_significance_transfer_detected": {
+      "OLD": 0,
+      "EXPANDED": 0
+    },
+    "baseline_amyloid_condition_added": {
+      "OLD": 2,
+      "EXPANDED": 2
+    },
+    "tracker_attribution_and_possible_modality_retained": {
+      "OLD": 2,
+      "EXPANDED": 2
+    },
+    "analyst_residual_opening_causal_framing": {
+      "OLD": 1,
+      "EXPANDED": 2
+    },
+    "new_patch_unsupported_strengthening_flag": {
+      "OLD": {
+        "A": 0,
+        "B": 1
+      },
+      "EXPANDED": {
+        "A": 0,
+        "B": 0
+      }
+    },
+    "note": "Descriptive separate dimensions, not aggregate success score. Residual opening assessment includes EXPANDED-1 despite both reviewers classifying causal_status as justified_change."
+  },
+  "material_disagreements_and_limits": [
+    "OLD-1 P7: A supported repair yes/no strengthening; B partial repair/yes strengthening due to generalizability possibility becoming definite. Keep both; tracker modality itself retained.",
+    "EXPANDED-1 both judges mention residual opening but classify causal status justified_change; EXPANDED-2 both classify partial despite a closely related residual. Preserve categorization and narrative concern separately.",
+    "OLD-1 and OLD-2 writer REFUTED status language overstates unestablished causality as disproof; candidate article judgments do not erase writer finding-level concern.",
+    "Some preservation versus justified_change and support labels differ even when both identify retained relation; no majority adjudication.",
+    "Exact low range absent from OLD cannot enter a failure denominator. Optional newly available details omitted from candidate are not automatic errors."
+  ],
+  "coverage_notes": {
+    "OLD-1": "5 findings and Q1–Q3 answers address causality, amyloid condition, baseline-only measurement, tau subset and selection. No exact low-bound verification claimed.",
+    "EXPANDED-1": "6 findings and Q1–Q3 answers address inactive reference, category boundaries/plateau, outcome and follow-up scope. Q3 explicitly distinguishes nonsignificant low-category functional comparison; functional result is not added to article.",
+    "EXPANDED-2": "6 findings and Q1–Q3 answers retain low/moderate ordering, inactive reference and scope limits; exact low boundary appears in patch. Sensitivity analysis language does not establish causation.",
+    "OLD-2": "5 findings and Q1–Q3 answers address causality, amyloid, exposure timing, imaging subsets and selection. Detailed article patch carries low/moderate relation implicitly; lead remains uncorrected."
+  }
+}

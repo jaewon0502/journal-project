@@ -1,0 +1,74 @@
+{
+  "packet_id": "9af02c8beaf592052ad18f1a",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "The proposal is empty and displayed source and output are identical.",
+      "anchor": "proposed_patches: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Both displayed texts have the same percentage-point unit and Friday schedule.",
+      "anchor": "actual_output: 3%포인트; 금요일"
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "No patches were proposed.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The unchanged text satisfies both identified scenario checks; unknown external facts do not create an identified issue.",
+      "anchor": "E1; E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "적용·제외·롤백·보류된 수정도 없습니다",
+      "reason": "Explicitly says no changes were applied."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "원문과 동일합니다",
+      "reason": "Explicitly identifies final local output as identical."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 수정이 없어",
+      "reason": "Explicitly states no proposals, making all-applied inapplicable."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "It limits its positive claims to the scenario checks but does not communicate whether overall factual correctness is established."
+    },
+    "externalpublished": {
+      "rating": "accurate_explicit",
+      "short_anchor": "외부 게시는 이루어지지 않았습니다",
+      "reason": "Explicit denial of external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "확인된 미해결 의미 문제는 없습니다",
+      "reason": "Explicitly reports no identified unresolved meaning issue."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

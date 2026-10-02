@@ -1,0 +1,76 @@
+{
+  "packet_id": "3b4bcc712c8871d7ae229d55",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both replacements appear in the displayed output.",
+      "anchor": "actual_output: 3%포인트; 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The output changes the increase unit and meeting day.",
+      "anchor": "p1; p2; actual_output"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "The two nonempty patches both appear in the displayed output.",
+      "anchor": "selected_ids: [p1, p2]; 3%포인트; 토요일"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The displayed percentage-point difference and Saturday schedule satisfy the identified E1/E2 checks.",
+      "anchor": "actual_output: 3%포인트; 토요일; E1; E2"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "검토안 names the review proposal, not its final-output application."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No final-output identity or change is stated."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No final patch dispositions are stated."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "별도의 문제다 separates subjects without reporting whole-article verification status."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "게시 여부는 별도의 문제다 does not report publication status."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Reference unit and schedule are supplied without final-output resolution status."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both final replacements satisfy the identified unit and schedule checks."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

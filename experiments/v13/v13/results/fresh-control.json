@@ -1,0 +1,403 @@
+{
+  "generated_utc": "2026-10-02T02:57:39.982595+00:00",
+  "scope": "fresh_control_only",
+  "fresh_cases": 1,
+  "actual_writer_runs": 1,
+  "actual_writer_proposals": 1,
+  "core_bundles_unchanged": 8,
+  "core_proposals_unchanged": 27,
+  "checks": {
+    "source_file_hash:acquisition-log.json": true,
+    "source_file_hash:build_packet.py": true,
+    "source_file_hash:nasa-full-release.txt": true,
+    "source_file_hash:nasa-web-raw.json": true,
+    "source_file_hash:nasa.html": true,
+    "source_file_hash:reuters-full-article.txt": true,
+    "source_file_hash:reuters-web-raw.json": true,
+    "source_file_hash:source-packet.json": true,
+    "pre_review_file_hash:source-packet.json": true,
+    "pre_review_file_hash:source-first-reference.json": true,
+    "pre_review_file_hash:writer-input.json": true,
+    "pre_review_file_hash:writer-output.json": true,
+    "pre_review_file_hash:bundle.json": true,
+    "pre_review_file_hash:review-input.json": true,
+    "writer_input_lock": true,
+    "writer_source_lock": true,
+    "reference_hash_lock": true,
+    "reference_frozen_before_output_lock": true,
+    "frozen:code/gate.py": true,
+    "frozen:protocol/REVIEW_SCHEMA.json": true,
+    "frozen:protocol/REVIEW_INSTRUCTIONS.md": true,
+    "frozen:protocol/PREREGISTRATION.md": true,
+    "initial:PREREGISTRATION.md": true,
+    "initial:final-audit-instruction.md": true,
+    "addendum_hash_frozen": true,
+    "article_exact_saved_direct_page_reconstruction": true,
+    "source_exact_saved_direct_page_reconstruction": true,
+    "article_saved_text_exact": true,
+    "source_saved_text_exact": true,
+    "article_body_count_18": true,
+    "source_paragraph_count_38": true,
+    "source_update_metadata_saved": true,
+    "source_missing_id_is_blank": true,
+    "writer_input_exact_packet_fields": true,
+    "writer_no_reference_or_gate_fields": true,
+    "writer_and_bundle_single_raw_patch": true,
+    "bundle_packet_fields_unchanged": true,
+    "writer_read_coverage": true,
+    "reference_read_coverage": true,
+    "reference_18_provisional_items": true,
+    "unique_nonoverlapping_application": true,
+    "review_A_valid": true,
+    "review_B_valid": true,
+    "review_input_frozen_instructions": true,
+    "review_input_full_candidate": true,
+    "gate_output_exact_replay": true,
+    "audit_input_lock:3faccf0a782e89c1526a5efb": true,
+    "audit_instruction:3faccf0a782e89c1526a5efb": true,
+    "audit_read_coverage:3faccf0a782e89c1526a5efb": true,
+    "audit_input_lock:a37fcc51688c78c2ffb0ce1a": true,
+    "audit_instruction:a37fcc51688c78c2ffb0ce1a": true,
+    "audit_read_coverage:a37fcc51688c78c2ffb0ce1a": true,
+    "changed_source_anchors:a37fcc51688c78c2ffb0ce1a": true,
+    "changed_text_actual:a37fcc51688c78c2ffb0ce1a": true,
+    "changed_context_anchors:a37fcc51688c78c2ffb0ce1a": true,
+    "audit_gate_candidate:G0": true,
+    "audit_gate_candidate:G1": true,
+    "coverage_input_candidate_and_reference:3faccf0a782e89c1526a5efb": true,
+    "coverage_complete_18_plus_3:3faccf0a782e89c1526a5efb": true,
+    "coverage_exact_anchors:3faccf0a782e89c1526a5efb": true,
+    "coverage_input_candidate_and_reference:a37fcc51688c78c2ffb0ce1a": true,
+    "coverage_complete_18_plus_3:a37fcc51688c78c2ffb0ce1a": true,
+    "coverage_exact_anchors:a37fcc51688c78c2ffb0ce1a": true
+  },
+  "all_mechanical_checks_pass": true,
+  "outcomes": {
+    "G0": {
+      "proposal_count": 1,
+      "accepted_ids": [],
+      "held_ids": [
+        "P1"
+      ],
+      "gate_status": "held",
+      "final_audit_complete": true,
+      "final_audit_safety": "safe",
+      "release_recommendation": "release",
+      "normal_noop": true,
+      "delivered_changed_span_count": 0,
+      "source_supported_warranted_corrections": 0,
+      "introduced_material_harms": 0,
+      "unmet_required_answers_reported": [],
+      "delivered_sha256": "3743271deb096e5b745745af87a4066b772cb272ad808f5f7a2209e60aa6dedc",
+      "audit_id": "3faccf0a782e89c1526a5efb"
+    },
+    "G1": {
+      "proposal_count": 1,
+      "accepted_ids": [
+        "P1"
+      ],
+      "held_ids": [],
+      "gate_status": "proposed_delivery",
+      "final_audit_complete": true,
+      "final_audit_safety": "safe",
+      "release_recommendation": "release",
+      "normal_noop": false,
+      "delivered_changed_span_count": 1,
+      "source_supported_warranted_corrections": 1,
+      "introduced_material_harms": 0,
+      "unmet_required_answers_reported": [],
+      "delivered_sha256": "2da857bb2c24af2f6c33c57b5b7529ed714edd806158bef29970871cc3f8b857",
+      "audit_id": "a37fcc51688c78c2ffb0ce1a"
+    }
+  },
+  "secondary_coverage_status": "complete",
+  "secondary_coverage_count": 2,
+  "reference_is_gold": false,
+  "reference_provisional_items": 18,
+  "requiredness_dispute": {
+    "item": "C02",
+    "source_first_reference": "nucleobase clarification required if explanatory sentence retained",
+    "final_audits": "unchanged imprecision mitigated by explicit no DNA/RNA; no unmet required answers reported",
+    "conclusion": "unresolved; safe edit does not establish correction completeness"
+  },
+  "source_urls": {
+    "article": "https://www.reuters.com/science/building-blocks-life-found-samples-asteroid-bennu-2025-01-29/",
+    "official_summary": "https://www.nasa.gov/news-release/nasas-asteroid-bennu-sample-reveals-mix-of-lifes-ingredients/"
+  },
+  "dates": {
+    "article_publication": "2025-01-29T16:08:00Z",
+    "article_update": "2025-01-29",
+    "NASA_publication": "2025-01-29",
+    "NASA_update": "2025-02-03",
+    "snapshot_collection": "2026-10-02"
+  },
+  "limitations": [
+    "One purposive fresh case and one proposal; no generalization or pooled score.",
+    "Official NASA summary only; neither complete papers nor independent scientific verification.",
+    "NASA update 2025-02-03 follows Reuters publication 2025-01-29; no contemporaneous fault inference.",
+    "Full supplied-paragraph read attestations do not prove exhaustive semantic coverage.",
+    "Reference is provisional, not gold; C02 requiredness disagreement remains."
+  ],
+  "secondary_coverage": {
+    "G0": {
+      "audit_id": "3faccf0a782e89c1526a5efb",
+      "complete": true,
+      "input_sha256": "df1c555eaa873233f8b3df54f99d2ba1866132ddda582194f3d8a16f1a490ff0",
+      "result_sha256": "e90fd9a806f2b7c9244aad83eb9590491cc650cbf7e1f37efd98ad103eca6683",
+      "items": [
+        {
+          "id": "R01",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R02",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R03",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R04",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R05",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R06",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R07",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R08",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R09",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R10",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R11",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R12",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R13",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R14",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R15",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R16",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R17",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R18",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "C01",
+          "status": "unaddressed"
+        },
+        {
+          "id": "C02",
+          "status": "addressed"
+        },
+        {
+          "id": "C03",
+          "status": "addressed"
+        }
+      ]
+    },
+    "G1": {
+      "audit_id": "a37fcc51688c78c2ffb0ce1a",
+      "complete": true,
+      "input_sha256": "7e6c1c8ef39bf88fb40dd468b2dc36fd2a7226474a4d95801ea8027b556c9fb7",
+      "result_sha256": "98b71deafff176b9e36c3422fe6335f0b8045288dff3d97f2f601914537d2e21",
+      "items": [
+        {
+          "id": "R01",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R02",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R03",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R04",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R05",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R06",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R07",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R08",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R09",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R10",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R11",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R12",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R13",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R14",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R15",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R16",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        },
+        {
+          "id": "R17",
+          "requiredness": "agree",
+          "candidate_presence": "covered",
+          "source_support": "supported"
+        },
+        {
+          "id": "R18",
+          "requiredness": "challenge",
+          "candidate_presence": "covered",
+          "source_support": "partial"
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "C01",
+          "status": "addressed"
+        },
+        {
+          "id": "C02",
+          "status": "not_necessary"
+        },
+        {
+          "id": "C03",
+          "status": "addressed"
+        }
+      ]
+    }
+  }
+}

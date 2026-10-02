@@ -1,0 +1,80 @@
+[
+  {
+    "review_id": "1a6e55fbc038e76db0",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "did not endorse that prediction",
+    "original_candidate_anchor": "the director withheld endorsement",
+    "patched_candidate_anchor": "planned a Friday ticket-sales update",
+    "reason": "The unchanged candidate correctly attributes the sellout prediction to the sponsor, preserves the director’s nonendorsement and uncompiled bookings, and gives the Friday update timing."
+  },
+  {
+    "review_id": "b8e615b2002876056e",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "코드가 없는 자료에서는 줄지 않았다",
+    "original_candidate_anchor": "사전 분류 코드 여부와 무관하게 등록 시간이 줄었고",
+    "patched_candidate_anchor": "코드가 없는 자료에서는 줄지 않았고",
+    "reason": "The original incorrectly extends the time reduction to uncoded materials. The patch restores the coded-material condition while preserving unchanged error rates and the selective rollout."
+  },
+  {
+    "review_id": "309d0ee36a6c8d81db",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "올해의 개선이 그 과거 비판을 반박하는 근거가 되지는 않는다",
+    "original_candidate_anchor": "올해의 개선이 그 비판을 반박하지 못한다고",
+    "patched_candidate_anchor": "지난해 가을 없던 경사로가 올해 봄 설치되어",
+    "reason": "The unchanged candidate preserves the absent-then-installed ramp chronology, current access, and the committee’s judgment that past criticism was justified despite later improvement."
+  },
+  {
+    "review_id": "bc439358c94f5f6d5b",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "감소를 보장하지 않았으며",
+    "original_candidate_anchor": "반드시 줄어든다고 보장했다",
+    "patched_candidate_anchor": "줄어들 수 있다고 전망했으며, 감소를 보장하지 않았다",
+    "reason": "The original turns a possible future decrease explicitly not guaranteed into a guarantee. The patch restores uncertainty and non-guarantee, retaining the lack of measurements and planned disclosure after the quarter."
+  },
+  {
+    "review_id": "34f91dcc03d7e1173e",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "waived only when a request arrived before the costume was dispatched",
+    "original_candidate_anchor": "only for requests received before dispatch",
+    "patched_candidate_anchor": "left eligibility unchanged",
+    "reason": "The unchanged candidate preserves the pre-dispatch waiver condition, unchanged alteration eligibility, and one-month extension of the same rules. “Extended” reasonably summarizes the stated extension decision."
+  },
+  {
+    "review_id": "954c97f3e429a1e982",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "source_anchor": "the year-to-year improvement did not contradict the slowdown since May",
+    "original_candidate_anchor": "annual improvement refuted the monthly slowdown",
+    "patched_candidate_anchor": "annual improvement did not refute the monthly slowdown",
+    "reason": "The original reverses the panel’s conclusion about the two comparison periods. Adding the negation repairs this while retaining all three turnaround figures, the parties’ positions, and the panel’s support for the customers."
+  }
+]

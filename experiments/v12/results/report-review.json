@@ -1,0 +1,120 @@
+{
+  "status": "REVISIONS_REQUESTED_REPORTING_ONLY",
+  "created_utc": "2026-10-02T01:30:20.858179+00:00",
+  "scope": "Independent final claim review against saved protocol, scores and challenges. No new method, criteria, source research, model experiment, score or denominator changes. Report not edited. This artifact contains no article, paper or candidate source quotations.",
+  "reviewed_artifacts": [
+    {
+      "path": "/historical-research/journal-v12/REPORT.md",
+      "sha256": "2d26e348ba5bac106c70868a9d43314b3e4822f4ad975e41df248011736fd429"
+    },
+    {
+      "path": "/historical-research/journal-v12/USER-PROCEDURE.md",
+      "sha256": "ee42a7f8a72eb471059a196e211dcafc7c1b9f8b3c7a9f6b99466ed4c2349423"
+    },
+    {
+      "path": "/historical-research/journal-v12/protocol/PREREGISTRATION.md",
+      "sha256": "8902091a04d623d06a41dca951be725e00a0574fa1ce941933d9ea30970ca71a"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/independent-validation.json",
+      "sha256": "d8e7f341505086c85f81592e4139c95c582ff19fc4652d96ed81bd32fdc108d4"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/review-scoreboard.json",
+      "sha256": "0ba322b09160b5b7cad9e96b29092fdd9c73701af2261d6a291b18ab11821b75"
+    },
+    {
+      "path": "/historical-research/journal-v12/results/supplementary-primary-note.md",
+      "sha256": "3ee1a567c7796a31e943172228b8815c3f91fd2746b635804702677567829529"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/reference-sensitivity/audit.json",
+      "sha256": "5150323927c808eeff4729fe41b81add3b91c4a5f8a16a12cb7b25a93b200ba8"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/development-adaptation/harm-challenge.json",
+      "sha256": "b56a46fafa5f7f3ca673fc1192c82a15364c1a6d4c4e51d6c8a0a5293f445a8a"
+    },
+    {
+      "path": "/historical-research/journal-v12-private/development-adaptation/v2-disagreement-challenge.json",
+      "sha256": "1ad93d18bb20f8b0141ea8b05a36907fbb33ce5379e7c5d597a52a654ad01473"
+    }
+  ],
+  "overall": "The report is substantially cautious and its displayed real-score rows match independent-validation.json. The KO 3/4 versus 4/4 claim already states its frozen provisional basis and materiality challenge. No general superiority, human validation, unknown-error recall, or comprehensive semantic preservation is established. Correct the reporting gaps below without reopening evaluation.",
+  "must_fix": [
+    {
+      "id": "RR01",
+      "location": "REPORT.md, metric table and evaluator-disagreement discussion",
+      "issue": "The same unmodified KO evaluation article receives baseline coverage 9/14 in both A reviews but 8/14 in both B reviews. The table preserves this correctly but does not explain the cross-packet baseline inconsistency. Readers could mistake it for different starting articles or infer comparable coverage gains of 4 versus 6.",
+      "evidence": [
+        "results/independent-validation.json real_scores KO-EVAL-01",
+        "reviewer-results-v2 A/B__4fc1204e8feb6b0ed2b488eb.json reference R09: baseline covered",
+        "reviewer-results-v2 A/B__8e610b71dcbe8ed3092dc4c2.json reference R09: baseline partial"
+      ],
+      "correction": "Add a table note that input text was identical; the one-atom discrepancy is candidate-context-dependent evaluation of R09, whose per-child unit was judged partial in B packets but covered in A packets. Preserve all raw scores. Do not interpret differing baseline-to-final gains as a treatment effect."
+    },
+    {
+      "id": "RR02",
+      "location": "REPORT.md, metrics and remaining limitations",
+      "issue": "The protocol promises more metrics than the report presents, including adjudicated previously-unlisted discoveries with union extensions, unique supported findings, deduplicated harmful patches, normal-text overediting and unanswered-scope accounting. The scoreboard has raw judge rows but does not supply all those finalized measures. Their status is currently left implicit, and at least one initial finding judgment is unsupported (EN evaluation A, judge B).",
+      "evidence": [
+        "protocol/PREREGISTRATION.md Descriptive metrics and Findings and reference revision",
+        "results/review-scoreboard.json scores finding_verdicts and patch_verdicts",
+        "results/independent-validation.json notes on atomic verdicts, deduplication and new_assertion"
+      ],
+      "correction": "Add a compact planned-metric status statement or appendix: identify raw available ledgers, report unresolved/unfinished adjudication explicitly, and say no finalized previously-unlisted-discovery count or deduplicated semantic-harm total is claimed. Preserve unsupported/partial judgments and do not treat new_assertion as harm. Report existing raw per-judge counts if desired, but do not invent new adjudication or denominators to fill this gap."
+    },
+    {
+      "id": "RR03",
+      "location": "REPORT.md, opening paragraph of development failures",
+      "issue": "The report categorically diagnoses the initial science editors as conflating absence from excerpts with refutation. The harm challenge distinguishes observable deletion from refutation and allows conservative uncertainty management as a possible reading for the unverified range. Deletion is demonstrated; the stronger characterization of the editors reasoning is not settled by the evidence cited.",
+      "evidence": [
+        "development-adaptation/harm-challenge.json candidates low_step_range and tracker_attribution",
+        "development-adaptation/harm-challenge.json cross_candidate_conclusion"
+      ],
+      "correction": "Describe removal of unverified reported detail as a preservation cost caused by limited evidence scope, and state that absence from the supplied excerpt does not refute the claim. Retain the concrete low-activity tau loss. Avoid implying that all range/attribution deletions are established material harm or demonstrated assertions of falsity."
+    }
+  ],
+  "recommended_clarifications": [
+    {
+      "id": "RC01",
+      "location": "REPORT.md, conclusion and materiality discussion",
+      "correction": "Tie the KO one-atom difference directly to R13 (base-year plus maximum-duration rule), classified optional in the post-freeze sensitivity audit. State that the other three frozen KO omissions were added by both procedures. The existing general caution is correct; this makes the actual differential traceable. Do not rescore against the later audit."
+    },
+    {
+      "id": "RC02",
+      "location": "REPORT.md, development rerun interpretation",
+      "correction": "Explicitly distinguish observed EN loss of an explicit pairwise comparison from unproven material harm; retained dose-response context permits strong ordinary inference. For KO, both the valid official-risk qualification and the removed policy-enabling explanation should remain visible. The current report broadly captures these qualifications."
+    },
+    {
+      "id": "RC03",
+      "location": "REPORT.md, timing and freezing limitations",
+      "correction": "Make clear that present hashes do not independently authenticate historical freeze/execution times, as already stated by the validator. Existing sparse timing caveats cover much of this limitation."
+    }
+  ],
+  "verified_claims": {
+    "real_counts": "4 article packets; 10 saved writer outputs = 4 initial development + 2 exposed B-v2 development reruns + 4 new evaluation; 6 unused generated inputs excluded; 20 initial assessments; 56 exact patches.",
+    "judgment_counts": "128 atomic finding assessments, 382 reference assessments, 112 patch assessments; these are repeated, correlated judgments, not independent cases.",
+    "validation": "The check_counts sum is 758. Its scope is artifact/count/recalculation checking, not semantic truth. Literal anchors are 382/382 source and 337/382 candidate in specified fields.",
+    "score_table": "All 10 displayed real rows agree with independent-validation.json per-judge discovery, recovery, baseline and final coverage counts.",
+    "ko_comparison": "Frozen omission recovery A 3/4 and B-v2 4/4 for both judges; the differential is R13. Sensitivity regards R13/R18/R19 optional and R14 ambiguous, so objective quality improvement is unestablished.",
+    "synthetic": "6 bases, 12 paired candidates, 24 procedure verdicts and 24 repair reviews; 12 altered procedure outputs repaired and 12 faithful outputs untouched; same 24/24 verdict matching for pooled H0/H1 observations does not establish H1 benefit.",
+    "frozen_posthoc": "Supplementary Results/tables/figures are explicitly outside the scored science packet, do not retroactively become writer evidence, and do not revise scores.",
+    "known_new": "Development reruns are explicitly exposed regressions. Evaluation articles are new to this study, not necessarily recent. Synthetic perturbations are separate from naturally occurring defects.",
+    "shared_miss": "The report does not claim absence of shared errors; it describes no newly established definitive major shared harm and preserves uncertainty about generalizability strengthening.",
+    "roles": "Same-family AI with role/context separation, no human or cross-family validation; possible style-based unblinding and instruction-only file restrictions are disclosed.",
+    "packet_scope": "Science Results/tables/figures and full BoE minutes excluded from scored packets; MOEL release does not constitute full legal text; source collection scope and supplementary expansion are distinguished.",
+    "user_procedure": "The procedure is presented with an explicit non-guarantee and unresolved-comparison example. Its stop rule is prospective operational guidance, not demonstrated perfect enforcement."
+  },
+  "unresolved_concerns": [
+    "Material relevance is disputed for every KO frozen omission and three of four EN omissions; neither initial nor later AI classification is gold.",
+    "Two judges can agree within an output while classifying identical baseline text differently across outputs; the KO R09 case demonstrates this.",
+    "No completed common-union adjudication of previously-unlisted findings is established by the reviewed report artifacts. Raw supported labels alone do not meet the preregistered category.",
+    "Semantic harm depends on interpretation: observable explicitness/attribution loss, unsupported strengthening, reasonable contextual inference and actual reader harm remain distinct.",
+    "Supplementary evidence supports qualitative science comparison direction and exact category boundaries but does not establish direct low-versus-moderate significance or a treatment effect.",
+    "Same-family shared blind spots, small accessible sample, incomplete timing metadata and absent independent historical freeze authentication remain limitations."
+  ],
+  "changes_made": [
+    "Created results/report-review.json only; no report, protocol, criteria, source output or score modifications."
+  ]
+}

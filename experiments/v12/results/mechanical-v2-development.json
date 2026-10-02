@@ -1,0 +1,45 @@
+{
+  "built_at": "2026-10-02T01:06:17.875682+00:00",
+  "rows": [
+    {
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "input_id": "77c17b415a3e6380cb8da833",
+      "split": "development",
+      "language": "KO",
+      "input_sha256": "1ae27bc1b6e092d3b9220928f759e1ccaf75ceffd7f9f32f69c02609aa70fcfc",
+      "common_input_sha256": "4449c99d982b19d18b6c8e75343ba1b8d19fcecd053a1f703916e2d38dcf04b1",
+      "article_text_sha256": "3f7fb330ff43d65f8a98e65f282ff8c35ee21378948df6065c4c5fc155cfe09f",
+      "previous_input_id": "ef01c1c27fd3418ca0e1d3be",
+      "run_plan": "run",
+      "packet_id": "b08605eacf27764a4995a290",
+      "writer_raw_sha256": "34294c53ec4886e71460fcb0968def63e1318879f75b7ecfadeebde42ad93081",
+      "review_input_sha256": "d90c7ac01e9358e5af970a32aabed63a7a4dea3aeeed7078be3ebcc22902b914",
+      "candidate_sha256": "686c8db006ebb4ac5152a1a31fbd2f1b058328b93fdc7a87076d3a4d1c575662",
+      "application_status": "applied",
+      "application_error": null,
+      "finding_items": 5,
+      "patch_count": 5
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "input_id": "d020bd701650da951576fccd",
+      "split": "development",
+      "language": "EN",
+      "input_sha256": "c81c75d9b41de93d6dea5b23789c9daccacc049f51e5dfcc382995d716c68cfe",
+      "common_input_sha256": "de7030df1eb5c34d94c71e625bbbf2e1be89411f1922f4a1cc322f9b7747301a",
+      "article_text_sha256": "60166871ac6176def73550bdb91af63f25a788e5cdb5b9f4c0ef1126c63e9ecf",
+      "previous_input_id": "ede155dad512a3d7d433676c",
+      "run_plan": "run",
+      "packet_id": "59a6106d81739f599e2c483f",
+      "writer_raw_sha256": "424519d426e466d729db0ffed996c76b1e99b611ea442fc46b203dca144a4ea0",
+      "review_input_sha256": "5acc2e5bb483e4f80c11bad68258005b04f4fd06c27f06ba9ae0b22724fd78bc",
+      "candidate_sha256": "16c9c794344308c129e9650035c6dd09726fe2d263c971635bcf55278ddb1e83",
+      "application_status": "applied",
+      "application_error": null,
+      "finding_items": 5,
+      "patch_count": 5
+    }
+  ]
+}

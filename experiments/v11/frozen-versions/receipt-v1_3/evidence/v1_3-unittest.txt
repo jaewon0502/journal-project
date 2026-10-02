@@ -1,0 +1,26 @@
+test_complete_depth65_utf16_utf32_cannot_mint (test_encoding_contract.EncodingContractTests.test_complete_depth65_utf16_utf32_cannot_mint) ... ok
+test_raw_nul_and_invalid_utf8_all_input_boundaries (test_encoding_contract.EncodingContractTests.test_raw_nul_and_invalid_utf8_all_input_boundaries) ... ok
+test_utf16_utf32_endian_bom_variants_deep_fail_closed (test_encoding_contract.EncodingContractTests.test_utf16_utf32_endian_bom_variants_deep_fail_closed) ... ok
+test_utf8_korean_escapes_escaped_nul_and_optional_bom (test_encoding_contract.EncodingContractTests.test_utf8_korean_escapes_escaped_nul_and_optional_bom) ... ok
+test_actual_twenty_thousand_byte_reproduction (test_nesting_contract.NestingContractTests.test_actual_twenty_thousand_byte_reproduction) ... ok
+test_all_raw_input_paths_and_forged_receipt (test_nesting_contract.NestingContractTests.test_all_raw_input_paths_and_forged_receipt) ... ok
+test_genuine_valid_json_at_and_beyond_supported_depth (test_nesting_contract.NestingContractTests.test_genuine_valid_json_at_and_beyond_supported_depth) ... ok
+test_programming_recursion_error_is_not_hidden (test_nesting_contract.NestingContractTests.test_programming_recursion_error_is_not_hidden) ... ok
+test_string_brackets_and_escaped_quotes_do_not_count (test_nesting_contract.NestingContractTests.test_string_brackets_and_escaped_quotes_do_not_count) ... ok
+test_aliases_prose_and_receipt_tampering (test_receipt.ReceiptTests.test_aliases_prose_and_receipt_tampering) ... ok
+test_all_actual_values_bound (test_receipt.ReceiptTests.test_all_actual_values_bound) ... ok
+test_empty_unapproved_abstains (test_receipt.ReceiptTests.test_empty_unapproved_abstains) ... ok
+test_source_only_separate_candidate (test_receipt.ReceiptTests.test_source_only_separate_candidate) ... ok
+test_stale_or_malformed_audit_abstains (test_receipt.ReceiptTests.test_stale_or_malformed_audit_abstains) ... ok
+test_states_and_language (test_receipt.ReceiptTests.test_states_and_language) ... ok
+test_store_hardlink_and_fifo_rejected (test_receipt.ReceiptTests.test_store_hardlink_and_fifo_rejected) ... ok
+test_store_rejects_symlinks_and_legacy (test_receipt.ReceiptTests.test_store_rejects_symlinks_and_legacy) ... ok
+test_store_roundtrip_and_collision (test_receipt.ReceiptTests.test_store_roundtrip_and_collision) ... ok
+test_actual_thirty_thousand_finding_expansion_rejected (test_size_contract.SizeContractTests.test_actual_thirty_thousand_finding_expansion_rejected) ... ok
+test_oversized_bypass_rejected_before_store_write (test_size_contract.SizeContractTests.test_oversized_bypass_rejected_before_store_write) ... ok
+test_real_near_exact_and_above_boundary (test_size_contract.SizeContractTests.test_real_near_exact_and_above_boundary) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 58.134s
+
+OK

@@ -1,0 +1,90 @@
+[
+  {
+    "input_id": "79814d8015a14d2c85d0e553",
+    "case_id": "bd569abe2ca0",
+    "packet_id": "8cd4b2e9c6e904f8b5e99194",
+    "condition": "STATUS_ONLY",
+    "language": "KO",
+    "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+    "packet_sha256": "952bdcae77f8ee17ec3bfe1d5fa6ae7be8aa30ab276035cf8143b90e2169a667",
+    "annotation_sha256": "9e39a54035f4cca5e061b4421009d88c7d57fc80a2723f365b014829cccabb26",
+    "issue_count": 1
+  },
+  {
+    "input_id": "79814d8015a14d2c85d0e553",
+    "case_id": "bd569abe2ca0",
+    "packet_id": "da9f0cdd844e21026a156173",
+    "condition": "STATUS_PLUS_LINKED_ISSUES",
+    "language": "KO",
+    "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+    "packet_sha256": "d6d37538eb6c0c532d0ab153e411c4d3876559f9dc36557c9582707e511264b8",
+    "annotation_sha256": "c1f3cc87847d2d41e5dd021168624df7ed02405566eb1eb07f115b7a8f50113f",
+    "issue_count": 1
+  },
+  {
+    "input_id": "0ca01f1b92bde49c1f37d9e8",
+    "case_id": "d6736be620d4",
+    "packet_id": "d26a4fb780ef5a629b9831e7",
+    "condition": "STATUS_ONLY",
+    "language": "EN",
+    "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+    "packet_sha256": "d520d12e511a491a987a0aa8eadedda987c39e619a1f796ac27bfa602131ccf4",
+    "annotation_sha256": "88be9fc286bb8a495d986e0c04211cdfb5654cf5f7704d06a298ca0a40f1cd65",
+    "issue_count": 2
+  },
+  {
+    "input_id": "0ca01f1b92bde49c1f37d9e8",
+    "case_id": "d6736be620d4",
+    "packet_id": "5f6bc52b6ff8990e2bd897b8",
+    "condition": "STATUS_PLUS_LINKED_ISSUES",
+    "language": "EN",
+    "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+    "packet_sha256": "97edd5fe8c678fe24ba11aba0565bfcf26cc28b4d36d912790d694d19360e3b2",
+    "annotation_sha256": "bcddb5dab77ee2cf726fd29e51fb858840802614758dea01598dc5dff0b511e7",
+    "issue_count": 2
+  },
+  {
+    "input_id": "e7cb04f0501bbb7c3a791efa",
+    "case_id": "2351c7060c84",
+    "packet_id": "23c079601c067d9e3a4da925",
+    "condition": "STATUS_ONLY",
+    "language": "KO",
+    "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+    "packet_sha256": "6cf1b5f4720dbeab2efe544b2d43451f666ecd1a87d58dcb67b33d8a0b861ee4",
+    "annotation_sha256": "39b95ed05946ce2348e9509e6b09659928ee2c56fae3f64d12425d189b3c68d3",
+    "issue_count": 1
+  },
+  {
+    "input_id": "e7cb04f0501bbb7c3a791efa",
+    "case_id": "2351c7060c84",
+    "packet_id": "e6d584e049f6810a994d2803",
+    "condition": "STATUS_PLUS_LINKED_ISSUES",
+    "language": "KO",
+    "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+    "packet_sha256": "c653532c37df973e84e01bf25d495ac74a63ef7e8c77c1b3105208b589e60238",
+    "annotation_sha256": "be361504e6c11b9418e518d75566b5326d8a35c90dbe3148894d9db0f9c0da30",
+    "issue_count": 1
+  },
+  {
+    "input_id": "c4b84e7013df1a8289b4df32",
+    "case_id": "88b1c16a46ec",
+    "packet_id": "d8ae4cb0628b1d4785202a8a",
+    "condition": "STATUS_ONLY",
+    "language": "EN",
+    "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+    "packet_sha256": "145cf29341fc98ebf27bf105ec6b9f8e2e5e7f9b4d4d5b7df7cca281357843bd",
+    "annotation_sha256": "02f698972286a89bb8d701f32df0a17496dbacdab10ac31df5f9393677a84217",
+    "issue_count": 0
+  },
+  {
+    "input_id": "c4b84e7013df1a8289b4df32",
+    "case_id": "88b1c16a46ec",
+    "packet_id": "dbca77a381b5b599aeab161d",
+    "condition": "STATUS_PLUS_LINKED_ISSUES",
+    "language": "EN",
+    "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+    "packet_sha256": "72b90a40f79c929e0a57cd8fd659b010adbe3800cae7c2ebbea57933d8e7817c",
+    "annotation_sha256": "63c28042c15e6b37065a3878dcc0aab579bca9ef427c55cf532a5935c958b50c",
+    "issue_count": 0
+  }
+]

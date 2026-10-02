@@ -1,0 +1,30 @@
+{
+  "packet_id": "d8ae4cb0628b1d4785202a8a",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+      "reason": "Source and actual output are identical; the receipt records no-op, zero selected/rejected/held patches and local release. The annotation preserves these facts."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "not_applicable",
+      "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+      "reason": "The supplied issue list is empty, so issue recoverability is not applicable. This does not establish complete issue coverage."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+      "reason": "The annotation limits success to the supplied local review and explicitly disclaims independent truth, resolution and external publication."
+    },
+    "noop_overcorrection": {
+      "answer": "no",
+      "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+      "reason": "No correction is proposed or implied. The possibility of unverified claims remaining is a scope caveat, not a correction request."
+    }
+  },
+  "missing_issue_ids": [],
+  "recovery_basis": "not_applicable",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

@@ -1,0 +1,25 @@
+{
+  "scope": "Content-classification and source-window review separate from hash verification; not a universal secrecy/copyright proof",
+  "public_types": {
+    "run_checks.py": 1,
+    "natural-private-records.json": 1,
+    "build-metadata.json": 1,
+    "SHA256SUMS": 1,
+    "README.md": 1,
+    "precision": 5,
+    "portable": 21,
+    "synthetic": 161,
+    "code-audit": 33,
+    "analysis": 5,
+    "protocol": 8,
+    "confirmation": 3,
+    "sidecar": 29,
+    "results": 4,
+    "v10-context": 4,
+    "frozen-versions": 61
+  },
+  "excluded": "Natural full sources/candidates/long audit anchors, orchestration conversations, report-editing internal notes, Library identities/responses/helpers. Synthetic inputs and requested verdict reasons retained.",
+  "blocked_path_or_credential_pattern_findings": [],
+  "source_window_check": "public-scope-check.json: no matching180-character window from3 natural source texts",
+  "limits": "Short source-linked anchors/URLs and experiment protocols intentionally included; source windows alone are not full redaction."
+}

@@ -1,0 +1,10 @@
+{
+  "input_id": "d6736be620d4",
+  "text": "The displayed local output is unchanged: it still says “an increase of 3%” and gives Friday as the meeting day. The proposed replacements, “3 percentage points” and “Saturday,” were rejected together when their component was rolled back; neither was applied, and no patches are held. The unchanged output was locally released. The supplied scenario identifies two unresolved meaning issues: the difference between 21% and 24% is 3 percentage points, and the fictional schedule specifies Saturday. The rollback does not resolve either issue or establish that the retained wording is correct.",
+  "limitations": [
+    "This note describes only the supplied local output and audit record; question resolution was not adjudicated.",
+    "Scenario facts are authored, not real-world verification. Overall factual accuracy and review identities are not independently established.",
+    "No external publication occurred."
+  ],
+  "declared_scope": "displayed_local_output"
+}

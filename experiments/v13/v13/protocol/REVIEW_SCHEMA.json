@@ -1,0 +1,311 @@
+{
+  "type": "object",
+  "properties": {
+    "bundle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "original_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "patches_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "complete": {
+      "const": true
+    },
+    "read_complete": {
+      "const": true
+    },
+    "patch_assessments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "patch_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "warranted": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "evidence_support": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "preserves_untargeted_meaning": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "context_safe": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "application_valid": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "dependency_status": {
+            "enum": [
+              "complete",
+              "unknown"
+            ]
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "document_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "document_id",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confidence": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          }
+        },
+        "required": [
+          "patch_id",
+          "warranted",
+          "evidence_support",
+          "preserves_untargeted_meaning",
+          "context_safe",
+          "application_valid",
+          "dependencies",
+          "dependency_status",
+          "anchors",
+          "reason",
+          "confidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "background_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "resolved",
+              "unresolved"
+            ]
+          },
+          "material": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "affects_patch_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "unrelated_to_edits": {
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "document_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "document_id",
+                "quote"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "material",
+          "affects_patch_ids",
+          "unrelated_to_edits",
+          "anchors",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "global_material_risk": {
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "global_risk_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "global_risk_anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "document_id",
+          "quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "preference_differences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason_preference_only": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "description",
+          "reason_preference_only"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "overall_reason": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "bundle_id",
+    "input_sha256",
+    "source_sha256",
+    "original_sha256",
+    "patches_sha256",
+    "complete",
+    "read_complete",
+    "patch_assessments",
+    "background_issues",
+    "global_material_risk",
+    "global_risk_reason",
+    "global_risk_anchors",
+    "preference_differences",
+    "overall_reason"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "global_material_risk": {
+            "enum": [
+              "yes",
+              "unknown"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "global_risk_anchors": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

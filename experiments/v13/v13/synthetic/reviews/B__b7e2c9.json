@@ -1,0 +1,16 @@
+{
+  "bundle_id": "b7e2c9",
+  "input_sha256": "6d563a3ce2efa0197b1527adefbf0920a6048f1fad99979ff8635fef3118d359",
+  "source_sha256": "861844f770d144090709fe3ee3b646c43bd266044d7e1632480a5e19709fdbd8",
+  "original_sha256": "25b9152051a8e569b4f5a7bf30ea6e7bd87b38f984724fc544c196f8cd4c54b5",
+  "patches_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [],
+  "background_issues": [],
+  "global_material_risk": "no",
+  "global_risk_reason": "There are no proposed edits, and the full candidate is identical to the original. The supplied source supports the article’s claims and preserved relationships; no new or edit-related material candidate risk is identified.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "Read the entire source, scope note, original article, questions, empty proposal array, full candidate, application-error object, instructions and schema. No necessary factual or meaning correction is identified within the supplied fictional record. The article accurately preserves the two-route August trial, the September 8 account of 61 positive responses among 86 voluntarily submitted surveys, the group’s criticism concerning nighttime users, the absence of a separate nighttime tally, consideration rather than commitment to an October additional survey, and budget-dependent permanent installation. The shortened August date does not contradict the exact trial dates; omission of an explicit all-riders disclaimer does not turn the expressly voluntary survey into a census. The final sentence does not assert that permanent installation was approved. No patches or dependencies require assessment, and no candidate application errors are reported. Findings are limited to the supplied fictional source scope; this review is not a final safety audit."
+}

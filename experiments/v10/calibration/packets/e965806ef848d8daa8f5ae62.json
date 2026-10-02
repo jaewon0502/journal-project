@@ -1,0 +1,15 @@
+{
+  "packet_id": "e965806ef848d8daa8f5ae62",
+  "language": "EN",
+  "source": "The pilot reduced processing time by 7%.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The complete pilot report states processing time fell from 100 seconds to 93 seconds."
+    }
+  ],
+  "target_question": "Can the 7% reduction be verified from the supplied report?",
+  "candidate": "The pilot reduced processing time by 7%.",
+  "delivery": "The supplied evidence verifies the 7% reduction.",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events."
+}

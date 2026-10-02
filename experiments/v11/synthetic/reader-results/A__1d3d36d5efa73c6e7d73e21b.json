@@ -1,0 +1,76 @@
+{
+  "packet_id": "1d3d36d5efa73c6e7d73e21b",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "The displayed output incorporates p1, changing the increase unit.",
+      "anchor": "actual_output: 3 percentage points"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The output changes the source increase unit.",
+      "anchor": "p1: 3% -> 3 percentage points"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "The output retains Friday, so proposed p2 was not incorporated.",
+      "anchor": "actual_output: Friday; rejected_ids: [p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The final output retains Friday while E2 stipulates Saturday; rejection is not resolution.",
+      "anchor": "actual_output: Friday; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Some proposed patches are present in the local output",
+      "reason": "Reports actual application."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "Applied 1",
+      "reason": "An incorporated replacement means changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Applied 1; excluded or rolled back 1",
+      "reason": "Reports not all proposals applied."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Factual truth is not independently verified",
+      "reason": "Reports verification limitation."
+    },
+    "externalpublished": {
+      "rating": "accurate_implicit",
+      "short_anchor": "No external article or publication was changed",
+      "reason": "Context communicates local-only action, phrased in terms of external alteration."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Unadjudicated finding references do not report the concrete final-output discrepancy; saying references alone do not establish an error is not a denial that evidence identifies one."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The final text still says Friday despite the scenario schedule specifying Saturday."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

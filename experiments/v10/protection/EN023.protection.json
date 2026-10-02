@@ -1,0 +1,173 @@
+{
+  "id": "EN023",
+  "purpose": "regression_only",
+  "source_sha256": "3591df7d10dcccb7604b0dc84237e26568c6eff2322fdb96ed5a9e1260b382f1",
+  "source_url": "https://apnews.com/article/heat-record-climate-change-sizzle-el-nino-2a78248322a04b97f417346308d05483",
+  "publication": "2026-09-10T02:00:03Z",
+  "fetched_at": "2026-10-01T08:50:08.095729+00:00",
+  "not_gold": true,
+  "coverage": "선별 보호표; 전수목록 아님. 원문 독립검토 필요.",
+  "rows": [
+    {
+      "id": "E01",
+      "paragraph": "P008",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 2258,
+        "end": 2265
+      },
+      "short_evidence": "Aug. 22",
+      "preserve": "8월22일 기록 수립 사건·Copernicus 귀속",
+      "why": "24–25일 새 기록 지지가 22일 사건 부정은 아님",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "E1_previous_March_record_tension",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E02",
+      "paragraph": "P004",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 735,
+        "end": 752
+      },
+      "short_evidence": "uncertainty level",
+      "preserve": "수치차이·불확실성·동률·Burgess 귀속을 한 묶음 보존",
+      "why": "인용된 판단의 보존과 측정 진실은 별개",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "E1_less_than_0.01_vs_reported_0.01",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E03",
+      "paragraph": "P020",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 5002,
+        "end": 5016
+      },
+      "short_evidence": "almost certain",
+      "preserve": "Hausfather의 전망과 강도; 2026·2027 전망연도",
+      "why": "강한 인용을 사실확정 또는 약한 추정으로 바꾸지 않음",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "forecast_not_verified",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E04",
+      "paragraph": "P006",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1401,
+        "end": 1412
+      },
+      "short_evidence": "longer term",
+      "preserve": "월간 관측과 장기1.5℃ 기준의 시간 규모",
+      "why": "월간 초과를 장기기준 위반으로 치환 금지",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "scope_mismatch_risk",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E05",
+      "paragraph": "P011",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 2655,
+        "end": 2663
+      },
+      "short_evidence": "Lower 48",
+      "preserve": "미국 본토와 전지구 여름 통계·1936비교·2024동률",
+      "why": "다른 지리와 시계열 합치기 금지",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "NOAA_primary_missing",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E06",
+      "paragraph": "P024",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 5943,
+        "end": 5961
+      },
+      "short_evidence": "solely responsible",
+      "preserve": "지원공개와 편집책임 공존",
+      "why": "재원 공개 삭제 또는 외부 편집통제 추론 금지",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "none_observed",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    },
+    {
+      "id": "E07",
+      "paragraph": "P018",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 4443,
+        "end": 4460
+      },
+      "short_evidence": "one or two tenths",
+      "preserve": "El Nino의 기여 크기와 화석연료의 상대적 주원인·귀속",
+      "why": "두 요인 존재를 동등 기여로 바꾸지 않음",
+      "confidence": {
+        "anchor_present": "high_verified",
+        "interpretation": "medium",
+        "world_truth": "not_established"
+      },
+      "conflict": "independent_truth_unverified",
+      "quotation_vs_truth": "문구/귀속 보존은 사실진실 인증이 아님",
+      "counterargument": {
+        "present": "not_identified_in_this_span",
+        "strength": "not_assessed; 인용 강도와 별개"
+      }
+    }
+  ]
+}

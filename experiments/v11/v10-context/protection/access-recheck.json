@@ -1,0 +1,46 @@
+{
+  "web_tool": {
+    "KO011": "not accessible via tool",
+    "EN023": "not accessible via tool",
+    "NASA2024": "readable full page"
+  },
+  "direct_http": [
+    {
+      "id": "KO011",
+      "url": "https://www.pressian.com/pages/articles/2026093021182974483",
+      "checked_at": "2026-10-01T22:47:16.409583+00:00",
+      "route": "direct urllib HTTP; no authentication",
+      "used_to_replace_frozen_input": false,
+      "status": 200,
+      "final_url": "https://www.pressian.com/pages/articles/2026093021182974483",
+      "bytes": 93025,
+      "sha256": "d9e75d2cafbc78aa12dcb464fdf8867be65d9cd3b2eeb2c7751f099dd0ba3223",
+      "contains_target_marker": true
+    },
+    {
+      "id": "EN023",
+      "url": "https://apnews.com/article/heat-record-climate-change-sizzle-el-nino-2a78248322a04b97f417346308d05483",
+      "checked_at": "2026-10-01T22:47:16.410039+00:00",
+      "route": "direct urllib HTTP; no authentication",
+      "used_to_replace_frozen_input": false,
+      "status": 200,
+      "final_url": "https://apnews.com/article/heat-record-climate-change-sizzle-el-nino-2a78248322a04b97f417346308d05483",
+      "bytes": 905490,
+      "sha256": "d0c94f75a381d6299b235812fee2d8be495b4576361c01172adcace3bbb1151c",
+      "contains_target_marker": true
+    },
+    {
+      "id": "EN023_E1",
+      "url": "https://climate.copernicus.eu/surface-air-temperature-august-2026",
+      "checked_at": "2026-10-01T22:47:16.411041+00:00",
+      "route": "direct urllib HTTP; no authentication",
+      "used_to_replace_frozen_input": false,
+      "status": 200,
+      "final_url": "https://climate.copernicus.eu/surface-air-temperature-august-2026",
+      "bytes": 235996,
+      "sha256": "11ab009905f0ab688f2fe28be2cda3b42354ac7ef156320b5e1ee7ef67a6c887",
+      "contains_target_marker": true
+    }
+  ],
+  "limitation": "HTML accessibility and marker presence only; frozen archived source not replaced; no certification of historical unchanged page."
+}

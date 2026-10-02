@@ -1,0 +1,76 @@
+{
+  "packet_id": "1609fcb5d2bd3bd3d45f46a2",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "The displayed output incorporates p1, changing the increase unit.",
+      "anchor": "actual_output: 3 percentage points"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The output changes the source increase unit.",
+      "anchor": "p1: 3% -> 3 percentage points"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "The output retains Friday, so proposed p2 was not incorporated.",
+      "anchor": "actual_output: Friday; rejected_ids: [p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The final output retains Friday while E2 stipulates Saturday; rejection is not resolution.",
+      "anchor": "actual_output: Friday; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The review topic does not say whether any patch reached final output."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No comparison of final output with source is stated."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The proposal topics do not communicate disposition of all patches."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Calling external verification a separate matter does not state whether whole-article correctness was established."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Calling publication a separate matter does not state whether it occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The annotation gives reference values but never says whether final output meets them."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Final output fixes the unit but retains Friday against the Saturday schedule."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

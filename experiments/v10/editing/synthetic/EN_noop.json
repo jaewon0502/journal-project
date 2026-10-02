@@ -1,0 +1,45 @@
+{
+  "case_id": "EN_noop",
+  "source": "a b c",
+  "proposal_raw": "{\"patches\": [], \"preimage_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\", \"writer_id\": \"writer\"}",
+  "dependency_raw": "{\"auditor_id\": \"dependency\", \"complete\": true, \"pairs\": [], \"patch_ids\": [], \"proposal_sha256\": \"39538eb558f5b6b734c8d5df8c39b2ab0d692ac51e0c20792b872c2580ed0c11\", \"read_complete\": true, \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\"}",
+  "patch_audit_raw": "{\"auditor_id\": \"patch\", \"complete\": true, \"patch_decisions\": [], \"preexisting_findings\": [], \"proposal_sha256\": \"39538eb558f5b6b734c8d5df8c39b2ab0d692ac51e0c20792b872c2580ed0c11\", \"read_complete\": true, \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\"}",
+  "final_audit_raw": [
+    "{\"auditor_id\": \"final\", \"candidate_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\", \"complete\": true, \"decision\": \"approved\", \"findings\": [], \"proposal_sha256\": \"39538eb558f5b6b734c8d5df8c39b2ab0d692ac51e0c20792b872c2580ed0c11\", \"read_complete\": true, \"selected_ids\": [], \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\", \"whole_candidate_reviewed\": true}"
+  ],
+  "output": "a b c",
+  "delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+    "output_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+    "proposal_sha256": "39538eb558f5b6b734c8d5df8c39b2ab0d692ac51e0c20792b872c2580ed0c11",
+    "dependency_sha256": "8bc9de28c0e6f45bb1bf08cf1fb7285c93ead20de7f4b955a5580850b6a1f650",
+    "patch_audit_sha256": "77a1933ba9781c3fbc9e314bf1d2ccfe73c58276d02712aedd9e753ca0bcb914",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "noop",
+    "released": true,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+    "final_candidate_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+    "applied_ids": [],
+    "components": [],
+    "patches": [],
+    "final_audit_history": [
+      {
+        "audit_sha256": "3a0b3f157beba3d426039f1978e1ebbb1b8e89f76713abe34b1c8ce093febb59",
+        "reviewed_candidate_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+        "reviewed_ids": [],
+        "released": true,
+        "next_candidate_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 수정 없음. 의존 컴포넌트 적용 0개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 0개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b. 기계적 검증은 의미 증명이 아님."
+  },
+  "one_factor_reference": "EN_baseline",
+  "factor": "noop",
+  "not_semantic_proof": true
+}

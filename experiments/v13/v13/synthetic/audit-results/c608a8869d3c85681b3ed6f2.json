@@ -1,0 +1,48 @@
+{
+  "audit_id": "c608a8869d3c85681b3ed6f2",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": ["S1.p1", "S1.p2", "S1.p3", "S1.p4", "S1.p5", "S1.p6"],
+  "original_paragraphs_read": true,
+  "changes": [
+    {
+      "id": "change_1",
+      "before": "사업을 신청한 기업 40곳 전체",
+      "after": "8월 30일까지 별도 동의서를 제출한 기업 25곳",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [
+        {"paragraph_id": "S1.p1", "text": "기업 40곳이 신청했다"},
+        {"paragraph_id": "S1.p2", "text": "신청 자체는 공개 동의가 아니었고"},
+        {"paragraph_id": "S1.p2", "text": "별도 동의서를 제출한 기업만 공개 대상에 넣었다"},
+        {"paragraph_id": "S1.p3", "text": "8월 30일까지 기업 25곳이 별도 동의서를 제출했고"},
+        {"paragraph_id": "S1.p4", "text": "9월 4일 동의서를 제출한 25곳의 평가 요약표를 홈페이지에 공개했다"},
+        {"paragraph_id": "S1.p5", "text": "이미 별도 동의서를 제출한 기업에는 공개 전에 다시 동의를 받지 않았으며"}
+      ],
+      "original_anchors": [
+        "공개 대상은 사업을 신청한 기업 40곳 전체였다.",
+        "이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다."
+      ],
+      "candidate_anchors": [
+        "공개 대상은 8월 30일까지 별도 동의서를 제출한 기업 25곳이었다.",
+        "이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다."
+      ],
+      "reason": "The original incorrectly equated all 40 applicants with the disclosure cohort. The replacement identifies the supported cohort of 25 separate-consent submitters and correctly dates their consent submission, without claiming that disclosure occurred by August 30. It also repairs the antecedent of the unchanged next sentence: ‘이 기업들’ now refers to firms that had already consented and were not asked to consent again, exactly as S1.p5 states. The original reference to 40 applicants is removed from this sentence because it was being used to define the wrong disclosure population; no separate, untargeted assertion about application totals is altered. The institution, disclosure object, distinction between initial consent and renewed consent, and grade-only/no-sales-content statements remain consistent with the source."
+    }
+  ],
+  "original_residual_issues": [],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither the source nor the article contains attributed criticism. The absence of renewed consent is a procedural fact, and the candidate preserves it with the correct previously consenting cohort."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": false,
+  "unmet_required_answers": [],
+  "uncertainties": [
+    "The unchanged opening says the business was conducted in August. This is supported as a broad description of the August application phase, but it does not distinguish that phase from the September 4 publication. An explicit September 4 publication date would improve temporal clarity. The candidate does not newly create that ambiguity or explicitly claim August publication; the source supplies the actual date."
+  ],
+  "release_recommendation": "release",
+  "reason": "The delivered correction is source-supported and fixes both the disclosure population and the contextual reference in the following sentence. All six source paragraphs and the full original and candidate were read. No introduced material harm or unknown safety was identified, and no further factual correction is required by the supplied record. The unchanged grade-only and excluded-sales statements match S1.p6. Explicitly adding the September 4 publication date or the 15 nonconsenting firms' exclusion could add clarity, but those omissions do not make the corrected account unsupported. This is an independent AI semantic audit, not human validation."
+}

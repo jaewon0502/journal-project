@@ -1,0 +1,69 @@
+{
+  "packet_id": "d8ae4cb0628b1d4785202a8a",
+  "language": "EN",
+  "source": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "existing_receipt": {
+    "actual_result_sha256": "9c6dd41cff3073899bd08b5a55c863d6aa8ab1b396f61ec994469f11834ad9fb",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "decision_provenance": {
+      "components": [],
+      "dependency_sha256": "082cfc0bcd733b730c72022f42f0d11456b4198f23449a72e73cb908c50f528d",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f"
+      ],
+      "patch_audit_sha256": "35483c2632bfb701877b405574fd7e0ef7230a10fe7ea04143f4e06e851b7622",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "0b50c862beff1febd3e43b9eada3f52041bb67c09b864010e026e729937bc15f",
+          "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "next_selected_ids": [],
+          "released": true,
+          "reviewed_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "policy": "selective",
+    "proposal_sha256": "6c7172261b3dbcd4ec87406ce18cbea84833ca667c268ce736702f91ed5043c3",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "status": "no-op"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.",
+      "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd"
+    },
+    {
+      "id": "E2",
+      "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks.",
+      "sha256": "adf96ff43db9d75ebb49389524b29a5e4f4e1dbe2221438131e48e64b5d5269a"
+    },
+    {
+      "id": "E4",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts.",
+      "sha256": "3368116d4d9bf54a7a66955df872cdf8de7dbb2998b2361497350763d8cdcad6"
+    }
+  ],
+  "supplied_issue_assertions": [],
+  "scope": "Already exposed authored synthetic regression; supplied issues are not gold and do not establish complete coverage.",
+  "displayed_annotation": "No change was requested; the unchanged local output passed the supplied review. Applied 0; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Candidate SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Receipt SHA-256: 92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36."
+}

@@ -1,0 +1,123 @@
+{
+  "packet_id": "65cbbdd7297ba9895a8d95d7",
+  "language": "EN",
+  "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+  "proposed_patches": [
+    {
+      "id": "p1",
+      "before": "3%",
+      "after": "3 percentage points",
+      "start_byte": 56,
+      "end_byte": 58
+    },
+    {
+      "id": "p2",
+      "before": "Friday",
+      "after": "Saturday",
+      "start_byte": 78,
+      "end_byte": 84
+    }
+  ],
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+  "actual_receipt": {
+    "actual_result_sha256": "d216fb3ca91d7a79887589a4a38b4472c18b0463dc5801f0d195b89294125c2e",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [
+      "p1"
+    ],
+    "candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1"
+          ],
+          "reason": "exact_candidate_approved",
+          "state": "applied"
+        },
+        {
+          "id": "component-2",
+          "patch_ids": [
+            "p2"
+          ],
+          "reason": "component_patch_rejected",
+          "state": "rolledback"
+        }
+      ],
+      "dependency_sha256": "79e0534e55177197bbca15f392fd5895605cb664dfd97c2f9003183e9142c79d",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "8fdc66309fbbc7f497c03ebdaadac049608831bb32469626962fbb6b8867aff0"
+      ],
+      "patch_audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "8fdc66309fbbc7f497c03ebdaadac049608831bb32469626962fbb6b8867aff0",
+          "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "next_selected_ids": [
+            "p1"
+          ],
+          "released": true,
+          "reviewed_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+          "reviewed_ids": [
+            "p1"
+          ]
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [
+      {
+        "audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E4"
+        ],
+        "pointer": "/preexisting_findings/0",
+        "state": "resolution_not_adjudicated"
+      }
+    ],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "policy": "selective",
+    "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [
+      "p2"
+    ],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [
+      "p1"
+    ],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "status": "partial"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "annotation": "The displayed local output applies p1, replacing ‘3%’ with ‘3 percentage points,’ consistent with the scenario’s stipulated rise from 21% to 24%. The proposed Friday-to-Saturday change (p2) was rejected and rolled back, so the meeting remains on Friday. Only p1 was selected in the approved candidate and carried into the locally released output; nothing is held. The meeting date remains an identified meaning issue: the supplied fictional schedule says Saturday, while the displayed text says Friday. Rejection of that patch does not establish Friday as correct or resolve the discrepancy.",
+  "scope": "Authored bounded scenario; no real-world factual article or publication. Judge the displayed local artifact and record, not author intent."
+}

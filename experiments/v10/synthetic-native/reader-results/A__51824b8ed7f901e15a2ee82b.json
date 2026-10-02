@@ -1,0 +1,41 @@
+{
+  "packet_id": "51824b8ed7f901e15a2ee82b",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "insufficient",
+  "truth_status": "unknown",
+  "abstain": true,
+  "evidence_anchors": [
+    "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+    "이 발췌문에는 6월 8일 수위나 그 이전 최고 수위가 없다.",
+    "나중의 최고 기록은 앞선 당시 기록과 양립할 수 있습니다."
+  ],
+  "reason": "The separate note correctly answers that June 10 alone cannot falsify the earlier time-scoped record. It does not promote the original report to verified truth. The evidential question is resolved while the June 8 factual verdict is unknown.",
+  "additional_meaning_losses": [],
+  "limitations": [
+    "June 8 level and previous maximum absent. Single-sentence synthetic source."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "6월 8일 수위가 당시 최고 기록",
+      "meaning": "Retains the earlier as-of-time record and observatory attribution, without replacing it with June 10."
+    }
+  ],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Earlier record is not verified by E1, but not contradicted by a later higher record.",
+      "source_anchor": "6월 8일 수위가 당시 최고 기록",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "admission": "approved"
+}

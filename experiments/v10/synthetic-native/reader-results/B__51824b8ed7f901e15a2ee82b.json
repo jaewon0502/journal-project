@@ -1,0 +1,42 @@
+{
+  "packet_id": "51824b8ed7f901e15a2ee82b",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "additional_meaning_losses": [],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Whether June 8 was a then-record remains evidence-insufficient, not contradicted.",
+      "source_anchor": "6월 8일 수위가 당시 최고 기록",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "insufficient",
+  "truth_status": "unknown",
+  "abstain": true,
+  "evidence_anchors": [
+    "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+    "6월 10일 최고 수위 8.2m가 기록됐다. 이 발췌문에는 6월 8일 수위나 그 이전 최고 수위가 없다.",
+    "나중의 최고 기록은 앞선 당시 기록과 양립할 수 있습니다."
+  ],
+  "reason": "The note correctly says the later record does not establish the earlier claim as false. It preserves attribution and 당시 temporal scope, explicitly names missing evidence, and accurately describes no change. The exact question about what may be inferred is resolved; actual June 8 record status remains unknown.",
+  "limitations": [
+    "June 8 level and earlier maximum absent.",
+    "No independent station announcement supplied."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+      "meaning": "Preserves station attribution and a record at that time, rather than a perpetual all-time record."
+    }
+  ],
+  "admission": "approved"
+}

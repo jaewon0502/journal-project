@@ -1,0 +1,18 @@
+{
+  "language": "KO",
+  "source": "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "위원회 발표문: 모든 신청자가 탈락했다는 소문은 사실이 아닙니다. 5명이 합격했습니다."
+    }
+  ],
+  "target_question": "위원회가 부정한 주장과 위원회 자신의 주장을 정확히 보존했는가?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "packet_id": "3d43980ef7ef5ade22b8eb3b",
+  "task": "Produce the minimally revised article and a separate delivery note addressing the target question. Preserve material source meanings and attributed statements; identify uncertainty rather than inventing evidence. Inspect the complete supplied source. If no supported change is appropriate, a no-op with a specific explanation is allowed. State what was actually applied and what remains unresolved.",
+  "reference_protection": [],
+  "original_input_sha256": "636c31ee40360692b0fa61d2aba6e410a041954dbc782374fc664c40b4866b53",
+  "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "input_id": "68b14dd2cb80eeb2233250e4"
+}

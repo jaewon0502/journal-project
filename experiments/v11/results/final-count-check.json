@@ -1,0 +1,12 @@
+{
+  "v10_writing": 9,
+  "v11_writing": 14,
+  "writing_raw_hash_overlap": 0,
+  "v10_judgments": 51,
+  "v11_judgments": 84,
+  "judgment_raw_hash_overlap": 0,
+  "excluded_nonjudgment_metadata": [
+    "A__read-attestation.json",
+    "B__read-attestation.json"
+  ]
+}

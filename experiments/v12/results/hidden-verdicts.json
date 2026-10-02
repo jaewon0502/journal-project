@@ -1,0 +1,218 @@
+[
+  {
+    "packet_id": "r_07eb50efc7f267d6",
+    "split": "heldout",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_1a791687e070e978",
+    "split": "heldout",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_1bf4db00e52b6121",
+    "split": "heldout",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_207817628140f63e",
+    "split": "heldout",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_292aac8413f81ce6",
+    "split": "heldout",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_3359d46b5e1b5930",
+    "split": "development",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_342849133e6d3525",
+    "split": "heldout",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_36ac16ef15a87853",
+    "split": "development",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_441e589c9e3f14db",
+    "split": "development",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_47d5e21368d56f63",
+    "split": "heldout",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_4d0570f287c7ffd1",
+    "split": "development",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_5802ee0591ba9a88",
+    "split": "development",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_6123c6d350b259e7",
+    "split": "development",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_6b77a0cfe51b944f",
+    "split": "development",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_7b4fbf47f2075766",
+    "split": "development",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_8930990df190b712",
+    "split": "development",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_92f23232f9363bf1",
+    "split": "development",
+    "method": "H1",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_b30dd2994b49387e",
+    "split": "heldout",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_c773c403d775f43e",
+    "split": "development",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_c9be8e360a975c24",
+    "split": "heldout",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_d7fd580c597007f4",
+    "split": "heldout",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_e8357f043a9439c8",
+    "split": "heldout",
+    "method": "H1",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  },
+  {
+    "packet_id": "r_f31e61ee24d704bc",
+    "split": "development",
+    "method": "H0",
+    "role": "normal",
+    "expected_verdict": "faithful",
+    "actual": "faithful",
+    "patch_count": 0
+  },
+  {
+    "packet_id": "r_f797304555860ca9",
+    "split": "heldout",
+    "method": "H0",
+    "role": "mutant",
+    "expected_verdict": "inconsistent",
+    "actual": "inconsistent",
+    "patch_count": 1
+  }
+]

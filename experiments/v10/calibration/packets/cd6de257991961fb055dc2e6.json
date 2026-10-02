@@ -1,0 +1,15 @@
+{
+  "packet_id": "cd6de257991961fb055dc2e6",
+  "language": "EN",
+  "source": "The analyst said the increase was exactly 0.02 units.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The unrounded measured increase was 0.016 units. The supplied evidence contains no recording or transcript of the analyst."
+    }
+  ],
+  "target_question": "Does the final note distinguish the reported exact 0.02 statement from the measured 0.016 increase, without claiming to verify the speech?",
+  "candidate": "The analyst said the increase was exactly 0.02 units.",
+  "delivery": "The article reports the analyst as saying exactly 0.02. E1 gives 0.016; the values differ. No speech recording is supplied.",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events."
+}

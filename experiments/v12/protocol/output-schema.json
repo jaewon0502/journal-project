@@ -1,0 +1,9 @@
+{
+  "input_id": "copy supplied opaque id",
+  "findings": [{"id":"F1","kind":"omission|inaccuracy|uncertain","article_anchor":"exact existing span, or empty for absence","evidence":[{"document_id":"supplied id","paragraph_id":"supplied id","quote":"short exact span"}],"description":"one atomic finding","question_ids":["Q1"],"materiality":"why this affects the requested understanding","status":"supported|uncertain","limits":"scope or none"}],
+  "patches": [{"id":"P1","finding_ids":["F1"],"before":"exact uniquely occurring original span","after":"replacement; may preserve before and append a new sentence","evidence_ids":["document_id:paragraph_id"],"justification":"why this exact change is warranted; distinguish evidence-backed correction from preservation"}],
+  "question_answers": [{"question_id":"Q1","answer":"evidence-bounded response; distinguish original article and proposed change","evidence_ids":["document_id:paragraph_id"],"remaining_unknown":"or none"}],
+  "unanswered_scope": ["unanswerable or unprocessed components; do not invent evidence"],
+  "no_change_reason": "if patches empty, explain why; otherwise empty",
+  "declared_limits": ["limits of supplied evidence and capture scope"]
+}

@@ -1,0 +1,7 @@
+{
+  "created_utc": "2026-10-02T02:40:25.177254+00:00",
+  "source_packet_sha256": "6f8aa65826d40b3fbd5cb5df52f95cc0ca5a8ea611a229de6aca3f8bc09aff32",
+  "writer_input_sha256": "ea8dac848ecf058fa64b9210cba1d41d13fb25dd59d4461a6d303be93e5de158",
+  "no_response_length_cap": true,
+  "source_first_reference_not_in_input": true
+}

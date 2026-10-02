@@ -1,0 +1,53 @@
+{
+  "module": "v12-supplementary-scope",
+  "locked_at": "2026-10-02T01:35:11.546497+00:00",
+  "phase": "pre-generation",
+  "final_method": "B-v2; no further prompt adaptation",
+  "files": [
+    {
+      "path": "journal-v12/supplementary/scope/protocol.md",
+      "sha256": "8671c69f87f3b89834bf7885188cd281acc0cb2c0bbf4fd9cb0f9ba157b98b01"
+    },
+    {
+      "path": "journal-v12/supplementary/scope/input-manifest.json",
+      "sha256": "a23f0ecc8415879c987c37ed1d5fd27137608c7f7d113d40d9e97fa11be20a57"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/allocation-map.json",
+      "sha256": "6170dcc228d74d5260866116db8279b578b5746c2c5fced26f90dc4642f587b1"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/source-manifest.json",
+      "sha256": "604cf3e817137b657ce79b474c2babe601e2b9a97ccda63da4b11e3ca01ad780"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/EN-DEV-S-expanded.txt",
+      "sha256": "3305bcc1bb9f72ba1938db0ba466333c1cc0bc34e00434c8510b1a8e702787e0"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/fb688b6b2fd47574538e180e.json",
+      "sha256": "a1e9dfbfcb02d300429d2a34a0f625b05aa975a7500690be7cf5255ca5d0e060"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/3b83a46307a5bf7ab93396fd.json",
+      "sha256": "b64aaa9ae91cbd9f2530bf15d79678d92b697f706c2a05e9b4c8d32c3ea51109"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/72560b94734c8104ad67f0ca.json",
+      "sha256": "dabde0419dddc1908b7053690d8b89b555512eaf7b2623fc6a8133afbb43a800"
+    },
+    {
+      "path": "journal-v12-private/supplementary/scope/writer-inputs/351bb0a5f134b921d2373423.json",
+      "sha256": "e5692f1dda984476311eca3aba799fcb5853e8b68c5bd9084aeaa00868cf8b3c"
+    }
+  ],
+  "validation": {
+    "four_inputs": true,
+    "two_repeats_per_scope": true,
+    "same_article": true,
+    "old_primary_exact": true,
+    "expanded_original_prefix_exact": true,
+    "all_other_prompt_fields_exact_except_opaque_id": true,
+    "no_writer_outputs_read_or_generated": true
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "packet_id": "5f6bc52b6ff8990e2bd897b8",
+  "language": "EN",
+  "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+  "actual_output": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+  "existing_receipt": {
+    "actual_result_sha256": "18f62db7b0e84879d9b95183645f57607e27653554418f2aee1dc0cad56c19cb",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1",
+            "p2"
+          ],
+          "reason": "component_patch_rejected",
+          "state": "rolledback"
+        }
+      ],
+      "dependency_sha256": "3c8cffe26c8814b0c99697f7d2e7a4e1dbfeb3fc66cb9eb653c313cb2309daca",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "978a340243b61f2a1d1e33f7ca1d3289f58a9842ed967a800c17a86c5e75b326"
+      ],
+      "patch_audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "978a340243b61f2a1d1e33f7ca1d3289f58a9842ed967a800c17a86c5e75b326",
+          "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+          "next_selected_ids": [],
+          "released": true,
+          "reviewed_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [
+      {
+        "audit_sha256": "40961b21a491c609b4b4fd89f82d7ddb7fe941c3ed57414d142aba12aeb12d6d",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E4"
+        ],
+        "pointer": "/preexisting_findings/0",
+        "state": "resolution_not_adjudicated"
+      }
+    ],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "policy": "selective",
+    "proposal_sha256": "467667bf8fae5000d0e3071ef0d8ae3ab4f0cbebbeaa82eab73b70e902110290",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [
+      "p1",
+      "p2"
+    ],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+    "status": "rolledback"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.",
+      "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd"
+    },
+    {
+      "id": "E2",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.",
+      "sha256": "b7ce86ef7dc97c03cdddf94c25d74784d772f20d79950bb9d05e0ce38253522f"
+    },
+    {
+      "id": "E4",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts.",
+      "sha256": "3368116d4d9bf54a7a66955df872cdf8de7dbb2998b2361497350763d8cdcad6"
+    }
+  ],
+  "supplied_issue_assertions": [
+    {
+      "id": "q1",
+      "kind": "question_comparison",
+      "review_status": "reported_unresolved",
+      "output_span": {
+        "start_byte": 56,
+        "end_byte": 58,
+        "text": "3%",
+        "sha256": "d1e1d77ec17c3b55a3a1c4fd8458c91ece57671e1e49964e8549eb7d3f10e741"
+      },
+      "evidence_span": {
+        "evidence_id": "E1",
+        "start_byte": 0,
+        "end_byte": 132,
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.",
+        "sha256": "2e6cc123692db7e41dbb93aaede79c56903b138ade050a79b9924370716510cd"
+      }
+    },
+    {
+      "id": "q2",
+      "kind": "question_comparison",
+      "review_status": "reported_unresolved",
+      "output_span": {
+        "start_byte": 78,
+        "end_byte": 84,
+        "text": "Friday",
+        "sha256": "e21f3f372a46d4be7b49f6809fc91baefeadae004af06485518e124a142c0271"
+      },
+      "evidence_span": {
+        "evidence_id": "E2",
+        "start_byte": 0,
+        "end_byte": 126,
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.",
+        "sha256": "b7ce86ef7dc97c03cdddf94c25d74784d772f20d79950bb9d05e0ce38253522f"
+      }
+    }
+  ],
+  "scope": "Already exposed authored synthetic regression; supplied issues are not gold and do not establish complete coverage.",
+  "displayed_annotation": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 1 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Candidate SHA-256: 508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f. Receipt SHA-256: 852d6f7371d5cb8e1dfaf4cbbd5bd8a1f49fe2d5e7988931d0b649f2ab21eaa4.\n\n[\"q1\"] Question comparison\nOutput quote: \"3%\"\nEvidence quote: \"The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim.\n\n[\"q2\"] Question comparison\nOutput quote: \"Friday\"\nEvidence quote: \"The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence.\"\nSupplied review reports this issue unresolved; the sidecar does not independently verify the claim."
+}

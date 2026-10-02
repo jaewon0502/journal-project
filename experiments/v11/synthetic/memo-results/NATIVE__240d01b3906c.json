@@ -1,0 +1,9 @@
+{
+  "input_id": "240d01b3906c",
+  "text": "The displayed local output is unchanged. The proposed replacements of “3%” with “3 percentage points” and “Friday” with “Saturday” were both held because the patches or their dependencies were uncertain. Neither was selected or applied; the process abstained without local release. Two meaning issues therefore remain in the displayed text: within the supplied fictional scenario, the change from 21% to 24% is 3 percentage points, and the stipulated meeting day is Saturday, while the output still says “3%” and “Friday.” The hold decision does not resolve those issues or establish factual correctness.",
+  "limitations": [
+    "This note describes only the supplied local output, receipt, and bounded scenario evidence; it is not an independent adjudication or human fact-check.",
+    "Question resolution was not adjudicated, overall factual accuracy was not established, and no external publication occurred."
+  ],
+  "declared_scope": "displayed_local_output"
+}

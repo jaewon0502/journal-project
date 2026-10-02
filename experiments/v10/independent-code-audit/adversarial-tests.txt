@@ -1,0 +1,17 @@
+test_1_unicode_length_changes_and_atomic_dependency (__main__.IndependentTests.test_1_unicode_length_changes_and_atomic_dependency) ... ok
+test_2_source_only_dependencies_and_preexisting_prose (__main__.IndependentTests.test_2_source_only_dependencies_and_preexisting_prose) ... ok
+test_3_reduced_candidate_stale_then_fresh_audits (__main__.IndependentTests.test_3_reduced_candidate_stale_then_fresh_audits) ... ok
+test_4_json_field_type_tampering_should_be_rejected (__main__.IndependentTests.test_4_json_field_type_tampering_should_be_rejected) ... FAIL
+
+======================================================================
+FAIL: test_4_json_field_type_tampering_should_be_rejected (__main__.IndependentTests.test_4_json_field_type_tampering_should_be_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/historical-research/journal-v10/independent-code-audit/test_independent.py", line 93, in test_4_json_field_type_tampering_should_be_rejected
+    self.assertFalse(accepted, 'verify_delivery accepted modified JSON field types')
+AssertionError: True is not false : verify_delivery accepted modified JSON field types
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+FAILED (failures=1)

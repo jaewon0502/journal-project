@@ -1,0 +1,146 @@
+[
+  {
+    "path": "writer-inputs/a1053a9afe9d33763cc394d6.json",
+    "sha256": "1f7d53e842d0ea93c57cd1342edaa461d800f30fb1b4d569067353785aca0042",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "writer-results/a1053a9afe9d33763cc394d6.json",
+    "sha256": "41c745bab7d5d1e12c356963df1749e97119dcded63c07462a449b4b6b162dbb",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "reader-inputs/911fd3144434ecb5099f634f.json",
+    "sha256": "5e45c92e8533f20c937237f7360a9e447e43984714a9332ff59c5bff59514319",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "reader-results/A__911fd3144434ecb5099f634f.json",
+    "sha256": "a9addf5db7a8d53b095eef04b0070a0fd43e53889ad216344ee5f9c517d37510",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "reader-results/B__911fd3144434ecb5099f634f.json",
+    "sha256": "4e50059c924be12fad850d2bf682eb485ace2560fb53b06e1ba87fd9e45e4168",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "final-inputs/f12a64e6ead7b66dbfa6f9ac.json",
+    "sha256": "26808e8a57033408d8f5f860cd04d2cbbfec845ea4970a254fbb843dc7e54d6d",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "final-results/f12a64e6ead7b66dbfa6f9ac.json",
+    "sha256": "6db0ea0284323c7c424c39486ad943c6cd71650acceab68560c18a507c4acd36",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "delivered/f12a64e6ead7b66dbfa6f9ac.json",
+    "sha256": "75ecfdefbef10142d3c19a9d4ffed24b105c6ecc7ea48aef3b01746405766aaa",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "KO011"
+  },
+  {
+    "path": "writer-inputs/532b58871285554912f8650f.json",
+    "sha256": "d0a3844e71daffff7448167a24482dd3c8997e85e099dc4a1cbdc70c48e48136",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "writer-results/532b58871285554912f8650f.json",
+    "sha256": "71d6cd85b38e3f4c81046fd4fd485bce9732c3a4f00776275e816634ffc7ef61",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "reader-inputs/4364e49645812e095edaf93a.json",
+    "sha256": "13410c1657b0b93a739a411bf60ae45ec9829f57c7b5068dda0babf482ec8873",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "reader-results/A__4364e49645812e095edaf93a.json",
+    "sha256": "b02814f68ee98ee8082785260b3364fafd438cf80f8308f07ff147f5ae4f46b8",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "reader-results/B__4364e49645812e095edaf93a.json",
+    "sha256": "009eba3f73cf712a5789a24b1d74c2292c323aed8e1a67e654b488cb42594aa2",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "final-inputs/6a36b158ef932510bd0d4d6d.json",
+    "sha256": "d6d2cb7f5e60e7d714a2e7b94dfd216fe21f86482785b88c3e3dcb46acb9b637",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "final-results/6a36b158ef932510bd0d4d6d.json",
+    "sha256": "1b3009bfac4a8fbe76d55c56d25c930465380550dd2ddacf595b5fe6b1e32824",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "delivered/6a36b158ef932510bd0d4d6d.json",
+    "sha256": "1f8e0c09669a826d00eb1d7a426ee6a64daeb6bd411297e117d0f4c925e07889",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "EN023"
+  },
+  {
+    "path": "writer-inputs/708e96d9b04de12811d56d64.json",
+    "sha256": "bb839d0f25468da630275209ceb54f2db29056a1d61400e12c9987529ada7b73",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "writer-results/708e96d9b04de12811d56d64.json",
+    "sha256": "df33bb9ffa1a110d95f8e13cd3af893e4ec0977eacd5d72a9a8c9212ce10fcd0",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "reader-inputs/48b2b0fc8fcb4e7e8b865f5f.json",
+    "sha256": "c88ea6e3dcf2a4626b170f8061a5c97467b9c1f181bb2ea4bef40768258c3a6b",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "reader-results/A__48b2b0fc8fcb4e7e8b865f5f.json",
+    "sha256": "7bf9cc4824e998acd1b3e5c7e5032c6031c5dd0ccf1af2ecb81b338acca8e5df",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "reader-results/B__48b2b0fc8fcb4e7e8b865f5f.json",
+    "sha256": "2a19a046c428f7481c3d895b1e73baf97c68fad5b13b3eb2d0d5cee3563fd4b7",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "final-inputs/027e93129b768c09aa3d809b.json",
+    "sha256": "5a8aad39af38e6caa609a7b23c4f37568a881da656e01ba6d47dca69f4fc9677",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "final-results/027e93129b768c09aa3d809b.json",
+    "sha256": "afc507f55eaa3b46cf7cd19a4cadce9675c360226b15d8d1555b0a531a236974",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  },
+  {
+    "path": "delivered/027e93129b768c09aa3d809b.json",
+    "sha256": "2b1d5b777868e927a5cda3a625168eca2505fdf3a3479a49a5b79a4bb2ec7218",
+    "reason": "Natural source/raw inventory or audit anchors retained privately; not redistributed.",
+    "origin": "NASA2024"
+  }
+]

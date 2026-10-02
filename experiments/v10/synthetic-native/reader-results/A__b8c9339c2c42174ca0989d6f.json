@@ -1,0 +1,36 @@
+{
+  "packet_id": "b8c9339c2c42174ca0989d6f",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+    "위원회 발표문: 모든 신청자가 탈락했다는 소문은 사실이 아닙니다. 5명이 합격했습니다.",
+    "두 내용과 반박 관계가 E1에 부합하므로 변경을 적용하지 않았습니다."
+  ],
+  "reason": "The unchanged sentence and separate note correctly distinguish the proposition denied by the committee from its own affirmative claim. E1 supports both the attribution and rebuttal relation.",
+  "additional_meaning_losses": [],
+  "limitations": [
+    "Authored announcement only; this assesses accurate report of the committee statement, not independent applicant outcomes. Single-sentence source."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "\"모든 신청자가 탈락했다\"는 소문을 반박하며",
+      "meaning": "Retains universal-failure proposition as denied rumor, not committee endorsement."
+    },
+    {
+      "source_anchor": "5명이 합격했다고 밝혔다.",
+      "meaning": "Retains committee affirmative claim of five successes and its relation to the denial."
+    }
+  ],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [],
+  "new_findings": [],
+  "admission": "approved"
+}

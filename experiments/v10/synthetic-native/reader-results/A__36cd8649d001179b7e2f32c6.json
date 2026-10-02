@@ -1,0 +1,59 @@
+{
+  "packet_id": "36cd8649d001179b7e2f32c6",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "actual_patch_state": "changed",
+  "delivery_consistency": "fail",
+  "original_statement_retention": "removed_or_replaced",
+  "targeted_question_resolution": "unresolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "은행의 예대금리차는 1.20%다.",
+    "은행의 예대금리차는 1.20%포인트다.",
+    "예대금리차는 4.20% - 3.00% = 1.20%포인트다.",
+    "이 JSON에는 단위 수정 제안만 기록했으며, 기사 원문이나 발행본에 실제 적용한 것은 아니다. 실제 반영 여부는 확인되지 않았다."
+  ],
+  "reason": "The body correctly fixes the unit and preserves magnitude. The target also requires accurate implementation reporting: although no publication is established, the supplied candidate demonstrably implements p1. Saying this JSON only records a proposal and implementation is unconfirmed misdescribes that candidate. Truth label concerns the unit, not the contradictory delivery assertion.",
+  "additional_meaning_losses": [],
+  "limitations": [
+    "No evidence of actual publication; candidate construction and publication are distinct. Single-sentence source."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "예대금리차는 1.20%",
+      "meaning": "Retains the bank spread and numerical magnitude, replacing the erroneous percent unit."
+    }
+  ],
+  "patch_decisions": [
+    {
+      "id": "p1",
+      "decision": "approved",
+      "reason": "E1 explicitly supports 1.20 percentage points; replacing the percent unit is justified.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Original uses percent for a difference between percent rates; this is fixed in the candidate.",
+      "source_anchor": "1.20%",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [
+    {
+      "id": "N1",
+      "description": "Separate note says the JSON records only a proposal and implementation is unknown, although its candidate visibly contains the correction. The claim of no published application alone is not the error.",
+      "relation": "offending",
+      "patch_ids": [],
+      "location": "reader_note"
+    }
+  ],
+  "admission": "rejected"
+}

@@ -1,0 +1,795 @@
+{
+  "scope": "Four already exposed synthetic variants; supplied issue selection deliberately fixed from known failures, not fresh generalization",
+  "native_writing_outputs": 0,
+  "new_deterministic_sidecars": 4,
+  "reader_judgments": 16,
+  "conditions": {
+    "STATUS_ONLY": {
+      "judgments": 8,
+      "questions": {
+        "state_preserved": {
+          "yes": 8
+        },
+        "concrete_issue_recoverable": {
+          "no": 6,
+          "not_applicable": 2
+        },
+        "overclaim": {
+          "no": 8
+        },
+        "noop_overcorrection": {
+          "no": 2,
+          "not_applicable": 6
+        }
+      },
+      "recovery_basis": {
+        "common_input_only": 6,
+        "not_applicable": 2
+      },
+      "missing_issue_references": 8,
+      "additional_concerns": []
+    },
+    "STATUS_PLUS_LINKED_ISSUES": {
+      "judgments": 8,
+      "questions": {
+        "state_preserved": {
+          "yes": 8
+        },
+        "concrete_issue_recoverable": {
+          "not_applicable": 2,
+          "yes": 6
+        },
+        "overclaim": {
+          "no": 8
+        },
+        "noop_overcorrection": {
+          "no": 2,
+          "not_applicable": 6
+        }
+      },
+      "recovery_basis": {
+        "annotation": 6,
+        "not_applicable": 2
+      },
+      "missing_issue_references": 0,
+      "additional_concerns": []
+    }
+  },
+  "disagreements": [],
+  "records": [
+    {
+      "mapping": {
+        "input_id": "79814d8015a14d2c85d0e553",
+        "case_id": "bd569abe2ca0",
+        "packet_id": "8cd4b2e9c6e904f8b5e99194",
+        "condition": "STATUS_ONLY",
+        "language": "KO",
+        "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+        "packet_sha256": "952bdcae77f8ee17ec3bfe1d5fa6ae7be8aa30ab276035cf8143b90e2169a667",
+        "annotation_sha256": "9e39a54035f4cca5e061b4421009d88c7d57fc80a2723f365b014829cccabb26",
+        "issue_count": 1
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "8cd4b2e9c6e904f8b5e99194",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+            "reason": "The output applies the percentage-point change while retaining Friday. The receipt selects p1 and rejects p2; the annotation accurately reports partial local application and zero held patches."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다.",
+            "reason": "The annotation does not identify q1, the retained 금요일 span, or the supplied Saturday schedule evidence. These can be reconstructed from the common packet only."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "적용 1개, 제외·원복 1개",
+            "reason": "This is partial application with a supplied unresolved issue, not an unchanged empty-issue no-op."
+          }
+        },
+        "missing_issue_ids": [
+          "q1"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "6e85b7798ead110820bd4e48a9071e215832da540b9d6d64c065f46b327d8b70"
+    },
+    {
+      "mapping": {
+        "input_id": "79814d8015a14d2c85d0e553",
+        "case_id": "bd569abe2ca0",
+        "packet_id": "8cd4b2e9c6e904f8b5e99194",
+        "condition": "STATUS_ONLY",
+        "language": "KO",
+        "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+        "packet_sha256": "952bdcae77f8ee17ec3bfe1d5fa6ae7be8aa30ab276035cf8143b90e2169a667",
+        "annotation_sha256": "9e39a54035f4cca5e061b4421009d88c7d57fc80a2723f365b014829cccabb26",
+        "issue_count": 1
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "8cd4b2e9c6e904f8b5e99194",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+            "reason": "The receipt selects p1 and rejects p2. Output changes the percentage wording but retains Friday. The annotation accurately describes partial local application and its counts."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개",
+            "reason": "The annotation does not quote or identify Friday or the E2 Saturday evidence. Its generic unresolved-reference notice is insufficient; q1 is recoverable only from the common input."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "The annotation limits approval to the local review gate and explicitly withholds factual verification and question adjudication. Any quoted concern is attributed to the supplied review, not independently certified."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [
+          "q1"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "b94e40b340a82d96977d3272ee1a48a84a57ac983a48d485ed007450b619de94"
+    },
+    {
+      "mapping": {
+        "input_id": "79814d8015a14d2c85d0e553",
+        "case_id": "bd569abe2ca0",
+        "packet_id": "da9f0cdd844e21026a156173",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "KO",
+        "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+        "packet_sha256": "d6d37538eb6c0c532d0ab153e411c4d3876559f9dc36557c9582707e511264b8",
+        "annotation_sha256": "c1f3cc87847d2d41e5dd021168624df7ed02405566eb1eb07f115b7a8f50113f",
+        "issue_count": 1
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "da9f0cdd844e21026a156173",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+            "reason": "The output applies the percentage-point change while retaining Friday. The receipt selects p1 and rejects p2; the annotation accurately reports partial local application and zero held patches."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"q1\"] 질문 비교; 출력 인용: \"금요일\"",
+            "reason": "The annotation quotes the retained Friday span and supplied evidence saying the fictional meeting schedule is Saturday. It attributes unresolved status to the supplied review and disclaims independent verification."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "적용 1개, 제외·원복 1개",
+            "reason": "This is partial application with a supplied unresolved issue, not an unchanged empty-issue no-op."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "f0d6e0eb191fd77836435e93ff3475fce27dc9a6150ec538d7bbf9921bae706a"
+    },
+    {
+      "mapping": {
+        "input_id": "79814d8015a14d2c85d0e553",
+        "case_id": "bd569abe2ca0",
+        "packet_id": "da9f0cdd844e21026a156173",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "KO",
+        "common_input_sha256": "251ddfa99737a098ed14c091ab553bd9be743d1f3578d617aa5d256b36703ce5",
+        "packet_sha256": "d6d37538eb6c0c532d0ab153e411c4d3876559f9dc36557c9582707e511264b8",
+        "annotation_sha256": "c1f3cc87847d2d41e5dd021168624df7ed02405566eb1eb07f115b7a8f50113f",
+        "issue_count": 1
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "da9f0cdd844e21026a156173",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 1개, 제외·원복 1개, 보류 0개.",
+            "reason": "The receipt selects p1 and rejects p2. Output changes the percentage wording but retains Friday. The annotation accurately describes partial local application and its counts."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"q1\"] 질문 비교; 출력 인용: \"금요일\"",
+            "reason": "The annotation identifies the retained Friday span and quotes the supplied evidence stipulating Saturday. It attributes unresolved status to the supplied review and disclaims independent verification."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "The annotation limits approval to the local review gate and explicitly withholds factual verification and question adjudication. Any quoted concern is attributed to the supplied review, not independently certified."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "6a1126aa5e75d16a437a0bc9077558def4af5377627fda72752359fe19e716a5"
+    },
+    {
+      "mapping": {
+        "input_id": "0ca01f1b92bde49c1f37d9e8",
+        "case_id": "d6736be620d4",
+        "packet_id": "d26a4fb780ef5a629b9831e7",
+        "condition": "STATUS_ONLY",
+        "language": "EN",
+        "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+        "packet_sha256": "d520d12e511a491a987a0aa8eadedda987c39e619a1f796ac27bfa602131ccf4",
+        "annotation_sha256": "88be9fc286bb8a495d986e0c04211cdfb5654cf5f7704d06a298ca0a40f1cd65",
+        "issue_count": 2
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "d26a4fb780ef5a629b9831e7",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+            "reason": "Source and actual output are identical; the receipt records rolledback with p1 and p2 rejected and no selected patches. The annotation preserves that state and local-only release."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "There are 1 finding references with unadjudicated resolution; this does not establish that an error remains.",
+            "reason": "Neither the specific 3% and Friday output spans nor their supplied percentage-point and Saturday evidence is identified in the annotation. The common packet supplies q1 and q2, but the annotation does not."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation describes local review status and explicitly withholds truth and resolution claims. Quoted concerns, where present, remain attributed review assertions."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "excluded or rolled back 2",
+            "reason": "The output is unchanged due to rollback and has supplied unresolved issues; this is not the empty-issue no-op case."
+          }
+        },
+        "missing_issue_ids": [
+          "q1",
+          "q2"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "4549ef6065f4fcc9b0a77494fc05e63f91404c1241e28c59466e95a9f2ae4ed6"
+    },
+    {
+      "mapping": {
+        "input_id": "0ca01f1b92bde49c1f37d9e8",
+        "case_id": "d6736be620d4",
+        "packet_id": "d26a4fb780ef5a629b9831e7",
+        "condition": "STATUS_ONLY",
+        "language": "EN",
+        "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+        "packet_sha256": "d520d12e511a491a987a0aa8eadedda987c39e619a1f796ac27bfa602131ccf4",
+        "annotation_sha256": "88be9fc286bb8a495d986e0c04211cdfb5654cf5f7704d06a298ca0a40f1cd65",
+        "issue_count": 2
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "d26a4fb780ef5a629b9831e7",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+            "reason": "Output equals source; neither proposed patch is selected and both are rejected in the receipt. In context, no patches present refers to their absence from the local output."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "There are 1 finding references with unadjudicated resolution",
+            "reason": "The annotation gives only a reference count and general uncertainty. It does not identify 3% versus E1 or Friday versus E2; both concerns require the common input."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation reports local gate release and expressly avoids factual verification, adjudication, and external publication. Attribution of supplied unresolved concerns is not certification of their truth."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [
+          "q1",
+          "q2"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "77ac291e1c5c75baa8a190931e18f6c8f27d251014509a3197beab869810b42b"
+    },
+    {
+      "mapping": {
+        "input_id": "0ca01f1b92bde49c1f37d9e8",
+        "case_id": "d6736be620d4",
+        "packet_id": "5f6bc52b6ff8990e2bd897b8",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "EN",
+        "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+        "packet_sha256": "97edd5fe8c678fe24ba11aba0565bfcf26cc28b4d36d912790d694d19360e3b2",
+        "annotation_sha256": "bcddb5dab77ee2cf726fd29e51fb858840802614758dea01598dc5dff0b511e7",
+        "issue_count": 2
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "5f6bc52b6ff8990e2bd897b8",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+            "reason": "Source and actual output are identical; the receipt records rolledback with p1 and p2 rejected and no selected patches. The annotation preserves that state and local-only release."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"q1\"] Output quote: \"3%\"; [\"q2\"] Output quote: \"Friday\"",
+            "reason": "The annotation pairs 3% with the supplied 21%-to-24%/3-percentage-point evidence and Friday with the supplied Saturday schedule evidence. Both unresolved statuses are attributed to supplied review."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation describes local review status and explicitly withholds truth and resolution claims. Quoted concerns, where present, remain attributed review assertions."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "excluded or rolled back 2",
+            "reason": "The output is unchanged due to rollback and has supplied unresolved issues; this is not the empty-issue no-op case."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "63a94d3912ec3069a2ccca0bf8bdd288033cbbb14c8f328ae11ae87187eb63d3"
+    },
+    {
+      "mapping": {
+        "input_id": "0ca01f1b92bde49c1f37d9e8",
+        "case_id": "d6736be620d4",
+        "packet_id": "5f6bc52b6ff8990e2bd897b8",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "EN",
+        "common_input_sha256": "d503787a409e28ef1e47cb442d2ed722d0238ce00808aadfd8c6c05704139c2e",
+        "packet_sha256": "97edd5fe8c678fe24ba11aba0565bfcf26cc28b4d36d912790d694d19360e3b2",
+        "annotation_sha256": "bcddb5dab77ee2cf726fd29e51fb858840802614758dea01598dc5dff0b511e7",
+        "issue_count": 2
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "5f6bc52b6ff8990e2bd897b8",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+            "reason": "Output equals source; neither proposed patch is selected and both are rejected in the receipt. In context, no patches present refers to their absence from the local output."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"q1\"] Output quote: \"3%\"; [\"q2\"] Output quote: \"Friday\"",
+            "reason": "Both output spans are quoted and paired with their supplied evidence: E1 describes a 3-percentage-point difference and E2 stipulates Saturday. Each is explicitly reported as an unresolved review claim."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation reports local gate release and expressly avoids factual verification, adjudication, and external publication. Attribution of supplied unresolved concerns is not certification of their truth."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "c823b91e784c827131e791d2df46667c4f433ca88a44d47a081329e0a7c8d89f"
+    },
+    {
+      "mapping": {
+        "input_id": "e7cb04f0501bbb7c3a791efa",
+        "case_id": "2351c7060c84",
+        "packet_id": "23c079601c067d9e3a4da925",
+        "condition": "STATUS_ONLY",
+        "language": "KO",
+        "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+        "packet_sha256": "6cf1b5f4720dbeab2efe544b2d43451f666ecd1a87d58dcb67b33d8a0b861ee4",
+        "annotation_sha256": "39b95ed05946ce2348e9509e6b09659928ee2c56fae3f64d12425d189b3c68d3",
+        "issue_count": 1
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "23c079601c067d9e3a4da925",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 2개, 제외·원복 0개, 보류 0개.",
+            "reason": "The output changes the percentage-point wording and meeting day while preserving the attendance-total sentence. The receipt selects p1 and p2 and the annotation accurately describes both patches as locally applied."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개가 있으며, 잔존 오류 확정은 아닙니다.",
+            "reason": "The annotation only gives an unadjudicated reference count and generic uncertainty. It does not identify a1, the unchanged 8-and-5 total-14 sentence, or E3. Those details are recoverable only from the common packet."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "적용 2개",
+            "reason": "This is an applied case with a supplied unresolved issue, not an empty-issue unchanged no-op."
+          }
+        },
+        "missing_issue_ids": [
+          "a1"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "4806c3fdace8fc047a7b714ea90c648bf4c79418126c4a5063b25248e49f0842"
+    },
+    {
+      "mapping": {
+        "input_id": "e7cb04f0501bbb7c3a791efa",
+        "case_id": "2351c7060c84",
+        "packet_id": "23c079601c067d9e3a4da925",
+        "condition": "STATUS_ONLY",
+        "language": "KO",
+        "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+        "packet_sha256": "6cf1b5f4720dbeab2efe544b2d43451f666ecd1a87d58dcb67b33d8a0b861ee4",
+        "annotation_sha256": "39b95ed05946ce2348e9509e6b09659928ee2c56fae3f64d12425d189b3c68d3",
+        "issue_count": 1
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "23c079601c067d9e3a4da925",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 2개, 제외·원복 0개, 보류 0개.",
+            "reason": "Both patches are recorded as applied. Output changes the percentage-point wording and meeting day, while the attendee sentence remains unchanged; the annotation reports local application without asserting complete factual correction."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "no",
+            "short_anchor": "해결 여부를 판정하지 않은 감사 참조 1개",
+            "reason": "An unadjudicated reference count does not identify the attendee sentence or E3 evidence. The a1 concern is recoverable from the common input only, not from this annotation."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "The annotation limits approval to the local review gate and explicitly withholds factual verification and question adjudication. Any quoted concern is attributed to the supplied review, not independently certified."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [
+          "a1"
+        ],
+        "recovery_basis": "common_input_only",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "39c671993a61b20f5f83ae33e87470b6f17728ae7ad1817bad7ebf5f2073ba27"
+    },
+    {
+      "mapping": {
+        "input_id": "e7cb04f0501bbb7c3a791efa",
+        "case_id": "2351c7060c84",
+        "packet_id": "e6d584e049f6810a994d2803",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "KO",
+        "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+        "packet_sha256": "c653532c37df973e84e01bf25d495ac74a63ef7e8c77c1b3105208b589e60238",
+        "annotation_sha256": "be361504e6c11b9418e518d75566b5326d8a35c90dbe3148894d9db0f9c0da30",
+        "issue_count": 1
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "e6d584e049f6810a994d2803",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 2개, 제외·원복 0개, 보류 0개.",
+            "reason": "The output changes the percentage-point wording and meeting day while preserving the attendance-total sentence. The receipt selects p1 and p2 and the annotation accurately describes both patches as locally applied."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"a1\"] 산술; 출력 인용: \"참석자는 8명과 5명으로 총 14명이다.\"",
+            "reason": "The annotation quotes the full unchanged attendance-total sentence and E3 evidence describing disjoint counts 8 and 5 and total 14. It explicitly attributes unresolved status to the supplied review, rather than independently certifying it."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "Local review approval is distinguished from factual verification and question resolution; the annotation does not claim external publication or that all issues were resolved."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "적용 2개",
+            "reason": "This is an applied case with a supplied unresolved issue, not an empty-issue unchanged no-op."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "f91d9321e6507909ce81d91c40c63028ab57018a0093c3f927eae8dbcec56bf4"
+    },
+    {
+      "mapping": {
+        "input_id": "e7cb04f0501bbb7c3a791efa",
+        "case_id": "2351c7060c84",
+        "packet_id": "e6d584e049f6810a994d2803",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "KO",
+        "common_input_sha256": "431cbba80ab2616a344a782c0207a1ccfc08c7629f3ebcdf0d6ebee53706b442",
+        "packet_sha256": "c653532c37df973e84e01bf25d495ac74a63ef7e8c77c1b3105208b589e60238",
+        "annotation_sha256": "be361504e6c11b9418e518d75566b5326d8a35c90dbe3148894d9db0f9c0da30",
+        "issue_count": 1
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "e6d584e049f6810a994d2803",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "적용 2개, 제외·원복 0개, 보류 0개.",
+            "reason": "Both patches are recorded as applied. Output changes the percentage-point wording and meeting day, while the attendee sentence remains unchanged; the annotation reports local application without asserting complete factual correction."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "yes",
+            "short_anchor": "[\"a1\"] 산술; 참석자는 8명과 5명으로 총 14명이다.",
+            "reason": "The annotation quotes the exact attendee sentence and the supplied E3 evidence concerning disjoint counts 8 and 5 and total 14. It explicitly labels this an unresolved supplied-review claim."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "사실의 진위는 독립적으로 검증되지 않았고 질문 해결 여부는 판정하지 않았습니다.",
+            "reason": "The annotation limits approval to the local review gate and explicitly withholds factual verification and question adjudication. Any quoted concern is attributed to the supplied review, not independently certified."
+          },
+          "noop_overcorrection": {
+            "answer": "not_applicable",
+            "short_anchor": "The receipt is not a no-op.",
+            "reason": "The no-op overcorrection question applies only to unchanged no-op output with an empty supplied issue list; this packet does not meet that condition."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "annotation",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "e3033a8de35758f5b3d611e8b206249776dee3fcca58406308d6f4c9008c9cca"
+    },
+    {
+      "mapping": {
+        "input_id": "c4b84e7013df1a8289b4df32",
+        "case_id": "88b1c16a46ec",
+        "packet_id": "d8ae4cb0628b1d4785202a8a",
+        "condition": "STATUS_ONLY",
+        "language": "EN",
+        "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+        "packet_sha256": "145cf29341fc98ebf27bf105ec6b9f8e2e5e7f9b4d4d5b7df7cca281357843bd",
+        "annotation_sha256": "02f698972286a89bb8d701f32df0a17496dbacdab10ac31df5f9393677a84217",
+        "issue_count": 0
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "d8ae4cb0628b1d4785202a8a",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "Source and actual output are identical; the receipt records no-op, zero selected/rejected/held patches and local release. The annotation preserves these facts."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "not_applicable",
+            "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+            "reason": "The supplied issue list is empty, so issue recoverability is not applicable. This does not establish complete issue coverage."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation limits success to the supplied local review and explicitly disclaims independent truth, resolution and external publication."
+          },
+          "noop_overcorrection": {
+            "answer": "no",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "No correction is proposed or implied. The possibility of unverified claims remaining is a scope caveat, not a correction request."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "not_applicable",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "8696da1e98fe82833a2c9fb3f513ea0cf10e31120269225cafe53ec8250af3ce"
+    },
+    {
+      "mapping": {
+        "input_id": "c4b84e7013df1a8289b4df32",
+        "case_id": "88b1c16a46ec",
+        "packet_id": "d8ae4cb0628b1d4785202a8a",
+        "condition": "STATUS_ONLY",
+        "language": "EN",
+        "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+        "packet_sha256": "145cf29341fc98ebf27bf105ec6b9f8e2e5e7f9b4d4d5b7df7cca281357843bd",
+        "annotation_sha256": "02f698972286a89bb8d701f32df0a17496dbacdab10ac31df5f9393677a84217",
+        "issue_count": 0
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "d8ae4cb0628b1d4785202a8a",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "Source and output match; selected, rejected, and held lists are empty, and receipt status is no-op. The annotation preserves that local state."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "not_applicable",
+            "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+            "reason": "The supplied issue list is empty. This judgment does not establish that all possible issues are resolved."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "Passing the supplied local review is distinguished from factual verification or external publication; no all-resolved claim is made."
+          },
+          "noop_overcorrection": {
+            "answer": "no",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "The annotation neither proposes a replacement nor implies that the unchanged text must be corrected. Its uncertainty disclaimer is not a correction."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "not_applicable",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "833da5d60e7e55a227a2e2ec73e23df8341c321bab4b51cfbba8eadbc779d79c"
+    },
+    {
+      "mapping": {
+        "input_id": "c4b84e7013df1a8289b4df32",
+        "case_id": "88b1c16a46ec",
+        "packet_id": "dbca77a381b5b599aeab161d",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "EN",
+        "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+        "packet_sha256": "72b90a40f79c929e0a57cd8fd659b010adbe3800cae7c2ebbea57933d8e7817c",
+        "annotation_sha256": "63c28042c15e6b37065a3878dcc0aab579bca9ef427c55cf532a5935c958b50c",
+        "issue_count": 0
+      },
+      "reader": "A",
+      "result": {
+        "packet_id": "dbca77a381b5b599aeab161d",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "Source and actual output are identical; the receipt records no-op, zero selected/rejected/held patches and local release. The annotation preserves these facts."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "not_applicable",
+            "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+            "reason": "The supplied issue list is empty, so issue recoverability is not applicable. This does not establish complete issue coverage."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "The annotation limits success to the supplied local review and explicitly disclaims independent truth, resolution and external publication."
+          },
+          "noop_overcorrection": {
+            "answer": "no",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "No correction is proposed or implied. The possibility of unverified claims remaining is a scope caveat, not a correction request."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "not_applicable",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "b3ffa7f0e584967811fba4803e7597ada1aa7fdbae065f180e120fab8f555062"
+    },
+    {
+      "mapping": {
+        "input_id": "c4b84e7013df1a8289b4df32",
+        "case_id": "88b1c16a46ec",
+        "packet_id": "dbca77a381b5b599aeab161d",
+        "condition": "STATUS_PLUS_LINKED_ISSUES",
+        "language": "EN",
+        "common_input_sha256": "94cdbc52b5f0048b480abe48406408b8d4ef2d3137469b97496a26c55ec081e7",
+        "packet_sha256": "72b90a40f79c929e0a57cd8fd659b010adbe3800cae7c2ebbea57933d8e7817c",
+        "annotation_sha256": "63c28042c15e6b37065a3878dcc0aab579bca9ef427c55cf532a5935c958b50c",
+        "issue_count": 0
+      },
+      "reader": "B",
+      "result": {
+        "packet_id": "dbca77a381b5b599aeab161d",
+        "answers": {
+          "state_preserved": {
+            "answer": "yes",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "Source and output match; selected, rejected, and held lists are empty, and receipt status is no-op. The annotation preserves that local state."
+          },
+          "concrete_issue_recoverable": {
+            "answer": "not_applicable",
+            "short_anchor": "Applied 0; excluded or rolled back 0; held 0.",
+            "reason": "The supplied issue list is empty. This judgment does not establish that all possible issues are resolved."
+          },
+          "overclaim": {
+            "answer": "no",
+            "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+            "reason": "Passing the supplied local review is distinguished from factual verification or external publication; no all-resolved claim is made."
+          },
+          "noop_overcorrection": {
+            "answer": "no",
+            "short_anchor": "No change was requested; the unchanged local output passed the supplied review.",
+            "reason": "The annotation neither proposes a replacement nor implies that the unchanged text must be corrected. Its uncertainty disclaimer is not a correction."
+          }
+        },
+        "missing_issue_ids": [],
+        "recovery_basis": "not_applicable",
+        "additional_concerns": [],
+        "complete": true,
+        "read_complete": true
+      },
+      "raw_sha256": "661b2574611ba563f877594966daf1a5e0708ef237e3f2e18bcb22a8b00095f4"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source_meaning_error": false,
+  "original_meaning_loss": false,
+  "required_answer_missing": false,
+  "optional_context_absence": true,
+  "decision": "accept",
+  "evidence": [
+    {"field":"candidate","quote":"새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.","supports":"시작된 사업과 참여 단체들의 비판을 자료에 맞게 귀속하여 전달하고 독자 질문에 답한다."},
+    {"field":"original_article","quote":"새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.","supports":"후보가 원문과 같으므로 원문의 중요한 의미나 귀속을 잃지 않았다."},
+    {"field":"reader_question","quote":"어떤 사업이 시작됐고 참여 단체들은 무엇을 비판했는가?","supports":"독자 질문에는 사업의 정체와 비판 내용이 필요하며 후보에 모두 있다."},
+    {"field":"source","quote":"신청 대상은 새봄시에 등록된 비영리 동아리다.","supports":"후보에 없는 추가 사실이지만 원문에도 없고 독자 질문의 답에 필요하지 않아 선택 맥락 누락이다."}
+  ],
+  "reason": "후보는 원문 전체를 그대로 보존하고 자료와 일치하며 비판의 주체도 명확하게 귀속한다. 사업명과 참여 단체들이 비판한 예약 창구 문제를 모두 제시하므로 필수 답변 누락은 없다. 신청 대상 정보는 빠졌지만 후보가 신청 자격을 주장하지 않아 조건 삭제로 의미가 확대되지 않는다. 이 정보는 원문 보존이나 해당 질문의 답에 필요하지 않은 선택 맥락이다. 세 오류 항목이 모두 false이므로 accept로 판정한다."
+}

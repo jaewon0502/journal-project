@@ -1,0 +1,42 @@
+{
+  "packet_id": "29fe1583b05ce1230072da9f",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "additional_meaning_losses": [],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [
+    {
+      "id": "I1",
+      "description": "Body reduction claim cannot be independently verified from final time alone; this is evidence insufficiency, not demonstrated error.",
+      "source_anchor": "reduced processing time by 7%.",
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "new_findings": [],
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "insufficient",
+  "truth_status": "unknown",
+  "abstain": true,
+  "evidence_anchors": [
+    "The pilot reduced processing time by 7%.",
+    "The available report excerpt gives final processing time as 93 seconds but omits the baseline.",
+    "A 100-second baseline would yield a 7% reduction, but that baseline is not supplied."
+  ],
+  "reason": "The question whether this report verifies 7% is answered correctly: it does not. The underlying reduction is unknown, not disproved. The hypothetical baseline is explicitly hypothetical and arithmetically correct; unchanged body and separate note are admissible.",
+  "limitations": [
+    "The actual baseline is absent; the 7% factual verdict cannot be determined.",
+    "Single-sentence synthetic source only."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "The pilot reduced processing time by 7%.",
+      "meaning": "Retains pilot, processing-time outcome, decrease direction, and claimed magnitude."
+    }
+  ],
+  "admission": "approved"
+}

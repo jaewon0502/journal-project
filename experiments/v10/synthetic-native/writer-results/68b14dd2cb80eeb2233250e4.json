@@ -1,0 +1,20 @@
+{
+  "input_id": "68b14dd2cb80eeb2233250e4",
+  "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "protection_inventory": [
+    {"id": "P1", "source_anchor": "\"모든 신청자가 탈락했다\"는 소문", "meaning": "모든 신청자의 탈락은 위원회가 부정한 소문의 내용으로 보존해야 하며 위원회 자신의 주장으로 바꾸면 안 된다.", "outside_reference": true},
+    {"id": "P2", "source_anchor": "위원회는", "meaning": "반박과 합격자 수 발표의 주체는 모두 위원회이다.", "outside_reference": true},
+    {"id": "P3", "source_anchor": "반박하며 5명이 합격했다고 밝혔다", "meaning": "위원회가 소문을 반박하면서 5명의 합격을 발표했다는 내용과 두 진술의 관계를 보존해야 한다.", "outside_reference": true}
+  ],
+  "patches": [],
+  "dependencies": [],
+  "reader_note": "원문은 위원회가 부정한 주장인 ‘모든 신청자가 탈락했다’와 위원회 자신의 주장인 ‘5명이 합격했다’를 정확히 구분하여 보존합니다. 두 내용과 반박 관계가 E1에 부합하므로 변경을 적용하지 않았습니다. 제공된 자료 범위에서 이 질문과 관련해 미해결된 사항은 없습니다.",
+  "target_response": "no_change_needed",
+  "unresolved": [],
+  "self_check": {
+    "original_statement_retention": "원문 전체를 검토했으며 무변경 후보이므로 소문의 내용, 위원회의 반박, 합격자 수 발표가 양방향으로 모두 보존된다.",
+    "scope_time_comparison": "E1과 원문의 발표 주체, 신청자 범위, 5명이라는 합격자 수가 일치한다. 별도의 시점이나 비교 기간을 추정하지 않았다.",
+    "criticism_and_counterargument": "반박 대상인 전원 탈락 소문과 위원회의 5명 합격 발표를 구분하고 그 반박 관계를 유지했다.",
+    "outside_patch_unchanged": true
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "order": 1,
+    "condition": "F",
+    "repeat": 1,
+    "input_id": "674467d6a1caa99f9d1e504b",
+    "input_path": "/historical-research/journal-v12-private/supplementary/transfer/writer-inputs/674467d6a1caa99f9d1e504b.json",
+    "sha256": "e9a4a164b5043dd7f4e030ae150644fa21b87133ff4d2034587623410ccf1f3c",
+    "packet_id": "7da15e4a14289e3e51a30b45",
+    "writer_sha256": "a087f57ec0d6f77cbd81de22827458254afc1493c7a45178bb7b6211011d0aa7",
+    "reviewer_input_sha256": "de1c3335d5f18576abe78e063c7645b81c51cdf388caa75c979995ca3536dad6",
+    "source_sha256": "b9c4379c5477b991925d991550a4bfbfd901c88300c4e4806e6dca71f963a9e7",
+    "candidate_sha256": "5333e64f428c4147c8826f49f1231fa823f9a353764f0f71e60d9a92bee34512",
+    "application_status": "applied",
+    "patches": 2
+  },
+  {
+    "order": 2,
+    "condition": "T",
+    "repeat": 1,
+    "input_id": "16df5ab2355736d58d1aef18",
+    "input_path": "/historical-research/journal-v12-private/supplementary/transfer/writer-inputs/16df5ab2355736d58d1aef18.json",
+    "sha256": "851319cc25ae641bf01e293042cbecd44a438ddb2d3fac0f105c3dbf163979ff",
+    "packet_id": "766507d0a11060dea4d7e12b",
+    "writer_sha256": "b159af8f5ce927ead62a9016dba0e8f386ba80bd868d232b21352edc680ba2f2",
+    "reviewer_input_sha256": "48bb14ce9f73f3a6b12cbfbb10972afb14c63fe3844470ede6f6578822fd93e9",
+    "source_sha256": "b9c4379c5477b991925d991550a4bfbfd901c88300c4e4806e6dca71f963a9e7",
+    "candidate_sha256": "f83349e2688b9a545ea7328bd9cf3cfb2f9756358cfb580743d90eba8169713f",
+    "application_status": "applied",
+    "patches": 2
+  },
+  {
+    "order": 3,
+    "condition": "T",
+    "repeat": 2,
+    "input_id": "8f75d2d099970038bc5afc95",
+    "input_path": "/historical-research/journal-v12-private/supplementary/transfer/writer-inputs/8f75d2d099970038bc5afc95.json",
+    "sha256": "f3a2fdafede5081b2975a0f94ee120efc82a1dbbe0888beac865451e7346f6d0",
+    "packet_id": "e295cc873769cdc1a6e5cf30",
+    "writer_sha256": "9705d44465d5cb9536e526e34605562c2dfaa2380008ad6aee7a525c08a8420c",
+    "reviewer_input_sha256": "bd5796ed36315e4ba6e5f8c613dad625357baf5ddc412b6794dedab1b80eb245",
+    "source_sha256": "b9c4379c5477b991925d991550a4bfbfd901c88300c4e4806e6dca71f963a9e7",
+    "candidate_sha256": "74bd01af95bdc7c0cbe33ce4b3bd20b46f6c4da787d020efd1738415684004f7",
+    "application_status": "applied",
+    "patches": 2
+  },
+  {
+    "order": 4,
+    "condition": "F",
+    "repeat": 2,
+    "input_id": "98813e949e07eabf1cea95f3",
+    "input_path": "/historical-research/journal-v12-private/supplementary/transfer/writer-inputs/98813e949e07eabf1cea95f3.json",
+    "sha256": "fc91f96d7b5f73583a073a323e978e561bd30857081ddada1343e142b7eb038c",
+    "packet_id": "5ecd8913dc37d284f109814e",
+    "writer_sha256": "7c9c8c89eb4e5ee2a0e1f64712695f349021703bfcce08bceaa658f2e10d4552",
+    "reviewer_input_sha256": "5afc0b0424e1cfc94a26534e8a8f28503349b75f1e0040b4427a3f2f92290202",
+    "source_sha256": "b9c4379c5477b991925d991550a4bfbfd901c88300c4e4806e6dca71f963a9e7",
+    "candidate_sha256": "938110af5b3903ee12e1d9b497c0373ff0eae923cbe4ce9506f9a9353705ae6b",
+    "application_status": "applied",
+    "patches": 2
+  }
+]

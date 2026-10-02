@@ -1,0 +1,76 @@
+{
+  "packet_id": "61506924a04f31fd3e026846",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both proposed unit and day replacements occur in the local output.",
+      "anchor": "actual_output: 3%포인트 / 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit and meeting day differ from the source.",
+      "anchor": "source: 3% / 금요일; actual_output: 3%포인트 / 토요일"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both proposed patches occur in the displayed output.",
+      "anchor": "actual_receipt.selected_ids: [p1, p2]; actual_output"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits overall factual accuracy; local review does not establish entire-article truth.",
+      "anchor": "E4: The scenario does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The supplied scenario and receipt explicitly exclude external publication.",
+      "anchor": "E4: No external publication action occurred."
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The disjoint counts 8 and 5 still incorrectly total 14; E3 identifies this untouched issue.",
+      "anchor": "E3; actual_output: 참석자는 8명과 5명으로 총 14명이다."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "검토안은 증가 폭의 단위와 회의 요일을 다룬다.",
+      "reason": "Review proposal scope does not report final application."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "검토안은 증가 폭의 단위와 회의 요일을 다룬다.",
+      "reason": "Does not compare final output with source."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "수치 차이는 3%포인트이며 일정 자료는 토요일을 가리킨다.",
+      "reason": "Scenario facts do not report which patches reached the output."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "reason": "Does not report full factual verification status."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "reason": "Does not state whether publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "검토안은 증가 폭의 단위와 회의 요일을 다룬다.",
+      "reason": "Does not state the remaining meaning issues in the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both patches were applied, but the untouched disjoint attendee counts 8 and 5 still total 14 incorrectly; annotation omits this identified remaining issue."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader judgment. No external factual verification or authored-key comparison performed."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "audit_id": "956a7d6e3749814171d10fb7",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [],
+  "original_residual_issues": [],
+  "criticism_preservation": {
+    "status": "preserved",
+    "reason": "The unchanged article retains Daon Mobility Rights Group as the critic, its objection to inferring effectiveness solely from positive responses, and the concern about obscuring nighttime users’ inconvenience. It also retains the laboratory’s admission that nighttime responses were not separately counted."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": true,
+  "unmet_required_answers": [],
+  "uncertainties": [
+    "The source reports voluntary submissions, not a representative survey of all riders; the article appropriately identifies the responses as voluntary. These data do not establish overall effectiveness or nighttime users’ experience.",
+    "Whether an additional October survey will occur and whether permanent installation will be approved remain undecided in the source and candidate."
+  ],
+  "release_recommendation": "release",
+  "reason": "All six source paragraphs and the full original and candidate were read. The candidate is identical to the original, so there are no actual changed spans, beneficial corrections delivered, or introduced material harms to judge. The original’s factual statements are supported: the August trial involved two eastern loop bus routes (S1.p1); 61 of 86 voluntary survey responses favored ease of understanding, reported September 8 (S1.p2–p3); the attributed criticism and laboratory response are preserved (S1.p4–p5); permanent installation remains subject to an additional budget review (S1.p6). The absence of exact August dates, the year, and an explicit repetition that no installation decision was made at the briefing does not create a contrary assertion in this context. No necessary factual correction is identified within the provided sources. Safety is assessed relative to the original and the supplied fictional record, not as external verification."
+}

@@ -1,0 +1,74 @@
+{
+  "packet_id": "b994541b47b8c72de504782f",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both replacements appear in the displayed output.",
+      "anchor": "3%포인트; 토요일"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The unit and day differ from the source.",
+      "anchor": "3%포인트; 토요일"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both proposed replacements are present; receipt selects p1 and p2.",
+      "anchor": "3%포인트; 토요일; selected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The unchanged attendance total is 14 although E3 identifies disjoint counts 8 and 5, whose sum is 13.",
+      "anchor": "총 14명이다; E3"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다.",
+      "reason": "Directly reports actual local application."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다.",
+      "reason": "Actual replacement of source wording entails a changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 두 수정이 모두 적용되었습니다.",
+      "reason": "Reports the complete proposal disposition."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "수정 적용이 글 전체의 사실 정확성이나 문제 해결을 뜻하지는 않습니다.",
+      "reason": "Explicitly denies a whole-article correctness inference."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "local output",
+      "reason": "Identifying a local output or local release does not explicitly exclude an additional external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "총 14명이라는 오류가 남아 있습니다.",
+      "reason": "Reports the identified meaning status of the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

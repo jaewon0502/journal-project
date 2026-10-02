@@ -1,0 +1,21 @@
+{
+  "schema": "journal-v11.issue-sidecar-input.v1",
+  "input_id": "developer-example-2",
+  "language": "KO",
+  "actual_output": "foo",
+  "output_sha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+  "receipt_address": {
+    "path": "/historical-research/journal-v11/sidecar/examples/receipt-2.json",
+    "json_pointer": "/actual_receipt",
+    "file_sha256": "2e0ea46cd12890288357a28487d86ea52ce40335fb5de6f9d87ee2f09c47916a",
+    "receipt_sha256": "d1ec5c2a259497160b093bf88a2e9a3254e3ecfc491eea203037e31703464101"
+  },
+  "evidence": [
+    {
+      "id": "generic-evidence",
+      "text": "bar",
+      "sha256": "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9"
+    }
+  ],
+  "issues": []
+}

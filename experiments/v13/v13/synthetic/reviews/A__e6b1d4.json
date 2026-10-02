@@ -1,0 +1,90 @@
+{
+  "bundle_id": "e6b1d4",
+  "input_sha256": "1a2e3291941420a39b8f13a8673f7ec5831500bcda94c5c0661dea383b21fd1f",
+  "source_sha256": "b7d5aef170109ba2baaff49e20bdce3b77576bbb4cb9f9a14e6d77e7a953abd8",
+  "original_sha256": "73afb3b289d60dbfe67ea98530b1272d8c218baa87a452fde682d04459e3b504",
+  "patches_sha256": "40194e02a967015005dd8103b6b99f8bbd1ee7e3874d6269f458db4197a1cf09",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "재단은 최종 납품 계약을 맺은 업체가 7곳이며 예비 협상에 참여한 2곳은 계약 업체에 포함되지 않는다고 밝혔다."
+        },
+        {
+          "document_id": "original",
+          "quote": "재단에 따르면 최종 납품 계약을 맺은 업체는 9곳이다."
+        }
+      ],
+      "reason": "The source explicitly gives seven final contracting suppliers and excludes two preliminary negotiating firms. Changing nine to seven is a necessary factual correction that retains attribution and the final-contract category. The exact before span occurs once and does not overlap P2. This count correction neither changes nor depends on the criticism and response sequence; P2 introduces a separate, localized problem in the simultaneous candidate. No required dependencies were found.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "no",
+      "evidence_support": "no",
+      "preserves_untargeted_meaning": "no",
+      "context_safe": "no",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "S1.p4",
+          "quote": "서린학부모연대는 설명회에서 “재단이 호환성을 검증하지 않은 채 장비를 발주해 교실 수업을 혼란에 빠뜨렸다”고 비판했다."
+        },
+        {
+          "document_id": "S1.p5",
+          "quote": "재단은 발주 전 서류 검토는 했지만 교실 환경에서의 호환성 시험은 하지 않았다고 답했다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "재단은 수업 혼란의 원인은 조사 중이며 9월 말까지 현장 시험 계획을 내겠다고 밝혔다."
+        },
+        {
+          "document_id": "original",
+          "quote": "서린학부모연대는 재단이 호환성을 검증하지 않은 채 장비를 발주해 교실 수업을 혼란에 빠뜨렸다고 비판했다."
+        }
+      ],
+      "reason": "The original accurately attributes the accusation to the parent group; the source does not record the proposed procedural-improvement suggestion. P2 replaces criticism assigning responsibility and alleging a causal link to disrupted classes with a milder, prospective recommendation. This removes supported meaning rather than correcting a fact. The foundation admitting no classroom testing and investigating the cause does not authorize rewriting the group's statement. In the full candidate, the subsequent admission framed as a reply loses the accusation it answered, and the sentence about investigating classroom disruption loses its preceding account of that disruption. P1 cannot repair this semantic and contextual damage, and no supplied patch is a required remedy. Dependency analysis is complete. Application is mechanically valid: the before span is exact and unique, the after text clearly implements the assessed replacement, and there is no overlap or reported application error.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "S1.p2",
+          "quote": "재단은 최종 납품 계약을 맺은 업체가 7곳이며 예비 협상에 참여한 2곳은 계약 업체에 포함되지 않는다고 밝혔다."
+        },
+        {
+          "document_id": "original",
+          "quote": "최종 납품 계약을 맺은 업체는 9곳이다."
+        }
+      ],
+      "reason": "The original final-contract count is inconsistent with the source. P1 resolves the discrepancy in the simultaneous candidate; withholding it leaves the incorrect count in place."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "The simultaneous candidate has material distortion of the parent group's criticism and its relation to the foundation's reply, all safely localized to P2. No additional unresolved new or edit-related material risk outside the assessed patch IDs was identified.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "Read the entire wrapper, all six source paragraphs, scope note, original, questions, both patches, full candidate, instructions and schema. P1 corrects the necessary factual error. P2 changes supported criticism, responsibility and causality into an unsupported suggestion and weakens the surrounding response relationship. These are meaning changes, not mere tone preferences. The fictional source supports reporting the group's allegation but does not establish the cause of classroom disruption; the original preserves that distinction through attribution and the investigation statement. No application errors were supplied or found. No additional dependencies were identified. This independent review is not a final safety audit."
+}

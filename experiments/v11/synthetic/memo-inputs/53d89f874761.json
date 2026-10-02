@@ -1,0 +1,108 @@
+{
+  "input_id": "53d89f874761",
+  "language": "KO",
+  "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+  "proposed_patches": [
+    {
+      "id": "p1",
+      "before": "3%",
+      "after": "3%포인트",
+      "start_byte": 51,
+      "end_byte": 53
+    },
+    {
+      "id": "p2",
+      "before": "금요일",
+      "after": "토요일",
+      "start_byte": 78,
+      "end_byte": 87
+    }
+  ],
+  "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+  "actual_receipt": {
+    "actual_result_sha256": "0fca2a5fced8f14cb23eacb412c4dec91744109c51b4d657fb3b37ed38638187",
+    "authentication": "not_established_by_hashes",
+    "candidate_selected_ids": [],
+    "candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+    "decision_provenance": {
+      "components": [
+        {
+          "id": "component-1",
+          "patch_ids": [
+            "p1",
+            "p2"
+          ],
+          "reason": "component_patch_rejected",
+          "state": "rolledback"
+        }
+      ],
+      "dependency_sha256": "aad14d4116811b872fcc46e78efaed55cfe11cee8515794010e0ba916e6385c0",
+      "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+      "final_audit_sha256": [
+        "ef688392bad1fe83092c9f7bcb45533374251382a1ae92a836f0bb5df1f465f9"
+      ],
+      "patch_audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+      "replay_wrapper_sha256": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+      "transitions": [
+        {
+          "audit_sha256": "ef688392bad1fe83092c9f7bcb45533374251382a1ae92a836f0bb5df1f465f9",
+          "next_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+          "next_selected_ids": [],
+          "released": true,
+          "reviewed_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+          "reviewed_ids": []
+        }
+      ]
+    },
+    "evidence_scope": "supplied_local_bytes_and_audits_only",
+    "external_publication_performed": false,
+    "finding_references": [
+      {
+        "audit_sha256": "a03d0e528961c2b654253279f02fce76cca01c04ec3d84ab22eb2a4df0ca4da6",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "evidence_ids": [
+          "E1",
+          "E2",
+          "E4"
+        ],
+        "pointer": "/preexisting_findings/0",
+        "state": "resolution_not_adjudicated"
+      }
+    ],
+    "held_ids": [],
+    "locally_released": true,
+    "next_candidate_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+    "output_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+    "policy": "selective",
+    "proposal_sha256": "2c2a9f2d02f30e1b920ada308397483758082486f49bdcbd04300ced6e776cd4",
+    "publication_scope": "local_output_only",
+    "question_resolution": "not_adjudicated",
+    "rejected_ids": [
+      "p1",
+      "p2"
+    ],
+    "schema": "journal-v11.applied-patch-receipt.v1",
+    "selected_ids": [],
+    "semantic_truth": "not_independently_verified",
+    "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+    "status": "rolledback"
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "authored_scenario",
+      "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+    },
+    {
+      "id": "E2",
+      "type": "authored_scenario",
+      "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+    },
+    {
+      "id": "E4",
+      "type": "scope",
+      "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+    }
+  ],
+  "provenance": "locked authored synthetic scenario; code replayed and checked against independently locked actual output; review identities not authenticated."
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "directory": "receipt",
+    "manifest_sha256": "a56e17bf8b57b8e15e7436614445fdf0f307f10b33c13dd788cbae7e991d4462",
+    "mismatches": []
+  },
+  {
+    "directory": "receipt-v1_1",
+    "manifest_sha256": "85b9ebbe9953787302cd83f9313ba0d688f98ec7e89fe43ca6764c3d40b28b3f",
+    "mismatches": []
+  },
+  {
+    "directory": "receipt-v1_2",
+    "manifest_sha256": "b2b840e295405d298b9c5ba50a84ade1ccbb9ddfdb2ecfc8ceef63bf18c5d499",
+    "mismatches": []
+  },
+  {
+    "directory": "receipt-v1_3",
+    "manifest_sha256": "7ad693ff4da32daaeefa18c120746af8cb6f2b1308dbadd7a9732aeddd570777",
+    "mismatches": []
+  }
+]

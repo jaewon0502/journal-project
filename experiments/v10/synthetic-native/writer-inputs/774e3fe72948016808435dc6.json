@@ -1,0 +1,18 @@
+{
+  "language": "EN",
+  "source": "The analyst said the increase was exactly 0.02 units.",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The unrounded measured increase was 0.016 units. The supplied evidence contains no recording or transcript of the analyst."
+    }
+  ],
+  "target_question": "Does the final note distinguish the reported exact 0.02 statement from the measured 0.016 increase, without claiming to verify the speech?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "packet_id": "a109a16b167e313805f7dbae",
+  "task": "Produce the minimally revised article and a separate delivery note addressing the target question. Preserve material source meanings and attributed statements; identify uncertainty rather than inventing evidence. Inspect the complete supplied source. If no supported change is appropriate, a no-op with a specific explanation is allowed. State what was actually applied and what remains unresolved.",
+  "reference_protection": [],
+  "original_input_sha256": "72fae248290d19f9f867a705c67ad2aeced952a4c6b47ff34f19fc203bcbe253",
+  "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+  "input_id": "774e3fe72948016808435dc6"
+}

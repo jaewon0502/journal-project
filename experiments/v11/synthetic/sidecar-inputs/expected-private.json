@@ -1,0 +1,50 @@
+[
+  {
+    "input_id": "79814d8015a14d2c85d0e553",
+    "actual_applied_ids": [
+      "p1"
+    ],
+    "unchanged": false,
+    "supplied_issue_ids": [
+      "q1"
+    ],
+    "expected_sidecar_scope": "reported_unresolved_only",
+    "empty_list_not_all_resolved": true,
+    "no_independent_truth_adjudication": true
+  },
+  {
+    "input_id": "0ca01f1b92bde49c1f37d9e8",
+    "actual_applied_ids": [],
+    "unchanged": true,
+    "supplied_issue_ids": [
+      "q1",
+      "q2"
+    ],
+    "expected_sidecar_scope": "reported_unresolved_only",
+    "empty_list_not_all_resolved": true,
+    "no_independent_truth_adjudication": true
+  },
+  {
+    "input_id": "e7cb04f0501bbb7c3a791efa",
+    "actual_applied_ids": [
+      "p1",
+      "p2"
+    ],
+    "unchanged": false,
+    "supplied_issue_ids": [
+      "a1"
+    ],
+    "expected_sidecar_scope": "reported_unresolved_only",
+    "empty_list_not_all_resolved": true,
+    "no_independent_truth_adjudication": true
+  },
+  {
+    "input_id": "c4b84e7013df1a8289b4df32",
+    "actual_applied_ids": [],
+    "unchanged": true,
+    "supplied_issue_ids": [],
+    "expected_sidecar_scope": "reported_unresolved_only",
+    "empty_list_not_all_resolved": true,
+    "no_independent_truth_adjudication": true
+  }
+]

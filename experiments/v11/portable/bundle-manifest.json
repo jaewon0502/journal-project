@@ -1,0 +1,29 @@
+{
+  "candidates": {
+    "v1_1": {
+      "origin_manifest_sha256": "85b9ebbe9953787302cd83f9313ba0d688f98ec7e89fe43ca6764c3d40b28b3f",
+      "path": "candidates/v1_1/receipt.py",
+      "receipt_sha256": "87820c5db495e1015f736b5459a8b2a182a8bf61b2098aa9699261f3a9db7292",
+      "original_receipt_sha256": "aa9f90eae4045e3263a2e4338fccbc354241d8f99fa5f8bcda15d41c66507ad0"
+    },
+    "v1_2": {
+      "origin_manifest_sha256": "b2b840e295405d298b9c5ba50a84ade1ccbb9ddfdb2ecfc8ceef63bf18c5d499",
+      "path": "candidates/v1_2/receipt.py",
+      "receipt_sha256": "b25daf02c72ec277fe0fb65fd354b1f8f5b75508f1d8069d3eaa1e5f1aa7fcf5",
+      "original_receipt_sha256": "849ac86c88612da792755ebc2abd45b7ed39125b3931ad0e35a4bca12a10094e"
+    },
+    "v1_3": {
+      "origin_manifest_sha256": "7ad693ff4da32daaeefa18c120746af8cb6f2b1308dbadd7a9732aeddd570777",
+      "path": "candidates/v1_3/receipt.py",
+      "receipt_sha256": "120e8c86cce2fc13dee257bde4b19e691f034f69b044ca5d387e2724a3f70e8e",
+      "original_receipt_sha256": "3f3a4dc118c4311bd0adef8fe4893cd6d1340ce1e490b445febb7d13464a6014"
+    }
+  },
+  "dependencies": {
+    "dependencies/delivery.py": "b785ca128b1f2ec489da8c581bbb33b46b1c1c2f62e0c59b10e4bd606d80c8f6",
+    "dependencies/vendor/selective_rollback.py": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a"
+  },
+  "schema": "journal-v11.portable-replay-bundle.v1",
+  "scope": "receipt code and pinned legacy dependencies only; no article inputs",
+  "publication_note": "Candidate path literals redacted; original hashes retained separately. Runtime dependency adaptation unchanged; public replay tested separately."
+}

@@ -1,0 +1,105 @@
+{
+  "bundle_id": "a9f3b6",
+  "input_sha256": "bc8626b106036c2e2ad15bfadb00434aa0c726e01bc1c5dad510dae578fb8505",
+  "source_sha256": "49a967b0a194a7eec805208ef9453f6d5b3652e987b145eb66176f4cdd7a1f9f",
+  "original_sha256": "48254e82d9d7329c387e3f3fe9c37f35d2c300b933634c99b11a9f6037c02604",
+  "patches_sha256": "8e231084e4f90e4d984cd8bd0c0fa674048d71d9d534dc2a1076f830ed7abd50",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "공개 대상은 사업을 신청한 기업 40곳 전체였다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "신청 자체는 공개 동의가 아니었고 지원원은 별도 동의서를 제출한 기업만 공개 대상에 넣었다."
+        },
+        {
+          "document_id": "S1.p3",
+          "quote": "8월 30일까지 기업 25곳이 별도 동의서를 제출했고 나머지 15곳은 제출하지 않았다."
+        },
+        {
+          "document_id": "S1.p5",
+          "quote": "이미 별도 동의서를 제출한 기업에는 공개 전에 다시 동의를 받지 않았으며 동의서를 내지 않은 기업의 자료는 공개하지 않았다."
+        }
+      ],
+      "reason": "The original incorrectly equates all 40 applicants with the publication group. The source restricts publication to the 25 separate consent submitters by August 30. This necessary correction also supplies the correct antecedent for the following sentence about no repeat consent, whether that sentence is retained or P2 is applied. No P2 dependency is required. Other publication-content claims remain unchanged. The before span is exact and unique and does not overlap P2; the supplied candidate has no application errors.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "no",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [
+        "P1"
+      ],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다."
+        },
+        {
+          "document_id": "original",
+          "quote": "공개 대상은 사업을 신청한 기업 40곳 전체였다."
+        },
+        {
+          "document_id": "S1.p4",
+          "quote": "지원원은 9월 4일 동의서를 제출한 25곳의 평가 요약표를 홈페이지에 공개했다."
+        },
+        {
+          "document_id": "S1.p5",
+          "quote": "이미 별도 동의서를 제출한 기업에는 공개 전에 다시 동의를 받지 않았으며 동의서를 내지 않은 기업의 자료는 공개하지 않았다."
+        }
+      ],
+      "reason": "The September 4 publication date and absence of repeat consent are directly supported for the 25 consent submitters. However, after P1 the existing repeat-consent sentence is already accurate, and the opening sentence describes conducting the project in August rather than expressly dating publication. Adding the publication date is therefore supported supplementary detail, not a necessary factual or meaning correction. Contextual safety requires P1: without it, these companies still refers to all 40 applicants and P2 would falsely assert publication of every applicant's summary. With P1, the simultaneous candidate preserves the prior-consent versus repeat-consent distinction and the surrounding content. Both replacement spans are exact, unique and disjoint.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1",
+        "P2"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "공개 대상은 사업을 신청한 기업 40곳 전체였다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "신청 자체는 공개 동의가 아니었고 지원원은 별도 동의서를 제출한 기업만 공개 대상에 넣었다."
+        },
+        {
+          "document_id": "S1.p4",
+          "quote": "지원원은 9월 4일 동의서를 제출한 25곳의 평가 요약표를 홈페이지에 공개했다."
+        }
+      ],
+      "reason": "The original conflates application with consent and publication eligibility; its incorrect group also governs the adjacent demonstrative reference. P1 resolves this material original error in the full candidate and is required for P2 to refer to the actual published group."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "The full simultaneous candidate correctly identifies the consented group and its publication date. No unresolved new or edit-related material risk outside the explicitly localized P2 dependency is identified.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "All supplied source paragraphs, scope note, original, questions, patches, candidate and schema were read. P1 is the necessary factual correction and also repairs the adjacent antecedent. P2 is supported additional detail but is not necessary and requires P1 for contextual accuracy. The unchanged grade-only and no-sales-figures statements are supported by S1.p6. Conclusions are limited to the supplied fictional procedural record; this independent review is not a final safety audit."
+}

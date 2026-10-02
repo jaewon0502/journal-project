@@ -1,0 +1,70 @@
+{
+  "final_id": "fcaef05cca4c73a3ae36df56",
+  "output": "관측소는 6월 8일 수위가 당시 최고 기록을 세웠다고 발표했다.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+    "output_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+    "proposal_sha256": "66da2f0564939181d7cb4cfe03665ff4af6ee14305dc33ec2cc162368e8b647e",
+    "dependency_sha256": "8ceb27802b26c06d4fb57b7bf51135933703f9549a9bdbb78d5ec0cb88923d33",
+    "patch_audit_sha256": "e3fb8d074ce3ca89c5299aea6579248c6a41dd3e7681f0bfb1eba1fb2cfb34f2",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "noop",
+    "released": true,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+    "final_candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+    "applied_ids": [],
+    "components": [],
+    "patches": [],
+    "final_audit_history": [
+      {
+        "audit_sha256": "453b4b234284eb26162c9b808a4c4eede04a4ab3597902219e6f5ce0ef61df1d",
+        "reviewed_candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+        "reviewed_ids": [],
+        "released": true,
+        "next_candidate_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e3fb8d074ce3ca89c5299aea6579248c6a41dd3e7681f0bfb1eba1fb2cfb34f2",
+        "pointer": "/preexisting_findings/0",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e3fb8d074ce3ca89c5299aea6579248c6a41dd3e7681f0bfb1eba1fb2cfb34f2",
+        "pointer": "/preexisting_findings/1",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "final_finding_requires_resolution_evidence",
+        "audit_sha256": "453b4b234284eb26162c9b808a4c4eede04a4ab3597902219e6f5ce0ef61df1d",
+        "pointer": "/findings/0"
+      }
+    ],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 수정 없음. 의존 컴포넌트 적용 0개, 원복 0개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 3개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": "아니요. E1의 6월 10일 최고 수위 8.2m 기록만으로 6월 8일 당시 최고 기록 주장이 틀렸다고 확정할 수 없습니다. 나중의 최고 기록은 앞선 당시 기록과 양립할 수 있습니다. 근거가 있는 수정은 없어 원문을 그대로 두었으며 적용한 변경은 없습니다. 6월 8일 수위와 그 이전 최고 수위가 없어 당시 기록 여부는 확인되지 않습니다.",
+  "explanation_sha256": "047a1255aea13536a7838e0ac2ac1cfa2a536ae05241b12f26b3c620b9210fc7",
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "approved",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "resolved",
+  "remaining_uncertainty": [
+    "June 8 level and preceding highest level absent.",
+    "Original reported observatory announcement is not independently verified by the June 10 excerpt."
+  ]
+}

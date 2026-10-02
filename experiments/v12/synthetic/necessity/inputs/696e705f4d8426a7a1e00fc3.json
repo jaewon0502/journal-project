@@ -1,0 +1,78 @@
+{
+  "classifier_prompt": "당신은 한국어 기사 재작성 검토자다. 제공된 자료는 모두 새로 지어낸 가상 사례다. source(전체 자료), original_article(보존해야 할 원문), candidate(검토할 재작성), reader_question(고정된 독자 질문)을 구분해서 판정하라. 자료 밖의 사실을 추가하지 마라.\n각 항목을 독립적으로 판정하라. source_meaning_error: 후보가 자료에 어긋나거나 조건 삭제로 자료의 주장을 부당하게 넓히는 경우 true. 단순히 자료의 일부를 말하지 않은 것만으로 true로 하지 않는다. original_meaning_loss: 원문에 실제로 있던 중요한 의미·조건·귀속을 후보가 잃으면 true. 원문에 없던 자료의 추가 정보 누락은 여기에 포함하지 않는다. required_answer_missing: 독자 질문에 답하는 데 필요한, 자료에 명시된 정보가 후보에 없으면 true. optional_context_absence: 후보에 없는 자료의 추가 사실 중 원문 의미 보존이나 해당 독자 질문의 답에 필요하지 않은 것이 하나라도 있으면 true. 사실이 아닌 메타데이터와 같은 내용의 반복은 세지 않는다. 하나의 빠진 사실은 해당 질문에서 필수이면 선택 맥락으로 중복 계산하지 않는다. 충실하게 귀속된 비판은 부정적인 논조라는 이유만으로 오류로 보지 않는다.\ndecision은 accept, patch, hold 중 하나다. 자료로 판단 가능하고 세 오류 항목이 모두 false이면 accept(선택 맥락 누락만으로 수정하지 않는다). 세 오류 중 하나라도 true이고 제공 자료로 수정 가능하면 patch. 제공 자료만으로 핵심 판정이나 수정을 확정할 수 없으면 hold. 각 true/false와 결정을 근거로 설명하라. 결과는 아래 스키마에 맞는 JSON 하나만 반환하라.",
+  "output_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "source_meaning_error",
+      "original_meaning_loss",
+      "required_answer_missing",
+      "optional_context_absence",
+      "decision",
+      "evidence",
+      "reason"
+    ],
+    "properties": {
+      "source_meaning_error": {
+        "type": "boolean"
+      },
+      "original_meaning_loss": {
+        "type": "boolean"
+      },
+      "required_answer_missing": {
+        "type": "boolean"
+      },
+      "optional_context_absence": {
+        "type": "boolean"
+      },
+      "decision": {
+        "type": "string",
+        "enum": [
+          "accept",
+          "patch",
+          "hold"
+        ]
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "field",
+            "quote",
+            "supports"
+          ],
+          "properties": {
+            "field": {
+              "type": "string",
+              "enum": [
+                "source",
+                "original_article",
+                "candidate",
+                "reader_question"
+              ]
+            },
+            "quote": {
+              "type": "string"
+            },
+            "supports": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "reason": {
+        "type": "string"
+      }
+    }
+  },
+  "item": {
+    "item_id": "696e705f4d8426a7a1e00fc3",
+    "fiction_notice": "모든 기관·사업·정책과 사실은 이 모듈을 위해 새로 만든 가상 설정이며 실제 제도에 관한 정보가 아니다.",
+    "source": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다. 신청 대상은 새봄시에 등록된 비영리 동아리다.",
+    "original_article": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+    "candidate": "새봄시는 동네 작업실 공동이용 사업을 시작했다. 참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다.",
+    "reader_question": "이 사업의 신청 대상은 누구인가?"
+  }
+}

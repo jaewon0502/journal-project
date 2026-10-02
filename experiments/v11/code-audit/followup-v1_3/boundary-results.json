@@ -1,0 +1,160 @@
+{
+  "encoding_variants": [
+    {
+      "encoding": "utf-16-le",
+      "bom": false,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 40048,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-16-le",
+      "bom": true,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 40050,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-16-be",
+      "bom": false,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 40048,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-16-be",
+      "bom": true,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 40050,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-32-le",
+      "bom": false,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 80096,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-32-le",
+      "bom": true,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 80100,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-32-be",
+      "bom": false,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 80096,
+      "deep_response": "verification_failed"
+    },
+    {
+      "encoding": "utf-32-be",
+      "bom": true,
+      "depth65_mint_rejected": true,
+      "deep_bytes": 80100,
+      "deep_response": "verification_failed"
+    }
+  ],
+  "malformed_utf8_and_raw_nul": [
+    {
+      "hex": "80",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "c0af",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "eda080",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "f09f92",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "f4908080",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "7b2278223a22610062227d",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "007b7d",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    },
+    {
+      "hex": "7b7d00",
+      "all_four_json_input_paths_both_languages": "fixed verification_failed"
+    }
+  ],
+  "noop_korean": [
+    {
+      "bom": false,
+      "depth": 63,
+      "result": "verified no-op"
+    },
+    {
+      "bom": false,
+      "depth": 64,
+      "result": "verified no-op"
+    },
+    {
+      "bom": false,
+      "depth": 65,
+      "result": "rejected at mint"
+    },
+    {
+      "bom": true,
+      "depth": 63,
+      "result": "verified no-op"
+    },
+    {
+      "bom": true,
+      "depth": 64,
+      "result": "verified no-op"
+    },
+    {
+      "bom": true,
+      "depth": 65,
+      "result": "rejected at mint"
+    }
+  ],
+  "stored_corrupt_encoding": [
+    {
+      "hex": "80",
+      "get_rejected": true
+    },
+    {
+      "hex": "c0af",
+      "get_rejected": true
+    },
+    {
+      "hex": "eda080",
+      "get_rejected": true
+    },
+    {
+      "hex": "f09f92",
+      "get_rejected": true
+    },
+    {
+      "hex": "f4908080",
+      "get_rejected": true
+    },
+    {
+      "hex": "7b2278223a22610062227d",
+      "get_rejected": true
+    },
+    {
+      "hex": "007b7d",
+      "get_rejected": true
+    },
+    {
+      "hex": "7b7d00",
+      "get_rejected": true
+    }
+  ]
+}

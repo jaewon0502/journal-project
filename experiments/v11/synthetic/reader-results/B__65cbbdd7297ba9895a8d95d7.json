@@ -1,0 +1,72 @@
+{
+  "packet_id": "65cbbdd7297ba9895a8d95d7",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Displayed output incorporates p1, changing the increase to percentage points.",
+      "anchor": "selected_ids: [p1]; actual_output: 3 percentage points / 3%포인트"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The increase unit differs from the source.",
+      "anchor": "p1: 3% → 3 percentage points / 3%포인트"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "p2 was rejected; the output retains Friday rather than Saturday.",
+      "anchor": "rejected_ids: [p2]; actual_output: Friday / 금요일"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "E2 stipulates Saturday but displayed output retains Friday. Rejection does not settle this discrepancy.",
+      "anchor": "E2: The fictional meeting schedule says Saturday."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "displayed local output applies p1",
+      "reason": "Explicit actual application."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "replacing ‘3%’ with ‘3 percentage points’",
+      "reason": "Stated replacement entails changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Only p1 was selected",
+      "reason": "p2 rejection and p1-only final incorporation are explicit."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_implicit",
+      "short_anchor": "meeting date remains an identified meaning issue",
+      "reason": "Explicit unresolved factual discrepancy rules out entire correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Locally released does not settle whether any separate external publication occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "schedule says Saturday, while the displayed text says Friday",
+      "reason": "Precisely locates remaining discrepancy in displayed text."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

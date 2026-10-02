@@ -1,0 +1,18 @@
+--- receipt-v1_2/receipt.py
++++ receipt-v1_3/receipt.py
+@@ -26,12 +26,15 @@
+ def bounded_json_nesting(raw):
+     """Nonrecursive resource preflight; ordinary syntax errors stay with v10.
+ 
++    Require strict UTF-8 bytes without raw NULs before the byte scanner.
+     Count JSON object/array containers, ignoring quoted text and escapes.
+     Depth above 64 fails before the recursive JSON decoder is invoked.
+     This does not catch arbitrary RecursionError from application code.
+     """
+     require(type(raw) is bytes and len(raw) <= engine.MAX_BYTES,
+             "expected bounded raw JSON bytes")
++    raw.decode("utf-8", errors="strict")
++    require(b"\x00" not in raw, "JSON bytes must be UTF-8 without raw NUL bytes")
+     depth, quoted, escaped = 0, False, False
+     for byte in raw:
+         if quoted:

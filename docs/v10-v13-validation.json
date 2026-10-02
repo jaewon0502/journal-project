@@ -1,0 +1,27 @@
+{
+  "scope": "Local publication checks, not new research or automatic external code review",
+  "new_model_calls": 0,
+  "unit_test_cases_passed": 121,
+  "v10_calibration_pairs_recounted": 12,
+  "v11_confirmation_replays": 10,
+  "v11_mechanical_corruptions_rejected": 6,
+  "v11_reader_judgments_recounted": 60,
+  "v11_precision_projection_judgments_recounted": 8,
+  "v11_sidecar_judgments_recounted": 16,
+  "v11_portable_smoke_variants": 10,
+  "v12_saved_synthetic_patch_replays": 24,
+  "v13_saved_synthetic_gate_rows_replayed": 12,
+  "privacy_scan": {
+    "natural_source_packet_files": 26,
+    "unique_source_units": 321,
+    "normalized_contiguous_window_characters": 160,
+    "long_overlap_findings": 0,
+    "scope": "New v10-v13 public text only; shorter excerpts and paraphrases are outside this detector's guarantee"
+  },
+  "limitations": [
+    "Historical failed versions and their results are preserved, not reported as current passing code",
+    "No full natural-source re-adjudication or human validation",
+    "Package hashes validate public derivative bytes, not original historical freeze identity",
+    "CI and automatic review status must be read from the pull request for its exact commit"
+  ]
+}

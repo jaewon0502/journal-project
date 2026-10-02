@@ -1,0 +1,148 @@
+[
+  {
+    "review_id": "223e677bb657bf53fe",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "A sponsor",
+        "did not endorse that prediction",
+        "on Friday"
+      ],
+      "original": [
+        "The director predicted"
+      ],
+      "patched": [
+        "A sponsor predicted",
+        "the director withheld endorsement"
+      ]
+    },
+    "reason": "The original assigns the sponsor’s sellout prediction to the director, who expressly withheld endorsement. The patch corrects only that attribution and preserves uncertainty about bookings and the Friday update."
+  },
+  {
+    "review_id": "13c8a51fcbbe67de65",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "코드가 없는 자료에서는 줄지 않았다",
+        "두 종류의 자료 모두 등록 오류율은 기존 절차와 같았다",
+        "분류 코드가 있는 자료에만"
+      ],
+      "original": [
+        "사전 분류 코드가 있는 자료에서만 등록 시간이 줄었고",
+        "두 자료 유형 모두 오류율은 기존 절차와 같았다",
+        "나머지는 기존 절차를 유지"
+      ],
+      "patched": [
+        "사전 분류 코드가 있는 자료에서만 등록 시간이 줄었고"
+      ]
+    },
+    "reason": "The unchanged candidate preserves the condition on faster registration, unchanged error rates for both groups, and selective adoption with the old procedure retained for other materials."
+  },
+  {
+    "review_id": "f6b9b544488df96007",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "올해 봄 경사로를 설치해",
+        "그 과거 비판을 반박하는 근거가 되지는 않는다고"
+      ],
+      "original": [
+        "올해의 개선이 그 비판을 반박한다고"
+      ],
+      "patched": [
+        "올해의 개선이 그 비판을 반박하는 근거가 되지는 않는다고"
+      ]
+    },
+    "reason": "The original reverses the panel’s assessment of whether current improvements rebut justified criticism of past access. The patch restores the negation, retaining the installation timeline, present access, and legitimacy of the past criticism."
+  },
+  {
+    "review_id": "2c92c918752068f297",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "줄어들 수 있다고 전망했다",
+        "다음 분기의 실측 자료가 없었다",
+        "다음 분기가 끝난 뒤"
+      ],
+      "original": [
+        "줄어들 수 있다고 전망했다",
+        "그 분기의 실측 자료는 없었으며",
+        "분기 종료 뒤"
+      ],
+      "patched": [
+        "줄어들 수 있다고 전망했다"
+      ]
+    },
+    "reason": "The unchanged candidate presents a possible future decrease rather than a guarantee or observed result, accurately attributes the forecast, and retains the absence of measurements and the post-quarter disclosure plan."
+  },
+  {
+    "review_id": "87554054b1ea4efb41",
+    "original_verdict": "inconsistent",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "yes",
+    "repaired": "yes",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "only when a request arrived before",
+        "after dispatch still carried the usual fee",
+        "one further month"
+      ],
+      "original": [
+        "both before and after dispatch"
+      ],
+      "patched": [
+        "only before dispatch",
+        "left eligibility unchanged",
+        "for one month"
+      ]
+    },
+    "reason": "The original wrongly includes after-dispatch requests in the fee waiver. The patch restores the before-dispatch restriction and preserves unchanged eligibility and the one-month continuation. “Extended” reasonably summarizes the decision to extend in this context."
+  },
+  {
+    "review_id": "64c5669727aaab9cce",
+    "original_verdict": "faithful",
+    "detector_verdict_supported": "yes",
+    "patch_warranted": "no",
+    "repaired": "not_applicable",
+    "introduced_error": "no",
+    "unnecessary_edit": "no",
+    "anchors": {
+      "source": [
+        "nine days this June",
+        "six days in May",
+        "twelve days in June of the previous year",
+        "did not contradict the slowdown since May"
+      ],
+      "original": [
+        "nine days, slower than May’s six but faster than the previous June’s twelve",
+        "annual improvement did not refute the monthly slowdown"
+      ],
+      "patched": [
+        "The panel upheld the customers’ criticism"
+      ]
+    },
+    "reason": "The unchanged candidate accurately preserves all three durations, the different comparison periods, each party’s position, and the panel’s conclusion that annual improvement does not refute the justified month-to-month criticism."
+  }
+]

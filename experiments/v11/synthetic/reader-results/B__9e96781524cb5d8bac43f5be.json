@@ -1,0 +1,76 @@
+{
+  "packet_id": "9e96781524cb5d8bac43f5be",
+  "answers": {
+    "applied_local": {
+      "answer": "yes",
+      "reason": "Both replacements appear in the displayed output.",
+      "anchor": "3 percentage points; Saturday"
+    },
+    "unchanged": {
+      "answer": "no",
+      "reason": "The unit and day differ from the source.",
+      "anchor": "3 percentage points; Saturday"
+    },
+    "allproposed_applied": {
+      "answer": "yes",
+      "reason": "Both proposed replacements are present; receipt selects p1 and p2.",
+      "anchor": "3 percentage points; Saturday; selected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "The two identified issues are corrected to match E1 and E2; no further identified issue is supplied.",
+      "anchor": "3 percentage points; Saturday; E1; E2"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "All proposed patches are present in the local output.",
+      "reason": "Directly states whether changes were applied to this local output."
+    },
+    "unchanged": {
+      "rating": "accurate_implicit",
+      "short_anchor": "All proposed patches are present in the local output.",
+      "reason": "All nonempty replacements imply a changed output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "All proposed patches are present in the local output.",
+      "reason": "Communicates all applied, none applied, or no requested changes as appropriate."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Factual truth is not independently verified",
+      "reason": "Does not equate review approval with whole-article truth."
+    },
+    "externalpublished": {
+      "rating": "accurate_explicit",
+      "short_anchor": "No external article or publication was changed.",
+      "reason": "Clearly denies an external change."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "question resolution is not adjudicated",
+      "reason": "Describes adjudication or reference status, not whether the identified scenario issues remain in this displayed output; this is not a false assertion that none remain."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Both identified meaning issues are resolved in the displayed output under E1 and E2."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

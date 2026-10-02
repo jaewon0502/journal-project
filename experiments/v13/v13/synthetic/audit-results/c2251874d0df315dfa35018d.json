@@ -1,0 +1,35 @@
+{
+  "audit_id": "c2251874d0df315dfa35018d",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": ["S1.p1", "S1.p2", "S1.p3", "S1.p4", "S1.p5", "S1.p6"],
+  "original_paragraphs_read": true,
+  "changes": [
+    {
+      "id": "change_1",
+      "before": "6억 원",
+      "after": "4억 원",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "introduced_material_harm": "no",
+      "harm_dimensions": [],
+      "source_anchors": [{"paragraph_id": "S1.p2", "text": "이번 군비 편성안은 4억 원이며 군은 이를 의회에 제출할 예정"}],
+      "original_anchors": ["군이 의회에 제출할 군비 편성안은 6억 원이다."],
+      "candidate_anchors": ["군이 의회에 제출할 군비 편성안은 4억 원이다."],
+      "reason": "The only actual edit corrects the proposed county funding amount from 600 million to 400 million won, matching the source. It preserves the amount's status as a budget proposal to be submitted to the council. The design description, conditional opening date, attribution to the county, and permit decision pending as of the announcement remain unchanged; no neighboring or long-distance relation creates a new unsupported implication."
+    }
+  ],
+  "original_residual_issues": [],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "Neither the source nor the original contains criticism."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": false,
+  "unmet_required_answers": [],
+  "uncertainties": [
+    "The sources establish the budget proposal and permit status only as of the fictional September 10, 2026 announcement. Subsequent approval, permit outcome, and actual opening remain unverified; the candidate does not assert them."
+  ],
+  "release_recommendation": "release",
+  "reason": "All six source paragraphs and the full original and candidate were read. The candidate delivers the required supported budget correction without introducing material harm. The source's one observation room, excluded parking expansion, received permit application, and promise to announce a revised opening schedule if permission is delayed are omitted in both article versions, but those omissions do not contradict the retained claims or require an additional factual correction. The necessary permit deadline and conditional March opening remain explicit."
+}

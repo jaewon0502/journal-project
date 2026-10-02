@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-10-02T00:35:44.063686+00:00",
+  "search_tool": "web.run search_query; search snippets used for discovery only, never packet text",
+  "search_queries": [
+    "2025 육아휴직 1년 6개월 2월 23일 뉴스",
+    "2025 한국은행 기준금리 2.50 5월 29일 뉴스",
+    "site.bok.or.kr 통화정책방향 2025.5.29",
+    "site.moel.go.kr 육아지원 2025 2.11",
+    "site.moel.go.kr 임신초기 유산 2025 보도자료"
+  ],
+  "candidate_pool": [
+    {
+      "url": "https://www.yna.co.kr/view/AKR20250529054700002",
+      "status": "selected_development",
+      "access": "web open + direct HTTP 200",
+      "reason": "Ordinary economic news report with directly readable same-day BOK policy statement; selected on access and domain coverage, without requiring a known error."
+    },
+    {
+      "url": "https://www.ibabynews.com/news/articleView.html?idxno=125012",
+      "status": "excluded",
+      "access": "web open + direct HTTP 200; full body inspected",
+      "reason": "Includes minimum-wage paragraph, overlapping excluded prior topic; excluded before evaluation packet assignment."
+    },
+    {
+      "url": "https://www.khan.co.kr/article/202502111114001",
+      "status": "selected_locked_evaluation",
+      "access": "web open + direct HTTP 200",
+      "reason": "Ordinary public-policy report with same-day originating MOEL release and readable complete appendix; chosen on topic separation and access, without requiring a known error."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=_rU_cGySfog",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Video rather than directly readable ordinary article."
+    },
+    {
+      "url": "https://biz.newdaily.co.kr/site/data/html/2025/05/29/2025052900154.html",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Photo-only item; selected fuller economics report."
+    },
+    {
+      "url": "https://mobile.newsis.com/photo/NISI20250211_0020693620",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Photo-only item; selected fuller policy report."
+    },
+    {
+      "url": "https://news.tvchosun.com/site/data/html_dir/2025/02/11/2025021190159.html",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Same-event alternative surfaced; accessible fuller selected article already available."
+    },
+    {
+      "url": "https://mobile.newsis.com/view/NISX20250418_0003145471",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Different later guidebook event; direct implementation report preferable."
+    },
+    {
+      "url": "https://www.onews.tv/news/articleView.html?idxno=233838",
+      "status": "not_pursued",
+      "access": "search result only",
+      "reason": "Same-event alternative; selected fuller report already available."
+    }
+  ],
+  "selection_basis": "Convenience selection for access, originating evidence and two distinct subject domains. No claim of random or representative sampling. No known-error requirement.",
+  "splits_fixed_before_outputs": true,
+  "no_method_outputs_or_gold_created": true,
+  "access_blockers": [],
+  "technical_note": "Python requests package absent; successful acquisition used standard-library urllib. MOEL PDF pages 3–4 are images, visually read and manually transcribed by acquisition agent."
+}

@@ -1,0 +1,74 @@
+{
+  "packet_id": "09d1f70e63f789b26f0605b4",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output.",
+      "anchor": "selected_ids: []; actual_output: increase of 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output repeats the source exactly.",
+      "anchor": "source_sha256 equals output_sha256; status: rolledback"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both patches were rejected and neither is in displayed output.",
+      "anchor": "rejected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "Displayed 3% misstates the stipulated difference and Friday conflicts with the Saturday schedule.",
+      "anchor": "E1: 3 percentage points; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "The review topic is named, but no application outcome is given."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No comparison between displayed output and source is made."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No disposition of the proposed patches is given."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Calling external verification a separate matter does not state whether article-wide correctness is established."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Calling publication a separate matter leaves actual publication status unstated."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "It states the arithmetic and schedule evidence but does not connect them to retained or corrected wording in the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Neither replacement is in the displayed output; both 3% and Friday remain inconsistent with E1 and E2."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

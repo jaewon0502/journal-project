@@ -1,0 +1,44 @@
+{
+  "cases": {
+    "KO-DEV-01": {
+      "sha256": "286803cf77639b16fef4eddd341c358b8115c4a21ca6ecf024b2643d666d802c",
+      "counts": {
+        "atoms": 16,
+        "eligible_required": 11,
+        "eligible_omission": 4,
+        "excluded_required": 5,
+        "unknown": 1
+      }
+    },
+    "EN-DEV-01": {
+      "sha256": "72ab85570f37d63ff9a7444b2bd97e2c03ea7672f9e29285944dbfa5116f8e2c",
+      "counts": {
+        "atoms": 17,
+        "eligible_required": 11,
+        "eligible_omission": 4,
+        "excluded_required": 6,
+        "unknown": 1
+      }
+    },
+    "KO-EVAL-01": {
+      "sha256": "6458cde7d06c554299b05dfa94649d1a84d7b1b5a0c2b4a41273e1c9e82c7098",
+      "counts": {
+        "atoms": 21,
+        "eligible_required": 14,
+        "eligible_omission": 4,
+        "excluded_required": 7,
+        "unknown": 4
+      }
+    },
+    "EN-EVAL-01": {
+      "sha256": "f9ef192753e59f109baf28592e2d8eaba082265d79c9bc8c884b9801cefca662",
+      "counts": {
+        "atoms": 25,
+        "eligible_required": 17,
+        "eligible_omission": 4,
+        "excluded_required": 8,
+        "unknown": 1
+      }
+    }
+  }
+}

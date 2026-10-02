@@ -1,0 +1,22 @@
+{
+  "packet_id": "b8c9339c2c42174ca0989d6f",
+  "source": "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+  "candidate": "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+  "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "candidate_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "위원회 발표문: 모든 신청자가 탈락했다는 소문은 사실이 아닙니다. 5명이 합격했습니다."
+    }
+  ],
+  "target_question": "위원회가 부정한 주장과 위원회 자신의 주장을 정확히 보존했는가?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "patches": [],
+  "delivery": {
+    "artifact_status": "constructed_candidate_under_review_not_final_release",
+    "actual_applied_to_candidate_ids": [],
+    "reader_note": "원문은 위원회가 부정한 주장인 ‘모든 신청자가 탈락했다’와 위원회 자신의 주장인 ‘5명이 합격했다’를 정확히 구분하여 보존합니다. 두 내용과 반박 관계가 E1에 부합하므로 변경을 적용하지 않았습니다. 제공된 자료 범위에서 이 질문과 관련해 미해결된 사항은 없습니다."
+  }
+}

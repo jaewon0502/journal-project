@@ -1,0 +1,86 @@
+[
+  {
+    "item_id": "i_9f36bd72",
+    "base_id": "s_27c18f",
+    "pair_id": "p_b117a405",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_23ac085f",
+    "base_id": "s_27c18f",
+    "pair_id": "p_b117a405",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  },
+  {
+    "item_id": "i_750d6a1c",
+    "base_id": "s_b619a0",
+    "pair_id": "p_ca679e23",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_c830b54e",
+    "base_id": "s_b619a0",
+    "pair_id": "p_ca679e23",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  },
+  {
+    "item_id": "i_61e97c03",
+    "base_id": "s_4ac731",
+    "pair_id": "p_c063186c",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_b08d249a",
+    "base_id": "s_4ac731",
+    "pair_id": "p_c063186c",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  },
+  {
+    "item_id": "i_a78c130e",
+    "base_id": "s_d093f2",
+    "pair_id": "p_32640b27",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_348fb6d2",
+    "base_id": "s_d093f2",
+    "pair_id": "p_32640b27",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  },
+  {
+    "item_id": "i_d512a64f",
+    "base_id": "s_08eb64",
+    "pair_id": "p_194721ad",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_05eb79c8",
+    "base_id": "s_08eb64",
+    "pair_id": "p_194721ad",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  },
+  {
+    "item_id": "i_4f892ae1",
+    "base_id": "s_e514b8",
+    "pair_id": "p_8dbe7229",
+    "role": "normal",
+    "author_expected": "SUPPORTED"
+  },
+  {
+    "item_id": "i_e6370bd5",
+    "base_id": "s_e514b8",
+    "pair_id": "p_8dbe7229",
+    "role": "mutant",
+    "author_expected": "UNSUPPORTED"
+  }
+]

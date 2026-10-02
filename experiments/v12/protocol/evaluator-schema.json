@@ -1,0 +1,11 @@
+{
+  "packet_id":"opaque supplied id",
+  "finding_assessments":[{"atomic_id":"F1a","writer_finding_id":"F1","verdict":"supported|unsupported|partial|unknown","category":"omission|inaccuracy|already_present|nonmaterial_context|uncertain","reference_ids":[],"duplicate_of":null,"article_anchor":"short exact quote or explicit absence scope","evidence_anchors":[],"reason":"brief evidence-based justification"}],
+  "reference_assessments":[{"reference_id":"supplied atomic id","eligibility_agreement":"agree|challenge|unknown","original_presence":"covered|partial|absent|unknown","writer_identified":"yes|no|partial|unknown","candidate_presence":"covered|partial|absent|unknown","source_answer":"brief evidence-bounded answer","candidate_answer":"brief answer or not stated","source_anchor":"exact short span","candidate_anchor":"exact short span or absence","semantic_answer_match":"yes|no|partial|unknown","reason":"explain conditionality/attribution/time rather than answerability alone"}],
+  "patch_assessments":[{"patch_id":"P1","warranted":"yes|no|unknown","new_assertion":"yes|no|unknown","meaning_loss":"yes|no|unknown","overediting":"yes|no|unknown","location_correct":"yes|no|unknown","repairs_identified_issue":"yes|no|partial|unknown","source_true_candidate_false_scenario":"concrete possible counterexample, or none/unknown","candidate_true_protected_source_false_scenario":"concrete possible loss, or none/unknown","evidence_justifies_difference":"yes|no|unknown|not_applicable","anchors":[],"reason":"do not force equivalence for justified factual correction"}],
+  "unlisted_findings":[{"description":"possible additional omission or harm absent from frozen reference","source_anchor":"exact","article_or_candidate_anchor":"exact or bounded absence","material_question_id":"Q1|Q2|Q3","status":"supported|unknown","reason":"needs separate challenge; not automatically score-key expansion"}],
+  "unanswered_scope":[{"question_id":"Q1","component":"specific material question component","status":"answered|partial|unanswered|unknown","acknowledged_by_writer":true,"reason":"evidence-based"}],
+  "overall_flags":{"any_supported_harm":false,"any_unresolved_material_issue":false},
+  "complete":true,
+  "read_complete":true
+}

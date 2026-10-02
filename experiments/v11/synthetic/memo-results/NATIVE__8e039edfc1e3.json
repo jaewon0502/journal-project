@@ -1,0 +1,9 @@
+{
+  "input_id": "8e039edfc1e3",
+  "text": "The displayed local output applies p1, replacing ‘3%’ with ‘3 percentage points,’ consistent with the scenario’s stipulated rise from 21% to 24%. The proposed Friday-to-Saturday change (p2) was rejected and rolled back, so the meeting remains on Friday. Only p1 was selected in the approved candidate and carried into the locally released output; nothing is held. The meeting date remains an identified meaning issue: the supplied fictional schedule says Saturday, while the displayed text says Friday. Rejection of that patch does not establish Friday as correct or resolve the discrepancy.",
+  "limitations": [
+    "This note describes supplied local output and audits, not an independent adjudication or human fact-check. Overall factual accuracy and question resolution were not established.",
+    "The evidence is an authored scenario, not real-world library or meeting evidence. Review identities are not authenticated by the hashes. No external publication occurred."
+  ],
+  "declared_scope": "displayed_local_output"
+}

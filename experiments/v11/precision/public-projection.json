@@ -1,0 +1,289 @@
+{
+  "scope": "Separate exposed-case precision micro-regression, not part of confirmation score; arithmetic over four native outputs and eight recorded AI reader judgments.",
+  "underlying_article_events": 1,
+  "native_outputs": 4,
+  "reader_judgments": 8,
+  "all_input_output_packet_hashes_verified": true,
+  "all_common_inputs_identical_except_input_id_and_target_question": true,
+  "source_sha256": "3591df7d10dcccb7604b0dc84237e26568c6eff2322fdb96ed5a9e1260b382f1",
+  "task_factor": {
+    "original_strengthened": "Does the account of an exactly one-hundredth Celsius difference agree with the bulletin's less-than-0.01 difference? Distinguish attributed speech from measured data and preserve the tie/uncertainty and criticism. Also assess whether the later August 24–25 sea record justifies deleting the August 22 record assertion; explicitly name what remains unknown.",
+    "source_aligned": "Does the account of a one-hundredth Celsius difference agree with the bulletin's less-than-0.01 difference? Distinguish attributed speech from measured data and preserve the tie/uncertainty and criticism. Also assess whether the later August 24–25 sea record justifies deleting the August 22 record assertion; explicitly name what remains unknown.",
+    "exact_change": "an exactly one-hundredth → a one-hundredth",
+    "other_semantic_input_differences": [],
+    "administrative_difference": "input_id differs"
+  },
+  "reader_scope": [
+    "source",
+    "candidate",
+    "evidence",
+    "evidence_boundary",
+    "source_metadata",
+    "reader_note"
+  ],
+  "hidden_from_readers": [
+    "target_question",
+    "condition",
+    "writer patch reason",
+    "writer self_check",
+    "writer protection inventory"
+  ],
+  "conditions": {
+    "original_strengthened": {
+      "native_outputs": 2,
+      "reader_judgments": 4,
+      "strengthened_precision": {
+        "ambiguous": 2,
+        "yes": 2
+      },
+      "contradiction_claim": {
+        "claimed": 2,
+        "qualified_or_unresolved": 2
+      },
+      "contradiction_support": {
+        "insufficient": 4
+      },
+      "unsupported_inference_items": 5,
+      "judgments_recording_unsupported_inferences": 3,
+      "by_reader": {
+        "A": {
+          "strengthened_precision": {
+            "ambiguous": 1,
+            "yes": 1
+          },
+          "contradiction_claim": {
+            "claimed": 1,
+            "qualified_or_unresolved": 1
+          },
+          "unsupported_inference_items": 3,
+          "judgments_recording_unsupported_inferences": 2
+        },
+        "B": {
+          "strengthened_precision": {
+            "ambiguous": 1,
+            "yes": 1
+          },
+          "contradiction_claim": {
+            "claimed": 1,
+            "qualified_or_unresolved": 1
+          },
+          "unsupported_inference_items": 2,
+          "judgments_recording_unsupported_inferences": 1
+        }
+      },
+      "paired_agreement": {
+        "strengthened_precision.verdict": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "contradiction_claim.verdict": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "contradiction_claim.support": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "unsupported_inference_presence": {
+          "matching_output_pairs": 1,
+          "total_output_pairs": 2
+        }
+      }
+    },
+    "source_aligned": {
+      "native_outputs": 2,
+      "reader_judgments": 4,
+      "strengthened_precision": {
+        "no": 2,
+        "yes": 2
+      },
+      "contradiction_claim": {
+        "claimed": 2,
+        "qualified_or_unresolved": 2
+      },
+      "contradiction_support": {
+        "insufficient": 4
+      },
+      "unsupported_inference_items": 5,
+      "judgments_recording_unsupported_inferences": 3,
+      "by_reader": {
+        "A": {
+          "strengthened_precision": {
+            "no": 1,
+            "yes": 1
+          },
+          "contradiction_claim": {
+            "claimed": 1,
+            "qualified_or_unresolved": 1
+          },
+          "unsupported_inference_items": 3,
+          "judgments_recording_unsupported_inferences": 2
+        },
+        "B": {
+          "strengthened_precision": {
+            "no": 1,
+            "yes": 1
+          },
+          "contradiction_claim": {
+            "claimed": 1,
+            "qualified_or_unresolved": 1
+          },
+          "unsupported_inference_items": 2,
+          "judgments_recording_unsupported_inferences": 1
+        }
+      },
+      "paired_agreement": {
+        "strengthened_precision.verdict": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "contradiction_claim.verdict": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "contradiction_claim.support": {
+          "matching_output_pairs": 2,
+          "total_output_pairs": 2
+        },
+        "unsupported_inference_presence": {
+          "matching_output_pairs": 1,
+          "total_output_pairs": 2
+        }
+      }
+    }
+  },
+  "limitations": [
+    "One previously exposed EN023 event; no fresh holdout.",
+    "Two stochastic native outputs per condition, no controlled seeds or pinned deployment version.",
+    "Same source does not imply same output; task wording and stochastic generation can both matter.",
+    "No inference of causal effect, effect size, significance, generalization or human-reader comprehension.",
+    "No additional generation or post-hoc prompt changes."
+  ],
+  "projection_only": true,
+  "outputs": [
+    {
+      "condition": "original_strengthened",
+      "repetition": 1,
+      "input_id": "2259a4cc7238c1f7de770371",
+      "packet_id": "dbc973b01536ff19d5a88642",
+      "input_sha256": "3f66c3dcc6af86c88086b2f5d78874c81e022928341acc5d805332650de25dc8",
+      "response_sha256": "844677775ce24bb5513627e8d644ca493bc804d4035b0c56cee8cfe0fae0ed20",
+      "candidate_sha256": "b1f5a4abd9bbc4f985dc7b480e2c518d5f5067d9a0c5b5b885ac9ec453a0b20e",
+      "patch_count": 1,
+      "added_clauses": [
+        "The Copernicus August 2026 bulletin, however, reports that the difference was less than 0.01 degrees Celsius and classifies August 2026 and July 2023 as joint-warmest, with displayed averages of 16.96 and 16.95 degrees Celsius, respectively."
+      ],
+      "ratings": {
+        "A": {
+          "strengthened_precision": "ambiguous",
+          "contradiction_claim": "qualified_or_unresolved",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 1
+        },
+        "B": {
+          "strengthened_precision": "ambiguous",
+          "contradiction_claim": "qualified_or_unresolved",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 0
+        }
+      },
+      "raw_judgment_hashes": {
+        "A": "e4c5dad5ea936f435651f53dae5c6d6f9feda22479acb909b21f5b55abbe805f",
+        "B": "f6f89eeb8c461ac28b2ed0abec657aa1b92e82981a78ba8ee3fcb912e18ebc5c"
+      }
+    },
+    {
+      "condition": "original_strengthened",
+      "repetition": 2,
+      "input_id": "bf1ba39f2c033aaa5f2c7635",
+      "packet_id": "ab747477a6e3e0393854c7f2",
+      "input_sha256": "11c83fe0d92b084b42af7fc4101752d22c3bec7989102249d592fc56dcdb0e60",
+      "response_sha256": "908fa28ab7686f5acee566be0955fa1f6ad01d8bd7c4b062d6e183ad6d1e6225",
+      "candidate_sha256": "1117239c20c95b401d9f0a026014614734500d52e2f44976b386d50a52278fa3",
+      "patch_count": 1,
+      "added_clauses": [
+        "The Copernicus August 2026 bulletin, however, reports that the difference from July 2023 was less than 0.01 degrees Celsius, while likewise classifying the two months as joint-warmest."
+      ],
+      "ratings": {
+        "A": {
+          "strengthened_precision": "yes",
+          "contradiction_claim": "claimed",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 2
+        },
+        "B": {
+          "strengthened_precision": "yes",
+          "contradiction_claim": "claimed",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 2
+        }
+      },
+      "raw_judgment_hashes": {
+        "A": "c65635ec3ed0d65e983e678b528a9add32ab49c02e56d0f351f52cecb4d281f6",
+        "B": "abbe282ff863f6b1f0fa3f35ddadf117a96993e5e11dde70591fb0810cd252de"
+      }
+    },
+    {
+      "condition": "source_aligned",
+      "repetition": 1,
+      "input_id": "fbc3ab094016f98313cf2559",
+      "packet_id": "1227ce89816e839d05fb6c21",
+      "input_sha256": "ffd716cad7c447fe51bec15c0519703be892842a46cbbe42d0147b626118be31",
+      "response_sha256": "80b2982e8a4f945cd4716817faf99592a55a8b2e1747deab8c637525c2bc04fe",
+      "candidate_sha256": "d018590f04548efce2b7035e28b6e4abc101d194b05f643a42388200b8f55275",
+      "patch_count": 1,
+      "added_clauses": [
+        "Copernicus’ August 2026 bulletin reports that the difference from July 2023 was less than 0.01 degrees Celsius, despite the displayed rounded values of 16.96 and 16.95 degrees Celsius, and likewise classifies the two months as joint-warmest."
+      ],
+      "ratings": {
+        "A": {
+          "strengthened_precision": "no",
+          "contradiction_claim": "qualified_or_unresolved",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 1
+        },
+        "B": {
+          "strengthened_precision": "no",
+          "contradiction_claim": "qualified_or_unresolved",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 0
+        }
+      },
+      "raw_judgment_hashes": {
+        "A": "da5ddcebfe85c20a285417ede50441160f963842ced05dfe01d5cf2aecf8e8dd",
+        "B": "debb129214ff4b45f415b010a7dd765caef46480c3611489cb4fe8166948da92"
+      }
+    },
+    {
+      "condition": "source_aligned",
+      "repetition": 2,
+      "input_id": "6af34dd6eb500dcf83375e41",
+      "packet_id": "e6cafb1931d375b0474ff102",
+      "input_sha256": "a35096f78ae17d54f805ad013d0c48c5e46755d44c14da2ba04db1b20bd12aa5",
+      "response_sha256": "2797500d1080b82158cb83a0a5c685fa8619a8a6dfdb8ff696a9c69ab689b004",
+      "candidate_sha256": "d63c2c09ee4019ffc68b5816bd8f32e081489b56b70dff702c6f410ba42604e7",
+      "patch_count": 1,
+      "added_clauses": [
+        "The Copernicus August 2026 bulletin reports the difference from July 2023 as less than 0.01 degrees Celsius, rather than exactly one-hundredth, while likewise classifying the months as jointly warmest; its displayed averages are rounded to 16.96 and 16.95 degrees Celsius, respectively."
+      ],
+      "ratings": {
+        "A": {
+          "strengthened_precision": "yes",
+          "contradiction_claim": "claimed",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 2
+        },
+        "B": {
+          "strengthened_precision": "yes",
+          "contradiction_claim": "claimed",
+          "contradiction_support": "insufficient",
+          "unsupported_inference_items": 2
+        }
+      },
+      "raw_judgment_hashes": {
+        "A": "4b46c66018d3293f3fc8111889ee4eaf73621e05f539d4da3069400649d5a61e",
+        "B": "ae37dee6e0fb23786c8e6f815e27aec6f3f253d09b03b19fd6cccf7a4807f7a2"
+      }
+    }
+  ]
+}

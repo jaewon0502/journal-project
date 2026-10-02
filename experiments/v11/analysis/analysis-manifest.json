@@ -1,0 +1,30 @@
+{
+  "scope": "arithmetic and diagnostic summary of immutable recorded reader responses",
+  "files": [
+    {
+      "path": "/historical-research/journal-v11/analysis/aggregate_readers.py",
+      "sha256": "01fc669619681751d0568d0d319b9246a984975580caee1aaa09e16ebb4c8ab0",
+      "bytes": 6548
+    },
+    {
+      "path": "/historical-research/journal-v11/analysis/reader-propositions.json",
+      "sha256": "41e8e5b091c7b050e7089c3d3f67729a99f4e0421b71061189c55831f7922f14",
+      "bytes": 217600
+    },
+    {
+      "path": "/historical-research/journal-v11/analysis/reader-report.ko.md",
+      "sha256": "5c0b3cef017dca6b89b03ae7a9df65f76ea66fe3c72752e5f18f1282bf6cabd9",
+      "bytes": 9753
+    },
+    {
+      "path": "/historical-research/journal-v11/analysis/reader-summary.json",
+      "sha256": "dff64d815a2cfc50bd234330e4190fe66f18bcd9ec7c996d3b6fc0f42e4c3006",
+      "bytes": 74704
+    },
+    {
+      "path": "/historical-research/journal-v11/analysis/write_report.py",
+      "sha256": "4aa2bba33e0e0b287ae4d51cdcf9cda804a4fafc68a3f63f8389325a32d665d5",
+      "bytes": 9094
+    }
+  ]
+}

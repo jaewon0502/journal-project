@@ -1,0 +1,120 @@
+{
+  "bundle_id": "f4a8d1",
+  "input_sha256": "d6b562666b36191cadcb07ebaebc9888205ecd484c9e599c4f6697ba1b96a916",
+  "source_sha256": "026800620a9634448908c9ff5d2b9de5bc54ece16947abb374b1bc038b775b33",
+  "original_sha256": "ceb94b2968e48f796d6d283b1bc2fa7d6eea4642bb01cdea594c9197f7bda471",
+  "patches_sha256": "ace4be480d52d318998a95898bc068e6c8ae010f4295302396c56c16b6f7b798",
+  "complete": true,
+  "read_complete": true,
+  "patch_assessments": [
+    {
+      "patch_id": "P1",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "참여 공간은 센터가 직접 운영하는 14곳이다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "공지에 적힌 참여 공간은 센터가 직접 운영하는 11곳이며 지역의 민간 공연장은 포함하지 않는다."
+        }
+      ],
+      "reason": "The original count of 14 conflicts with the supplied notice’s 11 directly operated spaces. P1 corrects only that count while retaining the operator and participating-space scope. Its exact before span occurs once, is disjoint from P2, and the candidate applies it faithfully. Neither the deadline, lottery selection nor historical attendance sentence depends on this count; the surrounding relations remain intact. No required dependency or candidate interaction is identified.",
+      "confidence": "high"
+    },
+    {
+      "patch_id": "P2",
+      "warranted": "yes",
+      "evidence_support": "yes",
+      "preserves_untargeted_meaning": "yes",
+      "context_safe": "yes",
+      "application_valid": "yes",
+      "dependencies": [],
+      "dependency_status": "complete",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "신청서는 9월 18일 오후 6시까지 접수하며 참여 팀은 추첨으로 정한다."
+        },
+        {
+          "document_id": "S1.p3",
+          "quote": "신청서는 9월 20일 오후 6시까지 접수하고, 접수순이 아니라 별도 추첨으로 참여 팀을 정한다."
+        }
+      ],
+      "reason": "The notice directly establishes September 20 at 6 p.m., so changing September 18 to September 20 is a necessary factual correction. The time and lottery clause are preserved. The before span is exact and unique, does not overlap P1, and is faithfully applied in the candidate. The corrected deadline fits the separately stated September 22 notification and October trial; neither the space count correction nor historical attendance evidence is needed to make this edit safe. Dependency analysis identifies no required patch.",
+      "confidence": "high"
+    }
+  ],
+  "background_issues": [
+    {
+      "id": "B1",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P1"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "참여 공간은 센터가 직접 운영하는 14곳이다."
+        },
+        {
+          "document_id": "S1.p2",
+          "quote": "센터가 직접 운영하는 11곳"
+        }
+      ],
+      "reason": "The original misstates the number of participating directly operated spaces; P1 resolves this error in the full candidate. Holding P1 would leave it uncorrected."
+    },
+    {
+      "id": "B2",
+      "status": "resolved",
+      "material": "yes",
+      "affects_patch_ids": [
+        "P2"
+      ],
+      "unrelated_to_edits": "no",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "신청서는 9월 18일 오후 6시까지 접수하며"
+        },
+        {
+          "document_id": "S1.p3",
+          "quote": "신청서는 9월 20일 오후 6시까지 접수하고"
+        }
+      ],
+      "reason": "The original deadline is two days early. P2 resolves this actionable timing error in the candidate; holding P2 would leave it uncorrected."
+    },
+    {
+      "id": "B3",
+      "status": "unresolved",
+      "material": "yes",
+      "affects_patch_ids": [],
+      "unrelated_to_edits": "yes",
+      "anchors": [
+        {
+          "document_id": "original",
+          "quote": "센터는 지난해 주말 이용객이 전년보다 늘었다고 밝힌 바 있다."
+        },
+        {
+          "document_id": "S1.p6",
+          "quote": "이 공지는 이번 대관 시험의 모집 절차만 설명하고 이용객 통계는 제공하지 않는다."
+        }
+      ],
+      "reason": "The supplied notice and explicitly limited source scope cannot verify the unchanged claim about a previous center announcement and year-over-year weekend attendance. Missing evidence does not establish that claim is false; separate historical announcement or attendance evidence is needed. This is a substantive original evidence limitation. It concerns a distinct past comparison and attribution, not participating-space count or application timing. Neither edit changes that sentence, creates a causal or comparative link to it, changes its adjacent relation to the trial timetable, or depends on it; the issue is therefore unrelated to both edits and their dependencies."
+    }
+  ],
+  "global_material_risk": "no",
+  "global_risk_reason": "No unresolved new or edit-related material risk is identified in the full simultaneous candidate. Both corrections are independently supported and preserve surrounding relations. The unchanged historical attendance assertion remains an unrelated original evidence limitation, not a risk introduced by the edits.",
+  "global_risk_anchors": [],
+  "preference_differences": [],
+  "overall_reason": "Read the entire supplied wrapper, sources, scope note, original, questions, both patches and simultaneous candidate. P1 corrects the participating-space count and P2 the deadline without dependencies or conflicts. No candidate application errors are supplied or found. The historical attendance assertion remains unverified within the expressly limited source set and requires separate evidence; it is not refuted by omission from this notice. No additional factual correction is established by the supplied material. This review is not a final safety audit."
+}

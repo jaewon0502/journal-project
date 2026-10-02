@@ -1,0 +1,30 @@
+{
+  "source_meaning_error": false,
+  "original_meaning_loss": false,
+  "required_answer_missing": false,
+  "optional_context_absence": false,
+  "decision": "accept",
+  "evidence": [
+    {
+      "field": "source",
+      "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+      "supports": "자료는 등록 회원이라는 대상과 안전교육 이수라는 필수 조건을 명시한다."
+    },
+    {
+      "field": "original_article",
+      "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+      "supports": "원문의 대상, 조건, 안내 주체가 후보에 모두 보존되어 있다."
+    },
+    {
+      "field": "candidate",
+      "quote": "별모래제작소는 등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다고 안내했다.",
+      "supports": "후보가 자료 및 원문과 동일하여 의미 오류나 의미 손실이 없고 자료에서 빠진 추가 사실도 없다."
+    },
+    {
+      "field": "reader_question",
+      "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+      "supports": "후보는 등록 회원이 안전교육을 이수해야 한다고 답하므로 필수 답변 정보가 누락되지 않았다."
+    }
+  ],
+  "reason": "후보는 자료 및 원문과 동일하며 등록 회원이라는 대상, 안전교육 이수라는 필수 조건, 별모래제작소의 안내라는 귀속을 모두 보존한다. 독자 질문에 필요한 정보가 모두 있으며 생략된 선택 맥락도 없다. 세 오류 항목이 모두 false이므로 accept로 판정한다."
+}

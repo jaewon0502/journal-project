@@ -1,0 +1,36 @@
+{
+  "audit_id": "4228c5b2b48fdd9e7a4aee8d",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [],
+  "original_residual_issues": [
+    {
+      "issue": "The final contracted supplier count remains 9 rather than 7.",
+      "evidence_status": "refuted_by_source",
+      "reason": "S1.p2 states “최종 납품 계약을 맺은 업체가 7곳” and excludes the two preliminary negotiating firms. Both original and candidate retain “최종 납품 계약을 맺은 업체는 9곳이다.” Correct 9곳 to 7곳; optionally clarify that the two preliminary participants are excluded. This is an unchanged original factual error, not an introduced harm."
+    }
+  ],
+  "criticism_preservation": {
+    "status": "preserved",
+    "reason": "The candidate exactly preserves the parent group’s criticism, including actor, target, causal allegation and intensity, and retains the foundation’s response and ongoing investigation. S1.p4 records the criticism; S1.p5–p6 distinguish the admitted lack of classroom compatibility testing from the still-unresolved cause of classroom disruption."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": true,
+  "unmet_required_answers": [
+    "The needed factual correction of the final contracted supplier count from 9 to 7 has not been delivered; no beneficial correction is present."
+  ],
+  "uncertainties": [
+    "The cause of classroom disruption remains under investigation in S1.p6; the parent group’s causal allegation is attributed criticism, not an established finding."
+  ],
+  "release_recommendation": "release",
+  "reason": "All supplied source paragraphs and the full original were read. The candidate is exactly identical to the original, so there are no changed spans or new contextual implications to judge. Release is supported only under the relative-safety criterion: no introduced harm or unknown change safety. The unchanged article remains inaccurate about the supplier count and requires that correction. This independent AI report is not human validation or proof of exhaustive semantic coverage."
+}

@@ -1,0 +1,125 @@
+{
+  "measurement": "Counts descriptions/materiality/status/limits, patch after+justification, answers/remaining_unknown, unanswered_scope/no_change_reason/declared_limits. Excludes before, article/evidence anchor quotes, identifiers and JSON keys. Replacement after always counted even if partly copied. This explicit mechanical operationalization is measurement metadata, not posthoc success threshold. No truncation/rerun for exceedance.",
+  "rows": [
+    {
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "A",
+      "input_id": "088d7390d4359ea589b69407",
+      "total_json_characters": 8026,
+      "total_json_whitespace_words": 1187,
+      "narrative_characters": 2640,
+      "narrative_whitespace_words": 626,
+      "requested_cap": 3500,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v1",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "input_id": "ef01c1c27fd3418ca0e1d3be",
+      "total_json_characters": 6966,
+      "total_json_whitespace_words": 1062,
+      "narrative_characters": 2619,
+      "narrative_whitespace_words": 621,
+      "requested_cap": 3500,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "A",
+      "input_id": "e54d797342e6b80fbea0299d",
+      "total_json_characters": 10215,
+      "total_json_whitespace_words": 1025,
+      "narrative_characters": 4884,
+      "narrative_whitespace_words": 630,
+      "requested_cap": 900,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v1",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "input_id": "ede155dad512a3d7d433676c",
+      "total_json_characters": 10961,
+      "total_json_whitespace_words": 1067,
+      "narrative_characters": 4917,
+      "narrative_whitespace_words": 627,
+      "requested_cap": 900,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "KO-DEV-01",
+      "condition": "B",
+      "input_id": "77c17b415a3e6380cb8da833",
+      "total_json_characters": 7314,
+      "total_json_whitespace_words": 1105,
+      "narrative_characters": 2582,
+      "narrative_whitespace_words": 596,
+      "requested_cap": 3500,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "EN-DEV-01",
+      "condition": "B",
+      "input_id": "d020bd701650da951576fccd",
+      "total_json_characters": 12990,
+      "total_json_whitespace_words": 1496,
+      "narrative_characters": 5006,
+      "narrative_whitespace_words": 665,
+      "requested_cap": 900,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "A",
+      "input_id": "c437a544c3c8c4ff39ae7f3d",
+      "total_json_characters": 7967,
+      "total_json_whitespace_words": 1131,
+      "narrative_characters": 2248,
+      "narrative_whitespace_words": 536,
+      "requested_cap": 3500,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "KO-EVAL-01",
+      "condition": "B",
+      "input_id": "0cb0917c57864cfa4be1121e",
+      "total_json_characters": 9432,
+      "total_json_whitespace_words": 1236,
+      "narrative_characters": 2369,
+      "narrative_whitespace_words": 560,
+      "requested_cap": 3500,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "A",
+      "input_id": "ec8450119a3653826b876bd1",
+      "total_json_characters": 9468,
+      "total_json_whitespace_words": 1154,
+      "narrative_characters": 4784,
+      "narrative_whitespace_words": 694,
+      "requested_cap": 900,
+      "exceeds_requested_cap": false
+    },
+    {
+      "version": "v2",
+      "case_id": "EN-EVAL-01",
+      "condition": "B",
+      "input_id": "21bae782c8af373f772865fa",
+      "total_json_characters": 9424,
+      "total_json_whitespace_words": 1116,
+      "narrative_characters": 4636,
+      "narrative_whitespace_words": 649,
+      "requested_cap": 900,
+      "exceeds_requested_cap": false
+    }
+  ]
+}

@@ -1,0 +1,2452 @@
+{
+  "status": "final_audit_validation_complete_with_reported_anchor_deviations_and_modality_caveat",
+  "validated_at_utc": "2026-10-02T02:25:29.674565+00:00",
+  "scope": {
+    "bundles": 8,
+    "synthetic_bundles": 6,
+    "authored_synthetic_patches": 10,
+    "exposed_v12_real_bundles": 2,
+    "v12_real_patches": 17,
+    "risk_review_records": 16,
+    "patch_assessments": 54,
+    "unique_final_audit_candidates": 15
+  },
+  "checks": [
+    {
+      "name": "freeze:protocol/PREREGISTRATION.md",
+      "passed": true,
+      "evidence": "f8adfa7211743771ed2d9f0a0c80167378ec2cc40c5d67a206fbfbfda86b6b31"
+    },
+    {
+      "name": "freeze:protocol/REVIEW_SCHEMA.json",
+      "passed": true,
+      "evidence": "404c1e3d2fa06d5fa177feae2bef8f40d91fef028707e3c647e94fe00ead13ee"
+    },
+    {
+      "name": "freeze:protocol/REVIEW_INSTRUCTIONS.md",
+      "passed": true,
+      "evidence": "8a74606fa071617ce4a4f708fc85912751e692068b56124f1e9eeac768e807f3"
+    },
+    {
+      "name": "freeze:code/gate.py",
+      "passed": true,
+      "evidence": "6ffbc5c7c5577131b1f9a5d81ee3f8569bd6de3366716cac0f844d19013d113a"
+    },
+    {
+      "name": "freeze:code/build_schema.py",
+      "passed": true,
+      "evidence": "b3771a6a294a4f702e3bf7d7080b8ff97910a9db5e100d0649cc4ca5dffa9059"
+    },
+    {
+      "name": "freeze:code/test_gate.py",
+      "passed": true,
+      "evidence": "ead5689afa1f7a7954fd0534ad287a5ed7c5025490db778f078c59f41e76281d"
+    },
+    {
+      "name": "freeze:code/README.md",
+      "passed": true,
+      "evidence": "07553da846f68021e2c74e486d3e5ab993a467f689b1665936fd2a932ba44a6a"
+    },
+    {
+      "name": "synthetic lock:b7e2c9",
+      "passed": true,
+      "evidence": "6d563a3ce2efa0197b1527adefbf0920a6048f1fad99979ff8635fef3118d359"
+    },
+    {
+      "name": "synthetic lock:f4a8d1",
+      "passed": true,
+      "evidence": "d6b562666b36191cadcb07ebaebc9888205ecd484c9e599c4f6697ba1b96a916"
+    },
+    {
+      "name": "synthetic lock:c2d6a0",
+      "passed": true,
+      "evidence": "1f657315d334b245c97c1e00273448ccb531dc5d4f40ab947530816a86500dcf"
+    },
+    {
+      "name": "synthetic lock:a9f3b6",
+      "passed": true,
+      "evidence": "bc8626b106036c2e2ad15bfadb00434aa0c726e01bc1c5dad510dae578fb8505"
+    },
+    {
+      "name": "synthetic lock:e6b1d4",
+      "passed": true,
+      "evidence": "1a2e3291941420a39b8f13a8673f7ec5831500bcda94c5c0661dea383b21fd1f"
+    },
+    {
+      "name": "synthetic lock:d0c7e5",
+      "passed": true,
+      "evidence": "fbf015fe119a40b75dcc9ffbd3bc7db84db6a4b54fc685d78fe51018b14ceedf"
+    },
+    {
+      "name": "real lock:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "46897ac06d34545d18bc9b1878901f792b8bf8b8dbd10cc5cbff791341ec8a71"
+    },
+    {
+      "name": "real lock:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "f5a736d0761f736d796ec4223adf324d416936a90ffc4bf534b547b0dc19d9e5"
+    },
+    {
+      "name": "review wrapper lock:a9f3b6",
+      "passed": true,
+      "evidence": "da3e217fe21440b7d4c0cab741ee9742f0c8a1501776441740ce39b4acc12ed4"
+    },
+    {
+      "name": "review wrapper lock:b7e2c9",
+      "passed": true,
+      "evidence": "66127e8a0b9b45415630100e3a819a4f9e2719a492d687cfb079e04534282363"
+    },
+    {
+      "name": "review wrapper lock:c2d6a0",
+      "passed": true,
+      "evidence": "b07dc47ac815ea2736602bc730e46b472fdb1d8cf43542743b0cb10dea5f1972"
+    },
+    {
+      "name": "review wrapper lock:d0c7e5",
+      "passed": true,
+      "evidence": "45dfb3d09655af56a30a8347c1e8b1c3764140b5c13a9116ef38876744a07e96"
+    },
+    {
+      "name": "review wrapper lock:e6b1d4",
+      "passed": true,
+      "evidence": "4f683534892354de1fd2cd905f997bcbfa71b70057c0bfc2eba9f98c73d32394"
+    },
+    {
+      "name": "review wrapper lock:f4a8d1",
+      "passed": true,
+      "evidence": "5b6f6b341945b7e23a0217513922974881456a0f825ea1c873e71ac4f4fc4034"
+    },
+    {
+      "name": "review wrapper lock:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "65f74bf1413c11305f13deb23276e45860002e9f98e5b3db3c015d6d445cacd6"
+    },
+    {
+      "name": "review wrapper lock:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "f43f98a7a46b66181969b3d613537a89a7e8d720798c359ecdd2ec73d1d7da1a"
+    },
+    {
+      "name": "wrapper components:a9f3b6",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:a9f3b6",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:a9f3b6",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "a46c5a2d562d1992370e01e2e469085290e7686930f14310754112b16eac58aa",
+        "replay_sha256": "a46c5a2d562d1992370e01e2e469085290e7686930f14310754112b16eac58aa"
+      }
+    },
+    {
+      "name": "distinct review records:a9f3b6",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:b7e2c9",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:b7e2c9",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:b7e2c9",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "5e4533e8640571357b934b4379835940d4d683f0f948351c695613a012f9ceb0",
+        "replay_sha256": "5e4533e8640571357b934b4379835940d4d683f0f948351c695613a012f9ceb0"
+      }
+    },
+    {
+      "name": "distinct review records:b7e2c9",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:c2d6a0",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:c2d6a0",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:c2d6a0",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "0ffef764af42c4de7e56efe68558d253dd11a87cc70eccb8785efcaaa787de51",
+        "replay_sha256": "0ffef764af42c4de7e56efe68558d253dd11a87cc70eccb8785efcaaa787de51"
+      }
+    },
+    {
+      "name": "distinct review records:c2d6a0",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:d0c7e5",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:d0c7e5",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:d0c7e5",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "4e2dd81c0149e41f393b2c88310cf41d17888fb8b084e3acd46e51496f3646bc",
+        "replay_sha256": "4e2dd81c0149e41f393b2c88310cf41d17888fb8b084e3acd46e51496f3646bc"
+      }
+    },
+    {
+      "name": "distinct review records:d0c7e5",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:e6b1d4",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:e6b1d4",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:e6b1d4",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "97853ebd2698b918fa39892f88f9c0675d9401fcb097863954b004164c0b8092",
+        "replay_sha256": "97853ebd2698b918fa39892f88f9c0675d9401fcb097863954b004164c0b8092"
+      }
+    },
+    {
+      "name": "distinct review records:e6b1d4",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:f4a8d1",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:f4a8d1",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:f4a8d1",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "384f24d35eb5e6e152d2fa375ace3b2481f51b0a229bc809ed5f9c25470a4d93",
+        "replay_sha256": "384f24d35eb5e6e152d2fa375ace3b2481f51b0a229bc809ed5f9c25470a4d93"
+      }
+    },
+    {
+      "name": "distinct review records:f4a8d1",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "ad729596dc4f1445b0f8170ea115f306f0cbdbf78ba294ff289724e03a80bd0a",
+        "replay_sha256": "ad729596dc4f1445b0f8170ea115f306f0cbdbf78ba294ff289724e03a80bd0a"
+      }
+    },
+    {
+      "name": "distinct review records:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "wrapper components:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "full unchanged parsed bundle, binding, full candidate, fixed instructions/schema"
+    },
+    {
+      "name": "review validation:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": [
+        [],
+        []
+      ]
+    },
+    {
+      "name": "in-memory replay byte identity:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": {
+        "saved_sha256": "ac03c8b162e79d56bbe48c3eaf1a6b590eabb22ffea7d5d5bda161a06f0eb5b2",
+        "replay_sha256": "ac03c8b162e79d56bbe48c3eaf1a6b590eabb22ffea7d5d5bda161a06f0eb5b2"
+      }
+    },
+    {
+      "name": "distinct review records:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "Distinct JSON contents; this does not prove context or model independence."
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/writer-inputs-v1/e54d797342e6b80fbea0299d.json",
+      "passed": true,
+      "evidence": "8ab892aaba7f55ab22031df3cf39b9d106b5cb4ca761fd105c3a2012446de6bf"
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/reviewer-inputs-v1/e04940ff183338f5fe772428.json",
+      "passed": true,
+      "evidence": "d0dfcc6a19a42daf1b6976bf2cb8b3e139314d6cb1897975d0aa099624ef437e"
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/writer-results-v1/e54d797342e6b80fbea0299d.json",
+      "passed": true,
+      "evidence": "5dd27f0fae8347b9d309eb78f8cc5191c96c3c16cc8a633468d798a374e7913a"
+    },
+    {
+      "name": "v12 original/questions:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "direct decoded equality with original v12 writer and reviewer inputs"
+    },
+    {
+      "name": "v12 all source paragraphs:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "all IDs/text/order preserved"
+    },
+    {
+      "name": "v12 all proposals:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "all 17 original patches preserved with declared justification-to-reason rename and finding_ids omitted"
+    },
+    {
+      "name": "v12 full candidate:70d87266fca45f0cf61e141a",
+      "passed": true,
+      "evidence": "simultaneous candidate matches v12 exactly"
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/writer-inputs-v2/0cb0917c57864cfa4be1121e.json",
+      "passed": true,
+      "evidence": "e536c950e1dce89fb22af7cb78188c3249e91488e52e797a50d2ee9930d84876"
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/reviewer-inputs-v2/8e610b71dcbe8ed3092dc4c2.json",
+      "passed": true,
+      "evidence": "12c7afa0ea938045cca533da9f8a1deee42dbd14f4c400746e7f3370f4bce0e3"
+    },
+    {
+      "name": "v12 provenance file:/historical-research/journal-v12-private/writer-results-v2/0cb0917c57864cfa4be1121e.json",
+      "passed": true,
+      "evidence": "fcfba0405aca5b1f965414d11597a74ea0c90d6e4217639ae3e5d43cdbfe4184"
+    },
+    {
+      "name": "v12 original/questions:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "direct decoded equality with original v12 writer and reviewer inputs"
+    },
+    {
+      "name": "v12 all source paragraphs:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "all IDs/text/order preserved"
+    },
+    {
+      "name": "v12 all proposals:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "all 17 original patches preserved with declared justification-to-reason rename and finding_ids omitted"
+    },
+    {
+      "name": "v12 full candidate:4b272a88ea0ba855b27a82d2",
+      "passed": true,
+      "evidence": "simultaneous candidate matches v12 exactly"
+    },
+    {
+      "name": "audit packet:8649aa3953e8e67bd935ad57",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:c608a8869d3c85681b3ed6f2",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:956a7d6e3749814171d10fb7",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:6508da842ad4914fd83d312f",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:c2251874d0df315dfa35018d",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:ffdec0044edd171b337691e1",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:5357018ef8bc2ceaa0bb7eca",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:4228c5b2b48fdd9e7a4aee8d",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:2d67a9e89e6b35dace78ea34",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:45b0ba8ebb57d45e2bb565e0",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:142d661e324ca435774aa8e2",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:f82e0ae5ca2787a9466a5fed",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:5882f56c556daebc6436c357",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:15ac0a53049a0fe3363f55b7",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "audit packet:c797d49f0c6d6066ff89235e",
+      "passed": true,
+      "evidence": "hash-bound candidate; unchanged source/original; no explicit gate/review/author-label fields"
+    },
+    {
+      "name": "17 handcrafted mechanics fixtures",
+      "passed": true,
+      "evidence": "test_cycles (test_gate.Mechanics.test_cycles) ... ok\ntest_dependency_rollback_transitive (test_gate.Mechanics.test_dependency_rollback_transitive) ... ok\ntest_global_unlocalized (test_gate.Mechanics.test_global_unlocalized) ... ok\ntest_inexact_evidence (test_gate.Mechanics.test_inexact_evidence) ... ok\ntest_mapped_material (test_gate.Mechanics.test_mapped_material) ... ok\ntest_missing_hash (test_gate.Mechanics.test_missing_hash) ... ok\ntest_missing_review (test_gate.Mechanics.test_missing_review) ... ok\ntest_mixed_independent (test_gate.Mechanics.test_mixed_independent) ... ok\ntest_nonunique_anchor (test_gate.Mechanics.test_nonunique_anchor) ... ok\ntest_normal_no_patch (test_gate.Mechanics.test_normal_no_patch) ... ok\ntest_overlap (test_gate.Mechanics.test_overlap) ... ok\ntest_preference_only (test_gate.Mechanics.test_preference_only) ... ok\ntest_raw_byte_binding (test_gate.Mechanics.test_raw_byte_binding) ... ok\ntest_simultaneous (test_gate.Mechanics.test_simultaneous) ... ok\ntest_unknown_dependency (test_gate.Mechanics.test_unknown_dependency) ... ok\ntest_unknown_relation (test_gate.Mechanics.test_unknown_relation) ... ok\ntest_unrelated_gap (test_gate.Mechanics.test_unrelated_gap) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 0.010s\n\nOK\n"
+    }
+  ],
+  "rows": [
+    {
+      "bundle_id": "a9f3b6",
+      "kind": "synthetic",
+      "patch_count": 2,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [
+              "P1"
+            ],
+            [
+              "P1"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "062620360275496598cb5efc7520d75b2f1c3bec3d8b147b94b5f956fbe68c24",
+        "81b6a566136aa7b2096e11175402f882ec3478e3faa6be2c8177f4a28a5c54f5"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1"
+        ],
+        "held_ids": [
+          "P2"
+        ],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "kind": "synthetic",
+      "patch_count": 0,
+      "all_patch_assessments": [],
+      "same_reviews_for_G0_G1": [
+        "d4c1784c4f0ccb75593c78b02adf31a7d08f78423034eba4b823cde7945e3b1d",
+        "e99e004978c376c8af8724d13593e9120154ba7118fe35bcacb90e1d70ab31a6"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [],
+        "status": "no_op"
+      },
+      "G1": {
+        "accepted_ids": [],
+        "held_ids": [],
+        "status": "no_op"
+      }
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "kind": "synthetic",
+      "patch_count": 2,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "no",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "no",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "2d9b86e820224f1ee2370b3b2c56c68474e8dfba85db415f0163c081a2f8c9d0",
+        "bb1dd3ee48adef6d5043c20183fff831f9a713b3f0e6410877cbe16348da5b76"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1"
+        ],
+        "held_ids": [
+          "P2"
+        ],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "kind": "synthetic",
+      "patch_count": 2,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "unknown",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "unknown",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "9a8ebb5b3810bc962bb3740232d422a69b338be5757107fd280cf4d7f2cdf6b7",
+        "2acaea25ef1d421cfa30bb6b221a98619032b833dbdf27465478056bac7e622c"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1"
+        ],
+        "held_ids": [
+          "P2"
+        ],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "kind": "synthetic",
+      "patch_count": 2,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "no",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "no",
+              "preserves_untargeted_meaning": "no",
+              "context_safe": "no",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "84c81cebbb703458c7d13c75fdd70c47f81fd13eb8685f90ba34c198b8dc1353",
+        "64b925428ab41bac79330617a231a8531e3d54f97a61badf82f3dce915656af7"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1"
+        ],
+        "held_ids": [
+          "P2"
+        ],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "kind": "synthetic",
+      "patch_count": 2,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "92520921e11f834585d017bebd5698e53d6994fedce98d8b7e120eee3b47fd22",
+        "02be58745806d81d1c5f676e488a47638239dc4fd28876425b153b3f3f481304"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1",
+          "P2"
+        ],
+        "held_ids": [],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "4b272a88ea0ba855b27a82d2",
+      "kind": "real",
+      "patch_count": 9,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P3",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P4",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P5",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P6",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P7",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P8",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P9",
+          "review_fields": [
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "no",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "a1c53992df38395b66ea7c16778bd61a1f9c0324b61e9c7be9319d1e00849276",
+        "1c41e294736c1dd55d529996ec1741c64cfd678cdc9058c056a3fd18916d16a2"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8",
+          "P9"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P1",
+          "P2",
+          "P3",
+          "P5",
+          "P7"
+        ],
+        "held_ids": [
+          "P4",
+          "P6",
+          "P8",
+          "P9"
+        ],
+        "status": "proposed_delivery"
+      }
+    },
+    {
+      "bundle_id": "70d87266fca45f0cf61e141a",
+      "kind": "real",
+      "patch_count": 8,
+      "all_patch_assessments": [
+        {
+          "id": "P1",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [
+              "P2",
+              "P6"
+            ],
+            [
+              "P2",
+              "P3",
+              "P4",
+              "P6"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P2",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [
+              "P6"
+            ],
+            [
+              "P3",
+              "P4",
+              "P6"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P3",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [
+              "P6"
+            ],
+            [
+              "P4",
+              "P6"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P4",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            [
+              "P3",
+              "P6"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P5",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            [
+              "P4",
+              "P6"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P6",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "unknown",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [
+              "P1",
+              "P2",
+              "P3",
+              "P4",
+              "P5"
+            ],
+            [
+              "P4"
+            ]
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P7",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "id": "P8",
+          "review_fields": [
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            },
+            {
+              "warranted": "yes",
+              "evidence_support": "yes",
+              "preserves_untargeted_meaning": "yes",
+              "context_safe": "yes",
+              "application_valid": "yes"
+            }
+          ],
+          "dependencies": [
+            [],
+            []
+          ],
+          "dependency_status": [
+            "complete",
+            "complete"
+          ]
+        }
+      ],
+      "same_reviews_for_G0_G1": [
+        "c713e0380b1fad3a9fdf2900960da61dc2a74e1369fb006ad8ddc708ebd82d7c",
+        "fd7e095a52a77986474184c37a35e393fa73909697383e9f45a6fed9d8279649"
+      ],
+      "G0": {
+        "accepted_ids": [],
+        "held_ids": [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7",
+          "P8"
+        ],
+        "status": "held"
+      },
+      "G1": {
+        "accepted_ids": [
+          "P7",
+          "P8"
+        ],
+        "held_ids": [
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P6"
+        ],
+        "status": "proposed_delivery"
+      }
+    }
+  ],
+  "must_fix_findings": [],
+  "limitations_and_method_confounds": [
+    "The 17 passing test fixtures verify authored mechanics only; they are not semantic proof, independent model observations, or evidence of delivery safety.",
+    "G1 acceptability is conditional on reviewer localization/dependency judgments. The engine validates nonempty reasons and exact anchors but cannot establish that an unrelated classification is substantively justified or a complete dependency list is truly complete.",
+    "Resolved background issues are skipped by the engine; if their resolving patches are later held, safety relies on complete dependency judgments and the final whole-delivery audit. This is a general residual risk, not demonstrated new harm in these outputs.",
+    "The engine requires two records but does not authenticate reviewer identity or fresh-context independence. Distinct records and fixed packets support the intended workflow, not security isolation or independent statistical trials.",
+    "Proposal rationales are visible and may prime reviewers, especially preserved v12 PRESERVE/REFUTED terminology. Both gates share this exposure. Author expectations and previous evaluator verdicts are absent from wrappers.",
+    "Six authored synthetic cases and two deliberately selected exposed real regressions cannot estimate real-world generalization. No new held-out real case or generated editor output is supplied.",
+    "G0 harmonizes this review schema and is not a replay of v12 strict gate. Cross-version differences cannot be attributed solely to selective delivery.",
+    "Warranted is a necessary-correction threshold. Supported supplementary detail can be held without being unsafe; no/unknown categories must remain distinct.",
+    "Final audit review records and rollback dispositions were deliberately not inspected in this stage. No final semantic-safety or released-delivery claim is made.",
+    "All inspected v12 provenance files match their recorded hashes. This process did not modify v12; whole-tree historical immutability requires the parent checkpoint manifest beyond these six provenance records."
+  ],
+  "semantic_observations": [
+    "a9f3b6 P1 independently repairs the antecedent; P2 requires P1 but both reviewers call P2 supported supplementary detail, not warranted. Thus this synthetic case does not demonstrate a dependency-induced hold.",
+    "d0c7e5 P2 evidence_support is unknown, not refuted: missing north-point measurement does not establish failure; the proposed certainty and causal connection are unsupported.",
+    "e6b1d4 P2 materially changes attributed criticism and surrounding response relations; withholding it is not tone suppression.",
+    "f4a8d1 unrelated historical attendance gap is affirmatively explained by both reviewers; material differs yes/unknown and is retained as an unresolved original limitation.",
+    "70d87266fca45f0cf61e141a P6 tracker-benefit relationship is disputed: reviewer A calls mapped gap nonmaterial; B marks context unknown and mapped issue material. Gate holds P6 and dependency closure holds P1-P5, leaving only P7/P8. This is uncertainty-sensitive withholding, not proof P6 is actually unsafe.",
+    "4b272a88ea0ba855b27a82d2 P4/P6/P8/P9 are supported but unanimously unwarranted additions. These must not count as unsafe held patches.",
+    "Author labels were not read for this independent validation; semantic observations are provisional independent AI judgments, not human gold."
+  ],
+  "mutations": "Only this validation JSON was written under v13; all replays stayed in memory. No model generation calls, score edits, criteria edits, or experiment-input edits.",
+  "final_audit_validation": {
+    "validated_at_utc": "2026-10-02T02:30:18.650711+00:00",
+    "prior_validation_archive": {
+      "path": "/historical-research/journal-v13-private/independent-validation-before-final-audits.json",
+      "sha256": "3f80ab3990b7c09ed8523556720e90a6b038d28fae8468b2a60cbd99bee34a60"
+    },
+    "checks": [
+      {
+        "name": "preserved initial validation",
+        "passed": true,
+        "evidence": {
+          "path": "/historical-research/journal-v13-private/independent-validation-before-final-audits.json",
+          "sha256": "3f80ab3990b7c09ed8523556720e90a6b038d28fae8468b2a60cbd99bee34a60"
+        }
+      },
+      {
+        "name": "15 exact audit IDs",
+        "passed": true,
+        "evidence": {
+          "expected": [
+            "142d661e324ca435774aa8e2",
+            "15ac0a53049a0fe3363f55b7",
+            "2d67a9e89e6b35dace78ea34",
+            "4228c5b2b48fdd9e7a4aee8d",
+            "45b0ba8ebb57d45e2bb565e0",
+            "5357018ef8bc2ceaa0bb7eca",
+            "5882f56c556daebc6436c357",
+            "6508da842ad4914fd83d312f",
+            "8649aa3953e8e67bd935ad57",
+            "956a7d6e3749814171d10fb7",
+            "c2251874d0df315dfa35018d",
+            "c608a8869d3c85681b3ed6f2",
+            "c797d49f0c6d6066ff89235e",
+            "f82e0ae5ca2787a9466a5fed",
+            "ffdec0044edd171b337691e1"
+          ],
+          "actual": [
+            "142d661e324ca435774aa8e2",
+            "15ac0a53049a0fe3363f55b7",
+            "2d67a9e89e6b35dace78ea34",
+            "4228c5b2b48fdd9e7a4aee8d",
+            "45b0ba8ebb57d45e2bb565e0",
+            "5357018ef8bc2ceaa0bb7eca",
+            "5882f56c556daebc6436c357",
+            "6508da842ad4914fd83d312f",
+            "8649aa3953e8e67bd935ad57",
+            "956a7d6e3749814171d10fb7",
+            "c2251874d0df315dfa35018d",
+            "c608a8869d3c85681b3ed6f2",
+            "c797d49f0c6d6066ff89235e",
+            "f82e0ae5ca2787a9466a5fed",
+            "ffdec0044edd171b337691e1"
+          ]
+        }
+      },
+      {
+        "name": "16 gate outputs mapped",
+        "passed": true,
+        "evidence": "8 bundles x 2 gates"
+      },
+      {
+        "name": "audit completeness:8649aa3953e8e67bd935ad57",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:8649aa3953e8e67bd935ad57",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:a9f3b6:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:a9f3b6:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:8649aa3953e8e67bd935ad57",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:c608a8869d3c85681b3ed6f2",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:c608a8869d3c85681b3ed6f2",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:a9f3b6:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:a9f3b6:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:c608a8869d3c85681b3ed6f2:change_1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:c608a8869d3c85681b3ed6f2",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:956a7d6e3749814171d10fb7",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:956a7d6e3749814171d10fb7",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:b7e2c9:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:b7e2c9:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "delivery mapping:b7e2c9:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:b7e2c9:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:956a7d6e3749814171d10fb7",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:6508da842ad4914fd83d312f",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:6508da842ad4914fd83d312f",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:c2d6a0:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:c2d6a0:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:6508da842ad4914fd83d312f",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:c2251874d0df315dfa35018d",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:c2251874d0df315dfa35018d",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:c2d6a0:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:c2d6a0:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:c2251874d0df315dfa35018d:change_1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:c2251874d0df315dfa35018d",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:ffdec0044edd171b337691e1",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:ffdec0044edd171b337691e1",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:d0c7e5:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:d0c7e5:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:ffdec0044edd171b337691e1",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:5357018ef8bc2ceaa0bb7eca",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:5357018ef8bc2ceaa0bb7eca",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:d0c7e5:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:d0c7e5:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:5357018ef8bc2ceaa0bb7eca:C1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:5357018ef8bc2ceaa0bb7eca",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:4228c5b2b48fdd9e7a4aee8d",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:4228c5b2b48fdd9e7a4aee8d",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:e6b1d4:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:e6b1d4:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:4228c5b2b48fdd9e7a4aee8d",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:2d67a9e89e6b35dace78ea34",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:2d67a9e89e6b35dace78ea34",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:e6b1d4:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:e6b1d4:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:2d67a9e89e6b35dace78ea34:change_1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:2d67a9e89e6b35dace78ea34",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:45b0ba8ebb57d45e2bb565e0",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:45b0ba8ebb57d45e2bb565e0",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:f4a8d1:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:f4a8d1:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:45b0ba8ebb57d45e2bb565e0",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:142d661e324ca435774aa8e2",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:142d661e324ca435774aa8e2",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:f4a8d1:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:f4a8d1:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:142d661e324ca435774aa8e2:c1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:142d661e324ca435774aa8e2:c2",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:142d661e324ca435774aa8e2",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:f82e0ae5ca2787a9466a5fed",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:f82e0ae5ca2787a9466a5fed",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:4b272a88ea0ba855b27a82d2:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:4b272a88ea0ba855b27a82d2:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:f82e0ae5ca2787a9466a5fed",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:5882f56c556daebc6436c357",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:5882f56c556daebc6436c357",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:4b272a88ea0ba855b27a82d2:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:4b272a88ea0ba855b27a82d2:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:5882f56c556daebc6436c357:C1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:5882f56c556daebc6436c357:C2",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:5882f56c556daebc6436c357:C3",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:5882f56c556daebc6436c357:C4",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:5882f56c556daebc6436c357:C5",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:5882f56c556daebc6436c357",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:15ac0a53049a0fe3363f55b7",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:15ac0a53049a0fe3363f55b7",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:70d87266fca45f0cf61e141a:G0",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:70d87266fca45f0cf61e141a:G0",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "no fabricated changes:15ac0a53049a0fe3363f55b7",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "audit completeness:c797d49f0c6d6066ff89235e",
+        "passed": true,
+        "evidence": "Full expected source IDs reported; self-report does not prove exhaustive reading."
+      },
+      {
+        "name": "audit hash/scope:c797d49f0c6d6066ff89235e",
+        "passed": true,
+        "evidence": "Exact packet hash plus full original, source paragraphs, questions and scope retained."
+      },
+      {
+        "name": "delivery mapping:70d87266fca45f0cf61e141a:G1",
+        "passed": true,
+        "evidence": "Mapped exact delivered candidate and accepted patch IDs."
+      },
+      {
+        "name": "exact retained scope:70d87266fca45f0cf61e141a:G1",
+        "passed": true,
+        "evidence": "Independent ascending-span reconstruction preserves every original character outside accepted proposal spans; not a semantic-preservation proof."
+      },
+      {
+        "name": "actual change text:c797d49f0c6d6066ff89235e:C1",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:c797d49f0c6d6066ff89235e:C2",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "actual change text:c797d49f0c6d6066ff89235e:C3",
+        "passed": true,
+        "evidence": "Empty before is permitted for an addition; audit change units are not gate patch units."
+      },
+      {
+        "name": "no fabricated changes:c797d49f0c6d6066ff89235e",
+        "passed": true,
+        "evidence": "Changed/unchanged candidate agrees with presence of reported changes."
+      },
+      {
+        "name": "raw audit dispositions",
+        "passed": true,
+        "evidence": "15/15 raw safe/release; assessment relative to original, not original factual accuracy."
+      },
+      {
+        "name": "deduplication is only normal control",
+        "passed": true,
+        "evidence": "b7e2c9 original/candidate identical in both gates; one audit reused, not two independent judgments."
+      }
+    ],
+    "records": [
+      {
+        "audit_id": "8649aa3953e8e67bd935ad57",
+        "bundle_id": "a9f3b6",
+        "result_sha256": "18c13296f0ec4e812702173b01e22bef643a8aab817c1f9b4f03c612cedb117d",
+        "input_sha256": "92657227316323be9bab78f9d281f2963224e73e3426feb58d4f9771c79f628c",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "c608a8869d3c85681b3ed6f2",
+        "bundle_id": "a9f3b6",
+        "result_sha256": "b9add01b8aebdfc9d47bfa8a2dfcb092f7837feebd37152f8082554173cac37b",
+        "input_sha256": "3eea2a55bbde100e511f53a57d14c628eb8d86286fe66b0336f528e0262b3a03",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 1,
+        "audit_change_units": 1,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "change_1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "956a7d6e3749814171d10fb7",
+        "bundle_id": "b7e2c9",
+        "result_sha256": "1239e886407db38ce9a07ec36b9d47ac13f67bca25ff7d593d75a6a77f6e647e",
+        "input_sha256": "79ba607037844f8be87130d110e632981f6a40ee437aff3fa12bace8da2732fe",
+        "mapped_gates": [
+          "G0",
+          "G1"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "6508da842ad4914fd83d312f",
+        "bundle_id": "c2d6a0",
+        "result_sha256": "158fd7d6264d2ab537cd1379d0306001d70496b20a35f7f865b7efe3d4e0c00a",
+        "input_sha256": "c0bbbf4616778c5fc4dfbd89199498244d54a722054e95e85673c2687354ec0c",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "c2251874d0df315dfa35018d",
+        "bundle_id": "c2d6a0",
+        "result_sha256": "d5790609e2a2f3b69e53878042a3380f36b7c2dc470acd3f5e88db0dcd0b78e0",
+        "input_sha256": "c76f8b5f92f2a0097b205bd0cdf816dbed9e2937f3d7175ea5822a4aac193c08",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 1,
+        "audit_change_units": 1,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "change_1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "ffdec0044edd171b337691e1",
+        "bundle_id": "d0c7e5",
+        "result_sha256": "16b62c68876ee65e4cb466d4b9daac3ef5b56bb3c8bd867cc1c68b625969eeb5",
+        "input_sha256": "3607880123dd4732a9f1b900a1dc6e945c078e1973cf5fe946db176f51224284",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "5357018ef8bc2ceaa0bb7eca",
+        "bundle_id": "d0c7e5",
+        "result_sha256": "c50bd7dc0498e2e54a9b209608792b0038cce130aac2d0898846d594f0012654",
+        "input_sha256": "bdaa2c07460eb9892625f160d5da4e2dd0b295917b4834603d5458b4589f4569",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 1,
+        "audit_change_units": 1,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "C1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "4228c5b2b48fdd9e7a4aee8d",
+        "bundle_id": "e6b1d4",
+        "result_sha256": "71c469e918ec604b277e953cc19702877dad9d9e6da250556dc62524e8b1f969",
+        "input_sha256": "7f369ebc2fe5858ff4854cc0ae4470997236b28afcdb6abaf768b64fbe9b38d9",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "2d67a9e89e6b35dace78ea34",
+        "bundle_id": "e6b1d4",
+        "result_sha256": "2d3ac081d4d4aa57b6659caa773f15d48e124c58cd5cbfc8dc6c4c822d078f4e",
+        "input_sha256": "a57b56696e2534b47f946dc22a2c927a0255910fbe62c7f19fdb4c09206a3902",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 1,
+        "audit_change_units": 1,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "change_1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "45b0ba8ebb57d45e2bb565e0",
+        "bundle_id": "f4a8d1",
+        "result_sha256": "bc0653edbf5d8698147c047cbf7b919e16aec5684e982fd043b675d39ebaf49f",
+        "input_sha256": "4d13f3e5e358f97cc024b4064e89ee35b853f5f2386f3b26e032e8cb94ca5d29",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "142d661e324ca435774aa8e2",
+        "bundle_id": "f4a8d1",
+        "result_sha256": "1a974ec3ec030370e4c507373a1cef2ce87a76869d982b7af5b850d589fe1d8d",
+        "input_sha256": "699052ef0accf5eaa6bf572befc49261b5ef7ce97a97ff0df3ab903813a5c7e3",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 2,
+        "audit_change_units": 2,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "c1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "c2",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "f82e0ae5ca2787a9466a5fed",
+        "bundle_id": "4b272a88ea0ba855b27a82d2",
+        "result_sha256": "a1e03bd71fc270213379f9c608b5407415e0dd937284d5e92f04ac9b056450d2",
+        "input_sha256": "ee52cd5a90a3407b92ad3b7fa374109504f6d692e5cc1d337891a231d81abe4c",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "5882f56c556daebc6436c357",
+        "bundle_id": "4b272a88ea0ba855b27a82d2",
+        "result_sha256": "af00fd4cc025598ab98e6df2a210b614d718ed506993ea98607bb56a5dbe0f96",
+        "input_sha256": "bfc513c25f2d1df1efbc98d4bc4d903653232a49db7ac69fa4974bd9f7fc8d35",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 5,
+        "audit_change_units": 5,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "C1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C2",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C3",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C4",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C5",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      },
+      {
+        "audit_id": "15ac0a53049a0fe3363f55b7",
+        "bundle_id": "70d87266fca45f0cf61e141a",
+        "result_sha256": "0d7f25c28f0cdfdb192a0ce91d430f20aba7ff2b73b6d6327b8c03b82a250e4f",
+        "input_sha256": "38d056990c714eb05dd8382ac7994a24cd5e90041f9a428342aaa57a241d0155",
+        "mapped_gates": [
+          "G0"
+        ],
+        "delivered_patch_count": 0,
+        "audit_change_units": 0,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": []
+      },
+      {
+        "audit_id": "c797d49f0c6d6066ff89235e",
+        "bundle_id": "70d87266fca45f0cf61e141a",
+        "result_sha256": "a4ec3ea8347fd3f2da732230128fd5ee69141c0f0e8fa7520a47dbb51e2b8850",
+        "input_sha256": "d47e72569e1f020bc8047d36cf4f5fac3883e44bf770aceaac2407600172eafd",
+        "mapped_gates": [
+          "G1"
+        ],
+        "delivered_patch_count": 2,
+        "audit_change_units": 3,
+        "full_context_safety_raw": "safe",
+        "release_recommendation_raw": "release",
+        "change_judgments": [
+          {
+            "id": "C1",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C2",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          },
+          {
+            "id": "C3",
+            "warranted": "yes",
+            "evidence_support": "yes",
+            "introduced_material_harm": "no"
+          }
+        ]
+      }
+    ],
+    "counts": {
+      "mapped_gate_outputs": 16,
+      "unique_audits": 15,
+      "delivered_patch_ids": 13,
+      "auditor_change_units": 14,
+      "raw_safe": 15,
+      "raw_release": 15
+    },
+    "anchor_diagnostics": [
+      {
+        "audit_id": "5882f56c556daebc6436c357",
+        "change_id": "C1",
+        "kind": "nonliteral_source_anchor",
+        "anchor": "KE-P1-015: 부모 모두 3개월 이상 ... 한부모 ... 중증 장애아동"
+      },
+      {
+        "audit_id": "5882f56c556daebc6436c357",
+        "change_id": "C2",
+        "kind": "nonliteral_source_anchor",
+        "anchor": "KE-P1-015: 연장된 기간을 사용하고자 하는 경우 사업주에게 관련 증빙서류를 제출하여야 한다."
+      }
+    ],
+    "anchor_diagnostic_interpretation": "Final instructions request exact short anchors. These nonliteral anchors are reporting deviations, not demonstrated semantic failures. Preserve raw records; do not silently normalize them or claim universal exact-anchor compliance. Source-anchor serialization varies because final instruction specified arrays without a frozen nested JSON schema.",
+    "hash_binding_limit": "Audit result schema contains audit_id but not input/candidate hashes. External hash-locked audit map and exact ID link the packet; recorded raw-result hashes here pin current results, not a pre-existing result lock or proof that the auditor consumed these bytes.",
+    "change_unit_note": "13 accepted patch IDs, 14 auditor change units: English P7 is split into C1 baseline measurement and C2 imaging sample counts; English P8 is C3. Never use 14 as delivered proposed-patch count.",
+    "modality_comparison": {
+      "status": "posthoc_challenges_completed_release_with_literal_strengthening_caveat",
+      "source": "EN-DEV-S-P013: may limit the generalizability",
+      "candidate": "P8: this limits generalizability",
+      "current_raw_audit": "c797d49f0c6d6066ff89235e C3 explicitly notices firmer modality, judges no material distortion, and recommends release. This record is preserved without override.",
+      "old_v12": "Same-output EN-DEV A reviews A/B also acknowledged modest strengthening and accepted the limitation. The different EN-DEV B output reviewer A recorded may-limit versus is-limited as a separate modal harm. This is not a same-patch unanimous historical rejection and not proof that the current audit is correct or wrong.",
+      "old_records": [
+        {
+          "path": "/historical-research/journal-v12-private/reviewer-results-v1/A__e04940ff183338f5fe772428.json",
+          "sha256": "466c7d7368521f9d37c09b9da91293365b70906fc59ef25d162bb8daba79d1c3"
+        },
+        {
+          "path": "/historical-research/journal-v12-private/reviewer-results-v1/B__e04940ff183338f5fe772428.json",
+          "sha256": "43eb3bcb3079a402862c864f006c9d7c76634f7ed5a8ec04cac60d08d8ee1f6f"
+        },
+        {
+          "path": "/historical-research/journal-v12-private/reviewer-results-v1/A__031d406ace128460ad52cad9.json",
+          "sha256": "a22b45d5fc1906b9fe3d0654df477c1a5c79c1f5abd73304611eec436fdf6419"
+        }
+      ],
+      "interpretation": "Post-hoc challenge is a separate diagnostic after primary results, not a retroactive criterion, additional primary independent replicate, or score edit.",
+      "posthoc_challenges": [
+        {
+          "role": "A",
+          "path": "/historical-research/journal-v13-private/modality-challenge-A.json",
+          "sha256": "d0180b52aa486f4223e61390519e8b1e51b1d0d3d2c02766af9f790d6819ed46",
+          "audit_id": "c797d49f0c6d6066ff89235e",
+          "complete": true,
+          "read_complete": true,
+          "release_recommendation_raw": "release",
+          "reported_source_ids_complete": true,
+          "material_harm_raw": "no"
+        },
+        {
+          "role": "B",
+          "path": "/historical-research/journal-v13-private/modality-challenge-B.json",
+          "sha256": "a6191ef3dae282fccafef3865390fedfb362dcffeb806937be428c3e48bb339d",
+          "audit_id": "c797d49f0c6d6066ff89235e",
+          "complete": true,
+          "read_complete": true,
+          "release_recommendation_raw": "release",
+          "reported_source_ids_complete": true,
+          "material_harm_raw": "no",
+          "full_context_safety_raw": "safe"
+        }
+      ],
+      "final_interpretation": "Both post-hoc challengers retain release/no material harm while acknowledging literal may-to-definite strengthening and preferring may for source fidelity. Preserve this caveat and ordinary-reader interpretation uncertainty; no new patch cycle or primary-score change. The 13 primary raw-approved patches remain 13, not an enlarged evidence denominator."
+    },
+    "remaining_blockers": [],
+    "must_fix_mechanics": [],
+    "anchor_compliance_counts": {
+      "source_anchors_total": 24,
+      "exact_source_anchors": 22,
+      "nonexact_source_anchors": 2,
+      "original_anchors_total": 14,
+      "candidate_anchors_total": 15,
+      "nonexact_original_or_candidate_anchors": 0,
+      "exact_quote_instruction_deviations": 2,
+      "anchor_format_variants": "objects use id/paragraph_id and text/quote; Korean audit uses strings. No frozen nested anchor schema existed, so serialization variation is not assigned a schema-violation count.",
+      "unverified_anchor_claims_after_reconciliation": 0,
+      "independent_reconciliation_is_not_new_gold_label": true
+    },
+    "anchor_reconciliation": {
+      "path": "/historical-research/journal-v13-private/final-audit-anchor-reconciliation.json",
+      "sha256": "e8ac0825ee8b83b40ee0a4b60d02679afa3e532fa8e15d49cb3da69dc2164daf",
+      "interpretation": "Both nonliteral source anchors reconciled against the exact frozen paragraph; raw audit records remain unchanged. Their evidence claims are supported, but literal-quote deviations remain recorded."
+    },
+    "remaining_unverified": [
+      "Reading completeness and fresh-context isolation are reported workflow properties, not proven by hashes.",
+      "No human gold judgment or empirically measured reader effect establishes semantic safety.",
+      "Actual cross-population generalizability remains unverified; materiality of firmer wording is an AI contextual judgment.",
+      "Original English causality/amyloid-condition and historical unsupported claims remain residual issues; safe-relative-to-original does not validate them.",
+      "Whole-tree v12 historical immutability beyond the inspected provenance records depends on the parent checkpoint manifest."
+    ]
+  },
+  "validation_history_note": "Original checks and observations above remain unchanged as the earlier staged record. final_audit_validation supersedes only pending-final-audit status and records subsequent diagnostics; archived initial bytes remain private."
+}

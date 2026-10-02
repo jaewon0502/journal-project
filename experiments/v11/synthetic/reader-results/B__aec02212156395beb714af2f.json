@@ -1,0 +1,74 @@
+{
+  "packet_id": "aec02212156395beb714af2f",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output; selected_ids is empty.",
+      "anchor": "an increase of 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The entire displayed output repeats the source.",
+      "anchor": "an increase of 3%; Friday"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both nonempty proposals remain unapplied in the displayed output.",
+      "anchor": "selected_ids: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly limits the record; scoped scenario checks do not establish whole-article factual correctness.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 expressly deny an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The displayed output retains the wrong increase unit and Friday despite E1 and E2 stipulating percentage points and Saturday.",
+      "anchor": "an increase of 3%; Friday; E1; E2"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Neither was selected or applied",
+      "reason": "Directly reports actual local application."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "The displayed local output is unchanged.",
+      "reason": "States unchanged output."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "were both held",
+      "reason": "Reports the complete proposal disposition."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_explicit",
+      "short_anchor": "does not resolve those issues or establish factual correctness",
+      "reason": "Explicitly denies a whole-article correctness inference."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "local output",
+      "reason": "Identifying a local output or local release does not explicitly exclude an additional external publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "Two meaning issues therefore remain in the displayed text",
+      "reason": "Reports the identified meaning status of the displayed output."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not human assessment; bounded supplied scenario only."
+  ]
+}

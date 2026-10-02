@@ -1,0 +1,168 @@
+{
+  "validation": "independent completed-supplement audit",
+  "status": "pass_with_design_and_provenance_limits",
+  "scope": [
+    "supplementary/scope",
+    "supplementary/necessity"
+  ],
+  "new_model_outputs_generated": 0,
+  "original_outputs_or_scores_modified": false,
+  "checks": {
+    "scope_preparation_nine_frozen_files": true,
+    "scope_reviewer_instruction_hash": true,
+    "scope_four_outputs_eight_reviews": true,
+    "scope_other_fields_exact": true,
+    "scope_old_prefix_19_expanded_62": true,
+    "scope_base_frozen_v2_input_identified": true,
+    "scope_frozen_v2_fields_and_old_evidence": true,
+    "scope_twenty_two_patches": true,
+    "scope_exact_replay_hashes_and_raw_aggregation": true,
+    "scope_full_ledger_recomputed_equal": true,
+    "necessity_full_ledger_recomputed_equal": true,
+    "necessity_manifest_freeze": true,
+    "necessity_frozen_files": true,
+    "necessity_six_items": true,
+    "necessity_constant_prompt_schema": true,
+    "necessity_input_collection_equal": true,
+    "necessity_no_labels_in_detector_packets": true,
+    "necessity_three_one_factor_pairs": true,
+    "necessity_two_outputs_each": true,
+    "necessity_orchestrator_record_covers_fresh_tasks": true,
+    "necessity_all_output_schema_valid": true,
+    "necessity_all_quotes_exact_in_named_field": true,
+    "necessity_12_outputs_6_items_3_distinct_bases": true,
+    "necessity_47_named_field_exact_anchors": true,
+    "necessity_raw_judgments_preserved": true,
+    "all_existing_scoped_artifacts_unchanged": true
+  },
+  "scope_evidence": {
+    "writer_outputs": 4,
+    "writer_metadata_sidecars": 4,
+    "reviewer_outputs": 8,
+    "applied_patches": 22,
+    "dimension_judgments": 48,
+    "patch_judgments": 44,
+    "runs": [
+      {
+        "run": "OLD-1",
+        "patches": 7,
+        "input_hash": true,
+        "writer_hash": true,
+        "reviewer_input_hash": true,
+        "candidate_hash_and_exact_replay": true,
+        "source_hash": true,
+        "raw_judgments_preserved": true,
+        "reviewer_actual_input_matches": true
+      },
+      {
+        "run": "EXPANDED-1",
+        "patches": 5,
+        "input_hash": true,
+        "writer_hash": true,
+        "reviewer_input_hash": true,
+        "candidate_hash_and_exact_replay": true,
+        "source_hash": true,
+        "raw_judgments_preserved": true,
+        "reviewer_actual_input_matches": true
+      },
+      {
+        "run": "EXPANDED-2",
+        "patches": 3,
+        "input_hash": true,
+        "writer_hash": true,
+        "reviewer_input_hash": true,
+        "candidate_hash_and_exact_replay": true,
+        "source_hash": true,
+        "raw_judgments_preserved": true,
+        "reviewer_actual_input_matches": true
+      },
+      {
+        "run": "OLD-2",
+        "patches": 7,
+        "input_hash": true,
+        "writer_hash": true,
+        "reviewer_input_hash": true,
+        "candidate_hash_and_exact_replay": true,
+        "source_hash": true,
+        "raw_judgments_preserved": true,
+        "reviewer_actual_input_matches": true
+      }
+    ],
+    "preparation_hashes_checked": 9,
+    "reviewer_instruction_hash_checked": true,
+    "full_public_ledger_recomputed_without_writes": true
+  },
+  "necessity_evidence": {
+    "classifier_outputs": 12,
+    "synthetic_items": 6,
+    "independent_synthetic_bases": 3,
+    "minimal_contrast_pairs": [
+      {
+        "pair": 1,
+        "item_ids": [
+          "285cf1155fdc3469d7ee6681",
+          "696e705f4d8426a7a1e00fc3"
+        ],
+        "changed_fields": [
+          "reader_question"
+        ],
+        "one_factor_verified": true,
+        "exact_condition_deletion": null
+      },
+      {
+        "pair": 2,
+        "item_ids": [
+          "f09b014f3d4927e89ac2bb38",
+          "0ce5a7e0ec02731911b92d52"
+        ],
+        "changed_fields": [
+          "reader_question"
+        ],
+        "one_factor_verified": true,
+        "exact_condition_deletion": null
+      },
+      {
+        "pair": 3,
+        "item_ids": [
+          "0e0d2a253a6004ba748256e3",
+          "206a6e985b3915af8102500c"
+        ],
+        "changed_fields": [
+          "candidate"
+        ],
+        "one_factor_verified": true,
+        "exact_condition_deletion": true
+      }
+    ],
+    "exact_named_field_anchors": 47,
+    "total_anchors": 47,
+    "five_field_concordance_to_provisional_expectations": 12,
+    "repeat_agreement_items": 6,
+    "manifest_and_10_frozen_files_verified": true
+  },
+  "fairness_and_claim_findings": [
+    "Scope article, questions, B-v2 instructions, schema and narrative budget match the frozen base input; only opaque ID, permitted evidence and provenance/scope metadata vary. OLD evidence is the exact 19-paragraph prefix of EXPANDED (62 paragraphs).",
+    "OLD cannot support the exact 3,001 lower boundary; treating it as unavailable rather than failed is fair. Qualitative low/moderate relation is retained in both conditions; expanded detail is not mandatory merely because available.",
+    "Scope ledger preserves all A/B categories, including OLD-1 P7 strengthening disagreement and EXPANDED-1 justified_change despite narrative residual opening concerns. Residual causal-framing counts are analyst observations, not adjudicated success scores.",
+    "Necessity pairs 1 and 2 vary only reader question; pair 3 varies only the exact candidate condition deletion. Read against the supplied fictional text, these support the distinction between original meaning loss, required answers and optional context.",
+    "All 12 necessity five-field classifications match AI-authored provisional expectations; this is concordance, not gold-standard accuracy. All 47 evidence anchors are exact substrings in their named input fields.",
+    "Published summaries explicitly retain no-human-gold, no-new-real-cases and no-original-rescoring limitations. No new model generation or original rescoring was performed during this audit."
+  ],
+  "limitations": [
+    "One exposed real scope case and two repetitions per condition cannot establish general performance or a causal benefit of more evidence; evidence information and input length/attention are confounded.",
+    "Exact model/settings/seed equality and fresh-context independence cannot be independently authenticated from the saved artifacts. Hash matches establish current agreement with saved locks, not independently trusted historical timestamps.",
+    "Reviewer instruction was formalized after writer launch, and after at least the OLD-1 recorded completion, while lock record attests outputs were not inspected. Six dimensions were already in frozen protocol; this is weaker than complete evaluation preregistration before generation.",
+    "Necessity comprises three synthetic bases/six variants, not twelve independent cases or actual rewrite successes. Labels and validation are AI-authored, not human gold; prompt explicitly defines the tested distinction.",
+    "Exact quote matching verifies location rather than semantic truth. No new external source acquisition or full-paper factual audit was performed.",
+    "Audit preserved all existing files in the checked scope and results snapshot; historical absence of any prior main-score modification is not independently established by this local audit."
+  ],
+  "preservation": {
+    "existing_files_snapshotted": 88,
+    "all_snapshot_hashes_unchanged": true
+  },
+  "supporting_code_sha256": {
+    "code/analyze_scope.py": "30f038f72c07e94949f45181d63913cf330923e883ec58ca3f1a50fb13665f1f",
+    "code/check_necessity.py": "4298266f2519ab908661761957a091cf3b2ce7e6487d1aac440869c3be31cc5b"
+  },
+  "blockers": []
+}

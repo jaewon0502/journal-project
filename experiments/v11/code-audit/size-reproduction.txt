@@ -1,0 +1,15 @@
+{
+  "test": "independent reproduction of check 06; same failure class, separately constructed one-patch fixture",
+  "patch_audit_bytes": 1590306,
+  "receipt_bytes": 6890819,
+  "output": "A",
+  "receipt_status": "applied",
+  "emit": {
+    "status": "verification_failed",
+    "receipt_sha256": null,
+    "text": "Verification failed. No completion or application claim is available."
+  },
+  "put_returned_address": "7dc33f4447070bb41665a94b884e49c99ca5234a6ab3d3b44457615bd032d1d6",
+  "get": "ValueError: unsafe store object",
+  "elapsed_seconds": 113.76
+}

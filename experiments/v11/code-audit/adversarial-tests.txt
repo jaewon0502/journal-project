@@ -1,0 +1,26 @@
+test_01_stale_and_intermediate_binding (__main__.IndependentChecks.test_01_stale_and_intermediate_binding) ... ok
+test_02_dependency_rejection_then_fresh_partial (__main__.IndependentChecks.test_02_dependency_rejection_then_fresh_partial) ... ok
+test_03_types_failure_templates_and_prose (__main__.IndependentChecks.test_03_types_failure_templates_and_prose) ... ok
+test_04_write_once_incomplete_and_unsafe_store (__main__.IndependentChecks.test_04_write_once_incomplete_and_unsafe_store) ... ok
+test_05_deep_malformed_final_returns_fixed_failure (__main__.IndependentChecks.test_05_deep_malformed_final_returns_fixed_failure) ... ok
+test_06_large_valid_receipt_roundtrip_and_render (__main__.IndependentChecks.test_06_large_valid_receipt_roundtrip_and_render) ... FAIL
+
+======================================================================
+FAIL: test_06_large_valid_receipt_roundtrip_and_render (__main__.IndependentChecks.test_06_large_valid_receipt_roundtrip_and_render)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/historical-research/journal-v11/code-audit/audit_checks.py", line 129, in test_06_large_valid_receipt_roundtrip_and_render
+    self.assertEqual((result['status'],get_result),('verified','success'),'mint/verify/put succeeded, but render and get failed')
+AssertionError: Tuples differ: ('verification_failed', 'ValueError: unsafe store object') != ('verified', 'success')
+
+First differing element 0:
+'verification_failed'
+'verified'
+
+- ('verification_failed', 'ValueError: unsafe store object')
++ ('verified', 'success') : mint/verify/put succeeded, but render and get failed
+
+----------------------------------------------------------------------
+Ran 6 tests in 142.277s
+
+FAILED (failures=1)

@@ -1,0 +1,21 @@
+{
+  "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+  "proposal_sha256": "2f2af242bf7ab0b30795ed86dbd3b1c06662779c222a41c2ae437b1d0fc08d7e",
+  "candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+  "selected_ids": [],
+  "packet_id": "f730016555207909c302000a",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "approved",
+  "findings": [],
+  "explanation_grounding": "pass",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "May 2 approval of 12 permits retained as a dated event.",
+    "May 9 cumulative 15 is answered separately, preserving the distinction between event and cumulative total."
+  ],
+  "remaining_uncertainty": [],
+  "reason": "Approve unchanged accurate dated source plus supported cumulative answer. No edit is needed or claimed."
+}

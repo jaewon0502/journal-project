@@ -1,0 +1,72 @@
+{
+  "packet_id": "9af02c8beaf592052ad18f1a",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "No patches were proposed or selected, and displayed output equals source.",
+      "anchor": "proposed_patches: []; selected_ids: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The displayed source and output both use 3%포인트 and 금요일 with identical remaining text.",
+      "anchor": "status: no-op; source_sha256 equals output_sha256"
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "The proposal has no patches.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "Displayed 3 percentage points and Friday satisfy E1 and E2; no identified issue remains.",
+      "anchor": "E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 수정이 없어",
+      "reason": "Explicitly says there were no proposed changes."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "원문과 동일합니다",
+      "reason": "Explicitly identifies final local output as unchanged."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "제안된 수정이 없어",
+      "reason": "Makes empty proposal and inapplicability clear."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Only bounded checks are discussed; absence of article-wide verification is not stated."
+    },
+    "externalpublished": {
+      "rating": "accurate_explicit",
+      "short_anchor": "외부 게시는 이루어지지 않았습니다",
+      "reason": "Explicitly denies publication."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "확인된 미해결 의미 문제는 없습니다",
+      "reason": "Explicitly states no identified unresolved issue and supplies both bounded checks."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

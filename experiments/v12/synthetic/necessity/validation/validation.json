@@ -1,0 +1,116 @@
+{
+  "phase": "pre-classification-independent-validation",
+  "status": "eligible",
+  "independence": {
+    "first_read": "source-and-task-only.json",
+    "own_answers_saved_before_author_labels_manifest_schema": true,
+    "independent_answer_path": "/historical-research/journal-v12-private/supplementary/necessity/validation/independent-first.json",
+    "classifier_outputs_seen": false,
+    "web_or_new_cases_used": false
+  },
+  "checks": {
+    "all_manifest_file_hashes_match": true,
+    "constant_detector_prompt": true,
+    "constant_detector_schema": true,
+    "detector_item_matches_source_collection": true,
+    "detector_inputs_no_author_labels_or_pair_mapping": true,
+    "all_explicitly_fictional": true,
+    "all_pairs_only_intended_factor": true,
+    "all_expectations_independently_agree": true,
+    "manifest_freeze_hash_matches": true
+  },
+  "item_comparison": [
+    {
+      "item_id": "285cf1155fdc3469d7ee6681",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    },
+    {
+      "item_id": "696e705f4d8426a7a1e00fc3",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    },
+    {
+      "item_id": "f09b014f3d4927e89ac2bb38",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    },
+    {
+      "item_id": "0ce5a7e0ec02731911b92d52",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    },
+    {
+      "item_id": "0e0d2a253a6004ba748256e3",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    },
+    {
+      "item_id": "206a6e985b3915af8102500c",
+      "agreement": true,
+      "disagreements": {},
+      "ambiguous": false,
+      "eligible": true
+    }
+  ],
+  "pair_validation": [
+    {
+      "private_base_id": "invented-ko-1",
+      "changed_substantive_fields": [
+        "reader_question"
+      ],
+      "only_intended_factor_changed": true,
+      "candidate_exact_condition_deletion": null,
+      "eligible": true
+    },
+    {
+      "private_base_id": "invented-ko-2",
+      "changed_substantive_fields": [
+        "reader_question"
+      ],
+      "only_intended_factor_changed": true,
+      "candidate_exact_condition_deletion": null,
+      "eligible": true
+    },
+    {
+      "private_base_id": "invented-ko-3",
+      "changed_substantive_fields": [
+        "candidate"
+      ],
+      "only_intended_factor_changed": true,
+      "candidate_exact_condition_deletion": true,
+      "eligible": true
+    }
+  ],
+  "faithful_criticism_control": {
+    "passes": true,
+    "scope": "Criticism is reported as participants criticism with its stated reason preserved in source, original and candidate. The broad-question variant is a normal accept control; the eligibility-question variant needs only its requested factual answer, not removal or softening of criticism.",
+    "exact_source_span": "참여 단체들은 예약 창구가 하나뿐이라 이용이 불편하다고 비판했다."
+  },
+  "no_actual_legal_claims": {
+    "passes": true,
+    "reason": "All entities and policies are explicitly fictional. Eligibility, loan duration and workshop safety-training conditions are presented as invented program rules, not actual legal entitlements or real legal requirements."
+  },
+  "classification_clarity": {
+    "passes": true,
+    "reason": "Source-only absent facts are directly optional or necessary according to the explicit reader question. The condition deletion materially broadens permission and removes an explicitly asked-for condition. Constant prompt defines these distinctions and patch/accept decisions expressly.",
+    "ambiguous_items": []
+  },
+  "issues": [],
+  "limitations": [
+    "Six synthetic items across three independent bases; validation is not a performance estimate.",
+    "AI-authored expectations and independent AI validation do not create externally adjudicated ground truth.",
+    "Paired items share source text and are not independent real-world cases."
+  ],
+  "mutations": "No frozen items, gold expectations, manifest, prompt or schema changed."
+}

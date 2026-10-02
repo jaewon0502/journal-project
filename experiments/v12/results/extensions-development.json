@@ -1,0 +1,229 @@
+{
+  "audit_type": "development_extension_provenance",
+  "status": "complete_within_declared_scope",
+  "result": "Zero additional defects verified within the audited development sample under the previously-unlisted provenance rule.",
+  "counts": {
+    "development_cases": 2,
+    "writer_outputs": 6,
+    "writer_finding_items_screened": 28,
+    "patches_screened": 36,
+    "boundary_candidates_audited": 7,
+    "accepted_additional_natural_article_defects": 0,
+    "unresolved_previously_unlisted_candidates": 0,
+    "posthoc_review_records_excluded": 9
+  },
+  "outputs": [
+    {
+      "case_id": "KO-DEV-01",
+      "version": 1,
+      "condition": "A",
+      "input_id": "088d7390d4359ea589b69407",
+      "review_packet_id": "d4cd2cb427a66c946b552271",
+      "finding_items_screened": 5,
+      "patches_screened": 6,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "version": 1,
+      "condition": "B",
+      "input_id": "ef01c1c27fd3418ca0e1d3be",
+      "review_packet_id": "ab59af64c3470b1df309f39f",
+      "finding_items_screened": 4,
+      "patches_screened": 4,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "version": 1,
+      "condition": "A",
+      "input_id": "e54d797342e6b80fbea0299d",
+      "review_packet_id": "e04940ff183338f5fe772428",
+      "finding_items_screened": 4,
+      "patches_screened": 8,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "version": 1,
+      "condition": "B",
+      "input_id": "ede155dad512a3d7d433676c",
+      "review_packet_id": "031d406ace128460ad52cad9",
+      "finding_items_screened": 5,
+      "patches_screened": 8,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    },
+    {
+      "case_id": "KO-DEV-01",
+      "version": 2,
+      "condition": "B",
+      "input_id": "77c17b415a3e6380cb8da833",
+      "review_packet_id": "b08605eacf27764a4995a290",
+      "finding_items_screened": 5,
+      "patches_screened": 5,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    },
+    {
+      "case_id": "EN-DEV-01",
+      "version": 2,
+      "condition": "B",
+      "input_id": "d020bd701650da951576fccd",
+      "review_packet_id": "59a6106d81739f599e2c483f",
+      "finding_items_screened": 5,
+      "patches_screened": 5,
+      "previously_unlisted_accepted": 0,
+      "previously_unlisted_unknown": 0
+    }
+  ],
+  "provenance_decisions": [
+    {
+      "id": "april_persistence",
+      "case_id": "KO-DEV-01",
+      "topic": "April economic weakness and already slowing exports",
+      "decision": "reject",
+      "frozen_ids": [
+        "R04"
+      ],
+      "prewriter_ids": [
+        "KO-DEV-01-S04",
+        "KO-DEV-C01",
+        "I4"
+      ],
+      "materiality": "Useful temporal context; materiality was disputed before writing and frozen omission scope excludes this optional tail.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "transaction_lag",
+      "case_id": "KO-DEV-01",
+      "topic": "Loan growth following earlier housing transactions",
+      "decision": "reject",
+      "frozen_ids": [
+        "R16"
+      ],
+      "prewriter_ids": [
+        "KO-DEV-01-S08",
+        "KO-DEV-C03",
+        "I9"
+      ],
+      "materiality": "Useful causal and temporal context, frozen as optional; original prospective risk does not itself attribute already observed loans to the new cut.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "imaging_subsets",
+      "case_id": "EN-DEV-01",
+      "topic": "Smaller longitudinal imaging samples",
+      "decision": "reject",
+      "frozen_ids": [
+        "R09"
+      ],
+      "prewriter_ids": [
+        "EN-DEV-01-S012",
+        "I09"
+      ],
+      "materiality": "Sample precision is useful but was explicitly optional; amyloid 241 is present in independent inventory even though frozen R09 emphasizes tau 172.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "inactive_comparator",
+      "case_id": "EN-DEV-01",
+      "topic": "Inactivity as low-activity comparator",
+      "decision": "reject",
+      "frozen_ids": [
+        "R10"
+      ],
+      "prewriter_ids": [
+        "EN-DEV-01-S013",
+        "EN-DEV-CA-02",
+        "I10"
+      ],
+      "materiality": "Useful comparison clarification; already annotated and frozen optional, not a new independent discovery.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "measurement_protocol",
+      "case_id": "EN-DEV-01",
+      "topic": "Seven requested wear days and four valid days",
+      "decision": "reject",
+      "frozen_ids": [
+        "R14"
+      ],
+      "prewriter_ids": [
+        "EN-DEV-01-S017",
+        "I05"
+      ],
+      "materiality": "Optional protocol detail; baseline-only timing is separately material and already frozen R02.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "moderate_boundary",
+      "case_id": "EN-DEV-01",
+      "topic": "Exact moderate category and sedentary increments",
+      "decision": "reject",
+      "frozen_ids": [
+        "R06"
+      ],
+      "prewriter_ids": [
+        "EN-DEV-01-S007",
+        "EN-DEV-CA-01",
+        "I04"
+      ],
+      "materiality": "Exact one-step boundary is optional precision; plateau and causal qualification were already annotated.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    },
+    {
+      "id": "reverse_causality_patch",
+      "case_id": "EN-DEV-01",
+      "topic": "Underlying disease may reduce activity",
+      "decision": "reject",
+      "frozen_ids": [
+        "R07"
+      ],
+      "prewriter_ids": [
+        "EN-DEV-01-S008",
+        "EN-DEV-01-S009",
+        "I06"
+      ],
+      "materiality": "Material causal limitation, but frozen and prewriter listed; B2 adds it in P3 without a separate finding and receives no new discovery label.",
+      "reason": "Fails previously-unlisted provenance requirement. It was explicitly represented before writing, irrespective of denominator eligibility."
+    }
+  ],
+  "posthoc_labels": "Reviewer unlisted records concern introduced information loss, disputed preservation, or modal strengthening. They are excluded from natural article discovery counts; existing harm disagreements are preserved.",
+  "accepted_extensions": [],
+  "unknown_extensions": [],
+  "union_sensitivity": {
+    "status": "not_applicable_empty_union",
+    "union": [],
+    "scores_changed": false,
+    "denominators_changed": false,
+    "reason": "No extension accepted; no extended-reference recalculation is warranted."
+  },
+  "frozen_counts_preserved": {
+    "KO-DEV-01": {
+      "atoms": 16,
+      "eligible_required": 11,
+      "eligible_omission": 4,
+      "excluded_required": 5,
+      "unknown": 1
+    },
+    "EN-DEV-01": {
+      "atoms": 17,
+      "eligible_required": 11,
+      "eligible_omission": 4,
+      "excluded_required": 6,
+      "unknown": 1
+    }
+  },
+  "limitations": [
+    "Bounded provenance audit of six existing development outputs, including findings, patch additions and explicit reviewer unlisted records; not exhaustive enumeration of all possible article defects.",
+    "Earlier curator and counterauditor records establish prior listing, even though those records were not supplied to the writers.",
+    "Same-family internal AI adjudication; no independent human or model-family validation.",
+    "No web access, new writer execution, heldout article inspection, prompt adaptation, score changes or denominator revision.",
+    "Some original article assertions remain unverifiable within captured primary scope; that is not evidence of error."
+  ],
+  "private_evidence_path": "/historical-research/journal-v12-private/extensions/development-audit.json"
+}

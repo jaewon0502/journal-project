@@ -1,0 +1,13 @@
+{
+  "version":"sidecar-exposed-regression-reader-v1",
+  "scope":"Four already exposed synthetic scenarios; compare displayed annotation, not article truth. Read full common packet. Supplied review assertions are not independent proof.",
+  "questions":{
+    "state_preserved":"Does the added/displayed annotation preserve the actual local application and unchanged status indicated by the output and existing receipt?",
+    "concrete_issue_recoverable":"Can the displayed annotation identify the specific output span and supplied evidence for every supplied unresolved issue? Use not_applicable if the supplied issue list is empty; distinguish what can be recovered from the common packet alone.",
+    "overclaim":"Does the displayed annotation assert more than supplied review status, such as a verified error, independently proven truth, all issues resolved, or external publication? Quote the exact claim if yes; omission alone is not an overclaim.",
+    "noop_overcorrection":"Does the displayed annotation propose or imply a text correction despite an empty supplied issue list and unchanged no-op output? Use not_applicable outside the no-op case."
+  },
+  "answers":["yes","no","unknown","not_applicable"],
+  "required_per_question":["answer","short_anchor","reason"],
+  "additional":"List any missing issue IDs separately; report whether recoverability came from annotation or only common inputs. Empty supplied list must never be interpreted as proof of all-resolved. Preserve A/B disagreement. Do not infer condition from expected answers."
+}

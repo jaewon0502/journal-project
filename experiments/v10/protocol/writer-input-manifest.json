@@ -1,0 +1,72 @@
+{
+  "frozen_at": "2026-10-01T22:40:56.193556+00:00",
+  "generation_inputs": 9,
+  "synthetic": 6,
+  "exposed_regression": 2,
+  "new_real_scoped_control": 1,
+  "rows": [
+    {
+      "input_id": "68b14dd2cb80eeb2233250e4",
+      "origin": "3d43980ef7ef5ade22b8eb3b",
+      "kind": "authored_synthetic",
+      "input_sha256": "69c789c8e7f3766bf27ac2f68077aa346e9075f27aeb4994527ecc6ca53a290d",
+      "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4"
+    },
+    {
+      "input_id": "076444f8c29c062026da0640",
+      "origin": "459a283fa0463064e8dd444c",
+      "kind": "authored_synthetic",
+      "input_sha256": "242a954a6200264e0a8d34073128eb4067f3492690f225cb91573b5c552db607",
+      "source_sha256": "0e7622c5b4848ace82fd1bce8f80df6dc172024c60ff31dd40a961f79a6bfa76"
+    },
+    {
+      "input_id": "bb2bc147a7a191526de42c7e",
+      "origin": "807712af1b63c31c819db810",
+      "kind": "authored_synthetic",
+      "input_sha256": "c6340b58a20acd580d146855f184e86288cfaaff5871d2ca128ec1a87b3287fa",
+      "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d"
+    },
+    {
+      "input_id": "3c2c6fbd3a6be4122a4f2923",
+      "origin": "937ccb77b9e2ecc1514f0a62",
+      "kind": "authored_synthetic",
+      "input_sha256": "bdc5557b7acfe9b712815a2e7b7e7ecc3fc132afe22e6b832c62e573c55b1f65",
+      "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3"
+    },
+    {
+      "input_id": "774e3fe72948016808435dc6",
+      "origin": "a109a16b167e313805f7dbae",
+      "kind": "authored_synthetic",
+      "input_sha256": "48371b5c7b906ff95de45633c09597758c6c3e3b7941ce1ceebaacd5a6bff272",
+      "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f"
+    },
+    {
+      "input_id": "d751d02a9ccf200645c565e3",
+      "origin": "d8dc8d48792d596fe01b4bf7",
+      "kind": "authored_synthetic",
+      "input_sha256": "9157a2e00b71bbee7450b63f0decead61669ff56ccbb0b8e62333a6cff69b413",
+      "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e"
+    },
+    {
+      "input_id": "a1053a9afe9d33763cc394d6",
+      "origin": "KO011",
+      "kind": "exposed_regression",
+      "input_sha256": "1f7d53e842d0ea93c57cd1342edaa461d800f30fb1b4d569067353785aca0042",
+      "source_sha256": "9d581bc428de78e6af5686ffef7f7c6e24e8e9f3d99c2fff6481b03fbfa8311c"
+    },
+    {
+      "input_id": "532b58871285554912f8650f",
+      "origin": "EN023",
+      "kind": "exposed_regression",
+      "input_sha256": "d0a3844e71daffff7448167a24482dd3c8997e85e099dc4a1cbdc70c48e48136",
+      "source_sha256": "3591df7d10dcccb7604b0dc84237e26568c6eff2322fdb96ed5a9e1260b382f1"
+    },
+    {
+      "input_id": "708e96d9b04de12811d56d64",
+      "origin": "NASA2024",
+      "kind": "new_real_scoped_control",
+      "input_sha256": "bb839d0f25468da630275209ceb54f2db29056a1d61400e12c9987529ada7b73",
+      "source_sha256": "83a5843a37846dc1ed8028c042fa2e78c83f5dc0806b55b8f1bc8b1b9c116c3e"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "split": "heldout",
+  "counts": {
+    "bases": 3,
+    "candidates": 6,
+    "procedure_items": 12,
+    "procedures": 2
+  },
+  "packets": [
+    {
+      "packet_id": "r_07eb50efc7f267d6",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_07eb50efc7f267d6.json",
+      "sha256": "91ee400fc8be4a17747048d258ae9fb51dedf5f0d71eb6674bc48e17b23eca13"
+    },
+    {
+      "packet_id": "r_1a791687e070e978",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_1a791687e070e978.json",
+      "sha256": "cd65084f3c1490ccec43a7c28c129b4329e82b19d3b6a46fe6a093f40decb96e"
+    },
+    {
+      "packet_id": "r_1bf4db00e52b6121",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_1bf4db00e52b6121.json",
+      "sha256": "0cc9346d09dddfe0331a62706254123cf2e15616de25d3bfc6561c8b4ff055bb"
+    },
+    {
+      "packet_id": "r_207817628140f63e",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_207817628140f63e.json",
+      "sha256": "9a3c5c38b7367be93f623ce7ecb0f94b4123569807dafb5b552a56d9568cff2f"
+    },
+    {
+      "packet_id": "r_292aac8413f81ce6",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_292aac8413f81ce6.json",
+      "sha256": "bc217a9756eb030cdbadf979802427220e810745b19102d897e9fc179cd9c547"
+    },
+    {
+      "packet_id": "r_342849133e6d3525",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_342849133e6d3525.json",
+      "sha256": "7a76adc6a6fd0963299caf7b4a9a786b3bfb71ffcc562ad7cb706bf3e2926d0f"
+    },
+    {
+      "packet_id": "r_47d5e21368d56f63",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_47d5e21368d56f63.json",
+      "sha256": "a5ebe43c3658876b9041a62651948fad11c33de75fe85a01b0dba7a10dfca6ac"
+    },
+    {
+      "packet_id": "r_b30dd2994b49387e",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_b30dd2994b49387e.json",
+      "sha256": "8e2a078d67fc981f07fb56bc2963684634108835157e8268befa51edf08d5a05"
+    },
+    {
+      "packet_id": "r_c9be8e360a975c24",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_c9be8e360a975c24.json",
+      "sha256": "e18141d051d4c44ba3a2c1600333b5b26e94296c90615e4bd1c7b1093e3f2053"
+    },
+    {
+      "packet_id": "r_d7fd580c597007f4",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_d7fd580c597007f4.json",
+      "sha256": "71565fd784b268c9bd768d5458773741b6658942cee54742b1fcd1b17477222f"
+    },
+    {
+      "packet_id": "r_e8357f043a9439c8",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_e8357f043a9439c8.json",
+      "sha256": "6123984b0247e5b8a369d15ad28eb7f9b91c62a40112b8f217d0383a5a989983"
+    },
+    {
+      "packet_id": "r_f797304555860ca9",
+      "packet_path": "/historical-research/journal-v12-private/hidden-pairs/detector-inputs/r_f797304555860ca9.json",
+      "sha256": "ff4604f6dd82d4664c6742980ce7b2f26afe6bb76d0625b01171a253e02e0add"
+    }
+  ]
+}

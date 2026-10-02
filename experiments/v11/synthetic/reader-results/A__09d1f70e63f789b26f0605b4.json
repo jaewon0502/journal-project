@@ -1,0 +1,76 @@
+{
+  "packet_id": "09d1f70e63f789b26f0605b4",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output.",
+      "anchor": "selected_ids: []; actual_output: 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The displayed output repeats the source exactly.",
+      "anchor": "actual_output: an increase of 3%. The meeting is on Friday."
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both proposed patches were rolled back and neither is present.",
+      "anchor": "rejected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "The supplied scope explicitly does not establish overall factual accuracy, including beyond scoped checks.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The record explicitly denies an external publication action.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "The retained 3% unit and Friday day conflict with E1 and E2.",
+      "anchor": "actual_output: 3%; Friday; E1: 3 percentage points; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The review topic does not say whether any patch reached final output."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "No comparison of final output with source is stated."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The proposal topics do not communicate disposition of all patches."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Calling external verification a separate matter does not state whether whole-article correctness was established."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "Calling publication a separate matter does not state whether it occurred."
+    },
+    "unresolvedmeaning": {
+      "rating": "omitted",
+      "short_anchor": "No final-state statement",
+      "reason": "The annotation gives reference values but never says whether final output meets them."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "Neither correction reached output: the 3% unit and Friday date both remain inconsistent with scenario facts."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": [
+    "AI internal reading, not a human-reader result; no external verification or authored-key comparison."
+  ]
+}

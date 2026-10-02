@@ -1,0 +1,72 @@
+{
+  "packet_id": "8ccdceec3ca3f5602b527fa9",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "Neither proposed replacement appears in the displayed output.",
+      "anchor": "selected_ids: []; actual_output: increase of 3%; Friday"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "Displayed output repeats the source exactly.",
+      "anchor": "source_sha256 equals output_sha256; status: rolledback"
+    },
+    "allproposed_applied": {
+      "answer": "no",
+      "reason": "Both patches were rejected and neither is in displayed output.",
+      "anchor": "rejected_ids: [p1, p2]"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "yes",
+      "reason": "Displayed 3% misstates the stipulated difference and Friday conflicts with the Saturday schedule.",
+      "anchor": "E1: 3 percentage points; E2: Saturday"
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "accurate_explicit",
+      "short_anchor": "neither was applied",
+      "reason": "Explicit application denial."
+    },
+    "unchanged": {
+      "rating": "accurate_explicit",
+      "short_anchor": "displayed local output is unchanged",
+      "reason": "Explicit source/output identity."
+    },
+    "allproposed_applied": {
+      "rating": "accurate_explicit",
+      "short_anchor": "neither was applied",
+      "reason": "Both proposals rejected."
+    },
+    "verifiedcorrect": {
+      "rating": "accurate_implicit",
+      "short_anchor": "two unresolved meaning issues",
+      "reason": "Explicit scenario discrepancies preclude established full correctness."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Local release does not explicitly rule out a separate external publication action."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_explicit",
+      "short_anchor": "two unresolved meaning issues",
+      "reason": "Names retained unit and meeting-day errors against scenario evidence."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

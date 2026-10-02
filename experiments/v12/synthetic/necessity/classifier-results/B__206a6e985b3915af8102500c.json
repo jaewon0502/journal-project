@@ -1,0 +1,30 @@
+{
+  "source_meaning_error": true,
+  "original_meaning_loss": true,
+  "required_answer_missing": true,
+  "optional_context_absence": false,
+  "decision": "patch",
+  "evidence": [
+    {
+      "field": "source",
+      "quote": "등록 회원이 안전교육을 이수한 경우에만 공용 절단기를 사용할 수 있다",
+      "supports": "사용 자격에는 등록 회원이라는 요건과 안전교육 이수라는 필수 조건이 함께 명시되어 있다."
+    },
+    {
+      "field": "original_article",
+      "quote": "등록 회원이 안전교육을 이수한 경우에만",
+      "supports": "안전교육 이수 조건은 추가 배경이 아니라 원문에 실제로 있던 중요한 제한이다."
+    },
+    {
+      "field": "candidate",
+      "quote": "등록 회원이 공용 절단기를 사용할 수 있다고 안내했다.",
+      "supports": "필수 안전교육 이수 조건을 삭제하여 등록 회원 전반이 사용할 수 있는 것으로 의미를 넓혔다."
+    },
+    {
+      "field": "reader_question",
+      "quote": "누가 어떤 조건을 충족해야 공용 절단기를 사용할 수 있는가?",
+      "supports": "독자 질문에 답하려면 등록 회원의 안전교육 이수 조건도 제시해야 한다."
+    }
+  ],
+  "reason": "후보는 안전교육을 이수한 경우에만 사용할 수 있다는 제한을 삭제하므로 자료의 주장을 부당하게 넓히고 원문의 중요한 조건을 잃었다. 독자 질문이 요구하는 사용 조건도 빠져 있다. 빠진 안전교육 이수 사실은 필수 정보이므로 선택 맥락으로 중복 계산하지 않으며, 그 밖에 누락된 추가 사실은 없다. 자료에 명시된 안전교육 이수 조건을 복원하여 수정할 수 있으므로 patch다."
+}

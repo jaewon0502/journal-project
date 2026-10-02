@@ -1,0 +1,122 @@
+{
+  "status": "complete_no_must_fix_core_plus_fresh_control",
+  "reviewed_at_utc": "2026-10-02T02:59:49.395598+00:00",
+  "report_path": "/historical-research/journal-v13/REPORT.md",
+  "report_sha256": "e36af48bcc3c0aca0a3653bf41761077c3908f2f5193271c2f129d0112a9ffee",
+  "supporting_document_sha256": {
+    "USER-PROCEDURE.md": "184fc157b8d8c2d4dbcc7bf0b9d308508ddcc30560f087e8ff522d89418cdd8d",
+    "results/RESULTS.md": "1b356ec990323f99a340a68cc99b34a7e1fb3edb89ddda25676fcd51ab975602",
+    "results/analysis.json": "625917a6579dc62a39e70d11185147c06d79b5da58152b3e869afa3f88a59d40",
+    "results/independent-validation.json": "b32a0bb73c718dbfd1a44cf0d0121fd56ead02cc22a4a8c177f4deebc4bcabaa",
+    "results/fresh-control.md": "8c0269e3edaecf42c05441e27e3ed7ec6fc58646f2328807bdd0e4187dc713d9",
+    "results/fresh-control.json": "bd02a9e91217cc844b3d481baf056eeb16ea42a2f36e70e6065daeffb6d5d876",
+    "code/analyze_fresh_control.py": "c29edb919ede93d23fb6fb07bad6b029283755988df4dc6115d7e47dbc76b1ba"
+  },
+  "must_fix": [],
+  "optional_clarifications": [],
+  "verified": {
+    "units": {
+      "bundles": 8,
+      "proposals": 27,
+      "initial_reviews": 16,
+      "patch_assessments": 54,
+      "gate_bundle_rows": 16,
+      "unique_primary_audits": 15,
+      "audit_atomic_changes": 14
+    },
+    "delivery": {
+      "G0": 0,
+      "G1_synthetic": 6,
+      "G1_exposed_real_regression": 7,
+      "all_primary_audits_record_safe_release": 15
+    },
+    "G1_hold_partition": {
+      "review_assessed_unsafe": 3,
+      "supported_unwarranted": 5,
+      "unresolved_unknown": 1,
+      "dependency_closure": 5
+    },
+    "independently_recounted_anchors": {
+      "source_total": 24,
+      "exact_source": 22,
+      "original_total": 14,
+      "exact_original": 14,
+      "candidate_total": 15,
+      "exact_candidate": 15
+    },
+    "source_anchor_exceptions": "Korean primary audit C1 abbreviates eligibility alternatives; C2 normalizes an extraction newline. Frozen paragraph supports the described content, but both remain nonliteral quotes.",
+    "dependency_distinction": "Actual English P6 yes/unknown context disagreement and union dependencies hold P1-P5. Synthetic a9f3b6 P2 has dependency P1 but is held for warranted=no; RESULTS.md explicitly avoids calling this a dependency-blocking success.",
+    "example_fidelity": "Checked river-center 6-to-4 funding correction and retained permit condition; education foundation 9-to-7 suppliers and retained attributed criticism; cultural-center count/deadline corrections and retained unverified historic attendance claim.",
+    "modality": "Frozen EN-DEV-S-P013 says may limit; primary P8 says limits. Primary audit and two targeted posthoc challenges explicitly recognize stronger modality while judging no material harm. Report retains this source-fidelity loss rather than claiming perfect preservation.",
+    "posthoc": "Two diagnostic challenge records are distinct from the explicit root-authored one-phrase may insertion and its separate audit ce8cc9dc3f56c3390fe14daf. Neither is added to primary 13 accepted proposals or 15 audits.",
+    "no_change_scope": "No-change release is expressly relative to original, not whole-article truth or resolved original errors. Normal b7e2c9 has zero proposals and is correctly described as a gate negative control, not spontaneous editor-overediting evidence.",
+    "historical_scope": "v12 checkpoint and its 10 holds remain distinct; G0 is a harmonized comparison, not a bit-for-bit v12 rerun. No score revision is claimed.",
+    "mechanical_validation": "Stored independent validation contains 85 initial and 96 final checks; report correctly does not treat their sum as independent semantic tests.",
+    "protection_list": "Report expressly leaves completeness/necessity and AI common-mode errors unresolved; it does not promote protection lists or author expectations to gold labels."
+  },
+  "limitations": [
+    "This is an AI report-to-artifact review, not human gold judgment, new model experiment, or reader-outcome validation.",
+    "Fresh-context isolation and full reading are workflow claims; inspecting outputs or hashes cannot prove complete semantic coverage.",
+    "Primary semantic verdicts, especially materiality of stronger modality and conservative dependency closure, remain interpretive. Report qualifies them appropriately.",
+    "The six synthetic bundles are authored stimuli and the two real bundles are exposed regressions; they do not estimate general performance.",
+    "Whole-tree historical v12 immutability was not independently re-audited here; checkpoint preservation beyond inspected references remains dependent on the parent manifest.",
+    "Review did not edit raw inputs, proposals, judgments, protocols, scores, or report text.",
+    "Fresh-control C02 necessary-correction disagreement remains unresolved; one safe correction does not establish complete detection or a validated protection list.",
+    "NASA current release postdates Reuters publication; full research papers and contemporaneous original release are absent.",
+    "This final review makes no new model generations or web acquisitions. Full packaged HTML/ZIP and remote Library contents are outside this report-text review."
+  ],
+  "mutations": [
+    "Updated results/report-final-review.json only; prior core review preserved separately; no raw inputs, judgments, protocols, reports or scores edited."
+  ],
+  "prior_core_review": {
+    "path": "/historical-research/journal-v13/results/report-core-review.json",
+    "sha256": "d37be49c8dc7bcede796dad1e09da6f7a61817fd41ee5d54c8ad4384db15b982",
+    "note": "Original independent core review retained. Optional criticism-example wording is now explicitly synthetic."
+  },
+  "fresh_control_review": {
+    "status": "supported_with_explicit_limitations",
+    "distinct_denominators": {
+      "fresh_cases": 1,
+      "actual_writer_runs": 1,
+      "actual_writer_proposals": 1,
+      "initial_risk_reviews": 2,
+      "primary_candidate_audits": 2,
+      "secondary_coverage_audits": 2,
+      "pre_output_provisional_preservation_items": 18,
+      "secondary_qualification_items": 3,
+      "G0_accepted": 0,
+      "G1_accepted": 1,
+      "core_counts_unchanged": true
+    },
+    "mechanical_replay": "Independently imported frozen gate and replayed same bundle/raw bytes/two reviews in memory; exact equality with saved gate-output.json. No raw or result artifact changed by replay.",
+    "source_scope": "Reuters supplied text has 18 body paragraphs and 27 full packet blocks including article metadata, summary and caption. NASA supplied source has 38 nonempty text segments; ID 035 is an empty snapshot line. This is the complete official release text within the documented page scope, not either paper, supplements, underlying research data, image/video pixels or audio.",
+    "source_dates": {
+      "Reuters_publication": "2025-01-29T16:08:00Z",
+      "Reuters_displayed_update": "2025-01-29",
+      "NASA_publication": "2025-01-29",
+      "NASA_update": "2025-02-03",
+      "snapshot_collection": "2026-10-02"
+    },
+    "temporal_claim": "Report explicitly excludes inference that Reuters had the later NASA wording at publication or that this establishes contemporaneous journalistic fault.",
+    "selection": "Acquisition record identifies rejected author-led ScienceAlert explainer and selected second candidate Reuters, with purposive nonrandom selection disclosed. Freshness is a local-workspace/prior-case exclusion check, not proof about inaccessible model history.",
+    "pre_output_reference": "Source-first reference contains 18 provisional preservation items and C01-C03. Reference lock timestamp precedes review lock and records writer_output_exists=false. Writer input contains source/original/questions/instruction and excludes reference/gate fields. Hash and timestamp records support workflow ordering, not security isolation proof.",
+    "actual_change": "Writer emits exactly one raw proposal: insertion of Some of to narrow mineral novelty. NASA P022 distinguishes previously detected evaporites, newly observed complete evaporation sequence, and some individually first-detected extraterrestrial minerals. The report faithfully describes that distinction without claiming every mineral was novel.",
+    "gate_reason": "G0 holds on unresolved background B2-B4 from both reviews; this includes a mapped nonmaterial source-version limit and unrelated original evidence gaps. Both reviews unanimously approve five fields for P1 and give no dependencies/global risk; G1 accepts P1.",
+    "primary_audits": "G0 audit records zero changes and safe/release relative to original; G1 records one supported warranted change with no introduced material harm and safe/release. Independently checked G1 source anchors against supplied paragraphs. Neither certifies complete article accuracy.",
+    "secondary_C02": "Reference calls for clarification of nucleobases as components of larger information-bearing biomolecules. Both primary audits retain the isolated imprecision as residual but report no unmet required answers. Secondary G0 labels whole-article meaning addressed while explicitly challenging mandatory local repair; secondary G1 labels it not_necessary. Main report and fresh results preserve this unresolved requiredness difference without equating optional imprecision with ideal source fidelity.",
+    "metric_integrity": "Fresh 1 proposal is not added to core 8 bundles/27 proposals/13 accepted patches, nor to 15 core primary audits or 2 earlier modality challenges. No historical or frozen scores changed.",
+    "privacy": "Reviewed REPORT.md, USER-PROCEDURE.md, fresh-control.md and fresh-control.json contain no copied full Reuters paragraph longer than 120 characters. Public texts summarize and link; complete article, source snapshot, raw writer and semantic judgments stay in private tree. This is a scoped content check, not a full packaged-artifact privacy audit.",
+    "mechanical_summary": "All saved fresh-control mechanical check flags are true; reviewer also performed direct in-memory gate replay, source count, anchor, raw proposal, audit and C02 checks."
+  },
+  "final_addendum_review": {
+    "status": "no_must_fix",
+    "section": "실패·미실행·남은 문제의 난이도",
+    "observed_failures": "Matches retained original errors, modal-strength source-fidelity defect, two nonliteral source anchors, and unresolved fresh C02 requiredness disagreement. No failure is reclassified away to improve acceptance.",
+    "unexecuted": "Human/different-model judgment, reader/bias outcomes, random large real sample, controlled API deployment/seed/cost experiment, and complete Bennu papers/data are correctly excluded.",
+    "rollback": "Independently rechecked all 15 core and 2 fresh primary audit records: all are safe and every recorded changed span has introduced_material_harm=no. No candidate therefore demonstrates actual final-audit-triggered rollback effectiveness; report explicitly says so. Code checks and the known one-phrase posthoc repair are not presented as a general success experiment.",
+    "difficulty": "Low/medium/high/highest ordering is explicitly labeled research judgment based on observed failures, not measured work duration or success probabilities. The rankings are defensible qualitative priorities rather than empirical estimates.",
+    "new_vs_replay": "The report keeps 17 reused real proposals, 10 authored synthetic proposals, 16 initial semantic reviews, 15 unique core primary audits, 2 targeted challenges, 1 separate wording audit, and fresh writer/risk/final/secondary outputs distinct. It describes role-output counts, not internal API calls/cost; gate replay/hash/position checks are expressly not fresh semantic evidence.",
+    "fresh_table": "Latest Korean item table faithfully maps saved per-item labels. Independently compared both 18-item public arrays to raw coverage results and confirmed result hashes. C02 remains unchanged locally and disputed in requiredness.",
+    "latest_fresh_wording": "Candidate-level correction and relative-to-original audit language now explicitly excludes external publication or delivery; no raw verdict or score changes are implied."
+  }
+}

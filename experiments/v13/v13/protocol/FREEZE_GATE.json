@@ -1,0 +1,13 @@
+{
+  "frozen_at_utc": "2026-10-02T02:16:52.760673+00:00",
+  "phase": "before review results; code mechanics only",
+  "files": {
+    "protocol/PREREGISTRATION.md": "f8adfa7211743771ed2d9f0a0c80167378ec2cc40c5d67a206fbfbfda86b6b31",
+    "protocol/REVIEW_SCHEMA.json": "404c1e3d2fa06d5fa177feae2bef8f40d91fef028707e3c647e94fe00ead13ee",
+    "protocol/REVIEW_INSTRUCTIONS.md": "8a74606fa071617ce4a4f708fc85912751e692068b56124f1e9eeac768e807f3",
+    "code/gate.py": "6ffbc5c7c5577131b1f9a5d81ee3f8569bd6de3366716cac0f844d19013d113a",
+    "code/build_schema.py": "b3771a6a294a4f702e3bf7d7080b8ff97910a9db5e100d0649cc4ca5dffa9059",
+    "code/test_gate.py": "ead5689afa1f7a7954fd0534ad287a5ed7c5025490db778f078c59f41e76281d",
+    "code/README.md": "07553da846f68021e2c74e486d3e5ab993a467f689b1665936fd2a932ba44a6a"
+  }
+}

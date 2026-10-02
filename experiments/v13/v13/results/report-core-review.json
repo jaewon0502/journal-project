@@ -1,0 +1,72 @@
+{
+  "status": "complete_no_substantive_must_fix",
+  "reviewed_at_utc": "2026-10-02T02:36:47.610255+00:00",
+  "report_path": "/historical-research/journal-v13/REPORT.md",
+  "report_sha256": "29c13b1127e5332a0ac77f779148b804144f8cc72a084de3195bebef03a0b997",
+  "supporting_document_sha256": {
+    "USER-PROCEDURE.md": "d9cb6748f5c375d2652edeb6e1b4dea72ad6baf6b292ff8f687eb05857e4f774",
+    "results/RESULTS.md": "1b356ec990323f99a340a68cc99b34a7e1fb3edb89ddda25676fcd51ab975602",
+    "results/analysis.json": "625917a6579dc62a39e70d11185147c06d79b5da58152b3e869afa3f88a59d40",
+    "results/independent-validation.json": "b32a0bb73c718dbfd1a44cf0d0121fd56ead02cc22a4a8c177f4deebc4bcabaa"
+  },
+  "must_fix": [],
+  "optional_clarifications": [
+    {
+      "location": "REPORT.md, 확인된 국소 개선 paragraph",
+      "text": "실제 비판을 약화하는 제안은 제외하고 비판을 유지했다.",
+      "suggestion": "가상 사례에서 비판을 약화하는 제안은 제외하고 비판을 유지했다.",
+      "reason": "The demonstrated criticism-weakening proposal is synthetic e6b1d4; surrounding report already labels it synthetic, so this is an ambiguity reduction rather than a substantive contradiction."
+    }
+  ],
+  "verified": {
+    "units": {
+      "bundles": 8,
+      "proposals": 27,
+      "initial_reviews": 16,
+      "patch_assessments": 54,
+      "gate_bundle_rows": 16,
+      "unique_primary_audits": 15,
+      "audit_atomic_changes": 14
+    },
+    "delivery": {
+      "G0": 0,
+      "G1_synthetic": 6,
+      "G1_exposed_real_regression": 7,
+      "all_primary_audits_record_safe_release": 15
+    },
+    "G1_hold_partition": {
+      "review_assessed_unsafe": 3,
+      "supported_unwarranted": 5,
+      "unresolved_unknown": 1,
+      "dependency_closure": 5
+    },
+    "independently_recounted_anchors": {
+      "source_total": 24,
+      "exact_source": 22,
+      "original_total": 14,
+      "exact_original": 14,
+      "candidate_total": 15,
+      "exact_candidate": 15
+    },
+    "source_anchor_exceptions": "Korean primary audit C1 abbreviates eligibility alternatives; C2 normalizes an extraction newline. Frozen paragraph supports the described content, but both remain nonliteral quotes.",
+    "dependency_distinction": "Actual English P6 yes/unknown context disagreement and union dependencies hold P1-P5. Synthetic a9f3b6 P2 has dependency P1 but is held for warranted=no; RESULTS.md explicitly avoids calling this a dependency-blocking success.",
+    "example_fidelity": "Checked river-center 6-to-4 funding correction and retained permit condition; education foundation 9-to-7 suppliers and retained attributed criticism; cultural-center count/deadline corrections and retained unverified historic attendance claim.",
+    "modality": "Frozen EN-DEV-S-P013 says may limit; primary P8 says limits. Primary audit and two targeted posthoc challenges explicitly recognize stronger modality while judging no material harm. Report retains this source-fidelity loss rather than claiming perfect preservation.",
+    "posthoc": "Two diagnostic challenge records are distinct from the explicit root-authored one-phrase may insertion and its separate audit ce8cc9dc3f56c3390fe14daf. Neither is added to primary 13 accepted proposals or 15 audits.",
+    "no_change_scope": "No-change release is expressly relative to original, not whole-article truth or resolved original errors. Normal b7e2c9 has zero proposals and is correctly described as a gate negative control, not spontaneous editor-overediting evidence.",
+    "historical_scope": "v12 checkpoint and its 10 holds remain distinct; G0 is a harmonized comparison, not a bit-for-bit v12 rerun. No score revision is claimed.",
+    "mechanical_validation": "Stored independent validation contains 85 initial and 96 final checks; report correctly does not treat their sum as independent semantic tests.",
+    "protection_list": "Report expressly leaves completeness/necessity and AI common-mode errors unresolved; it does not promote protection lists or author expectations to gold labels."
+  },
+  "limitations": [
+    "This is an AI report-to-artifact review, not human gold judgment, new model experiment, or reader-outcome validation.",
+    "Fresh-context isolation and full reading are workflow claims; inspecting outputs or hashes cannot prove complete semantic coverage.",
+    "Primary semantic verdicts, especially materiality of stronger modality and conservative dependency closure, remain interpretive. Report qualifies them appropriately.",
+    "The six synthetic bundles are authored stimuli and the two real bundles are exposed regressions; they do not estimate general performance.",
+    "Whole-tree historical v12 immutability was not independently re-audited here; checkpoint preservation beyond inspected references remains dependent on the parent manifest.",
+    "Review did not edit raw inputs, proposals, judgments, protocols, scores, or report text."
+  ],
+  "mutations": [
+    "Created results/report-final-review.json only."
+  ]
+}

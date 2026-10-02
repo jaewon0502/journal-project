@@ -1,0 +1,17 @@
+{
+  "status": "verified",
+  "sidecar_sha256": "c80b5298dc872a7c5038ad3acc6bf11d4c7572aba81260133fdba4d28637cecd",
+  "sidecar": {
+    "independently_verified": false,
+    "input_sha256": "05e672a58035bb6dd472a7167aac72ca768fc56581debc05663f27278c28be69",
+    "issues": [],
+    "language": "EN",
+    "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+    "receipt_sha256": "92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36",
+    "rendered_text": "No unresolved issues were supplied; this does not establish that all issues are resolved.",
+    "review_assertion": "reported_unresolved",
+    "schema": "journal-v11.issue-sidecar.v1"
+  },
+  "text": "No unresolved issues were supplied; this does not establish that all issues are resolved.",
+  "combined_text": "No change was requested; the unchanged local output passed the supplied review. Applied 0; excluded or rolled back 0; held 0. The supplied review gate released this local output. The candidate is a separate local artifact. No external article or publication was changed. Evidence covers supplied local bytes and audit records only. Unverified claims from the source may remain in both output and candidate. Patch application does not prove factual truth or resolve the question. Factual truth is not independently verified; question resolution is not adjudicated. There are 0 finding references with unadjudicated resolution; this does not establish that an error remains. Hashes bind bytes but do not authenticate writers or reviewers. Output SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Candidate SHA-256: 75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488. Receipt SHA-256: 92c957bcd5a73476523b9e08ba3ab0562a019ac87f0f9f969e84020b8dddcb36.\n\nNo unresolved issues were supplied; this does not establish that all issues are resolved."
+}

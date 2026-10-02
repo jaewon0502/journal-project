@@ -1,0 +1,32 @@
+{
+  "packet_id": "b8c9339c2c42174ca0989d6f",
+  "rubric_id": "journal-v10-evaluation-rubric-1",
+  "additional_meaning_losses": [],
+  "patch_decisions": [],
+  "pairs": [],
+  "inherited_findings": [],
+  "new_findings": [],
+  "actual_patch_state": "unchanged",
+  "delivery_consistency": "pass",
+  "original_statement_retention": "retained",
+  "targeted_question_resolution": "resolved",
+  "source_sufficiency": "sufficient",
+  "truth_status": "supported_in_packet",
+  "abstain": false,
+  "evidence_anchors": [
+    "위원회는 \"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+    "위원회 발표문: 모든 신청자가 탈락했다는 소문은 사실이 아닙니다. 5명이 합격했습니다.",
+    "두 내용과 반박 관계가 E1에 부합하므로 변경을 적용하지 않았습니다."
+  ],
+  "reason": "Body and separate note correctly distinguish the rejected rumor from the committee assertion of five successful applicants, preserving the rebuttal relationship and attribution. E1 directly supports this fidelity judgment; no change is needed.",
+  "limitations": [
+    "Single-sentence synthetic source; fidelity to supplied announcement is the assessed proposition, not external verification of individual outcomes."
+  ],
+  "source_first_protections": [
+    {
+      "source_anchor": "\"모든 신청자가 탈락했다\"는 소문을 반박하며 5명이 합격했다고 밝혔다.",
+      "meaning": "Preserves negated rumor, positive committee claim, count and their rebuttal relationship."
+    }
+  ],
+  "admission": "approved"
+}

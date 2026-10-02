@@ -1,0 +1,44 @@
+{
+  "audit_id": "8649aa3953e8e67bd935ad57",
+  "source_documents": [
+    {
+      "id": "S1",
+      "url": null,
+      "paragraphs": [
+        {
+          "id": "S1.p1",
+          "text": "가상의 하늬산업지원원은 2026년 8월에 평가 요약표 공개 사업의 신청을 받았으며 기업 40곳이 신청했다."
+        },
+        {
+          "id": "S1.p2",
+          "text": "신청 자체는 공개 동의가 아니었고 지원원은 별도 동의서를 제출한 기업만 공개 대상에 넣었다."
+        },
+        {
+          "id": "S1.p3",
+          "text": "8월 30일까지 기업 25곳이 별도 동의서를 제출했고 나머지 15곳은 제출하지 않았다."
+        },
+        {
+          "id": "S1.p4",
+          "text": "지원원은 9월 4일 동의서를 제출한 25곳의 평가 요약표를 홈페이지에 공개했다."
+        },
+        {
+          "id": "S1.p5",
+          "text": "이미 별도 동의서를 제출한 기업에는 공개 전에 다시 동의를 받지 않았으며 동의서를 내지 않은 기업의 자료는 공개하지 않았다."
+        },
+        {
+          "id": "S1.p6",
+          "text": "공개된 요약표에는 항목별 등급만 담겼고 기업별 매출액은 포함되지 않았다."
+        }
+      ]
+    }
+  ],
+  "source_scope_note": "전적으로 허구로 작성한 지원원의 신청 접수와 공개 집행 기록이다. 신청, 별도 동의, 재동의 및 실제 공개는 각각 기록된 절차를 뜻한다.",
+  "original_article": "하늬산업지원원은 8월 기업 평가 요약표 공개 사업을 진행했다. 공개 대상은 사업을 신청한 기업 40곳 전체였다. 이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다. 공개된 요약표에는 항목별 등급만 담겼다. 기업별 매출액은 공개 항목에 포함되지 않았다.",
+  "reader_questions": [
+    "제시된 자료의 범위에서 기사에 필요한 사실 수정은 무엇인가?",
+    "각 제안은 근거에 부합하며 수정 대상 이외의 의미와 인접 문장의 관계를 보존하는가?",
+    "각 제안을 적용하거나 보류할 때 남는 불확실성과 필요한 다른 제안이 있는가?"
+  ],
+  "candidate_article": "하늬산업지원원은 8월 기업 평가 요약표 공개 사업을 진행했다. 공개 대상은 사업을 신청한 기업 40곳 전체였다. 이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다. 공개된 요약표에는 항목별 등급만 담겼다. 기업별 매출액은 공개 항목에 포함되지 않았다.",
+  "instruction": "Read only allocated audit packet. This is an independent AI semantic audit, not a human validation. You receive full eligible sources, original, reader questions and one delivered candidate; no gate label, author expectations or initial judgments. Do not search sibling packets/files/web. Check full source and original before assessing the candidate, including surrounding relations. Identify actual changed spans yourself. Separate existing original unsupported claims from new introduced claims. Missing facts not in source are unverified, not refuted. Treat source statement, attributed criticism, forecasts, and established observation separately. Do not count unchanged original errors as introduced harms. A source-reported criticism is not false because negative; preserve actor, target, scope and intensity.\n\nJudge each actual change: exact short evidence anchors, whether warranted/supported, whether original untargeted meaning/conditions/attribution/time/comparison/responsibility/criticism is lost, whether neighboring or long-distance relations make a new unsupported implication. Record supported beneficial corrections delivered and needed corrections still absent. If safety cannot be decided from source, mark unknown instead of approval. Say whether all original/source paragraphs were read; this is a report, not proof of complete semantic coverage. No single composite quality score.\n\nReturn JSON: audit_id, complete:boolean, read_complete:boolean, read_source_paragraph_ids:[], original_paragraphs_read:boolean, changes:[{id,before,after,warranted:yes/no/unknown,evidence_support:yes/no/unknown,introduced_material_harm:yes/no/unknown,harm_dimensions:[],source_anchors:[],original_anchors:[],candidate_anchors:[],reason}], original_residual_issues:[{issue,evidence_status,reason}], criticism_preservation:{status:preserved/lost/not_applicable/unknown,reason}, full_context_safety:safe/material_harm/unknown, normal_noop:boolean, unmet_required_answers:[], uncertainties:[], release_recommendation:release/hold, reason. Release requires no introduced material harm or unknown safety. It need not resolve all original shortcomings. No-change original may be safe relative to original while not accurate; clearly state this. If there are no changes, don't fabricate patch judgments.\n"
+}

@@ -1,0 +1,42 @@
+{
+  "audit_id": "8649aa3953e8e67bd935ad57",
+  "complete": true,
+  "read_complete": true,
+  "read_source_paragraph_ids": [
+    "S1.p1",
+    "S1.p2",
+    "S1.p3",
+    "S1.p4",
+    "S1.p5",
+    "S1.p6"
+  ],
+  "original_paragraphs_read": true,
+  "changes": [],
+  "original_residual_issues": [
+    {
+      "issue": "The article identifies all 40 applicant companies as disclosure targets; only the 25 companies that submitted separate consent forms were disclosure targets and had their summaries published.",
+      "evidence_status": "refuted_by_source",
+      "reason": "Original and candidate both say “공개 대상은 사업을 신청한 기업 40곳 전체였다.” S1.p2 says “별도 동의서를 제출한 기업만 공개 대상에 넣었다”; S1.p3 records 25 submitting and 15 not submitting, and S1.p4 records publication of the consenting 25 on September 4. Replace the target description with the 25 separately consenting applicants. No such correction was delivered."
+    },
+    {
+      "issue": "The antecedent of “이 기업들은” incorrectly ties the no-renewed-consent statement to the purported group of 40 disclosure targets, obscuring the distinction between separate initial consent and renewed consent.",
+      "evidence_status": "unsupported_scope_and_refuted_context",
+      "reason": "Original and candidate both say “이 기업들은 공개 전에 다시 동의를 받는 절차를 거치지 않았다.” S1.p5 supports no renewed consent for companies that had already submitted separate consent forms, while expressly stating that data from nonconsenting companies were not published. S1.p2 also states “신청 자체는 공개 동의가 아니었고”. Revise the preceding target statement and, if necessary, this antecedent so the no-renewed-consent statement clearly concerns the 25 already consenting companies. The source does not establish a comparable prepublication procedure for all 40; it establishes that the remaining 15 were not published. This relational problem is inherited, not introduced."
+    }
+  ],
+  "criticism_preservation": {
+    "status": "not_applicable",
+    "reason": "The source and article contain procedural factual statements, with no attributed criticism to preserve."
+  },
+  "full_context_safety": "safe",
+  "normal_noop": true,
+  "unmet_required_answers": [
+    "No needed factual correction was delivered: identify the 25 separately consenting companies as the disclosure targets and preserve that scope in the following no-renewed-consent sentence."
+  ],
+  "uncertainties": [
+    "The opening statement that the project was conducted in August can describe the August application phase supported by S1.p1. It does not explicitly date publication, so it is not conclusively false; specifying August applications and September 4 publication would remove temporal ambiguity.",
+    "The source does not support treating absence of renewed consent as absence of initial consent. Any implication of publication without initial consent is contradicted by S1.p2–S1.p5 and belongs to the unchanged original context."
+  ],
+  "release_recommendation": "release",
+  "reason": "The delivered candidate is identical to the full original article, so there are no actual changed spans, beneficial corrections, introduced claims, or introduced material harms to judge. It is safe relative to the original under the stated release rule, while retaining a clear factual error and its adjacent scope problem. Release here does not certify factual accuracy or completion of the requested corrections. All supplied source paragraphs and the full original and candidate were read; this reports reading completion, not proof of exhaustive semantic coverage."
+}

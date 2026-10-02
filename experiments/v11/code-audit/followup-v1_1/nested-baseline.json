@@ -1,0 +1,6 @@
+{
+  "uncaught": "RecursionError",
+  "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string",
+  "depth": 10000,
+  "audit_bytes": 20010
+}

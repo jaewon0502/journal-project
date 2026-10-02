@@ -1,0 +1,152 @@
+{
+  "case_id": "EN_independent_good_bad",
+  "source": "a b c",
+  "proposal_raw": "{\"patches\": [{\"after\": \"A\", \"before\": \"a\", \"end\": 1, \"id\": \"A\", \"start\": 0}, {\"after\": \"B\", \"before\": \"b\", \"end\": 3, \"id\": \"B\", \"start\": 2}, {\"after\": \"C\", \"before\": \"c\", \"end\": 5, \"id\": \"C\", \"start\": 4}], \"preimage_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\", \"writer_id\": \"writer\"}",
+  "dependency_raw": "{\"auditor_id\": \"dependency\", \"complete\": true, \"pairs\": [{\"ids\": [\"A\", \"B\"], \"relation\": \"independent\"}, {\"ids\": [\"A\", \"C\"], \"relation\": \"independent\"}, {\"ids\": [\"B\", \"C\"], \"relation\": \"independent\"}], \"patch_ids\": [\"A\", \"B\", \"C\"], \"proposal_sha256\": \"b30e111582d28ad097a35cf2c0f420dfd22dde29a023cbb1c2dd722614717d92\", \"read_complete\": true, \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\"}",
+  "patch_audit_raw": "{\"auditor_id\": \"patch\", \"complete\": true, \"patch_decisions\": [{\"decision\": \"approved\", \"id\": \"A\"}, {\"decision\": \"rejected\", \"id\": \"B\"}, {\"decision\": \"approved\", \"id\": \"C\"}], \"preexisting_findings\": [], \"proposal_sha256\": \"b30e111582d28ad097a35cf2c0f420dfd22dde29a023cbb1c2dd722614717d92\", \"read_complete\": true, \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\"}",
+  "final_audit_raw": [
+    "{\"auditor_id\": \"final\", \"candidate_sha256\": \"cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3\", \"complete\": true, \"decision\": \"approved\", \"findings\": [], \"proposal_sha256\": \"b30e111582d28ad097a35cf2c0f420dfd22dde29a023cbb1c2dd722614717d92\", \"read_complete\": true, \"selected_ids\": [\"A\", \"C\"], \"source_sha256\": \"0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b\", \"whole_candidate_reviewed\": true}"
+  ],
+  "output": "A b C",
+  "delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "0e9f64031fcb2bc708b531c2a20441580425d151a38503f38592a7dd36019d3b",
+    "output_sha256": "cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3",
+    "proposal_sha256": "b30e111582d28ad097a35cf2c0f420dfd22dde29a023cbb1c2dd722614717d92",
+    "dependency_sha256": "96a04d932c2927da3f802a17184b11e56c7b47686ab2cead96d6212643158ff3",
+    "patch_audit_sha256": "5dba437459170ea304510c5c367c78a29a0857a55fc419850b30b015112ba0e6",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "applied",
+    "released": true,
+    "source_equals_output": false,
+    "initial_candidate_sha256": "cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3",
+    "final_candidate_sha256": "cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3",
+    "applied_ids": [
+      "A",
+      "C"
+    ],
+    "components": [
+      {
+        "id": "component-1",
+        "patch_ids": [
+          "A"
+        ],
+        "state": "applied",
+        "reason": "exact_candidate_approved"
+      },
+      {
+        "id": "component-2",
+        "patch_ids": [
+          "B"
+        ],
+        "state": "rolledback",
+        "reason": "component_patch_rejected"
+      },
+      {
+        "id": "component-3",
+        "patch_ids": [
+          "C"
+        ],
+        "state": "applied",
+        "reason": "exact_candidate_approved"
+      }
+    ],
+    "patches": [
+      {
+        "id": "A",
+        "component_id": "component-1",
+        "state": "applied",
+        "source_span": [
+          0,
+          1
+        ],
+        "output_span": [
+          0,
+          1
+        ],
+        "before_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+        "proposed_after_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "actual_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "local_hunks": [
+          {
+            "start": 0,
+            "end": 1,
+            "before_sha256": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "after_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd"
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "component_id": "component-2",
+        "state": "rolledback",
+        "source_span": [
+          2,
+          3
+        ],
+        "output_span": [
+          2,
+          3
+        ],
+        "before_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+        "proposed_after_sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+        "actual_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+        "local_hunks": [
+          {
+            "start": 2,
+            "end": 3,
+            "before_sha256": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "after_sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c"
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "component_id": "component-3",
+        "state": "applied",
+        "source_span": [
+          4,
+          5
+        ],
+        "output_span": [
+          4,
+          5
+        ],
+        "before_sha256": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+        "proposed_after_sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+        "actual_sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+        "local_hunks": [
+          {
+            "start": 4,
+            "end": 5,
+            "before_sha256": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+            "after_sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d"
+          }
+        ]
+      }
+    ],
+    "final_audit_history": [
+      {
+        "audit_sha256": "f05d6372ed41f0726544ebd2a003632c0351f87fe31c4c86ffa47b763b92c7df",
+        "reviewed_candidate_sha256": "cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3",
+        "reviewed_ids": [
+          "A",
+          "C"
+        ],
+        "released": true,
+        "next_candidate_sha256": "cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3",
+        "next_selected_ids": [
+          "A",
+          "C"
+        ]
+      }
+    ],
+    "unresolved": [],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 적용. 의존 컴포넌트 적용 2개, 원복 1개, 보류 0개. 해결 여부가 확인되지 않은 감사 항목 0개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: cea6117496299185fa8044f2c2016db562098bfe2d698d2ad6f47709b6ab0af3. 기계적 검증은 의미 증명이 아님."
+  },
+  "one_factor_reference": "EN_baseline",
+  "factor": "independent_good_bad",
+  "not_semantic_proof": true
+}

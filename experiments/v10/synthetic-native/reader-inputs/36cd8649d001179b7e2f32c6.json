@@ -1,0 +1,32 @@
+{
+  "packet_id": "36cd8649d001179b7e2f32c6",
+  "source": "은행의 예대금리차는 1.20%다.",
+  "candidate": "은행의 예대금리차는 1.20%포인트다.",
+  "source_sha256": "0e7622c5b4848ace82fd1bce8f80df6dc172024c60ff31dd40a961f79a6bfa76",
+  "candidate_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "예대금리차는 4.20% - 3.00% = 1.20%포인트다."
+    }
+  ],
+  "target_question": "기사의 예대금리차 단위를 근거에 따라 바로잡고 실제 적용 여부를 정확하게 전달하라.",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "patches": [
+    {
+      "id": "p1",
+      "start": 29,
+      "end": 34,
+      "before": "1.20%",
+      "after": "1.20%포인트"
+    }
+  ],
+  "delivery": {
+    "artifact_status": "constructed_candidate_under_review_not_final_release",
+    "actual_applied_to_candidate_ids": [
+      "p1"
+    ],
+    "reader_note": "근거 E1에 따라 예대금리차의 단위는 1.20%포인트가 맞다. 이 JSON에는 단위 수정 제안만 기록했으며, 기사 원문이나 발행본에 실제 적용한 것은 아니다. 실제 반영 여부는 확인되지 않았다."
+  }
+}

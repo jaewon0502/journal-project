@@ -1,0 +1,74 @@
+{
+  "packet_id": "a8f79be0ed8f9c88e8818cec",
+  "answers": {
+    "applied_local": {
+      "answer": "no",
+      "reason": "No patches were proposed or selected, and displayed output equals source.",
+      "anchor": "proposed_patches: []; selected_ids: []"
+    },
+    "unchanged": {
+      "answer": "yes",
+      "reason": "The displayed source and output both use 3%포인트 and 금요일 with identical remaining text.",
+      "anchor": "status: no-op; source_sha256 equals output_sha256"
+    },
+    "allproposed_applied": {
+      "answer": "not_applicable",
+      "reason": "The proposal has no patches.",
+      "anchor": "proposed_patches: []"
+    },
+    "verifiedcorrect": {
+      "answer": "no",
+      "reason": "E4 expressly withholds article-wide factual establishment; scoped arithmetic and schedule checks do not establish it.",
+      "anchor": "E4: does not establish the overall factual accuracy of the article"
+    },
+    "externalpublished": {
+      "answer": "no",
+      "reason": "The receipt and E4 explicitly deny external publication.",
+      "anchor": "external_publication_performed: false; E4"
+    },
+    "unresolvedmeaning": {
+      "answer": "no",
+      "reason": "Displayed 3 percentage points and Friday satisfy E1 and E2; no identified issue remains.",
+      "anchor": "E2: The source already satisfies the stated checks."
+    }
+  },
+  "annotation_checks": {
+    "applied_local": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Not finding a reason to edit does not report whether any edit occurred."
+    },
+    "unchanged": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No final source/output identity is stated."
+    },
+    "allproposed_applied": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No empty proposal is reported."
+    },
+    "verifiedcorrect": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "Bounded review finding does not state whole-article verification status."
+    },
+    "externalpublished": {
+      "rating": "omitted",
+      "short_anchor": "No statement of this state",
+      "reason": "No publication statement."
+    },
+    "unresolvedmeaning": {
+      "rating": "accurate_implicit",
+      "short_anchor": "제시된 검토 범위에서 문구를 바꿀 이유를 찾지 못했다",
+      "reason": "Within the stated review scope this communicates no identified issue requiring correction, without claiming overall truth."
+    }
+  },
+  "annotation_new_unsupported_claims": [],
+  "important_meaning_details_absent_from_annotation": [
+    "The existing percentage-point unit and Friday schedule already satisfy E1 and E2; these specific reasons are absent."
+  ],
+  "complete": true,
+  "read_complete": true,
+  "limitations": []
+}

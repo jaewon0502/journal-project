@@ -1,0 +1,112 @@
+[
+  {
+    "path": "precision-inputs/fbc3ab094016f98313cf2559.json",
+    "sha256": "ffd716cad7c447fe51bec15c0519703be892842a46cbbe42d0147b626118be31",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-inputs/bf1ba39f2c033aaa5f2c7635.json",
+    "sha256": "11c83fe0d92b084b42af7fc4101752d22c3bec7989102249d592fc56dcdb0e60",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-inputs/2259a4cc7238c1f7de770371.json",
+    "sha256": "3f66c3dcc6af86c88086b2f5d78874c81e022928341acc5d805332650de25dc8",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-inputs/6af34dd6eb500dcf83375e41.json",
+    "sha256": "a35096f78ae17d54f805ad013d0c48c5e46755d44c14da2ba04db1b20bd12aa5",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-results/fbc3ab094016f98313cf2559.json",
+    "sha256": "80b2982e8a4f945cd4716817faf99592a55a8b2e1747deab8c637525c2bc04fe",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-results/bf1ba39f2c033aaa5f2c7635.json",
+    "sha256": "908fa28ab7686f5acee566be0955fa1f6ad01d8bd7c4b062d6e183ad6d1e6225",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-results/2259a4cc7238c1f7de770371.json",
+    "sha256": "844677775ce24bb5513627e8d644ca493bc804d4035b0c56cee8cfe0fae0ed20",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-results/6af34dd6eb500dcf83375e41.json",
+    "sha256": "2797500d1080b82158cb83a0a5c685fa8619a8a6dfdb8ff696a9c69ab689b004",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-inputs/1227ce89816e839d05fb6c21.json",
+    "sha256": "6736fa8d3b38c5ebee5bbeb614608fe5b5490e5bb8df31b95eabbfd2c8ad0b69",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-inputs/ab747477a6e3e0393854c7f2.json",
+    "sha256": "f5be37a921b1ca6afed46959608616c231f28d6b80a436bc99d2f4d87090409b",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-inputs/e6cafb1931d375b0474ff102.json",
+    "sha256": "93f56b466eb202f33bee086631beb4db1a5486ec631616c6de79a87a1f0b6577",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-inputs/dbc973b01536ff19d5a88642.json",
+    "sha256": "89a2cde346a83f88a0711b7ef0fbd0810ebfa641846dbb7fe11983c6a3700ef5",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/B__dbc973b01536ff19d5a88642.json",
+    "sha256": "f6f89eeb8c461ac28b2ed0abec657aa1b92e82981a78ba8ee3fcb912e18ebc5c",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/A__ab747477a6e3e0393854c7f2.json",
+    "sha256": "c65635ec3ed0d65e983e678b528a9add32ab49c02e56d0f351f52cecb4d281f6",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/B__e6cafb1931d375b0474ff102.json",
+    "sha256": "ae37dee6e0fb23786c8e6f815e27aec6f3f253d09b03b19fd6cccf7a4807f7a2",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/B__ab747477a6e3e0393854c7f2.json",
+    "sha256": "abbe282ff863f6b1f0fa3f35ddadf117a96993e5e11dde70591fb0810cd252de",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/B__1227ce89816e839d05fb6c21.json",
+    "sha256": "debb129214ff4b45f415b010a7dd765caef46480c3611489cb4fe8166948da92",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/A__dbc973b01536ff19d5a88642.json",
+    "sha256": "e4c5dad5ea936f435651f53dae5c6d6f9feda22479acb909b21f5b55abbe805f",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/A__1227ce89816e839d05fb6c21.json",
+    "sha256": "da5ddcebfe85c20a285417ede50441160f963842ced05dfe01d5cf2aecf8e8dd",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "precision-reader-results/A__e6cafb1931d375b0474ff102.json",
+    "sha256": "4b46c66018d3293f3fc8111889ee4eaf73621e05f539d4da3069400649d5a61e",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "challenge/raw.json",
+    "sha256": "7d9f0fc74654f6099fd0030e304f5aae27129f820d723cb5e41a3dc47ec6d7de",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  },
+  {
+    "path": "challenge/precision-diagnostic.json",
+    "sha256": "e22cf1738f5026e817c3756f3209ee9068d1a473f126130992d59443eec63da6",
+    "reason": "Natural-source full text or long audit anchors kept private; no public raw re-adjudication claimed."
+  }
+]

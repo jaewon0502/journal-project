@@ -1,0 +1,30 @@
+{
+  "algorithm": "sha256",
+  "inputs": [
+    {
+      "file": "0ce5a7e0ec02731911b92d52.json",
+      "sha256": "f3c8890c452296aafdc6cd8dcba5ad520ba7a7a5c2e9ed33b4cabfcaf224ebce"
+    },
+    {
+      "file": "0e0d2a253a6004ba748256e3.json",
+      "sha256": "b08a46729be9c532f0b30a3aa87cb6814474504528a0dd36ab8e97449514e644"
+    },
+    {
+      "file": "206a6e985b3915af8102500c.json",
+      "sha256": "eac40f8cc594d950c99948aec31634eb97a7f2a13a35cfbea7e73e9e3a010a3f"
+    },
+    {
+      "file": "285cf1155fdc3469d7ee6681.json",
+      "sha256": "aa193acdecf0e3692625f69d5a5084e42024b9234a9aeafd508cd183f52ef7d0"
+    },
+    {
+      "file": "696e705f4d8426a7a1e00fc3.json",
+      "sha256": "711ee0138d48a6f2ba35476bebf34b2acb2f598f0846ee009588b196e257b91a"
+    },
+    {
+      "file": "f09b014f3d4927e89ac2bb38.json",
+      "sha256": "6701ee95d7e5b85df60ac9ed9e491a3cf5adbb0c3423d222ec732754a5f613c1"
+    }
+  ],
+  "protocol_sha256": "e3a9b46f72a2e167c4985a59aceb61f76e95887494e9e9dd0d6ee2ed9049a693"
+}

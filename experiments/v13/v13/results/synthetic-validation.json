@@ -1,0 +1,551 @@
+{
+  "artifact_role": "Public fictional-fixture design validation",
+  "fictional": true,
+  "not_human_gold": true,
+  "source_first_sha256": "78e73f52702d94afec23a500ea00de64f90676af868afa1e9e1bb75b41341372",
+  "read_order_verified_by_workflow": true,
+  "grader_results_read": false,
+  "denominator": {
+    "cases": 6,
+    "patches": 10,
+    "ambiguous_cases_retained": [
+      "a9f3b6",
+      "d0c7e5",
+      "f4a8d1"
+    ],
+    "invalidated_cases": []
+  },
+  "source_first_assessment": [
+    {
+      "bundle_id": "a9f3b6",
+      "normal_no_edit_control": false,
+      "necessary_corrections": [
+        "Replace all 40 applicants with the 25 firms that separately consented by August 30."
+      ],
+      "patches": [
+        {
+          "patch_id": "P1",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p2 distinguishes application from consent; p3 gives 25 consenting firms. Correcting the antecedent also makes the following no-repeat-consent statement accurate.",
+          "anchors": [
+            "S1.p1",
+            "S1.p2",
+            "S1.p3",
+            "S1.p5"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        },
+        {
+          "patch_id": "P2",
+          "warranted": "unknown",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "no",
+          "application_valid": "yes",
+          "dependencies": [
+            "P1"
+          ],
+          "reason": "The September 4 publication and no repeated consent are supported only for the 25 consenting firms. Applied alone, the unchanged antecedent remains all 40 applicants and P2 falsely says their summaries were published. P1 is required. With P1 applied, P2 is safe and supported, but adding the exact publication date is arguably optional enrichment rather than a necessary factual correction.",
+          "anchors": [
+            "S1.p4",
+            "S1.p5",
+            "original sentences 2-3"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        }
+      ],
+      "source_ambiguity": [
+        {
+          "type": "warrantedness",
+          "patch_ids": [
+            "P2"
+          ],
+          "description": "P1 alone corrects the erroneous population and restores the adjacent pronoun. P2 adds a correct date but does not appear necessary after P1; whether this counts as warranted clarification is a rubric ambiguity, not source falsity.",
+          "invalidate_case": false
+        }
+      ],
+      "background_issues": [],
+      "global_risks": [],
+      "safe_application_sets": [
+        [],
+        [
+          "P1"
+        ],
+        [
+          "P1",
+          "P2"
+        ]
+      ],
+      "unsafe_application_sets": [
+        [
+          "P2"
+        ]
+      ],
+      "notes": "Safety and warrantedness are separate. P1 does not depend on P2. P2 context_safe=no denotes application to unchanged original; joint application with P1 is safe.",
+      "anchors_unique_nonoverlapping": true
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "normal_no_edit_control": true,
+      "necessary_corrections": [],
+      "patches": [],
+      "source_ambiguity": [],
+      "background_issues": [],
+      "global_risks": [],
+      "safe_application_sets": [
+        []
+      ],
+      "unsafe_application_sets": [],
+      "notes": "Article accurately retains voluntary survey scope, attributed criticism, lack of nighttime subgroup count, consideration rather than promise of follow-up, and budget-dependent permanent installation. Exact trial dates omitted without changing month. No patch needed.",
+      "anchors_unique_nonoverlapping": true
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "normal_no_edit_control": false,
+      "necessary_corrections": [
+        "Correct proposed budget from 600 million to 400 million won."
+      ],
+      "patches": [
+        {
+          "patch_id": "P1",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p2 gives 4억 원 as a proposal to be submitted, matching the unchanged proposal status.",
+          "anchors": [
+            "S1.p2"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        },
+        {
+          "patch_id": "P2",
+          "warranted": "no",
+          "evidence_support": "no",
+          "preserves_untargeted_meaning": "no",
+          "context_safe": "no",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "Deletes the December 31 permit condition and changes possible opening into a definite March opening. The following unresolved-permit sentence does not restore the removed condition.",
+          "anchors": [
+            "S1.p4",
+            "S1.p5",
+            "S1.p6"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        }
+      ],
+      "source_ambiguity": [],
+      "background_issues": [],
+      "global_risks": [],
+      "safe_application_sets": [
+        [],
+        [
+          "P1"
+        ]
+      ],
+      "unsafe_application_sets": [
+        [
+          "P2"
+        ],
+        [
+          "P1",
+          "P2"
+        ]
+      ],
+      "notes": "Permit status unresolved in source but accurately represented in original; it does not block independent budget correction.",
+      "anchors_unique_nonoverlapping": true
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "normal_no_edit_control": false,
+      "necessary_corrections": [
+        "Correct east measurement from 43 to 42 decibels."
+      ],
+      "patches": [
+        {
+          "patch_id": "P1",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p3 explicitly supplies east=42 and south=44. The change leaves all-three-points condition and target language intact.",
+          "anchors": [
+            "S1.p3"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        },
+        {
+          "patch_id": "P2",
+          "warranted": "no",
+          "evidence_support": "no",
+          "preserves_untargeted_meaning": "no",
+          "context_safe": "no",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "Two compliant readings do not establish all three; northern measurement/completion and approval are absent. Changes target preparation into definite start and invents fulfilled condition/causal link. Source absence does not prove conditions failed, but it cannot support their fulfillment.",
+          "anchors": [
+            "S1.p2",
+            "S1.p3",
+            "S1.p4",
+            "S1.p5",
+            "S1.p6"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        }
+      ],
+      "source_ambiguity": [
+        {
+          "type": "unresolved_material_condition",
+          "patch_ids": [
+            "P2"
+          ],
+          "description": "Actual northern measurement, all-three compliance, and approval are unknown within supplied source. This is intended source incompleteness, not evidence of failure.",
+          "invalidate_case": false
+        }
+      ],
+      "background_issues": [
+        {
+          "material": "yes",
+          "affects_patch_ids": [
+            "P2"
+          ],
+          "reason": "Northern reading and approval unknown; this relates to P2 completion/start assertion. It has no bearing on the explicitly recorded east reading corrected by P1.",
+          "anchors": [
+            "S1.p4",
+            "S1.p6"
+          ]
+        }
+      ],
+      "global_risks": [],
+      "safe_application_sets": [
+        [],
+        [
+          "P1"
+        ]
+      ],
+      "unsafe_application_sets": [
+        [
+          "P2"
+        ],
+        [
+          "P1",
+          "P2"
+        ]
+      ],
+      "notes": "Unsupported P2 is determinately unsafe as a publication based on this record, while actual future start remains unknown.",
+      "anchors_unique_nonoverlapping": true
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "normal_no_edit_control": false,
+      "necessary_corrections": [
+        "Correct final contracted supplier count from nine to seven."
+      ],
+      "patches": [
+        {
+          "patch_id": "P1",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p2 explicitly excludes two preliminary negotiators from seven contracted suppliers.",
+          "anchors": [
+            "S1.p2"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        },
+        {
+          "patch_id": "P2",
+          "warranted": "no",
+          "evidence_support": "no",
+          "preserves_untargeted_meaning": "no",
+          "context_safe": "no",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "Substitutes a procedural improvement suggestion for the actual attributed criticism assigning responsibility for classroom disruption; changes speech act, strength, and causal accusation. Investigation by foundation does not make faithfully attributed criticism an article error.",
+          "anchors": [
+            "S1.p4",
+            "S1.p5",
+            "S1.p6"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        }
+      ],
+      "source_ambiguity": [],
+      "background_issues": [],
+      "global_risks": [],
+      "safe_application_sets": [
+        [],
+        [
+          "P1"
+        ]
+      ],
+      "unsafe_application_sets": [
+        [
+          "P2"
+        ],
+        [
+          "P1",
+          "P2"
+        ]
+      ],
+      "notes": "Truth of the parent association’s causal accusation is unresolved, but occurrence/content of its criticism is supported and should be preserved.",
+      "anchors_unique_nonoverlapping": true
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "normal_no_edit_control": false,
+      "necessary_corrections": [
+        "Correct spaces from fourteen to eleven.",
+        "Correct application deadline from September 18 to September 20, retaining 6 p.m. and lottery."
+      ],
+      "patches": [
+        {
+          "patch_id": "P1",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p2 supports eleven center-operated spaces, without changing operator.",
+          "anchors": [
+            "S1.p2"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        },
+        {
+          "patch_id": "P2",
+          "warranted": "yes",
+          "evidence_support": "yes",
+          "preserves_untargeted_meaning": "yes",
+          "context_safe": "yes",
+          "application_valid": "yes",
+          "dependencies": [],
+          "reason": "S1.p3 supports September 20 at 6 p.m.; lottery clause remains unchanged.",
+          "anchors": [
+            "S1.p3"
+          ],
+          "confidence": "high",
+          "anchor_occurrences": 1
+        }
+      ],
+      "source_ambiguity": [
+        {
+          "type": "unrelated_original_evidence_gap",
+          "patch_ids": [],
+          "description": "Prior-year weekend visitor increase and the claimed earlier center statement are outside supplied recruitment notice. They cannot be verified or refuted from it.",
+          "invalidate_case": false
+        }
+      ],
+      "background_issues": [
+        {
+          "material": "unknown",
+          "affects_patch_ids": [],
+          "reason": "Unverified historical attendance claim is a separate sentence about a prior year, without a causal/comparative link to either current trial venue count or application deadline. Neither local correction changes it or relies on it. Retained evidence gap must still be reported.",
+          "anchors": [
+            "S1.p6",
+            "original sentence 4"
+          ]
+        }
+      ],
+      "global_risks": [],
+      "safe_application_sets": [
+        [],
+        [
+          "P1"
+        ],
+        [
+          "P2"
+        ],
+        [
+          "P1",
+          "P2"
+        ]
+      ],
+      "unsafe_application_sets": [],
+      "notes": "Both corrections independent; unsupported historical claim remains original-scope rather than introduced harm.",
+      "anchors_unique_nonoverlapping": true
+    }
+  ],
+  "author_expectation_comparison": [
+    {
+      "bundle_id": "a9f3b6",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "supported_in_combination_unsafe_isolated",
+          "independent_warranted": "unknown",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": "Safety agrees: unsafe alone, safe with P1. Necessary-correction warrantedness stays unknown; author limitations independently acknowledge this ambiguity."
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "b7e2c9",
+      "normal_control_agreement": true,
+      "patch_comparisons": [],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "c2d6a0",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unsafe",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "d0c7e5",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unknown_support_unsafe_to_assert",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": "Evidence support=no means this supplied record does not support the assertion; it does not mean the northern condition is known false."
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "e6b1d4",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "unsafe",
+          "independent_warranted": "no",
+          "independent_context_safe_on_original": "no",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    },
+    {
+      "bundle_id": "f4a8d1",
+      "normal_control_agreement": true,
+      "patch_comparisons": [
+        {
+          "patch_id": "P1",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        },
+        {
+          "patch_id": "P2",
+          "author_safety": "supported_warranted",
+          "independent_warranted": "yes",
+          "independent_context_safe_on_original": "yes",
+          "dependency_agreement": true,
+          "safety_relation_agreement": true,
+          "qualification": null
+        }
+      ],
+      "case_retained": true
+    }
+  ],
+  "summary": {
+    "cases": 6,
+    "patches": 10,
+    "normal_noop_controls": 1,
+    "independently_warranted_supported_corrections": 6,
+    "unsafe_proposed_edits": 3,
+    "conditional_safe_addition_with_unknown_warrantedness": 1,
+    "safety_relations_agree_count": 10,
+    "dependency_relations_agree_count": 10,
+    "unresolved_warrantedness": [
+      "a9f3b6:P2"
+    ],
+    "invalidated_or_removed_cases": []
+  },
+  "limitations": [
+    "Author expectations are provisional authored labels, not independent human gold.",
+    "Safety relation agreement is a design comparison, not performance accuracy, precision, or a gate result.",
+    "All six fixtures and ten proposals stay in denominator; source incompleteness and warrantedness ambiguity remain explicit.",
+    "No fixture, source, proposal, or author label was edited or relabeled.",
+    "Evidence-support enum distinguishes support in supplied record from truth outside the record.",
+    "All six cases were newly authored as fictional fixtures; proposed patches are authored stimuli, not sampled model outputs.",
+    "A single author designed both source facts and expected safety relations; this does not provide independent ground truth or representative prevalence.",
+    "The scope, size and natural-language ambiguity of these short fixtures limit generalization; reviewers may disagree and cases must not be relabeled to improve reported results.",
+    "The cross-patch example intentionally tests a demonstrable antecedent dependency. It may be ambiguous whether an additive date clarification is necessary; that warrantedness judgment must remain open for independent review.",
+    "No grading, gate decisions, reviewer judgments or generated edited articles are supplied."
+  ]
+}

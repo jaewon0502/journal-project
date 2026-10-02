@@ -1,0 +1,30 @@
+{
+  "packet_id": "5f6bc52b6ff8990e2bd897b8",
+  "answers": {
+    "state_preserved": {
+      "answer": "yes",
+      "short_anchor": "The original source is the local output; no proposed patches are present. Applied 0; excluded or rolled back 2; held 0.",
+      "reason": "Source and actual output are identical; the receipt records rolledback with p1 and p2 rejected and no selected patches. The annotation preserves that state and local-only release."
+    },
+    "concrete_issue_recoverable": {
+      "answer": "yes",
+      "short_anchor": "[\"q1\"] Output quote: \"3%\"; [\"q2\"] Output quote: \"Friday\"",
+      "reason": "The annotation pairs 3% with the supplied 21%-to-24%/3-percentage-point evidence and Friday with the supplied Saturday schedule evidence. Both unresolved statuses are attributed to supplied review."
+    },
+    "overclaim": {
+      "answer": "no",
+      "short_anchor": "Factual truth is not independently verified; question resolution is not adjudicated.",
+      "reason": "The annotation describes local review status and explicitly withholds truth and resolution claims. Quoted concerns, where present, remain attributed review assertions."
+    },
+    "noop_overcorrection": {
+      "answer": "not_applicable",
+      "short_anchor": "excluded or rolled back 2",
+      "reason": "The output is unchanged due to rollback and has supplied unresolved issues; this is not the empty-issue no-op case."
+    }
+  },
+  "missing_issue_ids": [],
+  "recovery_basis": "annotation",
+  "additional_concerns": [],
+  "complete": true,
+  "read_complete": true
+}

@@ -1,0 +1,12 @@
+{
+  "frozen_at": "2026-10-01T23:23:57.327806+00:00",
+  "underlying_exposed_cases": 1,
+  "native_runs_planned": 4,
+  "input_hashes": {
+    "2259a4cc7238c1f7de770371": "3f66c3dcc6af86c88086b2f5d78874c81e022928341acc5d805332650de25dc8",
+    "bf1ba39f2c033aaa5f2c7635": "11c83fe0d92b084b42af7fc4101752d22c3bec7989102249d592fc56dcdb0e60",
+    "fbc3ab094016f98313cf2559": "ffd716cad7c447fe51bec15c0519703be892842a46cbbe42d0147b626118be31",
+    "6af34dd6eb500dcf83375e41": "a35096f78ae17d54f805ad013d0c48c5e46755d44c14da2ba04db1b20bd12aa5"
+  },
+  "writer_sha256": "bdbeb71ff525901f8b925aa3a2b71283e625eb1fbd6b979d87864fdbe2109cbd"
+}

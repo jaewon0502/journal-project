@@ -1,0 +1,38 @@
+{
+  "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+  "proposal_sha256": "26e79ef282903a06bc1f996751c369e002f3a309528cd6c536193b365f0e85dd",
+  "candidate_sha256": "ece6a472fb3a8e1cb8dae0e3589f805fad6a397f4c95745c9aa5901e7cc0e07d",
+  "selected_ids": [
+    "p1"
+  ],
+  "packet_id": "25a01f3a9c8795125f5534e2",
+  "auditor_id": "C_fresh_final_reader",
+  "complete": true,
+  "read_complete": true,
+  "whole_candidate_reviewed": true,
+  "decision": "rejected",
+  "findings": [
+    {
+      "id": "contradictory_final_delivery",
+      "description": "The attached explanation ends “The patch is proposed, not finally released.” The delivery contract says final machine status will release on approval. This unqualified statement becomes contradictory in the approved final bundle, despite the accurate local application ledger. The problem is in the explanation, not the measurement edit.",
+      "relation": "offending",
+      "patch_ids": []
+    },
+    {
+      "id": "inherited_speech_unknown",
+      "description": "Original attributed speech is not independently verified: no recording or transcript is supplied. The candidate accurately discloses this inherited limit.",
+      "relation": "preexisting_independent",
+      "patch_ids": []
+    }
+  ],
+  "explanation_grounding": "fail",
+  "target_resolution": "resolved",
+  "source_first_extra_meanings": [
+    "Reported analyst speech retains attribution and exact 0.02 wording.",
+    "Measured unrounded 0.016 is separately identified; absence of recording/transcript retained."
+  ],
+  "remaining_uncertainty": [
+    "What the analyst actually said cannot be verified from measurement evidence."
+  ],
+  "reason": "The numerical clarification and attribution are acceptable, but the exact retained explanation says the patch is not finally released. On approval the stated delivery contract reports release, leaving a contradictory final delivery statement. Hold this exact bundle until that state-dependent sentence is removed or grounded in an explicit historical review time."
+}

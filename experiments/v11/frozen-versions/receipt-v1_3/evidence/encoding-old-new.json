@@ -1,0 +1,174 @@
+{
+  "rows": [
+    {
+      "version": "v1.2",
+      "encoding": "utf-16-le",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 40048,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-16-le",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 40050,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-16-be",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 40048,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-16-be",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 40050,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-32-le",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 80096,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-32-le",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 80100,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-32-be",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 80096,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.2",
+      "encoding": "utf-32-be",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 80100,
+      "uncaught": "RecursionError",
+      "message": "maximum recursion depth exceeded while decoding a JSON array from a unicode string"
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-16-le",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 40048,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-16-le",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 40050,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-16-be",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 40048,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-16-be",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 40050,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-32-le",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 80096,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-32-le",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 80100,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-32-be",
+      "bom": false,
+      "depth": 10000,
+      "audit_bytes": 80096,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    },
+    {
+      "version": "v1.3",
+      "encoding": "utf-32-be",
+      "bom": true,
+      "depth": 10000,
+      "audit_bytes": 80100,
+      "emitted": {
+        "status": "verification_failed",
+        "receipt_sha256": null,
+        "text": "Verification failed. No completion or application claim is available."
+      }
+    }
+  ],
+  "compatibility_tightening": "UTF-16/UTF-32 autodetected byte JSON is now rejected; strict UTF-8 (optional UTF-8 BOM), no raw NUL bytes required. Escaped JSON \\u0000 remains accepted.",
+  "no_hidden_cases_read": true
+}

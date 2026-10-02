@@ -1,0 +1,315 @@
+{
+  "completed_at": "2026-10-01T22:55:23.747832+00:00",
+  "final_native_judgments": 9,
+  "local_released": 8,
+  "local_held": 1,
+  "released_edited": 3,
+  "released_unchanged": 5,
+  "applied_patch_count": 4,
+  "external_publications": 0,
+  "rows": [
+    {
+      "origin": "3d43980ef7ef5ade22b8eb3b",
+      "kind": "authored_synthetic",
+      "packet_id": "b8c9339c2c42174ca0989d6f",
+      "final_id": "fc625e459d55379b1f8eb41f",
+      "initial_body_changed": false,
+      "final_decision": "approved",
+      "released": true,
+      "state": "noop",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+      "output_sha256": "0586ff6f6497a03475c617b832244de5ff9d4eef96e49c350c6ff0f29b0ecda4",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [],
+      "remaining_uncertainty": [],
+      "final_raw_sha256": "33a4224f6e54d5c42743ccad4c8848fefcd48b82ccf6689b1d656eb6515b8ae3",
+      "delivery_raw_sha256": "3339a152e86c40b66f252a9559f6c1a07970f153e663b784b7d00aebb86c4ee8"
+    },
+    {
+      "origin": "459a283fa0463064e8dd444c",
+      "kind": "authored_synthetic",
+      "packet_id": "36cd8649d001179b7e2f32c6",
+      "final_id": "b4226bcd20bba3d1f5a821e6",
+      "initial_body_changed": true,
+      "final_decision": "approved",
+      "released": true,
+      "state": "applied",
+      "output_changed": true,
+      "applied_patch_ids": [
+        "p1"
+      ],
+      "source_sha256": "0e7622c5b4848ace82fd1bce8f80df6dc172024c60ff31dd40a961f79a6bfa76",
+      "output_sha256": "7823386fa22b6656dbb136301ce878ef87bada788732b730074c6da786d56e4c",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": false,
+      "explanation_suppressed_before_final_review": true,
+      "final_findings": [],
+      "remaining_uncertainty": [],
+      "final_raw_sha256": "0d4f5bd0b8190a09d8fc9db26d38ab4c7c331aabd26092ff2566060a9a576223",
+      "delivery_raw_sha256": "c6676e02cf0e10f28e6d1db8660f11cc439927a56923160093968e45c78ae9be"
+    },
+    {
+      "origin": "807712af1b63c31c819db810",
+      "kind": "authored_synthetic",
+      "packet_id": "85443e30a826b3d76efc15a7",
+      "final_id": "f730016555207909c302000a",
+      "initial_body_changed": false,
+      "final_decision": "approved",
+      "released": true,
+      "state": "noop",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+      "output_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [],
+      "remaining_uncertainty": [],
+      "final_raw_sha256": "8ab7eca8b527ad43c8ce2c5f40815e66e03908dad5334bd83c760cca7a71ce8c",
+      "delivery_raw_sha256": "0c9ff798d3b20ea5f5dc42986129aa01183d3b0e35518134996857ee47bcee7d"
+    },
+    {
+      "origin": "937ccb77b9e2ecc1514f0a62",
+      "kind": "authored_synthetic",
+      "packet_id": "51824b8ed7f901e15a2ee82b",
+      "final_id": "fcaef05cca4c73a3ae36df56",
+      "initial_body_changed": false,
+      "final_decision": "approved",
+      "released": true,
+      "state": "noop",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+      "output_sha256": "c4b3008bc5804b85f44a0e429a7ddd8dd4f2889a6a894b98b6ebed119fc2d5a3",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "inherited_earlier_record_unknown",
+          "description": "Original June 8 then-record assertion cannot be verified from evidence omitting June 8 and prior levels; this inherited limit is explicitly disclosed.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "June 8 level and preceding highest level absent.",
+        "Original reported observatory announcement is not independently verified by the June 10 excerpt."
+      ],
+      "final_raw_sha256": "453b4b234284eb26162c9b808a4c4eede04a4ab3597902219e6f5ce0ef61df1d",
+      "delivery_raw_sha256": "f99234f577b52accc8365f7d14baa8689d2b5245c1b22850bbb76831bf40c149"
+    },
+    {
+      "origin": "a109a16b167e313805f7dbae",
+      "kind": "authored_synthetic",
+      "packet_id": "8caf3ea87e0919c42932e55e",
+      "final_id": "25a01f3a9c8795125f5534e2",
+      "initial_body_changed": true,
+      "final_decision": "rejected",
+      "released": false,
+      "state": "held",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+      "output_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "not_reassessed_after_hold",
+      "explanation_grounding": "fail",
+      "explanation_attached": false,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "contradictory_final_delivery",
+          "description": "The attached explanation ends “The patch is proposed, not finally released.” The delivery contract says final machine status will release on approval. This unqualified statement becomes contradictory in the approved final bundle, despite the accurate local application ledger. The problem is in the explanation, not the measurement edit.",
+          "relation": "offending",
+          "patch_ids": []
+        },
+        {
+          "id": "inherited_speech_unknown",
+          "description": "Original attributed speech is not independently verified: no recording or transcript is supplied. The candidate accurately discloses this inherited limit.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "What the analyst actually said cannot be verified from measurement evidence."
+      ],
+      "final_raw_sha256": "324578a486068872948e6d82b7ea5d665decfb60f62073cc1e7a17119904ad25",
+      "delivery_raw_sha256": "8c2dcd985cee113024314a4fc6c88b1a9814485b6654c872dd3c019e010b4eb5"
+    },
+    {
+      "origin": "d8dc8d48792d596fe01b4bf7",
+      "kind": "authored_synthetic",
+      "packet_id": "29fe1583b05ce1230072da9f",
+      "final_id": "63839db02ab626c968218d7e",
+      "initial_body_changed": false,
+      "final_decision": "approved",
+      "released": true,
+      "state": "noop",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+      "output_sha256": "6942db447639162e048fcdf2f92cd0c5ae348f7ba6c25d0814fd412bdb845f4e",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "inherited_baseline_missing",
+          "description": "Original 7% reduction cannot be verified without baseline; the unchanged source claim remains an explicitly disclosed inherited limit.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "Baseline and actual percentage reduction remain unknown."
+      ],
+      "final_raw_sha256": "ef2d708ec3757bb4ba752368dabceefc38b2ad59e1891ede8d738aa57c709026",
+      "delivery_raw_sha256": "e73ac86e49f40a6b7cba48b87233daee4d7a5a62884e1b55e9db5ed1e6b1e85b"
+    },
+    {
+      "origin": "KO011",
+      "kind": "exposed_regression",
+      "packet_id": "911fd3144434ecb5099f634f",
+      "final_id": "f12a64e6ead7b66dbfa6f9ac",
+      "initial_body_changed": true,
+      "final_decision": "approved",
+      "released": true,
+      "state": "applied",
+      "output_changed": true,
+      "applied_patch_ids": [
+        "p1",
+        "p2"
+      ],
+      "source_sha256": "9d581bc428de78e6af5686ffef7f7c6e24e8e9f3d99c2fff6481b03fbfa8311c",
+      "output_sha256": "2ac5f606fe8c5977a0d39d606858424f3d6f4b8b15c2161fb474d9918b652d8d",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "inherited_household_arithmetic",
+          "description": "Original 4.62 to 4.76 difference is 0.14 points, conflicting with its 0.12 claim; which value is wrong cannot be established. Explanation discloses this inherited conflict.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        },
+        {
+          "id": "inherited_periods_and_verification",
+          "description": "Original month counts differ from elapsed-month arithmetic and may involve inclusive/counting conventions; trends, highs and figures lack exact primary data. These inherited limits are explicitly distinguished from the unit corrections.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "Exact Bank of Korea source was not acquired.",
+        "Which household-loan figure is wrong remains unknown.",
+        "Month-count convention, monthly trajectories and claimed highs remain unverified."
+      ],
+      "final_raw_sha256": "6db0ea0284323c7c424c39486ad943c6cd71650acceab68560c18a507c4acd36",
+      "delivery_raw_sha256": "75ecfdefbef10142d3c19a9d4ffed24b105c6ecc7ea48aef3b01746405766aaa"
+    },
+    {
+      "origin": "EN023",
+      "kind": "exposed_regression",
+      "packet_id": "4364e49645812e095edaf93a",
+      "final_id": "6a36b158ef932510bd0d4d6d",
+      "initial_body_changed": true,
+      "final_decision": "approved",
+      "released": true,
+      "state": "applied",
+      "output_changed": true,
+      "applied_patch_ids": [
+        "p1"
+      ],
+      "source_sha256": "3591df7d10dcccb7604b0dc84237e26568c6eff2322fdb96ed5a9e1260b382f1",
+      "output_sha256": "b727a1fcc1d87f7f7b485dd24a855257fc33094dcb30da7285908f1978bf2cc8",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "inherited_partial_verification",
+          "description": "Original US temperatures, forecasts, quotations, captions and other unexamined claims remain outside supplied partial verification; retention does not certify truth.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        },
+        {
+          "id": "inherited_sea_record_tension",
+          "description": "Original August 22 record assertion remains in tension with bulletin calling March 2024 the previous record before August 24–25. Scope and event details are not established; the explanation discloses this inherited unresolved issue.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "Burgess’s reported speech is retained, not independently verified by the bulletin.",
+        "August 22 event, measurement scope and discrepancy with March 2024 previous-record wording remain unknown.",
+        "NOAA US series and other unexamined source claims are unverified in this partial evidence packet.",
+        "Historical publication-day wording is not certified by retrieval-time evidence."
+      ],
+      "final_raw_sha256": "1b3009bfac4a8fbe76d55c56d25c930465380550dd2ddacf595b5fe6b1e32824",
+      "delivery_raw_sha256": "1f8e0c09669a826d00eb1d7a426ee6a64daeb6bd411297e117d0f4c925e07889"
+    },
+    {
+      "origin": "NASA2024",
+      "kind": "new_real_scoped_control",
+      "packet_id": "48b2b0fc8fcb4e7e8b865f5f",
+      "final_id": "027e93129b768c09aa3d809b",
+      "initial_body_changed": false,
+      "final_decision": "approved",
+      "released": true,
+      "state": "noop",
+      "output_changed": false,
+      "applied_patch_ids": [],
+      "source_sha256": "83a5843a37846dc1ed8028c042fa2e78c83f5dc0806b55b8f1bc8b1b9c116c3e",
+      "output_sha256": "83a5843a37846dc1ed8028c042fa2e78c83f5dc0806b55b8f1bc8b1b9c116c3e",
+      "delivery_verified": true,
+      "reviewed_candidate_target_resolution": "resolved",
+      "delivered_target_resolution": "resolved",
+      "explanation_grounding": "pass",
+      "explanation_attached": true,
+      "explanation_suppressed_before_final_review": false,
+      "final_findings": [
+        {
+          "id": "inherited_verification_limit",
+          "description": "Original excerpt and attributed statements lack independent verification in this packet; this inherited limitation is disclosed and no new assertion is added.",
+          "relation": "preexisting_independent",
+          "patch_ids": []
+        }
+      ],
+      "remaining_uncertainty": [
+        "No independent verification of the supplied NASA excerpt.",
+        "Actual annual 1.5°C exceedance remains uncertain."
+      ],
+      "final_raw_sha256": "afc507f55eaa3b46cf7cd19a4cadce9675c360226b15d8d1555b0a531a236974",
+      "delivery_raw_sha256": "2b1d5b777868e927a5cda3a625168eca2505fdf3a3479a49a5b79a4bb2ec7218"
+    }
+  ],
+  "interpretation": "Local release is evidence-bounded workflow admission, not factual correctness or complete question resolution. One post-audit note suppression is a deterministic regression repair, not a new generated model output or unseen evaluation."
+}

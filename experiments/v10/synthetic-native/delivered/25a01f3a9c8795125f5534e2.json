@@ -1,0 +1,111 @@
+{
+  "final_id": "25a01f3a9c8795125f5534e2",
+  "output": "The analyst said the increase was exactly 0.02 units.",
+  "machine_delivery": {
+    "schema": "journal-v10.delivery.v1",
+    "source_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+    "output_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+    "proposal_sha256": "26e79ef282903a06bc1f996751c369e002f3a309528cd6c536193b365f0e85dd",
+    "dependency_sha256": "edd97cf9e447aadc02d48da2971ef8bb8001247f28b5ca684a2f26f7f5d45e0c",
+    "patch_audit_sha256": "e697ee18bbb6bb033f0f78a90c8006350f3f4bda8e4361f63aa000da40855815",
+    "engine_sha256": "480cfc3aaf8da84b95e850f05ccb7d454f3cb05dc3e89edce60218a5d690360a",
+    "policy": "selective",
+    "status": "held",
+    "released": false,
+    "source_equals_output": true,
+    "initial_candidate_sha256": "ece6a472fb3a8e1cb8dae0e3589f805fad6a397f4c95745c9aa5901e7cc0e07d",
+    "final_candidate_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+    "applied_ids": [],
+    "components": [
+      {
+        "id": "component-1",
+        "patch_ids": [
+          "p1"
+        ],
+        "state": "held",
+        "reason": "final_review_removed_component"
+      }
+    ],
+    "patches": [
+      {
+        "id": "p1",
+        "component_id": "component-1",
+        "state": "held",
+        "source_span": [
+          0,
+          53
+        ],
+        "output_span": [
+          0,
+          53
+        ],
+        "before_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+        "proposed_after_sha256": "ece6a472fb3a8e1cb8dae0e3589f805fad6a397f4c95745c9aa5901e7cc0e07d",
+        "actual_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+        "local_hunks": [
+          {
+            "start": 53,
+            "end": 53,
+            "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "after_sha256": "34b6ec08428bc02c66a1d0e505aaf047aa638d020d81d3aa9ffb798c9b07a1b3"
+          }
+        ]
+      }
+    ],
+    "final_audit_history": [
+      {
+        "audit_sha256": "324578a486068872948e6d82b7ea5d665decfb60f62073cc1e7a17119904ad25",
+        "reviewed_candidate_sha256": "ece6a472fb3a8e1cb8dae0e3589f805fad6a397f4c95745c9aa5901e7cc0e07d",
+        "reviewed_ids": [
+          "p1"
+        ],
+        "released": false,
+        "next_candidate_sha256": "7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f",
+        "next_selected_ids": []
+      }
+    ],
+    "unresolved": [
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e697ee18bbb6bb033f0f78a90c8006350f3f4bda8e4361f63aa000da40855815",
+        "pointer": "/preexisting_findings/0",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "proposal_finding_not_resolution_evidence",
+        "audit_sha256": "e697ee18bbb6bb033f0f78a90c8006350f3f4bda8e4361f63aa000da40855815",
+        "pointer": "/preexisting_findings/1",
+        "evidence_ids": [
+          "E1"
+        ]
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "final_finding_requires_resolution_evidence",
+        "audit_sha256": "324578a486068872948e6d82b7ea5d665decfb60f62073cc1e7a17119904ad25",
+        "pointer": "/findings/0"
+      },
+      {
+        "state": "resolution_not_adjudicated",
+        "basis": "final_finding_requires_resolution_evidence",
+        "audit_sha256": "324578a486068872948e6d82b7ea5d665decfb60f62073cc1e7a17119904ad25",
+        "pointer": "/findings/1"
+      }
+    ],
+    "not_semantic_proof": true,
+    "delivery_summary": "본문 처리: 보류. 의존 컴포넌트 적용 0개, 원복 0개, 보류 1개. 해결 여부가 확인되지 않은 감사 항목 4개 (잔존 오류 확정이 아니며, 패치 적용만으로 해결을 증명하지 않음). 전달문 SHA-256: 7b85573ab2fa06f2e3b2745bf88314ef266af28892f5ce47ab23b189a7c8b19f. 기계적 검증은 의미 증명이 아님."
+  },
+  "separate_explanation": null,
+  "explanation_sha256": null,
+  "scope": "local experimental deliverable only; no external publication",
+  "semantic_admission": "rejected",
+  "reviewed_candidate_target_resolution": "resolved",
+  "delivered_target_resolution": "not_reassessed_after_hold",
+  "remaining_uncertainty": [
+    "What the analyst actually said cannot be verified from measurement evidence."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "packet_id": "85443e30a826b3d76efc15a7",
+  "source": "The council approved 12 permits on May 2.",
+  "candidate": "The council approved 12 permits on May 2.",
+  "source_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+  "candidate_sha256": "a2dc131837041a76a9241f712a3eb88b4632a59ca4df5307c18d378805fae11d",
+  "evidence": [
+    {
+      "id": "E1",
+      "text": "The complete May 2 minutes record approval of 12 permits."
+    },
+    {
+      "id": "E2",
+      "text": "The May 9 minutes record approval of 3 additional permits, bringing the cumulative total to 15."
+    }
+  ],
+  "target_question": "How many permits had been approved cumulatively by the end of May 9?",
+  "evidence_boundary": "Entirely authored synthetic scenario. Facts are defined only by supplied evidence. No claim about real events.",
+  "source_metadata": {},
+  "patches": [],
+  "delivery": {
+    "artifact_status": "constructed_candidate_under_review_not_final_release",
+    "actual_applied_to_candidate_ids": [],
+    "reader_note": "By the end of May 9, 15 permits had been approved cumulatively: the 12 approved on May 2 plus 3 additional permits recorded on May 9 (E1–E2). No source changes were applied or proposed because its May 2 statement is accurate. Nothing remains unresolved within the supplied evidence."
+  }
+}

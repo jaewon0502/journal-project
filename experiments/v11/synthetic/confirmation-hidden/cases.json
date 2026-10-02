@@ -1,0 +1,733 @@
+[
+  {
+    "case_id": "d75d0e3fb2eb",
+    "language": "KO",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3%포인트",
+        "start_byte": 51,
+        "end_byte": 53
+      },
+      {
+        "id": "p2",
+        "before": "금요일",
+        "after": "토요일",
+        "start_byte": 78,
+        "end_byte": 87
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "approved"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 토요일에 열린다.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "output_sha256": "80b89d902dab9df8a3d68cf2d68b4e8dd4fd6b1daeffffc83a798f26006cabee",
+      "applied_ids": [
+        "p1",
+        "p2"
+      ],
+      "excluded_ids": [],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "applied",
+        "p2": "applied"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "resolved_within_supplied_checks",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "검토안은 증가 폭의 단위와 회의 요일을 다룬다. 수치 차이는 3%포인트이며 일정 자료는 토요일을 가리킨다. 외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "a7e87c69b904",
+    "language": "KO",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 금요일에 열린다.",
+    "proposed_patches": [],
+    "review_decisions": {},
+    "dependency_components": [],
+    "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 금요일에 열린다.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "applied_ids": [],
+      "excluded_ids": [],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {}
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "resolved_within_supplied_checks",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "제시된 검토 범위에서 문구를 바꿀 이유를 찾지 못했다.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "bd569abe2ca0",
+    "language": "KO",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3%포인트",
+        "start_byte": 51,
+        "end_byte": 53
+      },
+      {
+        "id": "p2",
+        "before": "금요일",
+        "after": "토요일",
+        "start_byte": 78,
+        "end_byte": 87
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "rejected"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 금요일에 열린다.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "output_sha256": "84420a574b9a972ec3ea58f2d10f7c9b665bce4397e9f7fec556b240e8962958",
+      "applied_ids": [
+        "p1"
+      ],
+      "excluded_ids": [
+        "p2"
+      ],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "applied",
+        "p2": "rolledback"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "검토안은 증가 폭의 단위와 회의 요일을 다룬다. 수치 차이는 3%포인트이며 일정 자료는 토요일을 가리킨다. 외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "53d89f874761",
+    "language": "KO",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3%포인트",
+        "start_byte": 51,
+        "end_byte": 53
+      },
+      {
+        "id": "p2",
+        "before": "금요일",
+        "after": "토요일",
+        "start_byte": 78,
+        "end_byte": 87
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "rejected"
+    },
+    "dependency_components": [
+      [
+        "p1",
+        "p2"
+      ]
+    ],
+    "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "output_sha256": "8151cc19e1f8d61b02d6fb1e602b5fd1b816776cad4aee95b771347641e3f786",
+      "applied_ids": [],
+      "excluded_ids": [
+        "p1",
+        "p2"
+      ],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "rolledback",
+        "p2": "rolledback"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "검토안은 증가 폭의 단위와 회의 요일을 다룬다. 수치 차이는 3%포인트이며 일정 자료는 토요일을 가리킨다. 외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "2351c7060c84",
+    "language": "KO",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "도서관 방문 비율은 21%에서 24%로 올라 3% 증가했다. 회의는 금요일에 열린다. 참석자는 8명과 5명으로 총 14명이다.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3%포인트",
+        "start_byte": 51,
+        "end_byte": 53
+      },
+      {
+        "id": "p2",
+        "before": "금요일",
+        "after": "토요일",
+        "start_byte": 78,
+        "end_byte": 87
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "approved"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "도서관 방문 비율은 21%에서 24%로 올라 3%포인트 증가했다. 회의는 토요일에 열린다. 참석자는 8명과 5명으로 총 14명이다.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "af1a9b6bd10155bb218e67c64f6f76d069a13d3646534aa6efa62e9be80483f0",
+      "output_sha256": "83bddaf85f16b3a75ff218b71de790f3caf036afc4cfb9fe6290581749f955f8",
+      "applied_ids": [
+        "p1",
+        "p2"
+      ],
+      "excluded_ids": [],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "applied",
+        "p2": "applied"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E3",
+        "type": "authored_scenario",
+        "text": "The unchanged sentence gives two disjoint counts, 8 and 5, and an incorrect total of 14. Neither proposed patch touches this sentence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "unrelated_total_incorrect",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "검토안은 증가 폭의 단위와 회의 요일을 다룬다. 수치 차이는 3%포인트이며 일정 자료는 토요일을 가리킨다. 외부 사실 확인과 게시 여부는 별도의 문제다.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "19b2afea4862",
+    "language": "EN",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3 percentage points",
+        "start_byte": 56,
+        "end_byte": 58
+      },
+      {
+        "id": "p2",
+        "before": "Friday",
+        "after": "Saturday",
+        "start_byte": 78,
+        "end_byte": 84
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "approved"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Saturday.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "output_sha256": "5c3c50bb9ed15265f88ed276b8b578dc8144a76f9bb293ab80f901162fb4c251",
+      "applied_ids": [
+        "p1",
+        "p2"
+      ],
+      "excluded_ids": [],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "applied",
+        "p2": "applied"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "resolved_within_supplied_checks",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "The review addresses the increase unit and meeting day. The numerical difference is 3 percentage points, and the schedule points to Saturday. External fact verification and publication are separate matters.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "88b1c16a46ec",
+    "language": "EN",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+    "proposed_patches": [],
+    "review_decisions": {},
+    "dependency_components": [],
+    "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "applied_ids": [],
+      "excluded_ids": [],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {}
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Friday. The source already satisfies the stated checks."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "resolved_within_supplied_checks",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "I found no reason to change the wording within the supplied review scope.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "8e039edfc1e3",
+    "language": "EN",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3 percentage points",
+        "start_byte": 56,
+        "end_byte": 58
+      },
+      {
+        "id": "p2",
+        "before": "Friday",
+        "after": "Saturday",
+        "start_byte": 78,
+        "end_byte": 84
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "rejected"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "Library attendance rose from 21% to 24%, an increase of 3 percentage points. The meeting is on Friday.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "output_sha256": "75bb7c3de72c4ed810abd841ca918d14990cf368b3128de35ef811caeeefc488",
+      "applied_ids": [
+        "p1"
+      ],
+      "excluded_ids": [
+        "p2"
+      ],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "applied",
+        "p2": "rolledback"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "The review addresses the increase unit and meeting day. The numerical difference is 3 percentage points, and the schedule points to Saturday. External fact verification and publication are separate matters.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "d6736be620d4",
+    "language": "EN",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3 percentage points",
+        "start_byte": 56,
+        "end_byte": 58
+      },
+      {
+        "id": "p2",
+        "before": "Friday",
+        "after": "Saturday",
+        "start_byte": 78,
+        "end_byte": 84
+      }
+    ],
+    "review_decisions": {
+      "p1": "approved",
+      "p2": "rejected"
+    },
+    "dependency_components": [
+      [
+        "p1",
+        "p2"
+      ]
+    ],
+    "actual_output": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "applied_ids": [],
+      "excluded_ids": [
+        "p1",
+        "p2"
+      ],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "rolledback",
+        "p2": "rolledback"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "The review addresses the increase unit and meeting day. The numerical difference is 3 percentage points, and the schedule points to Saturday. External fact verification and publication are separate matters.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  },
+  {
+    "case_id": "240d01b3906c",
+    "language": "EN",
+    "provenance": "entirely authored synthetic scenario; not a model output or factual article",
+    "source": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "proposed_patches": [
+      {
+        "id": "p1",
+        "before": "3%",
+        "after": "3 percentage points",
+        "start_byte": 56,
+        "end_byte": 58
+      },
+      {
+        "id": "p2",
+        "before": "Friday",
+        "after": "Saturday",
+        "start_byte": 78,
+        "end_byte": 84
+      }
+    ],
+    "review_decisions": {
+      "p1": "unknown",
+      "p2": "unknown"
+    },
+    "dependency_components": [
+      [
+        "p1"
+      ],
+      [
+        "p2"
+      ]
+    ],
+    "actual_output": "Library attendance rose from 21% to 24%, an increase of 3%. The meeting is on Friday.",
+    "actual_applied_receipt": {
+      "schema": "authored-actual-receipt-v1",
+      "source_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "output_sha256": "508ba1d20d4d81324d9214482ff3cf4903371c9a0329acba0611792170ac824f",
+      "applied_ids": [],
+      "excluded_ids": [
+        "p1",
+        "p2"
+      ],
+      "external_published": false,
+      "receipt_scope": "completed local output bytes only",
+      "patch_outcomes": {
+        "p1": "held",
+        "p2": "held"
+      }
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "type": "authored_scenario",
+        "text": "The scenario stipulates the endpoints 21% and 24%. Their difference is 3 percentage points. No real-world library data are asserted."
+      },
+      {
+        "id": "E2",
+        "type": "authored_scenario",
+        "text": "The fictional meeting schedule says Saturday. The review decision is independently stipulated and is not world-truth evidence."
+      },
+      {
+        "id": "E4",
+        "type": "scope",
+        "text": "No external publication action occurred. The scenario does not establish the overall factual accuracy of the article or any real-world facts."
+      }
+    ],
+    "semantic_facts": {
+      "overall_world_truth": "unknown",
+      "supplied_arithmetic": "correct",
+      "meaning_resolution": "unresolved",
+      "external_facts": "unknown"
+    },
+    "authored_free_memo_comparator": {
+      "text": "The review addresses the increase unit and meeting day. The numerical difference is 3 percentage points, and the schedule points to Saturday. External fact verification and publication are separate matters.",
+      "provenance": "plausible authored review memo; never generated model output",
+      "stage": "review proposal; not bound to final artifact"
+    }
+  }
+]

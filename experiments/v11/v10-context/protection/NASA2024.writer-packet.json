@@ -1,0 +1,104 @@
+{
+  "id": "V10_NEW_NASA2024",
+  "url": "https://www.nasa.gov/news-release/temperatures-rising-nasa-confirms-2024-warmest-year-on-record/",
+  "final_url": "https://www.nasa.gov/news-release/temperatures-rising-nasa-confirms-2024-warmest-year-on-record/",
+  "fetched_at": "2026-10-01T22:36:05.786211+00:00",
+  "published_date": "2025-01-10",
+  "last_updated_visible": "2025-01-10",
+  "event_period": "2024",
+  "acquisition": "direct HTTP 200 publisher page, not search summary",
+  "raw_sha256": "a7427e8574025efe92bf2dab899121dab7cbef716e77c60f700701eefcf875d9",
+  "source_sha256": "83a5843a37846dc1ed8028c042fa2e78c83f5dc0806b55b8f1bc8b1b9c116c3e",
+  "scope": "HTML p 요소 중 첫 본문부터 For more information 이전까지; p로 표시된 소제목 포함. title, 비p 캡션/소제목, footer 제외. 기사 전체 보장하지 않는 한정된 직접 원문.",
+  "private_text_path": "/historical-research/journal-v10-private/protection/NASA2024.body.txt",
+  "not_gold": true,
+  "use": "새 원문 정상보존 전이검사; 단일 기관 보도자료, 외부 후속검증 아님",
+  "rows": [
+    {
+      "id": "N1",
+      "paragraph": "N002",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 247,
+        "end": 256
+      },
+      "short_evidence": "1951-1980",
+      "preserve": "2024의1.28℃는1951–80기준; 2023기록 경신과15개월연속 범위 보존",
+      "why": "시간규모·기준·발화 강도를 섞는 변경 탐지",
+      "confidence": {
+        "source_presence": "high_verified",
+        "world_truth": "not_independently_verified"
+      },
+      "conflicts": "N002와N004 숫자는 기준기간이 달라 그 자체로 모순 아님",
+      "counterargument": {
+        "presence": "별도 반론자 없음; N011은 반론 아닌 전망 한정",
+        "strength": "not_applicable"
+      }
+    },
+    {
+      "id": "N2",
+      "paragraph": "N004",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1112,
+        "end": 1129
+      },
+      "short_evidence": "may have exceeded",
+      "preserve": "1850–1900기준1.47℃ 추정과 연평균1.5℃ 초과 가능성·수학적불확실성 보존",
+      "why": "시간규모·기준·발화 강도를 섞는 변경 탐지",
+      "confidence": {
+        "source_presence": "high_verified",
+        "world_truth": "not_independently_verified"
+      },
+      "conflicts": "N002와N004 숫자는 기준기간이 달라 그 자체로 모순 아님",
+      "counterargument": {
+        "presence": "별도 반론자 없음; N011은 반론 아닌 전망 한정",
+        "strength": "not_applicable"
+      }
+    },
+    {
+      "id": "N3",
+      "paragraph": "N005",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 1257,
+        "end": 1275
+      },
+      "short_evidence": "over the long term",
+      "preserve": "Schmidt 장기기준 발언 귀속·직접인용 강도 보존",
+      "why": "시간규모·기준·발화 강도를 섞는 변경 탐지",
+      "confidence": {
+        "source_presence": "high_verified",
+        "world_truth": "not_independently_verified"
+      },
+      "conflicts": "N002와N004 숫자는 기준기간이 달라 그 자체로 모순 아님",
+      "counterargument": {
+        "presence": "별도 반론자 없음; N011은 반론 아닌 전망 한정",
+        "strength": "not_applicable"
+      }
+    },
+    {
+      "id": "N4",
+      "paragraph": "N011",
+      "location": {
+        "basis": "UTF-8 bytes; zero-based; end exclusive",
+        "start": 3148,
+        "end": 3162
+      },
+      "short_evidence": "Not every year",
+      "preserve": "매년 경신 보장 부정과 장기추세 전망을 함께 보존",
+      "why": "시간규모·기준·발화 강도를 섞는 변경 탐지",
+      "confidence": {
+        "source_presence": "high_verified",
+        "world_truth": "not_independently_verified"
+      },
+      "conflicts": "N002와N004 숫자는 기준기간이 달라 그 자체로 모순 아님",
+      "counterargument": {
+        "presence": "별도 반론자 없음; N011은 반론 아닌 전망 한정",
+        "strength": "not_applicable"
+      }
+    }
+  ],
+  "writer_instructions": "private packet의 전체 source_text 접근 가능. 보호표만으로 충분하다고 가정 금지. 불필요하면 원문 유지. 새 사실/반론 발명 금지.",
+  "completeness_reviewer_input": "NASA2024.body.txt 전체와 public 목록을 별도 제공; 목록에 없는 한정/귀속/기준을 원문에서 찾기."
+}
