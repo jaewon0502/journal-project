@@ -3,7 +3,8 @@
   "path_redaction": "Historical local paths replaced by non-executable placeholders; private Library identities omitted.",
   "excluded_package_entries": [
     "PACKAGE-MANIFEST.json",
-    "PUBLIC-SAFETY-CHECK.json"
+    "PUBLIC-SAFETY-CHECK.json",
+    "results/authorization-scope.json (operational authorization metadata, not research evidence)"
   ],
   "files": [
     {
@@ -403,7 +404,7 @@
       "original_sha256": "9b066721b736703fc605563e6e99c9f7288c3349f0cebba1fd13f11290a070b7",
       "public_import_sha256": "d38dafcf4c7a8c2bec33340c67820a7c366b05f5bd6e405ac44656b094240a9b",
       "path_or_private_reference_redacted": true,
-      "current_public_sha256": "d38dafcf4c7a8c2bec33340c67820a7c366b05f5bd6e405ac44656b094240a9b"
+      "current_public_sha256": null
     },
     {
       "path": "results/deviations.json",

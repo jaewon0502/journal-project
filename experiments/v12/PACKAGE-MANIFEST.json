@@ -13,8 +13,8 @@
     },
     {
       "path": "PUBLIC-DERIVATION.json",
-      "sha256": "2666488bb9e754da07333ca55a1278530160113c069cbad900be572cbfb6ca8e",
-      "bytes": 76030
+      "sha256": "4c24aa986c3953430c917289230957d4464d9b52ecc19a3b37108da03db0d3a5",
+      "bytes": 76068
     },
     {
       "path": "README.md",
@@ -33,8 +33,8 @@
     },
     {
       "path": "SHA256SUMS",
-      "sha256": "a849298499c2f97be9302816cd9b71dbb872068be3b0e4ff779d6cdc4f9eca29",
-      "bytes": 20135
+      "sha256": "4f409f1c58db49761f4d6e9c1fdef55720055bb348e1f4ea823a6cc23b4d1942",
+      "bytes": 20036
     },
     {
       "path": "USER-PROCEDURE.md",
@@ -295,11 +295,6 @@
       "path": "results/additional-metrics.json",
       "sha256": "d7d210df47fbd73815c4af269db276065f126635c35c80f331f62cd5c12a61f1",
       "bytes": 167724
-    },
-    {
-      "path": "results/authorization-scope.json",
-      "sha256": "d38dafcf4c7a8c2bec33340c67820a7c366b05f5bd6e405ac44656b094240a9b",
-      "bytes": 461
     },
     {
       "path": "results/deviations.json",
