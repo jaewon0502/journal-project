@@ -30,3 +30,9 @@ for relative in ('v12/code', 'v13/v13/code'):
 run([sys.executable, 'code/verify_public_package.py', '.'], ROOT / 'experiments' / 'v12')
 run([sys.executable, 'v13/code/verify_public_package.py', '.', '--full-gate'], ROOT / 'experiments' / 'v13')
 print('v10-v13 saved-output and public derivative checks passed; new model calls: 0')
+
+# Source access / AI review follow-up: public saved records only, no source bundle required.
+followup = ROOT / 'experiments' / 'source-evidence-ai-review'
+run([sys.executable, 'tools/replay.py'], followup)
+run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py', '-v'], followup)
+print('Source-evidence AI review public replay passed; new model calls: 0')

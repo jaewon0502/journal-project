@@ -1,0 +1,312 @@
+{
+  "case_id": "BOK-20241011",
+  "kind": "constructed_local_propositions_not_natural_articles",
+  "construction_labels": "operator intentions, not externally validated gold",
+  "predeclared_ambiguity_id": "S08",
+  "importance_candidates": [
+    {
+      "id": "U1",
+      "text": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "source_location": "P1"
+    },
+    {
+      "id": "U2",
+      "text": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "source_location": "P4"
+    },
+    {
+      "id": "U3",
+      "text": "가계대출의 증가규모가 축소됐다.",
+      "source_location": "P5"
+    },
+    {
+      "id": "U4",
+      "text": "향후 인하 속도는 물가·성장·금융안정 등을 점검하며 신중하게 결정한다.",
+      "source_location": "P6"
+    },
+    {
+      "id": "U5",
+      "text": "수출 증가세가 이어졌지만 내수 회복은 더뎠다.",
+      "source_location": "P3"
+    },
+    {
+      "id": "U6",
+      "text": "금리 인하가 가계부채에 미칠 영향 등 금융안정 위험에 계속 유의할 필요가 있다고 판단했다.",
+      "source_location": "P6"
+    }
+  ],
+  "initial_sentences": [
+    {
+      "family": "inflation",
+      "construction": "faithful",
+      "text": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "paragraph": "P4",
+      "relation": "상승률 둔화와 가격 수준 하락 구별",
+      "intended": "accept",
+      "id": "S01"
+    },
+    {
+      "family": "loan",
+      "construction": "equivalent",
+      "text": "가계대출은 늘었지만 늘어난 규모는 상당히 줄었다.",
+      "paragraph": "P5",
+      "relation": "증가규모 감소와 잔액 감소 구별",
+      "intended": "accept",
+      "id": "S02"
+    },
+    {
+      "family": "growth",
+      "construction": "faithful",
+      "text": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다.",
+      "paragraph": "P3",
+      "relation": "대조 관계와 내수 회복 방향",
+      "intended": "accept",
+      "id": "S03"
+    },
+    {
+      "family": "loan",
+      "construction": "faithful",
+      "text": "가계대출의 증가규모가 상당폭 축소됐다.",
+      "paragraph": "P5",
+      "relation": "증가규모 감소와 잔액 감소 구별",
+      "intended": "accept",
+      "id": "S04"
+    },
+    {
+      "family": "forecast",
+      "construction": "changed",
+      "text": "앞으로 물가상승률은 낮은 수요압력으로 반드시 안정된 흐름을 이어간다.",
+      "paragraph": "P4",
+      "relation": "전망과 무조건 확정의 강도 차이",
+      "intended": "repair",
+      "id": "S05"
+    },
+    {
+      "family": "future",
+      "construction": "changed",
+      "text": "물가·성장·금융안정 상황과 관계없이 앞으로 금리 인하 속도를 높이기로 확정했다.",
+      "paragraph": "P6",
+      "relation": "정책 조건과 미래 결정 강도",
+      "intended": "repair",
+      "id": "S06"
+    },
+    {
+      "family": "loan",
+      "construction": "changed",
+      "text": "가계대출 잔액이 상당폭 줄었다.",
+      "paragraph": "P5",
+      "relation": "증가규모 감소와 잔액 감소 구별",
+      "intended": "repair",
+      "id": "S07"
+    },
+    {
+      "family": "inflation",
+      "construction": "equivalent",
+      "text": "9월 소비자물가는 전년 같은 달보다 1.6% 상승했다.",
+      "paragraph": "P4",
+      "relation": "상승률 둔화와 가격 수준 하락 구별",
+      "intended": "accept",
+      "id": "S08"
+    },
+    {
+      "family": "inflation",
+      "construction": "changed",
+      "text": "9월 소비자물가는 전년 같은 달보다 1.6% 하락했다.",
+      "paragraph": "P4",
+      "relation": "상승률 둔화와 가격 수준 하락 구별",
+      "intended": "repair",
+      "id": "S09"
+    },
+    {
+      "family": "rate",
+      "construction": "faithful",
+      "text": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "paragraph": "P1",
+      "relation": "금리 변화 방향과 출발/도착 수치",
+      "intended": "accept",
+      "id": "S10"
+    },
+    {
+      "family": "forecast",
+      "construction": "faithful",
+      "text": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다.",
+      "paragraph": "P4",
+      "relation": "전망과 무조건 확정의 강도 차이",
+      "intended": "accept",
+      "id": "S11"
+    },
+    {
+      "family": "rate",
+      "construction": "equivalent",
+      "text": "금융통화위원회는 기준금리를 0.25%포인트 내려 3.25%로 정했다.",
+      "paragraph": "P1",
+      "relation": "금리 변화 방향과 출발/도착 수치",
+      "intended": "accept",
+      "id": "S12"
+    },
+    {
+      "family": "growth",
+      "construction": "equivalent",
+      "text": "수출은 증가 흐름을 이어갔으나 내수는 회복 속도가 느렸다.",
+      "paragraph": "P3",
+      "relation": "대조 관계와 내수 회복 방향",
+      "intended": "accept",
+      "id": "S13"
+    },
+    {
+      "family": "future",
+      "construction": "equivalent",
+      "text": "물가와 성장, 금융안정 사이의 상충관계를 살핀 뒤 앞으로 금리를 내릴 속도를 신중히 정할 방침이다.",
+      "paragraph": "P6",
+      "relation": "정책 조건과 미래 결정 강도",
+      "intended": "accept",
+      "id": "S14"
+    },
+    {
+      "family": "rate",
+      "construction": "changed",
+      "text": "금융통화위원회는 기준금리를 3.25%에서 3.50%로 높였다.",
+      "paragraph": "P1",
+      "relation": "금리 변화 방향과 출발/도착 수치",
+      "intended": "repair",
+      "id": "S15"
+    },
+    {
+      "family": "forecast",
+      "construction": "equivalent",
+      "text": "낮은 수요압력을 배경으로 향후 물가상승률이 안정적인 흐름을 보일 것이라는 전망이다.",
+      "paragraph": "P4",
+      "relation": "전망과 무조건 확정의 강도 차이",
+      "intended": "accept",
+      "id": "S16"
+    },
+    {
+      "family": "growth",
+      "construction": "changed",
+      "text": "수출 증가세가 이어졌고 내수 회복세도 빨라졌다.",
+      "paragraph": "P3",
+      "relation": "대조 관계와 내수 회복 방향",
+      "intended": "repair",
+      "id": "S17"
+    },
+    {
+      "family": "future",
+      "construction": "faithful",
+      "text": "향후 금리 인하 속도는 물가·성장·금융안정의 상충관계를 점검하며 신중하게 결정한다.",
+      "paragraph": "P6",
+      "relation": "정책 조건과 미래 결정 강도",
+      "intended": "accept",
+      "id": "S18"
+    }
+  ],
+  "final_sentences": [
+    {
+      "id": "S01",
+      "text": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S02",
+      "text": "가계대출은 늘었지만 늘어난 규모는 상당히 줄었다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S03",
+      "text": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S04",
+      "text": "가계대출의 증가규모가 상당폭 축소됐다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S05",
+      "text": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S06",
+      "text": "물가·성장·금융안정의 상충관계를 점검하며 앞으로 금리 인하 속도를 신중하게 결정하기로 했다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S07",
+      "text": "가계대출의 증가규모가 상당폭 줄었다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S08",
+      "text": "9월 소비자물가는 전년 같은 달보다 1.6% 상승했다.",
+      "evidence_scope": "BOK plus KOSTAT September CPI",
+      "wording_changed": false
+    },
+    {
+      "id": "S09",
+      "text": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S10",
+      "text": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S11",
+      "text": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S12",
+      "text": "금융통화위원회는 기준금리를 0.25%포인트 내려 3.25%로 정했다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S13",
+      "text": "수출은 증가 흐름을 이어갔으나 내수는 회복 속도가 느렸다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S14",
+      "text": "물가와 성장, 금융안정 사이의 상충관계를 살핀 뒤 앞으로 금리를 내릴 속도를 신중히 정할 방침이다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S15",
+      "text": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S16",
+      "text": "낮은 수요압력을 배경으로 향후 물가상승률이 안정적인 흐름을 보일 것이라는 전망이다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    },
+    {
+      "id": "S17",
+      "text": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": true
+    },
+    {
+      "id": "S18",
+      "text": "향후 금리 인하 속도는 물가·성장·금융안정의 상충관계를 점검하며 신중하게 결정한다.",
+      "evidence_scope": "BOK six paragraphs",
+      "wording_changed": false
+    }
+  ]
+}

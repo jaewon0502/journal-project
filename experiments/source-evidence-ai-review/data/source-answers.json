@@ -1,0 +1,724 @@
+{
+  "not_original_v6_rejudgment": true,
+  "original_gold_key_recovered": false,
+  "original_document_status": "latest merged wording pending final narrow checks",
+  "original_finalized_at_utc": null,
+  "later_workflow_confirmation": "recorded separately; original metadata not rewritten",
+  "records": [
+    {
+      "id": "EVAL08-Q1",
+      "event_id": "EVAL08",
+      "topic": "법원·날짜·결정",
+      "answer_ko": "국제사법재판소(ICJ)는 2024년 5월 24일 남아프리카공화국 대 이스라엘 사건에서 3월 28일 잠정조치 명령을 수정했다. 기존 1월·3월 조치를 재확인하고 라파 관련 추가 조치와 1개월 내 이행 보고를 명령했다. 이는 본안에 대한 최종 판단과 구분해야 한다.",
+      "limitations": [
+        "57항 주문 및 47~55항에 관한 답변이다. 실제 이행 여부는 이 문서만으로 판정하지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "eef888fee6263f08ae06d98d1c8583afda881c8a06b2d9410d3aa62d411c46c9",
+      "locators": [
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            3
+          ],
+          "anchor_sha256": "11178977972344e8a7ba7b1c2517babf47031239371b9a4fb3ebf1e3cb881d77"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            15,
+            16,
+            17
+          ],
+          "anchor_sha256": "05f5279a5f8f2f6b66ccdb4cc11c47236f708e8a9abdea731e70beb447d0c1fd"
+        }
+      ]
+    },
+    {
+      "id": "EVAL08-Q2",
+      "event_id": "EVAL08",
+      "topic": "요청한 판단과 실제 결정",
+      "answer_ko": "남아공은 최종 구두 요청에서 라파를 포함한 가자지구의 군사행동 즉시 중단과 가자 전체에서의 즉각적·완전한·무조건적 철군, 구호·조사 접근 및 보고 관련 조치를 구했다. 이스라엘은 요청 기각을 구했다. 재판소는 요청과 동일한 조치만을 명할 의무가 없음을 설명했다. 주문에는 라파 군사공세·행위 중단에 관한 문구, 긴급히 필요한 기본 서비스와 인도적 지원을 방해 없이 대규모로 제공하기 위한 라파 통행로 개방 유지, 권한 있는 유엔 기관으로부터 집단살해 혐의 조사를 위임받은 조사기구의 가자지구 접근이 방해받지 않도록 보장할 효과적 조치, 1개월 내 보고가 포함된다. 중단 문구는 Q3에 적힌 내용과 함께 읽어야 한다.",
+      "limitations": [
+        "14항 최초 서면 요청과 17항 최종 구두 요청을 혼동하지 않는다. 기자 접근을 요청했다는 사실을 주문이 그대로 허용했다는 뜻으로 바꾸지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "1a717f2dcdf7b0d1843d46e5d6f0d921b5f9f7dd1c5ed0ce3e0d9149298baa15",
+      "locators": [
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            6,
+            7,
+            8
+          ],
+          "anchor_sha256": "3e049d78d958038ac6bd5dcf038075cc73362b4956aaf7308c3a69c8eca76297"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            15
+          ],
+          "anchor_sha256": "76c6238217c32bc8f66b938c7224baf598c08fdbf1067d258d2feee1300a8494"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            17
+          ],
+          "anchor_sha256": "b8aabcab0f32cd6c39bd079ce5b6600811bb8fb68c4945182a358ddfe561e204"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            17
+          ],
+          "paragraphs": [
+            "57(2)(b)",
+            "57(2)(c)"
+          ],
+          "anchor_sha256": "3de935ca6c7bd7775cd2b973d87a8fb30ddf4f709e14827d7d4e5ecb90e70bb6"
+        }
+      ]
+    },
+    {
+      "id": "EVAL08-Q3",
+      "event_id": "EVAL08",
+      "topic": "조건·범위·한계",
+      "answer_ko": "재판소는 이전 명령을 수정할 상황 변화와 잠정조치의 일반 요건을 검토했다. 집단살해협약 제9조에 따라 일응 관할권이 있다는 기존 결론과 보호를 구하는 일부 권리의 개연성을 다시 판단할 이유가 없다고 보았으며, 이번에 요청된 일부 조치가 그 권리를 보존하기 위한 것이라고 설명했다. 회복 불가능한 침해 위험과 긴급성도 검토했다. 57(2)(a)의 중단 명령에는 가자의 팔레스타인 집단을 전부 또는 일부 물리적으로 파괴할 수 있는 생활조건을 초래할 수 있다는 문구가 함께 들어 있다. 그 문구를 삭제하거나 특정 개별 의견을 재판소의 단일 확정해석으로 바꾸어 범위를 단정하지 않는다. 명령은 구속력을 가지지만 이전 명령 준수 여부에 관한 판단을 미리 결정하지 않는다.",
+      "limitations": [
+        "2026년 10월 3일 추가 검토에서 Nolte·Aurescu·Tladi의 개별 의견을 대조했다. 각 설명은 해당 재판관에게 귀속하며 재판소 전체의 단일 확정해석으로 대체하지 않는다.",
+        "모든 별도·반대의견, 후속 절차, 실제 이행을 조사한 것은 아니다. 구속력과 잠정적 판단·본안 최종 판단은 구분한다.",
+        "추가된 요건 설명을 원래 비공개 O1~O4 채점기준과 동일하다고 보지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "ef98d395779cb128a175d9a661e89c969dbee8b045c6bf99d5ad0ef9616a825a",
+      "locators": [
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            8,
+            11
+          ],
+          "anchor_sha256": "444f95b1506e1d93a1e4d89d29343cfcd703227548c4ea508f52e29020164e22"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            15
+          ],
+          "anchor_sha256": "5ab5f39e2cf66af9be494ab617ebde2f462c9209fa1e45af7a2d7ee6001b28fe"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            16
+          ],
+          "anchor_sha256": "e53fcd79cc2c55de52d1d8f53e46c8b6ed1bc00137511d50c1ce515557111e52"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            11
+          ],
+          "paragraphs": [
+            31
+          ],
+          "anchor_sha256": "5b57db09715a97b67bfa8d1c6fad2c6536532266d82036d108faa6bb305ab151"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            11
+          ],
+          "paragraphs": [
+            32
+          ],
+          "anchor_sha256": "792d329219bad6ce5972e5e0c9ebfd9294e03e39ddae1930976f461cdd29b1dd"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            17
+          ],
+          "paragraphs": [
+            "57(2)(a)"
+          ],
+          "anchor_sha256": "5ab5f39e2cf66af9be494ab617ebde2f462c9209fa1e45af7a2d7ee6001b28fe"
+        }
+      ]
+    },
+    {
+      "id": "EVAL08-Q4",
+      "event_id": "EVAL08",
+      "topic": "이유와 반대 주장에 대한 응답",
+      "answer_ko": "재판소는 라파 공세와 반복된 대규모 피란을 중대한 상황 변화로 보았다. 이스라엘은 작전의 제한성, 대피·구호 조치와 안보·인질 문제를 주장했다. 재판소는 제시된 대피 조치가 위험을 충분히 완화한다는 점에 설득되지 않았고, 대피 과정의 안전과 알마와시에서 대피민에게 필요한 물·위생·식량·의약품·거처를 확보할 수 있는지에 관한 정보가 충분하지 않다고 판단했다. 이에 회복 불가능한 침해의 현실적이고 임박한 위험과 긴급성을 인정했다. 인질의 즉각적·무조건적 석방 촉구도 반복했다.",
+      "limitations": [
+        "당사자 주장과 재판소의 판단을 분리했다. 인용된 모든 현장 보고서의 사실을 별도로 재조사한 결과는 아니다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "ddc709475db3714d386085724a96617fc5f808d689e54cc23918fb20b7c81d44",
+      "locators": [
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            10
+          ],
+          "anchor_sha256": "cd981aa788e3743d5c0889f926e36adaf6f7714c31977bf7c1adb64405dab7f0"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            13
+          ],
+          "anchor_sha256": "cc12b323f90114d966c001bf1638c14a07a171513781d42e3cbf2bf8678a7430"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            14,
+            15
+          ],
+          "anchor_sha256": "21f721f88221496e9305ff80bea880d4686f7bb5bc7e3fc4a2c2f023eb58c11f"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            16
+          ],
+          "anchor_sha256": "49ec36f510128ccef113be8a72b132b755e7e833a6750ff404bbb01033bcd42e"
+        },
+        {
+          "source_id": "EVAL08_order_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            14
+          ],
+          "paragraphs": [
+            46
+          ],
+          "anchor_sha256": "92963ed7d5f5d75d30015ecd91ee45fbec3699ee7b63be34a9231d2612b2af64"
+        }
+      ]
+    },
+    {
+      "id": "EVAL09-Q1",
+      "event_id": "EVAL09",
+      "topic": "법원·날짜·결정",
+      "answer_ko": "ICJ는 2024년 7월 19일 점령 팔레스타인 영토에 관한 권고적 의견을 냈다. 주문에서 이스라엘의 계속된 주재가 위법하다는 의견과 이를 가능한 한 신속히 끝낼 의무를 제시했다. 새 정착 활동의 즉각 중단·정착민 철수·배상, 다른 국가와 국제기구의 관련 의무도 다뤘다.",
+      "limitations": [
+        "권고적 의견이라는 문서 유형을 유지한다. 잠정조치 명령이나 국가 간 쟁송의 본안 판결이라고 부르지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "edd384aaf51f126882efa32f23f8edb4e42ed7b09c84b0bba9a93b66e79ecf93",
+      "locators": [
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            1
+          ],
+          "anchor_sha256": "cfcdbf089f98b3f355ef6d3d422e2b80055fed2d623b74a96566e37343edabda"
+        },
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            81,
+            82
+          ],
+          "anchor_sha256": "00575a9704d4284f9cc4c660f29f9a62ae606253bdac87911d60d3e34a146772"
+        }
+      ]
+    },
+    {
+      "id": "EVAL09-Q2",
+      "event_id": "EVAL09",
+      "topic": "요청한 판단과 실제 결정",
+      "answer_ko": "유엔총회는 자결권 침해, 장기 점령·정착·병합 및 차별적 조치의 법적 결과와, 이러한 정책·관행이 점령의 법적 지위 및 각국·유엔의 의무에 미치는 영향을 물었다. 재판소는 관할권이 있음을 인정하고 권고적 의견 요청에 응하기로 결정했다. 이스라엘의 위법한 주재 종료·새 정착 활동의 즉각 중단·정착민 철수·배상을 제시하고, 각국의 불승인·유지에 대한 원조 금지, 국제기구의 불승인, 유엔총회·안보리의 후속 조치 검토를 다뤘다.",
+      "limitations": [
+        "각국의 원조 금지와 국제기구에 대한 주문의 표현을 임의로 동일하게 만들지 않는다. 구체적인 이행 일정·제재 수단을 새로 만들어 넣지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "93548e607497d2f48f862021356049fbe9b7e85ee214919cf33ae59953791b5b",
+      "locators": [
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            28
+          ],
+          "anchor_sha256": "a9b9bb64e7e680b73bc557d86a72fd12f957c99de8da9daaaf3797f47ff2f05c"
+        },
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            81,
+            82
+          ],
+          "anchor_sha256": "cb5b9eea6b2819b8a7a0e4df5ab0be9d0bb6939935cfa42f473ad983a75f3683"
+        },
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            81
+          ],
+          "paragraphs": [
+            "285(1)",
+            "285(2)"
+          ],
+          "anchor_sha256": "f04e61858d43fca9fd697e33ba9478257b859e90d3907711ee3774380120c497"
+        }
+      ]
+    },
+    {
+      "id": "EVAL09-Q3",
+      "event_id": "EVAL09",
+      "topic": "조건·범위·한계",
+      "answer_ko": "대상 영토는 서안·동예루살렘·가자지구를 포함하는 하나의 영토 단위다. 요청은 1967년 이후 정책·관행을 다루며, 2023년 10월 7일 공격에 대응한 이스라엘의 가자 행위는 이 요청의 대상에 포함되지 않는다고 재판소가 범위를 정했다. 계속된 주재가 위법하다는 결론도 그 주재가 끝날 때까지 점령법 등 국제법상 의무를 면제하지 않는다.",
+      "limitations": [
+        "현재 전쟁의 모든 개별 행위의 적법성이나 제노사이드 성립을 이 권고적 의견이 판정했다고 확대하지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "9cfa6161f828453fb68ed7d4df20b864cf46d3c928b5a7bc64a7b89bfa3f2401",
+      "locators": [
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            30
+          ],
+          "anchor_sha256": "39f5f8421512753b126729cd8fd60a261473e30441cf4968ac41938fd91ba9e2"
+        },
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            75
+          ],
+          "anchor_sha256": "0dd70da59f7aa1b970b6615402c426d2b948371508ace0ab0eef9f42c229e9ea"
+        }
+      ]
+    },
+    {
+      "id": "EVAL09-Q4",
+      "event_id": "EVAL09",
+      "topic": "이유와 반대 주장에 대한 응답",
+      "answer_ko": "주재의 위법성에 관한 핵심 이유는 영토를 무력으로 취득할 수 없다는 원칙 위반과 팔레스타인인의 자결권 침해다. 재판소는 안보 우려가 영토 취득 금지를 넘어설 수 없고, 오슬로 합의도 안보를 이유로 병합이나 영구 주재를 허용하지 않는다고 보았다. 자료 부족 및 질문의 편향성이라는 이의에 대해서는 필요한 정보가 충분하고 재판소 스스로 적법성을 판단한다고 설명했다.",
+      "limitations": [
+        "모든 당사자 제출서와 별도의견을 독립적으로 감사한 것은 아니다. 판단의 법적 타당성에 대한 전문가 평가와 원문에 무엇이 쓰였는지 확인하는 작업을 구분한다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "4fe266ab9e827b058e04305399f9c8a4d1f3a6d551ed8863e8f820fc20ac0c47",
+      "locators": [
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            74,
+            75
+          ],
+          "anchor_sha256": "93c8f20711516c3f344259105574d6bfc01ce0fc4ed3f326271d1bce6643a54e"
+        },
+        {
+          "source_id": "EVAL09_opinion_UN",
+          "kind": "pdf_pages",
+          "pages": [
+            23,
+            24
+          ],
+          "anchor_sha256": "7acbb3f83906b68c8c5d88e87a58342b8f3fa3526d626b0cbc65ef7473ccd0af"
+        }
+      ]
+    },
+    {
+      "id": "EVAL10-Q1",
+      "event_id": "EVAL10",
+      "topic": "법원·날짜·결정",
+      "answer_ko": "유럽인권재판소 대재판부는 2024년 4월 9일 사건 53600/20에서 신청 단체의 청구에 관해 제8조 위반을 16 대 1, 제6조 제1항 위반을 만장일치로 판단했다. 개인 신청인 4명의 청구와 단체의 청구는 구분해야 하며 개인 청구는 부적법 판단을 받았다.",
+      "limitations": [
+        "신청인 모두가 동일한 판단을 받았다고 요약하지 않는다. 주문과 관련 본문에 대한 답변이다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "61f486d010217ea75d43d446d0e4e14aecb75b36d25336ccaad963afaff3828e",
+      "locators": [
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1
+          ],
+          "prefix_sha256": "3d320b4adc92d4517b487c80c7e432912fc17bf1ca92c222f7f04074fc6769be"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1887
+          ],
+          "prefix_sha256": "a95b04c6302cf643f89df2fb925b8fd5d5731841e04208509327fd9408b2241c"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1877
+          ],
+          "prefix_sha256": "3103e01520fc212d1407ea9f39bada70da0168d49388fbf837c6d591edf0b43f"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1881
+          ],
+          "prefix_sha256": "08076f1d4acd9b2ab8ad58ce0b5c249a12425d4fd9af7ed87f43b7f113b3fd05"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1681
+          ],
+          "prefix_sha256": "f468f044629c399ed17c395d132328d8dbaa09b98e669816044bf08d6a8ad215"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 0,
+          "context_after": 0,
+          "block_indices_zero_based": [
+            1875
+          ],
+          "prefix_sha256": "018de1d4d1cf1488529e1d1b409998e6c9ebe10522457df09c647241c4ff46dc"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 0,
+          "context_after": 0,
+          "block_indices_zero_based": [
+            1880
+          ],
+          "prefix_sha256": "20fbd39d128da428bf50905f2b0331597e8d89051577d7f19578f7ef8eaecb5c"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 0,
+          "context_after": 0,
+          "block_indices_zero_based": [
+            1882
+          ],
+          "prefix_sha256": "b585dfd7de72c7ac912a11b957f41a97aebb7d806e1c2f4e2607f19031fe8d8c"
+        }
+      ]
+    },
+    {
+      "id": "EVAL10-Q2",
+      "event_id": "EVAL10",
+      "topic": "요청한 판단과 실제 결정",
+      "answer_ko": "신청인들은 기후변화 완화에 관한 스위스 당국의 부작위와 법원 접근·구제 문제를 제기하며 제2·6·8·13조에 의존했다. 재판소는 단체의 실체적 청구를 제8조에서 심사하고 제6조 제1항 위반도 인정했다. 제2조 적용 가능성과 단체의 제13조 청구는 별도로 판단할 필요가 없다고 했다. 구체적 이행 조치는 스위스가 각료위원회의 감독 아래 정하도록 했다.",
+      "limitations": [
+        "주문의 소송비용 지급을 개인들에 대한 손해배상 명령으로 바꾸지 않는다. 특정 감축 수치나 정책을 재판소가 직접 명령했다고 하지 않는다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "5741a0ffd35d5c6929426b8859431d6bf042da3115e5d62dd866c2379c3c90e4",
+      "locators": [
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            236
+          ],
+          "prefix_sha256": "2f793c7c32f798b805fd1d592b645249c3e27317ed93bec31e47bcb5851c2582"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1685
+          ],
+          "prefix_sha256": "d8262c7f6838dbd2944829c1f8b473b0995e674eecb7620134151e9de82430c6"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1876
+          ],
+          "prefix_sha256": "82cb0ebdb4f1b784b5b988c2588e9766537999e549ede2c538e959c3b6694ba0"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1882
+          ],
+          "prefix_sha256": "b585dfd7de72c7ac912a11b957f41a97aebb7d806e1c2f4e2607f19031fe8d8c"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1869
+          ],
+          "prefix_sha256": "808ceea03c78ecef8a599cdc2c4a39328b1209139300b86de9176653c0575b57"
+        }
+      ]
+    },
+    {
+      "id": "EVAL10-Q3",
+      "event_id": "EVAL10",
+      "topic": "조건·범위·한계",
+      "answer_ko": "개인의 피해자 지위에는 기후변화의 악영향에 대한 높은 노출 강도와, 피해를 줄일 합리적인 조치가 없거나 불충분하여 개인 보호가 긴급히 필요하다는 요건이 적용됐다. 이 문턱은 특히 높으며 구체적인 사정을 평가한다. 단체에는 해당 관할에서 적법하게 설립되었거나 그곳에서 활동할 법적 지위가 있어야 한다는 기준, 정관상 목적에 따라 해당 관할 내 구성원 또는 다른 영향받는 개인의 인권을 보호한다는 목적을 입증하는 기준, 해당 관할에서 기후변화로 삶·건강·복지에 구체적인 위협이나 악영향을 받는 이들을 대리할 실질적 자격과 대표성을 입증하는 기준이 적용된다. 재판소는 비영리성, 활동, 구성원과 대표성, 운영 원칙·투명성 및 적정한 사법 운영의 이익 등도 고려한다고 설명했다. 단체가 대신 청구하는 이들이 각각 개인 피해자 요건을 충족해야 한다는 별도 요구는 두지 않았다. 기후변화와 그 악영향에 대응하겠다는 국가의 책무 및 관련 목표 설정에는 축소된 재량을, 목표 달성 수단·정책 선택에는 넓은 재량을 인정했다.",
+      "limitations": [
+        "502항의 기준과 이어지는 설명은 함께 읽는다. 일반 시민 누구나 제한 없이 같은 청구를 할 수 있다는 결론으로 확대하지 않는다.",
+        "이 답안은 주요 조건을 명시한 후속 초안이다. 원래 O1~O4의 필요·충분한 정답 목록이나 독립 인간이 확인한 법률 기준답이 아니다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "12d71832ce072c11b1aaedcba30142fdc2f6584a992b622b53d59730386b0862",
+      "locators": [
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1616
+          ],
+          "prefix_sha256": "e4c42e7b7971d52128e3bae4e743cb8441c10c00ee220070cbbe76ec11a4beb5"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1617
+          ],
+          "prefix_sha256": "ec312fbeee576f5d1e98ead456e70a4561fb4b0e0a611fc397365bdfab7d1bb0"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1618
+          ],
+          "prefix_sha256": "c59edb33ae5956c8294f79f5366d694d75c6d41edf6daf09de892a7767582fd3"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1619
+          ],
+          "prefix_sha256": "17c7492b147dbf5a7e91a1d6866790fe57a527fe5ca4d43288d0e4da0075d065"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1634
+          ],
+          "prefix_sha256": "2d5901f75df01af021fad6574d33921b0e13b5bfbeaa0ef4f238439814b5ed1c"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1637
+          ],
+          "prefix_sha256": "c1cbe3428ca6274177a7eae281145c599b03e14034ee26add30140bd39e015a3"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1707
+          ],
+          "prefix_sha256": "e9d563034d41b4f46bccf09339dcf9a7838d1861c4b52662092131d8669b7522"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 2,
+          "block_indices_zero_based": [
+            1635
+          ],
+          "paragraphs": [
+            502
+          ],
+          "prefix_sha256": "8bbd3e9e17e9b1cc96f82108db85efb64957f8d23539379828fc77ffe1f9b446"
+        }
+      ]
+    },
+    {
+      "id": "EVAL10-Q4",
+      "event_id": "EVAL10",
+      "topic": "이유와 반대 주장에 대한 응답",
+      "answer_ko": "재판소는 배출 한도를 탄소예산 또는 다른 방식으로 수량화하지 않은 점, 과거 감축목표 미달 및 제도 마련·시행의 지연과 불일치를 문제 삼았다. 국가 탄소예산을 정할 확립된 방법론이 없다는 정부 주장에도 효과적인 규제체계를 위해 국가 온실가스 배출 한도의 수량화가 필요하다고 보았다. 최근 제정된 기후법이 발효하면 기대되는 상당한 진전을 인정하면서도 종전의 결함을 치유하기에는 부족하다고 판단했다. 국내 법원은 단체의 청구와 과학적 근거를 충분히 다루지 않았고, 아직 시간이 있다는 판단에도 설득되지 않았다고 설명했다.",
+      "limitations": [
+        "568항은 새 기후법이 발효하면 기대되는 진전을 말한다. 이미 시행 성과가 확인됐거나 아무 조치도 없었다는 뜻으로 바꾸지 않는다. 판결 후 실제 이행 성과는 평가하지 않는다.",
+        "정부가 확립된 방법론이 없다고 주장한 것과 재판소가 방법 자체의 부재를 인정한 것은 다르다."
+      ],
+      "assessment": "source_grounded_ai_working_answer",
+      "human_review": "not_run",
+      "original_gold_key": null,
+      "answer_sha256": "8b64d6333ec9ce611803d76d2a465924dc12909d858a633f98c312340b87d7a2",
+      "locators": [
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1746
+          ],
+          "prefix_sha256": "d07335ed6ecc901859949fa4592000a105a235290b634544349729c5dc16054b"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1750
+          ],
+          "prefix_sha256": "a7e6e44dd92320a5096e0c68fc7da9d844d28f7d0247af44692963c06c0ad611"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1751
+          ],
+          "prefix_sha256": "90d59c09bf2ae37d88856be46023eb94d1ae5d1452f59483a4d54e2f87d85fca"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1834
+          ],
+          "prefix_sha256": "8c56b1c2257d991944dae849dc9c5444663f474c68be8e2deaeb4b239f53dabc"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1835
+          ],
+          "prefix_sha256": "2803ec5b65ecb9601c5d68f17b0859c7e9c523b0070cef40c14e97d62d727171"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1837
+          ],
+          "prefix_sha256": "0c335c390e644da36784f33ad9dcfee1ad91f3bf2023d6f6123656f34030da44"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 3,
+          "block_indices_zero_based": [
+            1839
+          ],
+          "prefix_sha256": "c5d170b76460931dabbdf5caf3a7e4eccb35ab593a4a4ee5c072e98bd7337cbf"
+        },
+        {
+          "source_id": "EVAL10_judgment_HUDOC",
+          "kind": "html_block_prefix",
+          "context_before": 1,
+          "context_after": 0,
+          "block_indices_zero_based": [
+            1744
+          ],
+          "prefix_sha256": "cef2062824a53245dfcfc76c74f661b7b0dc47db40dd22fcf36d04b2c4466b52"
+        }
+      ]
+    }
+  ]
+}

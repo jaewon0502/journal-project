@@ -1,0 +1,242 @@
+{
+  "reviewer_id": "CHALLENGER",
+  "mode": "AI",
+  "peer_votes_available": false,
+  "original_report_sha256": "8e96b48f56bfadaa6c510814cc4feba44d03609566fa2843571908fc2c008f79",
+  "sentences": [
+    {
+      "id": "S08",
+      "decision": "hold",
+      "reason": "원문은 9월 소비자물가 상승률이 1.6%라고 제시하지만 비교 기준이 전년 같은 달인지는 밝히지 않는다. 문장에 추가된 전년 동월 대비라는 조건을 제공 원문만으로 확정할 수 없다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "d7f26f698e62b1a6a05cd6bd28638d25e08a1db5d1fa6412b5608fff4af7bcfd",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S02",
+      "decision": "accept",
+      "reason": "가계대출의 증가 자체와 증가분의 축소를 구별하며, 증가규모가 상당폭 축소됐다는 원문의 뜻을 유지한다.",
+      "evidence": {
+        "location": "P5",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "beb98837ac6f4d06892c69b2b27e44c8d2e6927d3f198a30d89d74b90b9205e7",
+        "quote_characters": 21,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S01",
+      "decision": "accept",
+      "reason": "9월 소비자물가 상승률의 수치와 하락 방향을 그대로 유지한다. 석유류가격 하락이라는 원인 생략은 이 수치 주장의 의미를 바꾸지 않는다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "d7f26f698e62b1a6a05cd6bd28638d25e08a1db5d1fa6412b5608fff4af7bcfd",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S15",
+      "decision": "repair",
+      "reason": "원문은 3.50%에서 3.25%로 인하했다고 한다. 문장은 두 수치의 출발점과 도착점, 조정 방향을 모두 뒤집었다.",
+      "evidence": {
+        "location": "P1",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "7f9e5857f06d0546294e584570a07f05e63c56b1e23711b2ed5c5299d6f85e94",
+        "quote_characters": 29,
+        "quote_text_published": false
+      },
+      "minimal_repair": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다."
+    },
+    {
+      "id": "S17",
+      "decision": "repair",
+      "reason": "수출 증가세 지속은 일치하지만, 내수 회복세가 아직 더디다는 진술을 빨라졌다는 진술로 바꾸었다.",
+      "evidence": {
+        "location": "P3",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c3fadf7a06ad6ffb7815e781c2eafe50949d33c0c46b238b0475a4ea3ad1ae8d",
+        "quote_characters": 33,
+        "quote_text_published": false
+      },
+      "minimal_repair": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다."
+    },
+    {
+      "id": "S03",
+      "decision": "accept",
+      "reason": "수출의 증가세 지속과 내수의 더딘 회복이라는 두 진술 및 그 대비를 보존한다.",
+      "evidence": {
+        "location": "P3",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c3fadf7a06ad6ffb7815e781c2eafe50949d33c0c46b238b0475a4ea3ad1ae8d",
+        "quote_characters": 33,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S07",
+      "decision": "repair",
+      "reason": "원문에서 줄어든 것은 대출 잔액 자체가 아니라 대출의 증가규모이다. 잔액 감소로 표현하면 증가분의 축소를 총량 감소로 바꾸게 된다.",
+      "evidence": {
+        "location": "P5",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "beb98837ac6f4d06892c69b2b27e44c8d2e6927d3f198a30d89d74b90b9205e7",
+        "quote_characters": 21,
+        "quote_text_published": false
+      },
+      "minimal_repair": "가계대출 증가규모가 상당폭 줄었다."
+    },
+    {
+      "id": "S06",
+      "decision": "repair",
+      "reason": "원문은 물가·성장·금융안정의 상충관계를 점검하며 인하 속도를 신중히 결정할 방침이다. 문장은 조건을 무시한다고 바꾸고, 속도 확대가 이미 확정됐다는 결론까지 추가했다.",
+      "evidence": {
+        "location": "P6",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "ed7976e34b171ad391951aca6c7279eb767b44df3f21f2f6eb4738e18b41e25d",
+        "quote_characters": 67,
+        "quote_text_published": false
+      },
+      "minimal_repair": "물가·성장·금융안정의 상충관계를 점검하면서 앞으로 금리 인하 속도를 신중히 결정할 방침이다."
+    },
+    {
+      "id": "S11",
+      "decision": "accept",
+      "reason": "향후 물가 흐름, 낮은 수요압력이라는 배경, 예상이라는 확신 수준이 모두 원문과 같다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c56bd3ae2db5014fa307f16bab9ce11a16a16ad55540103f5c9d5739cda55420",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S05",
+      "decision": "repair",
+      "reason": "원문은 안정 흐름을 예상하지만 문장은 반드시 그렇게 된다고 단정한다. 전망을 확정적 사실로 강화한 의미 차이가 있다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c56bd3ae2db5014fa307f16bab9ce11a16a16ad55540103f5c9d5739cda55420",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다."
+    },
+    {
+      "id": "S04",
+      "decision": "accept",
+      "reason": "축소의 대상이 가계대출 증가규모라는 점과 축소 정도를 그대로 유지한다.",
+      "evidence": {
+        "location": "P5",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "beb98837ac6f4d06892c69b2b27e44c8d2e6927d3f198a30d89d74b90b9205e7",
+        "quote_characters": 21,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S09",
+      "decision": "repair",
+      "reason": "원문은 소비자물가 상승률이 양의 1.6%로 낮아졌다고 한다. 문장은 물가 수준이 1.6% 하락했다고 바꾸어 상승률 하락과 물가 하락을 혼동한다. 또한 원문에 명시되지 않은 전년 동월 비교 조건은 수정문에서 제거한다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "d7f26f698e62b1a6a05cd6bd28638d25e08a1db5d1fa6412b5608fff4af7bcfd",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": "9월 소비자물가 상승률은 1.6%로 낮아졌다."
+    },
+    {
+      "id": "S13",
+      "decision": "accept",
+      "reason": "증가세를 증가 흐름으로, 더딘 회복세를 느린 회복 속도로 풀어 썼으며 수출과 내수에 관한 핵심 의미를 유지한다.",
+      "evidence": {
+        "location": "P3",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c3fadf7a06ad6ffb7815e781c2eafe50949d33c0c46b238b0475a4ea3ad1ae8d",
+        "quote_characters": 33,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S12",
+      "decision": "accept",
+      "reason": "3.50%에서 3.25%로의 하향 조정은 0.25%포인트 인하이다. 계산된 차이와 조정 후 기준금리가 원문과 일치한다.",
+      "evidence": {
+        "location": "P1",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "7f9e5857f06d0546294e584570a07f05e63c56b1e23711b2ed5c5299d6f85e94",
+        "quote_characters": 29,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S16",
+      "decision": "accept",
+      "reason": "낮은 수요압력에 따른 향후 안정 흐름을 전망으로 표현하여 원문의 인과관계와 불확실성 수준을 유지한다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c56bd3ae2db5014fa307f16bab9ce11a16a16ad55540103f5c9d5739cda55420",
+        "quote_characters": 42,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S18",
+      "decision": "accept",
+      "reason": "향후 인하 속도를 결정할 때 물가·성장·금융안정의 상충관계를 점검하고 신중하게 판단한다는 정책 방침을 유지한다.",
+      "evidence": {
+        "location": "P6",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "ed7976e34b171ad391951aca6c7279eb767b44df3f21f2f6eb4738e18b41e25d",
+        "quote_characters": 67,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S10",
+      "decision": "accept",
+      "reason": "결정 주체, 인하 전후의 금리 수치 및 인하 방향이 모두 원문과 일치한다.",
+      "evidence": {
+        "location": "P1",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "7f9e5857f06d0546294e584570a07f05e63c56b1e23711b2ed5c5299d6f85e94",
+        "quote_characters": 29,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    },
+    {
+      "id": "S14",
+      "decision": "accept",
+      "reason": "정책변수 사이의 상충관계를 살피고 향후 인하 속도를 신중히 정하겠다는 방침을 보존한다. 살핀 뒤라는 표현은 검토를 거쳐 결정한다는 뜻으로 원문의 정책 방향과 일치한다.",
+      "evidence": {
+        "location": "P6",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "ed7976e34b171ad391951aca6c7279eb767b44df3f21f2f6eb4738e18b41e25d",
+        "quote_characters": 67,
+        "quote_text_published": false
+      },
+      "minimal_repair": null
+    }
+  ]
+}

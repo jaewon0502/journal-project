@@ -1,0 +1,938 @@
+{
+  "reports": [
+    {
+      "reviewer_id": "AI1",
+      "mode": "AI",
+      "original_report_sha256": "409ce77c6f6f2cea5c545303446173b435cd1b246ca1bc2c9fc401f4be08e831",
+      "saved_report_frozen_at_utc": "2026-10-03T05:43:23.952807+00:00",
+      "before_candidate_delivery_recorded": true,
+      "independent_timestamp_attestation": false,
+      "unit_texts_published": false,
+      "units": [
+        {
+          "id": "U01",
+          "importance": "필수",
+          "text_sha256": "59de39675c2580a2de9722f87a5dbff23436e16ffb091287ceff2e1ee470dda7",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "e951413383e6a2d66644f5e6a6d983d4c942f2985f8ff0a0763c7ec4c954be40",
+            "quote_characters": 27,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U02",
+          "importance": "필수",
+          "text_sha256": "e5e61150e553f97c82805ba7de9e367742553f47bab20e5bfc375c2b57edb3dd",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "3e2c42af7c2732e3a6c9dd09801664ee49a4421c9bd9899d7d4597190ebde4c7",
+            "quote_characters": 29,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U03",
+          "importance": "필수",
+          "text_sha256": "8296501b947b43537db155792a37e500035d2bd5ec2b82eb51a48d190f12b398",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "15cd8a4a21246cef1aed78ec60df78e78e519e667e9c1ed34a06b25ecef5cd6c",
+            "quote_characters": 26,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U04",
+          "importance": "필수",
+          "text_sha256": "823c6493f2cfdc246122cb8eb5ee183d41c7dd4d597883b502cf974b4e2eacf3",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "cb4ddb6c9243fa49e43a55c0ec83e6a4e9894b783ca96f2b188f68e6613fa3bf",
+            "quote_characters": 33,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U05",
+          "importance": "필수",
+          "text_sha256": "5fdee52dceb9ef420b0ac4cf0bfc6be69cf93a97ba62acdce1d6347b7b28b47f",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "0084da199b0018d476430dd7c77344b88f3e980e435b42b2f0bc9a31c33610a3",
+            "quote_characters": 19,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U06",
+          "importance": "유용",
+          "text_sha256": "e438477b07e7867d6d49be000a1d1bf5b532635fa683c26365bc68fd46810ef4",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "e7fd84b4daeedd64306acb99b6be3d79ebef3e2fa26794ea4ee985001a512862",
+            "quote_characters": 43,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U07",
+          "importance": "생략 가능",
+          "text_sha256": "11ad3f7c140fc9c631547bd2e8179d1b09c08108a9759b8ea283c54d3c538250",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "569e9ba2cd411d9d1d129bb7e5f1ec8b26c6df1747c0a40f1d800db51f58229f",
+            "quote_characters": 31,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U08",
+          "importance": "유용",
+          "text_sha256": "34ccdfb54a1e564a2867592647b613e6bd68086e98c9321b653420c62b4e5ba6",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "ac175972f55059aebd7d277bc1841c882ad61e0b94deaf2546482e3cdf6ef31c",
+            "quote_characters": 40,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U09",
+          "importance": "필수",
+          "text_sha256": "4f01cc0127ca951a4858ac4d269cd4b328930ad5055adf2cf5ef7cdf63651e18",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "7e83fcf18e2a1594eafa8f5be2fce95d0f5da8364c79b77fd7d92bd208b41b98",
+            "quote_characters": 30,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U10",
+          "importance": "유용",
+          "text_sha256": "6bd12b212fb61d35c91bd68816580dfe94f29985d97a2d826450157a12c4006b",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "273b2f15a2b56eab3ef03527173cd299ebf0e5350514a03b20d7f7fc6f8af54d",
+            "quote_characters": 36,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U11",
+          "importance": "필수",
+          "text_sha256": "a5e1ad0c9ebab64518a2af03823aff71356a56b06b25a93899700ced681f1134",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "1ea605c2e8c984994a851b3dd4689c620a28a17c4f4aa7bcaa160bbeb5be13c7",
+            "quote_characters": 53,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U12",
+          "importance": "유용",
+          "text_sha256": "ef579b2c70e548ea4aa414f69b61cc0420cb22746df0b45bcfc823173febf9f9",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "0dd0417c591b34008da8165d4198beb108a924d51de9696bc81df330e7a3000e",
+            "quote_characters": 30,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U13",
+          "importance": "유용",
+          "text_sha256": "eb014bd6532e922a9d9a8248a37643348aceaf8563bbf2fe2ff7879a29d7b391",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "4bc3d8c38d73824a9384c4334e126f97eed4c52ad79abbadfb64408a806a0fde",
+            "quote_characters": 27,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U14",
+          "importance": "필수",
+          "text_sha256": "48603789deb95b010b51dffaeb12c72f62ff85924978af8e76338be9e3bea480",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "6b33a7f42e0d46ad6a77117682b2b2743c1be845b3e98434bd8ebb21c2fa1624",
+            "quote_characters": 27,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U15",
+          "importance": "유용",
+          "text_sha256": "2b90d01f20a25294b3e09d0652219568562082cae82dcf9fae9c90bfe2bbe9f8",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "df8d929a28fe1ef766b121ebef8d842ec0c64f387bf96046dd991fd17408b346",
+            "quote_characters": 35,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U16",
+          "importance": "유용",
+          "text_sha256": "a982f6b6f88402dafba90f91acd8a4fcb55edd7cc8b016856559dc083f3fb0ff",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "4330fd491a311657d0ef51215c1ee6d71fd638945632fdee95015ae96c279504",
+            "quote_characters": 23,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U17",
+          "importance": "필수",
+          "text_sha256": "a9417767675c30af23c1287e38eab39878936617056996d9757697b29add4e0e",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a46126d00c81e8573d1df9b349fee2e610543fbd733b8ce68537cf3d5c723bd9",
+            "quote_characters": 44,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U18",
+          "importance": "유용",
+          "text_sha256": "26d0687f29a492b3bc3b134f9db953e0e26fa316c2a98701af6bc91b1e82d098",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "bf6d930f64060030dcd33df8ec3db15877abc3fc451cffb98a23fc02ea52bc9c",
+            "quote_characters": 31,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U19",
+          "importance": "유용",
+          "text_sha256": "0c4bd5336b8460a390553e41cd1e0111862447e8b827256d01436dfdef111745",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "1b2931500dc1c51d7768fbc81d8775f4346f420072dc9628c036287ee4f1951f",
+            "quote_characters": 27,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U20",
+          "importance": "필수",
+          "text_sha256": "7f864b900b5ec3f26d62705e74a826c27c360d8fa47013a174199d1ace4ed94d",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "b14b1d631756c2fdb43b698ad0ea24631a932a7b964efe62d3382d03e409df7d",
+            "quote_characters": 40,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U21",
+          "importance": "생략 가능",
+          "text_sha256": "3e35f1066c4961b9ebccff7fa52b84fa444b01c0d388841578ac2a35c15038f0",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "64787bfb29511377db0cadb52d9fe1a1dcc711592ff46e1ed02833d935942823",
+            "quote_characters": 60,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U22",
+          "importance": "유용",
+          "text_sha256": "b4f3feebc7929a082f8485c19a82c05b03e7d4dae68cb28573f91a40c93ea9ac",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a0765519aea083ccf20e699e4215e163d5e9590babfaca4232e8f42c0deb0be5",
+            "quote_characters": 40,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U23",
+          "importance": "필수",
+          "text_sha256": "eca3115921b48f1667f6b0597c091be5eea1bd3f504c741db98b081b38b66b3e",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "ea4dfe301b66f18a5980e71bcb0280bc2c964109dbd8d932ea6a205361f33e40",
+            "quote_characters": 26,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U24",
+          "importance": "필수",
+          "text_sha256": "6dbeb8eb51ce3d5cd4f46f8861a2a412ee8c671c25cd1b9a7f76bd0d1f565877",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "21f9911248e23cf5ed4a969a5c2d98ed761d6ca3be84f3c8787bb34f4a92fc25",
+            "quote_characters": 47,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U25",
+          "importance": "필수",
+          "text_sha256": "988e490ee83f54e96f14780b5dca19a2738162297db465864e2984c1f20b6777",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a5e475ec0702aa4792a7c396987ae7279775bbfc685a2f68eeb42b906a52066a",
+            "quote_characters": 32,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U26",
+          "importance": "필수",
+          "text_sha256": "11c3490e3134d97984a2a9e90ab37263dd34c54adc7f9045ebcf1b402c7f93b8",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "9ecebdba0da16a71387d8dd474d772fe7eadb4fd9903b179f793cc5dda57837b",
+            "quote_characters": 38,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U27",
+          "importance": "필수",
+          "text_sha256": "835484dcf05858658c46e4f1096bfbef4bcb7b75c69cb7f4954d0eeb68f604bc",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "2e185d85c8a9c9e023893a5e9f5f13e6d15503f167df2df30f98746468729edf",
+            "quote_characters": 43,
+            "quote_text_published": false
+          }
+        }
+      ]
+    },
+    {
+      "reviewer_id": "AI2",
+      "mode": "AI",
+      "original_report_sha256": "a881a62705496d97442dfd88f55f95c2df6ca17ac297095f4f159ac0913a1a85",
+      "saved_report_frozen_at_utc": "2026-10-03T05:43:46.372262+00:00",
+      "before_candidate_delivery_recorded": true,
+      "independent_timestamp_attestation": false,
+      "unit_texts_published": false,
+      "units": [
+        {
+          "id": "U01",
+          "importance": "필수",
+          "text_sha256": "e79c67475c465e21a4eb3ec039533a2ae0fa5a20d1c363806609566c45b0f8a8",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a5d0c21b9e8af9429228fc476459b97db8c1300578e3b30167e87ec77cf23ca6",
+            "quote_characters": 54,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U02",
+          "importance": "필수",
+          "text_sha256": "f6ba252179e499577265a76873e43a78067eb36de875b4cd2c62d8888f7e993f",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "028e0828f71e82e9e0fde5553bd80988c507dfda1af9a1dc17a9a42436045884",
+            "quote_characters": 49,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U03",
+          "importance": "필수",
+          "text_sha256": "61bebbdb654787f60c95065a8c46f28b4b620dde41465b3b5df97e15e0d66fe2",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "15cd8a4a21246cef1aed78ec60df78e78e519e667e9c1ed34a06b25ecef5cd6c",
+            "quote_characters": 26,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U04",
+          "importance": "필수",
+          "text_sha256": "42e9b1bd020c74890520a3107bf0197d02f61e9977968b7f7078f2526b593827",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "fbf684b26d436c72f5f59303b1fd2320a3de825c375d06672aed3a7889572486",
+            "quote_characters": 37,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U05",
+          "importance": "필수",
+          "text_sha256": "6240ed4a45442ff197cf3312a98ae2ae6b4605e46b79758f3598394e7dcf9921",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "0084da199b0018d476430dd7c77344b88f3e980e435b42b2f0bc9a31c33610a3",
+            "quote_characters": 19,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U06",
+          "importance": "유용",
+          "text_sha256": "b4a7aa86e8e8583c71f626264bcd9495b1a8842be3bcd46d79150d9c823ce7b8",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "89d4603e892ee414685cbc61beac961558fdfa01aee09271c25c4cfe67bf78af",
+            "quote_characters": 67,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U07",
+          "importance": "유용",
+          "text_sha256": "eaf8661804c361f805a377c4351219264d15e4887ee7afa3d26d81c240f64048",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "ae8eeb10a44c5a0254f9b6eaafc3e5fe052f320fc19c57f01c9cf92c4277dddb",
+            "quote_characters": 85,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U08",
+          "importance": "유용",
+          "text_sha256": "a657a622f8111d78ef5cfc9ac12171d3e079383db235260f08dec2130ff7f00d",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "042460adfa05ff5dc723bbbfe4d6706948559872f70428fcf2919469fe298330",
+            "quote_characters": 65,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U09",
+          "importance": "필수",
+          "text_sha256": "9b956b2225b0d9297aced4d132885ed3f6befa6a5b8ac118c66e1cc13a325641",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "4cad1630b06f553de24428389bfed06b8a12c88b3efa2a246665823be5e8f0a5",
+            "quote_characters": 32,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U10",
+          "importance": "유용",
+          "text_sha256": "c2eb9a4021a011a8fdfaaa82c66196027f562b6d28ecd50f010d84baecd8a2cd",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "0959894c55e1b3e70c2718bf41fa18b26902321a965f0963343f07ca829bdd3b",
+            "quote_characters": 39,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U11",
+          "importance": "필수",
+          "text_sha256": "9ea1a422de738a2b043f66bf3eb224a3dd42c8832f6ea1a2746ce38402109897",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "0b836435202801105f9b7b30a8786d8f720fb9f640651eb85ddcc07a00e6571d",
+            "quote_characters": 78,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U12",
+          "importance": "유용",
+          "text_sha256": "12b85f845b1e1f8830cfd1c9f962e92de94ad6140c387738eccbc30c65adc968",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "dcba584861008cd5d98e525c205bef7be69b7922f48e31249cc06c2790fd6e93",
+            "quote_characters": 52,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U13",
+          "importance": "필수",
+          "text_sha256": "078a9303266f73ba21b9d8dbb9f02e503ad77968f9774b49fa4e9fc2d7f0333a",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "d7f26f698e62b1a6a05cd6bd28638d25e08a1db5d1fa6412b5608fff4af7bcfd",
+            "quote_characters": 42,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U14",
+          "importance": "유용",
+          "text_sha256": "4faace8475a683b8bea803477330e43d3cf6dce5f40658a5c7ab2781d4fc933a",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a702e9a290beff29b10e8c9e658b3c8ad7e0abfd03c6b45ed8cfa147207e0518",
+            "quote_characters": 38,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U15",
+          "importance": "유용",
+          "text_sha256": "6f7736d0ba7551b87a78f1b80dec0ecd2415ee018464a9b9b8fe36281bbd25d1",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "4330fd491a311657d0ef51215c1ee6d71fd638945632fdee95015ae96c279504",
+            "quote_characters": 23,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U16",
+          "importance": "필수",
+          "text_sha256": "be115f7d066f482d8facc64bded0c07ca6ef295ce5702cf7ae7bb2e72767eab8",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "6ed8275f99b7956c18b775ddf308bece0ed9c27a4addcd965f461a4652594fe0",
+            "quote_characters": 107,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U17",
+          "importance": "유용",
+          "text_sha256": "14e585caea82b43471aeafb7b6d36dde08594bcf804b89665cddd14389cfdbb9",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "36aa34f72c112bdb58e540d0529e3285b1ed9e09acdbf6ebab63c4b3bd08776d",
+            "quote_characters": 61,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U18",
+          "importance": "유용",
+          "text_sha256": "1558c6795e63fcba37cc127b1b4f78b528a4e081b510edf0902e143fd8932c40",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "b2f0975c37bddeacc39ef53b183bbd883287e4af2c2787fa4e83771bfa206c9f",
+            "quote_characters": 62,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U19",
+          "importance": "필수",
+          "text_sha256": "79b0d322d0690d11dc97b1af9a7c8a20964136cb1a10bd16a208a36117452f93",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "2ad3d9dc2f0f7d6b16b172c79f1787f9acfdf2cfd18204affb83238ef65f1770",
+            "quote_characters": 64,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U20",
+          "importance": "유용",
+          "text_sha256": "9bd5761868fd08e3bc5017403e1d2315238eb5402e000228710d2cb78feb113b",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "d231ca70319fb64f8941191e2b9746ae559e2a6721fa238c9a0e84e024c7b85a",
+            "quote_characters": 86,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U21",
+          "importance": "필수",
+          "text_sha256": "24f86b8617efaedce1c890a0c4e8bfa96309bbbc52a309d12f36105fd7a6b8ce",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "d6ca47768a2f40ae94847a0684606aa2d2a466d19088922c00cacfffb3387b59",
+            "quote_characters": 46,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U22",
+          "importance": "필수",
+          "text_sha256": "54288292b7058a335d01584deb75ee4e777e1c1c1705be61d9fd5796d1a6f6a7",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "ea4dfe301b66f18a5980e71bcb0280bc2c964109dbd8d932ea6a205361f33e40",
+            "quote_characters": 26,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U23",
+          "importance": "필수",
+          "text_sha256": "f885758236dc6adb51e1cc559b326543a113839b9ece317021865b5113733948",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "1500c63cfda6d58c51b02707f28be9c4771ed1b518d90cbeaa46f4e90ad8bf07",
+            "quote_characters": 77,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U24",
+          "importance": "필수",
+          "text_sha256": "09fa7cf7264cc5dd1313f0513e861aa0cef23570d44fdc6586fca205348bbd33",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "c4e10be5763aa773b584d244be9c4b8dfd0957ae41a95528ad2fdb3eed880f9f",
+            "quote_characters": 52,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U25",
+          "importance": "필수",
+          "text_sha256": "70f1f43163bd6016135b7d132c806e812dd6f18cd15fd94c4a5eabad13f6442a",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "86e22e8c88dc2d9fdc853c0417df406b4fa21bd6cdfc7344941a61389fb5f461",
+            "quote_characters": 46,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U26",
+          "importance": "필수",
+          "text_sha256": "cdf7583b17d73c5733247ca06fb1ad53e5c4ec36d1052b7a8f3076f1edff6222",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "4c68d6c1d19869a30d05e7172ab9e0f5e370ee7d3e01bd1ff2093c7651c5aafd",
+            "quote_characters": 66,
+            "quote_text_published": false
+          }
+        }
+      ]
+    },
+    {
+      "reviewer_id": "AI3",
+      "mode": "AI",
+      "original_report_sha256": "b4ff8b092469b758b93e4d3d3e0c2d9fc5471af135ec0a3fdbbffaf579ce0a2d",
+      "saved_report_frozen_at_utc": "2026-10-03T05:47:11.182069+00:00",
+      "before_candidate_delivery_recorded": true,
+      "independent_timestamp_attestation": false,
+      "unit_texts_published": false,
+      "units": [
+        {
+          "id": "U01",
+          "importance": "필수",
+          "text_sha256": "1a258798d7f1bb94afeb179b6f685222b1ab8dc7b8dd3aa78f804c1b8cf65cbd",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "73ca93e6a261bb3411a13becabc59fcd1e4e81b2229bd492dc6abdad824f1fce",
+            "quote_characters": 35,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U02",
+          "importance": "필수",
+          "text_sha256": "9581a89ca3fb0b551672579a2c7d89ec8e3d2556e7f6c8131672578bc8c28b99",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "00e8717436818c3de4495bac78c60cc684ed72bd3d0b2796453b7e67e559adf5",
+            "quote_characters": 57,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U03",
+          "importance": "필수",
+          "text_sha256": "c1ea2a5d03260e376ba4f643f948d33edc2f6ae265d13223e7d190451d2b7185",
+          "evidence": {
+            "location": "P1",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "2300abe4ae1e57c9974ec25a6490622744021f3b46665f003078a2d0530067e3",
+            "quote_characters": 50,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U04",
+          "importance": "유용",
+          "text_sha256": "5cac1a95c53e76c7089cd031635475cf0dff586d9cd53c85aa4f29ff749cb61e",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "d6d18257c5278c371bfa5e9d04966d18a8ec4f444071458c52d30aabc3fa9eb3",
+            "quote_characters": 68,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U05",
+          "importance": "생략 가능",
+          "text_sha256": "1e44ce2e0a78c144b333bb7e9eea41786eda1df61734839ca53b7183eeabb81c",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "9293825edcbae5a9f627a5a14c0db6f914d49b6ab25e6cd22ad1a9a00c5cc3f5",
+            "quote_characters": 32,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U06",
+          "importance": "유용",
+          "text_sha256": "3bbe9ca7244a4a64783ac5c96a6752f31c3f302ad9752643c40eb967721ae92e",
+          "evidence": {
+            "location": "P2",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "b77ab6b77ecdc3948f62fa29fe0ce94055178a4454831780d2772d1c3d9976e4",
+            "quote_characters": 66,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U07",
+          "importance": "필수",
+          "text_sha256": "7a548e8e199e477a9776697e95849a2870f1e6ddd5729b3f572a116899a150c3",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "c3fadf7a06ad6ffb7815e781c2eafe50949d33c0c46b238b0475a4ea3ad1ae8d",
+            "quote_characters": 33,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U08",
+          "importance": "유용",
+          "text_sha256": "bc5c72480148707f4e7bf4f95ff39fd946a2419a529f24656a0788d105c64bc4",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "9004fea722be0d135d1896ce662cd000fd7cad8edbe0d64ff5c01857876ae01b",
+            "quote_characters": 40,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U09",
+          "importance": "필수",
+          "text_sha256": "79dab3810b2ff1aa8b337316455ccd6c897dc7976cd6013c6c297b2d377cf2cd",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "feb72699890a406147fdb1b0d2c66e792b819382b315060470be4151fa321f03",
+            "quote_characters": 63,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U10",
+          "importance": "유용",
+          "text_sha256": "f366faafc5c03968b8f870b48ec8f1020c52087a7f9736a166a30ed1c2863664",
+          "evidence": {
+            "location": "P3",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "d06ca1ba16e8cece5bc4575f6780798f051455c33940e48aeb1d4e0e65a9e6ba",
+            "quote_characters": 53,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U11",
+          "importance": "필수",
+          "text_sha256": "c2f60f1bc537242c787b5e94fcd3b4dfda3672e6bf2bc5bf81fac1cf79f67c87",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "cb5d7879e8065158d9d63c7358d5e03a3bfb3eed9cf4321ccccab7f07b01273f",
+            "quote_characters": 78,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U12",
+          "importance": "유용",
+          "text_sha256": "a982f6b6f88402dafba90f91acd8a4fcb55edd7cc8b016856559dc083f3fb0ff",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a982f6b6f88402dafba90f91acd8a4fcb55edd7cc8b016856559dc083f3fb0ff",
+            "quote_characters": 24,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U13",
+          "importance": "필수",
+          "text_sha256": "bb825017c9cfc940a0d718b92ff46cbcb627149239f207c1df5abb0246ecd5ab",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "c56bd3ae2db5014fa307f16bab9ce11a16a16ad55540103f5c9d5739cda55420",
+            "quote_characters": 42,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U14",
+          "importance": "유용",
+          "text_sha256": "3221d952c119fcef5555bd5c2cf3ee183ef14f1eebaeb6666423ba2194dc05c2",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "b08bc1bb4659844fe60d6404cbe30b7b42dd41730018f787e38be9f6ba3719f4",
+            "quote_characters": 39,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U15",
+          "importance": "유용",
+          "text_sha256": "c090a917c7d0260980ec24b521e105ade9005da1768edd9e6ad1fcb4d14a7db4",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "b2f0975c37bddeacc39ef53b183bbd883287e4af2c2787fa4e83771bfa206c9f",
+            "quote_characters": 62,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U16",
+          "importance": "필수",
+          "text_sha256": "159d1404c69806f1b051d93f6142a3c8cd67da17560fed955af57eb8f70eacae",
+          "evidence": {
+            "location": "P4",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "470920366529a91d63ac10da38ac9b0b249731afbae53f56a4c48d71c359519d",
+            "quote_characters": 46,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U17",
+          "importance": "생략 가능",
+          "text_sha256": "b01551d101f57d19e9dc99fcdd83d050858e0381f98cfe923e1bc64aa9b4c34e",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "a3c267e345c0f60ed526372a2c9557feefc664311416f22dd66efa00013364b2",
+            "quote_characters": 64,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U18",
+          "importance": "유용",
+          "text_sha256": "0437c27dfed25f335d7d345fb6aa0780f5bb46f1799198f57819927b6b3c1df8",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "60cda00bf90a54f8cdbee179da35d4637b71708a42bb0b019b98a36696cf38a2",
+            "quote_characters": 47,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U19",
+          "importance": "필수",
+          "text_sha256": "54288292b7058a335d01584deb75ee4e777e1c1c1705be61d9fd5796d1a6f6a7",
+          "evidence": {
+            "location": "P5",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "791e377db6628738bdf78869e9a7194e9133de3225ab3d542b979b52b1ec49cd",
+            "quote_characters": 27,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U20",
+          "importance": "필수",
+          "text_sha256": "d3d12e86686e233bc16db61d5729e0fa266173867483feab53cab68b1735f528",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "39484a01b3809c34894fc0bbe18d03d4938e6079b53ad33a4b0072f7342d8b3e",
+            "quote_characters": 49,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U21",
+          "importance": "필수",
+          "text_sha256": "2058f8a76527b910488afa29fc4355706186bd7e9b4bd7e15d01353d1c7580b8",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "e177bc1bcc322e12c5c14258af3a5be10c5c7c2eaff5782d74de714b9085a153",
+            "quote_characters": 47,
+            "quote_text_published": false
+          }
+        },
+        {
+          "id": "U22",
+          "importance": "필수",
+          "text_sha256": "3452d19fe814f16418fc90e8b4e29e4498419cf08f716e90aad53dfbee348b76",
+          "evidence": {
+            "location": "P6",
+            "source_id": "BOK-20241011",
+            "quote_sha256": "31c7f741dadb92fa2aba123560435ae0bda36f9fd9e3f4ef8158462d69a70d53",
+            "quote_characters": 52,
+            "quote_text_published": false
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "classification and provenance projection; omitted source-derived statements and full quotations prevent full semantic re-audit"
+}
