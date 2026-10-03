@@ -1,0 +1,876 @@
+{
+  "checked_at_utc": "2026-10-03T05:44:06.425816+00:00",
+  "check_kind": "local_integrity_locator_and_extraction_structure",
+  "errors": [],
+  "warnings": [
+    {
+      "code": "workflow_answer_status_conflict",
+      "workflow_completed_at": "2026-10-03T02:48:23.618627+00:00",
+      "answer_document_status": "latest merged wording pending final narrow checks",
+      "answer_finalized_at_utc": null
+    }
+  ],
+  "documents": [
+    {
+      "source_id": "EVAL08_order_UN",
+      "format": "pdf",
+      "role": "primary_decision",
+      "units": 18,
+      "original_byte_identity": "unknown",
+      "extraction_fidelity": "not_reextracted_from_pdf",
+      "main_paragraphs_present": 57
+    },
+    {
+      "source_id": "EVAL08_press_UN",
+      "format": "pdf",
+      "role": "explanatory",
+      "units": 4,
+      "original_byte_identity": "unknown",
+      "extraction_fidelity": "not_reextracted_from_pdf"
+    },
+    {
+      "source_id": "EVAL09_opinion_UN",
+      "format": "pdf",
+      "role": "primary_decision",
+      "units": 83,
+      "original_byte_identity": "unknown",
+      "extraction_fidelity": "not_reextracted_from_pdf",
+      "main_paragraphs_present": 285
+    },
+    {
+      "source_id": "EVAL09_summary_UN",
+      "format": "pdf",
+      "role": "explanatory",
+      "units": 32,
+      "original_byte_identity": "unknown",
+      "extraction_fidelity": "not_reextracted_from_pdf"
+    },
+    {
+      "source_id": "EVAL10_judgment_HUDOC",
+      "format": "html",
+      "role": "primary_decision",
+      "units": 2256,
+      "original_byte_identity": "unknown",
+      "normalized_html_p_li_reextraction_exact": true,
+      "main_paragraphs_present": 657
+    },
+    {
+      "source_id": "EVAL10_press_HUDOC",
+      "format": "pdf",
+      "role": "explanatory",
+      "units": 7,
+      "original_byte_identity": "unknown",
+      "extraction_fidelity": "not_reextracted_from_pdf"
+    }
+  ],
+  "questions": [
+    {
+      "id": "EVAL08-Q1",
+      "locator_count": 2,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL08-Q2",
+      "locator_count": 4,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL08-Q3",
+      "locator_count": 6,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL08-Q4",
+      "locator_count": 5,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL09-Q1",
+      "locator_count": 2,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL09-Q2",
+      "locator_count": 3,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL09-Q3",
+      "locator_count": 2,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL09-Q4",
+      "locator_count": 2,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL10-Q1",
+      "locator_count": 8,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL10-Q2",
+      "locator_count": 5,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL10-Q3",
+      "locator_count": 8,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    },
+    {
+      "id": "EVAL10-Q4",
+      "locator_count": 8,
+      "evidence_locations_resolve": true,
+      "semantic_accuracy": "not_scored"
+    }
+  ],
+  "locators": [
+    {
+      "question_id": "EVAL08-Q1",
+      "locator_number": 1,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        3
+      ],
+      "anchor_pages": [
+        3
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q1",
+      "locator_number": 2,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        15,
+        16,
+        17
+      ],
+      "anchor_pages": [
+        15,
+        17
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q2",
+      "locator_number": 1,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        6,
+        7,
+        8
+      ],
+      "anchor_pages": [
+        6,
+        7,
+        8
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q2",
+      "locator_number": 2,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        15
+      ],
+      "anchor_pages": [
+        15
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q2",
+      "locator_number": 3,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        17
+      ],
+      "anchor_pages": [
+        17
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q2",
+      "locator_number": 4,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        17
+      ],
+      "anchor_pages": [
+        17
+      ],
+      "paragraph_markers_checked": [
+        "57(2)(b)",
+        "57(2)(c)"
+      ]
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 1,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        8,
+        11
+      ],
+      "anchor_pages": [
+        8,
+        11
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 2,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        15
+      ],
+      "anchor_pages": [
+        15
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 3,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        16
+      ],
+      "anchor_pages": [
+        16
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 4,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        11
+      ],
+      "anchor_pages": [
+        11
+      ],
+      "paragraph_markers_checked": [
+        31
+      ]
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 5,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        11
+      ],
+      "anchor_pages": [
+        11
+      ],
+      "paragraph_markers_checked": [
+        32
+      ]
+    },
+    {
+      "question_id": "EVAL08-Q3",
+      "locator_number": 6,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        17
+      ],
+      "anchor_pages": [
+        17
+      ],
+      "paragraph_markers_checked": [
+        "57(2)(a)"
+      ]
+    },
+    {
+      "question_id": "EVAL08-Q4",
+      "locator_number": 1,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        10
+      ],
+      "anchor_pages": [
+        10
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q4",
+      "locator_number": 2,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        13
+      ],
+      "anchor_pages": [
+        13
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q4",
+      "locator_number": 3,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        14,
+        15
+      ],
+      "anchor_pages": [
+        14
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q4",
+      "locator_number": 4,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        16
+      ],
+      "anchor_pages": [
+        16
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL08-Q4",
+      "locator_number": 5,
+      "source_id": "EVAL08_order_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        14
+      ],
+      "anchor_pages": [
+        14
+      ],
+      "paragraph_markers_checked": [
+        46
+      ]
+    },
+    {
+      "question_id": "EVAL09-Q1",
+      "locator_number": 1,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        1
+      ],
+      "anchor_pages": [
+        1
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q1",
+      "locator_number": 2,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        81,
+        82
+      ],
+      "anchor_pages": [
+        81,
+        82
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q2",
+      "locator_number": 1,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        28
+      ],
+      "anchor_pages": [
+        28
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q2",
+      "locator_number": 2,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        81,
+        82
+      ],
+      "anchor_pages": [
+        81
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q2",
+      "locator_number": 3,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        81
+      ],
+      "anchor_pages": [
+        81
+      ],
+      "paragraph_markers_checked": [
+        "285(1)",
+        "285(2)"
+      ]
+    },
+    {
+      "question_id": "EVAL09-Q3",
+      "locator_number": 1,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        30
+      ],
+      "anchor_pages": [
+        30
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q3",
+      "locator_number": 2,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        75
+      ],
+      "anchor_pages": [
+        75
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q4",
+      "locator_number": 1,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        74,
+        75
+      ],
+      "anchor_pages": [
+        75
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL09-Q4",
+      "locator_number": 2,
+      "source_id": "EVAL09_opinion_UN",
+      "kind": "pdf_pages",
+      "cached_anchor_found_ignored": true,
+      "pages": [
+        23,
+        24
+      ],
+      "anchor_pages": [
+        23
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 1,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 2,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1887
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 3,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1877
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 4,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1881
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 5,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1681
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 6,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1875
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 7,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1880
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q1",
+      "locator_number": 8,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1882
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q2",
+      "locator_number": 1,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        236
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q2",
+      "locator_number": 2,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1685
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q2",
+      "locator_number": 3,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1876
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q2",
+      "locator_number": 4,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1882
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q2",
+      "locator_number": 5,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1869
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 1,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1616
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 2,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1617
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 3,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1618
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 4,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1619
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 5,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1634
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 6,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1637
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 7,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1707
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q3",
+      "locator_number": 8,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1635
+      ],
+      "paragraph_markers_checked": [
+        502
+      ]
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 1,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1746
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 2,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1750
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 3,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1751
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 4,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1834
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 5,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1835
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 6,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1837
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 7,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1839
+      ],
+      "paragraph_markers_checked": []
+    },
+    {
+      "question_id": "EVAL10-Q4",
+      "locator_number": 8,
+      "source_id": "EVAL10_judgment_HUDOC",
+      "kind": "html_block_prefix",
+      "cached_anchor_found_ignored": true,
+      "resolved_block_indices_zero_based": [
+        1744
+      ],
+      "paragraph_markers_checked": []
+    }
+  ],
+  "summary": {
+    "documents": 6,
+    "formats": {
+      "pdf": 5,
+      "html": 1
+    },
+    "questions": 12,
+    "locators": 55,
+    "hash_checks": 26,
+    "errors": 0,
+    "warnings": 1
+  },
+  "limits": [
+    "No live URL reachability or original-download byte identity tested.",
+    "PDF text was not re-extracted or visually rechecked; matching stored hashes prove preservation, not transcription accuracy.",
+    "Paragraph/subclause marker existence does not prove claim entailment or legal meaning.",
+    "Recorded review timestamps do not independently establish exposure order or isolation.",
+    "No semantic accuracy score, original v6 recovery, or participant evaluation follows from this audit."
+  ],
+  "scope": "archived original-bundle integrity and locator checks; public CI checks structure and counts only"
+}

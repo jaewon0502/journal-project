@@ -1,0 +1,45 @@
+{
+  "run_id": "source-evidence-ai-review-20261003",
+  "frozen_at_utc": "2026-10-03T05:37:31.309783+00:00",
+  "source_case": "BOK-20241011",
+  "reused_case": true,
+  "natural_articles": 0,
+  "constructed_propositions": 18,
+  "relation_families": 6,
+  "source_first_reviewers": 3,
+  "blind_challengers": 1,
+  "followup_reviewers": 1,
+  "model_family": "same family; independent provider execution not verified",
+  "model_version": null,
+  "model_seed": null,
+  "isolation": "separate conversation contexts with restricted inputs by instruction; shared filesystem, no security isolation claim",
+  "stages": [
+    "source-only importance extraction; save before candidates",
+    "six importance candidates plus eighteen anonymously ordered local propositions",
+    "source-only challenger without peer votes or construction labels",
+    "six wording repairs and one added evidence source",
+    "seven propositions checked in another fresh context"
+  ],
+  "rubric": {
+    "importance": [
+      "필수",
+      "유용",
+      "생략 가능",
+      "판단 어려움"
+    ],
+    "meaning": [
+      "accept",
+      "repair",
+      "hold"
+    ],
+    "rule": "Source support and demonstrated semantic difference govern editing; importance is not deletion permission. Missing optional context alone is not an error."
+  },
+  "predeclared_ambiguity_id": "S08",
+  "construction_labels_are_gold": false,
+  "historical_v6_rescored": false,
+  "human_alignment_proven": false,
+  "references": [
+    "https://arxiv.org/abs/2306.05685",
+    "https://arxiv.org/abs/2404.18796"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "archived validation of private inputs; not re-executed by public-only CI",
+  "checked_at_utc": "2026-10-03T05:54:45.959197+00:00",
+  "errors": [],
+  "hash_checks": 35,
+  "exact_quote_anchor_checks": 172,
+  "source_first_reports": 3,
+  "primary_meaning_judgments": 54,
+  "blind_challenger_judgments": 18,
+  "followup_judgments": 7,
+  "followup_accepted": 7,
+  "wording_edits": 6,
+  "unchanged_sentences": 12,
+  "new_human_responses": 0,
+  "semantic_accuracy_score": null,
+  "original_scope": "mechanical integrity and quote checks; semantic judgments remain AI in one reused case"
+}

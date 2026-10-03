@@ -1,0 +1,201 @@
+{
+  "reviewer_id": "VERIFY",
+  "mode": "AI",
+  "adaptive_same_case_followup": true,
+  "original_report_sha256": "c8172ef3134e509b09851ea4ca4640f960ef0503b55df9ce7f66cdddb70fcb69",
+  "verification_input_sha256": "55f553cfb6888b3b8315983f39032b6d2e16fec095364acc6c593f1fa35befc5",
+  "inputs": [
+    {
+      "text": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다.",
+      "id": "V1"
+    },
+    {
+      "text": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "id": "V2"
+    },
+    {
+      "text": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다.",
+      "id": "V3"
+    },
+    {
+      "text": "9월 소비자물가는 전년 같은 달보다 1.6% 상승했다.",
+      "id": "V4"
+    },
+    {
+      "text": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "id": "V5"
+    },
+    {
+      "text": "가계대출의 증가규모가 상당폭 줄었다.",
+      "id": "V6"
+    },
+    {
+      "text": "물가·성장·금융안정의 상충관계를 점검하며 앞으로 금리 인하 속도를 신중하게 결정하기로 했다.",
+      "id": "V7"
+    }
+  ],
+  "mapping": [
+    {
+      "verification_id": "V1",
+      "original_id": "S05"
+    },
+    {
+      "verification_id": "V2",
+      "original_id": "S09"
+    },
+    {
+      "verification_id": "V3",
+      "original_id": "S17"
+    },
+    {
+      "verification_id": "V4",
+      "original_id": "S08"
+    },
+    {
+      "verification_id": "V5",
+      "original_id": "S15"
+    },
+    {
+      "verification_id": "V6",
+      "original_id": "S07"
+    },
+    {
+      "verification_id": "V7",
+      "original_id": "S06"
+    }
+  ],
+  "changes": [
+    {
+      "id": "S05",
+      "before": "앞으로 물가상승률은 낮은 수요압력으로 반드시 안정된 흐름을 이어간다.",
+      "after": "앞으로 물가상승률은 낮은 수요압력으로 안정된 흐름을 이어갈 것으로 예상된다.",
+      "kind": "meaning_repair"
+    },
+    {
+      "id": "S06",
+      "before": "물가·성장·금융안정 상황과 관계없이 앞으로 금리 인하 속도를 높이기로 확정했다.",
+      "after": "물가·성장·금융안정의 상충관계를 점검하며 앞으로 금리 인하 속도를 신중하게 결정하기로 했다.",
+      "kind": "meaning_repair"
+    },
+    {
+      "id": "S07",
+      "before": "가계대출 잔액이 상당폭 줄었다.",
+      "after": "가계대출의 증가규모가 상당폭 줄었다.",
+      "kind": "meaning_repair"
+    },
+    {
+      "id": "S08",
+      "before": "9월 소비자물가는 전년 같은 달보다 1.6% 상승했다.",
+      "after": "9월 소비자물가는 전년 같은 달보다 1.6% 상승했다.",
+      "kind": "new_evidence_without_wording_change"
+    },
+    {
+      "id": "S09",
+      "before": "9월 소비자물가는 전년 같은 달보다 1.6% 하락했다.",
+      "after": "9월 소비자물가 상승률은 1.6%로 낮아졌다.",
+      "kind": "meaning_repair"
+    },
+    {
+      "id": "S15",
+      "before": "금융통화위원회는 기준금리를 3.25%에서 3.50%로 높였다.",
+      "after": "금융통화위원회는 기준금리를 3.50%에서 3.25%로 낮췄다.",
+      "kind": "meaning_repair"
+    },
+    {
+      "id": "S17",
+      "before": "수출 증가세가 이어졌고 내수 회복세도 빨라졌다.",
+      "after": "수출 증가세가 이어졌지만 내수 회복세는 아직 더뎠다.",
+      "kind": "meaning_repair"
+    }
+  ],
+  "judgments": [
+    {
+      "id": "V1",
+      "decision": "accept",
+      "reason": "원문의 해당 문장과 일치한다. 대상은 향후 물가상승률이며, 낮은 수요압력을 근거로 안정된 흐름을 예상한다는 전망의 강도가 유지된다. 같은 문단의 별도 전망 수치와 불확실성을 생략해도 이 문장 자체의 의미는 바뀌지 않는다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "c56bd3ae2db5014fa307f16bab9ce11a16a16ad55540103f5c9d5739cda55420",
+        "quote_characters": 42,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V2",
+      "decision": "accept",
+      "reason": "원문이 9월 소비자물가 상승률의 수치와 하락 방향을 직접 명시한다. 낮아진 대상은 물가 수준이 아니라 상승률이다. 석유류가격 하락이라는 부가 원인을 생략했으며, 다른 원인이나 변화 방향을 주장하지 않는다. 제공 자료의 시점은 2024년 9월이다.",
+      "evidence": {
+        "location": "P4",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "ef8d9107f9f53392f7f8fb06ca635efd9dfaebeac0e7b2997d6745473dd8de1e",
+        "quote_characters": 82,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V3",
+      "decision": "accept",
+      "reason": "수출 증가세 지속과 더딘 내수 회복이라는 대비가 원문에 직접 제시된다. '더딘 모습이다'를 '더뎠다'로 서술한 것은 발표 당시의 국내경제 상태를 과거형으로 전달한 것으로, 회복세의 방향이나 정도를 바꾸지 않는다. 별도의 과거 기간이나 이후 회복 완료를 뜻하는 주장은 없다.",
+      "evidence": {
+        "location": "P3",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "720c4f2179d73e44c880e00077624ce597e83a483496ec7ca8a53d6f95eacb9a",
+        "quote_characters": 39,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V4",
+      "decision": "accept",
+      "reason": "통계청 자료는 2024년 9월 소비자물가지수가 전년 같은 달보다 1.6% 상승했다고 명시한다. 문장은 비교 기준을 전년 동월로 정확히 유지한다. 같은 자료의 전월 대비 상승률 0.1%와 혼동하지 않았으며, 한국은행 P4의 9월 소비자물가 상승률 1.6%와도 일치한다.",
+      "evidence": {
+        "location": "PDF 실제 페이지 2 (pdf_page: 2)",
+        "source_id": "KOSTAT-202409",
+        "quote_sha256": "89b52a8f2adaf8d5979ad0a7162ae4548910fcb55d9282637f2c5095a32ee5f9",
+        "quote_characters": 184,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V5",
+      "decision": "accept",
+      "reason": "금융통화위원회라는 주체, 한국은행 기준금리라는 대상, 3.50%에서 3.25%로의 하향 조정이 모두 원문과 일치한다. '낮췄다'는 2024년 10월 11일 발표된 기준금리 하향 조정 결정을 요약한다. 다음 결정시까지의 운용 기간을 생략했지만 영구적 인하나 추가 인하를 주장하지 않는다.",
+      "evidence": {
+        "location": "P1",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "92c6a4ea897dbf3bb977443ea826c45df5a0d3b04b2b8923fba0840674009d75",
+        "quote_characters": 82,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V6",
+      "decision": "accept",
+      "reason": "'증가규모가 상당폭 줄었다'는 원문의 '증가규모도 상당폭 축소되었다'와 같은 의미다. 줄어든 대상이 가계대출의 증가규모임을 유지하므로 가계대출 잔액 자체가 감소했다는 주장으로 바뀌지 않는다. 앞선 주택시장 설명과 인과 연결의 생략만으로 의미 차이가 생기지는 않는다.",
+      "evidence": {
+        "location": "P5",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "791e377db6628738bdf78869e9a7194e9133de3225ab3d542b979b52b1ec49cd",
+        "quote_characters": 27,
+        "quote_text_published": false
+      }
+    },
+    {
+      "id": "V7",
+      "decision": "accept",
+      "reason": "물가·성장·금융안정 사이의 상충관계를 점검하면서 향후 금리 인하 속도를 신중히 결정한다는 정책 방침을 유지한다. '결정하기로 했다'는 앞으로의 결정 방침을 전달하며, 특정 인하 속도나 추가 인하 시점이 이미 확정됐다고 말하지 않는다. 원문의 '등'을 생략해도 열거된 변수와 인하 속도에 관한 진술은 지지된다.",
+      "evidence": {
+        "location": "P6",
+        "source_id": "BOK-20241011",
+        "quote_sha256": "8cf6c8650e3233ca2176152aeed88eb6c467d2fff24babb85eedc3f779608666",
+        "quote_characters": 80,
+        "quote_text_published": false
+      }
+    }
+  ],
+  "source_ids": [
+    "BOK-20241011",
+    "KOSTAT-202409"
+  ]
+}

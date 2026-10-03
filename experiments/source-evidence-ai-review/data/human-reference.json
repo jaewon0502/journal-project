@@ -1,0 +1,69 @@
+{
+  "kind": "posthoc_descriptive_comparison_of_prior_partial_feedback",
+  "participants": 1,
+  "direct_importance_responses": 3,
+  "source_first_status": "partial category-level response; no item-level spontaneous selection inferred",
+  "source_reading_confirmed": false,
+  "reasons_available": false,
+  "raw_responses_published": false,
+  "independent_external_reviewer_claimed": false,
+  "exposure_note": "self-report no previous viewing; earlier accidental tool-output disclosure recorded; no technical blinding proof",
+  "rows": [
+    {
+      "unit_id": "U1",
+      "human_rating": "유용",
+      "ai_ratings": [
+        {
+          "reviewer_id": "AI1",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI2",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI3",
+          "rating": "필수"
+        }
+      ]
+    },
+    {
+      "unit_id": "U2",
+      "human_rating": "유용",
+      "ai_ratings": [
+        {
+          "reviewer_id": "AI1",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI2",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI3",
+          "rating": "필수"
+        }
+      ]
+    },
+    {
+      "unit_id": "U3",
+      "human_rating": "유용",
+      "ai_ratings": [
+        {
+          "reviewer_id": "AI1",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI2",
+          "rating": "필수"
+        },
+        {
+          "reviewer_id": "AI3",
+          "rating": "필수"
+        }
+      ]
+    }
+  ],
+  "human_agreement_score": null,
+  "new_human_responses_in_this_AI_run": 0
+}

@@ -1,0 +1,106 @@
+{
+  "kind": "curated_public_derivative_not_original_run_bytes",
+  "published_from_existing_records_at_utc": "2026-10-03T06:20:42.959097+00:00",
+  "new_model_calls_during_publication": 0,
+  "original_artifacts": [
+    {
+      "logical_name": "source_inventory",
+      "sha256": "9e9ab1111f9a598e39aa561f4c2aec401c0dd1f32cc38ba2101bf66020562ace"
+    },
+    {
+      "logical_name": "latest_legal_working_answers",
+      "sha256": "0b9ddf2e97d4a9c3bebb4d5bcedd12648183ece5fa2c37fc2051306a3d04e2e2"
+    },
+    {
+      "logical_name": "source_audit",
+      "sha256": "880f7fcaeb81c221fc8c9a679374d3ec41734bdcb6a808d48e6457976b56a4af"
+    },
+    {
+      "logical_name": "initial_input_freeze",
+      "sha256": "68b00846c4f4c21502fe10aac04c530d13ce353e8213a0dcdf0288282c8d2d7b"
+    },
+    {
+      "logical_name": "protocol",
+      "sha256": "50afcac61f2fb5924491fef3f1f0e82d3d4788464c9b470990f3b6449617d18e"
+    },
+    {
+      "logical_name": "construction_key",
+      "sha256": "75ef94627a997e089bfc98832bf57fc5fecdf84f23b24448c8b86c20e242cff9"
+    },
+    {
+      "logical_name": "verification_input",
+      "sha256": "55f553cfb6888b3b8315983f39032b6d2e16fec095364acc6c593f1fa35befc5"
+    },
+    {
+      "logical_name": "verification_mapping",
+      "sha256": "a7835fea7c986a51ec63e0ec70ff2c1ddcf5448a297b284bb94aa2e72b5da9ac"
+    },
+    {
+      "logical_name": "local_validation",
+      "sha256": "5fc6b4fd34c92ba7b6e5aa857d5f61cdf9000387f1c4bf203201cddf8a8e9b2e"
+    },
+    {
+      "logical_name": "source_first_1",
+      "sha256": "409ce77c6f6f2cea5c545303446173b435cd1b246ca1bc2c9fc401f4be08e831"
+    },
+    {
+      "logical_name": "source_first_2",
+      "sha256": "a881a62705496d97442dfd88f55f95c2df6ca17ac297095f4f159ac0913a1a85"
+    },
+    {
+      "logical_name": "source_first_3",
+      "sha256": "b4ff8b092469b758b93e4d3d3e0c2d9fc5471af135ec0a3fdbbffaf579ce0a2d"
+    },
+    {
+      "logical_name": "candidate_review_1",
+      "sha256": "c9d001b1350f532c476f5e3877197d93835f36703a61eea94a4b46692e9fa010"
+    },
+    {
+      "logical_name": "candidate_review_2",
+      "sha256": "4fb67eac51183434eb7eda3321fcdccea5378886a02e2080d7beedbd1e180d7a"
+    },
+    {
+      "logical_name": "candidate_review_3",
+      "sha256": "0ea48c8d679b0b5818ce156c802de64b54b01fcdc1e352d60036acf22931381e"
+    },
+    {
+      "logical_name": "challenger",
+      "sha256": "8e96b48f56bfadaa6c510814cc4feba44d03609566fa2843571908fc2c008f79"
+    },
+    {
+      "logical_name": "followup",
+      "sha256": "c8172ef3134e509b09851ea4ca4640f960ef0503b55df9ce7f66cdddb70fcb69"
+    },
+    {
+      "logical_name": "source_audit_script",
+      "sha256": "7ed2b9dc1d97ab99cfbda63fcc610638cc2bd4a908199b3456b1420df7ee8a46"
+    },
+    {
+      "logical_name": "original_collector",
+      "sha256": "dcaed5301d4ff6969410a0cab8df18b3e448928e2893de289c2bd1cfe58e184d"
+    },
+    {
+      "logical_name": "original_final_validator",
+      "sha256": "cd96f6c27b1c7fd620e51b4717f2c8ccbb3bd78f27a4e2b571951ff08d951d86"
+    }
+  ],
+  "transformations": [
+    "Select classifications, self-authored synthetic propositions, analysis reasons, source locations and cryptographic digests.",
+    "Omit full source documents, source text extracts, verbatim quote fields, source-first text bodies, internal task instructions and agent identifiers.",
+    "Publish only deidentified aggregate/three item labels from existing human feedback; no chat text, participant ID, private path or raw response hash.",
+    "Keep original legal-answer pending metadata and later workflow warning; no historical score changes.",
+    "Public code replays stored decisions and checks exact input/output mapping; no new model or human execution."
+  ],
+  "not_publicly_reproducible_without_originals": [
+    "source-content entailment",
+    "55 legal locators against full original text",
+    "172 quote anchors against full original text",
+    "model input isolation and actual execution timing"
+  ],
+  "public_integrity_file": "SHA256SUMS",
+  "code_changes": {
+    "audit_private_bundle.py": "portable explicit bundle/output arguments; original integrity/locator checks retained",
+    "replay.py": "new public-only replay, exact final/input text bindings and nonzero failure exit",
+    "historical_validation_files": "retained as archived projections, not overwritten by strengthened checks"
+  }
+}
