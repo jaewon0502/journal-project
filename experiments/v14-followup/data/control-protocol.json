@@ -1,0 +1,34 @@
+{
+  "frozen_at_utc": "2026-10-03T07:56:58.112840+00:00",
+  "case_count": 6,
+  "source_families": 3,
+  "article_origin": "newly_authored_synthetic_Korean_complete_short_articles",
+  "natural_news_articles": 0,
+  "design": "three source-faithful versions and one deliberately contradictory counterpart per family; paired, not independent events",
+  "reviewer_count_planned": 2,
+  "same_model_family": true,
+  "isolated_context_not_technical_security_boundary": false,
+  "original_v14_replay": false,
+  "primary_checks": [
+    "observed unnecessary edits/holds among source-faithful constructed cases",
+    "observed missed contradiction among corrupted counterparts",
+    "exact proposed edit scope and whether conditional meaning retained"
+  ],
+  "analysis_rule": "Report each reviewer separately; compare to preregistered construction labels as labels, not objective/human gold. Do not average agreement into accuracy. Any ambiguous label stays disputed, never silently revised.",
+  "input_sha256": "1be9a086d084d8ba99271b56a191e809523b6a4ad9f6fb721c325c49f9f1c5d8",
+  "construction_sha256": "7c0ceb7235c884761898b3af013d17c7230ef2e5743f3e4d51eb7c9a2fe49263",
+  "limitations": [
+    "synthetic, small, same-model-family",
+    "one isolated contradiction per corrupted article",
+    "not natural-article false-positive rate",
+    "no proof of human importance alignment",
+    "not a test of all unseen semantic relations"
+  ],
+  "context_policy": "Existing subagent contexts reused due session agent limit. Reviewers have prior report/code tasks; neither receives control construction labels or peer decisions before submission. Not history-free or technically isolated.",
+  "protocol_amendment": {
+    "recorded_at_utc": "2026-10-03T08:04:37.872410+00:00",
+    "change": "context policy changed to reuse existing subagent contexts after agent thread limit prevented fresh spawn",
+    "timing": "policy text corrected before first review result; this explicit amendment log added after r1 was received",
+    "inputs_and_construction_labels_changed": false
+  }
+}

@@ -36,3 +36,11 @@ followup = ROOT / 'experiments' / 'source-evidence-ai-review'
 run([sys.executable, 'tools/replay.py'], followup)
 run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py', '-v'], followup)
 print('Source-evidence AI review public replay passed; new model calls: 0')
+
+# New v14 follow-up: synthetic saved judgments and a new deterministic relation gate.
+v14_followup = ROOT / 'experiments' / 'v14-followup'
+for directory in ('code', 'tools'):
+    run([sys.executable, '-m', 'unittest', 'discover', '-s', directory, '-p', 'test_*.py', '-v'], v14_followup)
+run([sys.executable, 'tools/replay_controls.py', '--check-saved'], v14_followup)
+run([sys.executable, 'tools/replay_integration.py'], v14_followup)
+print('v14 follow-up mechanical checks and saved AI record replay passed; new model calls: 0')
