@@ -1,0 +1,167 @@
+{
+  "scope": "saved synthetic control replay; construction labels are not independent human gold",
+  "new_model_calls": 0,
+  "natural_news_articles": 0,
+  "unique_source_families": 3,
+  "article_variants": 6,
+  "human_alignment_proven": false,
+  "original_v14_replayed": false,
+  "reviewers": [
+    {
+      "reviewer": "r1",
+      "report_sha256": "ee3f227071ca5324c7723d34fe0f1d76cd5b09c4d8da66c7c26d82c978b3ef9b",
+      "faithful_cases": 3,
+      "faithful_unchanged": 3,
+      "faithful_repair_or_hold": 0,
+      "injected_cases": 3,
+      "injected_repair": 3,
+      "injected_unchanged_or_hold": 0,
+      "rows": [
+        {
+          "case_id": "C971",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "52b55fe8eeec9800829c354f8eaf3dcef904c014a2d9c6af34d1f9a304e7d7df",
+          "exact_string_matches_faithful_pair": false,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C734",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "4cf60abf553306d789165f62bfa8daba76a5dbc145170aa1f009f26dd9d97518",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C256",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "aa54cebb95cf370f728773e158342a5052295cfe6af313ceb20f52d1ab00041a",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C138",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "4cf60abf553306d789165f62bfa8daba76a5dbc145170aa1f009f26dd9d97518",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C115",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "b557d76ff0ad6d6a8a28cc444e41ca601c974e2e6223a1ccf9dcc7b836baf666",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C456",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "b3ee1112343e3b5ecce0111a64e222d1d8cfc5b7cbd22e465339674777b1c38b",
+          "exact_string_matches_faithful_pair": false,
+          "semantic_repair_validated_by_this_script": false
+        }
+      ]
+    },
+    {
+      "reviewer": "r2",
+      "report_sha256": "0e8d12d47381f1c67bd738877e9c4430dd81d81489ec7797ed51878ae0d32042",
+      "faithful_cases": 3,
+      "faithful_unchanged": 3,
+      "faithful_repair_or_hold": 0,
+      "injected_cases": 3,
+      "injected_repair": 3,
+      "injected_unchanged_or_hold": 0,
+      "rows": [
+        {
+          "case_id": "C971",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "03a63dcdd625a33642bc16b65b6988d0a0f1256e2d8d0beac7bbe7c1aa752be2",
+          "exact_string_matches_faithful_pair": false,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C734",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "4cf60abf553306d789165f62bfa8daba76a5dbc145170aa1f009f26dd9d97518",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C256",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "aa54cebb95cf370f728773e158342a5052295cfe6af313ceb20f52d1ab00041a",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C138",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "4cf60abf553306d789165f62bfa8daba76a5dbc145170aa1f009f26dd9d97518",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C115",
+          "construction": "source_faithful",
+          "observed_decision": "unchanged",
+          "agrees_with_construction_decision": true,
+          "patch_count": 0,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "b557d76ff0ad6d6a8a28cc444e41ca601c974e2e6223a1ccf9dcc7b836baf666",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        },
+        {
+          "case_id": "C456",
+          "construction": "one_injected_contradiction",
+          "observed_decision": "repair",
+          "agrees_with_construction_decision": true,
+          "patch_count": 1,
+          "changed_outside_injected_span": false,
+          "candidate_sha256": "b557d76ff0ad6d6a8a28cc444e41ca601c974e2e6223a1ccf9dcc7b836baf666",
+          "exact_string_matches_faithful_pair": true,
+          "semantic_repair_validated_by_this_script": false
+        }
+      ]
+    }
+  ]
+}
