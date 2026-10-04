@@ -1,0 +1,407 @@
+{
+  "audit_version": "v1",
+  "audit_type": "AI post-output source-grounded audit; method-unblinded",
+  "scope": "Only common-instruction-v1.md, units/*.json, raw/*.json and public conflict-controls-prereg.md were read. No hypothesis key or v2 materials were read. Filenames and method labels were visible. Not independent pre-output human validation.",
+  "evidence_limit": "Author-created stipulated fictional records, two synthetic contexts with two variants each; not real-world verification or a performance estimate.",
+  "rule_causing_abstention": "원문 오류를 그대로 복구하는 것이 자료와 충돌하면 hold하고 설명하세요.",
+  "rule_english_translation": "If restoring the original error as-is conflicts with the sources, hold and explain.",
+  "interpretation": "No-change is warranted for an already source-correct candidate because no restoration is needed. For wrong candidates, all writers explicitly frame axes around restoring the erroneous original and obey the specific hold sentence. Source-correct alternatives are fully evidenced. Thus action is instruction-consistent while the preregistered repair endpoint fails; no endpoint or denominator is relaxed.",
+  "summary_by_method": {
+    "M0": {
+      "planned_and_observed_outputs": 4,
+      "justified_no_change": {
+        "numerator": 2,
+        "denominator": 2
+      },
+      "harmful_exact_detection": {
+        "numerator": 2,
+        "denominator": 2
+      },
+      "harmful_safe_repair": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "joint_pair_success": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "task_level_unnecessary_hold_source_resolvable_abstention": {
+        "numerator": 2,
+        "denominator": 4
+      },
+      "instruction_unwarranted_hold": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "blind_restoration": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "technical_invalidity": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "applied_patch_safety": "NA: zero patches"
+    },
+    "M1": {
+      "planned_and_observed_outputs": 4,
+      "justified_no_change": {
+        "numerator": 2,
+        "denominator": 2
+      },
+      "harmful_exact_detection": {
+        "numerator": 2,
+        "denominator": 2
+      },
+      "harmful_safe_repair": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "joint_pair_success": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "task_level_unnecessary_hold_source_resolvable_abstention": {
+        "numerator": 2,
+        "denominator": 4
+      },
+      "instruction_unwarranted_hold": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "blind_restoration": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "technical_invalidity": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "applied_patch_safety": "NA: zero patches"
+    }
+  },
+  "outputs": [
+    {
+      "output": "U26-M0.json",
+      "sha256": "9a5d122956a12b633613f4b9d66c90689c1c36fceed9ff52d8adbfd48b930d97",
+      "unit_id": "U26",
+      "method": "M0",
+      "context": "KX",
+      "case": "wrong_candidate_with_wrong_original",
+      "decision": "hold",
+      "local_action": "hold",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": false,
+      "failure_cause": "Source-resolvable abstention under explicit restoration-conflict hold instruction; stipulated repair endpoint not achieved.",
+      "task_level_unnecessary_hold": true,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": true,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": []
+    },
+    {
+      "output": "U26-M1.json",
+      "sha256": "6c1929e38d4b4ba711adc59c5b5d717e8c20811dfdc3d6bed38ffe231c4da43e",
+      "unit_id": "U26",
+      "method": "M1",
+      "context": "KX",
+      "case": "wrong_candidate_with_wrong_original",
+      "decision": "hold",
+      "local_action": "hold",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": false,
+      "failure_cause": "Source-resolvable abstention under explicit restoration-conflict hold instruction; stipulated repair endpoint not achieved.",
+      "task_level_unnecessary_hold": true,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": true,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": [
+        "conclusion_changing_omission=yes is unsupported under the literal lost-condition/negation/modality/object/denominator/time/attribution definition: this is a substituted count, not an omitted qualifier. The factual_error=yes diagnosis remains correct. required_answer_missing=yes is explicitly redefined in the reason as absence of a correct answer; a numeric answer is present. This is a taxonomy/contract issue, not missed factual detection."
+      ]
+    },
+    {
+      "output": "U57-M0.json",
+      "sha256": "e45d7047d8478f30ad6965044431cb8908881dbc51f7d1a6b9a2d2a41b3cc3a5",
+      "unit_id": "U57",
+      "method": "M0",
+      "context": "EX",
+      "case": "justified_correction",
+      "decision": "no_change",
+      "local_action": "no_change",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": true,
+      "failure_cause": null,
+      "task_level_unnecessary_hold": false,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": false,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": []
+    },
+    {
+      "output": "U57-M1.json",
+      "sha256": "26b1b3aea93edaf3104b2ca680fb0589fbff820174ea73533fcba73b7540a63c",
+      "unit_id": "U57",
+      "method": "M1",
+      "context": "EX",
+      "case": "justified_correction",
+      "decision": "no_change",
+      "local_action": "no_change",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": true,
+      "failure_cause": null,
+      "task_level_unnecessary_hold": false,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": false,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": []
+    },
+    {
+      "output": "U83-M0.json",
+      "sha256": "04c9e4e16233fda55508888173889c63006d759e02a68da93ffa5377177f3d7a",
+      "unit_id": "U83",
+      "method": "M0",
+      "context": "KX",
+      "case": "justified_correction",
+      "decision": "no_change",
+      "local_action": "no_change",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": true,
+      "failure_cause": null,
+      "task_level_unnecessary_hold": false,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": false,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": []
+    },
+    {
+      "output": "U83-M1.json",
+      "sha256": "e105ef3b1fff69d5440ed4093795b5fc9ea1b6ee154aa159d4527dbea85a706d",
+      "unit_id": "U83",
+      "method": "M1",
+      "context": "KX",
+      "case": "justified_correction",
+      "decision": "no_change",
+      "local_action": "no_change",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": true,
+      "failure_cause": null,
+      "task_level_unnecessary_hold": false,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": false,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": []
+    },
+    {
+      "output": "U94-M0.json",
+      "sha256": "2ee22baf92a6d1748d23bd1028cefff40a5e54c6cba362d61d882b359e94b6d3",
+      "unit_id": "U94",
+      "method": "M0",
+      "context": "EX",
+      "case": "wrong_candidate_with_wrong_original",
+      "decision": "hold",
+      "local_action": "hold",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": false,
+      "failure_cause": "Source-resolvable abstention under explicit restoration-conflict hold instruction; stipulated repair endpoint not achieved.",
+      "task_level_unnecessary_hold": true,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": true,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": [
+        "conclusion_changing_omission=yes is defensible as exclusion of the source-eligible 16–17 age range, although the surface edit is a substitution. The counterexample is grounded in the stipulated inclusive age rule.",
+        "required_answer_missing=yes treats a wrong age answer as a missing correct answer; the answer text is present. M1 uses no. Record this semantic-field inconsistency separately from the correct factual diagnosis."
+      ]
+    },
+    {
+      "output": "U94-M1.json",
+      "sha256": "07176e6287cca64fd77158682690fc0534ae553424a26796e90cbb30160c9071",
+      "unit_id": "U94",
+      "method": "M1",
+      "context": "EX",
+      "case": "wrong_candidate_with_wrong_original",
+      "decision": "hold",
+      "local_action": "hold",
+      "source_grounded_factual_diagnosis": true,
+      "instruction_consistent_action": true,
+      "preregistered_local_endpoint_success": false,
+      "failure_cause": "Source-resolvable abstention under explicit restoration-conflict hold instruction; stipulated repair endpoint not achieved.",
+      "task_level_unnecessary_hold": true,
+      "instruction_unwarranted_hold": false,
+      "quote_checks": [
+        {
+          "field": "original_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "candidate_quote",
+          "exact_substring": true
+        },
+        {
+          "field": "source_quote",
+          "exact_substring": true
+        }
+      ],
+      "schema_structure_and_enums_valid": true,
+      "patch_count": 0,
+      "patch_anchor_check": "NA: no patches",
+      "collateral_change": false,
+      "blind_original_restoration": false,
+      "remaining_candidate_source_contradiction": true,
+      "unsupported_full_verification_claim": false,
+      "unsupported_factual_error_claim": false,
+      "notes": [
+        "conclusion_changing_omission=yes is defensible as exclusion of the source-eligible 16–17 age range, although the surface edit is a substitution. The counterexample is grounded in the stipulated inclusive age rule."
+      ]
+    }
+  ],
+  "all_quote_checks_pass": true,
+  "raw_files_modified": false,
+  "comparative_conclusion": "Equal primary endpoint outcomes; no observed alignment benefit, no observed blind restoration. M1 U26 has an additional unsupported omission label, so equality of headline outcomes does not establish equal full-contract quality."
+}

@@ -1,0 +1,141 @@
+{
+  "unit_id": "D171",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "Is human review alone sufficient, and what are the AND/OR conditions for the editorial exception?",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "yes",
+      "optional_clarification": "no",
+      "required_answer_missing": "yes",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "and a named editor must sign responsibility for its publication. Human review alone does not meet this exception.",
+      "candidate_quote": "For the editorial exception, a notice must receive human review or editorial control.",
+      "source_refs": [
+        "S1, Sections 1, 2 and 4"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, editorial exception",
+            "quote": "The editorial exception applies if (human review OR editorial control) AND a named editor's signed responsibility for publication are present."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, sufficiency clarification",
+            "quote": "Human review by itself is insufficient."
+          },
+          "relation": "supports",
+          "relevance_to_claim": "The candidate retains the review/control alternative but omits the mandatory signature conjunct and gives no explicit answer on whether review alone suffices. Later attributed discussion of signatures does not specify this eligibility condition."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, label rule",
+            "quote": "A public notice containing generated text must bear the archive's generated-text label."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "Section 2",
+            "quote": "A public notice is text placed on the archive's open noticeboard for visitors. Private draft messages are not public notices."
+          },
+          "relation": "definition",
+          "relevance_to_claim": "The correction concerns the editorial exception for generated-text public notices; the candidate already preserves the definition and private-draft exclusion."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, editorial exception",
+            "quote": "The editorial exception applies if (human review OR editorial control) AND a named editor's signed responsibility for publication are present."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "Section 1",
+            "quote": "This handbook takes effect on 1 June 2034."
+          },
+          "relation": "effective_date",
+          "relevance_to_claim": "The final stipulated handbook applies during the 1–5 June batch; its effective date is already stated correctly."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, editorial exception",
+            "quote": "The editorial exception applies if (human review OR editorial control) AND a named editor's signed responsibility for publication are present."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, training exception",
+            "quote": "The separate training exception applies to a recorded rehearsal notice that remains on the staff-only training board; it does not apply when that notice is copied to the open noticeboard."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "The signature conjunct belongs to the editorial exception. The separate training exception and its copying restriction are already intact and remain unchanged."
+        }
+      ],
+      "changed_proposition_or_counterexample": "The candidate gives only human review OR editorial control as the stated editorial eligibility condition. The correction makes explicit that either route also requires a named editor’s signed responsibility and that review alone is insufficient. The candidate’s necessary-condition statement is not itself directly contradicted by S1, but the omitted conjunct changes the stated scope.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "Restore the lost mandatory signature condition and the explicit answer on review alone. The criticism and rebuttal elsewhere do not restore this rule; all attributed normative positions remain untouched."
+    },
+    {
+      "id": "F2",
+      "question_part": "How many notices in the 1–5 June batch were granted the editorial exemption?",
+      "origin": "inherited",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "Of those reviewed, 11 qualified",
+      "candidate_quote": "Of those reviewed, 9 qualified",
+      "source_refs": [
+        "S2, batch ledger"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "Editorial exemption count",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": {
+            "document_id": "S2",
+            "locator": "Batch window and unit",
+            "quote": "Submission window: 1–5 June 2034 inclusive."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "Nine is the supported exemption count for the same batch. The candidate also preserves the notice unit, 28 submissions, four withdrawals before review, and 24 reviews."
+        }
+      ],
+      "changed_proposition_or_counterexample": "The original gives 11 exemptions; the candidate correctly gives 9. Restoring 11 would introduce an error.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "This change corrects an inherited original error and must be retained."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F1",
+      "before": "For the editorial exception, a notice must receive human review or editorial control.",
+      "after": "For the editorial exception, a notice must receive human review or editorial control, and a named editor must sign responsibility for its publication. Human review alone does not meet this exception.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The single patch restores the editorial eligibility condition without altering the separate training exception or the attributed fairness debate. The candidate’s correction from 11 to 9 exemptions is retained. After the patch, all question parts are answered consistently with the complete stipulated fictional sources; no unresolved version, timing or coverage limit remains within this task.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

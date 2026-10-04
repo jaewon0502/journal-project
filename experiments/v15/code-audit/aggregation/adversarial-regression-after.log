@@ -1,0 +1,20 @@
+test_duplicate_blind_is_rejected (__main__.AggregationRegression.test_duplicate_blind_is_rejected) ... ok
+test_duplicate_is_rejected (__main__.AggregationRegression.test_duplicate_is_rejected) ... ok
+test_empty_mapping_is_rejected_without_overwriting (__main__.AggregationRegression.test_empty_mapping_is_rejected_without_overwriting) ... ok
+test_foreign_phase_is_distinguished (__main__.AggregationRegression.test_foreign_phase_is_distinguished) ... ok
+test_incomplete_mapping_is_rejected (__main__.AggregationRegression.test_incomplete_mapping_is_rejected) ... ok
+test_invalid_foreign_blind_id_is_structured (__main__.AggregationRegression.test_invalid_foreign_blind_id_is_structured) ... ok
+test_invalid_foreign_raw_id_is_structured (__main__.AggregationRegression.test_invalid_foreign_raw_id_is_structured) ... ok
+test_invalid_id_containers_are_structured (__main__.AggregationRegression.test_invalid_id_containers_are_structured) ... ok
+test_invalid_id_values_are_structured_and_existing_output_unchanged (__main__.AggregationRegression.test_invalid_id_values_are_structured_and_existing_output_unchanged) ... ok
+test_invalid_raw_id_is_structured (__main__.AggregationRegression.test_invalid_raw_id_is_structured) ... ok
+test_missing_is_rejected (__main__.AggregationRegression.test_missing_is_rejected) ... ok
+test_same_extra_count_cannot_hide_missing (__main__.AggregationRegression.test_same_extra_count_cannot_hide_missing) ... ok
+test_unknown_extra_is_rejected (__main__.AggregationRegression.test_unknown_extra_is_rejected) ... ok
+test_valid_result_matches_legacy_exactly (__main__.AggregationRegression.test_valid_result_matches_legacy_exactly) ... ok
+test_valid_shared_output_keeps_assigned_denominators (__main__.AggregationRegression.test_valid_shared_output_keeps_assigned_denominators) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.013s
+
+OK

@@ -1,0 +1,139 @@
+[
+  {
+    "language": "ko",
+    "article": {
+      "url": "https://www.khan.co.kr/article/202604232039005",
+      "title": "반도체 중심 수출 호조에…1분기 1.7% ‘깜짝 성장’",
+      "dates": {
+        "publication": "2026-04-23T20:39:00+09:00",
+        "modified": "2026-04-23T22:43:00+09:00",
+        "event": "2026-04-23 BOK advance release",
+        "measurement_period": "2026 Q1",
+        "collection": "2026-10-03T13:53:18.127075+00:00"
+      }
+    },
+    "article_text_sha256": "296e00778cb34d16a8a349a70d7472bfdb08a84fb4b999be3a62c39a7e7eb7b2",
+    "article_characters": 1244,
+    "sources": [
+      {
+        "id": "공보 2026-04-24호",
+        "url": "https://www.bok.or.kr/fileSrc/portal/c7597db684a44fef969442faf012bd20/1/de5d5987539244efa4497079fa5f8182.pdf",
+        "landing_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=10097644&menuNo=201264",
+        "title": "2026년 1/4분기 실질 국내총생산(속보)",
+        "dates": {
+          "publication": "2026-04-23",
+          "release_embargo": "2026-04-23T08:00:00+09:00",
+          "measurement_period": "2026 Q1",
+          "collection": "2026-10-03T13:53:18.127075+00:00"
+        },
+        "characters": 44687,
+        "text_sha256": "7f06c76305251674216c59fe9099327a4f8a8cdaa35ca3b2a5903fdd3c72c1ad"
+      }
+    ],
+    "scope": {
+      "candidate_events_considered": 2,
+      "candidate_events": [
+        "2025 annual/Q4 GDP (search only; not selected)",
+        "2026 Q1 advance GDP (selected)"
+      ],
+      "article_access": "Full publicly served article prose and subheads read via web open; direct urllib received 403. No paywall/auth bypass. Article image chart not transcribed into article text; web original reference retained. AI summary, navigation, related articles, and controls excluded. Eight prose paragraphs are complete.",
+      "source_access": "Full 20-page primary PDF downloaded and all extracted text read (cover + numbered pages 1–19). PDF is preserved exactly. Main GDP/GDI table visually inspected at physical page 3. PDF page 11 says detailed statistical tables available only via ECOS; those linked tables were not accessed and are outside this collected source.",
+      "metrics": [
+        "South Korea real GDP quarter-on-quarter growth, seasonally adjusted, 2020 chained prices, advance vintage 2026-04-23: 1.7%",
+        "South Korea real GDI quarter-on-quarter growth, same conditions/vintage: 7.5%"
+      ],
+      "same_target_facts": "GDP 1.7% appears in article lead, main announcement paragraph, contribution paragraph and GDP/GDI comparison; exact target matches primary 1.7%.",
+      "identifier_evidence": {
+        "release_identifier": "공보 2026-04-24호 printed on cover; identifies release, not a row",
+        "official_page_identifier": "nttId=10097644 identifies BOK release page",
+        "official_classification": "Printed page 19 maps 경제활동별 국내총생산(p.2) to ECOS 2.1.2.1.2 경제활동별 GDP 및 GNI (계절조정, 실질, 분기); classification is externally printed but is not claimed to be an independently fetched ECOS API series/row ID.",
+        "row_column_identity": "Printed p.2 rows 국내총생산(GDP) and 국내총소득(GDI), column 2026p 1/4; table header 2020년 연쇄가격 기준 / 계절조정계열, 전기대비, %. Parentheses mean original-series YoY, not QoQ. Physical PDF page 3 screenshot confirms layout.",
+        "explicit_relation": "Printed p.13 defines real GDI = real GDP + real trade gain/loss due to terms-of-trade changes. Primary already includes both labels, values and relationship; any later presentation contextualizes existing evidence, does not add newly discovered independent data.",
+        "invented_identifiers": false
+      },
+      "mutation_status": "No mutation made; original is not asserted erroneous. Any subsequent controlled mutation must be explicitly separate."
+    },
+    "supplement": "Original article chart later obtained and shown to BOTH arms; original collection scope preserved above."
+  },
+  {
+    "language": "en",
+    "article": {
+      "url": "https://abc7ny.com/post/nasa-super-earth-exoplanet-toi-715-b/14388381/",
+      "title": "NASA announces new 'super-Earth': Exoplanet orbits in 'habitable zone,' is only 137 light-years away",
+      "author": "Leah Sarnoff",
+      "publisher": "ABC7 New York / ABC News",
+      "dates": {
+        "published": "2024-02-05T19:50:00.000Z",
+        "modified": "2024-02-06T13:29:42.000Z",
+        "collected_utc": "2026-10-03T13:53:22.293460+00:00",
+        "event": "Discovery reported in 2023; NASA release 2024-01-31; report discusses it in February 2024."
+      }
+    },
+    "article_text_sha256": "4f10cffbf6afecb8a26001c1d4cb18f3a2d7fad42b352c37907a9659e6a85425",
+    "article_characters": 2703,
+    "sources": [
+      {
+        "id": "arXiv:2305.06206v1",
+        "url": "https://arxiv.org/pdf/2305.06206",
+        "title": "A 1.55 R⊕ habitable-zone planet hosted by TOI-715, an M4 star near the ecliptic South Pole",
+        "dates": {
+          "arxiv_submitted": "2023-05-10",
+          "pdf_preprint_label": "2023-05-11",
+          "accepted": "2023-05-10",
+          "received": "2023-05-09",
+          "original_submission": "2022-11-03",
+          "collected_utc": "2026-10-03T13:53:22.293460+00:00"
+        },
+        "role": "Complete primary discovery research by Georgina Dransfield et al.; independently authored from ABC News.",
+        "characters": 139493,
+        "text_sha256": "816e430e2f1615d61ff76aca81d40573287ffd05ab9d165ec18eb8dd08c7c3e4"
+      },
+      {
+        "id": "https://science.nasa.gov/universe/exoplanets/discovery-alert-a-super-earth-in-the-habitable-zone/",
+        "url": "https://science.nasa.gov/universe/exoplanets/discovery-alert-a-super-earth-in-the-habitable-zone/",
+        "title": "Discovery Alert: A ‘Super-Earth’ in the Habitable Zone",
+        "author": "Pat Brennan",
+        "dates": {
+          "published": "2024-01-31",
+          "page_last_updated": "2025-12-16",
+          "collected_utc": "2026-10-03T13:53:22.293460+00:00"
+        },
+        "role": "Full NASA announcement cited in news; supplemental agency source, not a substitute for primary paper.",
+        "characters": 4236,
+        "text_sha256": "3ee64917b3415309fb59e20fd33927d08f86930879436bf5415893b4aed45643"
+      }
+    ],
+    "scope": {
+      "language": "en",
+      "candidate_events_considered": 1,
+      "event": "TOI-715 b discovery and second candidate TIC 271971130.02",
+      "completeness": "All 11 article body paragraphs plus in-body figure caption, headline, deck and byline; entire 19-page primary PDF extracted without clipping; full NASA prose and figure caption. Navigation, related-story modules, share controls excluded from normalized news texts. Exact raw HTML/PDF retained. PDF text extraction preserves layout but mathematical glyphs/superscripts can be imperfect; use original PDF for visual checking.",
+      "source_native_relational_witness": {
+        "source_id": "arXiv:2305.06206v1",
+        "location": "Table 3, PDF page 11, full page in table3-whole-page.txt; full table caption, both target column headings, all parameter rows and Source column retained.",
+        "published_identifiers": [
+          "TOI-715 b",
+          "TIC 271971130.02"
+        ],
+        "host_cross_identification": "Abstract explicitly identifies host as TOI-715/TIC 271971130.",
+        "measurement_targets": [
+          "TOI-715 b",
+          "TIC 271971130.02"
+        ],
+        "metrics": [
+          "P (d)",
+          "Companion radius; Rp (R⊕)",
+          "Instellation; Sp (S⊕)",
+          "Equilibrium temperature; Teq (K)"
+        ],
+        "conditions": "Table Source column: 2-planet linear fit. Table caption: equilibrium temperature assumes albedo 0.3, emissivity 1. Second planet remains candidate/unconfirmed.",
+        "same_target_facts": "ABC reports TOI-715 b width about 1.5 times Earth and period 19 Earth days. Paper Table 3 assigns radius 1.550 ± 0.064 Earth radii and period 19.288004 +0.000027/-0.000024 days to TOI-715 b; separate candidate radius 1.066 ± 0.092 and period 25.60712 +0.00031/-0.00036. These are external source relations, not model-invented identities."
+      },
+      "cautions": [
+        "Original article is not alleged to be wrong. No controlled mutations performed.",
+        "NASA prose contains literal TOI-175 b once; retained verbatim, not silently corrected. Primary Table 3 provides identifiers.",
+        "The NASA page is updated in 2025; do not treat collection/update dates as the discovery event date."
+      ]
+    }
+  }
+]

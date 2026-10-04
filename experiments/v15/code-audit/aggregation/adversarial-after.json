@@ -1,0 +1,44 @@
+[
+  {
+    "value": null,
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": true,
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": 1,
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": 1.0,
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": "",
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": [],
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": {},
+    "status": "JudgmentIdentityError",
+    "judged": null,
+    "output_written": false
+  }
+]

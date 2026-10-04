@@ -1,0 +1,6 @@
+{
+  "K731": "Supported different object; exact keep, no hold",
+  "K842": "Same-object area conflict; correct to 20x20 metres or400sqm, preserve actor/property",
+  "K953": "Both sources correctly attributed; exact keep, no hold",
+  "K164": "Both numerical facts supported but whole release attribution wrong; preserve both values and give second to separate note, not delete/hold"
+}

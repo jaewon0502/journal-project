@@ -1,0 +1,70 @@
+{
+  "unit_id": "e28f91c4",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "5월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "14일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "relation": "supported",
+      "comparison_ids": [
+        "received_target"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이번 기록의 대상은 납품번호 L514인 한 차례 배송뿐이다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        }
+      ],
+      "reason": "The stated unit is boxes and S1 confirms receipt of eight inspected boxes for shipment L514. The same contents weigh 192 kilograms overall and 24 kilograms per box; those mass values do not contradict the box count. Preserve the wording without stylistic revision."
+    }
+  ],
+  "patches": [],
+  "full_edited_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

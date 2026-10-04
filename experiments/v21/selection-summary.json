@@ -1,0 +1,183 @@
+{
+  "native_selection_outputs": 16,
+  "new_model_calls_during_replay": 0,
+  "rows": [
+    {
+      "phase": "development",
+      "unit_id": "Q593",
+      "policy": "A",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "590a6e77ec9e07c5fa422bb05d71a4f367b2593ea1e372d97a0fbc804d2aa568",
+      "release_state": "candidate_scope_only",
+      "input_chars": 581,
+      "output_chars": 945
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q593",
+      "policy": "B",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "590a6e77ec9e07c5fa422bb05d71a4f367b2593ea1e372d97a0fbc804d2aa568",
+      "release_state": "candidate_scope_only",
+      "input_chars": 581,
+      "output_chars": 945
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q628",
+      "policy": "A",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "41148b97fd217cc411465cdba27521c99d0109a43485e5086ccecec88c6d913b",
+      "release_state": "candidate_scope_only",
+      "input_chars": 621,
+      "output_chars": 1145
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q628",
+      "policy": "B",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "41148b97fd217cc411465cdba27521c99d0109a43485e5086ccecec88c6d913b",
+      "release_state": "candidate_scope_only",
+      "input_chars": 621,
+      "output_chars": 1178
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q731",
+      "policy": "A",
+      "decision": "apply",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "c0d40f3430c5e0220bcabe92f2eaa3da00c43acc97351ebdf743b992ecb7e359",
+      "release_state": "candidate_scope_only",
+      "input_chars": 49214,
+      "output_chars": 1698
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q731",
+      "policy": "B",
+      "decision": "apply",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "c0d40f3430c5e0220bcabe92f2eaa3da00c43acc97351ebdf743b992ecb7e359",
+      "release_state": "candidate_scope_only",
+      "input_chars": 49214,
+      "output_chars": 1803
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q846",
+      "policy": "A",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "e57974229f5ba1fc42535fe39c04f018cd965a88648cdb9a9c81af72301b6ebf",
+      "release_state": "candidate_scope_only",
+      "input_chars": 3303,
+      "output_chars": 1570
+    },
+    {
+      "phase": "development",
+      "unit_id": "Q846",
+      "policy": "B",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "e57974229f5ba1fc42535fe39c04f018cd965a88648cdb9a9c81af72301b6ebf",
+      "release_state": "candidate_scope_only",
+      "input_chars": 3303,
+      "output_chars": 1729
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U407",
+      "policy": "A",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67238,
+      "output_chars": 1201
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U407",
+      "policy": "B",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67238,
+      "output_chars": 1156
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U518",
+      "policy": "A",
+      "decision": "apply",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67193,
+      "output_chars": 1344
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U518",
+      "policy": "B",
+      "decision": "apply",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67193,
+      "output_chars": 1360
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U629",
+      "policy": "A",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67201,
+      "output_chars": 1228
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U629",
+      "policy": "B",
+      "decision": "reject",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "0492da23daf64c3c2d4c5bbae31df7677402eddd46b125afdee6c8669d4102ba",
+      "release_state": "candidate_scope_only",
+      "input_chars": 67201,
+      "output_chars": 1145
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U740",
+      "policy": "A",
+      "decision": "hold",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "e5ff5c3eea00ac02828f34efd6b64c3a775e7c54a3cf11ff9e992def53484a38",
+      "release_state": "held_not_publishable",
+      "input_chars": 67194,
+      "output_chars": 1976
+    },
+    {
+      "phase": "transfer",
+      "unit_id": "U740",
+      "policy": "B",
+      "decision": "hold",
+      "AI_pre_agreement": true,
+      "mechanical_delivery_sha256": "e5ff5c3eea00ac02828f34efd6b64c3a775e7c54a3cf11ff9e992def53484a38",
+      "release_state": "held_not_publishable",
+      "input_chars": 67194,
+      "output_chars": 1790
+    }
+  ],
+  "limits": "Saved AI judgments, not human truth; candidate-scope decisions, not whole-article release certification. Hold leaves unresolved text and is not a correction success."
+}

@@ -1,0 +1,896 @@
+{
+  "audit_stage": "POST",
+  "auditor": "independent internal AI; no human-validation claim",
+  "scope": "All 18 authorized J*.json blind records and previously authorized originals/PRE only; no policies, mapping, raw, or browsing. No method names inferred.",
+  "pre_preserved_sha256": "123239f7a7f014689d23389f72b1a51379344eb7c6c7a3f6e31348090251404b",
+  "records": [
+    {
+      "blind_id": "J200",
+      "unit_id": "X081",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C3",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J217",
+      "unit_id": "X124",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C3",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C2"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J234",
+      "unit_id": "X196",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C3",
+          "independent_components": "wild occurrence + report proof",
+          "classification": "different_statuses_dual_axes",
+          "consequence": "World and attribution differ; dual axes and rationale preserve the distinction, with literal proposition-label ambiguity noted separately."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [
+        {
+          "claim_id": "C3",
+          "kind": "proposition_label_scope_ambiguity",
+          "literal_proposition_assessment": "The explicitly worded proposition that the report proved the effect is contradicted, not merely not established.",
+          "native_label": "fact_support=not_established; attribution_support=overstated",
+          "rationale_assessment": "Rationale correctly identifies the report scope conflict and unknown wild occurrence. Interpreting fact_support as the embedded world hypothesis reconciles the two axes. Interpreting it as the written whole proposition creates a label/rationale mismatch.",
+          "material_decision_disagreement": false,
+          "recommended_audit_normalization": "world occurrence: not_established; report proof: contradicted",
+          "actual_edit_impairment": false
+        }
+      ],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C3"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J251",
+      "unit_id": "X081",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J268",
+      "unit_id": "X124",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C3"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J285",
+      "unit_id": "X196",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [
+        {
+          "claim_id": "C5",
+          "kind": "attribution_only_axis",
+          "assessment": "fact_support=not_applicable and attribution_support=overstated separate the attribution axis. Normalize the report-proof proposition as contradicted; no factual decision/rationale disagreement."
+        }
+      ],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C4",
+              "C5"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J302",
+      "unit_id": "X081",
+      "surface_form": "reordered",
+      "full_edited_article": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C2",
+          "independent_components": "observation actor/action + laboratory + adults + count",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J319",
+      "unit_id": "X124",
+      "surface_form": "reordered",
+      "full_edited_article": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C2",
+          "independent_components": "supported observation actor/action + laboratory + adults; contradicted count",
+          "classification": "mixed_status_single_fact_verdict",
+          "consequence": "The single contradicted label covers a conjunction with supported components. Rationale localizes the count conflict and the delivered patch preserves supported content; this is a mixed-verdict granularity issue, not new factual loss."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C2"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J336",
+      "unit_id": "X196",
+      "surface_form": "reordered",
+      "full_edited_article": "야생에서의 효과는 이 보고서로 판단할 수 없다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "wild occurrence + report proof",
+          "classification": "different_statuses_dual_axes",
+          "consequence": "World and attribution differ; dual axes and rationale preserve the distinction, with literal proposition-label ambiguity noted separately."
+        },
+        {
+          "claim_id": "C2",
+          "independent_components": "observation actor/action + laboratory + adults + count",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [
+        {
+          "claim_id": "C1",
+          "kind": "proposition_label_scope_ambiguity",
+          "literal_proposition_assessment": "The explicitly worded proposition that the report proved the effect is contradicted, not merely not established.",
+          "native_label": "fact_support=not_established; attribution_support=overstated",
+          "rationale_assessment": "Rationale correctly identifies the report scope conflict and unknown wild occurrence. Interpreting fact_support as the embedded world hypothesis reconciles the two axes. Interpreting it as the written whole proposition creates a label/rationale mismatch.",
+          "material_decision_disagreement": false,
+          "recommended_audit_normalization": "world occurrence: not_established; report proof: contradicted",
+          "actual_edit_impairment": false
+        }
+      ],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C1"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J353",
+      "unit_id": "X081",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J370",
+      "unit_id": "X124",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C4"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J387",
+      "unit_id": "X196",
+      "surface_form": "joined",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C5",
+              "C6"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J404",
+      "unit_id": "X081",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C3",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J421",
+      "unit_id": "X124",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        },
+        {
+          "claim_id": "C3",
+          "independent_components": "temporal decrease + report attribution",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C2"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J438",
+      "unit_id": "X196",
+      "surface_form": "split",
+      "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C1",
+          "independent_components": "observation actor/action + laboratory + adults",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [
+        {
+          "claim_id": "C3",
+          "kind": "attribution_scope_leakage",
+          "assessment": "The isolated wild-world proposition has attribution_support=overstated although no attribution is in its wording; this belongs to C4. The rationale correctly says wild effects are unknown. No repair error or additional independent issue."
+        }
+      ],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C3",
+              "C4"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J455",
+      "unit_id": "X081",
+      "surface_form": "reordered",
+      "full_edited_article": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "No correction necessary; original retained exactly.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C6",
+          "independent_components": "observation actor/action + laboratory + adults + count",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J472",
+      "unit_id": "X124",
+      "surface_form": "reordered",
+      "full_edited_article": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "Only 18마리→12마리; temporal decrease and attribution preserved.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "supported after any count correction",
+        "source_recording": "supported",
+        "assessment": "Temporal 뒤 does not assert causation. No additional caveat needed."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C6",
+          "independent_components": "supported observation actor/action + laboratory + adults; contradicted count",
+          "classification": "mixed_status_single_fact_verdict",
+          "consequence": "The single contradicted label covers a conjunction with supported components. Rationale localizes the count conflict and the delivered patch preserves supported content; this is a mixed-verdict granularity issue, not new factual loss."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C6"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "sample_count"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    },
+    {
+      "blind_id": "J489",
+      "unit_id": "X196",
+      "surface_form": "reordered",
+      "full_edited_article": "야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "required_error_retained": [],
+      "normal_content_overedit": [],
+      "optional_content_overedit": [],
+      "new_meaning_loss": [],
+      "new_factual_error": [],
+      "unjustified_hold": [],
+      "necessary_correction_delivery": "False report-proof claim and asserted wild conclusion replaced locally by report limitation; laboratory/adult/12 observation preserved; no assertion that wild effects are absent.",
+      "protected_relations_preserved": true,
+      "world_support_vs_source_attribution": {
+        "world": "not_established",
+        "source_proof": "contradicted",
+        "delivery_preserves_unknown": true,
+        "assessment": "Native rationale preserves this distinction; see any label-scope notes."
+      },
+      "mixed_independent_propositions_per_verdict": [
+        {
+          "claim_id": "C6",
+          "independent_components": "observation actor/action + laboratory + adults + count",
+          "classification": "same_supported_status",
+          "consequence": "Bundled independently assessable components share supported status; no wrong factual outcome. Do not count component repetition as separate cases."
+        }
+      ],
+      "decision_rationale_disagreement": [],
+      "verdict_label_scope_notes": [
+        {
+          "claim_id": "C2",
+          "kind": "proposition_label_scope_ambiguity",
+          "literal_proposition_assessment": "The explicitly worded proposition that the report proved the effect is contradicted, not merely not established.",
+          "native_label": "fact_support=not_established; attribution_support=overstated",
+          "rationale_assessment": "Rationale correctly identifies the report scope conflict and unknown wild occurrence. Interpreting fact_support as the embedded world hypothesis reconciles the two axes. Interpreting it as the written whole proposition creates a label/rationale mismatch.",
+          "material_decision_disagreement": false,
+          "recommended_audit_normalization": "world occurrence: not_established; report proof: contradicted",
+          "actual_edit_impairment": false
+        }
+      ],
+      "proposed_vs_actual_delivery": {
+        "matches": true,
+        "patch_application_checks": [
+          {
+            "patch_id": "P1",
+            "anchor_occurrences": 1,
+            "linked_claim_ids": [
+              "C1",
+              "C2"
+            ]
+          }
+        ],
+        "differences": []
+      },
+      "unresolved_items_assessment": "Notes about unknown wild effects, where present, describe preserved epistemic uncertainty; they are not a withheld repair or unjustified hold.",
+      "atomic_issue_groups": [
+        "wild_world_assertion",
+        "report_proof_attribution"
+      ],
+      "deduplication": "Multiple quote anchors, claim rows, and shared patch references do not create additional input cases. Wild-world and report-proof propositions are independently assessable but one local patch can correct both."
+    }
+  ],
+  "grouped_findings": {
+    "delivery": "Every inspected complete delivered article implements only the necessary local edit, or correctly remains unchanged. No retained required error, unnecessary content edit, introduced meaning loss, unjustified hold, or proposal/delivery mismatch found.",
+    "mixed_status_single_fact_verdict": [
+      {
+        "blind_id": "J319",
+        "claim_id": "C2"
+      },
+      {
+        "blind_id": "J472",
+        "claim_id": "C6"
+      }
+    ],
+    "report_proof_label_scope_ambiguity": [
+      {
+        "blind_id": "J234",
+        "claim_id": "C3"
+      },
+      {
+        "blind_id": "J336",
+        "claim_id": "C1"
+      },
+      {
+        "blind_id": "J489",
+        "claim_id": "C2"
+      }
+    ],
+    "interpretive_limit": "These are granularity/label-scope observations. Dual support axes and explicit rationales prevent concluding that the outputs believe the wild effect is refuted. Do not convert them into delivery errors.",
+    "cross_surface_comparison": "Required correction decisions and actual factual outcomes are invariant for equivalent joined, split, and reordered inputs. Claim granularity and report-proof fact_support labels vary, including across equivalent outputs; preserve that distinction from repair quality.",
+    "atomic_grouping": "X081 supplies supported controls; X124 supplies a count contradiction; X196 supplies an unestablished wild-world assertion and contradicted proof attribution, corrected jointly. Repeated surface forms/anchors are observations of these relations, not newly discovered factual issues."
+  },
+  "limitations": [
+    "Small synthetic supplied corpus only.",
+    "No aggregate success score or statistical/human validation inference.",
+    "The supplied schema meanings were not inferred from hidden policies; ambiguous fact_support scope is reported explicitly."
+  ]
+}

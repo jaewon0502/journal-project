@@ -1,0 +1,69 @@
+{
+  "gate": {
+    "unit_id": "b8e035a1",
+    "article_sha256": "239dae52ac844b5ca58fa285d0b9a1140948ef7a7f809d28ce27132d43d0eef5",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "completion_target",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+        "article_span": [
+          0,
+          48
+        ],
+        "numeric_span": [
+          41,
+          43
+        ],
+        "original_numeric_token": "96",
+        "article_unit": "count",
+        "article_value": "96",
+        "expected_value": "96",
+        "normalized_expected_value": "96",
+        "dimension": "count"
+      },
+      {
+        "id": "other_scope",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "weekday_scope",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "b8e035a1",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

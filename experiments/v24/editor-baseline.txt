@@ -1,0 +1,1 @@
+The shared certificate is advisory. Independently decide which comparison is legitimate and whether its number differs; you may reject or supplement its reasoning by consulting sources. This is the existing explicit binding/counterexample procedure without an executable permission gate.

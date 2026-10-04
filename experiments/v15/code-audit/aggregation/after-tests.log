@@ -1,0 +1,13 @@
+test_duplicate_blind_is_rejected (__main__.AggregationRegression.test_duplicate_blind_is_rejected) ... ok
+test_duplicate_is_rejected (__main__.AggregationRegression.test_duplicate_is_rejected) ... ok
+test_foreign_phase_is_distinguished (__main__.AggregationRegression.test_foreign_phase_is_distinguished) ... ok
+test_missing_is_rejected (__main__.AggregationRegression.test_missing_is_rejected) ... ok
+test_same_extra_count_cannot_hide_missing (__main__.AggregationRegression.test_same_extra_count_cannot_hide_missing) ... ok
+test_unknown_extra_is_rejected (__main__.AggregationRegression.test_unknown_extra_is_rejected) ... ok
+test_valid_result_matches_legacy_exactly (__main__.AggregationRegression.test_valid_result_matches_legacy_exactly) ... ok
+test_valid_shared_output_keeps_assigned_denominators (__main__.AggregationRegression.test_valid_shared_output_keeps_assigned_denominators) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK

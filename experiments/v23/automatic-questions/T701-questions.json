@@ -1,0 +1,21 @@
+{
+  "unit_id": "T701",
+  "questions": [
+    {
+      "id": "T701-Q1",
+      "text": "Is electron spin a form of angular momentum?",
+      "covers_quote": "Electron spin is intrinsic angular momentum"
+    },
+    {
+      "id": "T701-Q2",
+      "text": "Is electron spin intrinsic?",
+      "covers_quote": "Electron spin is intrinsic"
+    },
+    {
+      "id": "T701-Q3",
+      "text": "Does electron spin involve literal rotation?",
+      "covers_quote": "rather than literal rotation"
+    }
+  ],
+  "omitted_spans": []
+}

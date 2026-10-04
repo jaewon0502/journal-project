@@ -1,0 +1,153 @@
+{
+  "audit_stage": "POST",
+  "scope": "Read only own frozen PRE and four blind JSON files. No mapping, oracle, policies, code or other audits were read. PRE was not modified.",
+  "assessment_basis": "Frozen PRE and synthetic source premises, assessing native proposal and actual delivery separately.",
+  "outputs": [
+    {
+      "blind_id": "S2173",
+      "unit_id": "unit_72f5d09d5937",
+      "preregistered_original_status": "contradicted_numerical_claim",
+      "native_proposal": {
+        "factual_assessment": "Correct. Matches whole rod R7 at 2026-04-12 10:00 and 20 C; converts exact 1.25 m to exact 125 cm and excludes the separate 14:00/80 C record.",
+        "false_contradictions": [],
+        "correct_minimal_repair": true,
+        "exact_normal_preservation": null,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "matches_preregistered_minimal_output": true
+      },
+      "actual_delivery": {
+        "factual_assessment": "Correct and exactly matches preregistered minimal output.",
+        "false_contradictions": [],
+        "correct_minimal_repair": true,
+        "exact_normal_preservation": null,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "review_required": [],
+        "matches_native_proposal": true
+      },
+      "source_anchors": [
+        "src_897101849a4f: 실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다.",
+        "src_897101849a4f: 두 기록은 온도 조건이 다르므로 서로 대체해서 인용할 수 없다."
+      ],
+      "assessment_note": "Single numerical replacement 126→125; every other character preserved."
+    },
+    {
+      "blind_id": "S2244",
+      "unit_id": "unit_72f5d09d5937",
+      "preregistered_original_status": "contradicted_numerical_claim",
+      "native_proposal": {
+        "factual_assessment": "Correct. Matches whole rod R7 at 2026-04-12 10:00 and 20 C; converts exact 1.25 m to exact 125 cm and excludes the separate 14:00/80 C record.",
+        "false_contradictions": [],
+        "correct_minimal_repair": true,
+        "exact_normal_preservation": null,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "matches_preregistered_minimal_output": true
+      },
+      "actual_delivery": {
+        "factual_assessment": "Correct and exactly matches preregistered minimal output.",
+        "false_contradictions": [],
+        "correct_minimal_repair": true,
+        "exact_normal_preservation": null,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "review_required": [],
+        "matches_native_proposal": true
+      },
+      "source_anchors": [
+        "src_897101849a4f: 실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다.",
+        "src_897101849a4f: 두 기록은 온도 조건이 다르므로 서로 대체해서 인용할 수 없다."
+      ],
+      "assessment_note": "Single numerical replacement 126→125; every other character preserved."
+    },
+    {
+      "blind_id": "S2315",
+      "unit_id": "unit_e4385c7df10c",
+      "preregistered_original_status": "supported_normal",
+      "native_proposal": {
+        "factual_assessment": "Correct. Matches whole rod R7 at 2026-04-12 10:00 and 20 C; converts exact 1.25 m to exact 125 cm and excludes the separate 14:00/80 C record.",
+        "false_contradictions": [],
+        "correct_minimal_repair": null,
+        "exact_normal_preservation": true,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "matches_preregistered_minimal_output": true
+      },
+      "actual_delivery": {
+        "factual_assessment": "Correct and exactly matches preregistered minimal output.",
+        "false_contradictions": [],
+        "correct_minimal_repair": null,
+        "exact_normal_preservation": true,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "review_required": [],
+        "matches_native_proposal": true
+      },
+      "source_anchors": [
+        "src_897101849a4f: 실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다.",
+        "src_897101849a4f: 두 기록은 온도 조건이 다르므로 서로 대체해서 인용할 수 없다."
+      ],
+      "assessment_note": "Supported original preserved character-for-character with no patches."
+    },
+    {
+      "blind_id": "S2386",
+      "unit_id": "unit_e4385c7df10c",
+      "preregistered_original_status": "supported_normal",
+      "native_proposal": {
+        "factual_assessment": "Correct. Matches whole rod R7 at 2026-04-12 10:00 and 20 C; converts exact 1.25 m to exact 125 cm and excludes the separate 14:00/80 C record.",
+        "false_contradictions": [],
+        "correct_minimal_repair": null,
+        "exact_normal_preservation": true,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "matches_preregistered_minimal_output": true
+      },
+      "actual_delivery": {
+        "factual_assessment": "Correct and exactly matches preregistered minimal output.",
+        "false_contradictions": [],
+        "correct_minimal_repair": null,
+        "exact_normal_preservation": true,
+        "supported_context_exactly_preserved": true,
+        "lost_conditions": [],
+        "unwanted_hold": false,
+        "review_required": [],
+        "matches_native_proposal": true
+      },
+      "source_anchors": [
+        "src_897101849a4f: 실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다.",
+        "src_897101849a4f: 두 기록은 온도 조건이 다르므로 서로 대체해서 인용할 수 없다."
+      ],
+      "assessment_note": "Supported original preserved character-for-character with no patches."
+    }
+  ],
+  "label_blinding": {
+    "explicit_arm_labels_present": false,
+    "potential_clues": [
+      {
+        "blind_ids": [
+          "S2244",
+          "S2386"
+        ],
+        "clue": "Reason text explicitly mentions gate restrictions; S2244 says eligible_mismatch and S2386 says normalized_equal. These reveal possible workflow mechanisms despite anonymous labels."
+      },
+      {
+        "blind_ids": [
+          "S2173",
+          "S2315"
+        ],
+        "clue": "Reasons lack those explicit gate-state terms, while using the common comparison_ids schema."
+      }
+    ],
+    "handling": "No arm identity was inferred or used. Assessments follow the frozen source-based criteria."
+  },
+  "conclusion": "Both anonymous outputs for the erroneous article correctly make only the required 126→125 repair in proposal and delivery. Both outputs for the supported article preserve it exactly with no patches. No false contradictions, lost conditions or unwanted holds were observed in these four outputs.",
+  "interpretation_limit": "Supplementary SI-unit pair coverage only; not aggregate holdout performance. No overall numerical score is assigned."
+}

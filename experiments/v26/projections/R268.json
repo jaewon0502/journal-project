@@ -1,0 +1,168 @@
+{
+  "unit_id": "R268",
+  "input_sha256": "529eb4ab7dd49750ea8462b68d8eecbf039537ddb9d32ecda652aba7db2d45e5",
+  "raw_sha256": "8c89507b4dcf2451093b0030874a3c6c42bc43651c27abcc9544645804423b50",
+  "original_sha256": "4fb046ebaada36a8471c8e3eb0012b19d62a0eb3c03d835c5fe53f43133f7d8e",
+  "final_sha256": "b5a25614cec4562a76c18969496f4d574f2b836b82ecfbd5eeaa63ef92ac3a7b",
+  "original_chars": 6966,
+  "final_chars": 8923,
+  "patch_count": 19,
+  "patches": [
+    {
+      "id": "P1",
+      "before_chars": 26,
+      "after_chars": 139,
+      "before_sha256": "c36c0d4a633dde19c35fedf27abfba2fa378cdd92f5f755fb7fbc731af1a6fb7",
+      "after_sha256": "d461abeed95a6d7e3d171026a3ea48183e0f7a7a03e8d1e09627d75e0afb4b72",
+      "position_in_sequential_input": 528
+    },
+    {
+      "id": "P2",
+      "before_chars": 141,
+      "after_chars": 264,
+      "before_sha256": "a3cbe01d7e9ea8f602b350445e144a2413c11a210d2a23833c423ad7af003d85",
+      "after_sha256": "ecb09c8fd7117c2e8268ea6f06430d9f4d31354f2bae11edc2e1a80662708693",
+      "position_in_sequential_input": 1626
+    },
+    {
+      "id": "P3",
+      "before_chars": 171,
+      "after_chars": 276,
+      "before_sha256": "2d43c1fd744f4365ed05963195bd589d84ba9da5e8004ac9a1cd7c44b80d66e6",
+      "after_sha256": "415c0c0abcef48e976e70ff2e680acb46cd96a8ec39761f5b70c49cbbf9d8b84",
+      "position_in_sequential_input": 2046
+    },
+    {
+      "id": "P4",
+      "before_chars": 90,
+      "after_chars": 144,
+      "before_sha256": "60827f3bce45c781df9c6b4987677e03e307b4af554b0d99fc5b678fae676b12",
+      "after_sha256": "c09beff7d5529c3364e614dfe96180c8f232be10da22f13ceb3431a69165f9cf",
+      "position_in_sequential_input": 2431
+    },
+    {
+      "id": "P5",
+      "before_chars": 100,
+      "after_chars": 222,
+      "before_sha256": "1468a1bbe15bd2b0f03cea17e84168187d7f1841097cc0df415c9d5949d70e45",
+      "after_sha256": "87cfb2de379aa9f0799539575d39824ca65d005378d4056750b3c198ef5e4fb9",
+      "position_in_sequential_input": 2780
+    },
+    {
+      "id": "P6",
+      "before_chars": 75,
+      "after_chars": 189,
+      "before_sha256": "61cebeea853e18887e6810c0517b1a7ec7c4f327b90f098964ef8ec2102ed1ca",
+      "after_sha256": "936d361ac2f12173c6304d67e0e97a9e4568e149c2b8cf7d2921b456bada88b1",
+      "position_in_sequential_input": 3073
+    },
+    {
+      "id": "P7",
+      "before_chars": 81,
+      "after_chars": 201,
+      "before_sha256": "59eddd0dd9c1d8b6e10a63908167eb94d3d94bed0b27acd80b8dbbcfabcf871d",
+      "after_sha256": "062db552548eed797299082cfd1dab13d634f13bcee2aabfbaac241869e25217",
+      "position_in_sequential_input": 3751
+    },
+    {
+      "id": "P8",
+      "before_chars": 100,
+      "after_chars": 237,
+      "before_sha256": "9966b86cf12f82f7589e24e45968215d79c5f9a8ed3fd0819f80683af3dfd832",
+      "after_sha256": "48287546c8cd096a56e8372eb0cc60e71ea56807485ec579442fdab47509a981",
+      "position_in_sequential_input": 4051
+    },
+    {
+      "id": "P9",
+      "before_chars": 78,
+      "after_chars": 210,
+      "before_sha256": "34c9ddb8d73b90414e43bca1f21f33e862f16fef2efb15d86e54fefaa234961c",
+      "after_sha256": "61c29515a8772f013412327623525cb756ea80de6ef539aa4a4ffc99ab55c1e6",
+      "position_in_sequential_input": 4404
+    },
+    {
+      "id": "P10",
+      "before_chars": 127,
+      "after_chars": 234,
+      "before_sha256": "d71c48b11c70a4a4ac8b6e310a9520ce67480d9027ba25eecfa7f13197fc4656",
+      "after_sha256": "e6fff64e8c3cf92e95811849963471f0dc1ea538f59b2caa1fd35bf948004224",
+      "position_in_sequential_input": 4685
+    },
+    {
+      "id": "P11",
+      "before_chars": 95,
+      "after_chars": 202,
+      "before_sha256": "c418b483f10d9493e6afc42d25fae40f76bbfcbf0a08fe5099f3e9186409199a",
+      "after_sha256": "04dec71dfc43872092f0c3ed4f1362680901f85aa9bfa46875ccbab5780910b9",
+      "position_in_sequential_input": 4921
+    },
+    {
+      "id": "P12",
+      "before_chars": 66,
+      "after_chars": 208,
+      "before_sha256": "9119c0cce171178c791da7b7d2847651208d26c9d5a6cae1e7167b5318a09bc2",
+      "after_sha256": "eda5a3eaadc58f9958b838ad6a4f024a678fd2d63dc176ab6d4e34f88c5eadbf",
+      "position_in_sequential_input": 5454
+    },
+    {
+      "id": "P13",
+      "before_chars": 84,
+      "after_chars": 193,
+      "before_sha256": "49ff8dadaf150d4a27a1220f3fbccdca429a0ac8f37919070f4bfa398b042bf5",
+      "after_sha256": "aa174fde44d00e382786be7dad414a59a2c43da317337c89de88695094db6dcb",
+      "position_in_sequential_input": 5740
+    },
+    {
+      "id": "P14",
+      "before_chars": 111,
+      "after_chars": 250,
+      "before_sha256": "25d8ca79046929237a6749ea128d362a013b00fbac149b3014da6d5c55e851e1",
+      "after_sha256": "598c6a90c26a74665a9da8cc1c82278add374765537980e4e2407a4f97ce34d9",
+      "position_in_sequential_input": 5934
+    },
+    {
+      "id": "P15",
+      "before_chars": 93,
+      "after_chars": 201,
+      "before_sha256": "5c50d1b2ca179cb2ecdd97ac308ec1c0509598523a9866775181243ce2408a61",
+      "after_sha256": "ade4549aaa7c52e49369de85ab7adf4957a82d54e2d35aa12d9b1eba8a57ccf7",
+      "position_in_sequential_input": 6278
+    },
+    {
+      "id": "P16",
+      "before_chars": 123,
+      "after_chars": 147,
+      "before_sha256": "0e84a87abd645c300e046c1afe2724924c2aa4ad2e01c6c1d5529c064b9ed5d7",
+      "after_sha256": "91bb34584056bc5c1f481e980ffeef8ede3b7c5d9849f47d66df185af0947f06",
+      "position_in_sequential_input": 6671
+    },
+    {
+      "id": "P17",
+      "before_chars": 174,
+      "after_chars": 216,
+      "before_sha256": "0fcff5fc3b564a87025b122ae0ac633ca936c1b84e5929266dc6204f4271ccf4",
+      "after_sha256": "14f16561b5f543050ba6290cb4ca9507dc469cf48b1d546a1c9331bdf5c348d5",
+      "position_in_sequential_input": 6896
+    },
+    {
+      "id": "P18",
+      "before_chars": 34,
+      "after_chars": 186,
+      "before_sha256": "0aa48e055f789ae0b590bc54b4a1b8bff3c2d98fe7410082f02ec9e6cf563815",
+      "after_sha256": "4d74035817453097e6dcd1347fcb4a48f45990b639c33b3a15045c941f342455",
+      "position_in_sequential_input": 7808
+    },
+    {
+      "id": "P19",
+      "before_chars": 223,
+      "after_chars": 230,
+      "before_sha256": "385ac94756d275ab91ea90ea94330fa99f312bb23df6dfe82eb32f0054e8116c",
+      "after_sha256": "a8493257d1d5ab3dd6b8b69fbf3c60e258b3edb6d14c5bda6bd8f0c956013e0e",
+      "position_in_sequential_input": 7996
+    }
+  ],
+  "clause_count": 59,
+  "annotation_count": 15,
+  "exact_literal_delivery": true,
+  "notice": "Public projection omits full article, quotations and edits that would collectively reproduce it. Private raw/input preserved."
+}

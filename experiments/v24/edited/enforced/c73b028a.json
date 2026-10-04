@@ -1,0 +1,70 @@
+{
+  "unit_id": "c73b028a",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "4월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "8일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "relation": "supported",
+      "comparison_ids": [
+        "actual_dispatch"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "오후에는 추가 입고나 발송이 없었다."
+        }
+      ],
+      "reason": "S1 states that the east depot dispatched all 45 booked parcels and that there were no afternoon dispatches. Thus 45 is also its finalized daily actual dispatch total. West-depot dispatch and future west plans cannot contradict the east quantity."
+    }
+  ],
+  "patches": [],
+  "full_edited_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

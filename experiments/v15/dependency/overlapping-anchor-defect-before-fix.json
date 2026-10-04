@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "original": "aaa",
+  "patches": [
+    {
+      "id": "P",
+      "before": "aa",
+      "after": "X"
+    }
+  ],
+  "expected": "ValueError for ambiguous anchor",
+  "actual_candidate": "Xa",
+  "all_occurrence_offsets": [
+    0,
+    1
+  ]
+}

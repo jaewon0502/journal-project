@@ -1,0 +1,136 @@
+{
+  "scope": {
+    "reviewed_files": [
+      "code_v2/gate.py",
+      "code_v2/delivery.py",
+      "code_v2/test_gate.py"
+    ],
+    "prior_audit_used": "code-audit.json",
+    "read_experiment_cases": false,
+    "read_experiment_outcomes": false,
+    "network_used": false,
+    "implementation_modified": false,
+    "scoring_modified": false,
+    "v2_sha256": {
+      "code_v2/gate.py": "dd7ab5056efc6fb22cbd40d05d77e393d5f996014ce6dfcd032bfb8cd5b900f2",
+      "code_v2/delivery.py": "afd7e47feccf2ac756664c182a674d53507b63cccadb667ffde3cc8444e76f99",
+      "code_v2/test_gate.py": "6e7ea42b4b3c6bf4b89fa7f34b1ac73884f8b8d55481e39d7d5cce0a2a2e2adb"
+    }
+  },
+  "conclusion": "Bounded independent review verifies the previously reproduced structural failures are blocked in v2 while legitimate numeric edits, unit normalization and typed arithmetic controls pass. False semantic A/B certificates still pass, as explicitly declared. This is verification of the targeted structural repairs, not semantic correctness certification or an exhaustive correctness proof.",
+  "v1_preservation": {
+    "all_three_original_code_files_unchanged": true,
+    "comparison": {
+      "code/gate.py": true,
+      "code/delivery.py": true,
+      "code/test_gate.py": true
+    },
+    "evidence": "Current original code file SHA-256 digests match digests captured in the preserved v1 audit. v1 audit JSON was read but not rewritten.",
+    "qualification": "This verifies original code/gate.py, code/delivery.py and code/test_gate.py; it does not make claims about other experiment artifacts."
+  },
+  "structural_fixes_verified": [
+    {
+      "prior_id": "S1",
+      "status": "verified for tested cases",
+      "checks": [
+        "A permission cannot authorize the numeric token in B.",
+        "Unknown IDs mixed with an eligible ID are rejected.",
+        "Wrong gate unit_id and article hash block delivery.",
+        "Unrelated B contradicted row referencing A is flagged for review."
+      ],
+      "mechanism": "Trusted gate output binds unit/article digest and exact numeric span; every reference must be eligible and bind the changed numeric token."
+    },
+    {
+      "prior_id": "S2",
+      "status": "verified for tested cases",
+      "checks": [
+        "Arbitrary prose/unit replacement is blocked.",
+        "Wrong numeric replacement is blocked.",
+        "Correct numeric value in the original unit is accepted."
+      ],
+      "mechanism": "Delivery compares nonnumeric segments, requires exactly one changed complete numeric token, and checks exact expected rational value for every referenced permission."
+    },
+    {
+      "prior_id": "S3",
+      "status": "verified for tested cases",
+      "checks": [
+        "3 m times 3 m asserted as 9 m is blocked.",
+        "300 cm squared yielding 9 m2 is accepted.",
+        "300 cm minus 1 m yielding 2 m is accepted."
+      ],
+      "mechanism": "Operands require units and are normalized before arithmetic; dimension exponent maps propagate through multiplication/division and additions/subtractions require equal dimensions."
+    },
+    {
+      "prior_id": "S4",
+      "status": "verified for tested cases",
+      "checks": [
+        "axes=[] returns a blocked comparison rather than throwing.",
+        "Included v2 suite exercises malformed unit, certificate, proposal, patch and audit-row structures."
+      ],
+      "mechanism": "Input validation and guarded operations retain original text and report blocked/review-required records instead of falling back to raw proposed text."
+    }
+  ],
+  "positive_controls": [
+    {
+      "case": "truthful same-unit mismatch",
+      "article": "A is 2 m. B is 7 m.",
+      "source": "A is 3 m. B is 7 m.",
+      "result": "A becomes 3 m; B unchanged"
+    },
+    {
+      "case": "truthful converted mismatch",
+      "article": "A is 2 km.",
+      "source": "A is 3000 m.",
+      "result": "2 km becomes 3 km"
+    },
+    {
+      "case": "truthful normalized equality",
+      "article": "A is 2 km.",
+      "source": "A is 2000 m.",
+      "result": "normalized_equal"
+    },
+    {
+      "case": "typed area",
+      "article": "A area is 2 m2.",
+      "source": "A is square with side 300 cm.",
+      "expression": "x*x",
+      "result": "2 m2 becomes 9 m2"
+    },
+    {
+      "case": "typed subtraction",
+      "article": "A is 1 m.",
+      "source": "A equals x minus y; x is 300 cm and y is 1 m.",
+      "expression": "x-y",
+      "result": "1 m becomes 2 m"
+    }
+  ],
+  "remaining_semantic_limitations": [
+    {
+      "case": "explicit false A/B identity certificate",
+      "article": "A is 2 m.",
+      "source": "B is 3 m.",
+      "certificate": "All axes falsely say same; article and source anchors are present and numeric values are accurately transcribed.",
+      "observed": "Gate returns eligible_mismatch and delivery changes A to 3 m. semantic_identity_verified and semantic_correctness_certified remain false.",
+      "assessment": "Expected acknowledged semantic limitation, not regression in structural repair. It is not evidence for actual A value."
+    },
+    {
+      "case": "meaning of source witnesses and assigned units",
+      "assessment": "Present source snippets and axis anchors do not prove semantic binding or truthful quantity/unit assignments. Article numeric token presence is now mechanically checked, but the gate does not fully parse text semantics."
+    }
+  ],
+  "operational_limits": [
+    "Gate artifacts must originate from the trusted evaluator; delivery does not authenticate them cryptographically. The v2 module states this trust assumption explicitly.",
+    "The token grammar and exact rational replacement policy are conservative; unsupported numeric formats or unrepresentable exact decimal replacements may require local review.",
+    "A proposal with both accepted and blocked patches can deliver accepted patches with status review_required; it does not claim all-or-nothing transaction semantics.",
+    "No cases/outcomes were inspected, so this review makes no empirical performance or rescoring claim."
+  ],
+  "validation": {
+    "independent_replay": "code-audit-v2-replay.py",
+    "independent_result": "All assertions passed, 17 result records.",
+    "replay_evidence": "code-audit-v2-replay-results.json",
+    "included_suite_command": "python -m unittest discover -s code_v2 -p test_gate.py",
+    "included_suite_result": "20 tests passed"
+  },
+  "remaining_blockers": [],
+  "recommendation": "Report v2 as a separate bounded structural repair with preserved v1 evidence. Retain the explicit false A/B certificate as the semantic limitation witness. Stop at the report; no further implementation changes were made."
+}

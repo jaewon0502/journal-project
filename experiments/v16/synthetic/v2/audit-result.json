@@ -1,0 +1,296 @@
+{
+  "audit_type": "Independent AI postoutput audit; no human gold",
+  "limitations": "Six neutral observations only; no mapping, hypotheses, prior outputs, search, or external facts used. Judgments rely on the full stipulated fictional O/C/S/Q and actual responses/applied candidates. No absent rubric requirements invented.",
+  "summary": {
+    "observations": 6,
+    "correct_actions": 6,
+    "required_repairs": 3,
+    "successful_repairs": 3,
+    "normal_preserved": 6,
+    "unnecessary_edits": 0,
+    "new_losses": 0,
+    "local_holds_needed": 0,
+    "observations_with_field_disagreement": 2,
+    "unsupported_finding_fields": 3
+  },
+  "rows": [
+    {
+      "id": "Z001",
+      "expected_action": "no_change",
+      "actual_action": "no_change",
+      "actual_preservation_decision": "no_change",
+      "source_backed_repair_needed": "no",
+      "source_backed_repair_completed": "NA",
+      "repair_success": "NA",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [],
+      "expected_finding_fields": {
+        "origin": "inherited (already corrected original issue)",
+        "original_meaning_loss": "no",
+        "factual_error": "no",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "no",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "no_change"
+      },
+      "reason": "The candidate already corrects the original’s unsupported 14-year minimum to the stipulated 16-year minimum. Restoring 14 would recreate an inherited error. No further repair is needed.",
+      "evidence": {
+        "original_quote": "During the trial, the night gallery admits visitors aged 14 and older.",
+        "candidate_quote": "During the trial, the night gallery admits visitors aged 16 and older.",
+        "source_ref": "S1",
+        "source_quote": "Minimum visitor age is 16, inclusive.",
+        "full_context_assessment": "The complete title, deck, body and caption retain the six-week night-only pilot, 1 June start conditional on passed inspection, free timed ticket in addition to age eligibility, no daytime-rule assertion, the access group’s strong criticism and internet-access concern, Vale’s disputed judgment and promised telephone line (not yet established as operating), unmeasured attendance, unestimated permanent costs, no permanent approval, review without guaranteed extension, and planned drawing rather than operating-service photograph. S2 establishes attributed speech, not the truth of either evaluation.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "Readiness is scoped to stipulated fictional evidence and preservation; no real-world certification inferred."
+    },
+    {
+      "id": "Z002",
+      "expected_action": "patch",
+      "actual_action": "patch",
+      "actual_preservation_decision": "repair",
+      "source_backed_repair_needed": "yes",
+      "source_backed_repair_completed": "yes",
+      "repair_success": "yes",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [],
+      "expected_finding_fields": {
+        "origin": "new_from_edit",
+        "original_meaning_loss": "yes",
+        "factual_error": "yes",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "yes",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "patch"
+      },
+      "reason": "The candidate gives an explicit but wrong count, 15; the original count 12 is also wrong. S1 directly supports 9 conditional approvals in the same period and unit. The applied candidate says 9 and retains the denominator and admission-to-operation distinction.",
+      "evidence": {
+        "original_quote": "조건부 승인을 받은 노선안은 12개였다.",
+        "candidate_quote": "조건부 승인을 받은 노선안은 15개였다.",
+        "source_ref": "S1",
+        "source_quote": "심사 24개, 조건부 승인 9개, 불승인 15개.",
+        "full_context_assessment": "The complete title, deck, body and caption retain the 1–5 April 2031 application period, 8 April publication, 30 submitted/6 withdrawn/24 reviewed proposals, conditional approval distinct from operating permission and required pre-operation vehicle safety inspection, the residents’ strong transparency criticism, next-week reasons promised rather than already delivered, no established review misconduct, this-period-only scope without last-year comparison, undecided fares, unmeasured ridership effect, and report-cover rather than actual-vehicle caption.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "Readiness is scoped to stipulated fictional evidence and preservation; no real-world certification inferred."
+    },
+    {
+      "id": "Z003",
+      "expected_action": "patch",
+      "actual_action": "patch",
+      "actual_preservation_decision": "repair",
+      "source_backed_repair_needed": "yes",
+      "source_backed_repair_completed": "yes",
+      "repair_success": "yes",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [
+        {
+          "finding_id": "F1",
+          "field": "conclusion_changing_omission",
+          "reported": "yes",
+          "audited": "no",
+          "reason": "The candidate contains a complete, explicit replacement answer to the same question. The defect is a directly contradicted factual assertion, not a missing temporal qualification or eligibility clause. A changed answer alone does not establish omission. The original proposition’s replacement remains recorded as original_meaning_loss; that does not require labeling the false replacement an omission.",
+          "evidence": {
+            "original": "측정 대상은 시험 운전 전의 소음 노출이다.",
+            "candidate": "측정 대상은 시험 운전 후의 소음 노출이다.",
+            "source_S1": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다."
+          }
+        },
+        {
+          "finding_id": "F1",
+          "field": "required_answer_missing",
+          "reported": "yes",
+          "audited": "no",
+          "reason": "Both original and candidate answer the temporal relationship explicitly. Before and after are wrong answers under S1, not absent answers. The explanation that the correct word 중 was absent from the original confuses factual incorrectness with inherited missing-answer status.",
+          "evidence": {
+            "original": "측정 대상은 시험 운전 전의 소음 노출이다.",
+            "candidate": "측정 대상은 시험 운전 후의 소음 노출이다.",
+            "source_S1": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다."
+          }
+        }
+      ],
+      "expected_finding_fields": {
+        "origin": "new_from_edit",
+        "original_meaning_loss": "yes",
+        "factual_error": "yes",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "yes",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "patch"
+      },
+      "reason": "The original explicitly answers before, the candidate explicitly answers after, and S1 directly excludes both and establishes during. The applied candidate correctly substitutes 중 for 후. This repairs a false temporal assertion; it does not supply an unanswered question.",
+      "evidence": {
+        "original_quote": "측정 대상은 시험 운전 전의 소음 노출이다.",
+        "candidate_quote": "측정 대상은 시험 운전 후의 소음 노출이다.",
+        "source_ref": "S1",
+        "source_quote": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다.",
+        "full_context_assessment": "The complete title, deck, body and caption retain 12 September 2033 publication and 2–8 September trial dates, one fixed port-boundary sensor, decibels rather than personal exposure conversion, the residents’ strong insufficiency criticism and demand for residential investigation, discussion promised next month rather than investigation begun, no verification of harm, no long-term trend or health-causality inference, separate permanent-use approval review, and a single-sensor location map rather than residential network. S2 establishes attributed speech, not independently verified evaluation.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "No field disagreement assigned: common instruction permits overall readiness separate from local preservation and does not force ready. In particular Z003’s unknown overall readiness does not constitute a local hold."
+    },
+    {
+      "id": "Z004",
+      "expected_action": "patch",
+      "actual_action": "patch",
+      "actual_preservation_decision": "repair",
+      "source_backed_repair_needed": "yes",
+      "source_backed_repair_completed": "yes",
+      "repair_success": "yes",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [
+        {
+          "finding_id": "F1",
+          "field": "conclusion_changing_omission",
+          "reported": "yes",
+          "audited": "no",
+          "reason": "The candidate contains a complete, explicit replacement answer to the same question. The defect is a directly contradicted factual assertion, not a missing temporal qualification or eligibility clause. A changed answer alone does not establish omission. The original proposition’s replacement remains recorded as original_meaning_loss; that does not require labeling the false replacement an omission.",
+          "evidence": {
+            "original": "During the trial, the night gallery admits visitors aged 14 and older.",
+            "candidate": "During the trial, the night gallery admits visitors aged 18 and older.",
+            "source_S1": "Minimum visitor age is 16, inclusive."
+          }
+        }
+      ],
+      "expected_finding_fields": {
+        "origin": "new_from_edit",
+        "original_meaning_loss": "yes",
+        "factual_error": "yes",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "yes",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "patch"
+      },
+      "reason": "The candidate explicitly supplies an incorrect age threshold of 18, excluding eligible ages 16–17. The original’s 14 also conflicts with S1 by including ages 14–15. The applied candidate supplies 16, preserving inclusive eligibility and the additional ticket and inspection requirements.",
+      "evidence": {
+        "original_quote": "During the trial, the night gallery admits visitors aged 14 and older.",
+        "candidate_quote": "During the trial, the night gallery admits visitors aged 18 and older.",
+        "source_ref": "S1",
+        "source_quote": "Minimum visitor age is 16, inclusive.",
+        "full_context_assessment": "The complete title, deck, body and caption retain the six-week night-only pilot, 1 June start conditional on passed inspection, free timed ticket in addition to age eligibility, no daytime-rule assertion, the access group’s strong criticism and internet-access concern, Vale’s disputed judgment and promised telephone line (not yet established as operating), unmeasured attendance, unestimated permanent costs, no permanent approval, review without guaranteed extension, and planned drawing rather than operating-service photograph. S2 establishes attributed speech, not the truth of either evaluation.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "Readiness is scoped to stipulated fictional evidence and preservation; no real-world certification inferred."
+    },
+    {
+      "id": "Z005",
+      "expected_action": "no_change",
+      "actual_action": "no_change",
+      "actual_preservation_decision": "no_change",
+      "source_backed_repair_needed": "no",
+      "source_backed_repair_completed": "NA",
+      "repair_success": "NA",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [],
+      "expected_finding_fields": {
+        "origin": "inherited (already corrected original issue)",
+        "original_meaning_loss": "no",
+        "factual_error": "no",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "no",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "no_change"
+      },
+      "reason": "The candidate already corrects the original’s 12 to the stipulated 9 conditional approvals. Reverting to 12 would reinstate an inherited factual error. No source-only extra detail is required by Q.",
+      "evidence": {
+        "original_quote": "이 가운데 조건부 승인을 받은 노선안은 12개였다.",
+        "candidate_quote": "이 가운데 조건부 승인을 받은 노선안은 9개였다.",
+        "source_ref": "S1",
+        "source_quote": "심사 24개, 조건부 승인 9개, 불승인 15개.",
+        "full_context_assessment": "The complete title, deck, body and caption retain the 1–5 April 2031 application period, 8 April publication, 30 submitted/6 withdrawn/24 reviewed proposals, conditional approval distinct from operating permission and required pre-operation vehicle safety inspection, the residents’ strong transparency criticism, next-week reasons promised rather than already delivered, no established review misconduct, this-period-only scope without last-year comparison, undecided fares, unmeasured ridership effect, and report-cover rather than actual-vehicle caption.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "Readiness is scoped to stipulated fictional evidence and preservation; no real-world certification inferred."
+    },
+    {
+      "id": "Z006",
+      "expected_action": "no_change",
+      "actual_action": "no_change",
+      "actual_preservation_decision": "no_change",
+      "source_backed_repair_needed": "no",
+      "source_backed_repair_completed": "NA",
+      "repair_success": "NA",
+      "normal_preserved": "yes",
+      "unnecessary_edit": "no",
+      "new_loss": "no",
+      "collateral_loss": "no",
+      "hold_needed": "no",
+      "actual_hold": "no",
+      "unsupported_findings": [],
+      "expected_finding_fields": {
+        "origin": "inherited (already corrected original issue)",
+        "original_meaning_loss": "no",
+        "factual_error": "no",
+        "conclusion_changing_omission": "no",
+        "optional_clarification": "no",
+        "required_answer_missing": "no",
+        "necessity": "no",
+        "evidence_support": "yes",
+        "preserves_other_meaning": "yes",
+        "context_safe": "yes",
+        "local_action": "no_change"
+      },
+      "reason": "The candidate already corrects the original’s before to the stipulated during. This is a justified correction of the original’s error, not a loss requiring restoration. The timing question is answered and the location, unit and scope remain explicit.",
+      "evidence": {
+        "original_quote": "측정 대상은 시험 운전 전의 소음 노출이다.",
+        "candidate_quote": "측정 대상은 시험 운전 중의 소음 노출이다.",
+        "source_ref": "S1",
+        "source_quote": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다.",
+        "full_context_assessment": "The complete title, deck, body and caption retain 12 September 2033 publication and 2–8 September trial dates, one fixed port-boundary sensor, decibels rather than personal exposure conversion, the residents’ strong insufficiency criticism and demand for residential investigation, discussion promised next month rather than investigation begun, no verification of harm, no long-term trend or health-causality inference, separate permanent-use approval review, and a single-sensor location map rather than residential network. S2 establishes attributed speech, not independently verified evaluation.",
+        "applied_candidate_assessment": "Applied candidate was read in full and supplies the source-backed correct proposition while preserving the surrounding full clauses. Exact patch application also matches the supplied actual_candidate; this mechanical check is corroborative only.",
+        "hold_assessment": "Necessity and safe source-backed correction are determinate for the local defect, or no further correction is needed. S2’s lack of independent proof of the criticism’s truth does not require a local hold because the article preserves attribution."
+      },
+      "readiness_assessment": "Readiness is scoped to stipulated fictional evidence and preservation; no real-world certification inferred."
+    }
+  ]
+}

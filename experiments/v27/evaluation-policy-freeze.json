@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-03T15:07:19.540579+00:00",
+  "decision": "No policy or decomposition semantic rule change after developer outputs. Freeze for fresh source case before opening its content at root.",
+  "selector_policy_sha256": "5fa8f720e59242c7c8803d1a1d557107b900092db316032421363a08273e1bc0",
+  "decompose_policy_sha256": "2abe69788fdb76b24b3bf6f291580d2b70df096e7f29b6feac9b00fdf53dc5c8",
+  "dev_raw": {
+    "D72-W.json": "4ba265e2cb762a7d4b981805d2f51615c0c788a8d7f1db5424fd95c2ec4defd3",
+    "D72-T.json": "14dec43c92cabcf025788e0268191ea12fb99d6de0d3546e582e45154ab261e6",
+    "D71-W.json": "659c81a80c556fc1fbde7d40647fcd6f381bf85fb844d7d35b26a41b7de3c0a2",
+    "D73-T.json": "dba0c9fe0153b3135a54f07126d0355de04c87c91df580038ff98465681abdcd",
+    "D71-S.json": "9cb84ae7fadc054fa715c5a8e9b2ce723e0aaf170426e70fb98dbdfae6642b88",
+    "D71-T.json": "986041d878f7a324c3ad698f536745a14e74a23bc43b6318e69d56e0e6ed41b6",
+    "D72-S.json": "fd5b507916552d323e0fa0d0821e4954e740c1012499479b52ffaec9b245169b",
+    "D73-W.json": "0f92afcaac908643e5d334b18427fa11ff7bf986499be4112480404b27526f68",
+    "D73-S.json": "cf4da526f76bd1f570746a05cab3c149f7098dc14c1aa06ae03ef7f6690c88f1"
+  }
+}

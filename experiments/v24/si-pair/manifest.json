@@ -1,0 +1,14 @@
+{
+  "registration": "separate_followup_coverage_not_prior_10",
+  "files": [
+    {
+      "path": "cases/unit_e4385c7df10c.json",
+      "sha256": "1e106488b13fe609d27732ea3f88c71ce5381ca161a32453ace5819566d26c95"
+    },
+    {
+      "path": "cases/unit_72f5d09d5937.json",
+      "sha256": "41de2a9eda5d5afab8135e722ac0f9b515c1f5502a82fb7c3b5fa23c733b3fe8"
+    }
+  ],
+  "oracle_sha256": "1aa7e555009d24acacce1d22dc4a1cbece5fa507f2523a65175dbb7adee5064e"
+}

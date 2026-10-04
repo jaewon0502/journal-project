@@ -1,0 +1,15 @@
+{
+  "unit_id": "X196",
+  "claims": [
+    {"id":"C1","proposition":"연구진은 동물을 관찰했다.","article_quotes":["연구진은","동물 12마리를 관찰했으며"],"source_witnesses":[{"document_id":"S1","quote":"연구진은 실험실에서 성체 동물 12마리를 관찰했다."}],"fact_support":"supported","attribution_support":"not_applicable","edit_necessity":"none","decision":"keep","rationale_rule":"supported_original","rationale":"관찰 주체와 행위가 출처에 명시되어 있다.","patch_ids":[]},
+    {"id":"C2","proposition":"관찰은 실험실에서 이루어졌다.","article_quotes":["실험실"],"source_witnesses":[{"document_id":"S1","quote":"연구진은 실험실에서 성체 동물 12마리를 관찰했다."}],"fact_support":"supported","attribution_support":"not_applicable","edit_necessity":"none","decision":"keep","rationale_rule":"supported_original","rationale":"실험실이라는 관찰 범위가 일치한다.","patch_ids":[]},
+    {"id":"C3","proposition":"관찰한 동물은 성체였다.","article_quotes":["성체 동물"],"source_witnesses":[{"document_id":"S1","quote":"성체 동물 12마리를 관찰했다."}],"fact_support":"supported","attribution_support":"not_applicable","edit_necessity":"none","decision":"keep","rationale_rule":"supported_original","rationale":"성체라는 대상 특성이 일치한다.","patch_ids":[]},
+    {"id":"C4","proposition":"관찰한 동물의 수는 12마리였다.","article_quotes":["동물 12마리"],"source_witnesses":[{"document_id":"S1","quote":"성체 동물 12마리를 관찰했다."}],"fact_support":"supported","attribution_support":"not_applicable","edit_necessity":"none","decision":"keep","rationale_rule":"supported_original","rationale":"표본 수가 일치한다.","patch_ids":[]},
+    {"id":"C5","proposition":"야생에서도 실험실에서와 같은 효과가 나타난다.","article_quotes":["야생에서도 같은 효과가 나타난다고"],"source_witnesses":[{"document_id":"S1","quote":"야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다."}],"fact_support":"not_established","attribution_support":"not_applicable","edit_necessity":"required","decision":"repair","rationale_rule":"unsupported_world_assertion","rationale":"야생 효과의 존재나 부재는 확립되지 않았다. 효과를 부정하지 않고 보고서로 판단할 수 없다는 한계로 국소 수정한다.","patch_ids":["P1"]},
+    {"id":"C6","proposition":"보고서는 야생에서도 같은 효과가 나타남을 입증했다.","article_quotes":["야생에서도 같은 효과가 나타난다고 보고서가 입증했다."],"source_witnesses":[{"document_id":"S1","quote":"야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다."}],"fact_support":"contradicted","attribution_support":"overstated","edit_necessity":"required","decision":"repair","rationale_rule":"source_scope_overclaim","rationale":"야생 효과 자체의 진위와 별개로, 보고서가 입증했다는 주장은 보고서의 명시된 한계와 충돌한다. 같은 복문 안에서 해당 절만 안전하게 수정한다.","patch_ids":["P1"]}
+  ],
+  "patches": [{"id":"P1","claim_ids":["C5","C6"],"before":"야생에서도 같은 효과가 나타난다고 보고서가 입증했다.","after":"야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다."}],
+  "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다.",
+  "unresolved_items": [{"claim_id":"C5","issue":"야생에서 같은 효과가 실제로 나타나는지는 제공된 출처로 확정할 수 없다. 수정문은 이 미확정 상태를 보존한다."}],
+  "read_scope": {"policy":"private-artifacts/policy-B.txt","input":"private-artifacts/control/inputs/joined/X196.json","article":"complete supplied original","sources":[{"document_id":"S1","scope":"complete supplied synthetic evidence"}],"external_sources_used":false}
+}

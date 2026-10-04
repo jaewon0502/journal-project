@@ -1,0 +1,424 @@
+[
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "a267dc49",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "a91d4f6e",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "b605ad37",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "b8e035a1",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "c41f9b20",
+    "delivery_same_as_native": false,
+    "accepted": [],
+    "blocked": [
+      {
+        "id": "P1",
+        "before": "20명",
+        "reason": "every comparison must exist and be eligible",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [
+      {
+        "quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+        "delivered_disposition": "review_required",
+        "reason": "every comparison must exist and be eligible"
+      }
+    ]
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "c73b028a",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "d19ec630",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "e28f91c4",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "e793a06d",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "baseline",
+    "unit_id": "f04a782d",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "a267dc49",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "a91d4f6e",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "b605ad37",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "b8e035a1",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "c41f9b20",
+    "delivery_same_as_native": false,
+    "accepted": [],
+    "blocked": [
+      {
+        "id": "P1",
+        "before": "20명",
+        "reason": "every comparison must exist and be eligible",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [
+      {
+        "quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+        "delivered_disposition": "review_required",
+        "reason": "every comparison must exist and be eligible"
+      }
+    ]
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "c73b028a",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "d19ec630",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "e28f91c4",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "e793a06d",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "original_certificate",
+    "arm": "enforced",
+    "unit_id": "f04a782d",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "a267dc49",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "a91d4f6e",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "b605ad37",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "b8e035a1",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "c41f9b20",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "c73b028a",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "d19ec630",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "e28f91c4",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "e793a06d",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "baseline",
+    "unit_id": "f04a782d",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "a267dc49",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "a91d4f6e",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "b605ad37",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "b8e035a1",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "c41f9b20",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "c73b028a",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "d19ec630",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "e28f91c4",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "e793a06d",
+    "delivery_same_as_native": true,
+    "accepted": [],
+    "blocked": [],
+    "raw_label_violations": []
+  },
+  {
+    "variant": "enriched_certificate",
+    "arm": "enforced",
+    "unit_id": "f04a782d",
+    "delivery_same_as_native": true,
+    "accepted": [
+      "P1"
+    ],
+    "blocked": [],
+    "raw_label_violations": []
+  }
+]

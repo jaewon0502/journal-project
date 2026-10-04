@@ -1,0 +1,667 @@
+{
+  "unit_id": "unit_e4385c7df10c",
+  "comparisons": [
+    {
+      "id": "length_target",
+      "article_quote": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 125센티미터였다.",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "The article asserts an exact whole-rod length in centimeters, without performing a calculation. The source explicitly gives the same target length as exactly 1.25 m. Quantities retain their stated units; no arithmetic is needed to extract the evidence.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "전체 길이",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both quantities are the entire rod length."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "125",
+        "unit": "cm"
+      },
+      "evidence_quantity": {
+        "value": "1.25",
+        "unit": "m"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "이 값은 반올림한 표시값이 아니라 이번 합성 기록에서 정한 정확한 수치다."
+        }
+      ],
+      "uncertainty": "None within the supplied synthetic record; the source explicitly specifies exactness."
+    },
+    {
+      "id": "length_other_condition",
+      "article_quote": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 125센티미터였다.",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Tempting comparison: the separate afternoon, 80-degree measurement explicitly states 1.26 m. It is not an expected value for the article’s morning, 20-degree target.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "전체 길이",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "담당자는 같은 날 오후 2시에 온도를 섭씨 80도로 바꾸어 별도의 비교 측정을 진행했고, 그 조건에서의 길이는 정확히 1.26미터라고 기록했다."
+            }
+          ],
+          "reason": "Both quantities are the entire rod length."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "different",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "담당자는 같은 날 오후 2시에 온도를 섭씨 80도로 바꾸어 별도의 비교 측정을 진행했고, 그 조건에서의 길이는 정확히 1.26미터라고 기록했다."
+            }
+          ],
+          "reason": "The candidate evidence is a separate 80-degree Celsius measurement, not the article’s 20-degree measurement."
+        },
+        "time": {
+          "relation": "different",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "담당자는 같은 날 오후 2시에 온도를 섭씨 80도로 바꾸어 별도의 비교 측정을 진행했고, 그 조건에서의 길이는 정확히 1.26미터라고 기록했다."
+            }
+          ],
+          "reason": "Same day, but the candidate measurement is at 2 p.m.; the article targets 10 a.m."
+        }
+      },
+      "article_quantity": {
+        "value": "125",
+        "unit": "cm"
+      },
+      "evidence_quantity": {
+        "value": "1.26",
+        "unit": "m"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "담당자는 같은 날 오후 2시에 온도를 섭씨 80도로 바꾸어 별도의 비교 측정을 진행했고, 그 조건에서의 길이는 정확히 1.26미터라고 기록했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "두 기록은 온도 조건이 다르므로 서로 대체해서 인용할 수 없다."
+        }
+      ],
+      "uncertainty": "No identity uncertainty. The alternative record differs in both conditions and event time."
+    },
+    {
+      "id": "event_year",
+      "article_quote": "2026년",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Calendar year of the measurement event explicitly matches the source. This is an asserted contextual numeric proposition, not an article calculation.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "Calendar year of the measurement event"
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        }
+      ],
+      "uncertainty": "The allowed unit vocabulary has no calendar, clock-time, or Celsius units. The unknown unit preserves the schema; the exact quotes establish the intended unit and context."
+    },
+    {
+      "id": "event_month",
+      "article_quote": "4월",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Calendar month of the measurement event explicitly matches the source. This is an asserted contextual numeric proposition, not an article calculation.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "Calendar month of the measurement event"
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        }
+      ],
+      "uncertainty": "The allowed unit vocabulary has no calendar, clock-time, or Celsius units. The unknown unit preserves the schema; the exact quotes establish the intended unit and context."
+    },
+    {
+      "id": "event_day",
+      "article_quote": "12일",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Day of month of the measurement event explicitly matches the source. This is an asserted contextual numeric proposition, not an article calculation.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "12일",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "Day of month of the measurement event"
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "12",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "12",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        }
+      ],
+      "uncertainty": "The allowed unit vocabulary has no calendar, clock-time, or Celsius units. The unknown unit preserves the schema; the exact quotes establish the intended unit and context."
+    },
+    {
+      "id": "event_hour",
+      "article_quote": "오전 10시",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Morning hour of the measurement event, explicitly 10 a.m. explicitly matches the source. This is an asserted contextual numeric proposition, not an article calculation.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "오전 10시",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "Morning hour of the measurement event, explicitly 10 a.m."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "10",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "10",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        }
+      ],
+      "uncertainty": "The allowed unit vocabulary has no calendar, clock-time, or Celsius units. The unknown unit preserves the schema; the exact quotes establish the intended unit and context."
+    },
+    {
+      "id": "temperature",
+      "article_quote": "섭씨 20도",
+      "source_ids": [
+        "src_897101849a4f"
+      ],
+      "expected_quantity_explanation": "Temperature in degrees Celsius during the measurement explicitly matches the source. This is an asserted contextual numeric proposition, not an article calculation.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해온 재료시험실",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The named laboratory and measurement record explicitly match."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Temperature in degrees Celsius during the measurement"
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "표준 막대 R7의 전체",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            },
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."
+            }
+          ],
+          "reason": "One identified complete rod; no packaging or marked subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "섭씨 20도에서",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+            }
+          ],
+          "reason": "Both describe the 20-degree Celsius measurement."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년 4월 12일 오전 10시에",
+          "source_anchors": [
+            {
+              "source_id": "src_897101849a4f",
+              "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+            }
+          ],
+          "reason": "The event date and morning measurement time explicitly match."
+        }
+      },
+      "article_quantity": {
+        "value": "20",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "20",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."
+        },
+        {
+          "source_id": "src_897101849a4f",
+          "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."
+        }
+      ],
+      "uncertainty": "The allowed unit vocabulary has no calendar, clock-time, or Celsius units. The unknown unit preserves the schema; the exact quotes establish the intended unit and context."
+    }
+  ],
+  "uncovered_numeric_claims": [],
+  "scope_limits": [
+    "Only the supplied article and its single frozen synthetic source were used. This is bounded experiment evidence, not a statement of real-world truth.",
+    "R7 is a rod identifier, not a numerical magnitude; its exact identity is captured in the population anchors.",
+    "Calendar and temperature claims use unknown units because the permitted vocabulary excludes their units. Length evidence is explicitly stated in meters and article values in centimeters; no calculated operand or conversion factor was introduced.",
+    "No prose edits or final action decision are included."
+  ]
+}

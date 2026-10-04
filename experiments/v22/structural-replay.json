@@ -1,0 +1,213 @@
+{
+  "scope": "Saved 26 editing outputs, no model regeneration, no entailment validation",
+  "results": [
+    {
+      "output": "control/raw/c17/X081.json",
+      "input": "control/inputs/joined/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c17/X124.json",
+      "input": "control/inputs/joined/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c17/X196.json",
+      "input": "control/inputs/joined/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c28/X081.json",
+      "input": "control/inputs/split/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c28/X124.json",
+      "input": "control/inputs/split/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c28/X196.json",
+      "input": "control/inputs/split/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c39/X081.json",
+      "input": "control/inputs/reordered/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c39/X124.json",
+      "input": "control/inputs/reordered/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c39/X196.json",
+      "input": "control/inputs/reordered/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c41/X081.json",
+      "input": "control/inputs/joined/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c41/X124.json",
+      "input": "control/inputs/joined/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c41/X196.json",
+      "input": "control/inputs/joined/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c52/X081.json",
+      "input": "control/inputs/split/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c52/X124.json",
+      "input": "control/inputs/split/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c52/X196.json",
+      "input": "control/inputs/split/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c63/X081.json",
+      "input": "control/inputs/reordered/X081.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c63/X124.json",
+      "input": "control/inputs/reordered/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "control/raw/c63/X196.json",
+      "input": "control/inputs/reordered/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "regression/raw/a/R811.json",
+      "input": "regression/inputs/R811.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "regression/raw/b/R811.json",
+      "input": "regression/inputs/R811.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "target-clarification/raw/X124.json",
+      "input": "control/inputs/reordered/X124.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "target-clarification/raw/X196.json",
+      "input": "control/inputs/reordered/X196.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "fresh/raw/a/E913.json",
+      "input": "fresh/inputs/E913.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "fresh/raw/a/K902.json",
+      "input": "fresh/inputs/K902.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "fresh/raw/b/E913.json",
+      "input": "fresh/inputs/E913.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    },
+    {
+      "output": "fresh/raw/b/K902.json",
+      "input": "fresh/inputs/K902.json",
+      "errors": [],
+      "flags": [],
+      "gate": "structurally_consistent_only",
+      "meaning_verified": false
+    }
+  ]
+}

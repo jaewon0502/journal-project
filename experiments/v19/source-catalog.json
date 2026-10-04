@@ -1,0 +1,185 @@
+[
+  {
+    "unit_id": "EN191",
+    "partition": "development",
+    "input_sha256": "5969b9007c9f239eba050a26344a484a23d95709102986edf7be0182baa4d871",
+    "article_chars": 3079,
+    "source_chars": {
+      "S1": 42443
+    },
+    "article": {
+      "url": "https://people.com/arsenic-lead-toxic-metals-found-in-tampons-8675213",
+      "title": "Arsenic, Lead, 14 Other ‘Toxic Metals’ Found in Tampons, According to Study",
+      "published": "2024-07-09T15:16:00-04:00",
+      "modified": null,
+      "collected": "2026-10-03T09:31:19.361514+00:00",
+      "article_kind": "independent newsroom report",
+      "body_scope": "Full headline, subtitle, byline, date, both photo captions/credits and every article body paragraph. Site navigation, author bio, newsletter promotion, image alt duplicates, comment controls and related stories excluded. Public web-open extraction; link labels retained. No article prose truncation."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.researchgate.net/publication/381659180_Tampons_as_a_source_of_exposure_to_metalloids",
+        "title": "Tampons as a source of exposure to metal(loid)s",
+        "published": "2024-06-22",
+        "collected": "2026-10-03T09:31:19.361514+00:00",
+        "version": "Environment International 190 (2024) 108849; author upload July 10 2024; doi:10.1016/j.envint.2024.108849",
+        "read_scope": "Complete paper text from title and abstract through Introduction, Materials & Methods (2.1–2.3), Results (3.1–3.3), Discussion (4–4.2), Funding, declarations and Supplementary data pointer. Includes Tables 1 and 2, figure captions, method detection and quantification limit definitions, handling of sub-MDL observations. References and supplementary file not included. Public author-upload extraction lines 75–1436, consecutively merged across overlapping reads; PDF line wraps retained; fi/fl encoding repaired.",
+        "lineage": "Primary research paper, publicly uploaded by coauthor Kathrin Schilling; not a news summary. Publisher landing URL returned 403; no authentication or paywall bypass used."
+      }
+    ]
+  },
+  {
+    "unit_id": "EN192",
+    "partition": "evaluation",
+    "input_sha256": "c65ee30b6d0da8e815ce14584e65f121f158e6076783e7e85f306eb5a38b6965",
+    "article_chars": 4202,
+    "source_chars": {
+      "S1": 32355
+    },
+    "article": {
+      "url": "https://www.itv.com/news/2023-08-25/paper-straws-may-not-be-better-for-the-environment-than-plastic-study-suggests",
+      "title": "Paper straws may not be better for the environment than plastic, study suggests",
+      "published": "2023-08-25T19:30:00+01:00",
+      "modified": null,
+      "collected": "2026-10-03T09:35:38.011506+00:00",
+      "article_kind": "independent newsroom report",
+      "body_scope": "Complete headline, timestamp, introductory video caption and every article body paragraph, including both percentage callouts and their captions. No separate subtitle or text byline shown. Navigation, related-story links, podcast promotion and footer excluded. Embedded video itself is outside text-article scope; no article prose truncated. Public web-open extraction link labels retained."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.researchgate.net/publication/373375203_Assessment_of_poly-_and_perfluoroalkyl_substances_PFAS_in_commercially_available_drinking_straws_using_targeted_and_suspect_screening_approaches",
+        "title": "Assessment of poly- and perfluoroalkyl substances (PFAS) in commercially available drinking straws using targeted and suspect screening approaches",
+        "published": "2023-08-24",
+        "collected": "2026-10-03T09:35:38.011506+00:00",
+        "version": "Published online 24 August 2023, Food Additives & Contaminants: Part A; doi:10.1080/19440049.2023.2240908; author upload 28 August 2023",
+        "read_scope": "Complete paper text from title, authors and abstract through Introduction, Materials and methods (collection, extraction/analysis, quality control, statistical analysis), Results and discussion (target and suspect-screening analyses), Conclusions, contributions, disclosure, funding, and data availability. Includes Table 1 and all figure captions within this scope, LOQ definition and censoring/replicate handling. References and external supplementary file not included. Consecutive public author-upload extraction lines 106–1420, merged from overlapping reads, preserving PDF line wraps and encoding as extracted.",
+        "lineage": "Primary research paper publicly uploaded by first author Pauline Boisacq. Independently acquired public full text, not a press release or search summary; no login, authentication or paywall bypass."
+      }
+    ]
+  },
+  {
+    "unit_id": "EXK183",
+    "partition": "regression",
+    "input_sha256": "523d7b09300ed849eb2b0064514e7e38e25ec62e98a44cde1273505ed10e1bff",
+    "article_chars": 1669,
+    "source_chars": {
+      "S1": 63171,
+      "S2": 1355,
+      "S3": 1180,
+      "S4": 1707
+    },
+    "article": {
+      "url": "https://www.newstree.kr/newsView/ntr202203250001",
+      "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+      "published": "2022-03-25T11:50:40+09:00",
+      "modified": null,
+      "collected": "2026-10-03T08:46:09.225101+00:00",
+      "article_kind": "independent_newsroom_report",
+      "body_scope": "Complete headline, byline, two-line subtitle, all nine body paragraphs from publisher web-open extraction lines 29–55. No text caption was present for lead image in accessible extraction. Image pixels and embedded YouTube video not transcribed; navigation, social controls, related stories and footer excluded. Original wording and apparent source typos retained; no prose truncated."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.researchgate.net/profile/Andre-Vethaak/publication/359440451_Journal_Pre-proofs_Full_length_article_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood/links/623c88cf2a1c362627354edd/Journal-Pre-proofs-Full-length-article-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood.pdf",
+        "title": "Discovery and quantification of plastic particle pollution in human blood",
+        "published": "2022-03-24",
+        "collected": "2026-10-03T08:46:09.225101+00:00",
+        "version": "Author-uploaded journal pre-proof, public ResearchGate upload dated March 24 2022; received 2021-12-21, revised 2022-03-11, accepted 2022-03-18; not final version of record.",
+        "read_scope": "Complete downloadable pre-proof PDF text (cover, abstract, introduction, methods, results and discussion, conclusion, tables, figure caption, declarations, references and end matter) extracted using pdftotext -layout. Figure pixels not transcribed; separately referenced supplemental Tables S1/S2 not supplied in this PDF.",
+        "lineage": "Original Leslie et al. primary research, DOI 10.1016/j.envint.2022.107199. Article directly links ScienceDirect version; publisher access was proxy-blocked, so publicly author-uploaded pre-proof on ResearchGate was acquired through its ordinary Download file PDF link, HTTP200; no access-control bypass."
+      },
+      {
+        "id": "S2",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34863566/",
+        "title": "A rapid review and meta-regression analyses of the toxicological impacts of microplastic exposure in human cells",
+        "published": "2021-11-24",
+        "collected": "2026-10-03T09:35:07.127729+00:00",
+        "version": "PubMed abstract; print issue 2022-04-05; DOI 10.1016/j.jhazmat.2021.127861",
+        "read_scope": "Complete abstract only; not full paper or original included experiments.",
+        "lineage": "K183 cell anchor -> 2021-12-09 Newstree -> exact DOI. K183 inhalation anchor -> 2022-01-13 Newstree -> same 2021-12-09 story -> same DOI."
+      },
+      {
+        "id": "S3",
+        "url": "https://www.newstree.kr/newsView/ntr202201130004",
+        "title": "건조기가 뿜어내는 미세플라스틱...1대가 연간 120만개 방출",
+        "published": "2022-01-13T13:11:57+09:00",
+        "collected": "2026-10-03T09:35:07.127729+00:00",
+        "version": "Current publicly rendered article; historical archive not verified",
+        "read_scope": "Entire textual article title/date/subhead/body; excluded navigation/ads/related stories; image pixels not inspected",
+        "lineage": "K183 inhalation hyperlink points here. Body health-effects hyperlink points to S4, not a distinct identified human respiratory-outcome study."
+      },
+      {
+        "id": "S4",
+        "url": "https://www.newstree.kr/newsView/ntr202112090001",
+        "title": "몸속 유입되는 '미세플라스틱' 인간세포 파괴시킨다",
+        "published": "2021-12-09T11:30:56+09:00",
+        "collected": "2026-10-03T09:35:07.127729+00:00",
+        "version": "Current publicly rendered article; historical archive not verified",
+        "read_scope": "Entire textual article title/date/subhead/body; excluded navigation/ads; image pixels not inspected",
+        "lineage": "Links publisher article S0304389421028302 matching S2 DOI; newsroom interpretation not independent primary evidence."
+      }
+    ]
+  },
+  {
+    "unit_id": "KO191",
+    "partition": "development",
+    "input_sha256": "b32ff0bb256433d84be79d48293470d3f27deb68c2e9a04a004bca00f4fc6d15",
+    "article_chars": 1134,
+    "source_chars": {
+      "KO191-S1": 2120
+    },
+    "article": {
+      "url": "https://search.newspim.com/news/view/20241121001063",
+      "title": "해외직구 어린이 의류, 유해물질 검출 심각",
+      "published": "2024-11-22T06:00:00+09:00",
+      "modified": "2024-11-22T06:00:04+09:00",
+      "collected": "2026-10-03T09:31:32.283284+00:00",
+      "article_kind": "independent newsroom news report",
+      "body_scope": "Complete headline, all published subtitle text when present, article body, byline/email and editorial image captions. Site navigation, ads, related stories, sharing widgets and legal footer excluded. No substantive article paragraphs omitted."
+    },
+    "sources": [
+      {
+        "id": "KO191-S1",
+        "url": "https://news.seoul.go.kr/economy/archives/563847",
+        "title": "“아이 옷 쇼핑 전 체크 필수”… 해외직구 어린이 의류, 프탈레이트 가소제 최대 622배 초과",
+        "published": "2024-11-22",
+        "collected": "2026-10-03T09:31:32.283284+00:00",
+        "version": "Public HTML collected 2026-10-03T09:31:32.283284+00:00; page displays modified 2024-11-22",
+        "read_scope": "Complete substantive official release, including all sampling, test categories, results, contextual notes and contact paragraphs; tags, navigation and sharing controls excluded.",
+        "lineage": "Original issuing authority: Seoul Metropolitan Government"
+      }
+    ]
+  },
+  {
+    "unit_id": "KO192",
+    "partition": "evaluation",
+    "input_sha256": "9f65c91371fb921f740fdc471af608cc114a328880b9dafd9fad51fdb0ad51ba",
+    "article_chars": 608,
+    "source_chars": {
+      "KO192-S1": 955
+    },
+    "article": {
+      "url": "https://www.yna.co.kr/view/AKR20250228035100004",
+      "title": "서울시, 잔류농약 검사항목 확대…급식·시민 먹거리 안전 강화",
+      "published": "2025-02-28T11:15:02+09:00",
+      "modified": "2025-02-28T11:15:02+09:00",
+      "collected": "2026-10-03T09:31:32.283284+00:00",
+      "article_kind": "independent newsroom news report",
+      "body_scope": "Complete headline, all published subtitle text when present, article body, byline/email and editorial image captions. Site navigation, ads, related stories, sharing widgets and legal footer excluded. No substantive article paragraphs omitted."
+    },
+    "sources": [
+      {
+        "id": "KO192-S1",
+        "url": "https://sihe.seoul.go.kr/archives/555415",
+        "title": "서울시, 잔류농약 검사 항목 확대…시민 먹거리 안전 강화",
+        "published": null,
+        "collected": "2026-10-03T09:31:32.283284+00:00",
+        "version": "Public HTML collected 2026-10-03T09:31:32.283284+00:00; page displays modified 2025-03-24",
+        "read_scope": "Complete substantive official release, including all sampling, test categories, results, contextual notes and contact paragraphs; tags, navigation and sharing controls excluded.",
+        "lineage": "Original issuing authority: Seoul Metropolitan Government Research Institute of Public Health and Environment; page shows modification date 2025-03-24, later than the article."
+      }
+    ]
+  }
+]

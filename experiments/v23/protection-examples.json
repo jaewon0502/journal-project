@@ -1,0 +1,63 @@
+{
+  "unit": "F923",
+  "offset_unit": "Python Unicode code points, zero-based, end exclusive; frozen retrieved text, not webpage DOM",
+  "article_sha256": "4fb046ebaada36a8471c8e3eb0012b19d62a0eb3c03d835c5fe53f43133f7d8e",
+  "source1_sha256": "99b45513844149e56ade98616d829b6719785d7e7844c5ef50a58fc8839f31ae",
+  "scope": "illustrative subset of actual full audits, NOT complete gold list",
+  "rows": [
+    {
+      "source_id": "article",
+      "char_start": 2129,
+      "char_end": 2150,
+      "short_anchor": "20-square-meter plots",
+      "protect": "재배구역 면적과 시스템 설치 규모의 대상 구별",
+      "evidence_status": "의무 보호; 사실값 미확인",
+      "conflict_or_limit": "동일 대상 미입증"
+    },
+    {
+      "source_id": "article",
+      "char_start": 3083,
+      "char_end": 3097,
+      "short_anchor": "25 days longer",
+      "protect": "성숙 지연과 발표 귀속을 함께 보존",
+      "evidence_status": "기사·발표 일치 구간 있음",
+      "conflict_or_limit": "전문가 45일 설명과 미해결"
+    },
+    {
+      "source_id": "article",
+      "char_start": 3282,
+      "char_end": 3299,
+      "short_anchor": "4.5 times greater",
+      "protect": "처리별 조건과 수치의 연결을 분리",
+      "evidence_status": "일반 향상만 부분 지지",
+      "conflict_or_limit": "2.8배/처리 배정 미확인"
+    },
+    {
+      "source_id": "article",
+      "char_start": 5041,
+      "char_end": 5061,
+      "short_anchor": "does not account for",
+      "protect": "실험 통제에 관한 비판을 삭제하지 않음",
+      "evidence_status": "문구 의미 모호",
+      "conflict_or_limit": "관측 여부와 인과 분리 여부 구별"
+    },
+    {
+      "source_id": "source1",
+      "char_start": 3388,
+      "char_end": 3407,
+      "short_anchor": "2024 growing season",
+      "protect": "실험 시점과 2026 보도 시점을 분리",
+      "evidence_status": "제공 발표에 명시",
+      "conflict_or_limit": "별도 전문 검증 없음"
+    },
+    {
+      "source_id": "source1",
+      "char_start": 6158,
+      "char_end": 6178,
+      "short_anchor": "estimated to produce",
+      "protect": "생산량 추정과 실측 구별",
+      "evidence_status": "전문가 발언에 명시",
+      "conflict_or_limit": "논문 실측 여부는 별도 미확인"
+    }
+  ]
+}

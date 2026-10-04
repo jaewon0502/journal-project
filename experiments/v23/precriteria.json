@@ -1,0 +1,70 @@
+[
+  {
+    "unit_id": "Q1077",
+    "kind": "cross_sentence",
+    "normal": false,
+    "required_behavior": "repair only unsupported scope/attribution; preserve supported clauses and distinguish absence from contradiction",
+    "paired_unit": "Q1072"
+  },
+  {
+    "unit_id": "Q1072",
+    "kind": "cross_sentence",
+    "normal": true,
+    "required_behavior": "keep exact original with no hold",
+    "paired_unit": "Q1077"
+  },
+  {
+    "unit_id": "Q2187",
+    "kind": "conjunction",
+    "normal": false,
+    "required_behavior": "repair only unsupported scope/attribution; preserve supported clauses and distinguish absence from contradiction",
+    "paired_unit": "Q2182"
+  },
+  {
+    "unit_id": "Q2182",
+    "kind": "conjunction",
+    "normal": true,
+    "required_behavior": "keep exact original with no hold",
+    "paired_unit": "Q2187"
+  },
+  {
+    "unit_id": "Q3297",
+    "kind": "quantification",
+    "normal": false,
+    "required_behavior": "repair only unsupported scope/attribution; preserve supported clauses and distinguish absence from contradiction",
+    "paired_unit": "Q3292"
+  },
+  {
+    "unit_id": "Q3292",
+    "kind": "quantification",
+    "normal": true,
+    "required_behavior": "keep exact original with no hold",
+    "paired_unit": "Q3297"
+  },
+  {
+    "unit_id": "Q4407",
+    "kind": "tense",
+    "normal": false,
+    "required_behavior": "repair only unsupported scope/attribution; preserve supported clauses and distinguish absence from contradiction",
+    "paired_unit": "Q4402"
+  },
+  {
+    "unit_id": "Q4402",
+    "kind": "tense",
+    "normal": true,
+    "required_behavior": "keep exact original with no hold",
+    "paired_unit": "Q4407"
+  },
+  {
+    "unit_id": "R551",
+    "kind": "exposed_actual_model_claim",
+    "normal": false,
+    "required_behavior": "do not claim full source support; distinguish supported intrinsic-property scope from unestablished definitions; lack is not falsity; retain useful content with clause-local evidence disposition, not blanket hold"
+  },
+  {
+    "unit_id": "R662",
+    "kind": "exposed_actual_model_claim",
+    "normal": false,
+    "required_behavior": "do not claim full source support; distinguish supported intrinsic-property scope from unestablished definitions; lack is not falsity; retain useful content with clause-local evidence disposition, not blanket hold"
+  }
+]

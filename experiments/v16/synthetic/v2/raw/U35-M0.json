@@ -1,0 +1,40 @@
+{
+  "unit_id": "U35",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "측정 대상은 시험 운전 전의 소음 노출이다.",
+      "candidate_quote": "측정 대상은 시험 운전 중의 소음 노출이다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다.",
+      "changed_proposition_or_counterexample": "원문의 '시험 운전 전'은 S1과 직접 충돌한다. 후보의 '시험 운전 중'은 동일 보고서의 측정 시점을 정당하게 교정하며 Q의 시간 관계에 답한다. 원문으로 복구하면 오히려 오류가 생긴다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "원문부터 있던 시점 오류를 후보가 자료에 맞게 교정했다. 이는 복구해야 할 의미손실이 아니며 위치·단위·범위, 발언 귀속과 미확정 사항도 전체 문맥에 보존돼 있다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [
+    {
+      "code": "H-C",
+      "scope": "주민협의회의 생활 피해 설명 부족 평가 자체의 진실",
+      "relation_to_local_action": "unrelated",
+      "reason": "S2는 비판 발언의 존재와 주체를 증명하지만 평가의 진실을 독립 입증하지 않는다. 후보는 이를 협의회 비판으로 귀속하므로 보존 판정에는 지장이 없다."
+    }
+  ],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 합성 기록과 고정 질문을 기준으로 후보는 시간 오류를 교정하고 필요한 범위·귀속·미확정 사항을 유지한다. 이는 합성 보존 업무의 완료 판정이며 현실 사실 또는 비판 내용 자체의 인증은 아니다."
+}

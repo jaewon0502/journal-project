@@ -1,0 +1,129 @@
+{
+  "unit_id": "X124",
+  "claims": [
+    {
+      "id": "C1",
+      "proposition": "연구진의 동물 관찰은 실험실에서 이루어졌다.",
+      "article_quotes": [
+        "연구진은 실험실"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The supplied report explicitly places the observation in a laboratory.",
+      "patch_ids": []
+    },
+    {
+      "id": "C2",
+      "proposition": "관찰한 동물은 성체였다.",
+      "article_quotes": [
+        "성체 동물"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The report explicitly identifies the observed animals as adults.",
+      "patch_ids": []
+    },
+    {
+      "id": "C3",
+      "proposition": "관찰한 동물은 18마리였다.",
+      "article_quotes": [
+        "동물 18마리를 관찰했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "contradicted",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "required",
+      "decision": "repair",
+      "rationale_rule": "direct_conflict",
+      "rationale": "The report gives 12 animals, directly conflicting with 18.",
+      "patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "id": "C4",
+      "proposition": "먹이를 준 뒤 관찰한 동물의 활동량이 감소했다.",
+      "article_quotes": [
+        "먹이를 준 뒤 활동량이 감소했다고"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "먹이를 준 뒤 활동량이 감소했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The source supports this temporal observation. The article does not assert that feeding caused the decrease, so adding the lack of a control group is unnecessary.",
+      "patch_ids": []
+    },
+    {
+      "id": "C5",
+      "proposition": "보고서는 먹이를 준 뒤 활동량이 감소했다고 기록했다.",
+      "article_quotes": [
+        "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "먹이를 준 뒤 활동량이 감소했다."
+        }
+      ],
+      "fact_support": "not_applicable",
+      "attribution_support": "supported",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The complete supplied report contains this observation, supporting the attribution independently of its substantive content.",
+      "patch_ids": []
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "claim_ids": [
+        "C3"
+      ],
+      "before": "18마리",
+      "after": "12마리"
+    }
+  ],
+  "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+  "unresolved_items": [],
+  "read_scope": {
+    "policy": "private-artifacts/policy-B.txt",
+    "originals_and_sources": "Read the complete original article and all supplied synthetic source text for each of X081, X124, and X196.",
+    "input_paths": [
+      "private-artifacts/control/inputs/split/X081.json",
+      "private-artifacts/control/inputs/split/X124.json",
+      "private-artifacts/control/inputs/split/X196.json"
+    ],
+    "other_materials_consulted": false
+  }
+}

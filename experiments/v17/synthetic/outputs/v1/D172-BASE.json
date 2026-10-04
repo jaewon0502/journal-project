@@ -1,0 +1,52 @@
+{
+  "unit_id": "D172",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "Number granted the editorial exemption for the 1–5 June batch",
+      "origin": "inherited",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "11 qualified for the editorial exemption",
+      "candidate_quote": "9 qualified for the editorial exemption",
+      "source_refs": [
+        "S2"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "Ledger exemption count",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": {
+            "document_id": "S2",
+            "locator": "Submission window and reviewed count",
+            "quote": "Submission window: 1–5 June 2034 inclusive. Notices submitted: 28. Withdrawn before review or any exemption decision: 4. Reviewed: 24."
+          },
+          "relation": "supports",
+          "relevance_to_claim": "The candidate correctly gives nine exemptions for this batch; restoring the original eleven would contradict the ledger."
+        }
+      ],
+      "changed_proposition_or_counterexample": "O states eleven reviewed notices qualified; C corrects that count to nine, matching S2. This change in original meaning is justified.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "The sole edit repairs an original numerical error. All four numerical slots and the other requested answers remain present and supported; no restoration or further correction is necessary."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The candidate correctly repairs the original exemption total and preserves the rule conditions, attribution, competing normative positions, measurement limits and revision status. The stipulated complete sources support the full candidate; no necessary correction remains.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

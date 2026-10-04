@@ -1,0 +1,342 @@
+{
+  "review_type": "separate-context AI internal evaluation; not independent model/human truth",
+  "rows": [
+    {
+      "output_id": "k11",
+      "language": "ko",
+      "condition": "T",
+      "variant_id": "ko-M47",
+      "blind_id": "U3007",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "a87126e0a7e6a370149c16e545e4965a80c940205a7b35254f5c13862fb5c069",
+      "post_sha256": "c8edff956ade649abcc5d4d5fcf4211d418d5cf286d42287949edd78d8f23c20"
+    },
+    {
+      "output_id": "k28",
+      "language": "ko",
+      "condition": "V",
+      "variant_id": "ko-M47",
+      "blind_id": "U3050",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "a87126e0a7e6a370149c16e545e4965a80c940205a7b35254f5c13862fb5c069",
+      "post_sha256": "c8edff956ade649abcc5d4d5fcf4211d418d5cf286d42287949edd78d8f23c20"
+    },
+    {
+      "output_id": "k46",
+      "language": "ko",
+      "condition": "T",
+      "variant_id": "ko-R82",
+      "blind_id": "U3093",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "a87126e0a7e6a370149c16e545e4965a80c940205a7b35254f5c13862fb5c069",
+      "post_sha256": "c8edff956ade649abcc5d4d5fcf4211d418d5cf286d42287949edd78d8f23c20"
+    },
+    {
+      "output_id": "k63",
+      "language": "ko",
+      "condition": "V",
+      "variant_id": "ko-R82",
+      "blind_id": "U3136",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "a87126e0a7e6a370149c16e545e4965a80c940205a7b35254f5c13862fb5c069",
+      "post_sha256": "c8edff956ade649abcc5d4d5fcf4211d418d5cf286d42287949edd78d8f23c20"
+    },
+    {
+      "output_id": "e17",
+      "language": "en",
+      "condition": "T",
+      "variant_id": "en-M47",
+      "blind_id": "W3007",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "7c11c46c019661194ff42932363a64d5e84d36cda63e3ca7950e103e719abaf0",
+      "post_sha256": "46eae601ef83bb721bd7ef9c6f6efe7802e2d2cab34c1e7d225658de2fbf4499"
+    },
+    {
+      "output_id": "e34",
+      "language": "en",
+      "condition": "V",
+      "variant_id": "en-M47",
+      "blind_id": "W3050",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "7c11c46c019661194ff42932363a64d5e84d36cda63e3ca7950e103e719abaf0",
+      "post_sha256": "46eae601ef83bb721bd7ef9c6f6efe7802e2d2cab34c1e7d225658de2fbf4499"
+    },
+    {
+      "output_id": "e52",
+      "language": "en",
+      "condition": "T",
+      "variant_id": "en-R82",
+      "blind_id": "W3093",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "7c11c46c019661194ff42932363a64d5e84d36cda63e3ca7950e103e719abaf0",
+      "post_sha256": "46eae601ef83bb721bd7ef9c6f6efe7802e2d2cab34c1e7d225658de2fbf4499"
+    },
+    {
+      "output_id": "e79",
+      "language": "en",
+      "condition": "V",
+      "variant_id": "en-R82",
+      "blind_id": "W3136",
+      "links": [
+        {
+          "question_id": "Q1",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q1",
+          "candidate_id": "B",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "A",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "candidate_id": "B",
+          "agrees": true
+        }
+      ],
+      "claims": [
+        {
+          "question_id": "Q1",
+          "agrees": true
+        },
+        {
+          "question_id": "Q2",
+          "agrees": true
+        }
+      ],
+      "exact_minimal_result": true,
+      "pre_sha256": "7c11c46c019661194ff42932363a64d5e84d36cda63e3ca7950e103e719abaf0",
+      "post_sha256": "46eae601ef83bb721bd7ef9c6f6efe7802e2d2cab34c1e7d225658de2fbf4499"
+    }
+  ],
+  "limit": "Projection removes long source quotations; complete frozen PRE/POST privately preserved. Reasons remained visible; imperfect blinding."
+}

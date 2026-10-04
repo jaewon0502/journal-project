@@ -1,0 +1,65 @@
+{
+  "collected_utc": "2026-10-03T13:53:22.293460+00:00",
+  "method": "Public unauthenticated urllib HTTPS GET; HTML parsed with lxml; PDF extracted with pdftotext -layout. No account, paywall, credentials, or snippet substituted for full source.",
+  "http_results": [
+    {
+      "url": "https://abc7ny.com/post/nasa-super-earth-exoplanet-toi-715-b/14388381/",
+      "status": 200,
+      "raw_file": "article.html"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2305.06206",
+      "status": 200,
+      "raw_file": "source.pdf"
+    },
+    {
+      "url": "https://science.nasa.gov/universe/exoplanets/discovery-alert-a-super-earth-in-the-habitable-zone/",
+      "status": 200,
+      "raw_file": "nasa.html"
+    }
+  ],
+  "files": {
+    "source.txt": {
+      "sha256": "816e430e2f1615d61ff76aca81d40573287ffd05ab9d165ec18eb8dd08c7c3e4",
+      "bytes": 140307
+    },
+    "article.txt": {
+      "sha256": "4f10cffbf6afecb8a26001c1d4cb18f3a2d7fad42b352c37907a9659e6a85425",
+      "bytes": 2703
+    },
+    "article.html": {
+      "sha256": "bb1208bee91b054184c70c22774c7cd131eddd8c26ab18702996192343843039",
+      "bytes": 268512
+    },
+    "nasa.html": {
+      "sha256": "f3fa6609180e99f72c711e03d9e8240f32f0b456f68621962899ff7e2a90faf0",
+      "bytes": 274298
+    },
+    "table3-whole-page.txt": {
+      "sha256": "55f5068b6a7625d545925bb7bdcd50b78c6de018e30a8dd20fc2534b54bf0834",
+      "bytes": 10079
+    },
+    "source.pdf": {
+      "sha256": "d34f099ba0443812a91ff38617f10a40e23c836fdcce41b07dcb1a84bf723101",
+      "bytes": 7571747
+    },
+    "unit.json": {
+      "sha256": "a227667a8caff6385ed9fd0d52397e7af5894cadda9b762f3624b806539012f4",
+      "bytes": 152794
+    },
+    "nasa.txt": {
+      "sha256": "3ee64917b3415309fb59e20fd33927d08f86930879436bf5415893b4aed45643",
+      "bytes": 4313
+    }
+  },
+  "text_checks": {
+    "article_body_paragraphs": 11,
+    "article_caption_count": 1,
+    "primary_pdf_pages": 19,
+    "table3_page": 11
+  },
+  "bounded_search": {
+    "candidate_event_count": 1,
+    "unavailable_attempt": "https://arxiv.org/html/2305.06206v2 returned web tool internal error; successful full PDF is v1 as printed in document."
+  }
+}

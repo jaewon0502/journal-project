@@ -1,0 +1,100 @@
+{
+  "blind_id": "G204",
+  "input": {
+    "unit_id": "G204",
+    "article": {
+      "text": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "provenance": "Complete researcher-authored synthetic text, not an actual news article"
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "text": "가상 보고서: 연구진은 실험실에서 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다. 대조군이 없어 감소의 인과원인은 확인하지 않았다. 야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+        "provenance": "Complete synthetic evidence"
+      }
+    ],
+    "scope": "Assess supplied complete text only. No prescribed issue count or decision. Do not browse."
+  },
+  "output": {
+    "unit_id": "G204",
+    "claims": [
+      {
+        "id": "C1",
+        "proposition": "Researchers observed adult laboratory animals.",
+        "article_quotes": [
+          "연구진은 실험실 성체 동물",
+          "관찰했으며"
+        ],
+        "source_witnesses": [
+          {
+            "document_id": "S1",
+            "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+          }
+        ],
+        "fact_support": "supported",
+        "attribution_support": "not_applicable",
+        "edit_necessity": "none",
+        "decision": "keep",
+        "rationale_rule": "supported_original",
+        "rationale": "The setting, adult population, research actor, and observation are directly supported.",
+        "patch_ids": []
+      },
+      {
+        "id": "C2",
+        "proposition": "The observed sample comprised 12 animals.",
+        "article_quotes": [
+          "12마리"
+        ],
+        "source_witnesses": [
+          {
+            "document_id": "S1",
+            "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+          }
+        ],
+        "fact_support": "supported",
+        "attribution_support": "not_applicable",
+        "edit_necessity": "none",
+        "decision": "keep",
+        "rationale_rule": "supported_original",
+        "rationale": "The stated sample size matches the source.",
+        "patch_ids": []
+      },
+      {
+        "id": "C3",
+        "proposition": "The report records that activity decreased after feeding.",
+        "article_quotes": [
+          "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다."
+        ],
+        "source_witnesses": [
+          {
+            "document_id": "S1",
+            "quote": "먹이를 준 뒤 활동량이 감소했다."
+          }
+        ],
+        "fact_support": "supported",
+        "attribution_support": "supported",
+        "edit_necessity": "none",
+        "decision": "keep",
+        "rationale_rule": "supported_original",
+        "rationale": "The source records the same temporal observation. The article does not claim causation or extend the observation to wild animals, so adding those source limitations is not necessary to correct its meaning.",
+        "patch_ids": []
+      }
+    ],
+    "patches": [],
+    "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+    "unresolved_items": [],
+    "read_scope": {
+      "policy": "private-artifacts/policy-A.txt",
+      "input": "private-artifacts/control/inputs/joined/X081.json",
+      "article_read": "complete original",
+      "sources_read": [
+        {
+          "document_id": "S1",
+          "scope": "complete supplied synthetic source"
+        }
+      ],
+      "external_sources_used": false
+    }
+  },
+  "provenance": "Constructed audit calibration fixture; not a new writer/model performance observation."
+}

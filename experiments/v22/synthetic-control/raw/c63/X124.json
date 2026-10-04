@@ -1,0 +1,148 @@
+{
+  "unit_id": "X124",
+  "claims": [
+    {
+      "id": "C1",
+      "proposition": "Activity decreased after feeding; this is a temporal observation, not a causal conclusion.",
+      "article_quotes": [
+        "먹이를 준 뒤 활동량이 감소했다고"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "먹이를 준 뒤 활동량이 감소했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The source directly supports the observed sequence. No causal or wild-population claim is made.",
+      "patch_ids": []
+    },
+    {
+      "id": "C2",
+      "proposition": "The report records the post-feeding decrease in activity.",
+      "article_quotes": [
+        "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "먹이를 준 뒤 활동량이 감소했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "supported",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The complete report contains the attributed observation.",
+      "patch_ids": []
+    },
+    {
+      "id": "C3",
+      "proposition": "Researchers observed animals.",
+      "article_quotes": [
+        "연구진은 실험실 성체 동물"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The source identifies researchers observing animals.",
+      "patch_ids": []
+    },
+    {
+      "id": "C4",
+      "proposition": "The observed animals were adults.",
+      "article_quotes": [
+        "성체 동물"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "Adult status is explicitly supported.",
+      "patch_ids": []
+    },
+    {
+      "id": "C5",
+      "proposition": "The observation took place in a laboratory.",
+      "article_quotes": [
+        "실험실"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The laboratory setting is explicitly supported.",
+      "patch_ids": []
+    },
+    {
+      "id": "C6",
+      "proposition": "Researchers observed 18 adult animals in the laboratory.",
+      "article_quotes": [
+        "18마리를 관찰했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "contradicted",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "required",
+      "decision": "repair",
+      "rationale_rule": "direct_conflict",
+      "rationale": "The source specifies 12, directly conflicting with 18. Only the incorrect number needs replacement.",
+      "patch_ids": [
+        "P1"
+      ]
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "claim_ids": [
+        "C6"
+      ],
+      "before": "18마리",
+      "after": "12마리"
+    }
+  ],
+  "full_edited_article": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+  "unresolved_items": [],
+  "read_scope": {
+    "policy": "private-artifacts/policy-B.txt",
+    "input": "private-artifacts/control/inputs/reordered/X124.json",
+    "article": "Entire supplied original article",
+    "sources": [
+      "S1: entire supplied synthetic source"
+    ],
+    "external_sources_used": false
+  }
+}

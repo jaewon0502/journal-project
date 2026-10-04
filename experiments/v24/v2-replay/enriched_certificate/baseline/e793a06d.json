@@ -1,0 +1,106 @@
+{
+  "gate": {
+    "unit_id": "e793a06d",
+    "article_sha256": "c1b737eb7ced9cc74254b15daad4a8543e2f5cc8f7edc8d39c4c48ed10d34475",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_2",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_3",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "late_member_denominator",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "오후 8시 이후에 이용한 회원 50명",
+        "article_span": [
+          32,
+          52
+        ],
+        "numeric_span": [
+          49,
+          51
+        ],
+        "original_numeric_token": "50",
+        "article_unit": "count",
+        "article_value": "50",
+        "expected_value": "50",
+        "normalized_expected_value": "50",
+        "dimension": "count"
+      },
+      {
+        "id": "selected_late_members",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+        "article_span": [
+          0,
+          79
+        ],
+        "numeric_span": [
+          72,
+          74
+        ],
+        "original_numeric_token": "20",
+        "article_unit": "count",
+        "article_value": "20",
+        "expected_value": "20",
+        "normalized_expected_value": "20",
+        "dimension": "count"
+      },
+      {
+        "id": "opposite_weekend_status",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "all_weekend_members",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "e793a06d",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

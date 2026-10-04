@@ -1,0 +1,26 @@
+{
+  "type": "post-evaluation diagnostic overlay; not a regenerated writer output or new schema enum",
+  "original_outputs_and_scores_unchanged": true,
+  "rows": [
+    {
+      "opaque_id": "S710",
+      "claim_id": "C20",
+      "original_fact_support": "supported",
+      "diagnostic_relation": "partial_only",
+      "operational_full_proposition_status": "not_established",
+      "supported_scope": "Electron spin is an intrinsic quantum property.",
+      "contradicted": false,
+      "edit_necessity_from_this_diagnosis": "not established; do not delete the original merely because evidence is partial"
+    },
+    {
+      "opaque_id": "S723",
+      "claim_id": "C37",
+      "original_fact_support": "supported",
+      "diagnostic_relation": "partial_only",
+      "operational_full_proposition_status": "not_established",
+      "supported_scope": "Electron spin is an intrinsic quantum property.",
+      "contradicted": false,
+      "edit_necessity_from_this_diagnosis": "not established; do not delete the original merely because evidence is partial"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "scope": "All three retained original v7 T blind inputs, private mappings, and raw outcome judgment files; read only.",
+  "privacy": "No source text, output text, opaque IDs or private filesystem paths exported.",
+  "phases": [
+    {
+      "phase": "dev-v1",
+      "blind_sha256": "74df2c6ce0933b961d10be7f22841cb48cc9f8a01f2ef2de723dd11bef92f5ea",
+      "mapping_sha256": "9652444ebde8fb465a35013bce3b0e9a0eb23d319962e5e68bde38688b8df96a",
+      "raw_sha256": "9da06880ce3377bddbce922b13d3c7eaf4507a2e5750b58ab59140db8337fcf7",
+      "original_summary_sha256": "5f566b989cee0110402e3e8ac3546b611c542a3501e9b5148b954eea175ad3b7",
+      "blind_rows": 10,
+      "raw_judgment_rows": 10,
+      "mapping_case_method_pairs": 18,
+      "diagnostic_counts": {
+        "duplicate_blind_ids": 0,
+        "duplicate_judgment_ids": 0,
+        "unexpected_judgment_ids": 0,
+        "unknown_extra_judgment_ids": 0,
+        "wrong_phase_judgment_ids": 0,
+        "missing_judgment_ids": 0
+      },
+      "checks": {
+        "strict_identity_validation_passed": true,
+        "blind_and_raw_ids_are_nonblank_strings": true,
+        "blind_and_mapping_id_sets_equal": true,
+        "mapping_case_method_pairs_unique": true,
+        "mapping_pairs_match_public_rows": true,
+        "original_summary_judgments_equal_raw": true,
+        "public_scoring_fields_equal_original_raw": true,
+        "public_unique_judged_count_matches_raw": true,
+        "original_summary_raw_provenance_hash_matches": true
+      }
+    },
+    {
+      "phase": "dev-v2",
+      "blind_sha256": "e307ef9c92fb9a498478f5c7d7cd30751ce4749b4437fb7d00a62d7426584bd4",
+      "mapping_sha256": "64b59c84d4b318106dcfc7f4df0bfda6b51fb2ca22a17d774ce2ec003a46d44f",
+      "raw_sha256": "2a593881c7fa74b4969930eb4d87982c044beb3dd080b0cb23d88c6c8c3941c8",
+      "original_summary_sha256": "3428ab90bd4253e5531f7d0b627a32b7cf2d372e8689db09467acb3a49fe837f",
+      "blind_rows": 10,
+      "raw_judgment_rows": 10,
+      "mapping_case_method_pairs": 18,
+      "diagnostic_counts": {
+        "duplicate_blind_ids": 0,
+        "duplicate_judgment_ids": 0,
+        "unexpected_judgment_ids": 0,
+        "unknown_extra_judgment_ids": 0,
+        "wrong_phase_judgment_ids": 0,
+        "missing_judgment_ids": 0
+      },
+      "checks": {
+        "strict_identity_validation_passed": true,
+        "blind_and_raw_ids_are_nonblank_strings": true,
+        "blind_and_mapping_id_sets_equal": true,
+        "mapping_case_method_pairs_unique": true,
+        "mapping_pairs_match_public_rows": true,
+        "original_summary_judgments_equal_raw": true,
+        "public_scoring_fields_equal_original_raw": true,
+        "public_unique_judged_count_matches_raw": true,
+        "original_summary_raw_provenance_hash_matches": true
+      }
+    },
+    {
+      "phase": "eval",
+      "blind_sha256": "20a404e0dbe35a34f0d05cfd4a7db70f8c3373ca5d9814fa791ff607e6e1658d",
+      "mapping_sha256": "c8f473b99d49d7a54a358d4f836d30164a2385d7fe8237468dc6170207635721",
+      "raw_sha256": "ce256cde4e32b3de7d13ab1f4d1397a87ce08884bc88b118cbc460054b9e8049",
+      "original_summary_sha256": "a446007a40b12f964e8e738d8a8637cae624af8bec1e4096ab23c09200fd0b7b",
+      "blind_rows": 20,
+      "raw_judgment_rows": 20,
+      "mapping_case_method_pairs": 36,
+      "diagnostic_counts": {
+        "duplicate_blind_ids": 0,
+        "duplicate_judgment_ids": 0,
+        "unexpected_judgment_ids": 0,
+        "unknown_extra_judgment_ids": 0,
+        "wrong_phase_judgment_ids": 0,
+        "missing_judgment_ids": 0
+      },
+      "checks": {
+        "strict_identity_validation_passed": true,
+        "blind_and_raw_ids_are_nonblank_strings": true,
+        "blind_and_mapping_id_sets_equal": true,
+        "mapping_case_method_pairs_unique": true,
+        "mapping_pairs_match_public_rows": true,
+        "original_summary_judgments_equal_raw": true,
+        "public_scoring_fields_equal_original_raw": true,
+        "public_unique_judged_count_matches_raw": true,
+        "original_summary_raw_provenance_hash_matches": true
+      }
+    }
+  ],
+  "all_checks_pass": true
+}

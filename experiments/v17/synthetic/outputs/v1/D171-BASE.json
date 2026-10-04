@@ -1,0 +1,95 @@
+{
+  "unit_id": "D171",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "Editorial exemption count for the 1–5 June batch.",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "11 qualified for the editorial exemption",
+      "candidate_quote": "9 qualified for the editorial exemption",
+      "source_refs": [
+        "S2: ledger exemption count"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "Editorial exemption count",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": null,
+          "relation": "supports",
+          "relevance_to_claim": "The candidate corrects the original count for the same batch and unit."
+        }
+      ],
+      "changed_proposition_or_counterexample": "The original reports 11 grants; the candidate correctly reports 9. Restoring 11 would contradict the ledger.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "Retain this justified correction of an original error."
+    },
+    {
+      "id": "F2",
+      "question_part": "Whether human review alone suffices and the complete AND/OR conditions for the editorial exception.",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "yes",
+      "optional_clarification": "no",
+      "required_answer_missing": "yes",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "a notice must receive human review or editorial control, and a named editor must sign responsibility for its publication. Human review alone does not meet this exception.",
+      "candidate_quote": "For the editorial exception, a notice must receive human review or editorial control.",
+      "source_refs": [
+        "S1: Section 4"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, editorial exception",
+            "quote": "The editorial exception applies if (human review OR editorial control) AND a named editor's signed responsibility for publication are present."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "Section 4, sufficiency restriction",
+            "quote": "Human review by itself is insufficient."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "The signature is a conjunctive eligibility condition, and review alone does not suffice. Later references to the signature debate do not state this operative condition."
+        }
+      ],
+      "changed_proposition_or_counterexample": "The candidate states only the review/control prerequisite and leaves the sufficiency question unanswered; the complete rule requires either review or control plus signed responsibility by a named editor. A reviewed notice without that signature fails the editorial exception.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "Restore the omitted conjunct and explicit answer on human review alone. The remaining training exception and attributed fairness debate remain intact."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F2",
+      "before": "For the editorial exception, a notice must receive human review or editorial control.",
+      "after": "For the editorial exception, a notice must receive human review or editorial control, and a named editor must sign responsibility for its publication. Human review alone does not meet this exception.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The single restoration supplies the missing editorial eligibility condition without changing the corrected ledger count, training rule, attributed opposing views or limits on measured effects and proposed revisions. Full candidate context with the patch answers all supplied questions. The stipulated final sources establish relevant scope and dates; no unresolved coverage limit is identified.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

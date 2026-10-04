@@ -1,0 +1,66 @@
+{
+  "unit_id": "D172",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "Number of notices granted the editorial exemption in the 1–5 June batch.",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "Of those reviewed, 11 qualified for the editorial exemption",
+      "candidate_quote": "Of those reviewed, 9 qualified for the editorial exemption",
+      "source_refs": [
+        "S2: ledger totals and batch scope"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "ledger totals",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": {
+            "document_id": "S2",
+            "locator": "submission window and unit",
+            "quote": "Submission window: 1–5 June 2034 inclusive."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "The nine grants apply to the same batch described in C. S2 also specifies notices, not authors; C retains that unit and the reviewed denominator of 24."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "ledger totals",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": {
+            "document_id": "S2",
+            "locator": "withdrawals",
+            "quote": "Withdrawn before review or any exemption decision: 4."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "Withdrawals are outside the exemption decisions. C preserves this distinction, so no added qualification or numerical adjustment is necessary."
+        }
+      ],
+      "changed_proposition_or_counterexample": "O reports 11 editorial exemptions; C reports the source-supported 9. Restoring 11 would contradict the stipulated ledger.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "The changed original meaning is a justified correction of an original numerical error, not a candidate defect. No restoration is warranted."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The full candidate answers all supplied questions consistently with the complete stipulated sources: 28 submitted, 4 withdrawn, 24 reviewed and 9 editorial exemptions; effective date and notice definition; editorial AND/OR and training conditions; attributed opposing views; and the absence of measured trust effects or adopted revisions. It preserves the distinction between attributed preferences and unsettled normative judgments. The sole change from O corrects the exemption count. No necessary correction or unresolved coverage gap is established.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

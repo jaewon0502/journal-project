@@ -1,0 +1,90 @@
+{
+  "scope": {
+    "reviewed_files": [
+      "code/gate.py",
+      "code/delivery.py",
+      "code/test_gate.py",
+      "PREREGISTRATION.md"
+    ],
+    "read_cases": false,
+    "read_outcomes": false,
+    "network_used": false,
+    "implementation_modified": false,
+    "scoring_modified": false,
+    "file_sha256": {
+      "code/gate.py": "e7404b288877644ec71c632bdc2ccfe8be640ebfc3e5e6753a92d151a5c43556",
+      "code/delivery.py": "866fe28025825e37af882f9c4607da1bbc5d7dcf24c6eb75e1d7b0591db48dff",
+      "code/test_gate.py": "d73acd5f58162b0c94d04075da558cbd94a5a6f760d6a939c19b805d9fe8e460",
+      "PREREGISTRATION.md": "7c4c468f3d4ff0c04d3c80473e97a24eb7c9dd190d753ff7c82157c9c16b6572"
+    }
+  },
+  "conclusion": "The executable gate enforces anchor presence, self-certified identity labels, endpoint quantity normalization, and restricted rational expressions. Delivery enforces an eligible-ID intersection and unique nonoverlapping before strings. It does not bind permission to the edited clause, constrain replacements to certified numeric values, or enforce dimensions within arithmetic.",
+  "findings": [
+    {
+      "id": "S1",
+      "priority": "high",
+      "classification": "fixable structural gap",
+      "location": "code/delivery.py:3-11,15; code/gate.py:47",
+      "title": "Eligible comparison IDs are transferable across clauses and units",
+      "evidence": "A truthful comparison of article A is 2 m. versus source A is 3 m. authorizes changing unrelated B is 7 m. to B is 999 m. Output accepts p with no block or review flag. A different gate unit_id also passes.",
+      "cause": "Delivery receives only ID/status results, no certified article span or quantity binding, never checks gate unit_id, and requires only a nonempty intersection with eligible IDs. Contradicted labels have the same intersection-only check.",
+      "repair_direction": "Bind gate result to article/unit identity and exact comparison span; require every referenced ID to exist and be eligible, and require its authorized span to cover exactly the changed numeric span. Bind contradicted audit rows to their own clause as well.",
+      "semantic_limitation_distinction": "Counterexample certificate accurately describes A. Failure arises after certification when permission is applied to B; no false semantic certificate is needed."
+    },
+    {
+      "id": "S2",
+      "priority": "high",
+      "classification": "fixable structural gap",
+      "location": "code/delivery.py:8-13",
+      "title": "Exact before substring does not constrain after content",
+      "evidence": "The same truthful A comparison accepts A is 999 kg and B is closed. as replacement for A is 2 m.",
+      "cause": "Only before uniqueness and overlap are checked. after is unconstrained and not checked against evidence_quantity; numeric-only editing is not enforced.",
+      "repair_direction": "Represent explicit numeric value/unit edit spans and derive or validate their replacement from the normalized permitted evidence quantity. Preserve text outside permitted spans.",
+      "semantic_limitation_distinction": "Verifying an exact original span and mechanically restricting changed bytes/value is possible without proving semantic identity. Current unique-before check is useful but insufficient."
+    },
+    {
+      "id": "S3",
+      "priority": "medium",
+      "classification": "fixable structural gap",
+      "location": "code/gate.py:10-22,35-40",
+      "title": "Rational arithmetic is untyped internally",
+      "evidence": "Anchored operand x={value:3,unit:m,quote:A is 3 m.}, expression x*x, and evidence_quantity={value:9,unit:m} return eligible_mismatch. Correct resulting dimension is area, not length.",
+      "cause": "arithmetic reads only operand names and values, discards units, and compares its raw scalar to raw evidence value. Only article/evidence endpoint dimensions are compared.",
+      "repair_direction": "Require operand units; normalize values and propagate dimension exponents through multiplication/division; require matching dimensions for addition/subtraction and compare normalized typed result to evidence quantity.",
+      "semantic_limitation_distinction": "Whether x refers to the intended fact remains semantic, but m*m versus m is a mechanically decidable dimensional mismatch. The output claim typed arithmetic overstates current enforcement."
+    },
+    {
+      "id": "S4",
+      "priority": "low",
+      "classification": "schema robustness and failure reporting gap",
+      "location": "code/gate.py:25-33,41,44-46; code/delivery.py:5-15",
+      "title": "Malformed structures raise rather than return a blocked diagnostic",
+      "evidence": "Setting axes=[] raises AttributeError before the quantity/arithmetic exception handler.",
+      "cause": "No complete schema validation exists; several accesses and set operations are outside guarded validation.",
+      "repair_direction": "Validate input schemas and produce explicit blocked/error records. Ensure callers never use raw proposals as fallback after exceptions.",
+      "semantic_limitation_distinction": "The observed exception is not itself a fail-open acceptance: this standalone function produces no delivery on failure. Caller fallback behavior was outside permitted review scope and remains unverified."
+    }
+  ],
+  "known_semantic_certificate_limitation": {
+    "acknowledged_in": "PREREGISTRATION.md and test_semantically_false_binding_can_pass",
+    "description": "Copied anchors plus relation=same do not establish that asserted referents, numeric values, conditions, or times actually describe those anchors. The existing false-value witness is an intentional documented limit.",
+    "do_not_conflate_with": "Transferable edit permission, unrestricted replacement, arithmetic unit propagation, and schema validation are separately enforceable structural properties."
+  },
+  "positive_checks": [
+    "All five identity labels must be same.",
+    "Article/source substring presence is checked.",
+    "Endpoint units are normalized using exact rational factors; different endpoint dimensions are blocked.",
+    "Arithmetic AST disallows constants and calls and checks exact scalar equality.",
+    "Delivery blocks missing eligible-ID intersections, nonunique before strings, and overlapping patches.",
+    "Gate and delivery explicitly disclaim semantic correctness certification."
+  ],
+  "validation": {
+    "existing_suite": "python -m unittest discover -s code -p test_gate.py",
+    "existing_suite_result": "8 tests passed",
+    "synthetic_replay": "code-audit-replay.py",
+    "synthetic_replay_result": "All assertions passed; reproduces unrelated clause edit, arbitrary replacement, mixed unknown ID, incompatible arithmetic dimension, mismatched unit_id, and malformed axes exception.",
+    "test_coverage_note": "test_gate.py contains no delivery tests. test_true_mismatch_permission changes article_quantity to 3 while article remains 2 km, so it exercises scalar inequality but does not demonstrate a truthful mismatch certificate."
+  },
+  "experiment_handling": "Preserve original implementation and hashes as v1. If repaired after generation, report a separate corrected replay/version; do not relabel v1 results or silently rescore them. This audit establishes implementation behavior only, not whether experiment outputs exploited these defects.",
+  "remaining_blockers": []
+}

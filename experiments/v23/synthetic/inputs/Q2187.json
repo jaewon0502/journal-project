@@ -1,0 +1,23 @@
+{
+  "unit_id": "Q2187",
+  "article": {
+    "text": "기관 기록은 3일 시험에서 장치의 평균 소비전력 감소와 수명 연장, 안전성 향상을 확인했다."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "기관은 장치의 평균 소비전력이 줄었다고 기록했다. 시험 기간은 3일이다. 수명과 안전성은 측정하지 않았으며 관련 결론을 제시하지 않는다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "전력·기간에 관해 무엇이 기록됐는가?"
+    },
+    {
+      "id": "q2",
+      "text": "수명·안전성 측정과 결론은 무엇인가?"
+    }
+  ],
+  "scope": "Complete synthetic source record; not real news. Correct unsupported source attribution without declaring unknown world propositions false."
+}

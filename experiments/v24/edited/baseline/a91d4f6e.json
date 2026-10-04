@@ -1,0 +1,84 @@
+{
+  "unit_id": "a91d4f6e",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "4월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "8일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "relation": "contradicted",
+      "comparison_ids": [
+        "actual_dispatch"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        }
+      ],
+      "reason": "The target is actual west-depot handoffs on April 8. S1 states 30, and there was no afternoon dispatch. The west reservation count of 45, east dispatch of 45, and next-day plan for 15 do not measure that target."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "45개",
+      "after": "30개",
+      "reason": "The target is actual west-depot handoffs on April 8. S1 states 30, and there was no afternoon dispatch. The west reservation count of 45, east dispatch of 45, and next-day plan for 15 do not measure that target.",
+      "comparison_ids": [
+        "actual_dispatch"
+      ]
+    }
+  ],
+  "full_edited_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

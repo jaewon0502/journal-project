@@ -1,0 +1,18 @@
+{
+  "private_files": {
+    "synthetic/freeze.json": "7db7a37db3de7680b0a23be7a5e55c58b3bc3db9957b739470de220685c0622e",
+    "synthetic/inputs/SY192.json": "f5cdbd1a4c169e4b3d620821927e59f02714dd79a0f72dfd049efed157b86ddf",
+    "synthetic/inputs/SY191.json": "beb0455fd06b03295e3ecb50a337050616259d4a0bf8c6dcbbb2791be367e4ca",
+    "synthetic/raw/SY191-v2.json": "9c6d09fdc7a1ea42d23e2c05b83f34a9c5c92055d84ad90c3db368fb421f81b3",
+    "synthetic/raw/SY192-v2.json": "e196fce978f342dcb04fe6338c6017c6005b38f23c188cce62ff6aa3d2413c8a",
+    "synthetic/SY191-pre.json": "a701af344a3a0884057054f5041920d30d619618e78e8dcaa69df5b6f919285e",
+    "synthetic/SY192-pre.json": "5002f9d243a0bb55fe269e67352a01a3b959f93003c595676320bdccf9a0272e",
+    "synthetic/SY192-audit.json": "d3507c6a2e5c13f6f0e00436cf0823f442391d20e9dbd40a8915026d98168eff",
+    "synthetic/SY191-audit.json": "4c1dab666752086a6bf40c3684855f322a200dc8cb236f9e097f62c3566ba343",
+    "selected-followup/KO192/candidate.json": "7d23330ce3d5cc3077c57c2703b04edc63f8700f5d3f3aa4b4146988720522ef",
+    "selected-followup/KO192/input.json": "a713d98b441634860b2a5f44040833f7380237dc4378ef646c26e409510bea8c",
+    "selected-followup/KO192/pre.json": "e560a877b4ae00dfcf673ed939dc644dad4c4712ec345659df9dac42bda37277",
+    "selected-followup/KO192/provenance.json": "7ec13295d839222ddb97d977c3affc28688451b0b75d8a07fcffd71172de2fb1",
+    "selected-followup/KO192/audit.json": "bc9324d5762c10a9ef520b7086266f9fbd48e3fa2f5c7b084ef1136601119ebc"
+  }
+}

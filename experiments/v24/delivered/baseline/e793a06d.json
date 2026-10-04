@@ -1,0 +1,11 @@
+{
+  "unit_id": "e793a06d",
+  "kind": "deterministic gated delivery; not native model generation",
+  "full_edited_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+  "accepted_patch_ids": [],
+  "blocked_patches": [],
+  "raw_label_violations": [],
+  "local_review_required": [],
+  "semantic_correctness_certified": false,
+  "raw_output_preserved": true
+}

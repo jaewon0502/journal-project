@@ -1,0 +1,170 @@
+{
+  "status": "Predeclared protocol-based expectations; not human gold, not judge output. Withhold from both future judges until both independent outputs are sealed.",
+  "normative_truth_gold": null,
+  "rows": [
+    {
+      "id": "A01",
+      "original_proposition_changed": "yes",
+      "changed_relation": "The approximate diameter changes from half a mile to 150 meters; this corrects O rather than establishing harmful loss.",
+      "candidate_factual_error": "no",
+      "normative_value_resolution": "not_applicable",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "a diameter of around half a mile"
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "a diameter of around 150 meters"
+        },
+        {
+          "document_id": "S2",
+          "locator": "Main, size result",
+          "quote": "volume-equivalent diameter of 151 ± 5 m"
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "original_proposition_changed": "yes",
+      "changed_relation": "C newly restricts the existing income-calculation term to the student alone; household inclusion is source-only, not text omitted from O.",
+      "candidate_factual_error": "yes",
+      "normative_value_resolution": "not_applicable",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "월 소득 인정액이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생"
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "학생 본인의 소득·재산만으로 산정한 월 소득 인정액이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생"
+        },
+        {
+          "document_id": "S1",
+          "locator": "Definition clause",
+          "quote": "월 소득 인정액*이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생"
+        },
+        {
+          "document_id": "S1",
+          "locator": "Immediately linked income footnote",
+          "quote": "학생 본인과 가구원(부모 또는 배우자)의 소득·재산 등을 조사하여 산정"
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "original_proposition_changed": "yes",
+      "changed_relation": "The asserted opening time changes from 09:00 to 10:00 and corrects O.",
+      "candidate_factual_error": "no",
+      "normative_value_resolution": "not_applicable",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "On Day 1, the gate opened at 09:00."
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "On Day 1, the gate opened at 10:00."
+        },
+        {
+          "document_id": "S1",
+          "locator": "Fictional final event log, Day 1",
+          "quote": "The gate opened at 10:00 on Day 1."
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "original_proposition_changed": "yes",
+      "changed_relation": "C adds an exclusive age minimum to O’s general resident eligibility proposition.",
+      "candidate_factual_error": "yes",
+      "normative_value_resolution": "not_applicable",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "Program P admits residents."
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "Program P admits only residents aged 30 or older."
+        },
+        {
+          "document_id": "S1",
+          "locator": "Fictional Program P complete eligibility rule",
+          "quote": "Program P admits residents of every age; there is no age minimum."
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "original_proposition_changed": "no",
+      "changed_relation": "The same exact attendance count is expressed in different surface wording.",
+      "candidate_factual_error": "no",
+      "normative_value_resolution": "not_applicable",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "Exactly six people attended the session."
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "The session had exactly six attendees."
+        },
+        {
+          "document_id": "S1",
+          "locator": "Fictional final attendance tally",
+          "quote": "Exactly six people attended the session."
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "original_proposition_changed": "yes",
+      "changed_relation": "The attributed opinion changes from fair to unfair; the transcript settles what Mira said, not whether the fee is fair.",
+      "candidate_factual_error": "yes",
+      "normative_value_resolution": "unresolved",
+      "source_anchors": [
+        {
+          "document_id": "O",
+          "locator": "target excerpt",
+          "quote": "Mira called the fee fair."
+        },
+        {
+          "document_id": "C",
+          "locator": "target excerpt",
+          "quote": "Mira called the fee unfair."
+        },
+        {
+          "document_id": "S1",
+          "locator": "Fictional verified transcript, Mira utterance",
+          "quote": "Mira: \"The fee is fair.\""
+        }
+      ]
+    }
+  ],
+  "preserved_old_judgments": {
+    "R004_F2": {
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "necessity": "no",
+      "local_action": "no_change"
+    },
+    "R006_F1": {
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "necessity": "yes",
+      "local_action": "patch"
+    }
+  },
+  "interpretation": "The proposed label resolves protocol ambiguity; neither old label is reclassified as model harm, and successful repair judgments and scores remain unchanged."
+}

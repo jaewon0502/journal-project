@@ -1,0 +1,88 @@
+{
+  "output_id": "e79",
+  "language": "en",
+  "condition": "V",
+  "variant_id": "en-R82",
+  "raw_sha256": "7d40176392ea011c29b907cb8d09746ffd992978e10a3d132b3681082ca59864",
+  "input_sha256": "6ec6b2a7994c69dbd8d888d95c549a59f8d475ca2d6e49b8d78ea71a0315719d",
+  "original_text_sha256": "f515533021923bb2e6afffb31773336fb137c13931716c658b45e961e551197a",
+  "final_text_sha256": "4f10cffbf6afecb8a26001c1d4cb18f3a2d7fad42b352c37907a9659e6a85425",
+  "article_unchanged": false,
+  "alignment": [
+    {
+      "question_id": "Q1",
+      "candidate_id": "A",
+      "relation": "different_target",
+      "source_id": "arXiv:2305.06206v1",
+      "source_location": {
+        "page": 11,
+        "table": "Table 3",
+        "row": "P (d)",
+        "column": "TIC 271971130.02",
+        "qualifier": "Fitted Parameters; 2-planet linear fit"
+      }
+    },
+    {
+      "question_id": "Q1",
+      "candidate_id": "B",
+      "relation": "same_target",
+      "source_id": "arXiv:2305.06206v1",
+      "source_location": {
+        "page": 11,
+        "table": "Table 3",
+        "row": "P (d)",
+        "column": "TOI-715 b",
+        "qualifier": "Fitted Parameters; 2-planet linear fit"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "A",
+      "relation": "same_target",
+      "source_id": "arXiv:2305.06206v1",
+      "source_location": {
+        "page": 11,
+        "table": "Table 3",
+        "row": "Companion radius; Rp (R⊕)",
+        "column": "TOI-715 b",
+        "qualifier": "Derived Parameters; 2-planet linear fit"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "B",
+      "relation": "different_target",
+      "source_id": "arXiv:2305.06206v1",
+      "source_location": {
+        "page": 11,
+        "table": "Table 3",
+        "row": "Companion radius; Rp (R⊕)",
+        "column": "TIC 271971130.02",
+        "qualifier": "Derived Parameters; 2-planet linear fit"
+      }
+    }
+  ],
+  "claim_audit": [
+    {
+      "question_id": "Q1",
+      "relation": "contradicted"
+    },
+    {
+      "question_id": "Q2",
+      "relation": "supported"
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "26 Earth days",
+      "after": "19 Earth days",
+      "reason": "Correct TOI-715 b's year using its fitted orbital period and NASA's whole-day rendering.",
+      "question_id": "Q1"
+    }
+  ],
+  "local_annotation_count": 0,
+  "other_concern_count": 0,
+  "exact_delivery": true,
+  "notice": "Projection excludes full article, source quotations and prose reasoning. Raw complete native output privately preserved; does not replace it."
+}

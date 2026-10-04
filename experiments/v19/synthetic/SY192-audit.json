@@ -1,0 +1,34 @@
+{
+  "unit_id": "SY192",
+  "audit_basis": "Independent source-first findings saved to SY192-pre.json before a separate tool call read the output; audit compares actual full_edited_article with entire original and complete S1.",
+  "necessary_issues_repaired": [
+    {
+      "id": "N1",
+      "original_article_anchor": "나머지 5명은 검출한계 미만이었다.",
+      "edited_article_anchor": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다.",
+      "source_anchor": {
+        "id": "S1",
+        "quote": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다."
+      },
+      "result": "Fully repaired: four remaining samples are detectable but below quantification, and one is below detection."
+    }
+  ],
+  "necessary_issues_missed": [],
+  "unnecessary_edits": [],
+  "collateral_loss": [],
+  "original_preservation": {
+    "verified_exact_single_replacement": true,
+    "evidence": "Actual full_edited_article equals original article.full_text with only the necessary sentence replaced; all other characters and paragraph breaks are preserved.",
+    "preserved_anchors": [
+      "가상 분석: 22명 중 17명에서 정량한계 초과",
+      "연구진은 성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다.",
+      "연구진은 표본 확대가 필요하다고 밝혔다. 이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다."
+    ]
+  },
+  "held_issues": [],
+  "optional_material_not_required": {
+    "source_anchor": "검출한계와 정량한계는 다르다.",
+    "assessment": "Omission of this general explanation is acceptable; the corrected breakdown makes the distinction explicit in the reported results."
+  },
+  "scoped_conclusion": "Pass within the complete supplied fictional record. The sole necessary factual correction is present, with no missed necessary issues, unnecessary edits, collateral loss, or unresolved holds. No external factual verification was attempted."
+}

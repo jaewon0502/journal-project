@@ -1,0 +1,92 @@
+[
+  {
+    "path": "author-slides.pdf",
+    "bytes": 8734266,
+    "sha256": "0ff0e2344a3ba8b8614e6b2802b6706ef0a12371dffdcb4a36ce2eea12c1ca23"
+  },
+  {
+    "path": "author-slides.txt",
+    "bytes": 75094,
+    "sha256": "74be78540cb182e7ed9c74c1de828d55f1f80c654049f682fc3389e54205ad89"
+  },
+  {
+    "path": "closure-audit.md",
+    "bytes": 10684,
+    "sha256": "98230af707b6d3c36687aefd3ec25bf49919502632a6b5d5c58d239e04181264"
+  },
+  {
+    "path": "direct-evidence-audit.md",
+    "bytes": 9310,
+    "sha256": "400d6542525c6ddd8c38f7603e072c77e83e857f3d36247827dbd3e40d3875a7"
+  },
+  {
+    "path": "prior-v28-report.html",
+    "bytes": 17245,
+    "sha256": "615add25b6477c5236b0ad26850480f029e6e28ec9d16f55ab2b6e41e8e82324"
+  },
+  {
+    "path": "search1.json",
+    "bytes": 34474,
+    "sha256": "c6dfbbbc1eee0413c0947d6f1e493131156e0685e43e6c6ccb221848b18b20f7"
+  },
+  {
+    "path": "slide-access.json",
+    "bytes": 312,
+    "sha256": "dedd21134b851a5874aa5f4a6ba64963e972c20be72607c2a533f977a0158418"
+  },
+  {
+    "path": "slide33.png",
+    "bytes": 909647,
+    "sha256": "0d94dd9cdc8b8ac400994d82e97167b97e736728830d3bdb6d4f74dcfe1bd695"
+  },
+  {
+    "path": "slide34.png",
+    "bytes": 480479,
+    "sha256": "5b2ec416a6d6f0b36d19e811b544e39c41409f8626b9ededa895f1998d0a2867"
+  },
+  {
+    "path": "status-qa.md",
+    "bytes": 2478,
+    "sha256": "2364a523d1dd3898bfebf73236a63bae52041b35a8c9589a6d3fb5389c659511"
+  },
+  {
+    "path": "update_report.py",
+    "bytes": 2175,
+    "sha256": "b922f506cd4a22757a5d8d4edf1c5755a1b03d222e1fbb29e20b4fdd6f7903c5"
+  },
+  {
+    "path": "web2.json",
+    "bytes": 22231,
+    "sha256": "cd50338a7457b1606432bb92df04bcf1e3d1ef5b66917a12c0554e992f5d742b"
+  },
+  {
+    "path": "web3.json",
+    "bytes": 24545,
+    "sha256": "1c30d262a0b4a7c4ac1f7546b16ff83348ac73b9303a1299033382adcce3f2c4"
+  },
+  {
+    "path": "web4.json",
+    "bytes": 23350,
+    "sha256": "7f25d39f403d0c473ed82caaae39f5f4dac4f6ca984b5fc1f07dedb83c505351"
+  },
+  {
+    "path": "web5.json",
+    "bytes": 32374,
+    "sha256": "fdf019aabe477bd6f55c29aae6628a89e58ccb207192b0909286c4d3d907d051"
+  },
+  {
+    "path": "web6.json",
+    "bytes": 19628,
+    "sha256": "22f86cfce834a7a9a730e1b34861ddee1bf43a98a5b4b71da024248d60176e49"
+  },
+  {
+    "path": "web7.json",
+    "bytes": 222,
+    "sha256": "7e88b0e26c87638d70dbb3bb6dae76dc45b73019a20d62788e249848eeab9b67"
+  },
+  {
+    "path": "web8.json",
+    "bytes": 15951,
+    "sha256": "2acd3bac79885e371c8ecaca0486bb6658a301323ce417ae300035919358d60e"
+  }
+]

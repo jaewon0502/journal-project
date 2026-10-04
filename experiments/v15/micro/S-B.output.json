@@ -1,0 +1,110 @@
+[
+  {
+    "id": "M15",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "provisional_inventory 밖의 입장 자격 제한; 후보에서 보존됨",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "허구의 다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "original_quote": "다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "candidate_quote": "다온마루는 안전교육 이수자만 입장할 수 있다."
+      },
+      {
+        "item": "provisional_inventory 밖의 안내실 벽 색상",
+        "origin": "source_only",
+        "importance": "optional",
+        "source_quote": "안내실 벽은 청록색이다.",
+        "original_quote": "",
+        "candidate_quote": ""
+      }
+    ],
+    "reason": "동결 inventory의 필수 입장 자격 제한과 무료 입장이 모두 유지되어 질문에 답한다. 후보와 원문은 동일하다. provisional_inventory에 없던 입장 자격도 검사했으며 보존되어 있다. 자료에만 있는 벽 색상은 질문과 무관한 선택 정보여서 추가할 필요가 없다. 패치가 없어 의존성 판정은 적용하지 않는다. 합성 기사라는 범위도 유지된다."
+  },
+  {
+    "id": "M92",
+    "new_harm_vs_original": "yes",
+    "required_answer_missing": "yes",
+    "source_conflict": "yes",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "provisional_inventory 밖의 안전교육 이수자만 입장 가능하다는 제한; 후보에서 소실됨",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "허구의 다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "original_quote": "다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "candidate_quote": "다온마루는 누구나 입장할 수 있다."
+      },
+      {
+        "item": "provisional_inventory 밖의 안내실 벽 색상",
+        "origin": "source_only",
+        "importance": "optional",
+        "source_quote": "안내실 벽은 청록색이다.",
+        "original_quote": "",
+        "candidate_quote": ""
+      }
+    ],
+    "reason": "무료 입장은 보존되지만 후보는 원문의 안전교육 이수자만이라는 필수 조건을 누구나로 바꾸었다. 따라서 누가 입장 가능한지에 대한 정확한 필수 답이 없어지고 자료와 충돌하며 원문 대비 새로운 손실이 생긴다. 이 조건은 동결 inventory에는 있었으나 provisional_inventory에는 빠져 있다. 복원할 조건은 원문에도 있었으므로 자료에만 있는 배경을 추가하는 문제가 아니다. 벽 색상 추가는 불필요하다. 패치가 없으므로 P1 단독 파손과 의존성은 적용하지 않는다."
+  },
+  {
+    "id": "M38",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "yes",
+    "missed_items": [
+      {
+        "item": "provisional_inventory 밖의 주민회의 예약 창구 비판과 귀속; 후보에서 보존됨",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "주민회는 예약 창구가 불편하다고 말했다.",
+        "original_quote": "주민회는 예약 창구가 불편하다고 말했다.",
+        "candidate_quote": "주민회는 예약 창구가 불편하다고 말했다."
+      }
+    ],
+    "reason": "후보는 원문과 동일하며 다음 달 개장이라는 상대적 시점과 예약 창구가 불편하다는 주민회의 평가를 모두 보존한다. 비판의 내용·대상·발언 주체가 유지되어 필수 답의 누락이나 자료 충돌이 없다. provisional_inventory 밖의 평가도 동결 inventory와 대조하여 검사했다. 추가 검토할 자료 전용 배경이나 패치는 없다."
+  },
+  {
+    "id": "M67",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "yes",
+    "missed_items": [
+      {
+        "item": "provisional_inventory 밖의 주민회의 예약 창구 비판과 귀속; 후보에서 보존됨",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "주민회는 예약 창구가 불편하다고 말했다.",
+        "original_quote": "주민회는 예약 창구가 불편하다고 말했다.",
+        "candidate_quote": "주민회는 예약 창구가 불편하다고 말했다."
+      },
+      {
+        "item": "provisional_inventory 밖의 관리실 책상 무늬",
+        "origin": "source_only",
+        "importance": "optional",
+        "source_quote": "관리실 책상은 느티나무 무늬다.",
+        "original_quote": "",
+        "candidate_quote": ""
+      }
+    ],
+    "reason": "후보와 원문은 동일하며 다음 달 개장과 주민회의 예약 창구 비판 및 귀속을 보존한다. 동결 inventory의 필수 답은 모두 충족한다. 자료에만 있는 책상 무늬는 개장 시점이나 주민회 평가를 답하는 데 불필요하며 원문 대비 새 손실이 아니다. provisional_inventory 밖의 비판과 선택 배경을 구별하여 기록했다. 패치는 없어 의존성 판정은 적용하지 않는다."
+  }
+]

@@ -1,0 +1,333 @@
+{
+  "unit_id": "a267dc49",
+  "comparisons": [
+    {
+      "id": "context_1",
+      "article_quote": "2026년",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Year of the first-half course completion cohort; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "completion_target",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Distinct completed learners across all first-half basic repair courses.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 수료자는 240명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 수료자는 240명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 수료자는 240명이었다."
+            }
+          ],
+          "reason": "The source explicitly counts the overall cohort."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 수료자는 240명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "집계 대상은 1월부터 6월까지 운영한 모든 기초 수선 강좌를 합친 것으로, 같은 사람이 여러 차례 참여해도 한 번만 셌다."
+            }
+          ],
+          "reason": "The completion cohort is January through June; June 30 is the confirmation date, not a separate cohort."
+        }
+      },
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "240",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 수료자는 240명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "other_scope",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Tempting related completion count; it does not measure the article’s population.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "All completers and weekend completers have different population scopes."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "weekday_scope",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Tempting related completion count; it does not measure the article’s population.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Weekday-only completers are a different subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "144",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "uncertainty": null
+    }
+  ],
+  "uncovered_numeric_claims": [],
+  "scope_limits": [
+    "Only the supplied frozen synthetic source was used; no real-world verification. Calendar and clock units are unknown because the allowed vocabulary has no temporal units."
+  ]
+}

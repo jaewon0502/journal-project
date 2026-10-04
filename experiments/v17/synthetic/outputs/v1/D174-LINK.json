@@ -1,0 +1,71 @@
+{
+  "unit_id": "D174",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "순서표 규칙 적용일은 언제인가?",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "yes",
+      "original_quote": "이번 순서표 규칙은 2035년 9월 1일부터 적용된다.",
+      "candidate_quote": "이번 순서표 규칙은 2035년 9월 12일부터 적용된다.",
+      "source_refs": [
+        "S1 제1항(적용일) 및 자료 범위 확인",
+        "S2 공개일"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "제1항(적용일)",
+            "quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용한다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "마지막 문장: 규칙 전문 및 변경 여부",
+            "quote": "이 자료는 기사와 질문에 관련된 규칙 전문이며 숨겨진 추가 예외나 적용일 변경은 없다."
+          },
+          "relation": "effective_date",
+          "relevance_to_claim": "최종 안내서의 적용일은 9월 2일이며 관련 예외나 변경도 없으므로 후보의 9월 12일과 원문의 9월 1일 모두 틀리다."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "첫 예약 기록: 공개일",
+            "quote": "공개일 2035년 9월 12일."
+          },
+          "linked_clause": null,
+          "relation": "scope",
+          "relevance_to_claim": "9월 12일은 기록 공개일에 해당한다. 후보의 공개일 서술은 유지하고 규칙 적용일만 고쳐야 한다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "후보는 규칙 적용일을 기록 공개일과 같은 9월 12일로 답한다. 자료에 따른 답은 규칙 적용일 9월 2일, 기록 공개일 9월 12일이다. 원문의 9월 1일 복원도 자료와 모순된다.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "명시적이지만 틀린 적용일 답을 최종 안내서 제1항에 맞게 최소 수정한다. 원문의 날짜 의미가 바뀌었으나 원문 역시 오류이므로 그대로 복원하지 않고 직접 뒷받침되는 9월 2일로 고친다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F1",
+      "before": "이번 순서표 규칙은 2035년 9월 12일부터 적용된다.",
+      "after": "이번 순서표 규칙은 2035년 9월 2일부터 적용된다.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "전체 후보에 날짜 수정 하나를 적용하면 공개일과 적용일을 구분하고 나머지 수치·정의·예외·공간 확인 조건·발언 귀속 및 가치 판단의 한계를 보존한다. 제공된 허구 자료의 범위에서 남은 필수 수정이나 미해결 근거 공백은 없다.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

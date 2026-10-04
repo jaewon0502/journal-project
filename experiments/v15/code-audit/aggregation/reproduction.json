@@ -1,0 +1,24 @@
+{
+  "fixture": "Synthetic one case, three methods sharing one blind output; one unknown extra raw judgment",
+  "expected_unique_judged_outputs": 1,
+  "legacy_unique_judged_outputs": 2,
+  "legacy_unique_blind_inputs": 1,
+  "legacy_assigned_method_outputs": 3,
+  "legacy_unexpected_judgment_ids": [
+    "unknown-extra"
+  ],
+  "checked_result_written": false,
+  "checked_rejection": {
+    "phase": "eval",
+    "duplicate_blind_ids": [],
+    "duplicate_judgment_ids": [],
+    "unexpected_judgment_ids": [
+      "unknown-extra"
+    ],
+    "unknown_extra_judgment_ids": [
+      "unknown-extra"
+    ],
+    "wrong_phase_judgment_ids": {},
+    "missing_judgment_ids": []
+  }
+}

@@ -1,0 +1,213 @@
+[
+  {
+    "arm": "c",
+    "selected": [
+      "P4",
+      "P19"
+    ],
+    "decisions": [
+      {
+        "patch_id": "P1",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P2",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P3",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P4",
+        "decision": "apply",
+        "factual_relation": "conflict"
+      },
+      {
+        "patch_id": "P5",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P6",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P7",
+        "decision": "reject",
+        "factual_relation": "consistent"
+      },
+      {
+        "patch_id": "P8",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P9",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P10",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P11",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P12",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P13",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P14",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P15",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P16",
+        "decision": "reject",
+        "factual_relation": "consistent"
+      },
+      {
+        "patch_id": "P17",
+        "decision": "reject",
+        "factual_relation": "consistent"
+      },
+      {
+        "patch_id": "P18",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P19",
+        "decision": "apply",
+        "factual_relation": "conflict"
+      }
+    ],
+    "final_sha256": "c8c9ea9c7f17bdddf8e7a199525eb0a55a75d4551f347b16efb6d8c9bddc6275",
+    "exact_delivery": true
+  },
+  {
+    "arm": "x",
+    "selected": [
+      "P19"
+    ],
+    "decisions": [
+      {
+        "patch_id": "P1",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P2",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P3",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P4",
+        "decision": "hold",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P5",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P6",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P7",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P8",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P9",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P10",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P11",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P12",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P13",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P14",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P15",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P16",
+        "decision": "reject",
+        "factual_relation": "consistent"
+      },
+      {
+        "patch_id": "P17",
+        "decision": "reject",
+        "factual_relation": "consistent"
+      },
+      {
+        "patch_id": "P18",
+        "decision": "reject",
+        "factual_relation": "unknown"
+      },
+      {
+        "patch_id": "P19",
+        "decision": "apply",
+        "factual_relation": "unknown"
+      }
+    ],
+    "final_sha256": "98ba449aca5ae1306036d2fa474a3efa5f088199dbda4edf824c90f73dfdee33",
+    "exact_delivery": true
+  }
+]

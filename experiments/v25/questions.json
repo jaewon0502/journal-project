@@ -1,0 +1,124 @@
+[
+  {
+    "language": "ko",
+    "questions": [
+      {
+        "id": "Q1",
+        "claim_locator": "부문별 설명 중 건설투자의 증가율을 말하는 절",
+        "question": "이 기사의 건설투자 증가율 주장을 확인할 때 연결해야 할 표의 셀을 고르세요. 수치 자체의 일치 여부와 별개로 대상·기간·측정기준을 확인하세요.",
+        "candidates": [
+          {
+            "label": "A",
+            "source_id": "공보 2026-04-24호",
+            "pdf_physical_page": 2,
+            "printed_page": "1",
+            "table": "국내총생산에 대한 지출",
+            "section": "2020년 연쇄가격 기준",
+            "column_position": "2026ᵖ / 1/4; unparenthesized entry",
+            "value": "2.8"
+          },
+          {
+            "label": "B",
+            "source_id": "공보 2026-04-24호",
+            "pdf_physical_page": 2,
+            "printed_page": "1",
+            "table": "국내총생산에 대한 지출",
+            "section": "2020년 연쇄가격 기준",
+            "column_position": "2026ᵖ / 1/4; unparenthesized entry",
+            "value": "4.8"
+          }
+        ]
+      },
+      {
+        "id": "Q2",
+        "claim_locator": "실질 국내총소득(GDI)의 1분기 증가율을 말하는 절",
+        "question": "이 기사의 1분기 실질 국내총소득 증가율 주장을 확인할 때 연결해야 할 표의 셀을 고르세요. 수치 자체의 일치 여부와 별개로 대상·기간·측정기준을 확인하세요.",
+        "candidates": [
+          {
+            "label": "A",
+            "source_id": "공보 2026-04-24호",
+            "pdf_physical_page": 3,
+            "printed_page": "2",
+            "table": "경제활동별 국내총생산",
+            "section": "2020년 연쇄가격 기준",
+            "column_position": "2026ᵖ / 1/4; unparenthesized entry",
+            "value": "1.7"
+          },
+          {
+            "label": "B",
+            "source_id": "공보 2026-04-24호",
+            "pdf_physical_page": 3,
+            "printed_page": "2",
+            "table": "경제활동별 국내총생산",
+            "section": "2020년 연쇄가격 기준",
+            "column_position": "2026ᵖ / 1/4; unparenthesized entry",
+            "value": "7.5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "language": "en",
+    "questions": [
+      {
+        "id": "Q1",
+        "claim_locator": "The paragraph beginning “The agency said that because of the short distance”; the planet’s year in Earth days",
+        "question": "Which table cell should be linked when checking this article’s orbital-period claim? Identify the target and measurement independently of whether the article’s number matches.",
+        "candidates": [
+          {
+            "label": "A",
+            "source_id": "arXiv:2305.06206v1",
+            "pdf_physical_page": 11,
+            "printed_page": "11",
+            "table": "Table 3",
+            "section": "Fitted Parameters",
+            "row": "P (d)",
+            "column_position": "second target column from left",
+            "value": "25.60712 +0.00031/−0.00036"
+          },
+          {
+            "label": "B",
+            "source_id": "arXiv:2305.06206v1",
+            "pdf_physical_page": 11,
+            "printed_page": "11",
+            "table": "Table 3",
+            "section": "Fitted Parameters",
+            "row": "P (d)",
+            "column_position": "first target column from left",
+            "value": "19.288004 +0.000027/−0.000024"
+          }
+        ]
+      },
+      {
+        "id": "Q2",
+        "claim_locator": "The paragraph beginning “Astronomers say”; the width relative to Earth (also stated in the deck)",
+        "question": "Which table cell should be linked when checking this article’s width relative to Earth? Identify the target and measurement independently of whether the article’s number matches.",
+        "candidates": [
+          {
+            "label": "A",
+            "source_id": "arXiv:2305.06206v1",
+            "pdf_physical_page": 11,
+            "printed_page": "11",
+            "table": "Table 3",
+            "section": "Derived Parameters",
+            "row": "Companion radius; Rₚ (R⊕)",
+            "column_position": "first target column from left",
+            "value": "1.550 ± 0.064"
+          },
+          {
+            "label": "B",
+            "source_id": "arXiv:2305.06206v1",
+            "pdf_physical_page": 11,
+            "printed_page": "11",
+            "table": "Table 3",
+            "section": "Derived Parameters",
+            "row": "Companion radius; Rₚ (R⊕)",
+            "column_position": "second target column from left",
+            "value": "1.066 ± 0.092"
+          }
+        ]
+      }
+    ]
+  }
+]

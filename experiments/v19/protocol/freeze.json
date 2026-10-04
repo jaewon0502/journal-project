@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-03T09:40:10.844135+00:00",
+  "files": {
+    "protocol/audit.md": "6f0c905bf12c875325556f645be57b6d33f596f9dce59f3f0cbeca1160e2c322",
+    "protocol/reference.md": "e23e9b74f16927a23a8dc764f0b121de3ab990abd0f934dc762e74a3d79bf95e",
+    "protocol/schema.json": "ec0fab47c37ef85244f1397f9dc9ed99239419769b787a70a8aa523ff93ce97b",
+    "protocol/writer-v2.md": "0136b24387697535ab70bea626162bd9569c55923bfb2e076d76f3ba0d63aa95"
+  },
+  "preregistration_sha256": "2d42a267b7b1ac2ce3b061dafa6816739eb35c7a0c65aff4702848dc289375ee"
+}

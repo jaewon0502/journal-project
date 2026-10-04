@@ -1,0 +1,64 @@
+{
+  "unit_id": "R261",
+  "input_sha256": "915a4b5496564ece3523580e3cf47ca8ce3dfc151d9d69131389e38ec0ed4b1e",
+  "raw_sha256": "2e250791f73613f8fe3efcff745eb8d0ecacebf7708797f7c3c2b46b95921c1e",
+  "original_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+  "final_sha256": "03a1d481b5e5175c9a6f6bd8d8ba31053ada2cb2a4d1d901b4871d099eaa34f3",
+  "original_chars": 8775,
+  "final_chars": 8966,
+  "patch_count": 6,
+  "patches": [
+    {
+      "id": "P1",
+      "before_chars": 53,
+      "after_chars": 89,
+      "before_sha256": "f09dad8ca30a90f8b3a4c859ac12b5d2a2cf5c1148dd0be3dd15cae8f2333a2e",
+      "after_sha256": "8454e4f6521457e3a324a2937e9f4fcb84cd1d4bddd870cb993d35963ee58cb0",
+      "position_in_sequential_input": 3218
+    },
+    {
+      "id": "P2",
+      "before_chars": 100,
+      "after_chars": 114,
+      "before_sha256": "4a8c8b4f6eaa341293e8e2ca799a41fb76bec8092f3f0f1558bb2cfac0f5a246",
+      "after_sha256": "630ec02e34b347c1b93b506c295f8396cd2819ec75fdca65b3e15661b53cf5d1",
+      "position_in_sequential_input": 3583
+    },
+    {
+      "id": "P3",
+      "before_chars": 107,
+      "after_chars": 109,
+      "before_sha256": "47727edd85ba4548d3a2c8284981c364b8ad47d914367ef735e169599c57567c",
+      "after_sha256": "132b6717bab7f2e929e1e3a58661756d261125425026847c6b786adf3cb5fd8c",
+      "position_in_sequential_input": 4889
+    },
+    {
+      "id": "P4",
+      "before_chars": 155,
+      "after_chars": 174,
+      "before_sha256": "4931856a747a68a91e00b115bb2a4f8883f5e1a0d500617630b4a54ed280b31a",
+      "after_sha256": "9bdfc38087cbf142d4c85a5c4b29df386dc8c4c63199c9baaabd0fbd3cbf84c5",
+      "position_in_sequential_input": 5254
+    },
+    {
+      "id": "P5",
+      "before_chars": 46,
+      "after_chars": 56,
+      "before_sha256": "06a9f529b9df220d3308f8c0a3918785ce4722967f678cca5be49fadaaa61adf",
+      "after_sha256": "e86944cd57fff67c25f31a88467e4d55a916a5e6814ab2b8e2f826f7fca91e92",
+      "position_in_sequential_input": 5751
+    },
+    {
+      "id": "P6",
+      "before_chars": 250,
+      "after_chars": 360,
+      "before_sha256": "934a5fc90cf8df47b053b8699826038acab44c918e988823675fa3a0908ef294",
+      "after_sha256": "0ef9c65f062d4849b6ab26b9a144bdca4d81bc030e6cbef09a77a5889aee6d41",
+      "position_in_sequential_input": 8489
+    }
+  ],
+  "clause_count": 77,
+  "annotation_count": 38,
+  "exact_literal_delivery": true,
+  "notice": "Public projection omits full article, quotations and edits that would collectively reproduce it. Private raw/input preserved."
+}

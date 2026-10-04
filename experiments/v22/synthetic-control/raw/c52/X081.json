@@ -1,0 +1,84 @@
+{
+  "unit_id": "X081",
+  "claims": [
+    {
+      "id": "C1",
+      "proposition": "Researchers observed adult animals in a laboratory.",
+      "article_quotes": [
+        "연구진은 실험실 성체 동물"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The research actor, laboratory setting, adult population, and observation are directly supported.",
+      "patch_ids": []
+    },
+    {
+      "id": "C2",
+      "proposition": "The observed sample comprised 12 animals.",
+      "article_quotes": [
+        "12마리를 관찰했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The sample size matches the source.",
+      "patch_ids": []
+    },
+    {
+      "id": "C3",
+      "proposition": "The report records a decrease in activity after feeding.",
+      "article_quotes": [
+        "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "먹이를 준 뒤 활동량이 감소했다."
+        },
+        {
+          "document_id": "S1",
+          "quote": "대조군이 없어 감소의 인과원인은 확인하지 않았다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "supported",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "Both the temporal observation and its attribution are supported. The article does not assert causation or effects in wild animals, so adding those limitations is unnecessary.",
+      "patch_ids": []
+    }
+  ],
+  "patches": [],
+  "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+  "unresolved_items": [],
+  "read_scope": {
+    "policy": "private-artifacts/policy-A.txt",
+    "input": "private-artifacts/control/inputs/split/X081.json",
+    "article": "Entire supplied original article",
+    "sources": [
+      {
+        "document_id": "S1",
+        "scope": "Entire supplied synthetic source"
+      }
+    ],
+    "external_sources_used": false
+  }
+}

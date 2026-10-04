@@ -1,0 +1,40 @@
+{
+  "v15_checked": {
+    "hold_last": {
+      "accepted": true,
+      "repair_success": false,
+      "pipeline_hold": true,
+      "result_written": true
+    },
+    "hold_first": {
+      "accepted": true,
+      "repair_success": true,
+      "pipeline_hold": false,
+      "result_written": true
+    }
+  },
+  "v19_checked_v2": {
+    "hold_last": {
+      "accepted": false,
+      "diagnostics": {
+        "duplicate_realization_identity": {
+          "report": "realized",
+          "case_id": "case",
+          "method": "free"
+        }
+      },
+      "result_written": false
+    },
+    "hold_first": {
+      "accepted": false,
+      "diagnostics": {
+        "duplicate_realization_identity": {
+          "report": "realized",
+          "case_id": "case",
+          "method": "free"
+        }
+      },
+      "result_written": false
+    }
+  }
+}

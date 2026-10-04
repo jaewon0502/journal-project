@@ -1,0 +1,62 @@
+{
+  "unit_id": "Q2182",
+  "clause_audit": [
+    {
+      "original_quote": "3일 시험에서",
+      "proposition": "The test lasted three days.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "시험 기간은 3일이다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Temporal scope matches."
+    },
+    {
+      "original_quote": "장치의 평균 소비전력 감소를 확인했지만",
+      "proposition": "The institution recorded reduced average power consumption.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "기관은 장치의 평균 소비전력이 줄었다고 기록했다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Attributed result matches."
+    },
+    {
+      "original_quote": "수명과 안전성은 측정하지 않았다.",
+      "proposition": "Lifespan was not measured.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "수명과 안전성은 측정하지 않았으며 관련 결론을 제시하지 않는다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Explicit nonmeasurement."
+    },
+    {
+      "original_quote": "수명과 안전성은 측정하지 않았다.",
+      "proposition": "Safety was not measured.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "수명과 안전성은 측정하지 않았으며 관련 결론을 제시하지 않는다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Conjoined safety claim is also explicit."
+    }
+  ],
+  "patches": [],
+  "full_edited_text": "기관 기록은 3일 시험에서 장치의 평균 소비전력 감소를 확인했지만 수명과 안전성은 측정하지 않았다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": "Actual lifespan and safety changes are not established."
+}

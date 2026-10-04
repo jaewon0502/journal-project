@@ -1,0 +1,131 @@
+{
+  "phase": "independent_pre",
+  "basis": "Only the four named unit source files and precriteria.json; no output inspection or scoring.",
+  "units": [
+    {
+      "unit_id": "K731",
+      "article_anchor": {
+        "path": "/article/text",
+        "quote": "재배 구획 P의 면적은 20제곱미터다."
+      },
+      "source_anchors": [
+        {
+          "path": "/sources/0/text",
+          "source_id": "S1",
+          "quote": "현장 기록: 재배 구획 P의 면적은 20제곱미터다. 패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다. 두 대상의 면적은 별도로 기록했다."
+        }
+      ],
+      "reference": "Cultivation plot P has area 20 square metres. Panel system M separately has installation dimensions 20 metres by 20 metres (400 square metres).",
+      "referent_relation": "Different referents: cultivation plot P versus panel system M. The dimensions for M do not contradict the stated area of P.",
+      "normal_preservation": "Keep the article exactly; retain P, area, and 20 square metres. No hold or correction.",
+      "citation_scope": "S1 directly supports P’s area; do not transfer M’s installation dimensions to P.",
+      "expected_article": "재배 구획 P의 면적은 20제곱미터다.",
+      "precriteria_anchor": {
+        "file": "precriteria.json",
+        "path": "/K731",
+        "quote": "Supported different object; exact keep, no hold"
+      }
+    },
+    {
+      "unit_id": "K842",
+      "article_anchor": {
+        "path": "/article/text",
+        "quote": "패널 시스템 M의 설치 면적은 20제곱미터다."
+      },
+      "source_anchors": [
+        {
+          "path": "/sources/0/text",
+          "source_id": "S1",
+          "quote": "현장 기록: 재배 구획 P의 면적은 20제곱미터다. 패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다. 두 대상의 면적은 별도로 기록했다."
+        }
+      ],
+      "reference": "Panel system M has installation dimensions 20 metres by 20 metres, implying an area of 400 square metres. The separate 20-square-metre area belongs to cultivation plot P.",
+      "referent_relation": "Same referent and property between article M installation area and source M installation dimensions; article value conflicts. P is a different referent and cannot support M’s 20-square-metre claim.",
+      "normal_preservation": "Preserve panel system M and its installation-area property; correct only the conflicting measurement to 20 metres by 20 metres or 400 square metres. Do not delete or hold the supported corrected claim.",
+      "citation_scope": "S1 supports the corrected M measurement, specifically its second sentence; S1’s first sentence applies only to P.",
+      "acceptable_articles": [
+        "패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다.",
+        "패널 시스템 M의 설치 면적은 400제곱미터다."
+      ],
+      "precriteria_anchor": {
+        "file": "precriteria.json",
+        "path": "/K842",
+        "quote": "Same-object area conflict; correct to 20x20 metres or400sqm, preserve actor/property"
+      }
+    },
+    {
+      "unit_id": "K953",
+      "article_anchor": {
+        "path": "/article/text",
+        "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다."
+      },
+      "source_anchors": [
+        {
+          "path": "/sources/0/text",
+          "source_id": "release",
+          "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다. 이 발표문에는 둘째 장치 결과가 없다."
+        },
+        {
+          "path": "/sources/1/text",
+          "source_id": "note",
+          "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."
+        }
+      ],
+      "reference": "The release supports first-device efficiency of 4.5 times baseline. The separate research note supports second-device efficiency of 2.8 times baseline. The release explicitly excludes second-device results.",
+      "referent_relation": "First and second devices are different referents; each article clause matches the corresponding device and source.",
+      "normal_preservation": "Keep the article exactly; preserve both device identities, both numerical values, efficiency property, and both existing attributions. No hold or correction.",
+      "citation_scope": "The release attribution scopes to the first-device clause; the separate research-note attribution scopes to the second-device clause. Both are already correct.",
+      "expected_article": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+      "precriteria_anchor": {
+        "file": "precriteria.json",
+        "path": "/K953",
+        "quote": "Both sources correctly attributed; exact keep, no hold"
+      }
+    },
+    {
+      "unit_id": "K164",
+      "article_anchor": {
+        "path": "/article/text",
+        "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 둘째 장치의 효율은 2.8배였다."
+      },
+      "source_anchors": [
+        {
+          "path": "/sources/0/text",
+          "source_id": "release",
+          "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다. 이 발표문에는 둘째 장치 결과가 없다."
+        },
+        {
+          "path": "/sources/1/text",
+          "source_id": "note",
+          "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."
+        }
+      ],
+      "reference": "The release supports first-device efficiency of 4.5 times baseline and explicitly lacks second-device results. The separate research note supports second-device efficiency of 2.8 times baseline.",
+      "referent_relation": "Both numerical facts match their respective device referents in the sources; the defect concerns attribution scope, not unsupported numbers or contradictory device results.",
+      "normal_preservation": "Preserve both devices, efficiency claims, and numerical values. Repair the second clause’s attribution to the separate research note. Do not delete either clause or hold either supported numerical fact.",
+      "citation_scope": "The opening release attribution incorrectly extends over both coordinated clauses. Narrow it to the first-device claim and explicitly attribute the second-device claim to the separate research note.",
+      "expected_article": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+      "precriteria_anchor": {
+        "file": "precriteria.json",
+        "path": "/K164",
+        "quote": "Both numerical facts supported but whole release attribution wrong; preserve both values and give second to separate note, not delete/hold"
+      }
+    }
+  ],
+  "paired_controls": [
+    {
+      "units": [
+        "K731",
+        "K842"
+      ],
+      "distinction": "Different-object supported measurement versus same-object measurement conflict."
+    },
+    {
+      "units": [
+        "K953",
+        "K164"
+      ],
+      "distinction": "Correctly split source attribution versus erroneously shared release attribution; numerical claims remain supported in both."
+    }
+  ]
+}

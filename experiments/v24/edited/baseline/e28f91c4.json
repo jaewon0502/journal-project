@@ -1,0 +1,74 @@
+{
+  "unit_id": "e28f91c4",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "5월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "14일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source establishes this same calendar or clock context."
+    },
+    {
+      "quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "relation": "supported",
+      "comparison_ids": [
+        "received_target"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이번 기록의 대상은 납품번호 L514인 한 차례 배송뿐이다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이 자료의 인수 수량은 주문 예정량이나 월간 누계가 아니라 이날 실제 검수를 통과한 전체 배송분을 뜻한다."
+        }
+      ],
+      "reason": "The article gives accepted contents in boxes for delivery L514. S1 explicitly gives 8 boxes for that inspected shipment. The same contents weigh 192 kilograms in total and 24 kilograms per box; these mass measures coexist with the supported box count."
+    }
+  ],
+  "patches": [],
+  "full_edited_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

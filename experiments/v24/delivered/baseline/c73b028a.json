@@ -1,0 +1,11 @@
+{
+  "unit_id": "c73b028a",
+  "kind": "deterministic gated delivery; not native model generation",
+  "full_edited_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+  "accepted_patch_ids": [],
+  "blocked_patches": [],
+  "raw_label_violations": [],
+  "local_review_required": [],
+  "semantic_correctness_certified": false,
+  "raw_output_preserved": true
+}

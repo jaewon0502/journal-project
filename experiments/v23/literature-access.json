@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://arxiv.org/html/2309.11495v2",
+    "status": 200,
+    "collected_at_utc": "2026-10-03T12:04:57.625270+00:00",
+    "sha256": "2bf54e2138d500f7f7d467c0ba6a0b1a3c491ce4ff1a2dbeb60b52d9a4accd06"
+  },
+  {
+    "url": "https://aclanthology.org/2023.acl-long.910.pdf",
+    "status": 200,
+    "collected_at_utc": "2026-10-03T12:04:58.292533+00:00",
+    "sha256": "012e1231dc847c4cee6c7cb0e6ffee43f5799f70754930c815db1674ceffeab9"
+  }
+]

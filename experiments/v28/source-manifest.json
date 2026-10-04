@@ -1,0 +1,102 @@
+[
+  {
+    "id": "article",
+    "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+    "dates": {
+      "publication": "2026-10-03",
+      "modification": null,
+      "collection": "2026-10-03T12:25:04Z",
+      "notes": "Publication date displayed on page; modification not displayed in retrieved text."
+    },
+    "unit": "D71",
+    "role": "article",
+    "text_sha256": "4fb046ebaada36a8471c8e3eb0012b19d62a0eb3c03d835c5fe53f43133f7d8e"
+  },
+  {
+    "id": "source1",
+    "url": "https://www.scimex.org/newsfeed/fields-of-magenta-solar-panels-the-future-of-farming",
+    "dates": {
+      "publication": null,
+      "modification": null,
+      "collection": "2026-10-03T12:25:04Z",
+      "notes": "Publicly released label has no date in retrieved page. Release describes study publishing October 2; this is not assigned as page publication. Expert section updates: Rayudu 29 Sep 2026 10:26am; McNab 29 Sep 2026 12:01pm, timezone unstated. Multimedia modification 03 Oct 2026 1:14am is not the release modification date."
+    },
+    "unit": "D71",
+    "role": "source1",
+    "text_sha256": "99b45513844149e56ade98616d829b6719785d7e7844c5ef50a58fc8839f31ae"
+  },
+  {
+    "url": "https://www.theguardian.com/uk-news/2024/dec/03/uk-delays-full-shift-to-digital-immigration-system-amid-evisa-flaws",
+    "title": "Use expired ID to get to UK, says minister in charge of flawed eVisas",
+    "published": "2024-12-03T19:56:00Z (visible first-publication timestamp)",
+    "modified": "2024-12-03T22:22:19.000Z",
+    "collected": "2026-10-03T08:44:47.032903+00:00",
+    "article_kind": "independent newsroom news article",
+    "body_scope": "Complete headline, standfirst, visible author/date line, lead photo caption and all article body paragraphs including inset caption; no arbitrary truncation. Repeated responsive copy of lead caption included once. Navigation, related stories, topic links and donation/sharing widgets excluded. Current fetched version; original HTML preserved.",
+    "unit": "D72",
+    "role": "article",
+    "text_sha256": "28c777f21222dcd832f49525c77e7ab01398e1446b76228dee11e1f2d25904d2"
+  },
+  {
+    "id": "S1",
+    "url": "https://www.gov.uk/government/news/visa-holders-should-switch-to-an-evisa-now",
+    "title": "Visa holders should switch to an eVisa now",
+    "published": "2024-12-04",
+    "collected": "2026-10-03T08:44:47.032903+00:00",
+    "version": "Dated Home Office news release fetched in current HTML; no update date displayed",
+    "read_scope": "Entire headline, lead, attribution/date and full substantive release body including all minister quotation paragraphs. Decorative image and site navigation excluded.",
+    "lineage": "Primary Home Office release published the following day: later evidence about the same transition; cannot establish what reporter knew on December 3. Does not substantiate unnamed insiders or independently verify campaigner comments.",
+    "unit": "D72",
+    "role": "S1",
+    "text_sha256": "2c45e7c11e18d107277dc721fb9341d92481fb26623fc010f6cca856179f32a9"
+  },
+  {
+    "url": "https://www.newstree.kr/newsView/ntr202203250001",
+    "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+    "published": "2022-03-25T11:50:40+09:00",
+    "modified": null,
+    "collected": "2026-10-03T08:46:09.225101+00:00",
+    "article_kind": "independent_newsroom_report",
+    "body_scope": "Complete headline, byline, two-line subtitle, all nine body paragraphs from publisher web-open extraction lines 29–55. No text caption was present for lead image in accessible extraction. Image pixels and embedded YouTube video not transcribed; navigation, social controls, related stories and footer excluded. Original wording and apparent source typos retained; no prose truncated.",
+    "unit": "D73",
+    "role": "article",
+    "text_sha256": "0c494514eb071c3f28135752fad14df16606270cd31e485a3ddfeb98e1298233"
+  },
+  {
+    "id": "S1",
+    "url": "https://www.researchgate.net/profile/Andre-Vethaak/publication/359440451_Journal_Pre-proofs_Full_length_article_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood/links/623c88cf2a1c362627354edd/Journal-Pre-proofs-Full-length-article-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood.pdf",
+    "title": "Discovery and quantification of plastic particle pollution in human blood",
+    "published": "2022-03-24",
+    "collected": "2026-10-03T08:46:09.225101+00:00",
+    "version": "Author-uploaded journal pre-proof, public ResearchGate upload dated March 24 2022; received 2021-12-21, revised 2022-03-11, accepted 2022-03-18; not final version of record.",
+    "read_scope": "Complete downloadable pre-proof PDF text (cover, abstract, introduction, methods, results and discussion, conclusion, tables, figure caption, declarations, references and end matter) extracted using pdftotext -layout. Figure pixels not transcribed; separately referenced supplemental Tables S1/S2 not supplied in this PDF.",
+    "lineage": "Original Leslie et al. primary research, DOI 10.1016/j.envint.2022.107199. Article directly links ScienceDirect version; publisher access was proxy-blocked, so publicly author-uploaded pre-proof on ResearchGate was acquired through its ordinary Download file PDF link, HTTP200; no access-control bypass.",
+    "unit": "D73",
+    "role": "S1",
+    "text_sha256": "024ee99ccad7cbedbc62f52f48af14d5599078a4358c22205d3528d9779a9e19"
+  },
+  {
+    "url": "https://www.preventionweb.net/news/nasa-analysis-shows-unexpected-amount-sea-level-rise-2024",
+    "dates": {
+      "published": "2025-03-13",
+      "collected_utc": "2026-10-03T14:59:21Z",
+      "last_updated": null
+    },
+    "unit": "v27_fresh_sealevel2024",
+    "role": "article",
+    "text_sha256": "6bfaefa59247b92aaceacf7447bb4a39c636a69701b9d61426a3b9680cc7ace2"
+  },
+  {
+    "id": "S1",
+    "url": "https://www.nasa.gov/missions/jason-cs-sentinel-6/sentinel-6-michael-freilich/nasa-analysis-shows-unexpected-amount-of-sea-level-rise-in-2024/",
+    "dates": {
+      "published": "2025-03-13",
+      "collected_utc": "2026-10-03T14:59:21Z",
+      "last_updated": "2026-03-20"
+    },
+    "scope": "Full original NASA/JPL institutional release 2025-036: editorial prose, captions, heading, author and public media-contact footer. Primary source for what the NASA-led analysis reported; no underlying dataset, code or peer-reviewed analysis supplied.",
+    "unit": "v27_fresh_sealevel2024",
+    "role": "S1",
+    "text_sha256": "1e758ef69a58c8b30e264c6eda8ed332f22286232ab26b1b62eaad07267f29ea"
+  }
+]

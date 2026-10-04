@@ -1,0 +1,85 @@
+{
+  "gate": {
+    "unit_id": "d19ec630",
+    "article_sha256": "88d368fb241b78a5967a630ff9e397fd4fa596a069063f01ad3a58abb69bd566",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_2",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_3",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_4",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "capacity_at_time",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+        "article_span": [
+          0,
+          50
+        ],
+        "numeric_span": [
+          43,
+          45
+        ],
+        "original_numeric_token": "24",
+        "article_unit": "count",
+        "article_value": "24",
+        "expected_value": "24",
+        "normalized_expected_value": "24",
+        "dimension": "count"
+      },
+      {
+        "id": "other_announcement",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: conditions: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "d19ec630",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

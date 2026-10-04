@@ -1,0 +1,310 @@
+{
+  "phase": "independent_post",
+  "pre_unchanged": true,
+  "method": "Compare delivered output with source-only expectations; verify exact quotations, original anchors and patch reconstruction. No ordinal or composite score.",
+  "units": [
+    {
+      "unit_id": "K731",
+      "finding": "Correctly distinguishes P from M. Exact supported article retained; no patch or hold.",
+      "meets_pre_expectation": true,
+      "delivered_text": "재배 구획 P의 면적은 20제곱미터다.",
+      "delivered_text_anchor": "raw/K731.json#/full_edited_text",
+      "patches_reproduce_delivered_text": true,
+      "exact_original_preservation": true,
+      "bindings_correct": true,
+      "source_quotation_checks": [
+        {
+          "output_path": "/clause_audit/0/original_quote",
+          "quote": "재배 구획 P의 면적은 20제곱미터다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/0/quote",
+          "source_id": "S1",
+          "quote": "재배 구획 P의 면적은 20제곱미터다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/1/quote",
+          "source_id": "S1",
+          "quote": "두 대상의 면적은 별도로 기록했다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/bindings/0/claim_anchor",
+          "quote": "재배 구획 P의 면적은 20제곱미터다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/0/source_anchor",
+          "quote": "재배 구획 P의 면적은 20제곱미터다.",
+          "matching_source_ids": [
+            "S1"
+          ],
+          "exact_source_substring": true
+        }
+      ],
+      "supported_normal_content_preserved": true,
+      "required_local_repair_completed": false,
+      "local_repair_required": false,
+      "source_scope_overclaim": false,
+      "unknown_converted_to_false": false,
+      "unrelated_changes": false,
+      "unnecessary_hold": false,
+      "whole_text_hold": false,
+      "numerical_and_actor_preservation": "All original actors and supported numerical values preserved.",
+      "uncertainty": {
+        "reported": [],
+        "classification": "No material uncertainty identified for the bounded claim and provided complete synthetic records."
+      },
+      "failures": []
+    },
+    {
+      "unit_id": "K842",
+      "finding": "Correctly binds the conflict to M, not P. The sole patch converts the recorded 20 × 20 metres to 400 square metres and preserves M and installation area.",
+      "meets_pre_expectation": true,
+      "delivered_text": "패널 시스템 M의 설치 면적은 400제곱미터다.",
+      "delivered_text_anchor": "raw/K842.json#/full_edited_text",
+      "patches_reproduce_delivered_text": true,
+      "exact_original_preservation": false,
+      "bindings_correct": true,
+      "source_quotation_checks": [
+        {
+          "output_path": "/clause_audit/0/original_quote",
+          "quote": "패널 시스템 M의 설치 면적은 20제곱미터다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/0/quote",
+          "source_id": "S1",
+          "quote": "패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/1/quote",
+          "source_id": "S1",
+          "quote": "두 대상의 면적은 별도로 기록했다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/bindings/0/claim_anchor",
+          "quote": "패널 시스템 M의 설치 면적은 20제곱미터다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/0/source_anchor",
+          "quote": "패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다.",
+          "matching_source_ids": [
+            "S1"
+          ],
+          "exact_source_substring": true
+        }
+      ],
+      "supported_normal_content_preserved": true,
+      "required_local_repair_completed": true,
+      "local_repair_required": true,
+      "source_scope_overclaim": false,
+      "unknown_converted_to_false": false,
+      "unrelated_changes": false,
+      "unnecessary_hold": false,
+      "whole_text_hold": false,
+      "numerical_and_actor_preservation": "All supported actors and values preserved; conflicting M area corrected from 20 to 400 square metres.",
+      "uncertainty": {
+        "reported": [],
+        "classification": "No material uncertainty identified for the bounded claim and provided complete synthetic records."
+      },
+      "failures": []
+    },
+    {
+      "unit_id": "K953",
+      "finding": "Correctly binds first device to release and second device to note. Exact article retained, including both numbers and separate attribution scopes.",
+      "meets_pre_expectation": true,
+      "delivered_text": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+      "delivered_text_anchor": "raw/K953.json#/full_edited_text",
+      "patches_reproduce_delivered_text": true,
+      "exact_original_preservation": true,
+      "bindings_correct": true,
+      "source_quotation_checks": [
+        {
+          "output_path": "/clause_audit/0/original_quote",
+          "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/0/quote",
+          "source_id": "release",
+          "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/1/original_quote",
+          "quote": "별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/1/source_witnesses/0/quote",
+          "source_id": "note",
+          "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/bindings/0/claim_anchor",
+          "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/0/source_anchor",
+          "quote": "첫째 장치의 효율은 기준 대비 4.5배였다.",
+          "matching_source_ids": [
+            "release"
+          ],
+          "exact_source_substring": true
+        },
+        {
+          "output_path": "/bindings/1/claim_anchor",
+          "quote": "별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/1/source_anchor",
+          "quote": "둘째 장치의 효율은 기준 대비 2.8배였다.",
+          "matching_source_ids": [
+            "note"
+          ],
+          "exact_source_substring": true
+        }
+      ],
+      "supported_normal_content_preserved": true,
+      "required_local_repair_completed": false,
+      "local_repair_required": false,
+      "source_scope_overclaim": false,
+      "unknown_converted_to_false": false,
+      "unrelated_changes": false,
+      "unnecessary_hold": false,
+      "whole_text_hold": false,
+      "numerical_and_actor_preservation": "All original actors and supported numerical values preserved.",
+      "uncertainty": {
+        "reported": [
+          "The sources do not identify their baselines or establish that both devices share one; the article makes no such claim."
+        ],
+        "classification": "Nonblocking source limitation: baseline identity and cross-device baseline equivalence are unspecified. Neither article asserts equivalence; no hold or factual negation is warranted."
+      },
+      "failures": []
+    },
+    {
+      "unit_id": "K164",
+      "finding": "Correctly separates support for the second-device numerical result from contradiction of release attribution. The sole patch inserts the separate-note attribution and preserves both devices and both values.",
+      "meets_pre_expectation": true,
+      "delivered_text": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+      "delivered_text_anchor": "raw/K164.json#/full_edited_text",
+      "patches_reproduce_delivered_text": true,
+      "exact_original_preservation": false,
+      "bindings_correct": true,
+      "source_quotation_checks": [
+        {
+          "output_path": "/clause_audit/0/original_quote",
+          "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/0/source_witnesses/0/quote",
+          "source_id": "release",
+          "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/1/original_quote",
+          "quote": "둘째 장치의 효율은 2.8배였다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/1/source_witnesses/0/quote",
+          "source_id": "note",
+          "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/2/original_quote",
+          "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 둘째 장치의 효율은 2.8배였다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/clause_audit/2/source_witnesses/0/quote",
+          "source_id": "release",
+          "quote": "이 발표문에는 둘째 장치 결과가 없다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/clause_audit/2/source_witnesses/1/quote",
+          "source_id": "note",
+          "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다.",
+          "exact_substring_of_named_source": true
+        },
+        {
+          "output_path": "/bindings/0/claim_anchor",
+          "quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/0/source_anchor",
+          "quote": "첫째 장치의 효율은 기준 대비 4.5배였다.",
+          "matching_source_ids": [
+            "release"
+          ],
+          "exact_source_substring": true
+        },
+        {
+          "output_path": "/bindings/1/claim_anchor",
+          "quote": "둘째 장치의 효율은 2.8배였다.",
+          "exact_substring_of_original": true
+        },
+        {
+          "output_path": "/bindings/1/source_anchor",
+          "quote": "둘째 장치의 효율은 기준 대비 2.8배였다.",
+          "matching_source_ids": [
+            "note"
+          ],
+          "exact_source_substring": true
+        },
+        {
+          "output_path": "/bindings/1/attribution_anchor",
+          "quote": "이 발표문에는 둘째 장치 결과가 없다.",
+          "matching_source_ids": [
+            "release"
+          ],
+          "exact_source_substring": true
+        }
+      ],
+      "supported_normal_content_preserved": true,
+      "required_local_repair_completed": true,
+      "local_repair_required": true,
+      "source_scope_overclaim": false,
+      "unknown_converted_to_false": false,
+      "unrelated_changes": false,
+      "unnecessary_hold": false,
+      "whole_text_hold": false,
+      "numerical_and_actor_preservation": "All original actors and supported numerical values preserved.",
+      "uncertainty": {
+        "reported": [
+          "The sources do not identify their baselines or establish that both devices share one; the edited article makes no such claim."
+        ],
+        "classification": "Nonblocking source limitation: baseline identity and cross-device baseline equivalence are unspecified. Neither article asserts equivalence; no hold or factual negation is warranted."
+      },
+      "failures": []
+    }
+  ],
+  "actual_counts": {
+    "cases_reviewed": 4,
+    "cases_meeting_pre_expectation": 4,
+    "supported_control_articles_kept_exactly": 2,
+    "required_local_repairs_completed": 2,
+    "patches": 2,
+    "whole_text_holds": 0,
+    "source_scope_overclaims": 0,
+    "unknown_to_false_errors": 0,
+    "unrelated_changes": 0,
+    "source_or_original_quotation_failures": 0,
+    "cases_with_nonblocking_baseline_uncertainty": 2
+  },
+  "remaining_blockers": []
+}

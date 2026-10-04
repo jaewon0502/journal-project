@@ -1,0 +1,48 @@
+{
+  "unit_id": "D172",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "Number granted the editorial exemption in the 1–5 June batch",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "Of those reviewed, 11 qualified",
+      "candidate_quote": "Of those reviewed, 9 qualified",
+      "source_refs": [
+        "S2"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "Ledger, editorial exemption count",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": null,
+          "relation": "supports",
+          "relevance_to_claim": "The candidate corrects the original count to the stipulated count for this batch."
+        }
+      ],
+      "changed_proposition_or_counterexample": "The original reports 11 exemptions; the candidate reports the source-supported 9. Restoring 11 would introduce an error.",
+      "necessity": "no",
+      "evidence_support": "no",
+      "preserves_other_meaning": "no",
+      "context_safe": "no",
+      "local_action": "no_change",
+      "reason": "The numerical meaning changed, but this is a justified correction of an original error. No further correction is necessary; the gates reject restoring the original count."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The candidate accurately gives all four numerical slots, the effective date and definition, both exceptions, the attributed opposing views, and the limits on empirical and normative conclusions. Its only change corrects the original exemption count using S2. No necessary correction remains.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

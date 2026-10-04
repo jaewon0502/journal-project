@@ -1,0 +1,45 @@
+{
+  "scope": "Bounded arithmetic operand unit enrichment for two certificates. New schema followup, not an untouched holdout. No claim correctness guarantee.",
+  "changes": [
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "selected_late_members",
+      "path": "/comparisons/4/arithmetic/operands/0/unit",
+      "operand": "late_members",
+      "unit": "count",
+      "source_id": "S1",
+      "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다.",
+      "reason": "The exact source quote identifies members (회원) and counts people with 명, establishing the allowed unit count."
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "selected_late_members",
+      "path": "/comparisons/4/arithmetic/operands/1/unit",
+      "operand": "both_members",
+      "unit": "count",
+      "source_id": "S1",
+      "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다.",
+      "reason": "The exact source quote identifies members (회원) and counts people with 명, establishing the allowed unit count."
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "opposite_weekend_status",
+      "path": "/comparisons/5/arithmetic/operands/0/unit",
+      "operand": "late_members",
+      "unit": "count",
+      "source_id": "S1",
+      "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다.",
+      "reason": "The exact source quote identifies members (회원) and counts people with 명, establishing the allowed unit count."
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "opposite_weekend_status",
+      "path": "/comparisons/5/arithmetic/operands/1/unit",
+      "operand": "both_members",
+      "unit": "count",
+      "source_id": "S1",
+      "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다.",
+      "reason": "The exact source quote identifies members (회원) and counts people with 명, establishing the allowed unit count."
+    }
+  ]
+}

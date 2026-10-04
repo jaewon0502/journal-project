@@ -1,0 +1,11 @@
+{
+  "unit_id": "b8e035a1",
+  "kind": "deterministic gated delivery; not native model generation",
+  "full_edited_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+  "accepted_patch_ids": [],
+  "blocked_patches": [],
+  "raw_label_violations": [],
+  "local_review_required": [],
+  "semantic_correctness_certified": false,
+  "raw_output_preserved": true
+}

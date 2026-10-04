@@ -1,0 +1,33 @@
+{
+  "unit_id": "SY191",
+  "stage": "source_first_pre_output",
+  "source_read": "inputs/SY191.json only",
+  "necessary_findings": [],
+  "assessment": "The entire original article is consistent with S1. No necessary factual correction or material omission is established under the request to make only necessary minimal edits.",
+  "evidence": [
+    {
+      "article_anchor": "headline: 가상 분석: 22명 중 17명에서 정량한계 초과",
+      "source_anchor": "S1: 성인 자원자 22명의 혈액 표본을 같은 방법으로 분석했다. 17명은 분석 대상 고분자의 정량한계를 넘었다.",
+      "assessment": "The numerator, denominator, and quantification-limit endpoint match."
+    },
+    {
+      "article_anchor": "paragraph 1: 나머지 5명은 정량한계 미만이었다.",
+      "source_anchor": "S1: 나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다. 검출한계와 정량한계는 다르다.",
+      "assessment": "The aggregate statement is supported. It does not call the five undetected or confuse detection and quantification. The four/one breakdown adds detail but is not needed to correct this sentence."
+    },
+    {
+      "article_anchor": "paragraph 2: 연구진은 표본 확대가 필요하다고 밝혔다. 이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다.",
+      "source_anchor": "S1: 이 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다. 연구진은 표본 확대가 필요하다고 밝혔다.",
+      "assessment": "Both scope limitation and call for larger sampling are faithfully preserved."
+    }
+  ],
+  "held_issues": [
+    {
+      "issue": "Omission of the below-quantification group’s four/one detection-limit breakdown and explicit threshold distinction",
+      "disposition": "Optional explanatory detail; not a necessary correction because the original consistently reports quantification-limit exceedance without claiming absence of detection.",
+      "article_anchor": "나머지 5명은 정량한계 미만이었다.",
+      "source_anchor": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다."
+    }
+  ],
+  "recommended_minimal_action": "Preserve the original article unchanged."
+}

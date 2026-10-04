@@ -1,0 +1,36 @@
+{
+  "historical_totals": {
+    "report_files": 6,
+    "report_rows": 96,
+    "within_report_duplicate_extra_rows": 0,
+    "prepared_files": 3,
+    "phase_assigned_cases": 24,
+    "phase_final_method_outputs": 72,
+    "legitimate_cross_report_free_updates": 24,
+    "blind_rows": 40,
+    "judgment_rows": 40,
+    "summary_files": 24,
+    "unique_summary_hashes": 6
+  },
+  "original_inputs_unchanged": true,
+  "original_234": {
+    "methods": 234,
+    "invocations": 17,
+    "fixture_counts": {
+      "hand_authored_synthetic": 219,
+      "saved_artifact_or_mutation": 15
+    },
+    "skip_count": 0,
+    "property_counts": {
+      "patch_realization_and_renderer_contract": 22,
+      "accounting_and_scoring_contract": 17,
+      "delivery_review_dependency_and_artifact_contract": 131,
+      "strict_type_schema_and_input_identity_contract": 13,
+      "filesystem_path_and_write_preservation_contract": 1,
+      "scoring_identity_and_binding_contract": 27,
+      "blinding_identity_and_content_preservation_contract": 8,
+      "alignment_offset_hash_and_reconstruction_contract": 15
+    }
+  },
+  "supplemental": "Original portable suite: 2 pass, 1 obsolete skip. Original sidecar import fails before 8 methods. Separate v20 adapter: 4 binding + 8 unchanged sidecar methods pass. No semantic rejudgment."
+}

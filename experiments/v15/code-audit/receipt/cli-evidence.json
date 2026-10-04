@@ -1,0 +1,466 @@
+{
+  "legacy_sha256": "6be5edc905bf62daafeb26e383f0fe7ede0167acf3a0912c10b1f0e002c7b6a8",
+  "fixed_sha256": "ae542024957807fedcc5bdfbd77af9f61ee16659c60d5c90e3db668f6c220403",
+  "legacy": [
+    {
+      "case": "normal",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_spec_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.log.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_source_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_output_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.log.json"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_output",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json"
+      ],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_is_source",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_is_evidence",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_existing",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_symlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json",
+        "source.txt"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_symlink_spec",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json",
+        "case.spec.json"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_hardlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [
+        "case.spec.log.json",
+        "source.txt"
+      ],
+      "created_files": [
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "receipt_dangling_symlink",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "missing.txt",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    },
+    {
+      "case": "output_is_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_is_spec",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_is_evidence",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_existing",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_symlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_hardlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_dangling_symlink",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_output_alias",
+      "expected": "reject_without_writes",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json"
+      ],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": true,
+      "contract_pass": false
+    }
+  ],
+  "fixed": [
+    {
+      "case": "normal",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_spec_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.log.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_source_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.txt"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "log_output_name",
+      "expected": "success",
+      "returncode": 0,
+      "changed_existing_files": [],
+      "created_files": [
+        "case.spec.log.json",
+        "result.log.json"
+      ],
+      "output_matches_expected_bytes": true,
+      "valid_receipt_metadata": true,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_output",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_evidence",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_existing",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_symlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_symlink_spec",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_hardlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_dangling_symlink",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_is_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_is_spec",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_is_evidence",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_existing",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_symlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_hardlink_source",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "output_dangling_symlink",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    },
+    {
+      "case": "receipt_is_output_alias",
+      "expected": "reject_without_writes",
+      "returncode": 1,
+      "changed_existing_files": [],
+      "created_files": [],
+      "output_matches_expected_bytes": false,
+      "valid_receipt_metadata": false,
+      "contract_pass": true
+    }
+  ]
+}

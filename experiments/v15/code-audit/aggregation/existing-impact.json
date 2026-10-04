@@ -1,0 +1,152 @@
+{
+  "scope": "Public v7 T summaries and exposed judgment rows only",
+  "limitation": "This script checks distributed public summaries only. The separate private-id-impact.json records the retained private-source ID audit.",
+  "legacy_scorer_sha256": "8586ea284cdb5e3f933474990a0ed63bcdd9f7d7fbb8f35b1cb284e4f4070226",
+  "phases": [
+    {
+      "phase": "dev-v1",
+      "file": "experiments/v7/results/T-dev-v1-summary.json",
+      "sha256": "ade5c38d0ab879a3809bb15718e126f3f500ef37e56bdcc2245e4d26d7df258e",
+      "published_unique_judged_outputs": 10,
+      "exposed_unique_judged_outputs": 10,
+      "diagnostics": {
+        "unexpected_judgment_ids": [],
+        "duplicate_judgment_ids": [],
+        "missing_judgment_ids": []
+      },
+      "checks": {
+        "public_unique_blind_count_matches_rows": true,
+        "public_unique_judged_count_matches_rows": true,
+        "published_id_diagnostics_empty": true,
+        "event_denominator_matches_rows": true,
+        "assigned_method_outputs_matches_rows": true
+      },
+      "public_reaggregated_totals": {
+        "free": {
+          "repair_success": 2,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "typed": {
+          "repair_success": 0,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 2,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "exact_extractive": {
+          "repair_success": 2,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        }
+      }
+    },
+    {
+      "phase": "dev-v2",
+      "file": "experiments/v7/results/T-dev-v2-summary.json",
+      "sha256": "7858c4c17a2699c5dcbef74abdd110d76c976832215da70c4260166f101db10f",
+      "published_unique_judged_outputs": 10,
+      "exposed_unique_judged_outputs": 10,
+      "diagnostics": {
+        "unexpected_judgment_ids": [],
+        "duplicate_judgment_ids": [],
+        "missing_judgment_ids": []
+      },
+      "checks": {
+        "public_unique_blind_count_matches_rows": true,
+        "public_unique_judged_count_matches_rows": true,
+        "published_id_diagnostics_empty": true,
+        "event_denominator_matches_rows": true,
+        "assigned_method_outputs_matches_rows": true
+      },
+      "public_reaggregated_totals": {
+        "free": {
+          "repair_success": 2,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "typed": {
+          "repair_success": 2,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "exact_extractive": {
+          "repair_success": 2,
+          "mutation_denominator": 2,
+          "preserved": 4,
+          "control_denominator": 4,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        }
+      }
+    },
+    {
+      "phase": "eval",
+      "file": "experiments/v7/results/T-eval-summary.json",
+      "sha256": "898163d299874febaa063fc691b61e58b1d2d3037c6536b579cd8083916a30a9",
+      "published_unique_judged_outputs": 20,
+      "exposed_unique_judged_outputs": 20,
+      "diagnostics": {
+        "unexpected_judgment_ids": [],
+        "duplicate_judgment_ids": [],
+        "missing_judgment_ids": []
+      },
+      "checks": {
+        "public_unique_blind_count_matches_rows": true,
+        "public_unique_judged_count_matches_rows": true,
+        "published_id_diagnostics_empty": true,
+        "event_denominator_matches_rows": true,
+        "assigned_method_outputs_matches_rows": true
+      },
+      "public_reaggregated_totals": {
+        "free": {
+          "repair_success": 4,
+          "mutation_denominator": 4,
+          "preserved": 8,
+          "control_denominator": 8,
+          "holds": 0,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "typed": {
+          "repair_success": 3,
+          "mutation_denominator": 4,
+          "preserved": 8,
+          "control_denominator": 8,
+          "holds": 1,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        },
+        "exact_extractive": {
+          "repair_success": 3,
+          "mutation_denominator": 4,
+          "preserved": 8,
+          "control_denominator": 8,
+          "holds": 1,
+          "new_errors": 0,
+          "unnecessary_edits": 0
+        }
+      }
+    }
+  ],
+  "conclusion": "No published-count discrepancy observed in the three public phases; unchanged public semantic totals. See separate private-id-impact.json for retained private raw ID verification."
+}

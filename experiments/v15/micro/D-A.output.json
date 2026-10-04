@@ -1,0 +1,76 @@
+[
+  {
+    "id": "M71",
+    "new_harm_vs_original": "yes",
+    "required_answer_missing": "yes",
+    "source_conflict": "yes",
+    "background_addition_necessary": "yes",
+    "dependency_p1_p2": "context_only",
+    "p1_new_break": "no",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "지난해 합계 9개라는 과거 기록의 정확한 보존",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "지난해 합계는 9개였다.",
+        "original_quote": "지난해 합계는 9개였다.",
+        "candidate_quote": "지난해 합계는 10개였다."
+      },
+      {
+        "item": "질문에서 요구한 현재 합계 10개의 명시",
+        "origin": "source_only",
+        "importance": "required",
+        "source_quote": "현재 합계는 10개다.",
+        "original_quote": "현재 붉은 구슬 5개와 푸른 구슬 4개가 있다.",
+        "candidate_quote": "현재 붉은 구슬 6개와 푸른 구슬 4개가 있다. 지난해 합계는 10개였다."
+      }
+    ],
+    "reason": "현재 붉은 구슬을 6개로 고친 것은 근거 있는 정정이다. 그러나 P2의 고정 문자열은 지난해 합계에 적용되어 정확했던 9개를 10개로 훼손한다. P1만 적용하면 현재 6개와 4개, 지난해 9개로 서로 모순되지 않으므로 P2는 안전 적용에 필요하지 않다. 현재 합계 10개는 색별 수로 계산 가능하지만 후보의 합계 문장은 지난해에 귀속되므로 현재 합계를 직접 묻는 질문에는 현재 합계라는 명시가 필요하다. 이는 질문에서 요구한 정보이지 자료의 모든 배경을 추가하라는 판단은 아니다."
+  },
+  {
+    "id": "M24",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "requires",
+    "p1_new_break": "yes",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "지난해 합계 9개라는 자료에만 있는 과거 배경",
+        "origin": "source_only",
+        "importance": "optional",
+        "source_quote": "지난해 합계는 9개였다.",
+        "original_quote": "현재 합계는 9개였다.",
+        "candidate_quote": "현재 합계는 10개였다."
+      }
+    ],
+    "reason": "원문의 합계는 '현재'에 귀속되어 있으며 '였다'라는 어미만으로 지난해 기록이 되지 않는다. 후보는 현재 붉은 6개, 푸른 4개, 합계 10개를 모두 자료에 맞게 정정했다. 원문에는 지난해 기록이 없으므로 그것을 새로 보충해야 보존 의무를 충족하는 것은 아니다. P1만 적용하면 6+4=10인데 현재 합계가 9개로 남아 원래 5+4=9에서 없었던 산술 모순이 생긴다. 이 새 파손을 막기 위해 P2가 필요하다."
+  },
+  {
+    "id": "M83",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "context_only",
+    "p1_new_break": "no",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [],
+    "reason": "원문은 5+4=9인데 총 11개라고 하므로 이미 합계 모순이 있다. P1만 적용하면 6+4=10인데 총 11개로 남는다. 모순은 원래부터 있던 것이며 P1이 새로 만들지 않았다. P2는 기존 총수 오류까지 완전히 해결하는 데 필요하지만 P1이 새로 만든 파손을 방지하는 requires 관계는 아니다. 두 패치를 적용한 후보 전체는 총 10개, 빨간 6개, 파란 4개로 자료와 일치한다."
+  },
+  {
+    "id": "M46",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "requires",
+    "p1_new_break": "yes",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [],
+    "reason": "원문 수치는 자료와 다르지만 내부적으로 5+4=9여서 합계 모순은 없다. P1만 적용하면 6+4=10인데 총수가 9개로 남아 새 산술 모순이 발생한다. P2가 총수를 10개로 고쳐 그 새 파손을 막으므로 requires다. 후보 전체는 두 패치가 함께 적용되어 자료와 일치하며 원래의 잘못된 수치를 바로잡은 것이므로 새로운 의미 손실이나 자료 충돌은 없다."
+  }
+]

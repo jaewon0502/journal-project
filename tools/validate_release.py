@@ -10,6 +10,7 @@ PATTERNS = {
     'private_library_identity': re.compile(r'libfile' + r'_[0-9a-f]+|file_' + r'0000[0-9a-f]+'),
     'private_resource': re.compile(r'(?:sediment|oai-library)://|chatgpt[.]com/space/|chatgpt[.]com/api/' + r'library/'),
     'internal_orchestration': re.compile(r'codex_' + r'delegation|source_thread_' + r'id|<multi_agent_' + r'role>|collaboration[.]spawn_' + r'agent|fork_' + r'turns'),
+    'session_url': re.compile(r'(?:;|%3[bB])(?:j' + r'sessionid|PHPSESSID)(?:=|%3[dD])|[?&](?:access_' + r'token|auth_token|sessionid|PHPSESSID)=', re.I),
     'credential': re.compile(r'gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{24,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
 }
 FORBIDDEN_SUFFIXES = {'.pdf', '.docx', '.har', '.pem', '.key', '.p12', '.zip'}

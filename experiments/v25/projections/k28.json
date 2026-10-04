@@ -1,0 +1,80 @@
+{
+  "output_id": "k28",
+  "language": "ko",
+  "condition": "V",
+  "variant_id": "ko-M47",
+  "raw_sha256": "d70d25663e83fcdbcc1c2fd1ec851bb80ec467add2543332817fe48a1aa3f287",
+  "input_sha256": "19b5be0bb4440c1c01de9776224cce193c9abf8b98c78dfb2cb3f3b15578aa0e",
+  "original_text_sha256": "296e00778cb34d16a8a349a70d7472bfdb08a84fb4b999be3a62c39a7e7eb7b2",
+  "final_text_sha256": "296e00778cb34d16a8a349a70d7472bfdb08a84fb4b999be3a62c39a7e7eb7b2",
+  "article_unchanged": true,
+  "alignment": [
+    {
+      "question_id": "Q1",
+      "candidate_id": "A",
+      "relation": "same_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "printed 1 (PDF 2)",
+        "table": "국내총생산에 대한 지출",
+        "row": "건설투자",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %"
+      }
+    },
+    {
+      "question_id": "Q1",
+      "candidate_id": "B",
+      "relation": "different_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "printed 1 (PDF 2)",
+        "table": "국내총생산에 대한 지출",
+        "row": "설비투자",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "A",
+      "relation": "different_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "printed 2 (PDF 3)",
+        "table": "경제활동별 국내총생산",
+        "row": "국내총생산 (GDP)",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "B",
+      "relation": "same_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "printed 2 (PDF 3)",
+        "table": "경제활동별 국내총생산",
+        "row": "국내총소득 (GDI)",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %"
+      }
+    }
+  ],
+  "claim_audit": [
+    {
+      "question_id": "Q1",
+      "relation": "supported"
+    },
+    {
+      "question_id": "Q2",
+      "relation": "supported"
+    }
+  ],
+  "patches": [],
+  "local_annotation_count": 0,
+  "other_concern_count": 0,
+  "exact_delivery": true,
+  "notice": "Projection excludes full article, source quotations and prose reasoning. Raw complete native output privately preserved; does not replace it."
+}

@@ -1,0 +1,594 @@
+{
+  "unit_id": "e793a06d",
+  "comparisons": [
+    {
+      "id": "context_1",
+      "article_quote": "2026년",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the monthly member-record period; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_2",
+      "article_quote": "7월",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the monthly member-record period; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "7월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "7월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "7월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "7월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "7월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_3",
+      "article_quote": "오후 8시",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Clock threshold for qualifying entry records, with PM retained in the anchor; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "오후 8시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "오후 8시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "오후 8시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "오후 8시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "오후 8시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "late_member_denominator",
+      "article_quote": "오후 8시 이후에 이용한 회원 50명",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Distinct members with at least one qualifying late entry in July.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "오후 8시 이후에 이용한 회원 50명",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "오후 8시 이후에 이용한 회원 50명",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "오후 8시 이후에 이용한 회원 50명",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "오후 8시 이후에 이용한 회원 50명",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후 이용 여부는 입실 기록으로 판정했다."
+            }
+          ],
+          "reason": "Late usage is determined from entry records."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "오후 8시 이후에 이용한 회원 50명",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "selected_late_members",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Intersection of members with a late record and members with a weekend record; visits need not coincide.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "The explicitly stated intersection matches the article subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+            }
+          ],
+          "reason": "Membership predicates apply to the whole month, not one simultaneous visit."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "opposite_weekend_status",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Related complement: late members minus the weekend intersection.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Weekend-present and weekend-absent late members are disjoint subsets."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "arithmetic": {
+        "expression": "late_members - both_members",
+        "operands": [
+          {
+            "name": "late_members",
+            "value": "50",
+            "source_id": "S1",
+            "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다.",
+            "unit": "count"
+          },
+          {
+            "name": "both_members",
+            "value": "20",
+            "source_id": "S1",
+            "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다.",
+            "unit": "count"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "all_weekend_members",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "All weekend members, irrespective of a late entry, are a tempting differently scoped count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "All weekend members do not equal the article’s subset within late members."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "60",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "uncertainty": null
+    }
+  ],
+  "uncovered_numeric_claims": [],
+  "scope_limits": [
+    "Only the supplied frozen synthetic source was used; no real-world verification. Calendar and clock units are unknown because the allowed vocabulary has no temporal units."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "unit_id": "D172",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "For the 1–5 June batch, how many notices were granted the editorial exemption?",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "Of those reviewed, 11 qualified for the editorial exemption",
+      "candidate_quote": "Of those reviewed, 9 qualified for the editorial exemption",
+      "source_refs": [
+        "S2"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "Ledger, editorial exemption total",
+            "quote": "Editorial exemption granted: 9."
+          },
+          "linked_clause": {
+            "document_id": "S2",
+            "locator": "Ledger, submission window and counting unit",
+            "quote": "Submission window: 1–5 June 2034 inclusive. Notices submitted: 28. Withdrawn before review or any exemption decision: 4. Reviewed: 24."
+          },
+          "relation": "scope",
+          "relevance_to_claim": "The nine grants refer to the same batch of 24 reviewed notices; the four pre-decision withdrawals are excluded. The candidate preserves this scope and separately states that the unit is notices, not authors."
+        }
+      ],
+      "changed_proposition_or_counterexample": "O says 11 reviewed notices qualified; C correctly says 9, matching the stipulated ledger. Restoring 11 would introduce an error.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "The sole change corrects an original numerical error. All four numerical slots are explicitly answered correctly in C. The full candidate preserves the handbook conditions, effective date, attributed opposing views, and limits on measurements and adopted revisions; no necessary correction is established."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The candidate correctly replaces the original exemption count with the stipulated nine grants. All reader questions are answered within the full article, including the unsettled normative fairness question. No restoration, additional clarification, or factual patch is necessary; the supplied fictional packet leaves no relevant coverage gap.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

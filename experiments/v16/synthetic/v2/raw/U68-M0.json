@@ -1,0 +1,47 @@
+{
+  "unit_id": "U68",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "yes",
+      "optional_clarification": "no",
+      "required_answer_missing": "yes",
+      "original_quote": "측정 대상은 시험 운전 전의 소음 노출이다.",
+      "candidate_quote": "측정 대상은 시험 운전 후의 소음 노출이다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "측정 대상은 시험 운전 중의 소음 노출이다. 시험 운전 전 또는 후의 노출은 이 보고서의 측정 대상이 아니다.",
+      "changed_proposition_or_counterexample": "편집은 측정 시점을 시험 운전 전에서 후로 바꾸어 첫 질문의 답을 바꿨다. 다만 원문의 '전'도 원래부터 자료에 반하는 오류이며 후보의 '후' 역시 S1이 직접 배제한다. 정확한 필수 답인 '중'은 원문부터 없었다(inherited). 원문으로 되돌리지 않고 자료가 직접 지지하는 시점으로 정정한다.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "동일 보고서의 동일 측정 대상에 대해 S1이 전·후를 명시적으로 부정하고 중을 확정한다. 시간 표현만 고치면 위치·단위·범위와 발언 귀속 및 미확정 사항을 유지하면서 후보 오류와 원래부터의 오류를 함께 바로잡을 수 있다. 원문 의미의 손실은 확인되지만 그 잘못된 의미의 복구는 금지한다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P01",
+      "finding_id": "F1",
+      "before": "측정 대상은 시험 운전 후의 소음 노출이다.",
+      "after": "측정 대상은 시험 운전 중의 소음 노출이다."
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [
+    {
+      "code": "H-C",
+      "scope": "주민협의회 비판 내용의 독립적 진실 검증",
+      "relation_to_local_action": "unrelated",
+      "reason": "S2는 비판과 답변의 존재·귀속을 뒷받침하지만 비판 내용의 진실을 독립 입증하지 않는다. 후보는 이를 협의회의 비판으로 보존하므로 시간 정정의 보류 사유가 아니다."
+    }
+  ],
+  "overall_readiness": "unknown",
+  "overall_reason": "시간 정정은 합성 자료 범위에서 안전하게 가능하며 다른 필수 답과 발언의 귀속은 유지된다. 이는 기사 전체의 독립적 사실 인증이 아니고 비판 내용의 진실은 제공 자료로 검증되지 않는다."
+}

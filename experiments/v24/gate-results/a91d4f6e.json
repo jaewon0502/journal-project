@@ -1,0 +1,64 @@
+{
+  "unit_id": "a91d4f6e",
+  "results": [
+    {
+      "id": "context_1",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_2",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_3",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "actual_dispatch",
+      "gate_result": "eligible_mismatch",
+      "reasons": [],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "other_depot",
+      "gate_result": "blocked",
+      "reasons": [
+        "referent: identity not certified",
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "reservations",
+      "gate_result": "blocked",
+      "reasons": [
+        "property: identity not certified",
+        "conditions: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "future_dispatch",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified",
+        "conditions: identity not certified",
+        "time: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    }
+  ],
+  "limits": "Exact anchor presence and typed arithmetic only; AI semantic binding may be false. Necessary not sufficient."
+}

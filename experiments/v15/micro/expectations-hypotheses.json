@@ -1,0 +1,65 @@
+{
+  "status": "AUTHOR_HYPOTHESES_NOT_GOLD",
+  "expected": {
+    "M71": {
+      "P1": "supported local correction; P2 is not required",
+      "P2": "wrongly changes historical fact; hold",
+      "new_dependency_harm": false
+    },
+    "M24": {
+      "P1": "supported; alone produces current arithmetic inconsistency",
+      "P2": "supported current sum correction; necessary companion"
+    },
+    "M83": {
+      "P1": "corrects one count but original total11 remains unsupported; incomplete candidate",
+      "dependency": "whether total repair is mandatory completion versus P-created harm must be distinguished; uncertain allowed"
+    },
+    "M46": {
+      "P1": "corrects count but creates arithmetic inconsistency absent in original",
+      "P2": "repairs current total; necessary companion",
+      "new_dependency_harm": true
+    },
+    "M15": {
+      "original_loss": false,
+      "required_omission": false,
+      "normal_negative": true
+    },
+    "M92": {
+      "original_loss": true,
+      "required_omission": true,
+      "scope_expansion": true
+    },
+    "M38": {
+      "original_loss": false,
+      "required_omission": false,
+      "normal_negative": true,
+      "criticism_preserved": true
+    },
+    "M67": {
+      "original_loss": false,
+      "required_omission": false,
+      "normal_negative": true,
+      "optional_background_absence": true
+    },
+    "M54": {
+      "original_loss": false,
+      "required_answer_missing": false,
+      "optional_context_absence": true
+    },
+    "M19": {
+      "original_loss": false,
+      "required_answer_missing": true
+    },
+    "M62": {
+      "original_loss": true,
+      "new_background_necessary": false,
+      "source_scope_error": true
+    },
+    "M05": {
+      "original_loss": false,
+      "new_background_necessary": false,
+      "source_scope_error": true,
+      "preexisting_issue": true
+    }
+  }
+}

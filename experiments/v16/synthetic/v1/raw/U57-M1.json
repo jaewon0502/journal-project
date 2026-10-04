@@ -1,0 +1,40 @@
+{
+  "unit_id": "U57",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "the night gallery admits visitors aged 14 and older",
+      "candidate_quote": "the night gallery admits visitors aged 16 and older",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "Minimum visitor age is 16, inclusive.",
+      "changed_proposition_or_counterexample": "The candidate changes the minimum age from 14 to 16, excluding ages 14 and 15 from age eligibility. S1 expressly establishes 16 as the inclusive minimum for this same pilot. This is a supported correction of an original error, not an omission requiring restoration. The additional ticket requirement and inspection condition remain explicit.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "The inherited issue is the original's incorrect minimum age; factual_error here evaluates the candidate, which matches S1. Restoring 14 would contradict the stipulated record. No restoration is proposed, so no local hold is needed. Both fixed questions remain answered across the complete candidate, including attributed criticism and response, outstanding measurements and costs, limited authorization, review, and lack of guaranteed extension."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [
+    {
+      "code": "H-C",
+      "scope": "Independent truth of the access group's criticism and the chair's disputed evaluation",
+      "relation_to_local_action": "unrelated",
+      "reason": "S2 supports the existence and attribution of the recorded statements, not the independent truth of either evaluation. The candidate retains their attribution and does not present them as established facts."
+    }
+  ],
+  "overall_readiness": "ready",
+  "overall_reason": "Ready for this synthetic preservation task: the sole edit corrects the original using the stipulated primary record, and no necessary repair remains. This does not certify the independent truth of attributed evaluations or any real-world article."
+}

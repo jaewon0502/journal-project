@@ -1,0 +1,58 @@
+{
+  "unit_id": "c41f9b20",
+  "results": [
+    {
+      "id": "context_1",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_2",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_3",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "late_member_denominator",
+      "gate_result": "normalized_equal",
+      "reasons": [],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "selected_late_members",
+      "gate_result": "eligible_mismatch",
+      "reasons": [],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "opposite_weekend_status",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "all_weekend_members",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    }
+  ],
+  "limits": "Exact anchor presence and typed arithmetic only; AI semantic binding may be false. Necessary not sufficient."
+}

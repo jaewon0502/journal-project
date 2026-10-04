@@ -1,0 +1,33 @@
+{
+  "unit_id": "U57",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "During the trial, the night gallery admits visitors aged 14 and older.",
+      "candidate_quote": "During the trial, the night gallery admits visitors aged 16 and older.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "Minimum visitor age is 16, inclusive.",
+      "changed_proposition_or_counterexample": "원문은 14세와 15세도 야간 갤러리의 연령 요건을 충족한다고 하지만, 같은 시범 운영에 대한 S1은 최소 연령을 16세로 명시한다. 후보의 16세 이상은 원문 오류의 정당한 교정이며 복구할 의미손실이 아니다. 무료 시간 지정 입장권과 검사 통과 조건도 보존되어 있다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "후보는 근거가 직접 지지하는 연령 기준을 이미 제시한다. 14세로 되돌리면 S1과 충돌한다. 두 고정 질문의 나머지 필수 답과 비판·응답의 귀속, 약속의 상태, 시범 운영의 한계는 전체 문맥에 유지되어 있다. factual_error는 후보 명제에 대한 판정이다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 가상 기록과 보존 업무 범위에서 후보는 준비되어 있다. S2는 비판과 응답이 기록되었음을 뒷받침하며 그 평가 내용 자체의 진실을 인증하지 않는다. 실제 세계의 사실 인증을 뜻하지 않는다."
+}

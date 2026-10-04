@@ -1,0 +1,118 @@
+{
+  "articles": [
+    {
+      "article_id": "K16-1",
+      "url": "https://news.gknu.ac.kr/news/articleView.html?idxno=1850",
+      "title": "10년 동안 시행됐던 단통법 폐지, 그 배경과 향후 전망은?",
+      "author": "정연수",
+      "publisher": "국립경국대신문 (2024 기사 당시 안동대신문)",
+      "published_display": "2025.09.08 09:00",
+      "modified_at": null,
+      "modified_note": "별도 수정시각 미표시; 게시 후 수정 여부 미확정",
+      "collected_at": "2026-10-03T06:46:25.060473+00:00",
+      "scope": "제목, 부제, 모든 본문 p 및 소제목, 모든 캡션. 탐색/광고/저작권 안내/관련기사 제외. HTML 엔티티 해제; 문단사이 두 개 LF. 이 정규화 텍스트가 변형 기준. 이미지 픽셀은 별도 보존하며 텍스트 평가에는 제공하지 않음.",
+      "body_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "body_characters": 2518,
+      "paragraphs_excluding_subheads": 12
+    },
+    {
+      "article_id": "K16-2",
+      "url": "https://news.gknu.ac.kr/news/articleView.html?idxno=1348",
+      "title": "수년째 풀리지 않는 대학가 저작권 문제… 해결책은?",
+      "author": "권회창",
+      "publisher": "국립경국대신문 (2024 기사 당시 안동대신문)",
+      "published_display": "2024.03.11 09:00",
+      "modified_at": null,
+      "modified_note": "별도 수정시각 미표시; 게시 후 수정 여부 미확정",
+      "collected_at": "2026-10-03T06:46:25.060473+00:00",
+      "scope": "제목, 부제, 모든 본문 p 및 소제목, 모든 캡션. 탐색/광고/저작권 안내/관련기사 제외. HTML 엔티티 해제; 문단사이 두 개 LF. 이 정규화 텍스트가 변형 기준. 이미지 픽셀은 별도 보존하며 텍스트 평가에는 제공하지 않음.",
+      "body_sha256": "41becccb037b336011cbd037fad8e44c824c22425f49705c6ae73e26b721cfe9",
+      "body_characters": 2547,
+      "paragraphs_excluding_subheads": 11
+    },
+    {
+      "article_id": "A201",
+      "url": "https://www.theguardian.com/business/2024/nov/20/uk-inflation-rises-delay-interest-rate-cut-price-rises",
+      "final_url": "https://www.theguardian.com/business/2024/nov/20/uk-inflation-rises-delay-interest-rate-cut-price-rises",
+      "title": "UK inflation rises to 2.3%, increasing pressure to delay interest rate cut",
+      "authors": [
+        "Phillip Inman"
+      ],
+      "published": "2024-11-20T17:52:53.000Z",
+      "modified": "2024-11-20T19:31:59.000Z",
+      "collected_at": "2026-10-03T06:42:55.305334+00:00",
+      "scope": "All article prose, title, visible standfirst, all unique image captions and subheadings. Text decoded UTF-8, HTML entities decoded, structural paragraphs separated by two newlines. Duplicate responsive hero caption retained once.",
+      "excluded": "Navigation, newsletters, advertisements, related-story promotional card, reader comments; image binary, link destinations and interactive content not included. No article prose truncated.",
+      "full_text_sha256": "6efa7ebc19ab56884c2c72f69d1edc7168e3268b8d88a02a928862877dff4132",
+      "raw_sha256": "7dd26ea84742516ed7cf118af5991b34c013d937164c4b849fb43c9650bc1461",
+      "paragraph_count": 21,
+      "word_count": 793
+    },
+    {
+      "article_id": "A202",
+      "url": "https://www.theguardian.com/technology/2024/mar/14/what-will-eu-proposed-regulation-ai-mean-consumers",
+      "final_url": "https://www.theguardian.com/technology/2024/mar/14/what-will-eu-proposed-regulation-ai-mean-consumers",
+      "title": "What will the EU’s proposed act to regulate AI mean for consumers?",
+      "authors": [
+        "Dan Milmo",
+        "Alex Hern"
+      ],
+      "published": "2024-03-14T14:33:04.000Z",
+      "modified": "2024-03-14T21:14:02.000Z",
+      "collected_at": "2026-10-03T06:42:55.996799+00:00",
+      "scope": "All article prose, title, visible standfirst, all unique image captions and subheadings. Text decoded UTF-8, HTML entities decoded, structural paragraphs separated by two newlines. Duplicate responsive hero caption retained once.",
+      "excluded": "Navigation, newsletters, advertisements, related-story promotional card, reader comments; image binary, link destinations and interactive content not included. No article prose truncated.",
+      "full_text_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+      "raw_sha256": "a3f6e0fc2a38ba5f87b4efecafae0b98cb26fd553fd830010687dcb6142e2b98",
+      "paragraph_count": 23,
+      "word_count": 1415
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.korea.kr/news/policyNewsView.do?newsId=148946196",
+      "title": "이달 22일부터 단통법 폐지…요금할인+추가지원금 혜택 가능",
+      "published_at": "2025-07-17T11:03:00+09:00",
+      "modified_at": null,
+      "collected_at": "2026-10-03T06:46:25.060473+00:00",
+      "scope": "모든 본문 24개 p, 이미지 및 이미지내 표 제외. 완전한 문단만 포함.",
+      "lineage": "과기정통부·방통위 발표 → 정부 정책브리핑",
+      "limitation": "기자 개별 인터뷰, KTOA 월별 수치, 이후 통신사 행동의 독립 확인 자료는 아님.",
+      "sha256": "03fbfe6a6ff555cfcb0987871847c26e4ea00adfc46f7e4b26415d51d1bbf74e"
+    },
+    {
+      "url": "https://www.copyright.or.kr/information-materials/statistics/education/index.do",
+      "title": "한국저작권위원회 저작권 교육 통계",
+      "published_at": null,
+      "modified_at": null,
+      "collected_at": "2026-10-03T06:46:25.060473+00:00",
+      "scope": "교육 통계 단위·열제목·2013~2025 전체 행·시차 주의문. 페이지 내비게이션 제외.",
+      "lineage": "교육 집행기관 한국저작권위원회 공식 국가승인통계",
+      "limitation": "현재 표에 과거 2022년 관측치 포함. 연령별 전체인구 분모·개별 인터뷰·교재사업 허가조건·교육 횟수는 확인하지 않음. 현재 공식표를 기사 시점의 동시 공개 자료로 간주하지 않음.",
+      "sha256": "340dca1766a03aaef82b4ff28122ca48c08c3feffdf7a87c448014fb739987ae"
+    },
+    {
+      "id": "S1",
+      "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/october2024",
+      "final_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/october2024",
+      "publication_date": "2024-11-20",
+      "modification_date": "Not separately exposed in acquired page",
+      "collected_at": "2026-10-03T06:43:42.513083+00:00",
+      "scope": "Selected complete paragraphs from directly acquired official page; excerpt packet, not complete source. Full downloaded HTML and extracted text archived privately. No search-summary substitution.",
+      "full_text_sha256": "8cc45aa455588b9a70d41788290529be789e5dfe63960018fdaba6dc2a1aeee5",
+      "raw_sha256": "e8a674cad1cbc62018b56f6277b34de80a066557f0fcb710df46e3bc40098676"
+    },
+    {
+      "id": "S2",
+      "url": "https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law",
+      "final_url": "https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law",
+      "publication_date": "2024-03-13",
+      "modification_date": "Not separately exposed in acquired page",
+      "collected_at": "2026-10-03T06:43:44.592466+00:00",
+      "scope": "Selected complete paragraphs from directly acquired official page; excerpt packet, not complete source. Full downloaded HTML and extracted text archived privately. No search-summary substitution.",
+      "full_text_sha256": "d4a6005d44e76ffecf489739e123ddc81bf30e5b691f47a70d2e4fd6145095d7",
+      "raw_sha256": "558b219c7a96ab1f7172b3bbbb07506afb828dbaefd97581fe5260fc43e2a1a3"
+    }
+  ],
+  "metadata_only": true
+}

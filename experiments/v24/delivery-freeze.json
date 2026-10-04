@@ -1,0 +1,22 @@
+{
+  "phase": "before any editor generation",
+  "at": "2026-10-03T13:19:54.859195+00:00",
+  "files": [
+    {
+      "name": "PREREGISTRATION.md",
+      "sha256": "7c4c468f3d4ff0c04d3c80473e97a24eb7c9dd190d753ff7c82157c9c16b6572"
+    },
+    {
+      "name": "code/gate.py",
+      "sha256": "e7404b288877644ec71c632bdc2ccfe8be640ebfc3e5e6753a92d151a5c43556"
+    },
+    {
+      "name": "code/delivery.py",
+      "sha256": "866fe28025825e37af882f9c4607da1bbc5d7dcf24c6eb75e1d7b0591db48dff"
+    },
+    {
+      "name": "code/test_gate.py",
+      "sha256": "d73acd5f58162b0c94d04075da558cbd94a5a6f760d6a939c19b805d9fe8e460"
+    }
+  ]
+}

@@ -1,0 +1,514 @@
+[
+  {
+    "id": "U202-expanded-disclosure",
+    "versions": [
+      16
+    ],
+    "categories": [
+      "new loss",
+      "unsupported certainty"
+    ],
+    "historical_observation": "P1 expands chatbot text to all AI-generated/manipulated public-interest text but omits the parallel law-authorised criminal-enforcement exception. Independent audit requests revise; scope metadata does not constrain actual sentence.",
+    "new_unit": "R261",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v16/primary-followup.audit.json"
+    ],
+    "current_result": "Autonomous original-article run; some supported limits repaired, but overclarification and excerpt-only certainty remain. Historical failed derivative not identical input."
+  },
+  {
+    "id": "E181",
+    "versions": [
+      18
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "P1 adds ordinary immigration checks and provisional travel conditions without established necessity; P2 dated next-day paper-document exception separately supported.",
+    "new_unit": "R262",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v18/audit/E181-v2/result.json"
+    ],
+    "current_result": "Concrete timing/obligation loss recurs: historic supposed plan replaced by next-day facts; required weakened to encouraged."
+  },
+  {
+    "id": "K183",
+    "versions": [
+      18
+    ],
+    "categories": [
+      "execution",
+      "unnecessary edit",
+      "missed correction"
+    ],
+    "historical_observation": "K183-v2 mutual P1/P2 dependency rejected by DAG checker; 80% to 77% precision and extra analyte detail unnecessary/unestablished. Later selected candidate omits quantification threshold and is held; disease assertion correction necessity also changes with evidence scope.",
+    "new_unit": "R263",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v18/audit/K183-v2/result.json"
+    ],
+    "current_result": "PS scope repaired; rounding overcorrection and unsupported other-study substitution recur. Threshold/joint-presence necessity remains disputed; no retroactive gold."
+  },
+  {
+    "id": "EN191",
+    "versions": [
+      19,
+      20
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "Reference and PRE omit skin/mucosa issue; writer F2 identifies and corrects it. v20 N204/N237 omit strict target finding; N237 explicitly notices less precise skin but rejects materiality.",
+    "new_unit": "R264",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v19/audit/EN191-v2/result.json",
+      "private-v19/reference/EN191.json",
+      "private-v19/audit/EN191-v2/pre.json",
+      "private-v20/diagnostic/audit/result.json"
+    ],
+    "current_result": "Two autonomous source-supported narrow repairs, no new material loss reported by POST; source gaps retained. Same tissue event across v19-v21."
+  },
+  {
+    "id": "KO192",
+    "versions": [
+      19
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "Writer P1 expands 9,041 prior-year tests with wholesale/distribution scope. Reference and independent audit establish no required correction; exact supported detail is still unnecessary under minimal editing.",
+    "new_unit": "R265",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v19/audit/KO192-v2/result.json"
+    ],
+    "current_result": "Original annual-count scope expansion not repeated. Two inline uncertainty insertions; not byte-identical normal article."
+  },
+  {
+    "id": "v16-conflict-controls",
+    "versions": [
+      16
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "U26 candidate approvals 15 versus supported 9; U94 age 18 versus supported 16. M0/M1 identify alternatives but hold because explicit v1 instruction requires hold when original restoration conflicts with source.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "private-v16/conflict-controls/audit-v1.json",
+      "prior-checkout/experiments/v16/conflict-controls-results-v1.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "v17-source-id-contract",
+    "versions": [
+      17
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "7/8 original development outputs use explanatory text in source_refs instead of exact IDs; 0 repairs delivered. D172 BASE no_change alone passes.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "private-v17/development/mechanical-checks.json",
+      "prior-checkout/experiments/v17/development-results.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "K181-input-quote-contract",
+    "versions": [
+      18
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "K181-v1 stores revised wording in original quote field; mechanical rejection despite appropriate March restoration.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "private-v18/audit/K181-v1/result.json"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "v15-E1-necessity-and-gate",
+    "versions": [
+      15
+    ],
+    "categories": [
+      "unsupported certainty",
+      "missed correction"
+    ],
+    "historical_observation": "E1 B no-op first labelled missed correction; later audits call A necessity unknown. Repro audit accepts despite necessity unknown, inconsistent with all-yes gate.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "private-v15/real-runs/E1.repro-audit.json",
+      "prior-checkout/experiments/v15/RESULTS.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "v15-K15Q-P02",
+    "versions": [
+      15
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "Both original writers add timing clarification to subtitle P01 and body P02; strict audits approve P01 but mark P02 necessity unknown.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "prior-checkout/experiments/v15/RESULTS.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "E183-same-text-necessity",
+    "versions": [
+      18
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "V1/v2 edited articles equal original bytes; v2 auditor calls population limitation mandatory, v1/reference optional. Followup finds no demonstrated unconditional generalization after attribution and population scope.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "prior-checkout/experiments/v18/scope-disagreement.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "EN192-optional-additions",
+    "versions": [
+      19
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "P2/P3 add testing-round and coating-source explanations beyond agreed P1 denominator correction; necessity differs between reference and audit.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "private-v19/audit/EN192-v2/result.json",
+      "prior-checkout/experiments/v19/RESULTS.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "v15-code-reproductions",
+    "versions": [
+      15
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Receipt/output same-path overwrites output; scorer counted out-of-list IDs; dependency gate missing pair treated safe; overlapping aa in aaa counted unique.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "prior-checkout/experiments/v15/RESULTS.md",
+      "private-v15/code-review/private-receipt-impact.json"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "v19-code-reproductions",
+    "versions": [
+      19,
+      20
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Duplicate realization applied/hold order changes old score; weak identifiers accepted by checker. Strict adapter and duplicate rejection added.",
+    "new_unit": null,
+    "status": "historical_witness_only; current-policy semantic resolution not claimed",
+    "evidence": [
+      "prior-checkout/experiments/v20/FAILURE-REGISTER.md",
+      "prior-checkout/experiments/v19/code-audit/README.md"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L22-EN-spin",
+    "versions": [
+      22
+    ],
+    "categories": [
+      "unsupported certainty"
+    ],
+    "historical_observation": "Intrinsic quantum property witness was labeled support for full intrinsic angular momentum/not literal rotation proposition. Both arms overstate what the supplied passage supports.",
+    "truth_limit": "Partial source support; no demonstrated falsehood of the physics proposition.",
+    "new_unit": "R266",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v22/fresh/raw/a/E913.json#claims.C20; parallel b claims.C37"
+    ],
+    "current_result": "Old whole-spin support and precursor addition not repeated as before, but new necessity and label-overreach issues remain."
+  },
+  {
+    "id": "L22-EN-growth",
+    "versions": [
+      22
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "Added two five-day preparation stages and temperatures although original two-week growth wording did not assert total synthesis time.",
+    "truth_limit": "Added facts supported; necessity judgment disputed/moderate-confidence overediting, not false content.",
+    "new_unit": "R266",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v22/fresh/raw/a/E913.json#patches.P02"
+    ],
+    "current_result": "Old whole-spin support and precursor addition not repeated as before, but new necessity and label-overreach issues remain."
+  },
+  {
+    "id": "L22-KO-quote",
+    "versions": [
+      22
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "Article direct quotation retains 향상할 것 while official release has 향상시킬 것. Both writers preserve the literal discrepancy.",
+    "truth_limit": "Literal fidelity mismatch only; same meaning/strength and no transcript establishing actual spoken wording. Do not count as substantive factual error; score only under an explicit exact-quotation requirement.",
+    "new_unit": "R267",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v22/fresh/raw/a/K902.json#claims.C17; parallel b claims.C29"
+    ],
+    "current_result": "Two substantive repairs preserved dates/regions/force. Literal quote discrepancy unresolved, not proven substantive misquote."
+  },
+  {
+    "id": "L22-KO-target",
+    "versions": [
+      22
+    ],
+    "categories": [
+      "unsupported certainty"
+    ],
+    "historical_observation": "Proposition names the fact of a forecast being attributed, but fact_support is not_established based on future outcome realization; proposition and evaluated target differ.",
+    "truth_limit": "Forecast attribution is supported; future realization is unknown.",
+    "new_unit": "R267",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v22/fresh/raw/a/K902.json#claims.C17"
+    ],
+    "current_result": "Two substantive repairs preserved dates/regions/force. Literal quote discrepancy unresolved, not proven substantive misquote."
+  },
+  {
+    "id": "L23-area",
+    "versions": [
+      23
+    ],
+    "categories": [
+      "unnecessary edit"
+    ],
+    "historical_observation": "Both writers replace 20-square-meter plots with 20 by 20 meter panel systems without establishing identity of plot and system; remove original area on an unproved contradiction.",
+    "truth_limit": "Source-relation unknown, not demonstrated original-area falsehood. Coexistence is a logical counterexample, not an asserted actual layout.",
+    "new_unit": "R268",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v23/transfer/visible-edited.json#patches.P3; parallel masked P3; both PRE audits"
+    ],
+    "current_result": "False referent contradiction recurs; selector counterexample followup holds P4 while retaining estimate repair. Final compound-patch completeness separately challenged."
+  },
+  {
+    "id": "L23-efficiency-attribution",
+    "versions": [
+      23
+    ],
+    "categories": [
+      "new loss"
+    ],
+    "historical_observation": "Introduced the release reports governs following 4.5x/2.8x treatment numbers that supplied release does not establish. Audit annotation elsewhere does not repair new prose attribution.",
+    "truth_limit": "Unsupported attribution/scope extension; numerical world truth remains unverified.",
+    "new_unit": "R268",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v23/transfer/visible-edited.json#patches.P5 and resulting paragraph"
+    ],
+    "current_result": "False referent contradiction recurs; selector counterexample followup holds P4 while retaining estimate repair. Final compound-patch completeness separately challenged."
+  },
+  {
+    "id": "L23-silence-global",
+    "versions": [
+      23
+    ],
+    "categories": [
+      "unsupported certainty"
+    ],
+    "historical_observation": "Open question/remains to be tested generalizes silence in supplied material into global scientific uncertainty or untested status.",
+    "truth_limit": "Evidence absence within source set, not proof of global absence of testing.",
+    "new_unit": "R268",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v23/transfer/visible-edited.json#patches.P2; masked P2; retained in first derived repair"
+    ],
+    "current_result": "False referent contradiction recurs; selector counterexample followup holds P4 while retaining estimate repair. Final compound-patch completeness separately challenged."
+  },
+  {
+    "id": "L23-expert-scope",
+    "versions": [
+      23
+    ],
+    "categories": [
+      "new loss"
+    ],
+    "historical_observation": "Inserted Rayudu says governs later dash-linked panel-size equivalence not supported by the expert quote.",
+    "truth_limit": "Unsupported source attribution; size-equivalence itself unverified.",
+    "new_unit": "R268",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v23/transfer/visible-edited.json#patches.P8; also repair/visible-derived.json"
+    ],
+    "current_result": "False referent contradiction recurs; selector counterexample followup holds P4 while retaining estimate repair. Final compound-patch completeness separately challenged."
+  },
+  {
+    "id": "L21-mixed-tissue",
+    "versions": [
+      21
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "Reason recognizes skin/mucosa distinction but grouped absorption row labeled supported, necessity no, optional yes. Not a detection absence.",
+    "truth_limit": "Source explicitly distinguishes vaginal mucosa from skin; underlying leaching/absorption unknown must remain.",
+    "new_unit": "R264",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v21/discovery-development/raw/146/V312.json#observations.V312-04"
+    ],
+    "duplicate_of": "EN191",
+    "current_result": "Two autonomous source-supported narrow repairs, no new material loss reported by POST; source gaps retained. Same tissue event across v19-v21."
+  },
+  {
+    "id": "L21-title-necessity",
+    "versions": [
+      21
+    ],
+    "categories": [
+      "missed correction"
+    ],
+    "historical_observation": "Recognizes title classifies all sixteen as toxic according to study, but marks necessity unknown and optional yes because opposite world claim not established.",
+    "truth_limit": "Source-attribution expansion is identifiable without proving all other metals categorically nontoxic.",
+    "new_unit": "R264",
+    "status": "executed_exposed_regression; see case-specific audit and limitations",
+    "evidence": [
+      "private-v21/discovery-development/raw/283/V312.json#observations.T01"
+    ],
+    "current_result": "Two autonomous source-supported narrow repairs, no new material loss reported by POST; source gaps retained. Same tissue event across v19-v21."
+  },
+  {
+    "id": "L24-S1",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Truthful A permission authorizes changing unrelated B, including wrong unit_id/mixed unknown ID.",
+    "truth_limit": "Executable constructed code counterexample; not observed frequency of native editor failure.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/code-audit.json#findings.S1"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L24-S2",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Exact before anchor permits arbitrary after content, unit and unsupported value.",
+    "truth_limit": "Executable constructed code counterexample; not observed frequency of native editor failure.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/code-audit.json#findings.S2"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L24-S3",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Operand 3 m multiplied by itself accepted as 9 m because internal arithmetic discards dimensions.",
+    "truth_limit": "Executable constructed code counterexample; not observed frequency of native editor failure.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/code-audit.json#findings.S3"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L24-S4",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "axes=[] raises AttributeError instead of blocked diagnostic; no demonstrated fail-open delivery.",
+    "truth_limit": "Executable constructed code counterexample; not observed frequency of native editor failure.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/code-audit.json#findings.S4"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L24-false-binding",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "unsupported certainty"
+    ],
+    "historical_observation": "False same-identity certificate for article A is 2 m and source B is 3 m passes and causes A to become 3 m.",
+    "truth_limit": "Fabricated certificate is false; actual A value is not disproved by evidence about B. Known semantic limitation survives structural repair.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/code-audit-v2.json#remaining_semantic_limitations[0]"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  },
+  {
+    "id": "L24-units-schema",
+    "versions": [
+      24
+    ],
+    "categories": [
+      "execution"
+    ],
+    "historical_observation": "Stricter v2 rejects legitimate count subtraction correction because original certificate lacks operand units.",
+    "truth_limit": "Established synthetic correction; schema migration block is distinct from semantic correctness.",
+    "new_unit": null,
+    "status": "historical_witness_only; retired executable gate not current editor",
+    "evidence": [
+      "prior-checkout/experiments/v24/v2-replay/original_certificate/enforced/c41f9b20.json#blocked P1"
+    ],
+    "current_result": "Stored witness reused only in historical/structural/disputed scope; no current autonomous all-article success claim."
+  }
+]

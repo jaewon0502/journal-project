@@ -1,0 +1,8 @@
+{
+  "start": "2026-10-03T09:40:16.533753+00:00",
+  "start_definition": "first development writer input/reference freeze, before launching writer",
+  "end": "2026-10-03T09:48:42.768201+00:00",
+  "end_definition": "last of five main writer file mtimes",
+  "elapsed_seconds": 506.234448,
+  "limit": "Includes scheduling/development audit/coordinator wait. Not model latency. Does not include collection, synthetic or followup audit time."
+}

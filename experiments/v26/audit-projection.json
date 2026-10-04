@@ -1,0 +1,197 @@
+{
+  "notice": "AI internal review, neither gold truth nor human review. Full article/source texts and patch text omitted; short source excerpts retained. Complete raw PRE/POST preserved. Root adjudication is separately documented.",
+  "findings": [
+    {
+      "unit_id": "R261",
+      "id": "A261-1",
+      "category": "unnecessary_edit",
+      "patch_id": "P4",
+      "assessment": "The section already introduces GPAI and the sentence says Under the first tier. Reading all model developers as every AI model irrespective of this referent is not compelled. Added specificity is true but necessity unproved.",
+      "source_position": "S2 paragraph 6: General-purpose AI (GPAI) systems, and the GPAI models they are based on; article preceding paragraph and There will be a two-tiered approach."
+    },
+    {
+      "unit_id": "R261",
+      "id": "A261-2",
+      "category": "unsupported_certainty",
+      "patch_id": null,
+      "assessment": "S2 establishes GPAI duties but never identifies generative AI as covered by GPAI. This substantive mapping is plausible but packet does not establish it; annotate instead of certification.",
+      "source_position": "S2 paragraph 6: General-purpose AI (GPAI) systems, and the GPAI models they are based on, must meet certain transparency requirements."
+    },
+    {
+      "unit_id": "R261",
+      "id": "A261-3",
+      "category": "unsupported_certainty",
+      "patch_id": null,
+      "assessment": "The reason admits the exact risk label is absent, yet does not locally annotate that quotation. The ban framework is supported; the asserted quoted category is not verified.",
+      "source_position": "S2 paragraph 3: The new rules ban certain AI applications that threaten citizens’ rights."
+    },
+    {
+      "unit_id": "R261",
+      "id": "A261-4",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "P5",
+      "assessment": "S2 gives an unqualified GPAI copyright rule but is an excerpt without open-source exceptions. Plausible correction, yet declaring the specific exception disproved by a summary generalization is not as conclusive as output claims. Output elsewhere correctly refuses to disprove urgency exceptions from a general prior-authorization summary. Need full legal text for definitive exception adjudication; under bounded policy annotate original if evidence judged insufficient.",
+      "source_position": "S2 paragraph 6: including compliance with EU copyright law; S2 paragraph 4: subject to specific prior judicial or administrative authorisation."
+    },
+    {
+      "unit_id": "R262",
+      "id": "A262-1",
+      "category": "unnecessary_edit",
+      "patch_id": "P1",
+      "assessment": "Historic intended plan and next-day current permissions are different time/proposition targets. S1 absence of historical plan is not contradiction. Keep original with a local unresolved annotation.",
+      "source_position": "S1 dated 4 December 2024, penultimate paragraph: Anyone with indefinite leave to remain who uses an ink stamp or vignette in a passport ... can continue to use their documents as they do today, including for travel.; article dated 3 December 2024."
+    },
+    {
+      "unit_id": "R262",
+      "id": "A262-2",
+      "category": "new_loss",
+      "patch_id": "P1",
+      "assessment": "Replacement loses the reported earlier plan and its January 1 implementation point, replacing historical reporting with background that does not resolve it.",
+      "source_position": "Same S1 Dec4 current-policy paragraph; no earlier-plan history supplied."
+    },
+    {
+      "unit_id": "R262",
+      "id": "A262-3",
+      "category": "unsupported_certainty",
+      "patch_id": "P1",
+      "assessment": "Writer explicitly says S1 does not establish historical plan, yet labels the claim contradicted. Logical mismatch; should be not_established.",
+      "source_position": "S1 penultimate paragraph describes continuing present permissions, not intended prior phaseout."
+    },
+    {
+      "unit_id": "R262",
+      "id": "A262-4",
+      "category": "unnecessary_edit",
+      "patch_id": "P2",
+      "assessment": "General encouragement does not exclude a separate employee-specific requirement. Remaining uncertainty admits such a requirement could exist, so policy directs annotation of original rather than mandatory softening.",
+      "source_position": "S1 switch guidance paragraph: Those yet to switch are encouraged to do so before the end of the year."
+    },
+    {
+      "unit_id": "R262",
+      "id": "A262-5",
+      "category": "new_loss",
+      "patch_id": "P2",
+      "assessment": "Changes reported obligation force on unresolved evidence. Encouraged is itself a different positive historical claim for employees, not merely uncertainty annotation.",
+      "source_position": "S1 Dec4 general guidance versus article Dec3 employee claim."
+    },
+    {
+      "unit_id": "R263",
+      "id": "A263-1",
+      "category": "unnecessary_edit",
+      "patch_id": "P1/P4",
+      "assessment": "17/22 is 77.27%, which rounds to 80% at one significant figure. Source uses 77%, but no materially misleading precision standard establishes the original rounded number false. Audit labels contradicted for this difference are overconfident. Headline polymer terminology repair is separable and justified.",
+      "source_position": "S1 Results 3.2 p20: 77% of donors (n=17 out of 22) carried a quantifiable (>LOQ) mass of plastic particles in their blood."
+    },
+    {
+      "unit_id": "R263",
+      "id": "A263-2",
+      "category": "unnecessary_edit",
+      "patch_id": "P11",
+      "assessment": "Original invokes recent other experiments/research, not this blood study as proof. Supplied paper establishes its own risk uncertainty, not nonexistence of every other clinical result. Local unverified annotation warranted; contradiction/required repair exceeds evidence.",
+      "source_position": "S1 Introduction p3: A human health risk assessment ... is currently not possible due to lack of data on both toxicological hazard and human exposure; Conclusion p25 no statements about risk or no risk can be made."
+    },
+    {
+      "unit_id": "R263",
+      "id": "A263-3",
+      "category": "new_loss",
+      "patch_id": "P11",
+      "assessment": "Changes a reported external research development into a generic research need without verifying external study. Also leaves connective 끼친다거나 attached to revised uncertainty statement, making preceding laboratory context less clear.",
+      "source_position": "Article sentence begins recent laboratory conditions; S1 does not reproduce that experiment."
+    },
+    {
+      "unit_id": "R263",
+      "id": "A263-4",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "P9",
+      "assessment": "Human-cell wall terminology is biologically problematic, but bounded source supplies no membrane injury experiment. Replacement supplies a particular alternative mechanism absent from packet, though annotation transparently flags it. Safer preserve/flag or correct only terminology without suggesting observed membrane injury; this is not unqualified fabricated certainty because annotation exists.",
+      "source_position": "S1 contains blood polymer measurement and no cited human-cell membrane-injury result."
+    },
+    {
+      "unit_id": "R263",
+      "id": "A263-5",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "P24/P25",
+      "assessment": "Acceptable caution about exact publication day/local time, but implication that journal publication requires final version of record is too strong. Pre-proof itself says ©2022 Published by Elsevier Ltd., To appear in Environment International and supplied metadata published=2022-03-24. Do not certify publication false; output does not, so this remains annotation rationale precision only.",
+      "source_position": "S1 cover: To appear in: Environment International; © 2022 Published by Elsevier Ltd.; version metadata and published field."
+    },
+    {
+      "unit_id": "R266",
+      "id": "B1",
+      "category": "unnecessary_edit",
+      "patch_id": "P2; clause_audit[15]",
+      "assessment": "The new word is accurate, but original future applications in a passage of prospective uses need not promise guaranteed deployment. Audit proposition “Numerous applications are assured” overstates the original. At most an optional precision edit; necessity not demonstrated."
+    },
+    {
+      "unit_id": "R266",
+      "id": "B2",
+      "category": "unsupported_certainty_label_overreach",
+      "patch_id": "P1; clause_audit[14]",
+      "assessment": "Earlier layered-compound evidence refutes broad first-in-layered-material priority. Original can also refer to the newly discussed specific compound. Patch safely removes priority but contradicted/required are categorical despite referent ambiguity. Record not_established or unresolved for compound-specific priority; do not claim source refutes every reasonable reading."
+    },
+    {
+      "unit_id": "R266",
+      "id": "B3",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "P3; clause_audit[30]",
+      "assessment": "Narrowing to electrons is reasonable physics clarification, but supplied evidence on electrons does not refute universal particle claim. Output itself labels not_established yet repairs as required; policy normally retains possibly true unverified claims with annotation. Demonstrable source-overstatement versus unsourced background is unresolved. New binary-measurement explanation is stronger than direct spectrum evidence; avoid certifying it purely from two channels."
+    },
+    {
+      "unit_id": "R266",
+      "id": "B4",
+      "category": "unsupported_certainty_label_overreach",
+      "patch_id": "P4; clause_audit[36]",
+      "assessment": "Revised distinction is supported. Audit recasts original as “Opposing moments alone prevent spin splitting in all antiferromagnets,” strengthening “not a good” into none and reading conventional contextual category universally. Correction may be warranted for causal oversimplification, but source-grounded precision is not automatically mandatory; preserve unresolved contextual necessity."
+    },
+    {
+      "unit_id": "R266",
+      "id": "B5",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "P5; clause_audit[43]",
+      "assessment": "Replacement preserves source uncertainty. Original preceding clause already says further research is required. Audit proposition “Competition ... determines ordering” adds determinative force; classify mandatory repair with caution. Also internal label says supported while reason says overstated."
+    },
+    {
+      "unit_id": "R268",
+      "id": "B6",
+      "category": "unsupported_certainty_label_overreach",
+      "patch_id": "P16; clause_audit[46]",
+      "assessment": "Revised criticism is supported and retained. Monitoring is not causal adjustment, control or separation; it cannot alone establish contradiction of “does not account for.” Strong contradicted/required label conflates these. Clarification optional or necessity unresolved unless original is specifically read as no monitoring."
+    },
+    {
+      "unit_id": "R268",
+      "id": "B7",
+      "category": "unsupported_certainty_label_overreach",
+      "patch_id": "P4; clause_audit[19]",
+      "assessment": "Replacement correctly preserves the available referents and avoids inventing control area. Label contradicted directly compares plot area with system dimensions without proving these are the identical measured object. There is a serious apparent dimension/source-misreporting issue, but exact original plot areas remain unestablished. Separate inaccurate reporting of supplied dimensions from disproven plot-area proposition."
+    },
+    {
+      "unit_id": "R268",
+      "id": "B8",
+      "category": "uncertain_necessity_source_gap",
+      "patch_id": "unpatched text; clause_audit[15]",
+      "assessment": "Immediate antecedent is capturing green light, itself annotated unverified. Research goal does not directly establish experimental support for future green-light capture. Audit supported reading broadens referent to spectral allocation. Keep possibility rather than call false, but record claim-specific source gap; source-backed verdict is too certain."
+    }
+  ],
+  "pre_errata": [
+    {
+      "unit_id": "R261",
+      "correction": "PRE missed required untargeted-scraping restriction (S2 paragraph3) and rights-affecting explanation limit (S2 paragraph5). Output P2/P3 rightly correct them."
+    },
+    {
+      "unit_id": "R261",
+      "correction": "PRE classified copyright exception as required_source_overstatement while qualifying that exception evidence could be insufficient. That primary classification was too categorical for this excerpt-only packet. Post keeps explicit uncertainty; does not silently redefine PRE."
+    },
+    {
+      "unit_id": "R263",
+      "correction": "PRE conditional joint-presence concern remains uncertain: ordinary Korean listing can be aggregate. Do not grade body as definitely missed repair for not saying at least one. Output correctly preserves nonexhaustive listing; 80% need not be false."
+    },
+    {
+      "unit_id": "R268",
+      "pre_location": "material_required_corrections dimension item",
+      "erratum": "PRE correctly warned about systems versus plots and unknown third area, but calling dimension repair unconditionally required understated referent uncertainty. Source does not directly measure article plot areas. POST explicitly separates likely source misreport from strict contradiction. PRE remains unchanged."
+    },
+    {
+      "unit_id": "R266",
+      "pre_location": "normal_supported_clauses and candidate scope",
+      "erratum": "PRE was a compressed inventory, not a full clause-by-clause verdict. Exact application certainty, causal competition wording and two-channel explanation require the more granular POST necessity analysis. No prior normal-clause grouping should be treated as gold."
+    }
+  ]
+}

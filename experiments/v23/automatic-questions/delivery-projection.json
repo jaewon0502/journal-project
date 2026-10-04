@@ -1,0 +1,42 @@
+[
+  {
+    "unit_id": "T701",
+    "full_edited_text": "Electron spin is intrinsic angular momentum [not established by supplied sources] rather than literal rotation [not established by supplied sources].",
+    "patches": [
+      {
+        "id": "T701-P1",
+        "before": "angular momentum",
+        "after": "angular momentum [not established by supplied sources]",
+        "reason": "Retain the background definition while marking its source-support gap locally."
+      },
+      {
+        "id": "T701-P2",
+        "before": "rather than literal rotation",
+        "after": "rather than literal rotation [not established by supplied sources]",
+        "reason": "Annotate the unsupported exclusion without declaring it false."
+      }
+    ],
+    "clause_annotations": [
+      {
+        "quote": "angular momentum",
+        "status": "not_established",
+        "reason": "The supplied sources do not define spin as angular momentum."
+      },
+      {
+        "quote": "rather than literal rotation",
+        "status": "not_established",
+        "reason": "The supplied sources do not explain whether spin entails literal rotation."
+      }
+    ],
+    "whole_text_hold": false,
+    "scope": "public projection excludes long source quotations; original JSON privately preserved"
+  },
+  {
+    "unit_id": "T812",
+    "full_edited_text": "Electron spin is an intrinsic quantum property.",
+    "patches": [],
+    "clause_annotations": [],
+    "whole_text_hold": false,
+    "scope": "public projection excludes long source quotations; original JSON privately preserved"
+  }
+]

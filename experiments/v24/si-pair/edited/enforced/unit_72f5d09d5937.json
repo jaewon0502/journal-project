@@ -1,0 +1,34 @@
+{
+  "unit_id": "unit_72f5d09d5937",
+  "clause_audit": [
+    {
+      "quote": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이",
+      "relation": "supported",
+      "comparison_ids": ["event_year", "event_month", "event_day", "event_hour", "temperature", "length_target"],
+      "evidence": [
+        {"source_id": "src_897101849a4f", "quote": "가상 시설인 해온 재료시험실은 2026년 4월 12일 오전 10시에 표준 막대 R7의 길이를 측정했다."},
+        {"source_id": "src_897101849a4f", "quote": "측정 대상은 막대 전체이며, 끝부분의 표식을 기준으로 삼거나 포장재를 포함하지 않았다."},
+        {"source_id": "src_897101849a4f", "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."}
+      ],
+      "reason": "출처가 시험실, 막대 식별자, 전체 길이, 날짜, 오전 시각과 온도를 직접 뒷받침한다. 날짜·온도 비교의 단위 제한에 따른 gate 차단은 이 문구들의 오류를 뜻하지 않는다. 그대로 보존한다."
+    },
+    {
+      "quote": "정확히 126센티미터였다.",
+      "relation": "contradicted",
+      "comparison_ids": ["length_target"],
+      "evidence": [
+        {"source_id": "src_897101849a4f", "quote": "실내 온도를 섭씨 20도로 유지한 상태에서 확인한 길이는 정확히 1.25미터였다."},
+        {"source_id": "src_897101849a4f", "quote": "이 값은 반올림한 표시값이 아니라 이번 합성 기록에서 정한 정확한 수치다."},
+        {"source_id": "src_897101849a4f", "quote": "담당자는 같은 날 오후 2시에 온도를 섭씨 80도로 바꾸어 별도의 비교 측정을 진행했고, 그 조건에서의 길이는 정확히 1.26미터라고 기록했다."}
+      ],
+      "reason": "동일한 막대 전체의 오전 10시·섭씨 20도 측정값은 정확히 1.25미터, 즉 125센티미터다. length_target은 eligible_mismatch이며 출처를 재독해 대상과 조건의 일치를 확인했다. 126센티미터에 해당하는 오후 2시·80도 기록은 별도 조건이므로 대체 근거가 아니다."
+    }
+  ],
+  "patches": [
+    {"id": "p1", "before": "126", "after": "125", "reason": "동일 대상·시간·조건의 정확한 1.25미터를 센티미터로 환산하여 잘못된 숫자만 수정한다.", "comparison_ids": ["length_target"]}
+  ],
+  "full_edited_text": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 125센티미터였다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "variant_id": "ko-M47",
+    "same_final_text": true,
+    "same_link_labels": true
+  },
+  {
+    "variant_id": "ko-R82",
+    "same_final_text": true,
+    "same_link_labels": true
+  },
+  {
+    "variant_id": "en-M47",
+    "same_final_text": true,
+    "same_link_labels": true
+  },
+  {
+    "variant_id": "en-R82",
+    "same_final_text": true,
+    "same_link_labels": true
+  }
+]

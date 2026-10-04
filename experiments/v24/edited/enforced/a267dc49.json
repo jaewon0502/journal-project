@@ -1,0 +1,52 @@
+{
+  "unit_id": "a267dc49",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "relation": "contradicted",
+      "comparison_ids": [
+        "completion_target"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 수료자는 240명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "집계 대상은 1월부터 6월까지 운영한 모든 기초 수선 강좌를 합친 것으로, 같은 사람이 여러 차례 참여해도 한 번만 셌다."
+        }
+      ],
+      "reason": "The article targets all distinct completers in the January–June cohort. S1 explicitly gives 240 overall; 96 refers only to weekend completers and 144 only to weekday completers. Same institution, course, completion criteria and period support changing only the total."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "96명",
+      "after": "240명",
+      "reason": "The article targets all distinct completers in the January–June cohort. S1 explicitly gives 240 overall; 96 refers only to weekend completers and 144 only to weekday completers. Same institution, course, completion criteria and period support changing only the total.",
+      "comparison_ids": [
+        "completion_target"
+      ]
+    }
+  ],
+  "full_edited_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

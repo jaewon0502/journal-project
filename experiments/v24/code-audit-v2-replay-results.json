@@ -1,0 +1,319 @@
+{
+  "unrelated_clause": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "p",
+        "before": "B is 7 m.",
+        "reason": "numeric edit outside comparison permission",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "B is 7 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "arbitrary_replacement": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "p",
+        "before": "A is 2 m.",
+        "reason": "non-numeric text/unit change; review_required",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "A is 2 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "mixed_ids": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "p",
+        "before": "A is 2 m.",
+        "reason": "every comparison must exist and be eligible",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "A is 2 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "wrong_numeric_value": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "p",
+        "before": "A is 2 m.",
+        "reason": "replacement differs from certified same-unit expected value",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "A is 2 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "wrong_unit_id": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "blocked",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "A is 2 m. B is 7 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": [
+      "invalid input: gate unit/article binding or status invalid"
+    ]
+  },
+  "wrong_article_sha256": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "blocked",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [
+      "A is 2 m. B is 7 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": [
+      "invalid input: gate unit/article binding or status invalid"
+    ]
+  },
+  "malformed_axes": {
+    "unit_id": "independent-synthetic",
+    "article_sha256": "916961574a5bbe79324a61b828392f477ab28cb4e5f6c1213e53fca3ac1e1cb1",
+    "results": [
+      {
+        "id": "c",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: invalid axes"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "dimension_arithmetic": {
+    "unit_id": "independent-synthetic",
+    "article_sha256": "916961574a5bbe79324a61b828392f477ab28cb4e5f6c1213e53fca3ac1e1cb1",
+    "results": [
+      {
+        "id": "c",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: typed arithmetic result mismatch"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "legitimate_edit": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "A is 3 m. B is 7 m.",
+    "accepted_patch_ids": [
+      "p"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "converted_edit": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "A is 3 km.",
+    "accepted_patch_ids": [
+      "p"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "normalized_equal": {
+    "unit_id": "independent-synthetic",
+    "article_sha256": "a2ab8ee2a9d6c185e5395e9798b2b6fad34bf4dafe9f9e66002d01c9320c84dd",
+    "results": [
+      {
+        "id": "c",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "2 km",
+        "article_span": [
+          5,
+          9
+        ],
+        "numeric_span": [
+          5,
+          6
+        ],
+        "original_numeric_token": "2",
+        "article_unit": "km",
+        "article_value": "2",
+        "expected_value": "2",
+        "normalized_expected_value": "2000",
+        "dimension": "length"
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "typed_area": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "A area is 9 m2.",
+    "accepted_patch_ids": [
+      "p"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "typed_subtraction": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "A is 2 m.",
+    "accepted_patch_ids": [
+      "p"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "false_semantic_certificate_gate": {
+    "unit_id": "independent-synthetic",
+    "article_sha256": "f41ccd1a2a1debb31241a39c78ea96a7acc34404be66429c0f9fbd214659b835",
+    "results": [
+      {
+        "id": "c",
+        "gate_result": "eligible_mismatch",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "A is 2 m.",
+        "article_span": [
+          0,
+          9
+        ],
+        "numeric_span": [
+          5,
+          6
+        ],
+        "original_numeric_token": "2",
+        "article_unit": "m",
+        "article_value": "2",
+        "expected_value": "3",
+        "normalized_expected_value": "3",
+        "dimension": "length"
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "false_semantic_certificate_delivery": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "A is 3 m.",
+    "accepted_patch_ids": [
+      "p"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "unrelated_contradiction_label": {
+    "unit_id": "independent-synthetic",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "A is 2 m. B is 7 m.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [
+      {
+        "quote": "B is 7 m.",
+        "delivered_disposition": "review_required",
+        "reason": "contradiction label outside comparison permission"
+      }
+    ],
+    "local_review_required": [
+      "B is 7 m."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  },
+  "v1_code_hashes_unchanged": {
+    "code/gate.py": true,
+    "code/delivery.py": true,
+    "code/test_gate.py": true
+  }
+}
