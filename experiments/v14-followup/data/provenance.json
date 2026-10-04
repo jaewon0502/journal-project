@@ -1,0 +1,91 @@
+{
+  "recorded_at_utc": "2026-10-03T08:00:54.369438+00:00",
+  "report_filename": "journal-v14-korean-report.html",
+  "report_sha256": "7f21c0556ac549b3385dbcd562feccd93589f7cde6438d4c7471e35a647292cf",
+  "historical_input_hashes_reported": {
+    "K01.reference.json": "c0784f77835d3251a625013fcaba517ecece2bf5ecd1af1cb9071ee8d8da475e",
+    "K01.json": "371c904c07bc861641bd2165a87bd5c5831be0dce03f8bab3096b7fbfe9a9de8"
+  },
+  "historical_runtime_recovered": false,
+  "original_model_outputs_recovered": false,
+  "original_k01_bundle_recovered": false,
+  "search_scope": "current workspace, related local Codex task directories, Downloads and repository main/PR records; user reports location unknown",
+  "historical_results_status": "reported_in_supplied_HTML_not_independently_replayed",
+  "reported_results": {
+    "article_count": 1,
+    "proposed_patches": 18,
+    "applied": 6,
+    "held": 12,
+    "preserved_provisional_items": 31,
+    "normal_control_articles": 0,
+    "human_reviews": 0
+  },
+  "reacquired_documents": [
+    {
+      "name": "article.html",
+      "url": "https://www.babytimes.co.kr/news/articleView.html?idxno=67598",
+      "retrieved_at_utc": "2026-10-03T07:55:07.190030+00:00",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "resolved_url": "https://www.babytimes.co.kr/news/articleView.html?idxno=67598",
+      "bytes": 100251,
+      "sha256": "0ff0ca7ad371b99c1e96b5f889d42a7ab8fc60d360ab3be36e4fd35dc6814062"
+    },
+    {
+      "name": "S1.pdf",
+      "url": "https://mofe.go.kr/com/cmm/fms/FileDown.do?atchFileId=ATCH_000000000026722&fileSn=11",
+      "retrieved_at_utc": "2026-10-03T07:55:07.298655+00:00",
+      "status": 200,
+      "content_type": "application/octet-stream",
+      "resolved_url": "https://mofe.go.kr/com/cmm/fms/FileDown.do?atchFileId=ATCH_000000000026722&fileSn=11",
+      "bytes": 1612337,
+      "sha256": "c8f82fd7a6f215495eebc709b078176327650ea05c54317249b97bd1dfc63fa5"
+    },
+    {
+      "name": "S2.pdf",
+      "url": "https://mofe.go.kr/com/cmm/fms/FileDown.do?atchFileId=ATCH_000000000026722&fileSn=4",
+      "retrieved_at_utc": "2026-10-03T07:55:08.102710+00:00",
+      "status": 200,
+      "content_type": "application/octet-stream",
+      "resolved_url": "https://mofe.go.kr/com/cmm/fms/FileDown.do?atchFileId=ATCH_000000000026722&fileSn=4",
+      "bytes": 1051412,
+      "sha256": "dc9438f8d7f6999774a61e4dc2c3ae99911759c081577f28b7dede1226fc1a88"
+    },
+    {
+      "name": "S3.html",
+      "url": "https://www.korea.kr/news/policyNewsView.do?newsId=148932921",
+      "retrieved_at_utc": "2026-10-03T07:55:08.375664+00:00",
+      "status": 200,
+      "content_type": "text/html;charset=UTF-8",
+      "resolved_url": "https://www.korea.kr/news/policyNewsView.do?newsId=148932921",
+      "bytes": 159669,
+      "sha256": "97601962dc194d9df8f0241984888499de0167bca84c3abd0c7dd0fcef76a19a"
+    }
+  ],
+  "new_extraction": {
+    "article_body_paragraphs": 35,
+    "S1_pdf_pages": 193,
+    "S2_pdf_pages": 40,
+    "not_same_as_old_frozen_bundle": true
+  },
+  "current_visual_read_scope": [
+    {
+      "file": "S1.pdf",
+      "physical_page": 1,
+      "observation": "Cover retains warning that committee may change contents; final confirmation requested."
+    },
+    {
+      "file": "S1.pdf",
+      "physical_page": 50,
+      "printed_page": 40,
+      "observation": "Columns confirm first 15→25, second 20→30, third/subsequent per-person 30→40; qualifying dependants age 8+; planned income application from 2025-01-01."
+    }
+  ],
+  "not_verified": [
+    "whole 233-page meaning audit",
+    "post-committee final version identity",
+    "current tax entitlement",
+    "original v14 reviewer exposure and code execution"
+  ],
+  "full_sources_in_public_git": false
+}

@@ -1,0 +1,16 @@
+{
+  "recorded_at_utc": "2026-10-03T08:09:07.091768+00:00",
+  "type": "adaptive_integration_demonstration_not_holdout_performance",
+  "source_control_case": "C734",
+  "selection_reason": "one existing library-condition repair used to exercise actual model reviews and deterministic final-audit flow",
+  "proposal_source": "saved control-review-r1 correction",
+  "reviewer_contexts": "r1 and r2 reuse contexts after earlier control trial; no peer gate judgment supplied before submission",
+  "final_auditor_context": "prior form implementation; no control labels/peer judgments supplied",
+  "expected_result": "not prescribed; preserve actual decisions",
+  "original_v14_replay": false,
+  "independent_new_cases": 0,
+  "real_world_article_claim": false,
+  "input_sha256": "ac90df240d280deb59baa7695da14a6c1562010c86e2e8f3d303e1343860f95d",
+  "gate_code_sha256_before_review": "112ccf0a29318835c2bffb8dca080c492cdba0532e840bd47d5d3f739077b8b1",
+  "contract_sha256_before_review": "4d955e6a0e11db4e19b1cc5bf521bab2dc383b49b7193ff4485c1b6da13b777b"
+}
