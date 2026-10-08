@@ -1,0 +1,56 @@
+{
+  "unit_id": "Q3297",
+  "clause_audit": [
+    {
+      "original_quote": "참가자 12명",
+      "proposition": "There were twelve participants.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "연구진은 참가자 12명 중 적어도 일부에서 회복을 관찰했다고 공개했다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Sample size matches."
+    },
+    {
+      "original_quote": "모두에서 회복을 관찰했다고 공개했다.",
+      "proposition": "Researchers disclosed recovery in all twelve.",
+      "relation": "contradicted",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "개별 참가자 결과와 정확한 회복 인원은 공개하지 않았다."
+        }
+      ],
+      "action": "repair",
+      "reason": "The complete record says exact recovery count was not disclosed. At least some does not exclude all, but attributing an all-participant disclosure overstates it."
+    },
+    {
+      "original_quote": "회복 원인은 조사하지 않았다.",
+      "proposition": "Recovery causes were not investigated.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "회복의 원인은 조사하지 않았다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Explicitly supported."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "before": "12명 모두에서",
+      "after": "12명 중 적어도 일부에서",
+      "reason": "Use the disclosed quantifier without inferring that anyone failed to recover."
+    }
+  ],
+  "full_edited_text": "연구진은 참가자 12명 중 적어도 일부에서 회복을 관찰했다고 공개했다. 회복 원인은 조사하지 않았다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": "Whether all twelve recovered and the recovery cause remain unknown."
+}

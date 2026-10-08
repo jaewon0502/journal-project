@@ -1,0 +1,128 @@
+{
+  "kind": "mechanical_counterfactual_only",
+  "semantic_truth_evaluated": false,
+  "new_native_model_output": false,
+  "changes_original_run_result": false,
+  "rows": [
+    {
+      "stored_output": "E181-v2.json",
+      "sha256": "6361348118419576c2cc815e63296f34c7dd5c3334ffdcbdc21801364657290b",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "1b42dc9216db1e12c2a2c6a049c677cc8ce017f06dbd0863d50b87833f61047f"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "1b42dc9216db1e12c2a2c6a049c677cc8ce017f06dbd0863d50b87833f61047f"
+      }
+    },
+    {
+      "stored_output": "E182-v2.json",
+      "sha256": "2ca894d9003a6f4d2f3acab5bee3f724f75a04b18663ad9c7190a0d0cca2bc5f",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "54b9c75d030a5601a7fa4bc55c5023a315e48488929586b7580b98f0865fc67b"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "54b9c75d030a5601a7fa4bc55c5023a315e48488929586b7580b98f0865fc67b"
+      }
+    },
+    {
+      "stored_output": "E183-v1.json",
+      "sha256": "66e12f3bf118d2208560f92ebfb9d9ceb656827f43274bba58f2024f43e378ab",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd"
+      }
+    },
+    {
+      "stored_output": "E183-v2.json",
+      "sha256": "b6a9ef433077e779fd32b6bfc8074f8ba047c78b0a5c1c3b090dee2180e589f7",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd"
+      }
+    },
+    {
+      "stored_output": "K181-v1.json",
+      "sha256": "a0b231d0a315168fad647b7f91cc3de1f90edc998f3b7ad04f94f73786483871",
+      "frozen": {
+        "accepted": false,
+        "error": "inexact article quote"
+      },
+      "v3_counterfactual": {
+        "accepted": false,
+        "error": "inexact article quote"
+      }
+    },
+    {
+      "stored_output": "K181-v2.json",
+      "sha256": "72c9ebc55de41ec26ec2b53e6d2ec62b773f8750bd50b8bf02c8a5c587459a94",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "8a5e605ace4884c67fd4eb748b4ff3aec8018da99f91485f92fe3cf232af62b0"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "8a5e605ace4884c67fd4eb748b4ff3aec8018da99f91485f92fe3cf232af62b0"
+      }
+    },
+    {
+      "stored_output": "K182-v2.json",
+      "sha256": "3682dc1e50652fce70fe3bb046a553fca157829dadb179c9eb21acf3635833b0",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "24abc25bff95e605e9ba9c720605c5e30f09e60cce0fc750dc9115ee5d5d1e42"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "24abc25bff95e605e9ba9c720605c5e30f09e60cce0fc750dc9115ee5d5d1e42"
+      }
+    },
+    {
+      "stored_output": "K183-v2.json",
+      "sha256": "4c49c8e0f57093421c77fefdf2ad2381c69eca6688ca09b01c2d0f513aaefc67",
+      "frozen": {
+        "accepted": false,
+        "error": "cyclic patch dependency"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "1365dce953d4181ba0aac08733dea5989ca50f09f2967f790c8b5f39400b4fdf"
+      }
+    },
+    {
+      "stored_output": "REG181-v2.json",
+      "sha256": "355b6fac8d79bc96cec4a8b41a42da39d9fb925178353b22be322600f439a45b",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "5b6b115deeda3cc974bce1e82e3bfe27a7374421ee2c3fc037b6fabe8245a3da"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "5b6b115deeda3cc974bce1e82e3bfe27a7374421ee2c3fc037b6fabe8245a3da"
+      }
+    },
+    {
+      "stored_output": "REG182-v2.json",
+      "sha256": "563f6dc00a984ccbed57dbde5d58232451abb7299a5ffdf513236e305a0217c0",
+      "frozen": {
+        "accepted": true,
+        "delivered_sha256": "cc7c1ea9bb2d15b248f57de03da7ec965d0a82760fff0bcbe6e667d9c4e66fc6"
+      },
+      "v3_counterfactual": {
+        "accepted": true,
+        "delivered_sha256": "cc7c1ea9bb2d15b248f57de03da7ec965d0a82760fff0bcbe6e667d9c4e66fc6"
+      }
+    }
+  ]
+}

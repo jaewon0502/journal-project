@@ -1,0 +1,40 @@
+{
+  "unit_id": "U94",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "yes",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "During the trial, the night gallery admits visitors aged 14 and older.",
+      "candidate_quote": "During the trial, the night gallery admits visitors aged 18 and older.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "Minimum visitor age is 16, inclusive.",
+      "changed_proposition_or_counterexample": "The edit changes the age-rule answer from 14 and older to 18 and older, excluding ages 14–17 that the original included. S1 directly establishes 16 and older for this same pilot: the original already wrongly included ages 14–15, while the candidate wrongly excludes ages 16–17. Neither original nor candidate gives the correct threshold. The additional ticket requirement and inspection condition remain explicit.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "Correct the candidate threshold to the directly supported inclusive age of 16. Restoring 14 would restore an inherited original error and conflict with S1. Changing only the numeral preserves the pilot's scope, ticket requirement and opening condition; the full context does not otherwise correct the age threshold. The required answer is present but incorrect, rather than absent."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P01",
+      "finding_id": "F1",
+      "before": "visitors aged 18 and older",
+      "after": "visitors aged 16 and older"
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "Ready with the age correction within the stipulated fictional exercise. S1 supports the operational limits and S2 supports the existence and attribution of the criticism and response; neither evaluation is presented as independently established truth. The remainder of the article is preserved. This is not a certification of real-world facts."
+}

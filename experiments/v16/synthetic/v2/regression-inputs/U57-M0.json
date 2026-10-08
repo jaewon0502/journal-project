@@ -1,0 +1,26 @@
+{
+  "unit_id": "U57",
+  "article_id": "EX",
+  "original_text": "[SYNTHETIC NEWS: all entities, dates and events below are fictional]\nTitle: Bellmere board sets access rule for trial night gallery\nDeck: A limited pilot will not open before the building inspection\nThe Bellmere Arts Board adopted an access rule on 11 May 2032 for a six-week trial beginning 1 June, subject to a passed building inspection. During the trial, the night gallery admits visitors aged 14 and older. Every admitted visitor must also hold a free timed ticket; a ticket does not waive the age rule. The rule concerns the night gallery alone and makes no claim about daytime admission.\nThe local access group called the pilot “a timid response to years of exclusion” and said the booking system disadvantages people without internet access. Board chair Mira Vale disputed that judgment, promising a staffed telephone booking line before opening. The promise is not evidence that the line is already operating.\nThe board has not measured trial attendance or estimated a permanent programme's costs. Its vote authorizes the pilot subject to the inspection; it does not approve permanent opening. A review is scheduled after the six weeks, and no extension is guaranteed.\nCaption: A drawing of the planned gallery entrance, not a photograph of an operating night service.",
+  "candidate_text": "[SYNTHETIC NEWS: all entities, dates and events below are fictional]\nTitle: Bellmere board sets access rule for trial night gallery\nDeck: A limited pilot will not open before the building inspection\nThe Bellmere Arts Board adopted an access rule on 11 May 2032 for a six-week trial beginning 1 June, subject to a passed building inspection. During the trial, the night gallery admits visitors aged 16 and older. Every admitted visitor must also hold a free timed ticket; a ticket does not waive the age rule. The rule concerns the night gallery alone and makes no claim about daytime admission.\nThe local access group called the pilot “a timid response to years of exclusion” and said the booking system disadvantages people without internet access. Board chair Mira Vale disputed that judgment, promising a staffed telephone booking line before opening. The promise is not evidence that the line is already operating.\nThe board has not measured trial attendance or estimated a permanent programme's costs. Its vote authorizes the pilot subject to the inspection; it does not approve permanent opening. A review is scheduled after the six weeks, and no extension is guaranteed.\nCaption: A drawing of the planned gallery entrance, not a photograph of an operating night service.",
+  "sources": [
+    {
+      "id": "S1",
+      "url": null,
+      "date": "2032-05-11",
+      "scope": "Stipulated fictional primary record; synthetic evidence only",
+      "text": "FICTIONAL STIPULATED PRIMARY RECORD S1. This author-created record is authoritative only inside this synthetic exercise, not real-world evidence. Bellmere Arts Board resolution, 11 May 2032: the six-week night-gallery pilot begins 1 June only if the building inspection is passed. Minimum visitor age is 16, inclusive. All admitted visitors also require a free timed ticket; tickets never override the minimum age. This resolution does not set daytime admission rules. It authorizes only this conditional pilot, not permanent opening. Attendance has not been measured, permanent-programme costs have not been estimated, and review after six weeks carries no guaranteed extension. The illustration is a planned entrance drawing, not a photograph of a working service."
+    },
+    {
+      "id": "S2",
+      "url": null,
+      "date": "2032-05-11",
+      "scope": "Stipulated fictional primary transcript; attribution evidence",
+      "text": "FICTIONAL STIPULATED PRIMARY RECORD S2. Bellmere board hearing transcript, 11 May 2032: the local access group called the pilot “a timid response to years of exclusion” and said internet-only booking disadvantages people without internet access. Chair Mira Vale disputed the judgment and promised a staffed telephone booking line before opening. No statement says the line is already operating. These are recorded claims and responses, not an independent finding that either evaluation is true."
+    }
+  ],
+  "fixed_questions": [
+    "Who meets the night-gallery age rule, what additional admission requirement applies, and when may this trial open?",
+    "What criticism and response were recorded, and what limits, unresolved matters and review conditions remain?"
+  ]
+}

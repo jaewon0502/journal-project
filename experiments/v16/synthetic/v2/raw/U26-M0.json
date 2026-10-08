@@ -1,0 +1,40 @@
+{
+  "unit_id": "U26",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "조건부 승인을 받은 노선안은 12개였다.",
+      "candidate_quote": "조건부 승인을 받은 노선안은 15개였다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "접수 노선안 30개, 철회 6개, 심사 24개, 조건부 승인 9개, 불승인 15개.",
+      "changed_proposition_or_counterexample": "같은 접수 기간의 조건부 승인 수가 원문 12개에서 후보 15개로 바뀌었다. S1은 조건부 승인 9개, 불승인 15개를 명시하므로 후보의 15개를 직접 반박한다. 원문의 12개도 자료에 반하는 기존 오류다. Q의 수량 답은 누락된 것이 아니라 잘못 제시되어 있다.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "편집으로 수량 의미가 달라졌지만 원문 수치로 복원하면 기존 오류를 되살린다. 동일 기관·기록일·접수 기간·단위의 S1이 직접 지지하는 9개로 최소 정정한다. 운행 전 안전점검, 발언의 귀속, 집계 범위와 미확정 사항은 전체 문맥에서 유지된다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P01",
+      "finding_id": "F1",
+      "before": "조건부 승인을 받은 노선안은 15개였다.",
+      "after": "조건부 승인을 받은 노선안은 9개였다."
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 합성 기사와 가정된 기록의 범위에서는 수량 정정 후 고정 질문의 답과 나머지 의미가 유지된다. 이는 허구 자료 내부의 판정이며 현실의 사실 또는 기사 일반에 대한 인증은 아니다."
+}

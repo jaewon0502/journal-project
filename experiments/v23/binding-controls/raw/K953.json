@@ -1,0 +1,16 @@
+{
+  "unit_id": "K953",
+  "bindings": [
+    {"claim_anchor": "발표문에 따르면 첫째 장치의 효율은 4.5배였고", "referent": "첫째 장치", "measured_property": "효율", "scope": "Ratio to the source's baseline; this clause is governed by 발표문에 따르면", "time": "past; no date specified", "unit": "배 (ratio)", "source_authority": "release: 발표문", "source_anchor": "첫째 장치의 효율은 기준 대비 4.5배였다.", "attribution_support": "release supports this first-device clause only"},
+    {"claim_anchor": "별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.", "referent": "둘째 장치", "measured_property": "효율", "scope": "Ratio to the source's baseline; this clause is governed by 별도 연구노트에 따르면", "time": "past; no date specified", "unit": "배 (ratio)", "source_authority": "note: 별도 연구노트", "source_anchor": "둘째 장치의 효율은 기준 대비 2.8배였다.", "attribution_support": "note independently supports this second-device clause", "contradiction_test": "The release's absence of second-device results and the note's second-device result can both be true because they concern different documents."}
+  ],
+  "clause_audit": [
+    {"original_quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고", "proposition": "The release reports first-device efficiency of 4.5 times the baseline.", "relation": "supported", "source_witnesses": [{"source_id": "release", "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다."}], "action": "keep", "reason": "The value, device and attribution match; no prose edit is necessary."},
+    {"original_quote": "별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.", "proposition": "The separate research note reports second-device efficiency of 2.8 times the baseline.", "relation": "supported", "source_witnesses": [{"source_id": "note", "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."}], "action": "keep", "reason": "The second clause has its own correct attribution and independent support; no prose edit is necessary."}
+  ],
+  "patches": [],
+  "full_edited_text": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": ["The sources do not identify their baselines or establish that both devices share one; the article makes no such claim."]
+}

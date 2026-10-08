@@ -1,0 +1,16 @@
+{
+  "unit_id": "T812",
+  "questions": [
+    {
+      "id": "T812-Q1",
+      "text": "Is electron spin an intrinsic property?",
+      "covers_quote": "Electron spin is an intrinsic quantum property."
+    },
+    {
+      "id": "T812-Q2",
+      "text": "Is electron spin a quantum property?",
+      "covers_quote": "Electron spin is an intrinsic quantum property."
+    }
+  ],
+  "omitted_spans": []
+}

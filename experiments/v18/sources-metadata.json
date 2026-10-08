@@ -1,0 +1,248 @@
+{
+  "policy": "No full article or source text. Current retrieval is not publication-time archive. Read scope and later-source dates retained.",
+  "units": [
+    {
+      "unit_id": "K181",
+      "partition": "development",
+      "language": "ko",
+      "domain": "policy/public procedure",
+      "input_sha256": "742926a2cd7802d7fd6a6b53ee1843051eca144d33d127f198b80e7f581c46cb",
+      "input_frozen_at": "2026-10-03T08:46:51.298214+00:00",
+      "article": {
+        "url": "https://www.korea.kr/news/policyNewsView.do?newsId=148939410",
+        "title": "모바일 주민등록증 발급 전국 확대…14일부터 단계적으로",
+        "published": "2025-02-10",
+        "modified": null,
+        "collected": "2026-10-03T08:44:47.032903+00:00",
+        "article_kind": "government policy-news article (explicit fallback)",
+        "body_scope": "Complete article title, subtitle, byline/date and all article-body text, including three captions and contact line. Navigation, sharing widgets and legal footer excluded. Text embedded only in illustrations not transcribed; original HTML retained."
+      },
+      "article_chars": 2087,
+      "article_text_sha256": "9e67e2489578eda1d7e0606a7e32cad015676535fa0deb867b579f347fd8cbf2",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000008&nttId=115585",
+          "title": "모바일 주민등록증 발급 2월 14일부터 단계적 전국 확대",
+          "published": "2025-02-10",
+          "collected": "2026-10-03T08:44:47.032903+00:00",
+          "version": "Current official ministry landing page for dated release; attachment inaccessible",
+          "read_scope": "Entire ministry landing-page description. Attached release read separately via official generated document preview (S2). Direct PDF/HWPX download returned 502.",
+          "lineage": "Originating ministry release landing page, same institution as policy-news article; not independent corroboration.",
+          "text_chars": 220,
+          "text_sha256": "28f056409e7c57c0431c04481cec630dd91819da9d270c0367c3c8e16a36b2f7"
+        },
+        {
+          "id": "S2",
+          "url": "https://www.mois.go.kr/synap/skin/doc.html?fn=BBS_2025020702083645701&rs=/synapFile/202610/",
+          "title": "모바일 주민등록증 발급 2월 14일부터 단계적 전국 확대",
+          "published": "2025-02-09T12:00:00+09:00 (online release); 2025-02-10 morning print edition",
+          "collected": "2026-10-03T08:46:28.951294+00:00",
+          "version": "Official ministry HWPX preview generated through linked Synap endpoint; pages 1–4",
+          "read_scope": "All text in all four rendered pages: pages 1–3 substantive release including table, footnotes, conditions, quotation and contacts; page 4 image appendix text labels only. Embedded screen illustrations not transcribed. Pages 5–7 return 404. Whitespace from source HTML is preserved as token spaces; table visual layout not preserved.",
+          "lineage": "Official attachment preview linked by originating ministry release landing page S1. Same institution as government-news article; not independent corroboration.",
+          "text_chars": 3074,
+          "text_sha256": "350406e9524206f94ba0555ba723c10c85d40c064045404a6e05d9062b1d21a8"
+        }
+      ]
+    },
+    {
+      "unit_id": "E183",
+      "partition": "development",
+      "language": "en",
+      "domain": "health/science",
+      "input_sha256": "5ce1c1eaeda67daa7d9ba0ee246b7eba67d999ed96979b85b9ad0f4c42d49578",
+      "input_frozen_at": "2026-10-03T08:44:44.926557+00:00",
+      "article": {
+        "url": "https://www.theguardian.com/science/2025/jan/08/daily-glass-of-milk-may-cut-bowel-cancer-risk-by-fifth-research-finds",
+        "title": "This article is more than 1 year old Daily glass of milk may cut bowel cancer risk by fifth, research finds This article is more than 1 year old",
+        "published": "2025-01-08T10:00:05Z",
+        "modified": "2025-01-08T18:47:00Z",
+        "collected": "2026-10-03T08:44:28.743799+00:00",
+        "article_kind": "independent_newsroom_report",
+        "body_scope": "Complete headline, standfirst, byline, lead photo caption/credit and all 12 article body paragraphs. Navigation, share controls, age-warning, related-article promo cards and topic links excluded. Image pixels excluded; no article prose truncated."
+      },
+      "article_chars": 3929,
+      "article_text_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.nature.com/articles/s41467-024-55219-5",
+          "title": "Diet-wide analyses for risk of colorectal cancer: prospective study of 12,251 incident cases among 542,778 women in the UK",
+          "published": "2025-01-08",
+          "collected": "2026-10-03T08:44:28.743799+00:00",
+          "version": "Published open-access HTML version of record accessed at collection",
+          "read_scope": "Entire publisher article HTML textual extraction including abstract, introduction, results, discussion and methods, figure captions, availability, references and declarations. Full-size tables, figure pixels and separately linked supplementary files not included. Publisher related-content widgets remain in extraction.",
+          "lineage": "Original research by Papier et al.; directly linked by news article; DOI 10.1038/s41467-024-55219-5. This is primary study text, not a press-release paraphrase.",
+          "text_chars": 65098,
+          "text_sha256": "a6bd1eb85738cb2a69055dee94d8f1d9b086d8c16ad6809c25fb568e67bfff41"
+        }
+      ]
+    },
+    {
+      "unit_id": "E181",
+      "partition": "evaluation",
+      "language": "en",
+      "domain": "policy/public procedure",
+      "input_sha256": "c0ee8cba48bdea6611527cee5d61fbe2f9d4672d5ebd3fbd882dd1a57d132f73",
+      "input_frozen_at": "2026-10-03T08:45:52.326665+00:00",
+      "article": {
+        "url": "https://www.theguardian.com/uk-news/2024/dec/03/uk-delays-full-shift-to-digital-immigration-system-amid-evisa-flaws",
+        "title": "Use expired ID to get to UK, says minister in charge of flawed eVisas",
+        "published": "2024-12-03T19:56:00Z (visible first-publication timestamp)",
+        "modified": "2024-12-03T22:22:19.000Z",
+        "collected": "2026-10-03T08:44:47.032903+00:00",
+        "article_kind": "independent newsroom news article",
+        "body_scope": "Complete headline, standfirst, visible author/date line, lead photo caption and all article body paragraphs including inset caption; no arbitrary truncation. Repeated responsive copy of lead caption included once. Navigation, related stories, topic links and donation/sharing widgets excluded. Current fetched version; original HTML preserved."
+      },
+      "article_chars": 4657,
+      "article_text_sha256": "28c777f21222dcd832f49525c77e7ab01398e1446b76228dee11e1f2d25904d2",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.gov.uk/government/news/visa-holders-should-switch-to-an-evisa-now",
+          "title": "Visa holders should switch to an eVisa now",
+          "published": "2024-12-04",
+          "collected": "2026-10-03T08:44:47.032903+00:00",
+          "version": "Dated Home Office news release fetched in current HTML; no update date displayed",
+          "read_scope": "Entire headline, lead, attribution/date and full substantive release body including all minister quotation paragraphs. Decorative image and site navigation excluded.",
+          "lineage": "Primary Home Office release published the following day: later evidence about the same transition; cannot establish what reporter knew on December 3. Does not substantiate unnamed insiders or independently verify campaigner comments.",
+          "text_chars": 3480,
+          "text_sha256": "2c45e7c11e18d107277dc721fb9341d92481fb26623fc010f6cca856179f32a9"
+        }
+      ]
+    },
+    {
+      "unit_id": "K182",
+      "partition": "evaluation",
+      "language": "ko",
+      "domain": "corporate_consumer",
+      "input_sha256": "19e0c4ea8a5e4d611e3576cdba2920ebbb538453caf014f38f4165683aca98b5",
+      "input_frozen_at": "2026-10-03T08:45:17.190339+00:00",
+      "article": {
+        "url": "https://www.thelec.kr/news/articleView.html?idxno=25060",
+        "title": "'아이템 확률 조작' 116억 과징금 맞은 넥슨",
+        "published": "2024-01-03T18:07:02+09:00",
+        "modified": null,
+        "collected": "2026-10-03T08:43:42.715557+00:00",
+        "article_kind": "Independent specialist newsroom report",
+        "body_scope": "Complete headline, subtitle/standfirst, displayed publication/byline, image caption, and all editorial body paragraphs. Site navigation, comments, ads and related-story promotional card excluded. Images not inspected; captions preserved. No truncation."
+      },
+      "article_chars": 923,
+      "article_text_sha256": "24abc25bff95e605e9ba9c720605c5e30f09e60cce0fc750dc9115ee5d5d1e42",
+      "sources": [
+        {
+          "id": "KS1",
+          "url": "https://www.korea.kr/news/policyNewsView.do?newsId=156609050",
+          "title": "(주)넥슨코리아의 전자상거래법 위반 행위 제재",
+          "published": "2024-01-03",
+          "collected": "2026-10-03T08:43:42.715557+00:00",
+          "version": {
+            "retrieved_public_page": "2026-10-03T08:43:42.715557+00:00",
+            "page_modified": null
+          },
+          "read_scope": "Complete HTML briefing transcript including complete Q&A through <끝>; no audio/video or linked attachment read.",
+          "lineage": "Official regulator text on its own public website; Korea.kr is the Korean government policy portal.",
+          "text_chars": 11973,
+          "text_sha256": "5076ae1acc5811b0e2badce9ee9c6bb411435730f7eaed01668341bd47ef414a"
+        },
+        {
+          "id": "KS2",
+          "url": "https://www.korea.kr/briefing/actuallyView.do?newsId=148924372",
+          "title": "공정위 “넥슨 제재 조치는 확률형 아이템의 확률 변경 공지 누락 때문”",
+          "published": "2024-01-05",
+          "collected": "2026-10-03T08:43:42.715557+00:00",
+          "version": {
+            "retrieved_public_page": "2026-10-03T08:43:42.715557+00:00",
+            "page_modified": null
+          },
+          "read_scope": "Complete clarification article, later than news article; historical chronology must be retained. No image evidence required.",
+          "lineage": "Official regulator text on its own public website; Korea.kr is the Korean government policy portal.",
+          "text_chars": 1218,
+          "text_sha256": "cfd85157f3f62838a49f57c532d6ad8b16bafdb2c7f7024e86e1b99587e39ddf"
+        }
+      ]
+    },
+    {
+      "unit_id": "E182",
+      "partition": "evaluation",
+      "language": "en",
+      "domain": "corporate_consumer",
+      "input_sha256": "965f1beb81c724592a77ece3590a675627030c2a6593c4545221012b027657d6",
+      "input_frozen_at": "2026-10-03T08:45:17.212920+00:00",
+      "article": {
+        "url": "https://www.theguardian.com/technology/2023/jun/21/amazon-sued-prime-cancel-ftc",
+        "title": "Amazon duped millions into enrolling in Prime, US regulator says in lawsuit",
+        "published": "2023-06-21T22:02:54.000Z",
+        "modified": "2023-06-22T15:53:11.000Z",
+        "collected": "2026-10-03T08:43:42.715557+00:00",
+        "article_kind": "Guardian newsroom report; byline explicitly Kari Paul and agencies (mixed newsroom/agency lineage)",
+        "body_scope": "Complete headline, subtitle/standfirst, displayed publication/byline, image caption, and all editorial body paragraphs. Site navigation, comments, ads and related-story promotional card excluded. Images not inspected; captions preserved. No truncation."
+      },
+      "article_chars": 5198,
+      "article_text_sha256": "a8bbaff906ac6e0aae1d82621a6f6176f61e18893130fd1242ba565ef32d5178",
+      "sources": [
+        {
+          "id": "ES1",
+          "url": "https://www.ftc.gov/news-events/news/press-releases/2023/06/ftc-takes-action-against-amazon-enrolling-consumers-amazon-prime-without-consent-sabotaging-their",
+          "title": "FTC Takes Action Against Amazon for Enrolling Consumers in Amazon Prime Without Consent and Sabotaging Their Attempts to Cancel",
+          "published": "2023-06-21",
+          "collected": "2026-10-03T08:43:42.715557+00:00",
+          "version": {
+            "retrieved_public_page": "2026-10-03T08:43:42.715557+00:00",
+            "page_modified": "2025-09-25T11:45:04-04:00"
+          },
+          "read_scope": "Complete release body including procedural NOTE and staff paragraph. This is a regulator allegation statement, not a liability finding. Current page metadata modified September 2025; body retains June 2023 release posture.",
+          "lineage": "United States Federal Trade Commission original public release.",
+          "text_chars": 4506,
+          "text_sha256": "db76c570d5435e102db71b53dc980b66a9820e0a3301d9a9da983277d18d019d"
+        },
+        {
+          "id": "ES2",
+          "url": "https://www.ftc.gov/system/files/ftc_gov/pdf/amazon-rosca-public-redacted-complaint-to_be_filed.pdf",
+          "title": "Complaint for Permanent Injunction, Civil Penalties, Monetary Relief, and Other Equitable Relief, FTC v. Amazon.com, Inc., Case 2:23-cv-00932, Document 1",
+          "published": "2023-06-21",
+          "collected": "2026-10-03T08:44:40.802234+00:00",
+          "version": "Filed June 21 2023; original public redacted complaint, 87 pages",
+          "read_scope": "PDF pages 1–3 in full: introductory allegation paragraph 1 and complete SUMMARY OF CASE paragraphs 2–8. Text extraction directly read; original redactions retained as extraction artifacts/blanks. No image-only or redacted content inferred. Remaining PDF downloaded and extracted but not substantively read or included.",
+          "lineage": "Official FTC PDF linked directly from contemporaneous release ES1; original court complaint, allegations rather than findings.",
+          "text_chars": 5984,
+          "text_sha256": "a05825726154c9e7d4df743b65c9db7740a51a8399788bed13a5511bd869a9f1"
+        }
+      ]
+    },
+    {
+      "unit_id": "K183",
+      "partition": "evaluation",
+      "language": "ko",
+      "domain": "health/environment",
+      "input_sha256": "8d6e39211ad4eeb45004d3eea746e59b5ff1c20bb75d37ac468e0da761cc0393",
+      "input_frozen_at": "2026-10-03T08:46:34.812922+00:00",
+      "article": {
+        "url": "https://www.newstree.kr/newsView/ntr202203250001",
+        "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+        "published": "2022-03-25T11:50:40+09:00",
+        "modified": null,
+        "collected": "2026-10-03T08:46:09.225101+00:00",
+        "article_kind": "independent_newsroom_report",
+        "body_scope": "Complete headline, byline, two-line subtitle, all nine body paragraphs from publisher web-open extraction lines 29–55. No text caption was present for lead image in accessible extraction. Image pixels and embedded YouTube video not transcribed; navigation, social controls, related stories and footer excluded. Original wording and apparent source typos retained; no prose truncated."
+      },
+      "article_chars": 1669,
+      "article_text_sha256": "0c494514eb071c3f28135752fad14df16606270cd31e485a3ddfeb98e1298233",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.researchgate.net/profile/Andre-Vethaak/publication/359440451_Journal_Pre-proofs_Full_length_article_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood/links/623c88cf2a1c362627354edd/Journal-Pre-proofs-Full-length-article-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood.pdf",
+          "title": "Discovery and quantification of plastic particle pollution in human blood",
+          "published": "2022-03-24",
+          "collected": "2026-10-03T08:46:09.225101+00:00",
+          "version": "Author-uploaded journal pre-proof, public ResearchGate upload dated March 24 2022; received 2021-12-21, revised 2022-03-11, accepted 2022-03-18; not final version of record.",
+          "read_scope": "Complete downloadable pre-proof PDF text (cover, abstract, introduction, methods, results and discussion, conclusion, tables, figure caption, declarations, references and end matter) extracted using pdftotext -layout. Figure pixels not transcribed; separately referenced supplemental Tables S1/S2 not supplied in this PDF.",
+          "lineage": "Original Leslie et al. primary research, DOI 10.1016/j.envint.2022.107199. Article directly links ScienceDirect version; publisher access was proxy-blocked, so publicly author-uploaded pre-proof on ResearchGate was acquired through its ordinary Download file PDF link, HTTP200; no access-control bypass.",
+          "text_chars": 63171,
+          "text_sha256": "024ee99ccad7cbedbc62f52f48af14d5599078a4358c22205d3528d9779a9e19"
+        }
+      ]
+    }
+  ]
+}

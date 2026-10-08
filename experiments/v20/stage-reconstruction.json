@@ -1,0 +1,30 @@
+{
+  "created_utc": "2026-10-03T10:17:21.748450+00:00",
+  "stage": "pre-output source-first reference and PRE audit",
+  "inherited_article_error": true,
+  "writer_introduced_error": false,
+  "role_limited_to_new_losses": false,
+  "external_protection_inventory_consumed": false,
+  "necessary_source_present_in_input": true,
+  "source_length_chars": 42443,
+  "source_witness": {
+    "document_id": "S1",
+    "start": 36347,
+    "end": 36382,
+    "quote": "vaginal mucosa rather than the skin"
+  },
+  "files": {
+    "reference.md": "e23e9b74f16927a23a8dc764f0b121de3ab990abd0f934dc762e74a3d79bf95e",
+    "audit.md": "6f0c905bf12c875325556f645be57b6d33f596f9dce59f3f0cbeca1160e2c322",
+    "collection-en/units/EN191.json": "5969b9007c9f239eba050a26344a484a23d95709102986edf7be0182baa4d871",
+    "reference/EN191.json": "d5a6fd563eca3ae91776dc218f867a8986f55d6b022229616eff11ebea5b5f80",
+    "audit/EN191-v2/pre.json": "9cb2f27a86f439eceafee04689a66f4d36e3563e0c07823fcc9bc008e8b9771c",
+    "raw/EN191-v2.json": "9411381cd7700aea33f72bd7e05729593120d9a79ae232e4c5f447d00d9ec23d",
+    "audit/EN191-v2/result.json": "377d8f53a976f3a0b827938d7c370b3762e032763f03c9cfaf91f7020f856c3e"
+  },
+  "primary_url": "https://www.researchgate.net/publication/381659180_Tampons_as_a_source_of_exposure_to_metalloids",
+  "doi": "10.1016/j.envint.2024.108849",
+  "primary_reopened": true,
+  "access_evidence_sha256": "4a1248eceb1c67f1e0d6f5c81661265753983baa80ab16c5b400ffcbfb588f49",
+  "limits": "Documentary source contradiction; not treating writer correction alone or reviewer consensus as truth. Reason for initial cognitive miss not inferred."
+}

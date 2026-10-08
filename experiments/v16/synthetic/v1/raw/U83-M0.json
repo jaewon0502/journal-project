@@ -1,0 +1,33 @@
+{
+  "unit_id": "U83",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "조건부 승인을 받은 노선안은 12개였다.",
+      "candidate_quote": "조건부 승인을 받은 노선안은 9개였다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "심사 24개, 조건부 승인 9개, 불승인 15개.",
+      "changed_proposition_or_counterexample": "동일 접수 기간·주체·단위의 조건부 승인 수가 12개에서 9개로 바뀌었다. S1은 9개를 명시하므로 이는 원문부터 있던 수치 오류의 정당한 교정이다. 후보는 운행 전 차량 안전점검 통과 조건도 그대로 보존하므로 고정 질문의 필수 답이 빠지지 않았다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "factual_error는 후보 명제 기준으로 no다. 원문의 12개를 복원하면 S1과 직접 충돌한다. 정당한 오류 교정은 복구할 새 의미손실로 보지 않으며, 현재 후보에는 필수 수정이 없다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 합성 기록 범위에서 후보는 승인 수와 운행 조건, 비판의 주체·강도, 교통국의 향후 제공 답변, 기간 한정과 미확정·미측정 사항 및 캡션을 유지한다. 이는 합성 보존 업무의 완료 판정이며 실제 세계의 기사 사실 인증이 아니다."
+}

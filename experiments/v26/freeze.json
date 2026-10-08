@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-03T14:33:33.529611+00:00",
+  "phase": "before generation",
+  "policy_sha256": "5d2089cea900cfe889f00edd822601f064bb10677e523b416fd7983e16eb2b43",
+  "inputs": [
+    {
+      "unit_id": "R261",
+      "historical_id": "U202",
+      "input_sha256": "915a4b5496564ece3523580e3cf47ca8ce3dfc151d9d69131389e38ec0ed4b1e",
+      "article_chars": 8775,
+      "source_chars": 3581
+    },
+    {
+      "unit_id": "R262",
+      "historical_id": "E181",
+      "input_sha256": "04ec69a57117e7bd518a0c8af5cab082c2fe8c060f72de8e1558d2b8af6e91dc",
+      "article_chars": 4657,
+      "source_chars": 3480
+    },
+    {
+      "unit_id": "R263",
+      "historical_id": "K183",
+      "input_sha256": "10f6c2ceaffff1e9a2027472685d92c9555a082ec86e0174c8ea65e0c4c4733c",
+      "article_chars": 1669,
+      "source_chars": 63171
+    },
+    {
+      "unit_id": "R264",
+      "historical_id": "EN191",
+      "input_sha256": "93f061c6005c1422002f72cb39489baa478fd6b2389f5c0f5f61d86039f8d6ad",
+      "article_chars": 3079,
+      "source_chars": 42443
+    },
+    {
+      "unit_id": "R265",
+      "historical_id": "KO192",
+      "input_sha256": "61a6b311896f284cd385ca8db7d462d8f6c643b2c577f166a598e2a1ed584447",
+      "article_chars": 608,
+      "source_chars": 955
+    },
+    {
+      "unit_id": "R266",
+      "historical_id": "E913",
+      "input_sha256": "0653e27f466f1db5325e6ccada56ef84673e797cd8c0f4cbdef45e9da0d4ee3d",
+      "article_chars": 5829,
+      "source_chars": 72887
+    },
+    {
+      "unit_id": "R267",
+      "historical_id": "K902",
+      "input_sha256": "9a163a0a64f97f6a0b9d4b43943e8a33952bce65bb1dafba20113a3068d6b0b9",
+      "article_chars": 1793,
+      "source_chars": 3074
+    },
+    {
+      "unit_id": "R268",
+      "historical_id": "F923",
+      "input_sha256": "529eb4ab7dd49750ea8462b68d8eecbf039537ddb9d32ecda652aba7db2d45e5",
+      "article_chars": 6966,
+      "source_chars": 10584
+    }
+  ]
+}

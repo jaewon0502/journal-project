@@ -1,0 +1,85 @@
+{
+  "unit_id": "SY192",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "나머지 5명의 검출한계 및 정량한계 대비 결과",
+      "origin": "inherited",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "original_quote": "나머지 5명은 검출한계 미만이었다.",
+      "candidate_quote": "나머지 5명은 검출한계 미만이었다.",
+      "source_refs": [
+        "S1"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "text, fourth sentence",
+            "quote": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "text, fifth sentence",
+            "quote": "검출한계와 정량한계는 다르다."
+          },
+          "relation": "contradicts",
+          "relevance_to_claim": "The source places four of the remaining five at or above detection but below quantification, and only one below detection; the article places all five below detection."
+        }
+      ],
+      "changed_proposition_or_counterexample": "Four participants had detectable results below the quantification limit; only one of the remaining five was below the detection limit.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "The matching complete experimental record directly contradicts the reported distribution. Replacing this sentence corrects the measurement categories without altering the 17 quantified results or the study limitations.",
+      "original_proposition_changed": "yes",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no"
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F1",
+      "before": "나머지 5명은 검출한계 미만이었다.",
+      "after": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "The single necessary local correction distinguishes detection from quantification and preserves the rest of the article exactly. No unresolved issue was identified within the supplied fictional record.",
+  "read_scope": "Read the entire assigned writer instruction, schema, input article and S1 complete synthetic record. No external materials used.",
+  "full_edited_article": "가상 분석: 22명 중 17명에서 정량한계 초과\n\n연구진은 성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다. 나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다.\n\n연구진은 표본 확대가 필요하다고 밝혔다. 이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다.",
+  "protection_items": [
+    {
+      "id": "R1",
+      "original_quotes": [
+        "가상 분석: 22명 중 17명에서 정량한계 초과",
+        "성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다."
+      ],
+      "relation": "The headline and body consistently report 17 of 22 above quantification, with adult volunteer sampling and a common method.",
+      "why_preserve": "The detection-category correction does not change the source-supported quantification count, denominator, or method.",
+      "confidence": "supported",
+      "conflict": "none found within supplied scope"
+    },
+    {
+      "id": "R2",
+      "original_quotes": [
+        "연구진은 표본 확대가 필요하다고 밝혔다.",
+        "이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다."
+      ],
+      "relation": "The call for a larger sample accompanies an explicit limitation on disease and population-prevalence inference.",
+      "why_preserve": "Correcting detectable results must not imply health outcomes or general-population prevalence.",
+      "confidence": "supported",
+      "conflict": "none found within supplied scope"
+    }
+  ]
+}

@@ -1,0 +1,624 @@
+{
+  "schema_version": 1,
+  "language": "ko",
+  "scope": "v1–v16 저장 기록 후향 감사; v17 숨긴 원문/후보 미열람; 새 모델실험 없음",
+  "counting_rule": "인과적 작업 메커니즘을 단위로 보수적 중복 제거. 같은 가족의 수정판·재시도·출력 수·기사 수·평가 수는 가산하지 않음. 숫자는 검토한 기록의 확인 최소값이며 모든 과거 시도의 전수 수가 아님.",
+  "problem_definitions": {
+    "P1": "보호해야 할 원문 의미 목록 불완전",
+    "P2": "수정에서 정당하게 겨냥하지 않은 의미의 부수 손실/최소편집",
+    "P3": "AI 사실·의미·필수성 판정의 불일치"
+  },
+  "summary": {
+    "P1": {
+      "known_minimum_distinct_attempted_mechanisms": 4,
+      "included_ids": [
+        "A01",
+        "A02",
+        "A03",
+        "A10"
+      ],
+      "confirmed_residual_failure_mechanisms_lower_bound": 1,
+      "failure_ids": [
+        "A01"
+      ],
+      "total_historical_upper_bound": null,
+      "ten_distinct_failures_established": false,
+      "no_observed_benefit_family_count": 2,
+      "no_observed_benefit_ids": [
+        "A03",
+        "A10"
+      ],
+      "protocol_only_included_count": 0,
+      "status_count_note": "같은 가족에 성공/한계가 병존하므로 상호배타 분할이나 합계 분모로 읽지 않음."
+    },
+    "P2": {
+      "known_minimum_distinct_attempted_mechanisms": 8,
+      "included_ids": [
+        "A02",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10"
+      ],
+      "confirmed_residual_failure_mechanisms_lower_bound": 4,
+      "failure_ids": [
+        "A02",
+        "A04",
+        "A08",
+        "A09"
+      ],
+      "total_historical_upper_bound": null,
+      "ten_distinct_failures_established": false,
+      "no_observed_benefit_family_count": 2,
+      "no_observed_benefit_ids": [
+        "A09",
+        "A10"
+      ],
+      "protocol_only_included_count": 0,
+      "status_count_note": "같은 가족에 성공/한계가 병존하므로 상호배타 분할이나 합계 분모로 읽지 않음."
+    },
+    "P3": {
+      "known_minimum_distinct_attempted_mechanisms": 4,
+      "included_ids": [
+        "A03",
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "confirmed_residual_failure_mechanisms_lower_bound": 1,
+      "failure_ids": [
+        "A11"
+      ],
+      "total_historical_upper_bound": null,
+      "ten_distinct_failures_established": false,
+      "no_observed_benefit_family_count": 2,
+      "no_observed_benefit_ids": [
+        "A03",
+        "A12"
+      ],
+      "protocol_only_included_count": 0,
+      "status_count_note": "같은 가족에 성공/한계가 병존하므로 상호배타 분할이나 합계 분모로 읽지 않음."
+    }
+  },
+  "approaches": [
+    {
+      "id": "A01",
+      "name": "구조화 보호목록·고정 질문",
+      "problems": [
+        "P1"
+      ],
+      "versions": [
+        "legacy/v1-v4",
+        "v8",
+        "v10"
+      ],
+      "mechanism": "원자 항목·귀속·시점·범위를 목록으로 만들고 고정 분모로 보존을 검사한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v8/data/dev-errata.json",
+          "locator": "EN001, EN007: supplemental_claim_count=1 각각"
+        },
+        {
+          "path": "experiments/legacy/repair-v3/minimum-wage-consistency.json",
+          "locator": "DEV01/F7 하위조건과 후속 재평가"
+        },
+        {
+          "path": "experiments/v10/protocol/writer-v1.md",
+          "locator": "protection_inventory/source_anchor/outside_reference"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P1"
+      ],
+      "overlap": "항목 수·세부 체크리스트·v1/v2 재작성은 한 가족. v8의 위치 정정만으로 의미 누락을 세지 않으며 EN001/EN007의 새 주장 발견을 근거로 삼음.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A02",
+      "name": "원문–후보 양방향 의미감사",
+      "problems": [
+        "P1",
+        "P2"
+      ],
+      "versions": [
+        "v10",
+        "v12 B-v1",
+        "v15"
+      ],
+      "mechanism": "전체 원문과 실제 후보를 양방향 비교하며 수치·귀속·조건·시점·인접 관계를 확인한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v10/protocol/writer-v1.md",
+          "locator": "procedure (5), complete original against candidate in both directions"
+        },
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "개발 실패: EN-DEV B-v1 P7 수치·타우·비교 삭제; P8 귀속 삭제"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P2"
+      ],
+      "overlap": "A03은 후보 보기 전 독립 질문 생성이라는 추가 조작만 별도. 단순 역방향 지시 반복은 A02.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A03",
+      "name": "원문 선행 독립 질문·반례 감사",
+      "problems": [
+        "P1",
+        "P3"
+      ],
+      "versions": [
+        "v12 third-audit/H1",
+        "v15 H-S/S-B"
+      ],
+      "mechanism": "기존 목록·후보를 보기 전에 원문에서 질문/답/앵커를 저장하고 양방향 반례로 의미를 대조한다.",
+      "status": [
+        "no_observed_benefit",
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v12/protocol/third-audit.md",
+          "locator": "First read...Save...before opening candidate"
+        },
+        {
+          "path": "experiments/v12/hidden-pairs/H1_method.txt",
+          "locator": "source_answer/exact_source_anchor; both directions"
+        },
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "숨긴 최소쌍: H0/H1 같은 결과; 제3 감사 중대 공동미탐 새 확정 없음"
+        },
+        {
+          "path": "experiments/v15/micro-results.md",
+          "locator": "S-A/S-B M15 M92 M38 M67; 목록 필수8중 누락4→0, 최종7필드 동일"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "v15 source-first는 v12의 새 원리가 아니다. 사전 목록 개선과 최종 검출 개선을 분리.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A04",
+      "name": "자유 최소패치·정확 범위·복원",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "legacy/v3-v4",
+        "v7 free",
+        "v8 local",
+        "v9 BASE",
+        "v10",
+        "v12 A"
+      ],
+      "mechanism": "자유 생성 수정안을 원문 앵커 범위로 제한하고 범위 밖 바이트 보존 및 롤백을 적용한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/legacy/README.md",
+          "locator": "repair-v4: 두 span씩, byte retention≠semantic completeness"
+        },
+        {
+          "path": "experiments/v7/results.md",
+          "locator": "EVAL01–04 자유4/4"
+        },
+        {
+          "path": "experiments/v9/results/followup-concern.json",
+          "locator": "REG_EN023 BASE; removal_as_demonstrated_correction=insufficiently_justified"
+        },
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "EN-DEV A P6 부수 삭제"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P2"
+      ],
+      "overlap": "앵커·해시 구현의 버전/자료형/경로 수리는 독립 의미해법으로 가산하지 않음. 자유 최소편집과 그 기계 guard를 보수적으로 한 가족으로 합침.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A05",
+      "name": "유형 슬롯 렌더러",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "v7 typed v1/v2"
+      ],
+      "mechanism": "승인된 오류유형과 슬롯을 결정론적 템플릿으로 조립한다.",
+      "status": [
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v7/protocol.md",
+          "locator": "T 세 방법; 초기6유형 및 v2 추가"
+        },
+        {
+          "path": "experiments/v7/results.md",
+          "locator": "DEV v1 0/2→v2 2/2; EVAL03 WHO 원문 없는 제외조건 요구, 평가3/4"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "유형 추가는 같은 메커니즘 수리. WHO 보류는 복구 실패지만 새 부수 의미손실이 확인된 실패는 아니므로 P2 실패 수에는 제외.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A06",
+      "name": "원문 연속구간 그대로 삽입",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "v7 source insert"
+      ],
+      "mechanism": "수정 없이 정확한 원자료 연속구간을 문맥 적합성 심사 후 삽입한다.",
+      "status": [
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v7/protocol.md",
+          "locator": "T 원문 구간 삽입"
+        },
+        {
+          "path": "experiments/v7/results.md",
+          "locator": "EVAL02 NASA 마침표/세미콜론 문맥 부적합 보류; 평가3/4"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "인용 삽입의 문맥 보류는 기능적 복구 실패로 별도 기록; 부수손실 발생으로 바꾸지 않음.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A07",
+      "name": "발언 유지·자료 정정 분리 주석",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "v9 NOTE",
+        "v10"
+      ],
+      "mechanism": "원 발언을 귀속 그대로 남기고 별도 귀속된 자료 설명을 붙인다.",
+      "status": [
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v9/README.md",
+          "locator": "BASE/NOTE 조건 설명; 정상·동등·시점4/4"
+        },
+        {
+          "path": "experiments/v10/results/report.md",
+          "locator": "기후 회귀: 8월22일 기록 유지, 0.01/미만 별도 구분"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "v9 BASE의 날짜 삭제를 NOTE 실패로 전가하지 않음. v10 연결은 재발견이 아닌 후속 회귀.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A08",
+      "name": "절별 보존·반박·미확인 경계 게이트",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "v12 B-v2",
+        "v16 conflict v1/v2"
+      ],
+      "mechanism": "수정 경계에 걸린 각 주장을 분류하고 근거의 정확한 강도·범위와 인접 관계를 확인해 축소/복원한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v12/protocol/B-v2-boundary-gate.txt",
+          "locator": "PRESERVE/REFUTED/UNVERIFIED; source silence is not refutation"
+        },
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "B-v2 KO 장애 완화 설명 과잉 반박; EN 정성 비교 동치 미확정"
+        },
+        {
+          "path": "experiments/v16/conflict-controls-results-v2.md",
+          "locator": "노출 오류2/2 및 새 합성1/1 근거 대안수정; 원문 오류 복원 안 함"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P2"
+      ],
+      "overlap": "확인 실패는 KO 반박 근거 과장. EN 비교의 완전동치 미확정만으로 확정 손실을 세지 않음. v16 한 문장 지시 수리는 새 원리/별도 실패 접근이 아님.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A09",
+      "name": "선택 복원·필수 의존폐쇄·전체 후보 감사",
+      "problems": [
+        "P2"
+      ],
+      "versions": [
+        "v9 SELECTIVE",
+        "v13 G1",
+        "v14",
+        "v15 H-D"
+      ],
+      "mechanism": "독립 승인 수정을 살리고 필수 의존 성분만 함께 보류하며 선택 적용한 전체 후보를 감사한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "repaired_success",
+        "no_observed_benefit",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v13/v13/protocol/REVIEW_INSTRUCTIONS.md",
+          "locator": "dependencies; exact source/original anchors; full simultaneous candidate"
+        },
+        {
+          "path": "experiments/v13/v13/results/RESULTS.md",
+          "locator": "영어 P7/P8, C3 may→단정 출처 충실도 손실; 별도 posthoc_operational_repair"
+        },
+        {
+          "path": "experiments/v15/method-research.md",
+          "locator": "K01 P5/P2 related를 required로 전파한 계약불일치"
+        },
+        {
+          "path": "experiments/v15/micro-results.md",
+          "locator": "D M71 M24 M83 M46; A/B 의존성 판단 동일"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P2"
+      ],
+      "overlap": "v14 related union 결함과 v15 방향간선·실물 O+P/O+P+Q 증거는 같은 선택 의존 가족의 계약 수리. v13 양태 손실은 확인되나 중대성/전달 판단은 이견. K01은 부수손실보다 과잉보류 계약문제.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A10",
+      "name": "전체 원문–후보 결정론적 대응표 가시화",
+      "problems": [
+        "P1",
+        "P2"
+      ],
+      "versions": [
+        "v16 M1"
+      ],
+      "mechanism": "동일 전체문서 입력에 span 대응표만 추가해 누락·부수손실의 가시성을 높인다.",
+      "status": [
+        "no_observed_benefit",
+        "repaired_success",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v16/PREREGISTRATION.md",
+          "locator": "M0/M1 표시 조작"
+        },
+        {
+          "path": "experiments/v16/RESULTS.md",
+          "locator": "12단위 행동/전달해시 동일; 훼손6/6 복구, 정상4/4; U101/U206"
+        },
+        {
+          "path": "experiments/v16/results-summary.json",
+          "locator": "unit-level 결과"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "A02 양방향 검사 계보이나 구체적 결정론적 표시 조작은 별도 메커니즘. 24출력은2방법×12단위이며 24접근이 아님.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A11",
+      "name": "가린 별도 문맥·축별 평가와 재감사",
+      "problems": [
+        "P3"
+      ],
+      "versions": [
+        "legacy/v3-v4",
+        "v6",
+        "v9",
+        "v10",
+        "v12",
+        "v13",
+        "v15",
+        "v16"
+      ],
+      "mechanism": "조건명/상대 판정을 가리고 근거·보존·필수성·문맥을 별도 축으로 비교한다.",
+      "status": [
+        "confirmed_residual_failure",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v10/results/report.md",
+          "locator": "판정 불일치: 전체7축 일치9/12,6/9"
+        },
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "동일 KO 원문 R09 충족9/14 vs8/14; 45 필드 차이"
+        },
+        {
+          "path": "experiments/v15/RESULTS.md",
+          "locator": "E1 necessity yes/unknown; unknown+accept 계약 불일치; 라벨 제거 재감사"
+        },
+        {
+          "path": "experiments/v16/synthetic/v2/audit-result.json",
+          "locator": "observations_with_field_disagreement=2, unsupported_finding_fields=3"
+        }
+      ],
+      "confirmed_residual_failure_for": [
+        "P3"
+      ],
+      "overlap": "평가자 추가·라벨 누출 수정·재시도는 같은 가족. 미가린 최초판정을 가린 실험으로 소급하지 않음.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A12",
+      "name": "고정 질문·삭제 반례로 필수성 분해",
+      "problems": [
+        "P3"
+      ],
+      "versions": [
+        "v12 necessity",
+        "v15 H-N/N-B"
+      ],
+      "mechanism": "원문 손실/자료 충돌/필수 답 부재/선택 배경을 나누고 같은 후보의 질문 대체 및 조건 삭제를 대조한다.",
+      "status": [
+        "repaired_success",
+        "no_observed_benefit",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v12/supplementary/necessity/protocol.md",
+          "locator": "세 최소쌍·고정 정의"
+        },
+        {
+          "path": "experiments/v12/supplementary/necessity/RESULTS.md",
+          "locator": "3기반6문항12출력 잠정기대 일치"
+        },
+        {
+          "path": "experiments/v15/micro-results.md",
+          "locator": "N M54/M19 질문대체; M62/M05 conflict 해석 이견"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "짧은 합성에서 성공. M62/M05 직접 모순 vs 조건 누락은 정의 경계여서 확정 추론 오류로 세지 않음. v15는 재현/구조화 확장.",
+      "count_as_known_distinct_attempt": true
+    },
+    {
+      "id": "A13",
+      "name": "모든 판정 일치시 전체 묶음 허용",
+      "problems": [
+        "P3"
+      ],
+      "versions": [
+        "v12 strict",
+        "v13 G0"
+      ],
+      "mechanism": "불일치·unknown이 하나라도 남으면 묶음 전체를 보류한다.",
+      "status": [
+        "confirmed_operational_limitation",
+        "unproven_completeness"
+      ],
+      "evidence": [
+        {
+          "path": "experiments/v12/REPORT.md",
+          "locator": "실제10출력 전부 hold"
+        },
+        {
+          "path": "experiments/v12/results/release-gate-results.json",
+          "locator": "실제 gate 재생"
+        },
+        {
+          "path": "experiments/v13/v13/results/RESULTS.md",
+          "locator": "G0 채택0; G1 대비 통과 수정도 보류"
+        }
+      ],
+      "confirmed_residual_failure_for": [],
+      "overlap": "판정 이견 해결이 아니라 전파 차단. 보류10개=한 접근10결정. 유용수정 차단은 확인된 운영 한계지만 사실판정 오답10건이 아님.",
+      "count_as_known_distinct_attempt": true
+    }
+  ],
+  "status_definitions": {
+    "confirmed_residual_failure": "해당 문제의 구체적 잔여 실패 확인; 일반 무효·중대성 확정과 다름",
+    "no_observed_benefit": "비교조건 대비 추가 이득 미관측; 실패나 동등성 입증 아님",
+    "unproven_completeness": "전수 의미/판정 안정성 미입증; 관측 미탐으로 세지 않음",
+    "repaired_success": "명시된 사례/조건의 국소 성공·회귀 수리; 일반해법 아님",
+    "confirmed_operational_limitation": "보류 전파 등 운영 한계; 사실/의미 오답과 구분"
+  },
+  "unknowns": [
+    "legacy 번호와 모든 이전 원시 지시의 완전 대응 불명; v5 산출물 미확보",
+    "복합 파이프라인의 구성요소 독립 인과효과 미분리",
+    "공개 파생본만으로 실제기사 전문/원판정을 모두 재감사할 수 없음",
+    "동일 계열 AI 내부 판정; 사람 gold·다른 모델계열 검증 없음"
+  ],
+  "excluded_or_merged": [
+    {
+      "item": "legacy A/B/C/D 전체 요약·중립화·다중자료",
+      "reason": "목표/정보 접근 함께 변한 기준군; 구조화 검증은 A01로 합침. 각 조건을 동일 최소편집 문제의 별도 실패로 세지 않음."
+    },
+    {
+      "item": "v6 새 문맥 C0/C1·의미영향 D0/D1",
+      "reason": "가린 축별 판단 A11 계보. D0/D1 실제 후보 결정 모두 같음; 추가 실패 접근 아님.",
+      "evidence": "experiments/v6/README.md"
+    },
+    {
+      "item": "v7 J 원자료 지지구간 삭제",
+      "reason": "근거 민감성 진단이며 평가자간 불일치를 해소하는 독립 방법 검증이 아님;4사건 지지/부족/지지.",
+      "evidence": "experiments/v7/protocol.md"
+    },
+    {
+      "item": "v11 최종 상태 메모·receipt",
+      "reason": "전달상태 지칭 문제; 세 의미문제와 동일 실패로 세지 않음.",
+      "evidence": "experiments/v11/protocol/native-memo-v1.md"
+    },
+    {
+      "item": "v12 source-scope 확대·v15 판결 전문 추가",
+      "reason": "자료 부족 해소라는 입력 개입. 추가 고유 방법 후보지만 세 문제 직접 메커니즘 최소값에서는 보수적으로 제외. 특정수치교정 성공/필수성이견 존속을 모든 접근 실패로 세지 않음.",
+      "evidence": "experiments/v12/supplementary/scope/RESULTS.md; experiments/v15/RESULTS.md"
+    },
+    {
+      "item": "v12 F/T 알려진 목표 본문 반영",
+      "reason": "A04 최소수정의 명시 목표 회귀; F/T 둘다2/2이며 표의 우위 없음.",
+      "evidence": "experiments/v12/supplementary/transfer/RESULTS.md"
+    }
+  ],
+  "disagreement_taxonomy": [
+    {
+      "type": "사실/근거 충돌",
+      "rule": "같은 주체·시점·단위·범위에서 상충 명제를 실제 근거로 판정. 근거 미확인을 거짓으로 바꾸지 않음.",
+      "examples": [
+        "v16 conflict v2 근거 대안수정3개",
+        "v9 REG_EN023 기존 날짜 반증 없음"
+      ]
+    },
+    {
+      "type": "의미·필수성·중대성 해석",
+      "rule": "암묵적 조건·문맥 충분성·고정 질문에 대한 필수 여부 및 손상 크기. 근거 충실도 손실 인정과 중대성 이견을 함께 기록.",
+      "examples": [
+        "v12 R09/R13",
+        "v13 영어 C3 양태",
+        "v15 E1/K15Q",
+        "v16 U101/U206"
+      ]
+    },
+    {
+      "type": "가치/문체 선호",
+      "rule": "정책 동의·부정 어조·비판 불편·표현 취향만으로 반박이나 삭제를 정당화하지 않음. 의미 변화는 의미축으로 재분류.",
+      "examples": [
+        "v13 REVIEW_INSTRUCTIONS preference_differences 규칙",
+        "v15 M38/M67 비판 보존 정상대조"
+      ]
+    }
+  ],
+  "conclusion": "동일 문제에 대한 서로 다른 10가지 실제 실패는 세 문제 모두 확립되지 않았다. 실패 횟수를 채우기 위한 강제 반복이나 전면 포기 근거가 아니다. 확인된 잔여 문제를 다음 독립 검증 대상으로 유지한다."
+}

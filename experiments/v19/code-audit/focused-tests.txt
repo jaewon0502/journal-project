@@ -1,0 +1,100 @@
+experiments/v17/code
+test_atomic_question_cannot_be_missing_and_wrong (test_check_output.Checks.test_atomic_question_cannot_be_missing_and_wrong) ... ok
+test_bad_source_quote (test_check_output.Checks.test_bad_source_quote) ... ok
+test_duplicate_anchor_rejected (test_check_output.Checks.test_duplicate_anchor_rejected) ... ok
+test_missing_or_cyclic_dependency (test_check_output.Checks.test_missing_or_cyclic_dependency) ... ok
+test_noop_cannot_be_repair (test_check_output.Checks.test_noop_cannot_be_repair) ... ok
+test_normal_unchanged (test_check_output.Checks.test_normal_unchanged) ... ok
+test_offsets_use_original_candidate (test_check_output.Checks.test_offsets_use_original_candidate) ... ok
+test_overlap_rejected (test_check_output.Checks.test_overlap_rejected) ... ok
+test_undelivered_patch_finding (test_check_output.Checks.test_undelivered_patch_finding) ... ok
+test_unknown_safety_cannot_apply (test_check_output.Checks.test_unknown_safety_cannot_apply) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK
+
+experiments/v18/code
+test_created_anchor_is_not_a_sequential_dependency (test_atomic_dependencies.DependencyContract.test_created_anchor_is_not_a_sequential_dependency) ... ok
+test_duplicate_dependency_rejected (test_atomic_dependencies.DependencyContract.test_duplicate_dependency_rejected) ... ok
+test_duplicate_patch_id_rejected (test_atomic_dependencies.DependencyContract.test_duplicate_patch_id_rejected) ... ok
+test_frozen_acyclic_control_and_original_offsets (test_atomic_dependencies.DependencyContract.test_frozen_acyclic_control_and_original_offsets) ... ok
+test_frozen_mutual_cycle_failure_preserved (test_atomic_dependencies.DependencyContract.test_frozen_mutual_cycle_failure_preserved) ... ok
+test_gate_failures_remain_rejected (test_atomic_dependencies.DependencyContract.test_gate_failures_remain_rejected) ... ok
+test_missing_dependency_rejected (test_atomic_dependencies.DependencyContract.test_missing_dependency_rejected) ... ok
+test_mutual_group_cannot_be_partially_selected (test_atomic_dependencies.DependencyContract.test_mutual_group_cannot_be_partially_selected) ... ok
+test_overlapping_spans_rejected (test_atomic_dependencies.DependencyContract.test_overlapping_spans_rejected) ... ok
+test_partial_native_delivery_rejected (test_atomic_dependencies.DependencyContract.test_partial_native_delivery_rejected) ... ok
+test_patch_list_order_does_not_set_execution_order (test_atomic_dependencies.DependencyContract.test_patch_list_order_does_not_set_execution_order) ... ok
+test_self_reference_existing_rejection_preserved (test_atomic_dependencies.DependencyContract.test_self_reference_existing_rejection_preserved) ... ok
+test_source_reference_rejected (test_atomic_dependencies.DependencyContract.test_source_reference_rejected) ... ok
+test_three_node_cycle_and_outgoing_dependency (test_atomic_dependencies.DependencyContract.test_three_node_cycle_and_outgoing_dependency) ... ok
+test_three_node_cycle_native_delivery (test_atomic_dependencies.DependencyContract.test_three_node_cycle_native_delivery) ... ok
+test_unsafe_combination_rejected (test_atomic_dependencies.DependencyContract.test_unsafe_combination_rejected) ... ok
+test_invented_protection_quote_rejected (test_check_output.WholeDelivery.test_invented_protection_quote_rejected) ... ok
+test_normal_exact_delivery (test_check_output.WholeDelivery.test_normal_exact_delivery) ... ok
+test_undeclared_full_article_deletion_rejected (test_check_output.WholeDelivery.test_undeclared_full_article_deletion_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.003s
+
+OK
+
+experiments/v15/code-audit/receipt
+test_collision_matrix (test_receipt_paths.ReceiptCLI.test_collision_matrix) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.495s
+
+OK
+
+experiments/v15/code-audit/aggregation
+test_duplicate_blind_is_rejected (test_aggregation.AggregationRegression.test_duplicate_blind_is_rejected) ... ok
+test_duplicate_is_rejected (test_aggregation.AggregationRegression.test_duplicate_is_rejected) ... ok
+test_empty_mapping_is_rejected_without_overwriting (test_aggregation.AggregationRegression.test_empty_mapping_is_rejected_without_overwriting) ... ok
+test_foreign_phase_is_distinguished (test_aggregation.AggregationRegression.test_foreign_phase_is_distinguished) ... ok
+test_incomplete_mapping_is_rejected (test_aggregation.AggregationRegression.test_incomplete_mapping_is_rejected) ... ok
+test_invalid_foreign_blind_id_is_structured (test_aggregation.AggregationRegression.test_invalid_foreign_blind_id_is_structured) ... ok
+test_invalid_foreign_raw_id_is_structured (test_aggregation.AggregationRegression.test_invalid_foreign_raw_id_is_structured) ... ok
+test_invalid_id_containers_are_structured (test_aggregation.AggregationRegression.test_invalid_id_containers_are_structured) ... ok
+test_invalid_id_values_are_structured_and_existing_output_unchanged (test_aggregation.AggregationRegression.test_invalid_id_values_are_structured_and_existing_output_unchanged) ... ok
+test_invalid_raw_id_is_structured (test_aggregation.AggregationRegression.test_invalid_raw_id_is_structured) ... ok
+test_missing_is_rejected (test_aggregation.AggregationRegression.test_missing_is_rejected) ... ok
+test_same_extra_count_cannot_hide_missing (test_aggregation.AggregationRegression.test_same_extra_count_cannot_hide_missing) ... ok
+test_unknown_extra_is_rejected (test_aggregation.AggregationRegression.test_unknown_extra_is_rejected) ... ok
+test_valid_result_matches_legacy_exactly (test_aggregation.AggregationRegression.test_valid_result_matches_legacy_exactly) ... ok
+test_valid_shared_output_keeps_assigned_denominators (test_aggregation.AggregationRegression.test_valid_shared_output_keeps_assigned_denominators) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.014s
+
+OK
+
+experiments/v19/code-audit
+test_blind_candidate_binding_remains_checked (test_scoring_paths.RealizationPaths.test_blind_candidate_binding_remains_checked) ... ok
+test_declared_prepared_hash_checked (test_scoring_paths.RealizationPaths.test_declared_prepared_hash_checked) ... ok
+test_documented_free_followup_supersession_preserved (test_scoring_paths.RealizationPaths.test_documented_free_followup_supersession_preserved) ... ok
+test_duplicate_all_methods_and_both_orders (test_scoring_paths.RealizationPaths.test_duplicate_all_methods_and_both_orders) ... ok
+test_foreign_method_in_free_followup_rejected (test_scoring_paths.RealizationPaths.test_foreign_method_in_free_followup_rejected) ... ok
+test_full_candidate_hash_binding_remains_checked (test_scoring_paths.RealizationPaths.test_full_candidate_hash_binding_remains_checked) ... ok
+test_good_declared_prepared_hash (test_scoring_paths.RealizationPaths.test_good_declared_prepared_hash) ... ok
+test_identical_duplicate_and_followup_duplicate_rejected (test_scoring_paths.RealizationPaths.test_identical_duplicate_and_followup_duplicate_rejected) ... ok
+test_invalid_identity_types_rejected (test_scoring_paths.RealizationPaths.test_invalid_identity_types_rejected) ... ok
+test_missing_record_rejected (test_scoring_paths.RealizationPaths.test_missing_record_rejected) ... ok
+test_unknown_case_or_method_rejected (test_scoring_paths.RealizationPaths.test_unknown_case_or_method_rejected) ... ok
+test_valid_result_identical_to_v15 (test_scoring_paths.RealizationPaths.test_valid_result_identical_to_v15) ... ok
+test_blank_and_nonstring_protection_identifiers (test_strict_input.StrictInput.test_blank_and_nonstring_protection_identifiers) ... ok
+test_duplicate_protection_identifiers (test_strict_input.StrictInput.test_duplicate_protection_identifiers) ... ok
+test_duplicate_source_identifiers (test_strict_input.StrictInput.test_duplicate_source_identifiers) ... ok
+test_input_quote_accepts_modified_quote_rejects (test_strict_input.StrictInput.test_input_quote_accepts_modified_quote_rejects) ... ok
+test_invalid_source_identifiers_even_when_unused (test_strict_input.StrictInput.test_invalid_source_identifiers_even_when_unused) ... ok
+test_invalid_unit_identifiers (test_strict_input.StrictInput.test_invalid_unit_identifiers) ... ok
+test_invalid_unit_source_and_article_containers (test_strict_input.StrictInput.test_invalid_unit_source_and_article_containers) ... ok
+test_missing_partner_and_partial_delivery_still_rejected (test_strict_input.StrictInput.test_missing_partner_and_partial_delivery_still_rejected) ... ok
+test_valid_result_equals_v18_and_inputs_unchanged (test_strict_input.StrictInput.test_valid_result_equals_v18_and_inputs_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.016s
+
+OK

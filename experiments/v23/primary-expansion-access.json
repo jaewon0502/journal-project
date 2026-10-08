@@ -1,0 +1,51 @@
+{
+  "doi": "10.1016/j.xcrp.2026.103555",
+  "checked_at_utc": "2026-10-03T12:56:07.786564+00:00",
+  "routes": [
+    {
+      "route": "crossref",
+      "url": "https://api.crossref.org/works/10.1016%2Fj.xcrp.2026.103555",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1016%2Fj.xcrp.2026.103555",
+      "content_type": "application/json",
+      "bytes": 35438,
+      "outcome": "Public DOI metadata obtained; not full text."
+    },
+    {
+      "route": "openalex",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.xcrp.2026.103555",
+      "error": "HTTP Error 429: Too Many Requests",
+      "status": 429,
+      "outcome": "Rate limited; no metadata or full text obtained; no retry."
+    },
+    {
+      "route": "public_repository_discovery",
+      "method": "web search",
+      "queries": [
+        "\"10.1016/j.xcrp.2026.103555\" repository OR diva OR pdf",
+        "\"Evaluating land productivity\" \"broccoli\"",
+        "\"103555\" \"broccoli\" site:diva-portal.org",
+        "\"Evaluating land productivity with semi-transparent\" repository OR manuscript OR filetype:pdf"
+      ],
+      "outcome": "No matching author/institutional full-text repository version identified in returned results. Search found publisher ScienceDirect landing page and press/news coverage; snippets not treated as full text. No direct repository file URL available to request.",
+      "matching_publisher_result": "https://www.sciencedirect.com/science/article/pii/S2666386426004613",
+      "publisher_result_directly_opened": false
+    }
+  ],
+  "scope": "Post-evaluation evidence expansion only; no experiment outputs read or earlier inputs/scores modified.",
+  "prior_access_reported_by_parent": [
+    {
+      "url": "https://doi.org/10.1016/j.xcrp.2026.103555",
+      "status": 403,
+      "independently_retried": false
+    },
+    {
+      "url": "https://www.cell.com/cell-reports-physical-science/fulltext/S2666-3864(26)00461-3",
+      "status": 403,
+      "independently_retried": false
+    }
+  ],
+  "distinct_routes_attempted": 3,
+  "full_text_obtained": false,
+  "blocker": "Crossref provides bibliographic metadata only; OpenAlex returned HTTP 429; bounded repository discovery identified no matching accessible full-text version. Prior publisher HTTP 403 remains unresolved; cannot substantiate requested paper-content claims or page/section anchors."
+}

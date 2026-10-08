@@ -1,0 +1,10 @@
+{
+  "source_final": "C396",
+  "type": "analyst-authored deterministic exposed-case regression",
+  "start": 332,
+  "end": 341,
+  "before": "폴리스티렌(PS)",
+  "after": "스티렌계 고분자(PS)",
+  "input_sha256": "2e40cccfa3488a80a5411a791e3ad07c5c02c9381f821620dbb05fc623ad6f84",
+  "output_sha256": "699e2cdd682ff935369e5b53c1f01b4be07d81a612b0ab06224ddc495e34761c"
+}

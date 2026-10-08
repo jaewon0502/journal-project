@@ -1,0 +1,495 @@
+{
+  "unit_id": "f04a782d",
+  "comparisons": [
+    {
+      "id": "context_1",
+      "article_quote": "2026년",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Calendar year of the preserved announcements; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_2",
+      "article_quote": "9월",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the announcement publication and immediately effective capacity time; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "9월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "9월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "9월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "9월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "9월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_3",
+      "article_quote": "5일",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the announcement publication and immediately effective capacity time; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "5일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "5일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "5일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "5일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "5일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_4",
+      "article_quote": "오후 6시",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the announcement publication and immediately effective capacity time; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "오후 6시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "오후 6시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "오후 6시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "오후 6시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "오후 6시",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "capacity_at_time",
+      "article_quote": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Allowed maximum enrollment at the specified announcement time; this is not actual enrollment.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "정원은 허용된 최대 등록 인원이고, 실제 등록자 수는 두 공지 모두 공개하지 않았다."
+            }
+          ],
+          "reason": "Both specify the maximum allowed enrollment."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+            }
+          ],
+          "reason": "The change applies from publication, without retroactive amendment."
+        }
+      },
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "18",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "other_announcement",
+      "article_quote": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Capacity of the same course at a different announcement time.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "different",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "공방은 이후 인접 공간의 안전 점검을 마치고 작업대 두 개를 추가했다."
+            }
+          ],
+          "reason": "Two worktables were added between the announcements."
+        },
+        "time": {
+          "relation": "different",
+          "article_anchor": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+            }
+          ],
+          "reason": "September 5 and September 12 have separate effective capacities."
+        }
+      },
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "uncertainty": null
+    }
+  ],
+  "uncovered_numeric_claims": [],
+  "scope_limits": [
+    "Only the supplied frozen synthetic source was used; no real-world verification. Calendar and clock units are unknown because the allowed vocabulary has no temporal units."
+  ]
+}

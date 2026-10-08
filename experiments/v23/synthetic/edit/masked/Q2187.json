@@ -1,0 +1,69 @@
+{
+  "unit_id": "Q2187",
+  "clause_audit": [
+    {
+      "original_quote": "3일 시험에서",
+      "proposition": "The test lasted three days.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "시험 기간은 3일이다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Duration matches."
+    },
+    {
+      "original_quote": "장치의 평균 소비전력 감소",
+      "proposition": "The institution recorded reduced average power consumption.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "기관은 장치의 평균 소비전력이 줄었다고 기록했다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Keep the supported outcome."
+    },
+    {
+      "original_quote": "수명 연장",
+      "proposition": "The institution confirmed lifespan extension in the test.",
+      "relation": "contradicted",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "수명과 안전성은 측정하지 않았으며 관련 결론을 제시하지 않는다."
+        }
+      ],
+      "action": "repair",
+      "reason": "The attribution conflicts with explicit nonmeasurement; actual extension remains unknown."
+    },
+    {
+      "original_quote": "안전성 향상을 확인했다.",
+      "proposition": "The institution confirmed safety improvement in the test.",
+      "relation": "contradicted",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "수명과 안전성은 측정하지 않았으며 관련 결론을 제시하지 않는다."
+        }
+      ],
+      "action": "repair",
+      "reason": "Safety was not measured; no improvement conclusion was offered."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "before": "감소와 수명 연장, 안전성 향상을 확인했다.",
+      "after": "감소를 확인했지만 수명과 안전성은 측정하지 않았다.",
+      "reason": "Retain the measured power result and correct only the unmeasured outcomes."
+    }
+  ],
+  "full_edited_text": "기관 기록은 3일 시험에서 장치의 평균 소비전력 감소를 확인했지만 수명과 안전성은 측정하지 않았다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": "Actual lifespan extension and safety improvement are neither established nor disproved."
+}

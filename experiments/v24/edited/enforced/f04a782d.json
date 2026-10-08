@@ -1,0 +1,94 @@
+{
+  "unit_id": "f04a782d",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "9월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "5일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "오후 6시",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_4"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "relation": "contradicted",
+      "comparison_ids": [
+        "capacity_at_time"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reason": "The article targets capacity at the September 5, 6 p.m. announcement, when S1 gives 18. Capacity became 24 only with the September 12 announcement after more worktables were added; the source explicitly rejects retroactive amendment. Preserve the earlier date and capacity property."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "24명",
+      "after": "18명",
+      "reason": "The article targets capacity at the September 5, 6 p.m. announcement, when S1 gives 18. Capacity became 24 only with the September 12 announcement after more worktables were added; the source explicitly rejects retroactive amendment. Preserve the earlier date and capacity property.",
+      "comparison_ids": [
+        "capacity_at_time"
+      ]
+    }
+  ],
+  "full_edited_text": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

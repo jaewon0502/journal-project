@@ -1,0 +1,461 @@
+{
+  "audit_stage": "PRE",
+  "method": "Independent source-bounded semantic audit. Read only the ten case JSON files. Synthetic source assertions are premises; no external factual verification. No oracle, policy, implementation, certificate, experiment, or system-output files were consulted.",
+  "interpretation": "Contradicted means the original scoped quantity conflicts with S1. Supported means the original is entailed under ordinary language. Protected text means unchanged material outside the selected repair; target-preserving repairs additionally protect the original target, property, conditions and time. Alternate repairs are separately identified when they change one of those dimensions. The task wording does not explicitly impose numeric-token-only edits or a unique edit-distance metric.",
+  "units": [
+    {
+      "unit_id": "a267dc49",
+      "article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "judgment": "contradicted",
+      "quantity": {
+        "target": "다온구 평생학습관 기초 수선 강좌",
+        "property": "전체 수료자 수",
+        "population": "2026년 상반기 모든 기초 수선 강좌의 중복 제거 수료자",
+        "conditions": "80퍼센트 이상 출석; 등록만 한 사람 제외; 평일/주말 중복 없음",
+        "time": "2026년 1월~6월; 6월 30일 확정"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 수료자는 240명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "The total is explicitly 240, also 144+96. The article substitutes the weekend subset for the total.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "96명",
+          "with": "240명",
+          "kind": "number",
+          "repaired_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다.",
+          "assessment": "Preserves the stated total population; preferred."
+        },
+        {
+          "replace": "전체 수료자",
+          "with": "주말반 수료자",
+          "kind": "population/scope",
+          "repaired_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+          "assessment": "Keeps 96 and makes the claim true. It changes the population, so equivalence as a permissible repair depends on whether target scope is protected; the prompt does not explicitly freeze it."
+        }
+      ],
+      "preferred_action": "use the target-preserving repair first; recognize listed alternatives as supported changes to the claim",
+      "protected_text": [
+        "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서",
+        "명이었다."
+      ],
+      "ambiguities": [
+        "No factual uncertainty. The local prompt does not uniquely specify number-only repair or a character/token edit metric; scope replacement is another small supported repair."
+      ]
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "judgment": "contradicted",
+      "quantity": {
+        "target": "해솔시 물품지원센터 서부 보관소",
+        "property": "실제 발송 방한 꾸러미 개수",
+        "population": "서부의 당일 실제 운송 기사 인계 꾸러미",
+        "conditions": "예약은 실제 발송과 구분; 다음 날 예정 15개 제외; 오후 추가 발송 없음",
+        "time": "2026년 4월 8일 확정 실적"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "reasoning": "West shipped 30, not its reservation total 45. East shipped 45.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "45개",
+          "with": "30개",
+          "kind": "number",
+          "repaired_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+          "assessment": "Preserves West and actual shipments; preferred."
+        },
+        {
+          "replace": "서부",
+          "with": "동부",
+          "kind": "target",
+          "repaired_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "assessment": "A one-syllable supported correction retaining actual shipments 45; changes which warehouse is reported."
+        },
+        {
+          "replace": "실제 발송했다",
+          "with": "예약 물량으로 집계했다",
+          "kind": "property",
+          "repaired_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 예약 물량으로 집계했다.",
+          "assessment": "West reservations were 45. Supported but a larger change and not the same shipment claim."
+        }
+      ],
+      "preferred_action": "use the target-preserving repair first; recognize listed alternatives as supported changes to the claim",
+      "protected_text": [
+        "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면,",
+        "보관소는 방한 꾸러미",
+        "개를"
+      ],
+      "ambiguities": [
+        "The evidence settles the original claim. Number and target corrections both make a locally minimal supported statement; no instruction explicitly says the warehouse is immutable."
+      ]
+    },
+    {
+      "unit_id": "b605ad37",
+      "article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "judgment": "contradicted",
+      "quantity": {
+        "target": "푸른급식연구소 납품번호 L514 건조 렌틸콩",
+        "property": "인수 내용물 순중량",
+        "population": "검수를 통과한 전체 8상자 내용물",
+        "conditions": "각 상자 순중량 24킬로그램; 포장 제외; 배송 간 혼합/내용물 제거 없음",
+        "time": "2026년 5월 14일 검수"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "외부 종이 상자와 완충재의 무게는 이 합계에 포함하지 않았다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        }
+      ],
+      "reasoning": "The received contents weigh 8×24=192 kg. Eight is a box count, not the total kg amount.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "8킬로그램",
+          "with": "192킬로그램",
+          "kind": "number",
+          "repaired_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+          "assessment": "Preserves the mass property and contents qualifier; preferred."
+        },
+        {
+          "replace": "8킬로그램",
+          "with": "8상자",
+          "kind": "unit/quantity representation",
+          "repaired_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자이었다.",
+          "assessment": "Reports the same received shipment as 8 boxes. Supported under the ordinary reading of contents amount as eight boxes of lentils; the contents qualifier is mildly awkward but not contradicted."
+        }
+      ],
+      "preferred_action": "use the target-preserving repair first; recognize listed alternatives as supported changes to the claim",
+      "protected_text": [
+        "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준",
+        "이었다."
+      ],
+      "ambiguities": [
+        "Number replacement and unit replacement are both plausible minimal repairs. Insisting exclusively on 192 kg would require a mass-property constraint not explicitly stated by the task. Box count does not assert packaging mass."
+      ]
+    },
+    {
+      "unit_id": "b8e035a1",
+      "article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "judgment": "supported",
+      "quantity": {
+        "target": "다온구 평생학습관 주말반",
+        "property": "수료자 수",
+        "population": "2026년 상반기 주말반 수료자 중복 제거 인원",
+        "conditions": "평일/주말 동시 수료자 없음; 동일 수료 기준",
+        "time": "2026년 상반기; 6월 30일 확정"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "Weekend-only graduates equal all weekend graduates because overlap is explicitly zero, hence 96.",
+      "legitimate_minimal_repairs": [],
+      "preferred_action": "preserve unchanged",
+      "protected_text": [
+        "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다."
+      ],
+      "ambiguities": [
+        "The omission of 만 from 주말반 is harmless because there are no dual-type graduates. Changing 96 to the overall 240 would introduce error."
+      ]
+    },
+    {
+      "unit_id": "c41f9b20",
+      "article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+      "judgment": "contradicted",
+      "quantity": {
+        "target": "새길도서관 공동 작업실 늦은 시간 이용 회원",
+        "property": "주말 이용 기록이 없는 회원 수",
+        "population": "오후 8시 이후 이용한 중복 제거 회원 50명",
+        "conditions": "월간 회원 집합 차집합; 같은 방문에서 두 조건 충족 필요 없음; 주말 토/일",
+        "time": "2026년 7월"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Late users without weekend history = 50−20=30. Twenty is the intersection, not the difference.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "20명",
+          "with": "30명",
+          "kind": "number",
+          "repaired_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 30명이었다.",
+          "assessment": "Preserves the negative weekend-history condition; preferred."
+        },
+        {
+          "replace": "없는",
+          "with": "있는",
+          "kind": "condition/polarity",
+          "repaired_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+          "assessment": "One-word repair yielding the explicitly supported 20-person intersection. Changes the measured subset, but is a legitimate small factual repair if conditions are not fixed."
+        }
+      ],
+      "preferred_action": "use the target-preserving repair first; recognize listed alternatives as supported changes to the claim",
+      "protected_text": [
+        "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이",
+        "회원은",
+        "명이었다."
+      ],
+      "ambiguities": [
+        "No set-size ambiguity under complete monthly records. A polarity correction is as natural as changing the number absent a rule protecting the negative condition."
+      ]
+    },
+    {
+      "unit_id": "c73b028a",
+      "article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "judgment": "supported",
+      "quantity": {
+        "target": "해솔시 물품지원센터 동부 보관소",
+        "property": "실제 발송 방한 꾸러미 개수",
+        "population": "동부의 당일 실제 운송 기사 인계 꾸러미",
+        "conditions": "오전 예약 45개 전부 발송; 오후 추가 발송 없음",
+        "time": "2026년 4월 8일 확정 실적"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        }
+      ],
+      "reasoning": "The East actual shipment count is exactly 45.",
+      "legitimate_minimal_repairs": [],
+      "preferred_action": "preserve unchanged",
+      "protected_text": [
+        "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다."
+      ],
+      "ambiguities": [
+        "No material ambiguity. West figures must not be transferred to East."
+      ]
+    },
+    {
+      "unit_id": "d19ec630",
+      "article": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "judgment": "supported",
+      "quantity": {
+        "target": "은빛공방 동일 도자기 야간반",
+        "property": "정원/허용 최대 등록 인원",
+        "population": "해당 강좌의 허용 인원",
+        "conditions": "새 공지 시점부터 변경 적용; 실제 등록자 수 아님",
+        "time": "2026년 9월 12일 오후 6시 공지 당시"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "정원은 허용된 최대 등록 인원이고, 실제 등록자 수는 두 공지 모두 공개하지 않았다."
+        }
+      ],
+      "reasoning": "At publication on September 12 the updated capacity 24 immediately applies.",
+      "legitimate_minimal_repairs": [],
+      "preferred_action": "preserve unchanged",
+      "protected_text": [
+        "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다."
+      ],
+      "ambiguities": [
+        "No boundary-time ambiguity: effectiveness at the new notice time is explicit."
+      ]
+    },
+    {
+      "unit_id": "e28f91c4",
+      "article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "judgment": "supported",
+      "quantity": {
+        "target": "푸른급식연구소 납품번호 L514 건조 렌틸콩",
+        "property": "인수량의 상자 단위 표현",
+        "population": "검수 통과 전체 배송분 8상자",
+        "conditions": "상자당 내용물 순중량 24킬로그램; 같은 물량을 상자/킬로그램으로 표기",
+        "time": "2026년 5월 14일 검수"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        }
+      ],
+      "reasoning": "The received amount is explicitly eight boxes; contents amount can be expressed in container units without asserting container weight.",
+      "legitimate_minimal_repairs": [],
+      "preferred_action": "preserve unchanged",
+      "protected_text": [
+        "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다."
+      ],
+      "ambiguities": [
+        "내용물 기준 8상자 is stylistically awkward if 내용물 기준 is taken to demand a net mass measurement. It is not a numeric contradiction: eight boxes of contents are supported. Conversion to 192킬로그램 would be true but unnecessary under preserve-normal-text instruction."
+      ]
+    },
+    {
+      "unit_id": "e793a06d",
+      "article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "judgment": "supported",
+      "quantity": {
+        "target": "새길도서관 공동 작업실 늦은 시간 이용 회원",
+        "property": "주말 이용 기록이 있는 회원 수",
+        "population": "오후 8시 이후 이용한 회원 50명",
+        "conditions": "월간 기록 기준 교집합; 동일 방문 동시 충족 불필요; 회원 중복 제거",
+        "time": "2026년 7월"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Both the 50-person denominator and the 20-person overlap are supported.",
+      "legitimate_minimal_repairs": [],
+      "preferred_action": "preserve unchanged",
+      "protected_text": [
+        "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다."
+      ],
+      "ambiguities": [
+        "The article does not require weekend late-night visits, only monthly membership in both sets. No correction warranted."
+      ]
+    },
+    {
+      "unit_id": "f04a782d",
+      "article": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "judgment": "contradicted",
+      "quantity": {
+        "target": "은빛공방 동일 도자기 야간반",
+        "property": "정원/허용 최대 등록 인원",
+        "population": "해당 강좌의 허용 인원",
+        "conditions": "변경 소급 적용 없음; 실제 등록자 수 아님",
+        "time": "2026년 9월 5일 오후 6시 공지 당시"
+      },
+      "source_anchors": [
+        {
+          "source_id": "S1",
+          "exact_quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reasoning": "September 5 capacity was 18. The later 24 cannot be applied retrospectively.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "24명",
+          "with": "18명",
+          "kind": "number",
+          "repaired_article": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+          "assessment": "Preserves the stated historical notice; preferred."
+        },
+        {
+          "replace": "9월 5일",
+          "with": "9월 12일",
+          "kind": "time",
+          "repaired_article": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+          "assessment": "A small date correction makes the 24-person claim true. Both date and capacity are numerical content; prompt does not explicitly protect the date."
+        }
+      ],
+      "preferred_action": "use the target-preserving repair first; recognize listed alternatives as supported changes to the claim",
+      "protected_text": [
+        "은빛공방의 2026년",
+        "오후 6시 공지 당시 도자기 야간반 정원은",
+        "명이었다."
+      ],
+      "ambiguities": [
+        "The historical facts are unambiguous. Which numerical token is faulty is underdetermined by the instruction alone: capacity repair and date repair both yield supported statements."
+      ]
+    }
+  ],
+  "cross_unit_findings": [
+    "The five contradicted originals have determinate source-correct quantities when original target, property, population, conditions and time are frozen.",
+    "The local instruction alone leaves repair-locus ambiguity: entity, scope, polarity, date, and unit changes can also yield small supported repairs. Such alternatives should not be treated as factual errors merely for differing from a presumed preferred string.",
+    "Supported originals should remain verbatim. Equivalent true restatements may still fail preservation/minimality.",
+    "Box-unit wording has mild linguistic awkwardness but does not justify inventing a contradiction."
+  ]
+}

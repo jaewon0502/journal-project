@@ -1,0 +1,164 @@
+[
+  {
+    "public_file": "v1/raw/U94-M0.json",
+    "original_sha256": "2ee22baf92a6d1748d23bd1028cefff40a5e54c6cba362d61d882b359e94b6d3",
+    "public_sha256": "f306c2cd5660283b7d10d5a753745f223c7bd802901191fe2748bce1e8ade840",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U57-M1.json",
+    "original_sha256": "26b1b3aea93edaf3104b2ca680fb0589fbff820174ea73533fcba73b7540a63c",
+    "public_sha256": "5340bccfc9a945386acdb2bc25c813be323e77f1404b65122ea2878aeb4a61f7",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U26-M0.json",
+    "original_sha256": "9a5d122956a12b633613f4b9d66c90689c1c36fceed9ff52d8adbfd48b930d97",
+    "public_sha256": "269ae3b589fde601aea927031846668860d3775a8047ab92ed9483266e8eda1a",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U57-M0.json",
+    "original_sha256": "e45d7047d8478f30ad6965044431cb8908881dbc51f7d1a6b9a2d2a41b3cc3a5",
+    "public_sha256": "9f46e00c32c2041941f8d508ce4fc2fb9acd5a569ebc38c7890bf6e77fadf6f5",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U83-M0.json",
+    "original_sha256": "04c9e4e16233fda55508888173889c63006d759e02a68da93ffa5377177f3d7a",
+    "public_sha256": "ed68bfdd4101b3310e507b8bc81eeec956a348a8ef00441c014e7de274672dc6",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U83-M1.json",
+    "original_sha256": "e105ef3b1fff69d5440ed4093795b5fc9ea1b6ee154aa159d4527dbea85a706d",
+    "public_sha256": "3e2670966ac5d24e48651993407060edc3d0d35653dfcfecc45c4f17ce105bac",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U94-M1.json",
+    "original_sha256": "07176e6287cca64fd77158682690fc0534ae553424a26796e90cbb30160c9071",
+    "public_sha256": "da97acc1816c02cd15f5a676cc1e86b1500144feac7b6cd15426b13cefd73f76",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/raw/U26-M1.json",
+    "original_sha256": "6c1929e38d4b4ba711adc59c5b5d717e8c20811dfdc3d6bed38ffe231c4da43e",
+    "public_sha256": "289b819faabed0ba1f587b57344a3dedbad4e8c5f73da8f6c253ef897968f185",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/units/U94.json",
+    "original_sha256": "8fb264dd3a88d37d41a3f4cfe1a7318ba61e184c0e7d5f39e5ceaad037cfb934",
+    "public_sha256": "bc4c26de5b39c853a34877ee5efc8a04db40617687f733530ce13c41df08b83f",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/units/U26.json",
+    "original_sha256": "946379ff783d6c5a08aec9a9e77bf76e1780053f25192185422b384c244ec9a3",
+    "public_sha256": "366dfe5f967fca034c7014393f95fd19fec2157b7d67625cefe375e69134a2f2",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/units/U83.json",
+    "original_sha256": "259df6fadd74b8b42ac6d5221d031dc4b547db316ba45d3a25748e2cec9efef2",
+    "public_sha256": "7644769972315eeaa5770ee44587f47ad325b74e6001f33d878d4135ec056fed",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/units/U57.json",
+    "original_sha256": "d0d957e4bbce124aefd370293c2f05503de467be32e97ac6f0219a4182b628d0",
+    "public_sha256": "c718a76e37dfc6d0daa8674cd80cc6ecfbaaad52ba8656d4800802da447c72b4",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v1/audit-v1.json",
+    "original_sha256": "2f3fb5db3a54dcda97c357804768cbe3b572ddd97ec059da047e613d9c17deea",
+    "public_sha256": "2f3fb5db3a54dcda97c357804768cbe3b572ddd97ec059da047e613d9c17deea",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U94-M0.json",
+    "original_sha256": "be7d70e7db5056560e929634bd96eba6f4738b4baaf14e49f3e2e5601c11a5fd",
+    "public_sha256": "21440a82987ef797fefdb01866dfcbe6b3e58583d14a6ad14fb781632b37b554",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U26-M0.json",
+    "original_sha256": "276b3c54697df1fc5b766e8452bd3101f2621579dbcb2bfdd79b6062575d532b",
+    "public_sha256": "71999effae8b22af13a9e2328cf48615726323594d2db0383db5bb7e0e128572",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U57-M0.json",
+    "original_sha256": "c70e3032ccb25199eb8830a808cf866d92d8c5608cdf905c76b5d37c556ca525",
+    "public_sha256": "ac10f40ad3b0b5a3183f720600edd55dc5d8c3f323f198a36c8750ae92aa3a81",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U83-M0.json",
+    "original_sha256": "435e10871e2c523ac70748a829f6c5b803c3aacd6f4ae12308941d8e73f368c1",
+    "public_sha256": "299b48f2b64df1715340bfb779908f4b86e9504728c8d2831dac3155c57b0480",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U35-M0.json",
+    "original_sha256": "75145df1212f50880af00c465036c0571a9c83e4a3084cc1b828409172e4b5fa",
+    "public_sha256": "c4141bcda84921b158e379a7d86c89a79a9be4f434e8dca97912b20c22524a76",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/raw/U68-M0.json",
+    "original_sha256": "7011bb576cbea515ebcdeb158aca5d8908137e441f518bdb4a7797f38fa4a06f",
+    "public_sha256": "a91ce83246e583e57035693716edb6d40e9ff618d546eec9257a8b934d8617e1",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/newinputs/U35-M0.json",
+    "original_sha256": "36c987974e8fed85f59a42c5fa229aa2044907edbcd21fc115d7548ddc0a252e",
+    "public_sha256": "faa54492aacbebb095c20a1199c64afc9b4d627cbe9a9324cb499f67b0c4984c",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/newinputs/U68-M0.json",
+    "original_sha256": "d7af37df940c034500be7e05b2bf21de2e1a0a411556354944fecf0476b1492e",
+    "public_sha256": "fc3c226833b5e4e0f33be08231f6adc2618b85acbe5c52b7516e3044b5e68b71",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/regression-inputs/U94-M0.json",
+    "original_sha256": "8fb264dd3a88d37d41a3f4cfe1a7318ba61e184c0e7d5f39e5ceaad037cfb934",
+    "public_sha256": "bc4c26de5b39c853a34877ee5efc8a04db40617687f733530ce13c41df08b83f",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/regression-inputs/U26-M0.json",
+    "original_sha256": "946379ff783d6c5a08aec9a9e77bf76e1780053f25192185422b384c244ec9a3",
+    "public_sha256": "366dfe5f967fca034c7014393f95fd19fec2157b7d67625cefe375e69134a2f2",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/regression-inputs/U57-M0.json",
+    "original_sha256": "d0d957e4bbce124aefd370293c2f05503de467be32e97ac6f0219a4182b628d0",
+    "public_sha256": "c718a76e37dfc6d0daa8674cd80cc6ecfbaaad52ba8656d4800802da447c72b4",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/regression-inputs/U83-M0.json",
+    "original_sha256": "259df6fadd74b8b42ac6d5221d031dc4b547db316ba45d3a25748e2cec9efef2",
+    "public_sha256": "7644769972315eeaa5770ee44587f47ad325b74e6001f33d878d4135ec056fed",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/audit-result.json",
+    "original_sha256": "000f1eff6d003e50260f36fb9a14bbbbbaedc080af56cdeeb3bde95870b3967f",
+    "public_sha256": "2e96368f313cecca5e9243b3a8f6f1af981f2e0230bdb01d9f3b8ca550f0d1ce",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  },
+  {
+    "public_file": "v2/audit-mapping-private.json",
+    "original_sha256": "5c120d61370c29b3d2fd7c6f33a62096fde94bab888061f78c4dde6e040135e6",
+    "public_sha256": "a3d5b0520f6679e218d72405e1d4f9b916fe1b6cf6145a62f6a8d5145ca7535a",
+    "transform": "read_scope removed; any internal absolute paths redacted; substantive synthetic judgments preserved"
+  }
+]

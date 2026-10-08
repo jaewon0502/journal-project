@@ -1,0 +1,23 @@
+{
+  "unit_id": "Q3292",
+  "article": {
+    "text": "연구진은 참가자 12명 중 적어도 일부에서 회복을 관찰했다고 공개했다. 회복 원인은 조사하지 않았다."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "연구진은 참가자 12명 중 적어도 일부에서 회복을 관찰했다고 공개했다. 개별 참가자 결과와 정확한 회복 인원은 공개하지 않았다. 회복의 원인은 조사하지 않았다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "표본수와 회복이 관찰된 범위·정확한 수는 무엇인가?"
+    },
+    {
+      "id": "q2",
+      "text": "회복 원인에 관해 조사한 것은 무엇인가?"
+    }
+  ],
+  "scope": "Complete synthetic source record; not real news. Correct unsupported source attribution without declaring unknown world propositions false."
+}

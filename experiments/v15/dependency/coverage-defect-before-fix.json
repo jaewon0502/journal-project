@@ -1,0 +1,30 @@
+{
+  "stage": "before coverage fix",
+  "synthetic": true,
+  "input_relations": [],
+  "expected_accepted_ids": [],
+  "actual": {
+    "status": "accepted",
+    "accepted_ids": [
+      "P",
+      "Q"
+    ],
+    "held_ids": [],
+    "reasons": {
+      "P": [],
+      "Q": []
+    },
+    "required_edges": {
+      "P": [],
+      "Q": []
+    },
+    "relation_validation": [],
+    "candidate_article": "A=1 B=1",
+    "candidate_sha256": "519846d04883048b4449debccf010fc939e1222c7f250e3b82c8d9442b8f6ad5",
+    "original_sha256": "2e8c7627a6950fb0ef353ef31177d3a9634c97c9715d1965a059c0682d228414",
+    "requires_final_audit": true,
+    "final_audit_status": "not_performed",
+    "scope": "Procedural selection only; independent AI audit of the entire actual selected candidate is required. Not truth or factual certification."
+  },
+  "reproduced": true
+}

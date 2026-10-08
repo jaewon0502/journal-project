@@ -1,0 +1,23 @@
+{
+  "unit_id": "Q1077",
+  "article": {
+    "text": "기록에 따르면 A팀은 성인 24명을 4주 관찰했고 수면 시간이 늘었다. B팀의 영아 관찰에서도 같은 결과가 나왔다."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "기록은 A팀과 B팀을 구분한다. A팀은 성인 24명을 4주 관찰했다. 이 팀에서 수면 시간이 늘었다. B팀은 영아 관찰을 제안했으며 결과는 아직 없다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "A팀의 관찰 대상·기간·결과는 무엇인가?"
+    },
+    {
+      "id": "q2",
+      "text": "B팀의 연구 대상과 진행 상태·결과는 무엇인가?"
+    }
+  ],
+  "scope": "Complete synthetic source record; not real news. Correct unsupported source attribution without declaring unknown world propositions false."
+}

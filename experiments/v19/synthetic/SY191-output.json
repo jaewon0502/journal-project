@@ -1,0 +1,78 @@
+{
+  "unit_id": "SY191",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "나머지 5명이 정량한계 미만이었다는 설명과 검출한계별 세부 구분의 필요성",
+      "origin": "inherited",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "yes",
+      "original_quote": "나머지 5명은 정량한계 미만이었다.",
+      "candidate_quote": "나머지 5명은 정량한계 미만이었다.",
+      "source_refs": [
+        "S1"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "text, fourth sentence",
+            "quote": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "text, fifth sentence",
+            "quote": "검출한계와 정량한계는 다르다."
+          },
+          "relation": "supports",
+          "relevance_to_claim": "원문은 5명을 미검출이라고 하지 않고 정량한계 미만이라고만 한다. 근거의 세부 구분은 이 설명과 양립하며 이를 반박하거나 조건부로 만들지 않는다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "검출한계 이상인 4명과 검출한계 미만인 1명의 구분은 추가할 수 있지만, 5명 모두 정량한계 미만이라는 원문의 명제를 바꾸는 필수 조건은 아니다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "원문은 검출한계와 정량한계를 혼동하지 않는다. 제목과 본문 모두 정량한계 초과 17명을 정확히 기술하며, 나머지 5명의 세부 검출 상태를 추가하는 것은 선택적 설명이다.",
+      "original_proposition_changed": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no"
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 가상 실험 기록은 원문의 표본 수, 정량한계 초과 인원, 나머지 인원의 정량한계 미만 상태, 표본 확대 필요성과 실험 범위를 뒷받침한다. 필요한 사실 수정이나 결론을 바꾸는 누락은 확인되지 않아 원문 전체를 그대로 보존한다.",
+  "read_scope": "지정된 writer-v2.md와 schema.json 및 SY191.json의 원문 전체와 S1의 전체 가상 기록 및 범위 메타데이터를 읽었다. 외부 자료는 사용하지 않았다.",
+  "full_edited_article": "가상 분석: 22명 중 17명에서 정량한계 초과\n\n연구진은 성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다. 나머지 5명은 정량한계 미만이었다.\n\n연구진은 표본 확대가 필요하다고 밝혔다. 이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다.",
+  "protection_items": [
+    {
+      "id": "P1",
+      "original_quotes": [
+        "가상 분석: 22명 중 17명에서 정량한계 초과",
+        "성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다.",
+        "나머지 5명은 정량한계 미만이었다."
+      ],
+      "relation": "동일 표본과 분석 방법에 대한 정량한계 기준의 분류",
+      "why_preserve": "정량한계 기준의 정확한 인원과 분석 대상을 보존하며 정량한계 미만을 미검출로 바꾸지 않는다.",
+      "confidence": "supported",
+      "conflict": "제공된 범위 내에서 충돌 없음."
+    },
+    {
+      "id": "P2",
+      "original_quotes": [
+        "연구진은 표본 확대가 필요하다고 밝혔다.",
+        "이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다."
+      ],
+      "relation": "연구진의 표본 확대 요청과 실험의 조사 범위 제한",
+      "why_preserve": "관찰 결과를 질병 발생이나 일반 인구의 유병률로 확대 해석하지 않도록 하는 기존 한계 설명을 유지한다.",
+      "confidence": "supported",
+      "conflict": "제공된 범위 내에서 충돌 없음."
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "unit_id": "D174",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "순서표 규칙 적용일은 언제인가? 기록 공개일과 구분하라.",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "yes",
+      "original_quote": "이번 순서표 규칙은 2035년 9월 1일부터 적용된다.",
+      "candidate_quote": "이번 순서표 규칙은 2035년 9월 12일부터 적용된다.",
+      "source_refs": [
+        "S1",
+        "S2"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "제1항(적용일)",
+            "quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용한다."
+          },
+          "linked_clause": null,
+          "relation": "contradicts",
+          "relevance_to_claim": "후보의 9월 12일 적용일과 원문의 9월 1일 적용일은 모두 최종 안내서의 9월 2일과 다르다. 원문 복원이 아니라 9월 2일로 직접 정정해야 한다."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "첫 예약 기록, 공개일",
+            "quote": "공개일 2035년 9월 12일."
+          },
+          "linked_clause": null,
+          "relation": "supports",
+          "relevance_to_claim": "9월 12일은 기록 공개일로서 후보 첫 문장의 날짜는 유지한다. 적용일과는 별도 사실이다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "후보는 규칙 적용일을 기록 공개일과 같은 9월 12일로 명시하지만, 최종 안내서에 따른 적용일은 9월 2일이다. 원문의 9월 1일도 잘못되어 복원할 수 없다.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "적용일에 대한 명시적 오답을 최소 날짜 교체로 바로잡는다. 편집으로 원문의 날짜가 변경되었으나 원문 자체에도 오류가 있어 자료가 직접 뒷받침하는 날짜를 사용한다. 공개일과 다른 내용은 보존된다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F1",
+      "before": "이번 순서표 규칙은 2035년 9월 12일부터 적용된다.",
+      "after": "이번 순서표 규칙은 2035년 9월 2일부터 적용된다.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "유일한 필요 정정은 적용일이다. 전체 후보에 패치를 적용한 상태에서 공개일, 신청 건수, 예약 완료의 의미와 배정 조건, 공동 시연의 정의와 예외, 발언 귀속 및 가치 판단의 한계가 보존된다. 제공된 최종 안내서는 적용일 변경이나 숨겨진 예외가 없음을 명시하며 자료 간 미해결 버전 문제가 없다.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

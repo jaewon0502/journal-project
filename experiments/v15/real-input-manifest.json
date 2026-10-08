@@ -1,0 +1,97 @@
+[
+  {
+    "case_id": "E1",
+    "article_url": "https://www.theguardian.com/environment/2024/nov/12/shell-wins-appeal-against-court-ruling-ordering-cut-in-carbon-emissions",
+    "published": "2024-11-12",
+    "retrieved": "2026-10-03T05:43:35.642954+00:00",
+    "input_sha256": "711333f8b24b310086cd0852c1af704f37592cad7e3e78d5124feee8d3f9962f",
+    "body_paragraphs": 19,
+    "source_links": [
+      {
+        "id": "E1S1",
+        "url": "https://www.rechtspraak.nl/organisatie-en-contact/organisatie/gerechtshoven/gerechtshof-den-haag/nieuws/2024/11/hague-court-denies-claim-for-reduction-in-shells-co2-emissions",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      },
+      {
+        "id": "E1S5",
+        "url": "https://shell.gcs-web.com/node/26161/pdf",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      },
+      {
+        "id": "E1S3",
+        "url": "https://pers.milieudefensie.nl/press/milieudefensie-over-uitspraak-shell-zaak-we-gaan-hoe-dan-ook-door-met-het-aanpakken-van-grote-vervuilers",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      }
+    ]
+  },
+  {
+    "case_id": "E2",
+    "article_url": "https://www.theguardian.com/environment/2025/jan/30/rosebank-oilfield-jackdaw-decision-unlawful-edinburgh-court",
+    "published": "2025-01-30",
+    "retrieved": "2026-10-03T05:43:35.642954+00:00",
+    "input_sha256": "a529434ab939af78f78625586dd99d38e847a89d7096c342cba14dd855cc0790",
+    "body_paragraphs": 19,
+    "source_links": [
+      {
+        "id": "E2S1",
+        "url": "https://judiciary.scot/home/sentences-judgments/judgments/2025/01/30/petitions-of-greenpeace-ltd-and-uplift-for-judicial-review",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      },
+      {
+        "id": "E2S3",
+        "url": "https://www.ithacaenergy.com/press-releases/ruling-in-relation-to-rosebank-judicial-review",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      },
+      {
+        "id": "E2S4",
+        "url": "https://www.scotcourts.gov.uk/media/v0zkbsxy/2025csoh10-petitions-by-greenpeace-limited-and-uplift-for-judicial-review.pdf",
+        "scope": "contemporaneous publication, retrieved later; archived-at-publication snapshot not obtained"
+      }
+    ]
+  },
+  {
+    "case_id": "K15N",
+    "article_url": "https://www.yna.co.kr/view/AKR20260813084500001",
+    "published": "2026-08-13T12:01:00+09:00",
+    "retrieved": "2026-10-03T05:51:41.482152+00:00",
+    "input_sha256": "b4820bdf5f77160d6db4e2c65aa9fa9971e99f04af9bd79da77ca2e8bf7eb34b",
+    "body_paragraphs": 8,
+    "source_links": [
+      {
+        "id": "S1",
+        "url": "https://www.mcee.go.kr/m/file/readDownloadFile.do?fileId=330970&fileSeq=2",
+        "scope": "법안 본회의 통과 후 보도참고자료. 수치·기구·지원 범위는 대조 가능하나 8월13일 위원회 표결 자체를 입증하지 않는다."
+      },
+      {
+        "id": "S2",
+        "url": "https://www.pcccr.go.kr/base/board/read?boardManagementNo=43&boardNo=4414&menuLevel=2&menuNo=92",
+        "scope": "기후미래포럼 구성 관련 정부 원자료. S1과 독립 계보로 세지 않음."
+      }
+    ]
+  },
+  {
+    "case_id": "K15Q",
+    "article_url": "https://www.yna.co.kr/view/AKR20230803120251017",
+    "published": "2023-08-03T17:51:00+09:00",
+    "retrieved": "2026-10-03T05:51:41.482152+00:00",
+    "input_sha256": "daa07a3759d69de8394e195af5b37c560628f3c0143f747638c71a4781bb6a66",
+    "body_paragraphs": 18,
+    "source_links": [
+      {
+        "id": "S1",
+        "url": "https://arxiv.org/pdf/2307.12008v1",
+        "scope": "최초 주장 논문 PDF 전체. 주장 자체는 실험 독립검증이나 확정 사실이 아님."
+      },
+      {
+        "id": "S2",
+        "url": "https://arxiv.org/pdf/2308.00676v2",
+        "scope": "DFT 계산 논문 전체. 직접 시료 재현실험이 아니며 도핑 조건부 가능성. 내부 날짜와 저장소 버전일 상충으로 당시 동일본문 여부 추가확인 필요."
+      },
+      {
+        "id": "S3",
+        "url": "https://arxiv.org/abs/2308.00676v2",
+        "scope": "v2 저장소 메타데이터·초록. S2와 별도 계보 아님."
+      }
+    ]
+  }
+]

@@ -6,6 +6,10 @@
 
 ## 결과부터 보기
 
+현재 통합 상태는 [v28 직접자료·남은 차단](experiments/v28/DIRECT-EVIDENCE-STATUS.md), [평가 정정](experiments/v28/RESULTS.md), [통합 변경과 우선순위](docs/v15-v28-integration.md)에 있습니다. 원격 main의 원자료·AI 검토 후속 작업(#4)을 보존하고 v15~v28 로컬 연구를 합쳤습니다. 되돌려진 v14와 별도 검토 중인 PR #7은 이번 통합에 포함하지 않습니다.
+
+발전량의 추정 상태와 PS의 분석 범위를 국소 수정했지만, 보호항목의 완전성·귀속 판단 재현성·일반 성능은 해결되지 않았습니다. 새 저자 슬라이드는 배치와 모델 관계를 보강했으나 최종 논문 전문이나 전문가의 추가 발언 기록을 대신하지 않습니다. 새 AI 실행 없이 저장 결과와 공개용 검사만 재검증했습니다.
+
 | 회차 | 범위 | 확인한 결과와 한계 |
 |---|---|---|
 | [기존 실험·수정 연구](experiments/legacy/) | A–D 주실험 48출력, 개발 회귀 6, 모듈 20 | 총 74출력과 후속 수정 실험을 구분합니다. 평가 기준 불일치 정정도 보존합니다. |
@@ -13,12 +17,14 @@
 | [v7 최소편집 비교](experiments/v7/) | 개발 2·평가 4발표 사건 | 자유 최소편집 4/4, 유형 생성 3/4, 원문 삽입 3/4 복구. 각 방식의 정상·동등 대조 8개는 그대로 보존됐습니다. 작은 영문 합성 오류 시험입니다. |
 | [v8 전체기사 비교](experiments/v8/) | 한국어30·영어30, 개발12·평가48 | 평가 필요수정13항목: 전체교체9성공·4실패, 최소편집7성공·5실패·1불확실. 언어별 분모와 중대 누락을 별도 보고합니다. |
 | [v9 발언 주석·선택적 복원](experiments/v9/) | 회귀2·신규 실제자료2·합성8 | 선택적 복원의 국소 개선, 별도 발언 주석의 추가효과 미확인, 두 평가자의 공동 승인 후 발견된 근거 부족을 함께 보존합니다. |
-
-
 | [v10 보호표·최소편집·평가 진단](experiments/v10/results/report.md) | 작성9·의미판정51; 합성6·노출회귀2·신규 NASA 발표1 | 목록 밖 조건과 전달문 불일치를 확인했습니다. 평가 합의는 정답이 아니며 최종 허용8건은 오류 해결8건이 아닙니다. |
 | [v11 적용 영수증과 의미 설명](experiments/v11/results/report.md) | native 작성14·세 묶음 판정84; 코드 산출물 별도 | 상태 영수증은 재생 가능하지만 미해결 의미 설명을 대체하지 못했습니다. 크기·중첩·인코딩 실패와 수정본을 별도 보존합니다. |
 | [v12 전체기사·자료범위 비교](experiments/v12/REPORT.md) | 실제기사4개, 주작성10; 보충 작성8은 별도 반복 | 추가 자료가 수치 경계를 보완했으나 의미 보존·인과 표현을 모두 해결하지 못했습니다. 원점수·평가불일치·늦은 상세 평가도구 동결을 보존합니다. |
 | [v13 수정별 선별과 보류](experiments/v13/v13/REPORT.md) | 합성6+노출실제2묶음·27제안·새검토16; 신규실제1 별도 | 동일 입력 G0=0/G1=13채택. 27개 새 모델 작성이나 13건 실기사 성공이 아닙니다. 발언강도 사후수정은 원집계와 분리합니다. |
+| [v15~v20 계약·전달 검사](experiments/v20/README.md) | 보호목록·의존성·전체문 전달·사실/필요성 구분 | 코드 수리와 의미 판단 개선을 구별하며 원실패를 보존합니다. |
+| [v21~v24 판정·대상 연결](experiments/v24/SUMMARY.md) | 후보 선택, 근거 우선, 귀속/분모, 수치 비교 | 구조 검사만으로 잘못된 의미 연결을 막지 못했습니다. |
+| [v25~v27 자료·패치 비교](experiments/v27/RESULTS.md) | 원문 표 이미지, 회귀, 전체/토큰/의미 단위 | 국소 성과와 추가효과 미확인·누락을 함께 보고합니다. |
+| [v28 재감사·직접자료](experiments/v28/DIRECT-EVIDENCE-STATUS.md) | 기존15출력 재감사, PS 국소 수리, 저자 자료 확보 | 필요성 평가 일부 정정, 귀속 위험 자발적 탐지 재현 실패. |
 
 후속 [원자료·AI 평가 검증](experiments/source-evidence-ai-review/)에서는 미확보 법원 3사건의 로컬 검토 자료 6개를 확보하고, 최신 AI 작업답안 12개·근거 위치 55개를 검사했습니다. 별도의 재사용 한국은행 원문에서 합성 문장 18개를 검토해 승인11·수정6·보류1을 기록하고, 수정6개·추가근거1개를 후속 확인했습니다. 공개본은 저장 판정과 문구 연결을 재검증하며 인간 중요도 일치·일반 성능의 증거로 제시하지 않습니다. 과거 v6 점수는 유지합니다.
 
@@ -34,6 +40,8 @@ Python 3.11 이상에서 공개 자료 점검과 회귀·집계 검사를 실행
 python -m pip install -r requirements-research.txt
 python tools/run_checks.py
 ```
+
+새 T 완료 평가 집계에는 [v19 checked 집계기](experiments/v19/code-audit/README.md)의 `score_T_checked_v2.py`를 사용합니다. 판단 ID뿐 아니라 realization 보고서 내부의 중복 case/method도 거부합니다. v7/v15 원코드와 과거 재생 경로는 보존합니다. 새 기사 입력의 식별자 검사가 필요하면 별도 `experiments/v19/code-audit/check_output_strict.py`를 사용하며, v18 원실험 재생은 동결 검증기를 계속 사용합니다.
 
 각 회차의 README는 공개된 입력과 제외된 자료, 재실행 가능한 코드 범위를 설명합니다. 원문을 재배포하지 않으므로 이 저장소만으로 최초 원문 입력을 포함한 모델 실행을 완전히 재현할 수는 없습니다. 외부 원자료는 해당 출처의 접근 조건과 권리를 확인해 별도로 확보해야 합니다. API 키나 유료 실행은 검사에 필요하지 않습니다.
 
@@ -55,3 +63,5 @@ python tools/run_checks.py
 - [권리·라이선스 상태](NOTICE.md)
 
 라이선스는 아직 선택하지 않았습니다. 외부 원문 전문·PDF, 인증정보, 개인 정보, 비공개 서비스 식별자, 내부 대화·작업 지시문은 공개 대상에서 제외했습니다. 자동 패턴 검사는 사람이 읽는 모든 의미와 모든 비밀 형식을 보장하지 않으므로 별도 내용 검토와 함께 사용했습니다.
+
+v20 audits the actual 234-method scope and preserved T scoring impact, and separates factual discrepancy recognition from correction necessity. For current sidecar use, load `experiments/v20/code-audit/sidecar/sidecar_adapter.py` via `load_sidecar()`; the historical sidecar import remains preserved with its old binding. `python experiments/v20/code-audit/replay/verify_saved_v19.py` adds exact saved-output identity checks to the unchanged v19 synthetic replay. See `experiments/v20/README.md` for the diagnostic results and remaining executable hypotheses.

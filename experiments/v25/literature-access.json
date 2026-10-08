@@ -1,0 +1,75 @@
+{
+  "date_utc": "2026-10-03",
+  "scope": "primary method research only; no experiments",
+  "sources": [
+    {
+      "name": "feverous",
+      "url": "https://arxiv.org/pdf/2106.05707",
+      "record_url": "https://arxiv.org/abs/2106.05707",
+      "status": 200,
+      "bytes": 3503391,
+      "sha256": "ccab004de543fa77dc2fe961690ec5c3bc969fb673302842f7925bbf04273fcb",
+      "local_pdf": "private/method-sources/feverous.pdf",
+      "local_text": "private/method-sources/feverous.txt",
+      "read_scope": [
+        "§3 PDF pp.3–4, text lines169–200",
+        "§4 PDF p.8, text lines436–465",
+        "§5.1 inspected"
+      ],
+      "access_method": "Python urllib.request; pdftotext -layout",
+      "full_pdf_downloaded": true
+    },
+    {
+      "name": "dwie",
+      "url": "https://arxiv.org/pdf/2009.12626",
+      "record_url": "https://arxiv.org/abs/2009.12626",
+      "status": 200,
+      "bytes": 1702737,
+      "sha256": "213ea03884e1deb6dba0b6a1811705e269541c0ec237b935a9a0f737e32612ff",
+      "local_pdf": "private/method-sources/dwie.pdf",
+      "local_text": "private/method-sources/dwie.txt",
+      "read_scope": [
+        "§3 PDF p.7 lines397–407",
+        "§4.2.2 PDF pp.14–15 lines821–881",
+        "§4.2.3 PDF pp.15–16 lines883–913",
+        "§4.3 PDF p.17 lines967–985",
+        "§7 PDF p.26 lines1517–1525"
+      ],
+      "access_method": "Python urllib.request; pdftotext -layout",
+      "full_pdf_downloaded": true
+    },
+    {
+      "name": "finqa",
+      "url": "https://arxiv.org/pdf/2109.00122",
+      "record_url": "https://arxiv.org/abs/2109.00122",
+      "status": 200,
+      "bytes": 1037367,
+      "sha256": "ce0c8b8f525be9c94f884cb6488041f1e3f0a3c64a86396fe7771c698fb64260",
+      "local_pdf": "private/method-sources/finqa.pdf",
+      "local_text": "private/method-sources/finqa.txt",
+      "read_scope": [
+        "§3 PDF p.3",
+        "§5.1 PDF pp.5–6 lines286–399",
+        "Appendix C Fig5 PDF p.13 lines775–792"
+      ],
+      "access_method": "Python urllib.request; pdftotext -layout",
+      "full_pdf_downloaded": true
+    }
+  ],
+  "prior_files_read": [
+    "prior-checkout/experiments/v23/APPROACH-LEDGER.md",
+    "prior-checkout/experiments/v24/METHOD-RESEARCH.md",
+    "prior-checkout/experiments/v24/APPROACH-COUNTS.md",
+    "prior-checkout/experiments/v24/SUMMARY.md"
+  ],
+  "discovery": "web search for FEVEROUS, scientific entity/coreference methods and FinQA; noisy unrelated results ignored; no snippet used as methods evidence",
+  "initial_local_error": "requests not installed; no network request occurred with requests; standard-library urllib succeeded",
+  "agrivoltaic_paper": "No new access attempted; prior fulltext blocker retained",
+  "external_models_downloaded": false,
+  "experiments_run": 0,
+  "old_files_modified": false,
+  "new_independent_families_counted": 0,
+  "final_candidate": "Same article and complete source text, plus fixed native publisher table-page image versus text alone; representation contrast, not additional independent facts or gate.",
+  "final_candidate_external_access": "No additional web calls. Candidate KO/EN pages described by parent, not inspected by literature agent.",
+  "novelty_correction": "Parent reports prior v17 registry IDs/XML cells, v18 layout text, v22 raster source images; not first ID/visual use; independent family increment remains 0."
+}

@@ -1,0 +1,62 @@
+{
+  "created_at_utc": "2026-10-03T13:14:52.692322+00:00",
+  "purpose": "Focused method research, not new factual verification",
+  "sources": [
+    {
+      "url": "https://arxiv.org/pdf/1901.03735",
+      "access": "Public web PDF open and anonymous urllib download succeeded",
+      "full_pdf_downloaded": true,
+      "full_paper_read": false,
+      "relevant_sections_read": [
+        "4.2 complete (4.2.1–4.2.5, Tables 3–5, Algorithm 1)",
+        "5.2 error discussion inspected"
+      ],
+      "local_pdf": "method-sources/equate.pdf",
+      "local_text": "method-sources/equate.txt",
+      "bytes": 496951,
+      "sha256": "49788da20bee2596228e0c73d3b09b4f222eecbfd496061f994be20313334699"
+    },
+    {
+      "url": "https://aclanthology.org/2025.findings-emnlp.1322.pdf",
+      "access": "Public web PDF open and anonymous urllib download succeeded",
+      "full_pdf_downloaded": true,
+      "full_paper_read": false,
+      "relevant_sections_read": [
+        "3 complete (3.1 and 3.2)",
+        "Introduction numerical/currency example"
+      ],
+      "local_pdf": "method-sources/think-right.pdf",
+      "local_text": "method-sources/think-right.txt",
+      "bytes": 1382589,
+      "sha256": "4f603662d0df1ee5e75cdd24aba6517168d874aee417dd639c2284fe447cf118"
+    }
+  ],
+  "blocked_primary": {
+    "doi": "10.1016/j.xcrp.2026.103555",
+    "title": "Evaluating land productivity with semi-transparent colored CdTe thin-film PV and broccoli cultivation in agrivoltaic systems",
+    "retried": false,
+    "full_text_obtained": false,
+    "metadata_source": "prior-private-v23/primary-expansion/crossref.json",
+    "prior_access_sources": [
+      "prior-private-v23/transfer/access.json",
+      "../v23/primary-expansion-access.json"
+    ],
+    "boundary": "Metadata is not full text; prior failure records preserved including differing DOI status summaries."
+  },
+  "new_intervention_executions": 0,
+  "old_family_counts": {
+    "P1": {
+      "tried": 4,
+      "failure": 1
+    },
+    "P2": {
+      "tried": 8,
+      "failure": 4
+    },
+    "P3": {
+      "tried": 4,
+      "failure": 1
+    }
+  },
+  "source_first_novelty_increment": 0
+}

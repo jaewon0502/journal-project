@@ -1,0 +1,59 @@
+[
+  {
+    "id": "M15",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [],
+    "reason": "보호표에는 입장료만 있지만 전체 자료와 원문·후보를 검사하면 안전교육 이수자만 입장 가능하다는 제한도 후보에 그대로 있다. 입장 자격과 무료라는 비용 모두 질문에 답한다. 후보는 원문과 같고 자료와 일치한다. 자료에만 있는 안내실 벽 색은 질문에 필요하지 않으며 패치는 없다."
+  },
+  {
+    "id": "M92",
+    "new_harm_vs_original": "yes",
+    "required_answer_missing": "yes",
+    "source_conflict": "yes",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "입장 자격이 안전교육 이수자로 한정된다는 조건",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "허구의 다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "original_quote": "다온마루는 안전교육 이수자만 입장할 수 있다.",
+        "candidate_quote": "다온마루는 누구나 입장할 수 있다."
+      }
+    ],
+    "reason": "무료 입장은 보존됐으나 보호표에 없는 입장 자격 제한을 누구나 입장 가능하다는 주장으로 바꿨다. 이는 원문의 정확한 필수 조건을 후보가 새로 훼손한 것이며 자료와 정면으로 충돌한다. 입장 가능자를 묻는 질문에 필요한 정확한 답이 사라졌다. 안내실 벽 색 추가는 불필요하며 패치가 없어 P1·P2 관계는 적용하지 않는다."
+  },
+  {
+    "id": "M38",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "yes",
+    "missed_items": [],
+    "reason": "보호표의 개장 시점뿐 아니라 주민회의 예약 창구 불편 비판과 그 발언 주체까지 원문·자료·후보에서 확인했다. 다음 달 개장과 주민회의 평가 모두 그대로 전달돼 질문의 필수 답이 보존됐다. 추가할 자료 전용 배경도 없고 패치도 없다."
+  },
+  {
+    "id": "M67",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "not_applicable",
+    "p1_new_break": "not_applicable",
+    "criticism_preserved": "yes",
+    "missed_items": [],
+    "reason": "후보는 원문과 같으며 다음 달 개장과 주민회의 예약 창구 불편 평가를 발언 주체와 함께 정확히 보존한다. 보호표에 없는 비판도 직접 검사했으며 중화되거나 누락되지 않았다. 자료에만 있는 관리실 책상 무늬는 질문과 관련 없는 선택적 배경이므로 추가할 필요가 없다. 패치는 없다."
+  }
+]

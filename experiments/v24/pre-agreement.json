@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-03T13:20:28.945342+00:00",
+  "pre_agreement": {
+    "a267dc49": "contradicted",
+    "a91d4f6e": "contradicted",
+    "b605ad37": "contradicted",
+    "b8e035a1": "supported",
+    "c41f9b20": "contradicted",
+    "c73b028a": "supported",
+    "d19ec630": "supported",
+    "e28f91c4": "supported",
+    "e793a06d": "supported",
+    "f04a782d": "contradicted"
+  },
+  "scope": "AI agreement, not truth; alternate repair ambiguity retained",
+  "hashes": {
+    "audit-pre.json": "625b0c9e21d557c5e2424eea100d075395941355937260cfbc3ee9dcc47db2c9",
+    "audit-two-pre.json": "fc6135b046d8d762085ea5002791f9bf4225227254f556eaaf472978fde512eb"
+  }
+}

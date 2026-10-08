@@ -1,0 +1,32 @@
+{
+  "unit_id": "F923",
+  "collection_timestamp": "2026-10-03T12:25:04Z",
+  "access_method": "Anonymous public web tool; complete rendered result saved as retrieval-web.txt. Python urllib direct article fetch additionally attempted and returned HTTP 403; no credentials or bypass used.",
+  "article": {
+    "accessible": true,
+    "read_complete": true,
+    "rendered_total_lines": 108
+  },
+  "source1": {
+    "accessible": true,
+    "read_complete": true,
+    "rendered_total_lines": 162
+  },
+  "unavailable": [
+    {
+      "url": "https://doi.org/10.1016/j.xcrp.2026.103555",
+      "result": "Web tool 500: redirect to https://linkinghub.elsevier.com/retrieve/pii/S2666386426004613 inaccessible (non-retryable)."
+    },
+    {
+      "url": "https://www.cell.com/cell-reports-physical-science/fulltext/S2666-3864%2826%2900461-3",
+      "result": "Web tool HTTP 403."
+    }
+  ],
+  "evidence_boundary": "Official release and expert commentary only; not complete primary-paper verification.",
+  "text_characters": {
+    "article": 6966,
+    "source1": 10584,
+    "total": 17550
+  },
+  "truncation": false
+}

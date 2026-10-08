@@ -1,0 +1,38 @@
+[
+  {
+    "id": "Z001",
+    "unit_id": "U57",
+    "cohort": "exposed_regression",
+    "raw_sha256": "c70e3032ccb25199eb8830a808cf866d92d8c5608cdf905c76b5d37c556ca525"
+  },
+  {
+    "id": "Z002",
+    "unit_id": "U26",
+    "cohort": "exposed_regression",
+    "raw_sha256": "276b3c54697df1fc5b766e8452bd3101f2621579dbcb2bfdd79b6062575d532b"
+  },
+  {
+    "id": "Z003",
+    "unit_id": "U68",
+    "cohort": "synthetic_transfer",
+    "raw_sha256": "7011bb576cbea515ebcdeb158aca5d8908137e441f518bdb4a7797f38fa4a06f"
+  },
+  {
+    "id": "Z004",
+    "unit_id": "U94",
+    "cohort": "exposed_regression",
+    "raw_sha256": "be7d70e7db5056560e929634bd96eba6f4738b4baaf14e49f3e2e5601c11a5fd"
+  },
+  {
+    "id": "Z005",
+    "unit_id": "U83",
+    "cohort": "exposed_regression",
+    "raw_sha256": "435e10871e2c523ac70748a829f6c5b803c3aacd6f4ae12308941d8e73f368c1"
+  },
+  {
+    "id": "Z006",
+    "unit_id": "U35",
+    "cohort": "synthetic_transfer",
+    "raw_sha256": "75145df1212f50880af00c465036c0571a9c83e4a3084cc1b828409172e4b5fa"
+  }
+]

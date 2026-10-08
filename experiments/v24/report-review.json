@@ -1,0 +1,85 @@
+{
+  "review_type": "Independent AI report QA; not human verification",
+  "status": "pass_with_declared_limits",
+  "material_overclaims": [],
+  "blockers": [],
+  "reviewed_reports": [
+    "SUMMARY.md",
+    "MAIN-RESULTS.md",
+    "CODE-FOLLOWUP.md",
+    "SI-RESULTS.md",
+    "APPROACH-COUNTS.md",
+    "BLOCKED-PAPER.md",
+    "PUBLIC-DERIVATION.md"
+  ],
+  "verified_counts": {
+    "main": {
+      "inputs": 10,
+      "edits": 20,
+      "identical_arm_text_pairs": 10
+    },
+    "si-pair/": {
+      "inputs": 2,
+      "edits": 4,
+      "identical_arm_text_pairs": 2
+    }
+  },
+  "checks": [
+    {
+      "claim": "Main per-arm 5/5 true-error corrections and 5/5 exact normal preservation; no additional semantic gain",
+      "result": "Supported by both independent PRE/POST audit pairs, 10 native text pair comparisons, and replay."
+    },
+    {
+      "claim": "SI separate 2 inputs/4 edits; no additional gain",
+      "result": "Supported by SI PRE/POST, 2 native text pair comparisons and replay; not pooled with main."
+    },
+    {
+      "claim": "v1 structural errors preserved",
+      "result": "All three v1 code file digests match preserved code-audit.json; report explicitly corrects initial typed-arithmetic description and retains v1 findings."
+    },
+    {
+      "claim": "Original-schema v2 overblock and enriched replay",
+      "result": "40 replay rows: original certificates reproduce 18/20 native texts with case c41f9b20 blocked in both arms; enriched certificates reproduce 20/20. Enrichment alters only four operand unit fields in two certificates."
+    },
+    {
+      "claim": "Structural code repairs do not establish semantic identity",
+      "result": "Saved independent v2 replay retains false A/B same-identity certificate passing and A 2→3 delivery; report states this residual explicitly."
+    },
+    {
+      "claim": "Approach counts historical caveat",
+      "result": "4/1, 8/4, 4/1 match v23 ledger; lower bounds and unknown upper/early records retained; overlapping rows not summed; v24 independent-family increment +0."
+    },
+    {
+      "claim": "Comparison denominators",
+      "result": "59 comparisons: 5 eligible mismatches, 7 normalized equal, 47 blocked = 28 temporal unsupported + 10 unequal same-unit different identity + 6 equal-numeral different identity + 3 incompatible measure. Report does not count blocks as prevented article errors."
+    },
+    {
+      "claim": "Privacy/public derivation",
+      "result": "No private absolute filesystem paths or Library/file IDs found in v24 text scan; wider working-tree pattern scan produced only legitimate judiciary.scot/home URL false-positive. No PDF/DOCX/HTML/archive real-source payloads in v24. Synthetic case source content and reports inspected; no full real source found in reviewed v24 scope."
+    }
+  ],
+  "supporting_evidence": [
+    "audit-pre.json",
+    "audit-two-pre.json",
+    "audit-post.json",
+    "audit-two-post.json",
+    "si-pair/audit-pre.json",
+    "si-pair/audit-post.json",
+    "literal-comparison.json",
+    "certificate-audit.json",
+    "code-audit.json",
+    "code-audit-v2.json",
+    "code-audit-v2-replay-results.json",
+    "v2-replay-summary.json",
+    "operand-unit-enrichment-rationale.json",
+    "../v23/APPROACH-LEDGER.md"
+  ],
+  "execution_evidence": "Read-only replay.py passed: 24 native edits, v1/v2 derived deliveries and counterfactual replays match saved artifacts; semantics not certified. PYTHONDONTWRITEBYTECODE=1 used.",
+  "limitations": [
+    "No new web access or new semantic performance experiment conducted.",
+    "Authorship/isolation statements rely on stored audit descriptions; no human or deployment-model identity certification.",
+    "Privacy review concerns current public working-tree files, not historical git objects; v24 report full-source absence was inspected rather than exhaustive semantic matching of all inherited versions.",
+    "Blocked-paper access account was reviewed as a bounded report of saved prior access, not independently retried."
+  ],
+  "public_files_modified": false
+}

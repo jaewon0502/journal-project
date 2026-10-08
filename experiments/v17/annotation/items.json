@@ -1,0 +1,116 @@
+{
+  "version": "annotation-followup-1",
+  "records": [
+    {
+      "id": "A01",
+      "kind": "exposed_regression",
+      "scope": "R004 F2 diameter phrases only. These exact excerpts are not full articles. Excludes the separate mass-dependency error, all other article claims and any applied repair.",
+      "O": "a diameter of around half a mile",
+      "C": "a diameter of around 150 meters",
+      "S": [
+        {
+          "id": "S2",
+          "locator": "Main, size result",
+          "text": "volume-equivalent diameter of 151 ± 5 m",
+          "date": "2023-03-01",
+          "url": "https://www.nature.com/articles/s41586-023-05810-5",
+          "scope": "Exact local measurement excerpt only; no independent version or availability verification."
+        }
+      ],
+      "Q": "Within the approximate diameter claim only, did O change in C, and does S contradict C?",
+      "provenance": {
+        "input": "evaluation/audit/R004.input.json",
+        "finding": "F2",
+        "exposure": "Previously observed; annotation regression only, not fresh validation."
+      }
+    },
+    {
+      "id": "A02",
+      "kind": "exposed_regression",
+      "scope": "R006 F1 eligibility clause and directly linked source definition only. Exact excerpts, not full articles. Excludes schedules, other conditions, anecdotes and applied repair.",
+      "O": "월 소득 인정액이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생",
+      "C": "학생 본인의 소득·재산만으로 산정한 월 소득 인정액이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생",
+      "S": [
+        {
+          "id": "S1",
+          "locator": "Definition clause",
+          "text": "월 소득 인정액*이 일정 수준 이하인 대학생 중 성적 기준 등을 충족한 학생"
+        },
+        {
+          "id": "S1",
+          "locator": "Immediately linked income footnote",
+          "text": "학생 본인과 가구원(부모 또는 배우자)의 소득·재산 등을 조사하여 산정",
+          "date": "2025-05-26",
+          "url": "https://www.korea.kr/common/download.do?fileId=198166319&tblKey=GMN",
+          "scope": "Local definition and footnote only; no earlier availability claim."
+        }
+      ],
+      "Q": "지원 대상 설명에서 학생 본인만의 소득·재산이라는 제한이 O에서 C로의 명제를 바꾸는가? S에 비추어 C의 산정 대상 설명은 사실상 틀린가?",
+      "provenance": {
+        "input": "evaluation/audit/R006.input.json",
+        "finding": "F1",
+        "exposure": "Previously observed; annotation regression only, not fresh validation."
+      }
+    },
+    {
+      "id": "A03",
+      "kind": "fresh_synthetic",
+      "scope": "Fictional single-event gate opening time only; the entire record is below, not an article.",
+      "O": "On Day 1, the gate opened at 09:00.",
+      "C": "On Day 1, the gate opened at 10:00.",
+      "S": [
+        {
+          "id": "S1",
+          "locator": "Fictional final event log, Day 1",
+          "text": "The gate opened at 10:00 on Day 1."
+        }
+      ],
+      "Q": "Did the opening-time proposition change, and is the candidate time contradicted?"
+    },
+    {
+      "id": "A04",
+      "kind": "fresh_synthetic",
+      "scope": "Fictional Program P eligibility definition only; the entire record is below, not an article.",
+      "O": "Program P admits residents.",
+      "C": "Program P admits only residents aged 30 or older.",
+      "S": [
+        {
+          "id": "S1",
+          "locator": "Fictional Program P complete eligibility rule",
+          "text": "Program P admits residents of every age; there is no age minimum."
+        }
+      ],
+      "Q": "Did the eligibility proposition change, and is the added age restriction contradicted?"
+    },
+    {
+      "id": "A05",
+      "kind": "fresh_synthetic",
+      "scope": "Fictional tally of one session only; the entire record is below, not an article.",
+      "O": "Exactly six people attended the session.",
+      "C": "The session had exactly six attendees.",
+      "S": [
+        {
+          "id": "S1",
+          "locator": "Fictional final attendance tally",
+          "text": "Exactly six people attended the session."
+        }
+      ],
+      "Q": "Did the attendance proposition change, and is the candidate tally contradicted?"
+    },
+    {
+      "id": "A06",
+      "kind": "fresh_synthetic",
+      "scope": "Fictional speaker attribution and fairness opinion only. The transcript is complete for the quoted utterance; no shared fairness criterion is supplied. Not an article.",
+      "O": "Mira called the fee fair.",
+      "C": "Mira called the fee unfair.",
+      "S": [
+        {
+          "id": "S1",
+          "locator": "Fictional verified transcript, Mira utterance",
+          "text": "Mira: \"The fee is fair.\""
+        }
+      ],
+      "Q": "Did the attributed proposition change? Does C accurately report Mira? Separately, does this packet settle whether the fee is fair?"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "unit_id": "b605ad37",
+  "results": [
+    {
+      "id": "context_1",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_2",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "context_3",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "received_target",
+      "gate_result": "eligible_mismatch",
+      "reasons": [],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "other_measure",
+      "gate_result": "blocked",
+      "reasons": [
+        "property: identity not certified",
+        "incompatible units"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "per_box_mass",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    }
+  ],
+  "limits": "Exact anchor presence and typed arithmetic only; AI semantic binding may be false. Necessary not sufficient."
+}

@@ -1,0 +1,109 @@
+{
+  "gate": {
+    "unit_id": "unit_72f5d09d5937",
+    "article_sha256": "be41c637f7261243f027d9b0c68628e06f6e75458165542ac051da22a591985e",
+    "results": [
+      {
+        "id": "length_target",
+        "gate_result": "eligible_mismatch",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 126센티미터였다.",
+        "article_span": [
+          0,
+          75
+        ],
+        "numeric_span": [
+          65,
+          68
+        ],
+        "original_numeric_token": "126",
+        "article_unit": "cm",
+        "article_value": "126",
+        "expected_value": "125",
+        "normalized_expected_value": "5/4",
+        "dimension": "length"
+      },
+      {
+        "id": "length_other_condition",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: conditions: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "event_year",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "event_month",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "event_day",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "event_hour",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "temperature",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "unit_72f5d09d5937",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 126센티미터였다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "correct_length",
+        "before": "126",
+        "reason": "every comparison must exist and be eligible",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [
+      {
+        "quote": "정확히 126센티미터였다.",
+        "delivered_disposition": "review_required",
+        "reason": "every comparison must exist and be eligible"
+      }
+    ],
+    "local_review_required": [
+      "126",
+      "정확히 126센티미터였다."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

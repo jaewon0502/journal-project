@@ -1,0 +1,132 @@
+{
+  "unit_id": "X196",
+  "claims": [
+    {
+      "id": "C1",
+      "proposition": "연구진의 동물 관찰은 실험실에서 이루어졌다.",
+      "article_quotes": [
+        "연구진은 실험실"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The supplied report explicitly places the observation in a laboratory.",
+      "patch_ids": []
+    },
+    {
+      "id": "C2",
+      "proposition": "관찰한 동물은 성체였다.",
+      "article_quotes": [
+        "성체 동물"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The report explicitly identifies the observed animals as adults.",
+      "patch_ids": []
+    },
+    {
+      "id": "C3",
+      "proposition": "관찰한 동물은 12마리였다.",
+      "article_quotes": [
+        "동물 12마리를 관찰했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        }
+      ],
+      "fact_support": "supported",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "none",
+      "decision": "keep",
+      "rationale_rule": "supported_original",
+      "rationale": "The reported sample size is exactly 12.",
+      "patch_ids": []
+    },
+    {
+      "id": "C4",
+      "proposition": "야생에서도 실험실에서 관찰된 것과 같은 효과가 나타난다.",
+      "article_quotes": [
+        "야생에서도 같은 효과가 나타난다고"
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다."
+        }
+      ],
+      "fact_support": "not_established",
+      "attribution_support": "not_applicable",
+      "edit_necessity": "required",
+      "decision": "repair",
+      "rationale_rule": "unsupported_world_assertion",
+      "rationale": "The report does not establish a matching effect in wild animals. This is unknown, not disproved. The shared local correction preserves that unknown instead of asserting either outcome.",
+      "patch_ids": [
+        "P1"
+      ]
+    },
+    {
+      "id": "C5",
+      "proposition": "이 보고서가 야생에서도 같은 효과가 나타난다는 결론을 입증했다.",
+      "article_quotes": [
+        "야생에서도 같은 효과가 나타난다고 보고서가 입증했다."
+      ],
+      "source_witnesses": [
+        {
+          "document_id": "S1",
+          "quote": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다."
+        }
+      ],
+      "fact_support": "not_applicable",
+      "attribution_support": "overstated",
+      "edit_necessity": "required",
+      "decision": "repair",
+      "rationale_rule": "source_scope_overclaim",
+      "rationale": "The full report explicitly says wild effects cannot be judged from it. Its asserted evidentiary scope must be corrected regardless of whether the effect might occur in the world.",
+      "patch_ids": [
+        "P1"
+      ]
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "claim_ids": [
+        "C4",
+        "C5"
+      ],
+      "before": "나타난다고 보고서가 입증했다.",
+      "after": "나타나는지는 이 보고서로 판단할 수 없다."
+    }
+  ],
+  "full_edited_article": "연구진은 실험실 성체 동물 12마리를 관찰했다. 야생에서도 같은 효과가 나타나는지는 이 보고서로 판단할 수 없다.",
+  "unresolved_items": [],
+  "read_scope": {
+    "policy": "private-artifacts/policy-B.txt",
+    "originals_and_sources": "Read the complete original article and all supplied synthetic source text for each of X081, X124, and X196.",
+    "input_paths": [
+      "private-artifacts/control/inputs/split/X081.json",
+      "private-artifacts/control/inputs/split/X124.json",
+      "private-artifacts/control/inputs/split/X196.json"
+    ],
+    "other_materials_consulted": false
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "unit_id": "F923",
+  "article": {
+    "title": "Finally: Rose-Tinted Solar Panels Could Let Crops And Electricity Share The Same Land",
+    "author": "Jess Cockerill",
+    "publisher": "ScienceAlert",
+    "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+    "dates": {
+      "publication": "2026-10-03",
+      "modification": null,
+      "collection": "2026-10-03T12:25:04Z",
+      "notes": "Publication date displayed on page; modification not displayed in retrieved text."
+    }
+  },
+  "source1": {
+    "title": "Fields of magenta solar panels: the future of farming?",
+    "host": "Scimex / Australian Science Media Centre",
+    "url": "https://www.scimex.org/newsfeed/fields-of-magenta-solar-panels-the-future-of-farming",
+    "dates": {
+      "publication": null,
+      "modification": null,
+      "collection": "2026-10-03T12:25:04Z",
+      "notes": "Publicly released label has no date in retrieved page. Release describes study publishing October 2; this is not assigned as page publication. Expert section updates: Rayudu 29 Sep 2026 10:26am; McNab 29 Sep 2026 12:01pm, timezone unstated. Multimedia modification 03 Oct 2026 1:14am is not the release modification date."
+    },
+    "sections": [
+      {
+        "section": "Opening overview",
+        "provenance": "Scimex editorial summary; individual author not displayed."
+      },
+      {
+        "section": "News release: Broccoli grows well under magenta solar panels",
+        "provenance": "Explicitly From: Cell Press; official publisher study release."
+      },
+      {
+        "section": "Expert Reaction: Dr Ramesh Rayudu",
+        "provenance": "Attributed power systems engineering expert, Victoria University of Wellington; SMC-collected personal comments; No COI stated."
+      },
+      {
+        "section": "Expert Reaction: Dr Sharee McNab",
+        "provenance": "Attributed Research Engineer, Electric Power Engineering Centre, University of Canterbury; SMC-collected personal comments; no conflicts declared."
+      }
+    ]
+  },
+  "lineage": [
+    {
+      "from": "article",
+      "to": "source1",
+      "type": "Direct repeated hyperlinks labeled says/explains, web article link 19."
+    },
+    {
+      "from": "article",
+      "to": "https://doi.org/10.1016/j.xcrp.2026.103555",
+      "type": "Direct study DOI link 18; inaccessible full paper."
+    },
+    {
+      "from": "source1",
+      "to": "https://www.cell.com/cell-reports-physical-science/fulltext/S2666-3864%2826%2900461-3",
+      "type": "Research link 37; inaccessible full paper."
+    }
+  ],
+  "read_scope": {
+    "purpose": "One finite real-case source-grounding/minimal-edit transfer; bounded official study-source evidence.",
+    "language": "English",
+    "topic": "Semi-transparent magenta agrivoltaic panels and broccoli",
+    "article_read": "Full article title, byline, displayed date, body, image captions and editorial footer; web rendered lines 27–95.",
+    "source_read": "Full public official Cell Press release plus Scimex overview, both expert reactions, displayed update dates, multimedia/attachment/funding metadata; rendered lines 55–148. Entire web result through line 161 read.",
+    "exclusions": "Site navigation/ads/recommendations excluded from unit text; retained in retrieval-web.txt. No inaccessible journalist contact details, linked full paper, supplementary methods, or independent replication read.",
+    "primary_paper_status": "DOI redirect inaccessible; Cell fulltext HTTP 403. Collected source is publisher press release and attributed expert commentary, not full paper.",
+    "truncation": false
+  },
+  "integrity": {
+    "article.txt": "84673209785e6d9dcb376a1e98cf2d83dfba7fce55f19f5db616c5827b04129b",
+    "source1.txt": "9cf239fd47f9f4d4ebe79b32677b71563d1b6d8d9196c5fb4c3c7d84b8f5d24d",
+    "retrieval-web.txt": "b40d346a59b270532d1f3eaa076c1e4abcbc58b6eeeacbf80610f4ff0377b0ab"
+  }
+}

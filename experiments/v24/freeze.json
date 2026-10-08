@@ -1,0 +1,74 @@
+{
+  "frozen_at_utc": "2026-10-03T13:17:38.849972+00:00",
+  "phase": "before certificates/editor outputs",
+  "files": [
+    {
+      "name": "cases/e793a06d.json",
+      "sha256": "ed980f974117b14c3ebbb42edd6a3442474291c8a1a201377beaec904292ac78"
+    },
+    {
+      "name": "cases/c73b028a.json",
+      "sha256": "db4cf1798117aa4b4360e97335639023951238f2031eef0795ef24d7eeed51d4"
+    },
+    {
+      "name": "cases/c41f9b20.json",
+      "sha256": "103a98975954c1ec5aa423f97a665dcb9ae04a045e676d3138f7c7511cb9f1fe"
+    },
+    {
+      "name": "cases/a91d4f6e.json",
+      "sha256": "00330f2235e29bb0f0cbb7c9f7348f8e9cc32e1d2102a351165bb5f7632670cf"
+    },
+    {
+      "name": "cases/b605ad37.json",
+      "sha256": "1793793794aff0f5845daee6e97268a403ef9a25f5be8677e4f20be353e44410"
+    },
+    {
+      "name": "cases/f04a782d.json",
+      "sha256": "0d1a65217333e761ce7b75f282ee64424652e14b41ed956a64bb52ef767a8146"
+    },
+    {
+      "name": "cases/a267dc49.json",
+      "sha256": "74dab850302fd93a2da18a25fac4a6c13a1c862949738185b3af9e7fd10f124a"
+    },
+    {
+      "name": "cases/d19ec630.json",
+      "sha256": "616432cc2ff132f6eec18e7d5b1f328c42fffe88f7b1ca08d20c24e8e3225b0a"
+    },
+    {
+      "name": "cases/e28f91c4.json",
+      "sha256": "5f9bf54c75b3e8590c377db8bd57136e5dcfe1278d7bdb04399b9bebf2b156fc"
+    },
+    {
+      "name": "cases/b8e035a1.json",
+      "sha256": "71f369cb513f7a523701d0ec7c4068823524bc7bc8303d5d964a8a8339b7a979"
+    },
+    {
+      "name": "extraction-policy.txt",
+      "sha256": "a959af4d901b963688511c0d4f4ee39bdc03ab10bcc9e509b7a8a030ea2247ae"
+    },
+    {
+      "name": "editor-common.txt",
+      "sha256": "c5c8d3eea5ebd2fa948503ed70bf825fb0803d02792892bdd91b7f2a96fd8bf7"
+    },
+    {
+      "name": "editor-baseline.txt",
+      "sha256": "2f639b60a6a9da5c92f5ad640325a69bfa16466e6aca916173b24e4983a1783a"
+    },
+    {
+      "name": "editor-treatment.txt",
+      "sha256": "4033deb0a8d2795880f7fcc9c2530cc6b63f11f61074a6ed74212cd7b1327fdf"
+    },
+    {
+      "name": "PREREGISTRATION.md",
+      "sha256": "fe0e16ccc29a9cbb12c592e561869a89f003fcfeef4c4d20bd459c60b280ebd9"
+    },
+    {
+      "name": "code/gate.py",
+      "sha256": "e7404b288877644ec71c632bdc2ccfe8be640ebfc3e5e6753a92d151a5c43556"
+    },
+    {
+      "name": "code/test_gate.py",
+      "sha256": "d73acd5f58162b0c94d04075da558cbd94a5a6f760d6a939c19b805d9fe8e460"
+    }
+  ]
+}

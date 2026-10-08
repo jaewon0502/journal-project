@@ -1,0 +1,1509 @@
+{
+  "audit_stage": "POST",
+  "method": "Read frozen own PRE and all twenty anonymous blind JSONs only. Judged actual delivered_text from synthetic S1 premises and frozen PRE, with native proposal errors assessed separately. No mapping, oracle, certificate, policy, other audit, implementation, or earlier experiment files were consulted. No inferred arm grouping or overall numerical score.",
+  "pre_integrity": {
+    "sha256": "625b0c9e21d557c5e2424eea100d075395941355937260cfbc3ee9dcc47db2c9",
+    "unchanged": true
+  },
+  "units": [
+    {
+      "blind_id": "N1301",
+      "unit_id": "a267dc49",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 수료자는 240명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "The total is explicitly 240, also 144+96. The article substitutes the weekend subset for the total.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "96",
+            "after": "240"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1338",
+      "unit_id": "a267dc49",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 수료자는 240명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "The total is explicitly 240, also 144+96. The article substitutes the weekend subset for the total.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "96",
+            "after": "240"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1375",
+      "unit_id": "a91d4f6e",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "reasoning": "West shipped 30, not its reservation total 45. East shipped 45.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "45",
+            "after": "30"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1412",
+      "unit_id": "a91d4f6e",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "reasoning": "West shipped 30, not its reservation total 45. East shipped 45.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "45",
+            "after": "30"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1449",
+      "unit_id": "b605ad37",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "외부 종이 상자와 완충재의 무게는 이 합계에 포함하지 않았다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        }
+      ],
+      "reasoning": "The received contents weigh 8×24=192 kg. Eight is a box count, not the total kg amount.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "8",
+            "after": "192"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1486",
+      "unit_id": "b605ad37",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "외부 종이 상자와 완충재의 무게는 이 합계에 포함하지 않았다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        }
+      ],
+      "reasoning": "The received contents weigh 8×24=192 kg. Eight is a box count, not the total kg amount.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "8",
+            "after": "192"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1523",
+      "unit_id": "b8e035a1",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "Weekend-only graduates equal all weekend graduates because overlap is explicitly zero, hence 96.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1560",
+      "unit_id": "b8e035a1",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reasoning": "Weekend-only graduates equal all weekend graduates because overlap is explicitly zero, hence 96.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1597",
+      "unit_id": "c41f9b20",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 30명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Late users without weekend history = 50−20=30. Twenty is the intersection, not the difference.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "2",
+            "after": "3"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1634",
+      "unit_id": "c41f9b20",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 30명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Late users without weekend history = 50−20=30. Twenty is the intersection, not the difference.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "2",
+            "after": "3"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1671",
+      "unit_id": "c73b028a",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        }
+      ],
+      "reasoning": "The East actual shipment count is exactly 45.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1708",
+      "unit_id": "c73b028a",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+        }
+      ],
+      "reasoning": "The East actual shipment count is exactly 45.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1745",
+      "unit_id": "d19ec630",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "정원은 허용된 최대 등록 인원이고, 실제 등록자 수는 두 공지 모두 공개하지 않았다."
+        }
+      ],
+      "reasoning": "At publication on September 12 the updated capacity 24 immediately applies.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1782",
+      "unit_id": "d19ec630",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "정원은 허용된 최대 등록 인원이고, 실제 등록자 수는 두 공지 모두 공개하지 않았다."
+        }
+      ],
+      "reasoning": "At publication on September 12 the updated capacity 24 immediately applies.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1819",
+      "unit_id": "e28f91c4",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        }
+      ],
+      "reasoning": "The received amount is explicitly eight boxes; contents amount can be expressed in container units without asserting container weight.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1856",
+      "unit_id": "e28f91c4",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        }
+      ],
+      "reasoning": "The received amount is explicitly eight boxes; contents amount can be expressed in container units without asserting container weight.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1893",
+      "unit_id": "e793a06d",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Both the 50-person denominator and the 20-person overlap are supported.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N1930",
+      "unit_id": "e793a06d",
+      "pre_status": "supported",
+      "verdict": "correct exact preservation",
+      "delivered_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reasoning": "Both the 50-person denominator and the 20-person overlap are supported.",
+      "true_error_detection": {
+        "error_needed": false,
+        "native_relation": "supported",
+        "correct": true
+      },
+      "correction": {
+        "needed": false,
+        "completed": null,
+        "mode": "unchanged",
+        "exact_changes": [],
+        "matches_pre_preferred_repair": null,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "Equivalent true rewordings would be unnecessary; none was made."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": true,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    },
+    {
+      "blind_id": "N1967",
+      "unit_id": "f04a782d",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reasoning": "September 5 capacity was 18. The later 24 cannot be applied retrospectively.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "24",
+            "after": "18"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": []
+    },
+    {
+      "blind_id": "N2004",
+      "unit_id": "f04a782d",
+      "pre_status": "contradicted",
+      "verdict": "correct minimal correction",
+      "delivered_text": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+      "delivered_source_correctness": "supported",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "exact_quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "exact_quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reasoning": "September 5 capacity was 18. The later 24 cannot be applied retrospectively.",
+      "true_error_detection": {
+        "error_needed": true,
+        "native_relation": "contradicted",
+        "correct": true
+      },
+      "correction": {
+        "needed": true,
+        "completed": true,
+        "mode": "number-only, target-preserving",
+        "exact_changes": [
+          {
+            "before": "24",
+            "after": "18"
+          }
+        ],
+        "matches_pre_preferred_repair": true,
+        "alternative_valid_repair_used": false,
+        "alternative_repair_note": "PRE alternatives remain possible but none was used; the observed repair is valid without requiring uniqueness."
+      },
+      "normal_preservation": {
+        "entire_original_verbatim": false,
+        "all_text_outside_needed_numeric_change_verbatim": true,
+        "target_preserved": true,
+        "property_preserved": true,
+        "population_preserved": true,
+        "conditions_preserved": true,
+        "time_preserved": true,
+        "unit_preserved": true
+      },
+      "unwanted_uncertainty_or_holds": {
+        "present": false,
+        "native_whole_text_hold": false,
+        "remaining_uncertainty": [],
+        "clause_annotations": [],
+        "delivery_review_required": []
+      },
+      "native_proposal_separate_assessment": {
+        "raw_semantic_errors": [],
+        "full_edited_text_equals_delivery": true,
+        "patches_reproduce_delivery": true,
+        "all_source_quotes_exact": true,
+        "all_clause_quotes_in_original": true,
+        "note": "Source-grounded judgment and proposed text agree with PRE. Mechanism-related assertions, if present, were not verified against any hidden implementation or policy."
+      },
+      "blinding_clues": [
+        "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+      ]
+    }
+  ],
+  "counts_by_pre_status": {
+    "supported": {
+      "unique_units": 5,
+      "anonymous_outputs": 10,
+      "source_supported_deliveries": 10,
+      "correct_native_detection": 10,
+      "needed_corrections_completed": 0,
+      "entire_original_preserved_verbatim": 10,
+      "unnecessary_changes": 0,
+      "unwanted_holds_or_uncertainty": 0,
+      "lost_target_property_population_condition_time_or_unit": 0,
+      "raw_native_semantic_errors": 0,
+      "delivery_native_disagreements": 0
+    },
+    "contradicted": {
+      "unique_units": 5,
+      "anonymous_outputs": 10,
+      "source_supported_deliveries": 10,
+      "correct_native_detection": 10,
+      "needed_corrections_completed": 10,
+      "entire_original_preserved_verbatim": 0,
+      "unnecessary_changes": 0,
+      "unwanted_holds_or_uncertainty": 0,
+      "lost_target_property_population_condition_time_or_unit": 0,
+      "raw_native_semantic_errors": 0,
+      "delivery_native_disagreements": 0
+    },
+    "underdetermined": {
+      "unique_units": 0,
+      "anonymous_outputs": 0,
+      "source_supported_deliveries": 0,
+      "correct_native_detection": 0,
+      "needed_corrections_completed": 0,
+      "entire_original_preserved_verbatim": 0,
+      "unnecessary_changes": 0,
+      "unwanted_holds_or_uncertainty": 0,
+      "lost_target_property_population_condition_time_or_unit": 0,
+      "raw_native_semantic_errors": 0,
+      "delivery_native_disagreements": 0
+    }
+  },
+  "same_unit_pairs": [
+    {
+      "unit_id": "a267dc49",
+      "blind_ids": [
+        "N1301",
+        "N1338"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "blind_ids": [
+        "N1375",
+        "N1412"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "b605ad37",
+      "blind_ids": [
+        "N1449",
+        "N1486"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "b8e035a1",
+      "blind_ids": [
+        "N1523",
+        "N1560"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "c41f9b20",
+      "blind_ids": [
+        "N1597",
+        "N1634"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "c73b028a",
+      "blind_ids": [
+        "N1671",
+        "N1708"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "d19ec630",
+      "blind_ids": [
+        "N1745",
+        "N1782"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "e28f91c4",
+      "blind_ids": [
+        "N1819",
+        "N1856"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "e793a06d",
+      "blind_ids": [
+        "N1893",
+        "N1930"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    },
+    {
+      "unit_id": "f04a782d",
+      "blind_ids": [
+        "N1967",
+        "N2004"
+      ],
+      "delivered_text_identical": true,
+      "native_full_edited_text_identical": true,
+      "assessment": "No delivered semantic or preservation difference. Explanation wording differs; no arm label is inferred."
+    }
+  ],
+  "blinding_limitations": [
+    "Several native proposal reasons explicitly say: The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording. This reveals a processing-mechanism clue and means anonymity is not complete textual blinding. No arm identities are inferred or assigned.",
+    "Comparison IDs such as capacity_at_time and selected_late_members reveal internal target labels but are not used as source evidence. Mechanism claims cannot be established from case sources."
+  ],
+  "interpretation_limits": [
+    "All observed deliveries use PRE-preferred repairs or exact preservation, so alternative-repair ambiguity does not alter these verdicts.",
+    "Counts describe these supplied anonymous outputs only; identical delivered results do not establish that any hidden mechanism helped, harmed, or would generalize.",
+    "The frozen PRE unit-conversion example mechanically retained 이었다 after 상자. A polished box-unit alternative would use 8상자였다. This minor PRE example morphology issue has no effect on any observed delivery; PRE remains unmodified."
+  ],
+  "summary": "Every delivered text is source-supported. Contradicted originals are minimally corrected by changing the quantity number while preserving target, scope, conditions, time and unit; supported originals are preserved exactly. No raw semantic proposal errors, delivery divergences, unwanted holds, or invented uncertainty were observed."
+}

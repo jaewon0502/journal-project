@@ -1,0 +1,71 @@
+{
+  "unit_id": "D174",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "순서표 규칙 적용일은 언제인가? 기록 공개일과 구분한다.",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "yes",
+      "original_quote": "이번 순서표 규칙은 2035년 9월 1일부터 적용된다.",
+      "candidate_quote": "이번 순서표 규칙은 2035년 9월 12일부터 적용된다.",
+      "source_refs": [
+        "S1 제1항(적용일) 및 최종 안내서 범위",
+        "S2 공개일"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "제1항(적용일)",
+            "quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용한다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "자료 범위 및 변경 유무",
+            "quote": "이 자료는 기사와 질문에 관련된 규칙 전문이며 숨겨진 추가 예외나 적용일 변경은 없다."
+          },
+          "relation": "effective_date",
+          "relevance_to_claim": "최종 안내서의 적용일은 9월 2일이다. 후보의 9월 12일과 원문의 9월 1일은 모두 이 날짜와 모순되므로 원문 복원이 아니라 직접 근거에 따른 정정이 필요하다."
+        },
+        {
+          "supporting_clause": {
+            "document_id": "S2",
+            "locator": "첫 예약 기록 공개일",
+            "quote": "공개일 2035년 9월 12일."
+          },
+          "linked_clause": null,
+          "relation": "scope",
+          "relevance_to_claim": "9월 12일은 기록 공개일로만 뒷받침된다. 후보의 별도 공개일 문장은 정확하므로 유지한다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "후보는 적용일을 공개일과 같은 9월 12일로 답한다. 정정 후 적용일은 9월 2일, 공개일은 9월 12일이라는 별도 사실이 된다. 원문의 9월 1일 또한 잘못되어 복원하지 않는다.",
+      "necessity": "yes",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "patch",
+      "reason": "적용일에 대한 명시적 오답이므로 누락이 아니다. 편집으로 원문의 날짜가 바뀌었지만 원문도 사실적 기준이 될 수 없다. 최종 안내서가 확정한 날짜로만 최소 정정하며 공개일과 나머지 의미는 보존한다."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "finding_id": "F1",
+      "before": "2035년 9월 12일부터 적용된다.",
+      "after": "2035년 9월 2일부터 적용된다.",
+      "depends_on": []
+    }
+  ],
+  "preservation_decision": "repair",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "전체 제목·부제·본문·캡션을 검토했다. 적용일의 최소 정정 후 집계 단위, 예약 완료의 제한, 공동 시연의 정의와 예외, 발언 귀속 및 가치 판단의 한계가 모두 유지된다. 공급된 최종 자료는 적용일 변경이 없음을 명시하며 과제 범위에서 남은 오류나 미해결 조건은 확인되지 않았다.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

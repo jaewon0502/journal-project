@@ -1,0 +1,52 @@
+{
+  "collected_at": "2026-10-03T13:53:18.127075+00:00",
+  "article": {
+    "url": "https://www.khan.co.kr/article/202604232039005",
+    "route": "web.open",
+    "original": "article.web.txt",
+    "direct_urllib_status": 403,
+    "full_prose_access": true
+  },
+  "primary": {
+    "landing_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?nttId=10097644&menuNo=201264",
+    "pdf_url": "https://www.bok.or.kr/fileSrc/portal/c7597db684a44fef969442faf012bd20/1/de5d5987539244efa4497079fa5f8182.pdf",
+    "route": "urllib HTTPS public download",
+    "status": 200,
+    "original": "source.pdf",
+    "landing_original": "source.html",
+    "extraction": "pdftotext -layout",
+    "pages": 20
+  },
+  "files": {
+    "source.txt": {
+      "sha256": "7f06c76305251674216c59fe9099327a4f8a8cdaa35ca3b2a5903fdd3c72c1ad",
+      "bytes": 57953
+    },
+    "article.txt": {
+      "sha256": "296e00778cb34d16a8a349a70d7472bfdb08a84fb4b999be3a62c39a7e7eb7b2",
+      "bytes": 2837
+    },
+    "article.web.txt": {
+      "sha256": "050fa145bbbca1b7ac6b511925b5e147ce0635651251a9efea1772094f1fa542",
+      "bytes": 19348
+    },
+    "source.pdf": {
+      "sha256": "d4d12f8316ed88f83c3917476f6721a1d6eda10df61eb32ef03a1de919eedaf4",
+      "bytes": 941207
+    },
+    "unit.json": {
+      "sha256": "e0ed3277c311cb66f97b04835da03d27fe6e46a885cc493de232731e53d0a28a",
+      "bytes": 65247
+    },
+    "source-page3.png": {
+      "sha256": "89cec0140c45a91b84f7a9fa5077fcb452f32f63726e7cf6350c3fc39551f726",
+      "bytes": 141540
+    },
+    "source.html": {
+      "sha256": "f2ab1d2327d494bfb0df380273d854a820342e6cfab257047604e2190f962a3b",
+      "bytes": 407588
+    }
+  },
+  "no_authentication": true,
+  "no_paywall_bypass": true
+}

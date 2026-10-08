@@ -1,0 +1,11 @@
+{
+  "unit_id": "e28f91c4",
+  "kind": "deterministic gated delivery; not native model generation",
+  "full_edited_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+  "accepted_patch_ids": [],
+  "blocked_patches": [],
+  "raw_label_violations": [],
+  "local_review_required": [],
+  "semantic_correctness_certified": false,
+  "raw_output_preserved": true
+}

@@ -1,0 +1,33 @@
+{
+  "unit_id": "U83",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "이 가운데 조건부 승인을 받은 노선안은 12개였다.",
+      "candidate_quote": "이 가운데 조건부 승인을 받은 노선안은 9개였다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "접수 노선안 30개, 철회 6개, 심사 24개, 조건부 승인 9개, 불승인 15개.",
+      "changed_proposition_or_counterexample": "같은 접수 기간의 조건부 승인 수가 12개에서 9개로 바뀌었다. S1은 9개라고 직접 명시하므로 후보는 원문부터 있던 수치 오류를 정당하게 교정했다. 운행 전 차량 안전점검 조건과 나머지 질문의 답은 전체 문맥에 유지된다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "factual_error는 후보 명제 기준으로 no이며, 원문의 12개는 S1과 충돌한다. 숫자의 변화는 복구할 의미손실이 아니라 근거에 맞는 교정이므로 12개로 되돌리는 패치를 제안하지 않는다. 복구가 필요한 국소 쟁점이 없어 hold도 필요하지 않다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 합성 기록 범위에서 후보의 수치 교정과 질문에 대한 필수 답이 뒷받침된다. 주민모임의 비판은 귀속된 발언으로 유지되며 그 내용이 사실로 입증되었다고 단정하지 않는다. 이 판정은 허구 자료 안의 보존 업무에 한정되며 실제 세계의 기사 사실 인증이 아니다."
+}

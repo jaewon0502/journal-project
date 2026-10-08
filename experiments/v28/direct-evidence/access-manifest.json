@@ -1,0 +1,47 @@
+{
+  "recorded": "2026-10-03T15:49:27.493295+00:00",
+  "routes": [
+    {
+      "url": "https://www.sciencedirect.com/science/article/pii/S2666386426004613",
+      "result": "403; first landing request, no retry"
+    },
+    {
+      "url": "https://www.uu.se/en/research/solve/news/archive/2026-02-24-public-phd-defence---silvia-ma-lu-6-march-2026",
+      "result": "full official announcement read; thesis link discovered"
+    },
+    {
+      "url": "https://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Amdh%3Adiva-75386",
+      "result": "500 non-retryable redirect to inaccessible thesis record; no retry"
+    },
+    {
+      "url": "https://mdu.diva-portal.org/smash/record.jsf?pid=diva2%3A2027496",
+      "result": "bot challenge only; no manuscript read, no challenge bypass"
+    },
+    {
+      "url": "https://www2.pv.unsw.edu.au/videos/Silvia-Ma-Lu-3September2026/seminar.php",
+      "result": "official seminar page read; slides linked; video not transcribed"
+    },
+    {
+      "url": "https://www2.pv.unsw.edu.au/videos/Silvia-Ma-Lu-3September2026/slides/Silvia-Ma-Lu-Seminar_SPREE.pdf",
+      "retrieved": "2026-10-03T15:42:40.513951+00:00",
+      "bytes": 8734266,
+      "sha256": "0ff0e2344a3ba8b8614e6b2802b6706ef0a12371dffdcb4a36ce2eea12c1ca23",
+      "status": 200,
+      "prior_failed_url": false
+    },
+    {
+      "url": "https://publires.unicatt.it/en/publications/economic-evaluation-of-one-axis-vertical-and-elevated-agrivoltaic/",
+      "result": "official author-institution metadata/abstract read, not methods"
+    },
+    {
+      "url": "https://publicatt.unicatt.it/handle/10807/328938",
+      "result": "403; no retry"
+    }
+  ],
+  "previous_failed_routes_not_retried": [
+    "DOI10.1016/j.xcrp.2026.103555 redirect",
+    "Cell fulltext",
+    "OpenAlex429"
+  ],
+  "not_equivalent_to_exhaustive_search": true
+}

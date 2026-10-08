@@ -1,0 +1,220 @@
+{
+  "scope": "v19 native article outputs; saved independent AI judgments, not human truth or general accuracy",
+  "writer_outputs": 5,
+  "new_articles": 4,
+  "exposed_source_expansion_regressions": 1,
+  "rows": [
+    {
+      "unit_id": "KO191",
+      "phase": "development",
+      "contract_valid": true,
+      "strict_identity_replay_valid": true,
+      "contract_error": null,
+      "strict_error": null,
+      "patches": 2,
+      "native_unchanged": false,
+      "native_sha256": "a87eca46449e84dfb6b3af5a150c792650a40ba371bf27022ddc49a5e7f2b691",
+      "reference_classification": "necessary_repair",
+      "frozen_necessary_findings": 1,
+      "reference_outcomes": {
+        "safe_success": 1,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0
+      },
+      "additional_outcomes": [],
+      "audit_scoped_assessment": "The sole frozen necessary finding is safely repaired across both original statements. Native article exactly equals mechanical delivery and independently applied patches. No established collateral losses, unnecessary patches, or additional necessary issues. Independent toxicology, raw laboratory evidence and representativeness remain outside supplied evidence.",
+      "decision": "repair",
+      "input_file_chars": 21233,
+      "output_file_chars": 7854
+    },
+    {
+      "unit_id": "EN191",
+      "phase": "development",
+      "contract_valid": true,
+      "strict_identity_replay_valid": true,
+      "contract_error": null,
+      "strict_error": null,
+      "patches": 2,
+      "native_unchanged": false,
+      "native_sha256": "e93ff1bbe31d5b576e01cd09af4a95cad2ece1d1b04f0e1d2955ed79dc82fd99",
+      "reference_classification": "necessary_repair",
+      "frozen_necessary_findings": 1,
+      "reference_outcomes": {
+        "safe_success": 1,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0
+      },
+      "additional_outcomes": [
+        {
+          "issue_id": "I2",
+          "status": "safe_success",
+          "necessity": "yes",
+          "classification": null,
+          "necessity_adjudication": null,
+          "reason": "Necessary tissue-identity correction safely delivered; separate from the frozen reference denominator."
+        }
+      ],
+      "audit_scoped_assessment": {
+        "frozen_necessary_denominator": 1,
+        "reference_safe_success": 1,
+        "reference_failed": 0,
+        "reference_held": 0,
+        "reference_uncertain": 0,
+        "additional_safe_success": 1,
+        "delivery_integrity": "Exact native, mechanical and reconstructed equality; each patch matches once.",
+        "collateral_harm": "None established. Study limits, comparisons, criticism attribution, contemporaneous FDA planned review, captions and dates preserved.",
+        "scope": "Supplied-evidence audit only; no independent verification of CBS/FDA quotations or external law. Two atomic delivered repairs accepted, one in the frozen reference."
+      },
+      "decision": "repair",
+      "input_file_chars": 65476,
+      "output_file_chars": 15876
+    },
+    {
+      "unit_id": "KO192",
+      "phase": "evaluation",
+      "contract_valid": true,
+      "strict_identity_replay_valid": true,
+      "contract_error": null,
+      "strict_error": null,
+      "patches": 1,
+      "native_unchanged": false,
+      "native_sha256": "75095e59a0a6523f0b41d7e8a4af7281baa7a7f80c8a1f226e95eaeb7e782702",
+      "reference_classification": "no_established_necessary_repair",
+      "frozen_necessary_findings": 0,
+      "reference_outcomes": {
+        "safe_success": 0,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0
+      },
+      "additional_outcomes": [
+        {
+          "issue_id": "writer-F1",
+          "status": "safe_success",
+          "necessity": "no_established_necessity",
+          "classification": "safe_optional_clarification",
+          "necessity_adjudication": null,
+          "reason": "Scope detail is correctly delivered and source-backed; it is unnecessary under the important-errors-only editing mandate. Not counted as repair of a frozen necessary issue."
+        }
+      ],
+      "audit_scoped_assessment": {
+        "delivery_integrity": "pass: native equals mechanical and reconstructed patch output",
+        "necessary_repairs": "No established necessary repairs in independent or frozen review; denominator remains zero.",
+        "unnecessary_patches": 1,
+        "new_meaning_losses": 0,
+        "assessment": "Writer safely clarifies historical sampling scope but overstates necessity. No collateral loss identified. Scope-limited finding, not global truth certification.",
+        "limitations": "Later-modified source cannot establish contemporaneous exact wording or precise announcement date; underlying test/enforcement records unavailable."
+      },
+      "decision": "repair",
+      "input_file_chars": 19611,
+      "output_file_chars": 4499
+    },
+    {
+      "unit_id": "EN192",
+      "phase": "evaluation",
+      "contract_valid": true,
+      "strict_identity_replay_valid": true,
+      "contract_error": null,
+      "strict_error": null,
+      "patches": 3,
+      "native_unchanged": false,
+      "native_sha256": "6a542f10fd3eb49f7df5a87af15ff74062479ac7d625b014121f4e8b1b073be7",
+      "reference_classification": "necessary_repair",
+      "frozen_necessary_findings": 1,
+      "reference_outcomes": {
+        "safe_success": 1,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0
+      },
+      "additional_outcomes": [
+        {
+          "issue_id": "I2",
+          "status": "safe_success",
+          "necessity": null,
+          "classification": null,
+          "necessity_adjudication": "Disputed: independently necessary; frozen reference optional/ambiguous",
+          "reason": "Prevalence alone is presented as evidence of intentional coating without the source’s directly relevant competing explanations. Delivered wording resolves this proposition without changing unrelated claims."
+        },
+        {
+          "issue_id": "I3",
+          "status": "safe_success",
+          "necessity": null,
+          "classification": null,
+          "necessity_adjudication": "Disputed: independently necessary; frozen reference optional/ambiguous",
+          "reason": "All 39 underwent targeted analysis; only 13 selected samples underwent suspect screening. Delivered wording resolves this proposition without changing unrelated claims."
+        }
+      ],
+      "audit_scoped_assessment": {
+        "frozen_necessary_denominator": 1,
+        "safe_success": 1,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0,
+        "delivery_integrity": "Exact match between native, supplied mechanical and independently applied article.",
+        "collateral_meaning_losses": 0,
+        "necessity_sensitivity": "Frozen denominator remains one. Independent pre-reference audit found two additional necessary issues; reference reasonably regards both as optional or ambiguous. Under stricter reference minimality, two accurate clarifications are unnecessary patches, not failed corrections or new factual errors. Earlier judgments remain unchanged.",
+        "scope": "Successful repair of the sole frozen necessary issue, with two supported but necessity-disputed clarifications; no global factual certification."
+      },
+      "decision": "repair",
+      "input_file_chars": 56975,
+      "output_file_chars": 22687
+    },
+    {
+      "unit_id": "EXK183",
+      "phase": "regression",
+      "contract_valid": true,
+      "strict_identity_replay_valid": true,
+      "contract_error": null,
+      "strict_error": null,
+      "patches": 4,
+      "native_unchanged": false,
+      "native_sha256": "91ee8773a278d6bc4e031136e19d00354a9a5ef15f709b8fedb55cec86af2a20",
+      "reference_classification": "necessary_repair",
+      "frozen_necessary_findings": 1,
+      "reference_outcomes": {
+        "safe_success": 1,
+        "failed": 0,
+        "held": 0,
+        "uncertain": 0
+      },
+      "additional_outcomes": [
+        {
+          "issue_id": "I2",
+          "status": "safe_success",
+          "necessity": null,
+          "classification": null,
+          "necessity_adjudication": null,
+          "reason": "Accurately restores the source barrier endpoint without claiming human cell walls."
+        },
+        {
+          "issue_id": "I3",
+          "status": "safe_success",
+          "necessity": null,
+          "classification": null,
+          "necessity_adjudication": null,
+          "reason": "Corrects material specificity in the body and subtitle together."
+        }
+      ],
+      "audit_scoped_assessment": {
+        "frozen_necessary_denominator": 1,
+        "reference_safe_success": 1,
+        "reference_failed": 0,
+        "reference_held": 0,
+        "reference_uncertain": 0,
+        "additional_independent_safe_repairs": 2,
+        "delivery_integrity": "Exact native/mechanical/reconstructed equality confirmed.",
+        "assessment": "The one frozen necessary issue is safely repaired. Two additional independently identified local corrections are supported and safe; reference differs on whether they warrant material necessary-repair status. No denominator expansion, collateral meaning loss, unnecessary hold or unsupported new factual claim established. Unverified original context remains outside scope.",
+        "sensitivity": "Using reference materiality threshold, classify the two additional repairs as optional supported precision changes, not additional denominator successes. Prior independent judgment is preserved unchanged."
+      },
+      "decision": "repair",
+      "input_file_chars": 91914,
+      "output_file_chars": 13155
+    }
+  ],
+  "input_file_chars_total": 255209,
+  "output_file_chars_total": 64071,
+  "limits": "Exact deployment/seed/tokens/cost unavailable. Unicode file characters exclude hidden prompts; audits/retrieval not included. Strict replay is not a new model run. Frozen reference omissions and necessity disagreements remain separate."
+}

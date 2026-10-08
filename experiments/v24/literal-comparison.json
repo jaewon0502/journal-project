@@ -1,0 +1,82 @@
+[
+  {
+    "unit_id": "a267dc49",
+    "same_native_text": true,
+    "baseline_patches": 1,
+    "enforced_patches": 1,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "a91d4f6e",
+    "same_native_text": true,
+    "baseline_patches": 1,
+    "enforced_patches": 1,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "b605ad37",
+    "same_native_text": true,
+    "baseline_patches": 1,
+    "enforced_patches": 1,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "b8e035a1",
+    "same_native_text": true,
+    "baseline_patches": 0,
+    "enforced_patches": 0,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "c41f9b20",
+    "same_native_text": true,
+    "baseline_patches": 1,
+    "enforced_patches": 1,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "c73b028a",
+    "same_native_text": true,
+    "baseline_patches": 0,
+    "enforced_patches": 0,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "d19ec630",
+    "same_native_text": true,
+    "baseline_patches": 0,
+    "enforced_patches": 0,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "e28f91c4",
+    "same_native_text": true,
+    "baseline_patches": 0,
+    "enforced_patches": 0,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "e793a06d",
+    "same_native_text": true,
+    "baseline_patches": 0,
+    "enforced_patches": 0,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  },
+  {
+    "unit_id": "f04a782d",
+    "same_native_text": true,
+    "baseline_patches": 1,
+    "enforced_patches": 1,
+    "baseline_annotations": 0,
+    "enforced_annotations": 0
+  }
+]

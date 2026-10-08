@@ -1,0 +1,375 @@
+{
+  "phase": "PRE",
+  "audit": "independent_semantic_audit_two",
+  "basis": "Only ten supplied case JSONs; synthetic source premises, not external fact verification.",
+  "construction_labels": "unknown; not inferred",
+  "units": [
+    {
+      "unit_id": "a267dc49",
+      "construction_condition": "unknown",
+      "status": "actual_numerical_conflict",
+      "original_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 수료자는 240명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reason": "The article targets all deduplicated first-half course completers: 144 + 96 = 240. 96 is only the weekend subgroup.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "96명",
+          "with": "240명",
+          "article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다."
+        }
+      ],
+      "preferred_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 240명이었다.",
+      "protected_conditions": [
+        "전체 수료자",
+        "2026년 상반기",
+        "기초 수선 강좌",
+        "unique people; no overlap and no additional day types",
+        "completion, not enrollment; attendance threshold 80%"
+      ],
+      "repair_boundaries": [
+        "Changing 전체 to 주말반 would replace the target rather than repair its count."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "construction_condition": "unknown",
+      "status": "actual_numerical_conflict",
+      "original_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "오후에는 추가 입고나 발송이 없었다."
+        }
+      ],
+      "reason": "West actually dispatched 30 that day. 45 refers to West reservations or East actual dispatch, neither the article target.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "45개",
+          "with": "30개",
+          "article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다."
+        }
+      ],
+      "preferred_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+      "protected_conditions": [
+        "서부 보관소",
+        "2026년 4월 8일 확정 실적",
+        "실제 발송",
+        "꾸러미 count, not household members",
+        "next-day planned shipments excluded"
+      ],
+      "repair_boundaries": [
+        "Changing 서부 to 동부 or 실제 발송 to 예약 changes the claim target/status."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "b605ad37",
+      "construction_condition": "unknown",
+      "status": "actual_numerical_conflict",
+      "original_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "외부 종이 상자와 완충재의 무게는 이 합계에 포함하지 않았다."
+        }
+      ],
+      "reason": "8 boxes × 24 kg net per box = 192 kg net. A count of boxes cannot be copied as kilograms.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "8킬로그램",
+          "with": "192킬로그램",
+          "article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다."
+        },
+        {
+          "replace": "8킬로그램",
+          "with": "8상자",
+          "article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자이었다."
+        }
+      ],
+      "preferred_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+      "protected_conditions": [
+        "2026년 5월 14일",
+        "납품번호 L514",
+        "건조 렌틸콩",
+        "내용물 기준",
+        "actual inspected full delivery, not order or monthly total"
+      ],
+      "repair_boundaries": [
+        "Changing 8킬로그램 to 8상자 is also a legitimate localized unit repair: same delivered quantity in the source-supported box unit."
+      ],
+      "unknowns": "Gross weight and meals served are undisclosed."
+    },
+    {
+      "unit_id": "b8e035a1",
+      "construction_condition": "unknown",
+      "status": "supported",
+      "original_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이번 기수에는 두 유형을 모두 수료한 사람이 없었으며, 그 밖의 요일 유형도 운영하지 않았다."
+        }
+      ],
+      "reason": "Weekend-only completers equal weekend completers because nobody completed both types. The stated 96 is supported.",
+      "legitimate_minimal_repairs": [],
+      "preferred_article": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "protected_conditions": [
+        "주말반 수료자",
+        "2026년 상반기",
+        "기초 수선 강좌",
+        "deduplicated completers, not enrollment"
+      ],
+      "repair_boundaries": [
+        "Do not replace subgroup 96 with overall total 240."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "c41f9b20",
+      "construction_condition": "unknown",
+      "status": "actual_numerical_conflict",
+      "original_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "집계에는 회원 100명의 해당 월 방문 기록이 빠짐없이 포함돼 있다."
+        }
+      ],
+      "reason": "Within the late-use set of 50, the 20 weekend users are excluded by 없는: 50 − 20 = 30. The denominator/reference set stays 50.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "20명",
+          "with": "30명",
+          "article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 30명이었다."
+        }
+      ],
+      "preferred_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 30명이었다.",
+      "protected_conditions": [
+        "2026년 7월",
+        "공동 작업실",
+        "오후 8시 이후",
+        "회원 50명 중",
+        "주말 이용 기록이 없는",
+        "unique members; monthly conditions need not occur on same visit"
+      ],
+      "repair_boundaries": [
+        "Changing 없는 to 있는 destroys the protected negation and substitutes the intersection claim.",
+        "Do not substitute total non-weekend users 40 or union count 90."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "c73b028a",
+      "construction_condition": "unknown",
+      "status": "supported",
+      "original_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "오후에는 추가 입고나 발송이 없었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이 보고서는 해당 날짜의 확정 실적이며, 다음 날 예정 물량은 당일 실적에 넣지 않았다."
+        }
+      ],
+      "reason": "East actually dispatched all 45. West’s 30 is a different target, not contradictory evidence.",
+      "legitimate_minimal_repairs": [],
+      "preferred_article": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "protected_conditions": [
+        "동부 보관소",
+        "2026년 4월 8일 확정 실적",
+        "실제 발송",
+        "꾸러미 count"
+      ],
+      "repair_boundaries": [
+        "Do not replace 45 with West’s 30."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "d19ec630",
+      "construction_condition": "unknown",
+      "status": "supported",
+      "original_article": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reason": "At the specified September 12 18:00 notice, the capacity is 24. Earlier capacity 18 refers to a different effective time.",
+      "legitimate_minimal_repairs": [],
+      "preferred_article": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "protected_conditions": [
+        "2026년 9월 12일 오후 6시",
+        "공지 당시",
+        "도자기 야간반",
+        "정원 (maximum permitted registration, not actual registrants)"
+      ],
+      "repair_boundaries": [
+        "Do not replace 24 with earlier capacity 18."
+      ],
+      "unknowns": "Actual registration counts are undisclosed."
+    },
+    {
+      "unit_id": "e28f91c4",
+      "construction_condition": "unknown",
+      "status": "supported",
+      "original_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "구매 계약서에는 수량을 상자로 적었고, 창고 입고 장부에는 같은 물량을 킬로그램으로 적었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "두 문서는 같은 납품번호를 사용한다."
+        }
+      ],
+      "reason": "8 boxes is supported and equivalent to 192 kg net contents. 내용물 기준 does not make the explicitly supported box count a numerical conflict.",
+      "legitimate_minimal_repairs": [],
+      "preferred_article": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "protected_conditions": [
+        "2026년 5월 14일",
+        "납품번호 L514",
+        "건조 렌틸콩",
+        "내용물 기준",
+        "8상자",
+        "actual inspected delivery"
+      ],
+      "repair_boundaries": [
+        "Preserve the supported original; conversion to 192킬로그램 is unnecessary."
+      ],
+      "unknowns": "Gross weight and meals served are undisclosed."
+    },
+    {
+      "unit_id": "e793a06d",
+      "construction_condition": "unknown",
+      "status": "supported",
+      "original_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "두 조건은 각각 월간 기록 전체에서 확인했으므로, 같은 날짜의 방문에서 두 조건을 동시에 충족할 필요는 없었다."
+        }
+      ],
+      "reason": "The article asks for the intersection of late users and weekend users, explicitly 20 among the late-use set of 50.",
+      "legitimate_minimal_repairs": [],
+      "preferred_article": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "protected_conditions": [
+        "2026년 7월",
+        "공동 작업실",
+        "오후 8시 이후",
+        "회원 50명 중",
+        "주말 이용 기록이 있는",
+        "monthly member-level overlap, not necessarily simultaneous weekend-night visits"
+      ],
+      "repair_boundaries": [
+        "Do not change 20 to complement count 30 or impose a same-visit requirement."
+      ],
+      "unknowns": "No uncertainty prevents adjudicating the article claim."
+    },
+    {
+      "unit_id": "f04a782d",
+      "construction_condition": "unknown",
+      "status": "actual_numerical_conflict",
+      "original_article": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "변경은 새 공지 게시 시점부터 적용됐으며, 앞선 날짜의 공지를 소급해서 고친 것은 아니다."
+        }
+      ],
+      "reason": "The article specifies September 5 18:00, when capacity was 18. The increase to 24 applies from September 12 and is not retroactive.",
+      "legitimate_minimal_repairs": [
+        {
+          "replace": "24명",
+          "with": "18명",
+          "article": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다."
+        }
+      ],
+      "preferred_article": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+      "protected_conditions": [
+        "2026년 9월 5일 오후 6시",
+        "공지 당시",
+        "도자기 야간반",
+        "정원 (capacity rather than actual enrollment)"
+      ],
+      "repair_boundaries": [
+        "Changing September 5 to September 12 changes the protected temporal target."
+      ],
+      "unknowns": "Actual registration counts are undisclosed."
+    }
+  ]
+}

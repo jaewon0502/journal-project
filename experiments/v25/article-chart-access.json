@@ -1,0 +1,12 @@
+{
+  "url": "https://img.khan.co.kr/news/2026/04/23/l_2026042401000726200075751.jpg",
+  "collected_at": "2026-10-03T13:55:32.855221+00:00",
+  "status": 200,
+  "bytes": 57464,
+  "sha256": "49aae10e87c229a96c60c8a4eb06142daa483005a0ff4cc4d1682f05d7eb97df",
+  "discovery": "Public web-reader article link 87",
+  "alt_in_web_reader": "반도체 중심 수출 호조에…1분기 1.7% ‘깜짝 성장’",
+  "caption_in_web_reader": null,
+  "retrieval": "One ordinary urllib HTTPS GET to discovered public image URL; no credentials, no custom headers or 403 workaround",
+  "original": "supplement-article-chart.jpg"
+}

@@ -1,0 +1,95 @@
+{
+  "ko": {
+    "id": "ko-mobile-resident-id-20250209",
+    "article": {
+      "url": "https://www.yna.co.kr/view/AKR20250209017100530",
+      "title": "모바일 주민등록증 발급, 14일부터 전국으로 단계적 확대 | 연합뉴스",
+      "dates": {
+        "published": "2025-02-09T12:00:02+09:00",
+        "modified": "2025-02-09T12:00:02+09:00",
+        "collected": "2026-10-03T11:18:31.484514+00:00"
+      }
+    },
+    "sources": [
+      {
+        "id": "mois-original-release",
+        "url": "https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000008&nttId=115585",
+        "title": "모바일 주민등록증 발급 2월 14일부터 단계적 전국 확대",
+        "dates": {
+          "published_online": "2025-02-09T12:00:00+09:00",
+          "print_release": "2025-02-10 morning edition",
+          "landing_registered": "2025-02-10",
+          "modified": null,
+          "collected": "2026-10-03T11:22:14.264058+00:00"
+        }
+      }
+    ],
+    "scope": {
+      "language": "ko",
+      "domain": "public procedure / digital identity",
+      "article": "Complete article headline, subheads, main text, captions, byline and end matter extracted from original publisher story-news DOM; page navigation excluded.",
+      "primary": "Full four-page MOIS release: all four official HWPX viewer HTML pages extracted; all four corresponding PDF viewer raster page images downloaded and visually read. Page 4 consists chiefly of specimen ID images; embedded image text is not transcribed into text but preserved in page image.",
+      "as_of": "Announcement made 2025-02-09; no claim of current rules validation.",
+      "collection": "Fresh collection of previously unselected topic, not assertion of recent publication."
+    }
+  },
+  "en": {
+    "id": "v22-new-en-altermagnetism",
+    "article": {
+      "id": "article",
+      "url": "https://www.sciencealert.com/no-longer-just-north-and-south-a-new-material-joins-the-third-type-of-magnetism",
+      "dates": {
+        "collected_at_utc": "2026-10-03T11:18:53.172668+00:00",
+        "published": "2026-10-02T11:00:00+00:00",
+        "modified": null,
+        "modified_status": "No dateModified in NewsArticle JSON-LD or article modified meta tag observed"
+      }
+    },
+    "sources": [
+      {
+        "id": "primary",
+        "url": "https://www.nature.com/articles/s41467-026-76784-x",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:18:55.633910+00:00",
+          "published": "2026-08-20",
+          "modified": null,
+          "received": "2025-06-11",
+          "accepted": "2026-08-06",
+          "version_of_record": "2026-09-18",
+          "modified_status": "No explicit modification date observed; version-of-record date preserved separately"
+        }
+      },
+      {
+        "id": "institution",
+        "url": "https://www.ucf.edu/news/ucf-researcher-discovers-experimental-evidence-of-new-type-of-magnetism/",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:18:56.157747+00:00",
+          "published": "2026-09-18T17:48:07+00:00",
+          "modified": "2026-10-01T19:31:57+00:00"
+        }
+      },
+      {
+        "id": "supplement",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-76784-x/MediaObjects/41467_2026_76784_MOESM1_ESM.pdf",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:19:12.840379+00:00",
+          "published": null,
+          "modified": null,
+          "document_date": "2026-07-31",
+          "date_status": "Document cover date only; separate publication/modification dates not established"
+        }
+      }
+    ],
+    "scope": {
+      "collection": "one actual English science-news article and its directly linked primary research, institutional release, and primary supplementary information",
+      "selection_basis": "new context outside excluded topics; full article and full open-access primary evidence obtainable; no expected error, answer, or patch selected",
+      "article_body": "complete article DOM text, including headline, byline, captions, publication display, and closing editorial notice",
+      "primary_body": "complete publisher article DOM, including abstract, body, methods, figure captions, references, declarations and publication-history metadata; embedded related-article promotional entries retained as publisher DOM context, not primary evidence",
+      "supplement": "complete PDF textual extraction; figure graphics not visually inspected",
+      "not_accessed": "linked historical research and general background links; primary data files; publisher peer-review supplement",
+      "language": "English",
+      "read_scope": "Collector read the complete article and primary extracted text, institutional body, and all eight pages of supplementary textual extraction. Raw HTML captured; no graphical-figure inspection, raw-data analysis, reference-paper reading, or peer-review-file reading.",
+      "institution_body": "Headline and byline from page h1/JSON-LD plus complete body and captions through funding statement; More Topics and subsequent promotional footer removed, original DOM extraction separately retained"
+    }
+  }
+}

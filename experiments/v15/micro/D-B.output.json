@@ -1,0 +1,68 @@
+[
+  {
+    "id": "M71",
+    "new_harm_vs_original": "yes",
+    "required_answer_missing": "yes",
+    "source_conflict": "yes",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "context_only",
+    "p1_new_break": "no",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "지난해 합계 9개라는 원래 과거 기록",
+        "origin": "original",
+        "importance": "required",
+        "source_quote": "지난해 합계는 9개였다.",
+        "original_quote": "지난해 합계는 9개였다.",
+        "candidate_quote": "지난해 합계는 10개였다."
+      }
+    ],
+    "reason": "원문은 현재 붉은 구슬 5개가 자료와 다르지만 지난해 합계 9개는 정확하다. P1 단독은 현재 수를 6개와 4개로 바로잡으면서 지난해 9개를 보존한다. 현재 합계 10개는 두 색의 수로 계산되며 지난해 수와 일치할 필요가 없다. P2 단독은 현재의 오류를 남기고 지난해를 10개로 바꾸는 새 오류를 만든다. P1+P2도 이 과거 기록 훼손을 유지하므로 자료와 충돌하고 과거 기록 보존 요구를 충족하지 못한다. P2는 P1의 안전 적용에 필요하지 않으며 복원도 하지 않는다. 필요한 것은 배경 추가가 아니라 원래 정확한 과거 기록의 보존이다."
+  },
+  {
+    "id": "M24",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "no",
+    "dependency_p1_p2": "requires",
+    "p1_new_break": "yes",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [
+      {
+        "item": "자료에만 있는 지난해 합계 9개",
+        "origin": "source_only",
+        "importance": "optional",
+        "source_quote": "지난해 합계는 9개였다.",
+        "original_quote": "현재 합계는 9개였다.",
+        "candidate_quote": "현재 합계는 10개였다."
+      }
+    ],
+    "reason": "원문의 5+4=9는 내부적으로 일치하지만 현재 붉은 구슬 수와 현재 합계가 자료와 다르다. P1 단독은 6+4=10인데 현재 합계를 9개로 남겨 원문에 없던 산술 모순을 만든다. P2 단독 역시 5+4=9인데 현재 합계만 10개가 되어 모순이 생긴다. P1+P2는 6+4=10으로 일치하며 자료의 현재 수치도 모두 충족한다. 따라서 P1이 새로 만든 모순을 없애려면 P2가 필요하다. 원문의 표현은 명시적으로 현재 합계이므로 이를 바로잡는 것은 과거 기록 손실이 아니다. 지난해 9개는 자료에만 있으며 원래 과거 기록 보존 요구가 이 배경의 추가까지 요구하지는 않는다."
+  },
+  {
+    "id": "M83",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "context_only",
+    "p1_new_break": "no",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [],
+    "reason": "원문부터 총 11개와 5+4=9가 모순된다. P1 단독에서는 총 11개와 6+4=10이 어긋나지만 기존 합계 모순이 남은 것이며 새로 생긴 모순은 아니다. P2 단독에서도 총 10개와 5+4=9가 어긋나 기존 문제가 남는다. P1+P2는 총 10개와 6+4=10으로 모순을 해소하고 자료의 수치를 모두 충족한다. P2는 완전한 정정에는 필요하지만 P1이 새로 만든 파손을 막는 선행 조건은 아니므로 context_only다. 원래 잘못된 수치를 고친 데 따른 정당한 정보 손실은 없다."
+  },
+  {
+    "id": "M46",
+    "new_harm_vs_original": "no",
+    "required_answer_missing": "no",
+    "source_conflict": "no",
+    "background_addition_necessary": "not_applicable",
+    "dependency_p1_p2": "requires",
+    "p1_new_break": "yes",
+    "criticism_preserved": "not_applicable",
+    "missed_items": [],
+    "reason": "원문은 자료와 달리 총 9개와 빨간 것 5개라고 하지만 5+4=9로 내부 합계는 일치한다. P1 단독은 총 9개를 둔 채 6+4=10으로 바꾸므로 합계 모순을 새로 만든다. P2 단독도 총 10개와 5+4=9가 어긋나 원문에 없던 모순이 생긴다. P1+P2는 총 10개와 6+4=10으로 일치를 복원하며 자료와도 맞는다. 따라서 P1 단독의 새 파손을 막기 위해 P2가 필요하다. 전체 후보에서는 이 파손이 해소되었으므로 새 손해나 자료 충돌이 없고, 잘못된 원래 수치의 정정은 필수 정보 누락이 아니다."
+  }
+]

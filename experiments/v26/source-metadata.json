@@ -1,0 +1,245 @@
+[
+  {
+    "unit_id": "R261",
+    "article": {
+      "id": "A202"
+    },
+    "sources": [
+      {
+        "id": "S2",
+        "url": "https://www.europarl.europa.eu/news/en/press-room/20240308IPR19015/artificial-intelligence-act-meps-adopt-landmark-law",
+        "date": "2024-03-13",
+        "scope": "Selected complete paragraphs from directly acquired official page; excerpt packet, not complete source. Full downloaded HTML and extracted text archived privately. No search-summary substitution."
+      }
+    ],
+    "scope": "Complete article title, standfirst, unique captions, subheadings and body; excluded navigation, newsletters, adverts and related-story cards. Official source text is selected complete paragraphs, not full document."
+  },
+  {
+    "unit_id": "R262",
+    "article": {
+      "url": "https://www.theguardian.com/uk-news/2024/dec/03/uk-delays-full-shift-to-digital-immigration-system-amid-evisa-flaws",
+      "title": "Use expired ID to get to UK, says minister in charge of flawed eVisas",
+      "published": "2024-12-03T19:56:00Z (visible first-publication timestamp)",
+      "modified": "2024-12-03T22:22:19.000Z",
+      "collected": "2026-10-03T08:44:47.032903+00:00",
+      "article_kind": "independent newsroom news article",
+      "body_scope": "Complete headline, standfirst, visible author/date line, lead photo caption and all article body paragraphs including inset caption; no arbitrary truncation. Repeated responsive copy of lead caption included once. Navigation, related stories, topic links and donation/sharing widgets excluded. Current fetched version; original HTML preserved."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.gov.uk/government/news/visa-holders-should-switch-to-an-evisa-now",
+        "title": "Visa holders should switch to an eVisa now",
+        "published": "2024-12-04",
+        "collected": "2026-10-03T08:44:47.032903+00:00",
+        "version": "Dated Home Office news release fetched in current HTML; no update date displayed",
+        "read_scope": "Entire headline, lead, attribution/date and full substantive release body including all minister quotation paragraphs. Decorative image and site navigation excluded.",
+        "lineage": "Primary Home Office release published the following day: later evidence about the same transition; cannot establish what reporter knew on December 3. Does not substantiate unnamed insiders or independently verify campaigner comments."
+      }
+    ],
+    "scope": "Source scope/version metadata retained per document."
+  },
+  {
+    "unit_id": "R263",
+    "article": {
+      "url": "https://www.newstree.kr/newsView/ntr202203250001",
+      "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+      "published": "2022-03-25T11:50:40+09:00",
+      "modified": null,
+      "collected": "2026-10-03T08:46:09.225101+00:00",
+      "article_kind": "independent_newsroom_report",
+      "body_scope": "Complete headline, byline, two-line subtitle, all nine body paragraphs from publisher web-open extraction lines 29–55. No text caption was present for lead image in accessible extraction. Image pixels and embedded YouTube video not transcribed; navigation, social controls, related stories and footer excluded. Original wording and apparent source typos retained; no prose truncated."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.researchgate.net/profile/Andre-Vethaak/publication/359440451_Journal_Pre-proofs_Full_length_article_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood_Discovery_and_quantification_of_plastic_particle_pollution_in_human_blood/links/623c88cf2a1c362627354edd/Journal-Pre-proofs-Full-length-article-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood-Discovery-and-quantification-of-plastic-particle-pollution-in-human-blood.pdf",
+        "title": "Discovery and quantification of plastic particle pollution in human blood",
+        "published": "2022-03-24",
+        "collected": "2026-10-03T08:46:09.225101+00:00",
+        "version": "Author-uploaded journal pre-proof, public ResearchGate upload dated March 24 2022; received 2021-12-21, revised 2022-03-11, accepted 2022-03-18; not final version of record.",
+        "read_scope": "Complete downloadable pre-proof PDF text (cover, abstract, introduction, methods, results and discussion, conclusion, tables, figure caption, declarations, references and end matter) extracted using pdftotext -layout. Figure pixels not transcribed; separately referenced supplemental Tables S1/S2 not supplied in this PDF.",
+        "lineage": "Original Leslie et al. primary research, DOI 10.1016/j.envint.2022.107199. Article directly links ScienceDirect version; publisher access was proxy-blocked, so publicly author-uploaded pre-proof on ResearchGate was acquired through its ordinary Download file PDF link, HTTP200; no access-control bypass."
+      }
+    ],
+    "scope": "Source scope/version metadata retained per document."
+  },
+  {
+    "unit_id": "R264",
+    "article": {
+      "url": "https://people.com/arsenic-lead-toxic-metals-found-in-tampons-8675213",
+      "title": "Arsenic, Lead, 14 Other ‘Toxic Metals’ Found in Tampons, According to Study",
+      "published": "2024-07-09T15:16:00-04:00",
+      "modified": null,
+      "collected": "2026-10-03T09:31:19.361514+00:00",
+      "article_kind": "independent newsroom report",
+      "body_scope": "Full headline, subtitle, byline, date, both photo captions/credits and every article body paragraph. Site navigation, author bio, newsletter promotion, image alt duplicates, comment controls and related stories excluded. Public web-open extraction; link labels retained. No article prose truncation."
+    },
+    "sources": [
+      {
+        "id": "S1",
+        "url": "https://www.researchgate.net/publication/381659180_Tampons_as_a_source_of_exposure_to_metalloids",
+        "title": "Tampons as a source of exposure to metal(loid)s",
+        "published": "2024-06-22",
+        "collected": "2026-10-03T09:31:19.361514+00:00",
+        "version": "Environment International 190 (2024) 108849; author upload July 10 2024; doi:10.1016/j.envint.2024.108849",
+        "read_scope": "Complete paper text from title and abstract through Introduction, Materials & Methods (2.1–2.3), Results (3.1–3.3), Discussion (4–4.2), Funding, declarations and Supplementary data pointer. Includes Tables 1 and 2, figure captions, method detection and quantification limit definitions, handling of sub-MDL observations. References and supplementary file not included. Public author-upload extraction lines 75–1436, consecutively merged across overlapping reads; PDF line wraps retained; fi/fl encoding repaired.",
+        "lineage": "Primary research paper, publicly uploaded by coauthor Kathrin Schilling; not a news summary. Publisher landing URL returned 403; no authentication or paywall bypass used."
+      }
+    ],
+    "scope": "Source scope/version metadata retained per document."
+  },
+  {
+    "unit_id": "R265",
+    "article": {
+      "url": "https://www.yna.co.kr/view/AKR20250228035100004",
+      "title": "서울시, 잔류농약 검사항목 확대…급식·시민 먹거리 안전 강화",
+      "published": "2025-02-28T11:15:02+09:00",
+      "modified": "2025-02-28T11:15:02+09:00",
+      "collected": "2026-10-03T09:31:32.283284+00:00",
+      "article_kind": "independent newsroom news report",
+      "body_scope": "Complete headline, all published subtitle text when present, article body, byline/email and editorial image captions. Site navigation, ads, related stories, sharing widgets and legal footer excluded. No substantive article paragraphs omitted."
+    },
+    "sources": [
+      {
+        "id": "KO192-S1",
+        "url": "https://sihe.seoul.go.kr/archives/555415",
+        "title": "서울시, 잔류농약 검사 항목 확대…시민 먹거리 안전 강화",
+        "published": null,
+        "collected": "2026-10-03T09:31:32.283284+00:00",
+        "version": "Public HTML collected 2026-10-03T09:31:32.283284+00:00; page displays modified 2025-03-24",
+        "read_scope": "Complete substantive official release, including all sampling, test categories, results, contextual notes and contact paragraphs; tags, navigation and sharing controls excluded.",
+        "lineage": "Original issuing authority: Seoul Metropolitan Government Research Institute of Public Health and Environment; page shows modification date 2025-03-24, later than the article."
+      }
+    ],
+    "scope": "Source scope/version metadata retained per document."
+  },
+  {
+    "unit_id": "R266",
+    "article": {
+      "id": "article",
+      "url": "https://www.sciencealert.com/no-longer-just-north-and-south-a-new-material-joins-the-third-type-of-magnetism",
+      "dates": {
+        "collected_at_utc": "2026-10-03T11:18:53.172668+00:00",
+        "published": "2026-10-02T11:00:00+00:00",
+        "modified": null,
+        "modified_status": "No dateModified in NewsArticle JSON-LD or article modified meta tag observed"
+      }
+    },
+    "sources": [
+      {
+        "id": "primary",
+        "url": "https://www.nature.com/articles/s41467-026-76784-x",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:18:55.633910+00:00",
+          "published": "2026-08-20",
+          "modified": null,
+          "received": "2025-06-11",
+          "accepted": "2026-08-06",
+          "version_of_record": "2026-09-18",
+          "modified_status": "No explicit modification date observed; version-of-record date preserved separately"
+        }
+      },
+      {
+        "id": "institution",
+        "url": "https://www.ucf.edu/news/ucf-researcher-discovers-experimental-evidence-of-new-type-of-magnetism/",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:18:56.157747+00:00",
+          "published": "2026-09-18T17:48:07+00:00",
+          "modified": "2026-10-01T19:31:57+00:00"
+        }
+      },
+      {
+        "id": "supplement",
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-76784-x/MediaObjects/41467_2026_76784_MOESM1_ESM.pdf",
+        "dates": {
+          "collected_at_utc": "2026-10-03T11:19:12.840379+00:00",
+          "published": null,
+          "modified": null,
+          "document_date": "2026-07-31",
+          "date_status": "Document cover date only; separate publication/modification dates not established"
+        }
+      }
+    ],
+    "scope": {
+      "collection": "one actual English science-news article and its directly linked primary research, institutional release, and primary supplementary information",
+      "selection_basis": "new context outside excluded topics; full article and full open-access primary evidence obtainable; no expected error, answer, or patch selected",
+      "article_body": "complete article DOM text, including headline, byline, captions, publication display, and closing editorial notice",
+      "primary_body": "complete publisher article DOM, including abstract, body, methods, figure captions, references, declarations and publication-history metadata; embedded related-article promotional entries retained as publisher DOM context, not primary evidence",
+      "supplement": "complete PDF textual extraction; figure graphics not visually inspected",
+      "not_accessed": "linked historical research and general background links; primary data files; publisher peer-review supplement",
+      "language": "English",
+      "read_scope": "Collector read the complete article and primary extracted text, institutional body, and all eight pages of supplementary textual extraction. Raw HTML captured; no graphical-figure inspection, raw-data analysis, reference-paper reading, or peer-review-file reading.",
+      "institution_body": "Headline and byline from page h1/JSON-LD plus complete body and captions through funding statement; More Topics and subsequent promotional footer removed, original DOM extraction separately retained"
+    }
+  },
+  {
+    "unit_id": "R267",
+    "article": {
+      "url": "https://www.yna.co.kr/view/AKR20250209017100530",
+      "title": "모바일 주민등록증 발급, 14일부터 전국으로 단계적 확대 | 연합뉴스",
+      "dates": {
+        "published": "2025-02-09T12:00:02+09:00",
+        "modified": "2025-02-09T12:00:02+09:00",
+        "collected": "2026-10-03T11:18:31.484514+00:00"
+      }
+    },
+    "sources": [
+      {
+        "id": "mois-original-release",
+        "url": "https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000008&nttId=115585",
+        "title": "모바일 주민등록증 발급 2월 14일부터 단계적 전국 확대",
+        "dates": {
+          "published_online": "2025-02-09T12:00:00+09:00",
+          "print_release": "2025-02-10 morning edition",
+          "landing_registered": "2025-02-10",
+          "modified": null,
+          "collected": "2026-10-03T11:22:14.264058+00:00"
+        }
+      }
+    ],
+    "scope": {
+      "language": "ko",
+      "domain": "public procedure / digital identity",
+      "article": "Complete article headline, subheads, main text, captions, byline and end matter extracted from original publisher story-news DOM; page navigation excluded.",
+      "primary": "Full four-page MOIS release: all four official HWPX viewer HTML pages extracted; all four corresponding PDF viewer raster page images downloaded and visually read. Page 4 consists chiefly of specimen ID images; embedded image text is not transcribed into text but preserved in page image.",
+      "as_of": "Announcement made 2025-02-09; no claim of current rules validation.",
+      "collection": "Fresh collection of previously unselected topic, not assertion of recent publication."
+    }
+  },
+  {
+    "unit_id": "R268",
+    "article": {
+      "id": "article",
+      "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+      "dates": {
+        "publication": "2026-10-03",
+        "modification": null,
+        "collection": "2026-10-03T12:25:04Z",
+        "notes": "Publication date displayed on page; modification not displayed in retrieved text."
+      }
+    },
+    "sources": [
+      {
+        "id": "source1",
+        "url": "https://www.scimex.org/newsfeed/fields-of-magenta-solar-panels-the-future-of-farming",
+        "dates": {
+          "publication": null,
+          "modification": null,
+          "collection": "2026-10-03T12:25:04Z",
+          "notes": "Publicly released label has no date in retrieved page. Release describes study publishing October 2; this is not assigned as page publication. Expert section updates: Rayudu 29 Sep 2026 10:26am; McNab 29 Sep 2026 12:01pm, timezone unstated. Multimedia modification 03 Oct 2026 1:14am is not the release modification date."
+        }
+      }
+    ],
+    "scope": {
+      "purpose": "One finite real-case source-grounding/minimal-edit transfer; bounded official study-source evidence.",
+      "language": "English",
+      "topic": "Semi-transparent magenta agrivoltaic panels and broccoli",
+      "article_read": "Full article title, byline, displayed date, body, image captions and editorial footer; web rendered lines 27–95.",
+      "source_read": "Full public official Cell Press release plus Scimex overview, both expert reactions, displayed update dates, multimedia/attachment/funding metadata; rendered lines 55–148. Entire web result through line 161 read.",
+      "exclusions": "Site navigation/ads/recommendations excluded from unit text; retained in retrieval-web.txt. No inaccessible journalist contact details, linked full paper, supplementary methods, or independent replication read.",
+      "primary_paper_status": "DOI redirect inaccessible; Cell fulltext HTTP 403. Collected source is publisher press release and attributed expert commentary, not full paper.",
+      "truncation": false
+    }
+  }
+]

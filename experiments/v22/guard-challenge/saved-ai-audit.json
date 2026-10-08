@@ -1,0 +1,121 @@
+{
+  "audit_type": "native_ai_semantic_audit",
+  "provenance": "Independent AI assessment of constructed calibration fixtures; not human audit and not a writer performance observation.",
+  "read_scope": {
+    "files": [
+      "private-artifacts/guard-challenge/inputs/G204.json",
+      "private-artifacts/guard-challenge/inputs/G315.json",
+      "private-artifacts/guard-challenge/inputs/G426.json"
+    ],
+    "complete_inputs_read": true,
+    "other_files_read": false,
+    "external_sources_used": false,
+    "embedded_read_scope_paths_followed": false
+  },
+  "audits": [
+    {
+      "blind_id": "G204",
+      "verdict": "acceptable",
+      "findings": [],
+      "meaningful_no_change_correctly_preserved": [
+        {
+          "claim_ids": [
+            "C1",
+            "C2",
+            "C3"
+          ],
+          "evidence": {
+            "source_sample": "연구진은 실험실에서 성체 동물 12마리를 관찰했다.",
+            "source_observation": "먹이를 준 뒤 활동량이 감소했다.",
+            "original_and_final": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다."
+          },
+          "assessment": "The actor, laboratory setting, adult population, sample of 12, and attributed temporal observation are supported. After feeding states temporal order, not causation; the article does not generalize to wild animals. Keeping all text and adding no limitations preserves the supported meaning. Rationales, keep decisions, empty patches, and final text agree."
+        }
+      ]
+    },
+    {
+      "blind_id": "G315",
+      "verdict": "review_required",
+      "findings": [
+        {
+          "claim_id": "C2",
+          "categories": [
+            "false_support",
+            "missed_required_repair",
+            "rationale_decision_conflict"
+          ],
+          "evidence": {
+            "original": "18마리",
+            "proposition": "The observed sample comprised 18 animals.",
+            "source": "연구진은 실험실에서 성체 동물 12마리를 관찰했다.",
+            "rationale": "The source specifies 12 animals, contradicting 18.",
+            "fact_support": "supported",
+            "edit_necessity": "none",
+            "decision": "keep",
+            "patches": [],
+            "final_text_sample": "18마리"
+          },
+          "assessment": "The complete source explicitly gives 12 for the same observed sample, contradicting 18. The rationale identifies this conflict, but support classification and keep decision deny it. No patch is made, and the actual final article retains the false sample size.",
+          "required_correction": "Replace 18마리 with 12마리 and align C2 support, necessity, decision, and patch with that repair."
+        }
+      ],
+      "meaningful_no_change_correctly_preserved": [
+        {
+          "claim_ids": [
+            "C1",
+            "C3"
+          ],
+          "evidence": {
+            "source_sample": "연구진은 실험실에서 성체 동물 12마리를 관찰했다.",
+            "source_observation": "먹이를 준 뒤 활동량이 감소했다."
+          },
+          "assessment": "The laboratory adult-animal observation and attributed activity decrease after feeding remain supported. No causal or wild-population assertion requires additional limitation text."
+        }
+      ]
+    },
+    {
+      "blind_id": "G426",
+      "verdict": "review_required",
+      "findings": [
+        {
+          "claim_id": "C2",
+          "patch_id": "PX",
+          "categories": [
+            "false_contradiction",
+            "unnecessary_harmful_repair",
+            "rationale_decision_conflict"
+          ],
+          "evidence": {
+            "original": "12마리",
+            "proposition": "The observed sample comprised 12 animals.",
+            "source": "연구진은 실험실에서 성체 동물 12마리를 관찰했다.",
+            "rationale": "The stated sample size matches the source.",
+            "fact_support": "contradicted",
+            "edit_necessity": "required",
+            "decision": "repair",
+            "patch": {
+              "before": "12마리",
+              "after": "18마리"
+            },
+            "final_text_sample": "18마리"
+          },
+          "assessment": "The original 12 matches the source exactly. The rationale correctly recognizes the match but conflicts with contradiction and repair decisions. PX is actually applied in the final text, introducing an unsupported and source-contradicted sample size of 18.",
+          "required_correction": "Remove PX, restore 12마리 in the final article, and classify C2 as supported with no edit necessary and keep."
+        }
+      ],
+      "meaningful_no_change_correctly_preserved": [
+        {
+          "claim_ids": [
+            "C1",
+            "C3"
+          ],
+          "evidence": {
+            "source_sample": "연구진은 실험실에서 성체 동물 12마리를 관찰했다.",
+            "source_observation": "먹이를 준 뒤 활동량이 감소했다."
+          },
+          "assessment": "These unaffected claims and their keep rationales remain supported; temporal wording does not claim causation or effects on wild animals."
+        }
+      ]
+    }
+  ]
+}

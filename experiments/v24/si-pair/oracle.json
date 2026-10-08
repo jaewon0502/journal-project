@@ -1,0 +1,18 @@
+{
+  "synthetic": true,
+  "registration": "separate_followup_coverage_not_prior_10",
+  "source_id": "src_897101849a4f",
+  "normal_unit_id": "unit_e4385c7df10c",
+  "error_unit_id": "unit_72f5d09d5937",
+  "normal_expected_text": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 125센티미터였다.",
+  "error_expected_text": "해온 재료시험실이 2026년 4월 12일 오전 10시에 섭씨 20도에서 측정한 표준 막대 R7의 전체 길이는 정확히 125센티미터였다.",
+  "normal_expected_edits": [],
+  "error_expected_edits": [
+    {
+      "old": "126",
+      "new": "125"
+    }
+  ],
+  "rationale": "오전 10시, 섭씨 20도, 표준 막대 R7 전체 길이는 정확히 1.25m = 125cm이다. 오후 2시 섭씨 80도의 1.26m = 126cm는 조건이 달라 오전 주장에 적용할 수 없다. 정상문은 그대로 보존하고 오류문은 스칼라 126만 125로 바꾼다.",
+  "source_whitespace_word_count": 111
+}

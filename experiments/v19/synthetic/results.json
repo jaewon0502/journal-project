@@ -1,0 +1,30 @@
+{
+  "actual_native_outputs": 2,
+  "independent_AI_audits": 2,
+  "normal_preservation": "1/1",
+  "necessary_repair": "1/1",
+  "new_meaning_loss_established": 0,
+  "scope": "single controlled fictional measurement pair; not two independent real events",
+  "rows": [
+    {
+      "unit_id": "SY191",
+      "patches": 0,
+      "decision": "no_change",
+      "contract_valid": true,
+      "unchanged": true,
+      "original_chars": 177,
+      "delivered_chars": 177,
+      "raw_sha256": "9c6d09fdc7a1ea42d23e2c05b83f34a9c5c92055d84ad90c3db368fb421f81b3"
+    },
+    {
+      "unit_id": "SY192",
+      "patches": 1,
+      "decision": "repair",
+      "contract_valid": true,
+      "unchanged": false,
+      "original_chars": 177,
+      "delivered_chars": 209,
+      "raw_sha256": "e196fce978f342dcb04fe6338c6017c6005b38f23c188cce62ff6aa3d2413c8a"
+    }
+  ]
+}

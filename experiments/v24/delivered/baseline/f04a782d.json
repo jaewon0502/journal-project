@@ -1,0 +1,13 @@
+{
+  "unit_id": "f04a782d",
+  "kind": "deterministic gated delivery; not native model generation",
+  "full_edited_text": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+  "accepted_patch_ids": [
+    "P1"
+  ],
+  "blocked_patches": [],
+  "raw_label_violations": [],
+  "local_review_required": [],
+  "semantic_correctness_certified": false,
+  "raw_output_preserved": true
+}

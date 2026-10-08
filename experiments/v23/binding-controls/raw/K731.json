@@ -1,0 +1,10 @@
+{
+  "unit_id": "K731",
+  "bindings": [{"claim_anchor": "재배 구획 P의 면적은 20제곱미터다.", "referent": "재배 구획 P", "measured_property": "면적", "scope": "P only, not panel system M", "time": "unspecified", "unit": "제곱미터", "source_authority": "S1: 현장 기록", "source_anchor": "재배 구획 P의 면적은 20제곱미터다.", "contradiction_test": "P's 20 square metres and M's 20 metres by 20 metres can both be true because they concern different referents. S1 explicitly records them separately."}],
+  "clause_audit": [{"original_quote": "재배 구획 P의 면적은 20제곱미터다.", "proposition": "Cultivation plot P has an area of 20 square metres.", "relation": "supported", "source_witnesses": [{"source_id": "S1", "quote": "재배 구획 P의 면적은 20제곱미터다."}, {"source_id": "S1", "quote": "두 대상의 면적은 별도로 기록했다."}], "action": "keep", "reason": "Exact referent, property and unit match. M's distinct installation area does not contradict P's area; no prose edit is necessary."}],
+  "patches": [],
+  "full_edited_text": "재배 구획 P의 면적은 20제곱미터다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

@@ -1,0 +1,109 @@
+{
+  "gate": {
+    "unit_id": "c41f9b20",
+    "article_sha256": "2e3457525ef5bd270c9e104b3555abaa95eeea119802043953b276539178e6eb",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_2",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_3",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "late_member_denominator",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "오후 8시 이후에 이용한 회원 50명",
+        "article_span": [
+          32,
+          52
+        ],
+        "numeric_span": [
+          49,
+          51
+        ],
+        "original_numeric_token": "50",
+        "article_unit": "count",
+        "article_value": "50",
+        "expected_value": "50",
+        "normalized_expected_value": "50",
+        "dimension": "count"
+      },
+      {
+        "id": "selected_late_members",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "opposite_weekend_status",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "all_weekend_members",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "c41f9b20",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "review_required",
+    "full_edited_text": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [
+      {
+        "id": "P1",
+        "before": "20명",
+        "reason": "every comparison must exist and be eligible",
+        "disposition": "review_required"
+      }
+    ],
+    "raw_label_violations": [
+      {
+        "quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+        "delivered_disposition": "review_required",
+        "reason": "every comparison must exist and be eligible"
+      }
+    ],
+    "local_review_required": [
+      "20명",
+      "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다."
+    ],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

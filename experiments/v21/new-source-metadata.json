@@ -1,0 +1,53 @@
+[
+  {
+    "context": "bumblebee_social_learning_2024",
+    "article": {
+      "url": "https://phys.org/news/2024-03-bumblebees-scientists-advanced-social-skills.html",
+      "dates": {
+        "published": "2024-03-06",
+        "accessed_at": "2026-10-03T10:47:59.831313+00:00"
+      }
+    },
+    "sources": [
+      {
+        "id": "primary_bridges_2024",
+        "url": "https://www.nature.com/articles/s41586-024-07126-4",
+        "dates": {
+          "published": "2024-03-06",
+          "received": "2023-09-01",
+          "accepted": "2024-01-26",
+          "issue": "2024-03-21",
+          "accessed_at": "2026-10-03T10:47:59.831313+00:00"
+        }
+      }
+    ],
+    "scope": "Fresh source collection only: a complete QMUL-authored Phys.org science report and its cited open-access Nature research paper, about laboratory social learning of a two-step puzzle by Bombus terrestris. No injected errors, patches, expected answers, or performance claims."
+  },
+  {
+    "context": "dart_orbit_initial_results_2022",
+    "article": {
+      "url": "https://www.theguardian.com/science/2022/oct/11/nasa-dart-spacecraft-asteroid-successful",
+      "dates": {
+        "first_published_display": "2022-10-11 14:38 EDT",
+        "published_display": "2022-10-12 13:05 EDT",
+        "published_metadata": "2022-10-12T17:05:12.000Z",
+        "modified_metadata": "2024-11-08T19:23:34.000Z",
+        "correction_note_date": "2022-10-12",
+        "accessed_at": "2026-10-03T10:53:32.084336+00:00"
+      }
+    },
+    "sources": [
+      {
+        "id": "nasa_dart_release_22_105",
+        "url": "https://www.nasa.gov/news-release/nasa-confirms-dart-mission-impact-changed-asteroids-motion-in-space/",
+        "dates": {
+          "published": "2022-10-11",
+          "published_metadata": "2022-10-11T21:12:00Z",
+          "updated_metadata": "2023-07-26T16:41:45-04:00",
+          "accessed_at": "2026-10-03T10:53:33.035447+00:00"
+        }
+      }
+    ],
+    "scope": "A single historical reporting context: Guardian coverage of NASA DART initial results announced 11 October 2022, paired with NASA release 22-105. The source is the mission agency’s original official results announcement, not a peer-reviewed paper or independent replication. Assess only the supplied historical context; subsequent orbital refinements are outside this context. Source collection only; no patches, injected errors, target hints, expected answers or performance claims."
+  }
+]

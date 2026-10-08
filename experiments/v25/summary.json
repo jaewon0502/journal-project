@@ -1,0 +1,18 @@
+{
+  "T": {
+    "outputs": 4,
+    "candidate_links": 16,
+    "links_agree_with_pre_and_source": 16,
+    "selected_claims": 8,
+    "claim_judgments_agree": 8,
+    "exact_minimal_results": 4
+  },
+  "V": {
+    "outputs": 4,
+    "candidate_links": 16,
+    "links_agree_with_pre_and_source": 16,
+    "selected_claims": 8,
+    "claim_judgments_agree": 8,
+    "exact_minimal_results": 4
+  }
+}

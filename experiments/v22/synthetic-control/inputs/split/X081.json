@@ -1,0 +1,15 @@
+{
+  "unit_id": "X081",
+  "article": {
+    "text": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+    "provenance": "Complete researcher-authored synthetic text, not an actual news article"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "가상 보고서: 연구진은 실험실에서 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다. 대조군이 없어 감소의 인과원인은 확인하지 않았다. 야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+      "provenance": "Complete synthetic evidence"
+    }
+  ],
+  "scope": "Assess supplied complete text only. No prescribed issue count or decision. Do not browse."
+}

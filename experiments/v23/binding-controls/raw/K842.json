@@ -1,0 +1,10 @@
+{
+  "unit_id": "K842",
+  "bindings": [{"claim_anchor": "패널 시스템 M의 설치 면적은 20제곱미터다.", "referent": "패널 시스템 M", "measured_property": "설치 면적", "scope": "M only, not cultivation plot P", "time": "unspecified", "unit": "Article: square metres; source: metres multiplied by metres", "source_authority": "S1: 현장 기록", "source_anchor": "패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다.", "contradiction_test": "P's 20 square metres and M's 20-by-20-metre installation can coexist because their referents differ. The article and relevant source both concern M, however, so the article's 20 square metres conflicts with the source's 400 square metres."}],
+  "clause_audit": [{"original_quote": "패널 시스템 M의 설치 면적은 20제곱미터다.", "proposition": "Panel system M has an installation area of 20 square metres.", "relation": "contradicted", "source_witnesses": [{"source_id": "S1", "quote": "패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다."}, {"source_id": "S1", "quote": "두 대상의 면적은 별도로 기록했다."}], "action": "repair", "reason": "M's source dimensions yield 20 × 20 = 400 square metres. P's 20-square-metre area cannot support a claim about M. Repair only the number."}],
+  "patches": [{"id": "P1", "before": "20제곱미터", "after": "400제곱미터", "reason": "Convert M's recorded 20-metre-by-20-metre installation area into square metres."}],
+  "full_edited_text": "패널 시스템 M의 설치 면적은 400제곱미터다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

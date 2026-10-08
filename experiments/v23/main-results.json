@@ -1,0 +1,137 @@
+{
+  "literal": [
+    {
+      "unit_id": "Q2182",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q1072",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q3297",
+      "same_final_text": true,
+      "visible_patch_count": 1,
+      "masked_patch_count": 1,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q2187",
+      "same_final_text": true,
+      "visible_patch_count": 1,
+      "masked_patch_count": 1,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "R662",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 2,
+      "masked_annotations": 2
+    },
+    {
+      "unit_id": "R551",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 2,
+      "masked_annotations": 2
+    },
+    {
+      "unit_id": "Q1077",
+      "same_final_text": true,
+      "visible_patch_count": 1,
+      "masked_patch_count": 1,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q4402",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q4407",
+      "same_final_text": true,
+      "visible_patch_count": 1,
+      "masked_patch_count": 1,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    },
+    {
+      "unit_id": "Q3292",
+      "same_final_text": true,
+      "visible_patch_count": 0,
+      "masked_patch_count": 0,
+      "visible_whole_hold": false,
+      "masked_whole_hold": false,
+      "visible_annotations": 0,
+      "masked_annotations": 0
+    }
+  ],
+  "auditor_one": {
+    "blind_outputs_reviewed": 20,
+    "evidence_answer_error_outputs": 0,
+    "required_synthetic_repairs_delivered": 8,
+    "required_synthetic_repairs_total": 8,
+    "normal_exact_no_hold": 8,
+    "normal_total": 8,
+    "spin_local_annotation_dispositions_delivered": 4,
+    "spin_outputs_total": 4,
+    "supported_content_loss_outputs": 0,
+    "unsupported_to_false_confusion_outputs": 0,
+    "blanket_hold_outputs": 0,
+    "same_source_pair_combinations_checked": 16,
+    "material_semantic_drift_pair_combinations": 0,
+    "source_quote_normalization_failures": 0
+  },
+  "auditor_two": {
+    "outputs_assessed": 20,
+    "normal_outputs_exact_and_no_hold": 8,
+    "required_text_repair_outputs_delivered": 8,
+    "required_repair_clauses_delivered": 10,
+    "evidence_annotation_outputs_sufficient": 4,
+    "unestablished_clauses_locally_annotated": 8,
+    "evidence_answer_errors": 0,
+    "evidence_answer_overreach": 0,
+    "supported_content_loss": 0,
+    "unsupported_to_false_confusions": 0,
+    "blanket_holds": 0,
+    "source_quotes_checked": 144,
+    "nonverbatim_source_quotes": 0,
+    "semantic_drift_findings": 0,
+    "comparative_quality_advantage_established": false
+  }
+}

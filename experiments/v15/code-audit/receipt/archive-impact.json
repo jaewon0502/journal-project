@@ -1,0 +1,32 @@
+{
+  "legacy_engine_sha256": "6be5edc905bf62daafeb26e383f0fe7ede0167acf3a0912c10b1f0e002c7b6a8",
+  "all_inventory_hashes_preserved": true,
+  "inventory_entry_count": 138,
+  "fixtures": [
+    {
+      "case": "EVAL03",
+      "archived_output_sha256": "180f7f296ebaf6d498d374fcdc285802459d802a0f9e50ee6866edbe76714297",
+      "same_output_bytes": true,
+      "same_receipt": true,
+      "rollback_exact": true,
+      "historical_cli_collision": false
+    },
+    {
+      "case": "EVAL05",
+      "archived_output_sha256": "2180b35aeb1e98c36feb5206b61bb0d68adb9023e6a8741a1ae0475e102d32bb",
+      "same_output_bytes": true,
+      "same_receipt": true,
+      "rollback_exact": true,
+      "historical_cli_collision": false
+    },
+    {
+      "case": "NEW01",
+      "archived_output_sha256": "99c7f21e6c576d6baa4111b7c70bfc00b6de9a8145a56165cdf26d4bdac9c757",
+      "same_output_bytes": true,
+      "same_receipt": true,
+      "rollback_exact": true,
+      "historical_cli_collision": false
+    }
+  ],
+  "scope": "Public sanitized fixtures only; original private checks are recorded separately in private-impact-summary.json. No claim of source-support or semantic revalidation."
+}

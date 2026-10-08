@@ -1,0 +1,52 @@
+{
+  "unit_id": "D173",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "순서표 규칙 적용일",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "이번 순서표 규칙은 2035년 9월 1일부터 적용된다.",
+      "candidate_quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용된다.",
+      "source_refs": [
+        "S1 제1항(적용일) 및 말미 범위 확인"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "제1항(적용일)",
+            "quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용한다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "말미 범위 확인",
+            "quote": "이 자료는 기사와 질문에 관련된 규칙 전문이며 숨겨진 추가 예외나 적용일 변경은 없다."
+          },
+          "relation": "effective_date",
+          "relevance_to_claim": "최종 운영 안내서가 9월 2일 적용을 명시하고 추가 적용일 변경이 없음을 확인한다. 후보의 날짜는 정확하며 원문의 9월 1일로 복원하면 오류가 된다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "원문의 9월 1일 적용이라는 의미가 후보에서 9월 2일 적용으로 바뀌었으나, 이는 S1에 따른 원문 오류의 정당한 수정이다. 기록 공개일 9월 12일도 별도로 유지된다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "후보는 적용일 오류를 이미 바로잡았다. 원문 날짜의 복원은 금지하며 추가 수정은 필요 없다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "후보 전문은 네 집계 수치와 단위, 적용일과 공개일, 예약 완료 및 공동 시연의 정의·조건, 양측의 귀속된 의견과 의결·측정 여부를 보존하며 자료로 확정할 수 없는 공정성 가치 판단을 구별한다. 유일한 원문 대비 날짜 변경은 최종 원자료에 맞는 정정이다. 필요한 추가 수정이나 미해결 근거 공백이 없다.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

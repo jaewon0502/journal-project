@@ -1,0 +1,79 @@
+test_duplicate_blind_is_rejected (__main__.AggregationRegression.test_duplicate_blind_is_rejected) ... FAIL
+test_duplicate_is_rejected (__main__.AggregationRegression.test_duplicate_is_rejected) ... FAIL
+test_foreign_phase_is_distinguished (__main__.AggregationRegression.test_foreign_phase_is_distinguished) ... FAIL
+test_missing_is_rejected (__main__.AggregationRegression.test_missing_is_rejected) ... FAIL
+test_same_extra_count_cannot_hide_missing (__main__.AggregationRegression.test_same_extra_count_cannot_hide_missing) ... FAIL
+test_unknown_extra_is_rejected (__main__.AggregationRegression.test_unknown_extra_is_rejected) ... FAIL
+test_valid_result_matches_legacy_exactly (__main__.AggregationRegression.test_valid_result_matches_legacy_exactly) ... ok
+test_valid_shared_output_keeps_assigned_denominators (__main__.AggregationRegression.test_valid_shared_output_keeps_assigned_denominators) ... ok
+
+======================================================================
+FAIL: test_duplicate_blind_is_rejected (__main__.AggregationRegression.test_duplicate_blind_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 72, in test_duplicate_blind_is_rejected
+    self.rejected('duplicate_blind_ids', ['expected'])
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+======================================================================
+FAIL: test_duplicate_is_rejected (__main__.AggregationRegression.test_duplicate_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 64, in test_duplicate_is_rejected
+    self.rejected('duplicate_judgment_ids', ['expected'])
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+======================================================================
+FAIL: test_foreign_phase_is_distinguished (__main__.AggregationRegression.test_foreign_phase_is_distinguished)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 60, in test_foreign_phase_is_distinguished
+    self.rejected('wrong_phase_judgment_ids', {'dev-only': ['dev']})
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+======================================================================
+FAIL: test_missing_is_rejected (__main__.AggregationRegression.test_missing_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 68, in test_missing_is_rejected
+    self.rejected('missing_judgment_ids', ['expected'])
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+======================================================================
+FAIL: test_same_extra_count_cannot_hide_missing (__main__.AggregationRegression.test_same_extra_count_cannot_hide_missing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 76, in test_same_extra_count_cannot_hide_missing
+    self.rejected('missing_judgment_ids', ['expected'])
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+======================================================================
+FAIL: test_unknown_extra_is_rejected (__main__.AggregationRegression.test_unknown_extra_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 56, in test_unknown_extra_is_rejected
+    self.rejected('unknown_extra_judgment_ids', ['unknown-extra'])
+  File "experiments/v15/code-audit/aggregation/test_aggregation.py", line 42, in rejected
+    with self.assertRaises(checked.JudgmentIdentityError) as context:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: JudgmentIdentityError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.008s
+
+FAILED (failures=6)

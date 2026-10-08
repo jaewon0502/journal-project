@@ -1,0 +1,85 @@
+{
+  "gate": {
+    "unit_id": "c73b028a",
+    "article_sha256": "e1ff5421e729ba1cb815d079ff0bce25b6b602450ed73bee58719f80ca9f360d",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_2",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_3",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "actual_dispatch",
+        "gate_result": "normalized_equal",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+        "article_span": [
+          0,
+          64
+        ],
+        "numeric_span": [
+          51,
+          53
+        ],
+        "original_numeric_token": "45",
+        "article_unit": "count",
+        "article_value": "45",
+        "expected_value": "45",
+        "normalized_expected_value": "45",
+        "dimension": "count"
+      },
+      {
+        "id": "other_depot",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: referent: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "reservations",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: property: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "c73b028a",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+    "accepted_patch_ids": [],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

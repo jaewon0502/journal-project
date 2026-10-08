@@ -1,0 +1,13 @@
+{
+  "unit_id": "K842",
+  "article": {
+    "text": "패널 시스템 M의 설치 면적은 20제곱미터다."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "현장 기록: 재배 구획 P의 면적은 20제곱미터다. 패널 시스템 M의 설치 면적은 20미터 곱하기 20미터다. 두 대상의 면적은 별도로 기록했다."
+    }
+  ],
+  "scope": "Complete synthetic records; not real-world experiment."
+}

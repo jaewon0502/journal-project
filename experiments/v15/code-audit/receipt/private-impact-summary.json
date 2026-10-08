@@ -1,0 +1,65 @@
+{
+  "scope": "Retained original repair-v4 local artifacts; three spec-derived receipts and one extended NEW01 receipt. No private text, paths, inverse payloads or raw receipts exported.",
+  "original_engine_sha256": "d456b986f105f224e436b4bc66ff669b87212dbc732ff2790648ffb90ba3992c",
+  "original_v4_tree_file_count": 59,
+  "original_v4_tree_unchanged": true,
+  "cases": [
+    {
+      "case": "EVAL03",
+      "spec_sha256": "d2c4d6e45107eb3cb724fa72235a6f817501b4cd114b85987240e9e8a0d178de",
+      "source_sha256": "07c7e7ca487d84ad98e3938f2ce1bbb6558d7d5a3c1799cd7b7dfa24e284baae",
+      "output_sha256": "73259cc1bdf8fa07ffa5b0a69b6adb39571a12b1b2d502832fb48b97cdd05267",
+      "receipt_sha256": "5d392ff27d8f422d758cb0b24c3c811c05d58e3fdfada1f2316808d92d4ec614",
+      "source_hash_matches_spec_and_receipt": true,
+      "output_hash_matches_receipt": true,
+      "output_equals_replayed_patch": true,
+      "receipt_core_equals_replay": true,
+      "receipt_rollback_equals_source": true,
+      "receipt_paths_match_spec": true,
+      "receipt_output_input_paths_distinct": true,
+      "evidence_input_count": 1,
+      "all_evidence_hashes_match": true
+    },
+    {
+      "case": "EVAL05",
+      "spec_sha256": "561799e29340967621cdd0d0ce5ca299ca014a7164b8c9d6854577e2c38fbc75",
+      "source_sha256": "8ca4a4f7d02978b8846fab4b69050c5e94822fee5654bf51f98d882c197aeebc",
+      "output_sha256": "913c117e8a876dd2bfe70d3a1e042c26f5ec712fca35ab1cf5d49bb2f332e7dc",
+      "receipt_sha256": "a1e0880be49d1178eb0cfd077f6b58b0e8b0c2f1d542084e343b844a844cc4b7",
+      "source_hash_matches_spec_and_receipt": true,
+      "output_hash_matches_receipt": true,
+      "output_equals_replayed_patch": true,
+      "receipt_core_equals_replay": true,
+      "receipt_rollback_equals_source": true,
+      "receipt_paths_match_spec": true,
+      "receipt_output_input_paths_distinct": true,
+      "evidence_input_count": 1,
+      "all_evidence_hashes_match": true
+    },
+    {
+      "case": "NEW01",
+      "spec_sha256": "eb72f972df076b1bf168ee150d83eb7b077a4275b84f46fad53d32971914dd4d",
+      "source_sha256": "57bd1152abaeb67c3197ba96ac3cae114533eb02bb78a53280d1ff315d149b5a",
+      "output_sha256": "a17cdf590f7c10881e30ec11fb50355e74b66fa03681eac85be7ba39407ca8e8",
+      "receipt_sha256": "7c05d3ec0d1e36efde413a109a58e9774ddd7e2af5e689ad6732e54a4f109d4f",
+      "source_hash_matches_spec_and_receipt": true,
+      "output_hash_matches_receipt": true,
+      "output_equals_replayed_patch": true,
+      "receipt_core_equals_replay": true,
+      "receipt_rollback_equals_source": true,
+      "receipt_paths_match_spec": true,
+      "receipt_output_input_paths_distinct": true,
+      "evidence_input_count": 4,
+      "all_evidence_hashes_match": true
+    }
+  ],
+  "extended_NEW01_receipt": {
+    "receipt_sha256": "3a571216334b3451283354a0627883b1117283f11bbdaee86f2eb1af3b3c41ba",
+    "source_hash_matches": true,
+    "output_hash_matches": true,
+    "rollback_equals_source": true
+  },
+  "evidence_checks_count": 6,
+  "all_evidence_hashes_match": true,
+  "interpretation": "No receipt collision damage detected in retained originals; hashes, exact patch replay and receipt rollback agree. This does not prove the absence of other discarded executions and does not re-evaluate semantic ratings."
+}

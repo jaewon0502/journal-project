@@ -1,0 +1,75 @@
+{
+  "unit_id": "Q1072",
+  "clause_audit": [
+    {
+      "original_quote": "A팀은 성인 24명을",
+      "proposition": "A팀 observed 24 adults.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "A팀은 성인 24명을 4주 관찰했다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Population and count match."
+    },
+    {
+      "original_quote": "4주 관찰했고",
+      "proposition": "A팀 observed them for four weeks.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "A팀은 성인 24명을 4주 관찰했다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Duration matches."
+    },
+    {
+      "original_quote": "수면 시간이 늘었다.",
+      "proposition": "Sleep time increased in A팀.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "이 팀에서 수면 시간이 늘었다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Antecedent resolves to A팀."
+    },
+    {
+      "original_quote": "B팀의 영아 관찰은 제안 단계이며",
+      "proposition": "B팀 proposed infant observation.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "B팀은 영아 관찰을 제안했으며 결과는 아직 없다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Population and proposal status match."
+    },
+    {
+      "original_quote": "결과는 아직 없다.",
+      "proposition": "B팀 has no results yet.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "B팀은 영아 관찰을 제안했으며 결과는 아직 없다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Correct team and temporal qualification."
+    }
+  ],
+  "patches": [],
+  "full_edited_text": "기록에 따르면 A팀은 성인 24명을 4주 관찰했고 수면 시간이 늘었다. B팀의 영아 관찰은 제안 단계이며 결과는 아직 없다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": "Infant sleep outcomes remain unestablished."
+}

@@ -1,0 +1,20 @@
+{
+  "status": "retrospective feasibility probe, not controlled model comparison",
+  "rows": [
+    {
+      "unit_id": "EN192",
+      "candidate_count": 1,
+      "contains_known_missed_contrast": false,
+      "artifact_sha256": "5d74781f295e2577e5169496c540adf5426943cbd5242d44ee749aa27499b0c5",
+      "input_sha256": "c65ee30b6d0da8e815ce14584e65f121f158e6076783e7e85f306eb5a38b6965"
+    },
+    {
+      "unit_id": "EN191",
+      "candidate_count": 3,
+      "contains_known_missed_contrast": true,
+      "artifact_sha256": "88446ece87f2b88df307534a0d368ada395eaa8d064d52b48ec2330a495ee4ce",
+      "input_sha256": "5969b9007c9f239eba050a26344a484a23d95709102986edf7be0182baa4d871"
+    }
+  ],
+  "limits": "Known failure selected after exposure. False positives/recall and usefulness not evaluated. No new native writer or evaluator output."
+}

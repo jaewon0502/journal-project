@@ -1,0 +1,32 @@
+{
+  "unit_id": "R265",
+  "input_sha256": "61a6b311896f284cd385ca8db7d462d8f6c643b2c577f166a598e2a1ed584447",
+  "raw_sha256": "742c7e1c9a5c1f506c44f34a8b2080c3096061cc5a8f1aa633ada222d1e231c9",
+  "original_sha256": "e57974229f5ba1fc42535fe39c04f018cd965a88648cdb9a9c81af72301b6ebf",
+  "final_sha256": "598c6002d8cc556b87c09552cfc5a65ee82d5c82b93faec5c6697b90c18aa99b",
+  "original_chars": 608,
+  "final_chars": 740,
+  "patch_count": 2,
+  "patches": [
+    {
+      "id": "P1",
+      "before_chars": 8,
+      "after_chars": 53,
+      "before_sha256": "a024f70737f0b69cf4e9a9e43f62ac85645e71c078ef1109ded1121594d7b232",
+      "after_sha256": "aa1dca8aac9673597aa6260c71435c4fd36a3dba8b2c340c9da7065c5f0161eb",
+      "position_in_sequential_input": 88
+    },
+    {
+      "id": "P2",
+      "before_chars": 25,
+      "after_chars": 112,
+      "before_sha256": "8b3f0f4f4bbf886baedcb169931e237e60344c6432d323883dc6f6aab8b5558a",
+      "after_sha256": "8352f112cf288c61f1af17a1b52fd69384b6e90b0cb093657af3dbf3846fe031",
+      "position_in_sequential_input": 613
+    }
+  ],
+  "clause_count": 21,
+  "annotation_count": 3,
+  "exact_literal_delivery": true,
+  "notice": "Public projection omits full article, quotations and edits that would collectively reproduce it. Private raw/input preserved."
+}

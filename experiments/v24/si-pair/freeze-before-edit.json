@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-03T13:32:42.140292+00:00",
+  "phase": "before supplementary editor outputs",
+  "files": [
+    {
+      "path": "si-pair/cases/unit_72f5d09d5937.json",
+      "sha256": "41de2a9eda5d5afab8135e722ac0f9b515c1f5502a82fb7c3b5fa23c733b3fe8"
+    },
+    {
+      "path": "si-pair/cases/unit_e4385c7df10c.json",
+      "sha256": "1e106488b13fe609d27732ea3f88c71ce5381ca161a32453ace5819566d26c95"
+    },
+    {
+      "path": "si-pair/certificates/unit_72f5d09d5937.json",
+      "sha256": "dfe2a94b59bce3a41394511d6c1e27d21b1b1ff07f6a6c2b9aab8a2a99d4f653"
+    },
+    {
+      "path": "si-pair/certificates/unit_e4385c7df10c.json",
+      "sha256": "d91d1b6bbcf6dd358ca2549f5abe2334b4949c45fcf4367b155860260699cb72"
+    },
+    {
+      "path": "si-pair/editor-inputs/X62/unit_72f5d09d5937.json",
+      "sha256": "8e846cba07534154215c88be3e9ceaabf9dbbc349db259584b6eb90af98199ec"
+    },
+    {
+      "path": "si-pair/editor-inputs/X62/unit_e4385c7df10c.json",
+      "sha256": "45f1a3b03dc134065e924d58684aaf69aaef2293bfa1d1e894e4b32e1df1814c"
+    },
+    {
+      "path": "si-pair/editor-inputs/X62/policy.txt",
+      "sha256": "7d3a0c0248678adbb3bf7cd1dd35c34521ce2730b6ab27ce36d0eff86ee1df1b"
+    },
+    {
+      "path": "si-pair/editor-inputs/X41/unit_72f5d09d5937.json",
+      "sha256": "c551cb21280923b295529f89e8db2878222ba9181da9fc13a6d37b5a6036532c"
+    },
+    {
+      "path": "si-pair/editor-inputs/X41/unit_e4385c7df10c.json",
+      "sha256": "d2e6c85e8e0975a19fe1b8e762c31489519684b29e6429a431d83840348f1a88"
+    },
+    {
+      "path": "si-pair/editor-inputs/X41/policy.txt",
+      "sha256": "d1dec05b66be963a1f0421c834c3d69906c0bb2ef2b51e0b2fe70a7f7d3e87b6"
+    },
+    {
+      "path": "code_v2/delivery.py",
+      "sha256": "afd7e47feccf2ac756664c182a674d53507b63cccadb667ffde3cc8444e76f99"
+    },
+    {
+      "path": "code_v2/gate.py",
+      "sha256": "dd7ab5056efc6fb22cbd40d05d77e393d5f996014ce6dfcd032bfb8cd5b900f2"
+    },
+    {
+      "path": "code_v2/test_gate.py",
+      "sha256": "6e7ea42b4b3c6bf4b89fa7f34b1ac73884f8b8d55481e39d7d5cce0a2a2e2adb"
+    },
+    {
+      "path": "si-pair/audit-pre.json",
+      "sha256": "108afb9275ee14ae965542833ec1e805db4bb69ca4b401d5fe5e669f492749c3"
+    }
+  ]
+}

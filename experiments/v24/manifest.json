@@ -1,0 +1,21 @@
+{
+  "synthetic": true,
+  "frozen_at_utc": "2026-10-03T13:15:03.410512+00:00",
+  "hash_algorithm": "SHA256",
+  "input_directory": "cases",
+  "unit_count": 10,
+  "files": {
+    "cases/a267dc49.json": "74dab850302fd93a2da18a25fac4a6c13a1c862949738185b3af9e7fd10f124a",
+    "cases/a91d4f6e.json": "00330f2235e29bb0f0cbb7c9f7348f8e9cc32e1d2102a351165bb5f7632670cf",
+    "cases/b605ad37.json": "1793793794aff0f5845daee6e97268a403ef9a25f5be8677e4f20be353e44410",
+    "cases/b8e035a1.json": "71f369cb513f7a523701d0ec7c4068823524bc7bc8303d5d964a8a8339b7a979",
+    "cases/c41f9b20.json": "103a98975954c1ec5aa423f97a665dcb9ae04a045e676d3138f7c7511cb9f1fe",
+    "cases/c73b028a.json": "db4cf1798117aa4b4360e97335639023951238f2031eef0795ef24d7eeed51d4",
+    "cases/d19ec630.json": "616432cc2ff132f6eec18e7d5b1f328c42fffe88f7b1ca08d20c24e8e3225b0a",
+    "cases/e28f91c4.json": "5f9bf54c75b3e8590c377db8bd57136e5dcfe1278d7bdb04399b9bebf2b156fc",
+    "cases/e793a06d.json": "ed980f974117b14c3ebbb42edd6a3442474291c8a1a201377beaec904292ac78",
+    "cases/f04a782d.json": "0d1a65217333e761ce7b75f282ee64424652e14b41ed956a64bb52ef767a8146"
+  },
+  "oracle_sha256": "948d88bdf6e9d033e219f105e785ca7609b06522181da492de02df3d133bb6b8",
+  "freeze_rule": "Do not edit input files, oracle, or manifest after notifying parent."
+}

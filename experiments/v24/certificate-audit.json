@@ -1,0 +1,1926 @@
+{
+  "audit_type": "independent AI semantic audit of supplied synthetic cases and certificates",
+  "read_scope": [
+    "cases",
+    "certificates",
+    "gate-results"
+  ],
+  "excluded_material_not_read": [
+    "oracle",
+    "PRE/POST",
+    "outputs",
+    "editor conditions"
+  ],
+  "method": "Read every case source and every certificate comparison; independently bind target/property/population/conditions/time, assess quantities/units/derivations and coverage. Gate outputs counted only as structural results, never taken as semantic proof. Source and article anchor presence mechanically checked as supporting evidence.",
+  "comparison_count": 59,
+  "case_count": 10,
+  "gate_counts": {
+    "blocked": 47,
+    "eligible_mismatch": 5,
+    "normalized_equal": 7
+  },
+  "blocked_classification": {
+    "calendar_clock_unit_unrepresented": 28,
+    "different_identity_equal_numerals": 6,
+    "different_identity_unequal_same_unit_values": 10,
+    "different_measure_incompatible_units": 3
+  },
+  "blocked_reason_occurrences_nonexclusive": {
+    "invalid quantity/arithmetic": 28,
+    "population: identity not certified": 13,
+    "referent: identity not certified": 2,
+    "property: identity not certified": 5,
+    "conditions: identity not certified": 5,
+    "time: identity not certified": 3,
+    "incompatible units": 3
+  },
+  "blocked_reason_combinations": {
+    "invalid quantity/arithmetic": 28,
+    "population: identity not certified": 9,
+    "referent: identity not certified; population: identity not certified": 2,
+    "property: identity not certified; conditions: identity not certified": 2,
+    "population: identity not certified; conditions: identity not certified; time: identity not certified": 1,
+    "property: identity not certified; incompatible units": 2,
+    "conditions: identity not certified; time: identity not certified": 2,
+    "property: identity not certified; population: identity not certified; incompatible units": 1
+  },
+  "findings": {
+    "genuine_eligible_mismatches": 5,
+    "false_eligible_mismatches": 0,
+    "genuine_normalized_equal": 7,
+    "blocked_actual_same_target_errors": 0,
+    "missing_required_comparisons": 0,
+    "wrong_quantity_unit_or_derivation_found": 0,
+    "material_wrong_identity_decisions_found": 0,
+    "anchor_errors": [],
+    "exact_counterexamples": []
+  },
+  "interpretation": "47 blocked comparisons consist of 28 supported calendar/clock components with unrepresented units and 19 different-target comparisons. Of those 19, 10 have unequal same-unit values, 6 have equal same-unit values, and 3 have incompatible units. The 28 calendar/clock blocks are not successful false-numerical-conflict prevention. Equal-numeral distractors also do not demonstrate prevention of a numerical mismatch.",
+  "limits": [
+    "AI audit, not formal semantic proof or external truth verification.",
+    "Generic axis language is interpreted jointly with the full source, article, quantity explanation and arithmetic, not as standalone proof.",
+    "Separating a population restriction from a measurement condition can be conventional; no classification ambiguity changes an audited eligibility result."
+  ],
+  "case_coverage": [
+    {
+      "unit_id": "a267dc49",
+      "comparison_count": 4,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_count": 7,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_count": 6,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": "L514 is a shipment identifier, not an asserted quantity."
+    },
+    {
+      "unit_id": "b8e035a1",
+      "comparison_count": 4,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_count": 7,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_count": 6,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_count": 6,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_count": 6,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": "L514 is a shipment identifier, not an asserted quantity."
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_count": 7,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_count": 6,
+      "coverage": "All asserted numerical quantities, calendar/clock components, and relevant scope restrictions checked. No required comparison missing.",
+      "identifier_note": null
+    }
+  ],
+  "comparisons": [
+    {
+      "unit_id": "a267dc49",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a267dc49",
+      "comparison_id": "completion_target",
+      "gate_result": "eligible_mismatch",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_mismatch",
+      "blocked_category": null,
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "240",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 수료자는 240명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article specifies all distinct first-half completers: source total is 240, not the weekend-only 96.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a267dc49",
+      "comparison_id": "other_scope",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "Weekend-only 96 is a subset of the article total, despite equal numerals.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a267dc49",
+      "comparison_id": "weekday_scope",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 전체 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "144",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "Weekday-only 144 is a subset, not all completers.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "4월",
+      "article_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "8일",
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "actual_dispatch",
+      "gate_result": "eligible_mismatch",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_mismatch",
+      "blocked_category": null,
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "West actually dispatched 30 on April 8; 45 is reservations. No afternoon dispatch or retroactive inclusion of next-day parcels.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "other_depot",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "referent: identity not certified",
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "East dispatched 45; the article names West.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "reservations",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "property: identity not certified",
+        "conditions: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "West reservations 45 do not establish actual dispatch; only 30 were handed off.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "a91d4f6e",
+      "comparison_id": "future_dispatch",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified",
+        "conditions: identity not certified",
+        "time: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "15",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "15 remaining West reservations are planned for the next day, not completed April 8 dispatch.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "5월",
+      "article_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "14일",
+      "article_quantity": {
+        "value": "14",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "14",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "received_target",
+      "gate_result": "eligible_mismatch",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_mismatch",
+      "blocked_category": null,
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "kg"
+      },
+      "evidence_quantity": {
+        "value": "192",
+        "unit": "kg"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "L514 total net contents mass is explicitly 192 kg, corroborated by 8 boxes times 24 kg each; article claims 8 kg.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "other_measure",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "property: identity not certified",
+        "incompatible units"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_measure_incompatible_units",
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "kg"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "8 boxes is a count, not 8 kg; same delivery but different property and units.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b605ad37",
+      "comparison_id": "per_box_mass",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "kg"
+      },
+      "evidence_quantity": {
+        "value": "24",
+        "unit": "kg"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "24 kg is contents of each single box, not total shipment mass.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b8e035a1",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "다온구 평생학습관은 2026년 6월 30일에 상반기 기초 수선 강좌의 수료 현황을 확정했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b8e035a1",
+      "comparison_id": "completion_target",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "Weekend completers equal weekend-only completers because the source excludes dual-type completers: 96.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b8e035a1",
+      "comparison_id": "other_scope",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "240",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 수료자는 240명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "240 is all completers, not the weekend subset.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "b8e035a1",
+      "comparison_id": "weekday_scope",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "다온구 평생학습관의 2026년 상반기 기초 수선 강좌에서 주말반 수료자는 96명이었다.",
+      "article_quantity": {
+        "value": "96",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "144",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이 가운데 평일반만 수료한 사람은 144명이고, 주말반만 수료한 사람은 96명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "144 is weekday-only, not weekend completers.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "7월",
+      "article_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "오후 8시",
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "late_member_denominator",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "오후 8시 이후에 이용한 회원 50명",
+      "article_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "50 distinct members have qualifying late entry records in July.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "selected_late_members",
+      "gate_result": "eligible_mismatch",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_mismatch",
+      "blocked_category": null,
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "arithmetic": {
+        "expression": "late_members - both_members",
+        "operands": [
+          {
+            "name": "late_members",
+            "value": "50",
+            "source_id": "S1",
+            "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+          },
+          {
+            "name": "both_members",
+            "value": "20",
+            "source_id": "S1",
+            "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+          }
+        ]
+      },
+      "audit_reason": "Monthly late set has 50 and its weekend intersection 20; late members with no weekend record are 50-20=30, not 20. Full monthly records and member-level predicates justify the complement.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "opposite_weekend_status",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "20 is the weekend-present intersection, disjoint from the requested weekend-absent late subset.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c41f9b20",
+      "comparison_id": "all_weekend_members",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 없는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "60",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "60 includes all weekend members, not late members without weekend records.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "4월",
+      "article_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "8일",
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "actual_dispatch",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "East dispatched all 45 reserved parcels; no afternoon dispatch changes the daily total.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "other_depot",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "referent: identity not certified",
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "30 belongs to West, while the article specifies East.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "c73b028a",
+      "comparison_id": "reservations",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "property: identity not certified",
+        "conditions: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 동부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "Reservations and dispatch are distinct operational measures, although all East bookings were dispatched here; there is no numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "9월",
+      "article_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "12일",
+      "article_quantity": {
+        "value": "12",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "12",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "context_4",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "오후 6시",
+      "article_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "capacity_at_time",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "September 12 at 6 PM capacity is explicitly 24, effective immediately.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "d19ec630",
+      "comparison_id": "other_announcement",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "conditions: identity not certified",
+        "time: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "은빛공방의 2026년 9월 12일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "18",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "18 is September 5 capacity under fewer worktables, not the article September 12 capacity.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "5월",
+      "article_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "14일",
+      "article_quantity": {
+        "value": "14",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "14",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "received_target",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "Actual inspected L514 delivery contains 8 boxes. The contents qualifier does not change the stated box-count unit.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "other_measure",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "property: identity not certified",
+        "incompatible units"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_measure_incompatible_units",
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "192",
+        "unit": "kg"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "192 kg is total net mass, not box count; relation 8 boxes times 24 kg does not permit direct numerical comparison.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e28f91c4",
+      "comparison_id": "per_box_mass",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "property: identity not certified",
+        "population: identity not certified",
+        "incompatible units"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_measure_incompatible_units",
+      "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8상자였다.",
+      "article_quantity": {
+        "value": "8",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "24",
+        "unit": "kg"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "연구소가 인수한 수량은 8상자였으며, 각 상자에는 내용물 순중량 24킬로그램이 들어 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "24 kg concerns each box contents, a different measure and scope from total box count.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "7월",
+      "article_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "7",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "새길도서관은 2026년 7월 한 달 동안 공동 작업실을 이용한 회원 100명의 이용 기록을 분석했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "오후 8시",
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "late_member_denominator",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "오후 8시 이후에 이용한 회원 50명",
+      "article_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "50",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "50 distinct members have qualifying late entry records in July.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "selected_late_members",
+      "gate_result": "normalized_equal",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_equal",
+      "blocked_category": null,
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "20 is the explicit monthly intersection of late and weekend members; the two visits need not coincide.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "opposite_weekend_status",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+        }
+      ],
+      "arithmetic": {
+        "expression": "late_members - both_members",
+        "operands": [
+          {
+            "name": "late_members",
+            "value": "50",
+            "source_id": "S1",
+            "quote": "오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+          },
+          {
+            "name": "both_members",
+            "value": "20",
+            "source_id": "S1",
+            "quote": "주말 이용 조건과 오후 8시 이후 이용 조건을 모두 충족한 회원은 20명이었다."
+          }
+        ]
+      },
+      "audit_reason": "50-20=30 correctly derives the complementary weekend-absent late subset, not the article weekend-present subset.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "e793a06d",
+      "comparison_id": "all_weekend_members",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_unequal_same_unit_values",
+      "article_quote": "새길도서관의 2026년 7월 공동 작업실 이용 기록에서, 오후 8시 이후에 이용한 회원 50명 중 주말 이용 기록이 있는 회원은 20명이었다.",
+      "article_quantity": {
+        "value": "20",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "60",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "전체 100명 가운데 주말에 한 번 이상 이용한 회원은 60명이었고, 오후 8시 이후에 한 번 이상 이용한 회원은 50명이었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "60 is all weekend members regardless of late entry, not the requested intersection.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "context_1",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "2026년",
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "은빛공방은 2026년 9월의 도자기 야간반 운영 공지를 날짜별로 보관하고 있다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "context_2",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "9월",
+      "article_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "9",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "context_3",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "5일",
+      "article_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "5",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "context_4",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_verdict": "supported_calendar_or_clock_component_outside_typed_gate",
+      "blocked_category": "calendar_clock_unit_unrepresented",
+      "article_quote": "오후 6시",
+      "article_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "6",
+        "unit": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "The article calendar/clock component agrees with its source in context. PM is retained where applicable. Unknown temporal unit causes structural blocking; this is not prevention of a false numerical conflict.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "capacity_at_time",
+      "gate_result": "eligible_mismatch",
+      "gate_reasons": [],
+      "semantic_verdict": "genuine_same_target_mismatch",
+      "blocked_category": null,
+      "article_quote": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "18",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "9월 5일 오후 6시에 게시한 공지에서 야간반 정원은 18명으로 확정돼 있었다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "September 5 at 6 PM capacity is 18, not 24; later September 12 expansion expressly does not amend the earlier announcement.",
+      "material_semantic_error": false
+    },
+    {
+      "unit_id": "f04a782d",
+      "comparison_id": "other_announcement",
+      "gate_result": "blocked",
+      "gate_reasons": [
+        "conditions: identity not certified",
+        "time: identity not certified"
+      ],
+      "semantic_verdict": "correctly_excluded_different_comparison_target",
+      "blocked_category": "different_identity_equal_numerals",
+      "article_quote": "은빛공방의 2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 24명이었다.",
+      "article_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "24",
+        "unit": "count"
+      },
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이에 따라 9월 12일 오후 6시에 새 공지를 게시하면서 같은 야간반의 정원을 24명으로 변경했다."
+        }
+      ],
+      "arithmetic": null,
+      "audit_reason": "24 belongs to September 12 after two worktables were added, not September 5.",
+      "material_semantic_error": false
+    }
+  ],
+  "input_manifest": [
+    {
+      "path": "cases/a267dc49.json",
+      "sha256": "74dab850302fd93a2da18a25fac4a6c13a1c862949738185b3af9e7fd10f124a"
+    },
+    {
+      "path": "certificates/a267dc49.json",
+      "sha256": "2575c0bbce34cc6447b7e3d3832210605712d6431db98667769b5c79959f1032"
+    },
+    {
+      "path": "gate-results/a267dc49.json",
+      "sha256": "39eba6db998359a1fb82904e46c528e83de7d4218d3051261b5ec4967c0ca56d"
+    },
+    {
+      "path": "cases/a91d4f6e.json",
+      "sha256": "00330f2235e29bb0f0cbb7c9f7348f8e9cc32e1d2102a351165bb5f7632670cf"
+    },
+    {
+      "path": "certificates/a91d4f6e.json",
+      "sha256": "f7b527e7f754acb15036f2786256331fa1d9e5f7fc3f3d1ed12420ba57faa056"
+    },
+    {
+      "path": "gate-results/a91d4f6e.json",
+      "sha256": "3b014816c005ac678bfc416f666809a055ac760fad16a5f7619e5c19059bd267"
+    },
+    {
+      "path": "cases/b605ad37.json",
+      "sha256": "1793793794aff0f5845daee6e97268a403ef9a25f5be8677e4f20be353e44410"
+    },
+    {
+      "path": "certificates/b605ad37.json",
+      "sha256": "d7831971d078f19304a0ea97ab73ac60337db8577431dfffea20a9fdbbdefecd"
+    },
+    {
+      "path": "gate-results/b605ad37.json",
+      "sha256": "191f6a732be98c4e7f5ed35d2bd1e7e931d5906a9c1175210707480b49656441"
+    },
+    {
+      "path": "cases/b8e035a1.json",
+      "sha256": "71f369cb513f7a523701d0ec7c4068823524bc7bc8303d5d964a8a8339b7a979"
+    },
+    {
+      "path": "certificates/b8e035a1.json",
+      "sha256": "54c047a3a2befcf88ef78ef0b4e9e95f919ddef563ab87954d70875648b10a68"
+    },
+    {
+      "path": "gate-results/b8e035a1.json",
+      "sha256": "8de3c7336c42d44ea1daa0e5af947e676f194ee9d879e5ef3f5e762fce0c3520"
+    },
+    {
+      "path": "cases/c41f9b20.json",
+      "sha256": "103a98975954c1ec5aa423f97a665dcb9ae04a045e676d3138f7c7511cb9f1fe"
+    },
+    {
+      "path": "certificates/c41f9b20.json",
+      "sha256": "9c015b6ee04a031f6f6c33e6a760334a37df4be0d1a41ec511d14b10c585125c"
+    },
+    {
+      "path": "gate-results/c41f9b20.json",
+      "sha256": "4f3ca5ebf56662de866660c76779621eb18b37ef0b57f938da0c892958a15b83"
+    },
+    {
+      "path": "cases/c73b028a.json",
+      "sha256": "db4cf1798117aa4b4360e97335639023951238f2031eef0795ef24d7eeed51d4"
+    },
+    {
+      "path": "certificates/c73b028a.json",
+      "sha256": "b82bd015b9f1f1c554336af3327332187fda9af1101ef3fc2dfbdd45e8f8482e"
+    },
+    {
+      "path": "gate-results/c73b028a.json",
+      "sha256": "2bed2cf0f280c2fd4584f05ea40f7f4be56221759b814c91ef6fcd84c39e10d3"
+    },
+    {
+      "path": "cases/d19ec630.json",
+      "sha256": "616432cc2ff132f6eec18e7d5b1f328c42fffe88f7b1ca08d20c24e8e3225b0a"
+    },
+    {
+      "path": "certificates/d19ec630.json",
+      "sha256": "ff42b4d805221b70fddbaa749e1b4ce167c21b2200caa77b1b296c782a95c79a"
+    },
+    {
+      "path": "gate-results/d19ec630.json",
+      "sha256": "c145f10bb4b706f84cb1177efe6ab1d20388b5ee6ec3338c1e708a8a3d7a2e67"
+    },
+    {
+      "path": "cases/e28f91c4.json",
+      "sha256": "5f9bf54c75b3e8590c377db8bd57136e5dcfe1278d7bdb04399b9bebf2b156fc"
+    },
+    {
+      "path": "certificates/e28f91c4.json",
+      "sha256": "9e948df423505a3d78e1778e80177fb21d1aabc1f10afa0b7a30b85ad08ec0e3"
+    },
+    {
+      "path": "gate-results/e28f91c4.json",
+      "sha256": "f1692beb8ba59017c44297acef32ff10ed0f58928009afc1bec1cae11cf03775"
+    },
+    {
+      "path": "cases/e793a06d.json",
+      "sha256": "ed980f974117b14c3ebbb42edd6a3442474291c8a1a201377beaec904292ac78"
+    },
+    {
+      "path": "certificates/e793a06d.json",
+      "sha256": "b64f4870fe7e92ed879b467e9a24acaaa5d9ba83cac590e6df3dfed98e4d7161"
+    },
+    {
+      "path": "gate-results/e793a06d.json",
+      "sha256": "73ce118558c150cd520feab7221868fe94f2ff3cce6d85b1051b3a7323496895"
+    },
+    {
+      "path": "cases/f04a782d.json",
+      "sha256": "0d1a65217333e761ce7b75f282ee64424652e14b41ed956a64bb52ef767a8146"
+    },
+    {
+      "path": "certificates/f04a782d.json",
+      "sha256": "5338783824d3abade150a7f40261ea9b74d83c16a504318b41ed1902969c8d38"
+    },
+    {
+      "path": "gate-results/f04a782d.json",
+      "sha256": "b6b095a66f9028386199be173a71fd4014b2fad960bf81f1f111e2cb606b5a18"
+    }
+  ]
+}

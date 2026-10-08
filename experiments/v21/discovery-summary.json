@@ -1,0 +1,79 @@
+{
+  "native_discovery_outputs": 8,
+  "new_model_calls_during_replay": 0,
+  "rows": [
+    {
+      "phase": "discovery-development",
+      "unit_id": "V312",
+      "policy": "A",
+      "observation_rows": 7,
+      "output_chars": 8196,
+      "output_sha256": "15632360a63dc7797167708ac5d0337df322764747ee445ddd8cf9e56660c779",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-development",
+      "unit_id": "V312",
+      "policy": "B",
+      "observation_rows": 19,
+      "output_chars": 19709,
+      "output_sha256": "8c9b0ff85ed16f341eae3edce7a49ab6f3e0e97f511e6959d158718b3283ddfc",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-development",
+      "unit_id": "V467",
+      "policy": "A",
+      "observation_rows": 8,
+      "output_chars": 10509,
+      "output_sha256": "e0c72de54ea82f7f7bff1f16a75e31109a01d307cd3abd2d577af86c8dec7ee6",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-development",
+      "unit_id": "V467",
+      "policy": "B",
+      "observation_rows": 17,
+      "output_chars": 20850,
+      "output_sha256": "86ce20a307fa92122f79228108d25b0c35d6e6333afc26864ece42c0415c13d2",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-transfer",
+      "unit_id": "W582",
+      "policy": "A",
+      "observation_rows": 7,
+      "output_chars": 9141,
+      "output_sha256": "f13cf367411546d11b9391fa0298dc12c3ffb663eeb5fe34b5a92050aec4ff0c",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-transfer",
+      "unit_id": "W582",
+      "policy": "B",
+      "observation_rows": 29,
+      "output_chars": 24437,
+      "output_sha256": "0f49ad65212fbe42b889d0e9c579080684b333de9ec217e60cc48b432f6309e5",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-transfer",
+      "unit_id": "W693",
+      "policy": "A",
+      "observation_rows": 9,
+      "output_chars": 9899,
+      "output_sha256": "fb710987aa3d67b186ceee4c2599b72670a2b972872063c2304c0eaf1f7156d0",
+      "witness_spans_match": true
+    },
+    {
+      "phase": "discovery-transfer",
+      "unit_id": "W693",
+      "policy": "B",
+      "observation_rows": 32,
+      "output_chars": 28607,
+      "output_sha256": "3fd1363cad8e684d9e1204ced67678725721c1cf6c18055ef010955831fd0a48",
+      "witness_spans_match": true
+    }
+  ],
+  "limits": "Matching strings and hashes do not establish entailment, completeness or necessary editing. More observation rows are not a success score."
+}

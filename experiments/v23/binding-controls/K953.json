@@ -1,0 +1,17 @@
+{
+  "unit_id": "K953",
+  "article": {
+    "text": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다."
+  },
+  "sources": [
+    {
+      "id": "release",
+      "text": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다. 이 발표문에는 둘째 장치 결과가 없다."
+    },
+    {
+      "id": "note",
+      "text": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."
+    }
+  ],
+  "scope": "Complete synthetic records; not real-world experiment."
+}

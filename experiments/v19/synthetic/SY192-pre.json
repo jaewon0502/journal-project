@@ -1,0 +1,28 @@
+{
+  "unit_id": "SY192",
+  "phase": "source_first_before_output",
+  "evidence_scope": "Only inputs/SY192.json article.full_text and sources[S1].text",
+  "necessary_findings": [
+    {
+      "id": "N1",
+      "type": "factual_error_and_necessary_omission",
+      "article_anchor": "나머지 5명은 검출한계 미만이었다.",
+      "source_id": "S1",
+      "source_anchor": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다.",
+      "finding": "The article incorrectly puts all five remaining volunteers below the detection limit. Four were at or above detection but below quantification; only one was below detection.",
+      "minimal_required_repair": "나머지 5명 중 4명은 검출한계 이상이지만 정량한계 미만이었고, 1명은 검출한계 미만이었다."
+    }
+  ],
+  "preserve": [
+    "가상 분석: 22명 중 17명에서 정량한계 초과",
+    "연구진은 성인 자원자 22명의 혈액 표본을 같은 방법으로 분석해 17명에서 분석 대상 고분자가 정량한계를 넘었다고 밝혔다.",
+    "연구진은 표본 확대가 필요하다고 밝혔다. 이번 실험은 질병 발생이나 일반 인구의 유병률을 조사하지 않았다."
+  ],
+  "held_issues": [
+    {
+      "source_anchor": "검출한계와 정량한계는 다르다.",
+      "disposition": "Optional explanatory addition, not independently necessary once the five-person breakdown is repaired."
+    }
+  ],
+  "source_only_conclusion": "One necessary local factual correction; no other necessary omissions or errors identified in the complete supplied article."
+}

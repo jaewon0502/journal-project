@@ -1,0 +1,80 @@
+{
+  "unit_id": "a91d4f6e",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "4월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "8일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "relation": "contradicted",
+      "comparison_ids": [
+        "actual_dispatch"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "오후에는 추가 입고나 발송이 없었다."
+        }
+      ],
+      "reason": "S1 records 30 actual west-depot handoffs on April 8 and no additional afternoon dispatch. The 45 west reservations, 45 east dispatches and 15 next-day planned dispatches measure different properties, depots or times. Preserve the west actor and finalized reporting date."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "45개",
+      "after": "30개",
+      "reason": "S1 records 30 actual west-depot handoffs on April 8 and no additional afternoon dispatch. The 45 west reservations, 45 east dispatches and 15 next-day planned dispatches measure different properties, depots or times. Preserve the west actor and finalized reporting date.",
+      "comparison_ids": [
+        "actual_dispatch"
+      ]
+    }
+  ],
+  "full_edited_text": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}

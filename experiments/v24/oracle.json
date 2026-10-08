@@ -1,0 +1,119 @@
+{
+  "synthetic": true,
+  "construction_status": "Author expectations only; independent reviewer must preregister own answers.",
+  "pairs": [
+    {
+      "pair_index": 1,
+      "category": "different_referents_same_numbers",
+      "mapping": {
+        "error": "a91d4f6e",
+        "normal": "c73b028a"
+      },
+      "source_word_count": 126,
+      "expected_exact_facts": {
+        "east_start": 120,
+        "west_start": 120,
+        "east_reserved": 45,
+        "west_reserved": 45,
+        "east_dispatched": 45,
+        "west_dispatched": 30,
+        "west_pending": 15
+      },
+      "normal_disposition": "PRESERVE unchanged",
+      "error_disposition": "Numeric factual conflict; minimally repair while preserving other claims",
+      "expected_error_repair_fragment": "서부 보관소는 방한 꾸러미 30개를 실제 발송했다.",
+      "one_factor_rationale": "동부→서부라는 대상 하나만 변경. 날짜, 물품, 실제 발송 술어와 수치는 동일.",
+      "limits_and_unknowns": "다음 날 실제 발송량은 알려지지 않았다. 오류 문장의 날짜와 대상은 유지하고 45개를 30개로 수정한다."
+    },
+    {
+      "pair_index": 2,
+      "category": "same_referent_different_units",
+      "mapping": {
+        "normal": "e28f91c4",
+        "error": "b605ad37"
+      },
+      "source_word_count": 123,
+      "expected_exact_facts": {
+        "boxes": 8,
+        "net_kg_per_box": 24,
+        "net_kg_total": 192
+      },
+      "normal_disposition": "PRESERVE unchanged",
+      "error_disposition": "Numeric factual conflict; minimally repair while preserving other claims",
+      "expected_error_repair_fragment": "내용물 기준 192킬로그램이었다.",
+      "one_factor_rationale": "8이라는 숫자는 유지하고 단위 상자→킬로그램만 변경. 어미 변화는 문법상 수반 변화.",
+      "limits_and_unknowns": "포장 포함 총중량 및 식사 제공 수는 미공개. 정상문은 보존. 오류문은 8킬로그램→192킬로그램, 또는 단위만 상자로 복원하는 최소 수정도 사실상 가능."
+    },
+    {
+      "pair_index": 3,
+      "category": "genuine_temporal_change",
+      "mapping": {
+        "error": "f04a782d",
+        "normal": "d19ec630"
+      },
+      "source_word_count": 133,
+      "expected_exact_facts": {
+        "2026-09-05T18:00_capacity": 18,
+        "2026-09-12T18:00_capacity": 24,
+        "old_desks": 6,
+        "new_desks": 8,
+        "persons_per_desk": 3
+      },
+      "normal_disposition": "PRESERVE unchanged",
+      "error_disposition": "Numeric factual conflict; minimally repair while preserving other claims",
+      "expected_error_repair_fragment": "2026년 9월 5일 오후 6시 공지 당시 도자기 야간반 정원은 18명이었다.",
+      "one_factor_rationale": "공지 날짜 12일→5일만 변경. 동일 강좌의 진짜 시간상 변화이며 서로 모순된 동시 출처가 아님.",
+      "limits_and_unknowns": "실제 등록자 수 미공개. 오류 날짜를 존중하면 24명→18명이 최소 사실 수정. 정상문에 과거 수치를 덮어쓰지 않는다."
+    },
+    {
+      "pair_index": 4,
+      "category": "group_subset_whole",
+      "mapping": {
+        "normal": "b8e035a1",
+        "error": "a267dc49"
+      },
+      "source_word_count": 131,
+      "expected_exact_facts": {
+        "total_unique_completers": 240,
+        "weekday_only": 144,
+        "weekend_only": 96,
+        "both": 0
+      },
+      "normal_disposition": "PRESERVE unchanged",
+      "error_disposition": "Numeric factual conflict; minimally repair while preserving other claims",
+      "expected_error_repair_fragment": "전체 수료자는 240명이었다.",
+      "one_factor_rationale": "주말반→전체라는 집계 범위 하나만 변경. 기간, 강좌와 수료자 지표 유지.",
+      "limits_and_unknowns": "등록자 수와 하반기 정원은 미공개. 오류문의 전체 범위를 유지하고 96명→240명 수정."
+    },
+    {
+      "pair_index": 5,
+      "category": "overlapping_indicators",
+      "mapping": {
+        "error": "c41f9b20",
+        "normal": "e793a06d"
+      },
+      "source_word_count": 143,
+      "expected_exact_facts": {
+        "all_members": 100,
+        "weekend": 60,
+        "after_20h": 50,
+        "both_monthly_conditions": 20,
+        "after_20h_without_weekend": 30,
+        "weekend_without_after_20h": 40,
+        "union": 90,
+        "neither": 10
+      },
+      "normal_disposition": "PRESERVE unchanged",
+      "error_disposition": "Numeric factual conflict; minimally repair while preserving other claims",
+      "expected_error_repair_fragment": "주말 이용 기록이 없는 회원은 30명이었다.",
+      "one_factor_rationale": "있는→없는이라는 부분집합 조건의 극성 하나만 변경. 50명 분모와 월간 회원 기준 유지.",
+      "limits_and_unknowns": "한 번의 동일 방문에서 두 조건을 충족한 회원 수는 알 수 없음. 기사에는 그 주장을 하지 않는다. 오류의 월간 여집합은 50−20=30으로 확정되므로 unknown 처리가 부적절."
+    }
+  ],
+  "ambiguities": [
+    "Minimal correction is not a unique string: restoring a changed scope token can yield another supported statement. Expected corrections preserve the erroneous article scope and correct its numeric claim where possible.",
+    "Korean word counts use whitespace-delimited eojeol. All source texts are between 100 and 300 such tokens.",
+    "Units pair admits an equally short repair restoring 상자; either repair can be factually correct."
+  ],
+  "provenance": "Native generation in this task; no prior experiments, policies, code, or model outputs were read. No network used."
+}

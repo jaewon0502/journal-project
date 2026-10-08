@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-10-03T09:49:29.602218+00:00",
+  "scope": "synthetic minimal pair, not natural article performance",
+  "single_factor": "only 정량한계→검출한계 in remaining-five sentence",
+  "SY191": {
+    "expected": "no_change",
+    "necessary_issues": 0,
+    "preserve_all": true
+  },
+  "SY192": {
+    "expected": "repair",
+    "necessary_issues": 1,
+    "target": "Remaining five below quantification, not all below detection; 4 are above detection",
+    "preserve_all_other_propositions": true
+  },
+  "inputs": {
+    "SY192.json": "f5cdbd1a4c169e4b3d620821927e59f02714dd79a0f72dfd049efed157b86ddf",
+    "SY191.json": "beb0455fd06b03295e3ecb50a337050616259d4a0bf8c6dcbbb2791be367e4ca"
+  }
+}

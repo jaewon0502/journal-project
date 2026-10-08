@@ -1,0 +1,23 @@
+{
+  "unit_id": "Q4402",
+  "article": {
+    "text": "시는 예산 30억원을 승인받았고, 2025년 9월 교량 보강 공사를 시작할 계획이다."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "text": "2025년 6월 1일 발표: 시는 2025년 9월에 교량 보강 공사를 시작할 계획이다. 예산 30억원은 승인됐다. 이번 발표에는 착공이나 준공 실적 확인이 없다. 조사 기준일은 2025년 6월 2일이다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "발표일·조사 기준일·계획 시점 및 실제 공사 상태 근거는 무엇인가?"
+    },
+    {
+      "id": "q2",
+      "text": "예산 금액과 승인 상태는 무엇인가?"
+    }
+  ],
+  "scope": "Complete synthetic source record; not real news. Correct unsupported source attribution without declaring unknown world propositions false."
+}

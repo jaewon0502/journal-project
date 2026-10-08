@@ -1,0 +1,43 @@
+{
+  "unit_id": "Q4407",
+  "clause_audit": [
+    {
+      "original_quote": "시는 예산 30억원을 승인받았고,",
+      "proposition": "The city's 3-billion-won budget was approved.",
+      "relation": "supported",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "예산 30억원은 승인됐다."
+        }
+      ],
+      "action": "keep",
+      "reason": "Amount and approval match."
+    },
+    {
+      "original_quote": "2025년 9월 교량 보강 공사를 시작했다.",
+      "proposition": "The city actually began bridge reinforcement in September 2025.",
+      "relation": "not_established",
+      "source_witnesses": [
+        {
+          "source_id": "S1",
+          "quote": "2025년 6월 1일 발표: 시는 2025년 9월에 교량 보강 공사를 시작할 계획이다. 예산 30억원은 승인됐다. 이번 발표에는 착공이나 준공 실적 확인이 없다. 조사 기준일은 2025년 6월 2일이다."
+        }
+      ],
+      "action": "repair",
+      "reason": "Only a future plan is documented as of June 2. Repair the plan-to-actual overstatement without declaring a later start false."
+    }
+  ],
+  "patches": [
+    {
+      "id": "p1",
+      "before": "공사를 시작했다.",
+      "after": "공사를 시작할 계획이다.",
+      "reason": "Restore the documented planned status."
+    }
+  ],
+  "full_edited_text": "시는 예산 30억원을 승인받았고, 2025년 9월 교량 보강 공사를 시작할 계획이다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": "Actual construction status after the record date is not established."
+}

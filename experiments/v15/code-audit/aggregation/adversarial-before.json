@@ -1,0 +1,44 @@
+[
+  {
+    "value": null,
+    "status": "ACCEPT",
+    "judged": 1,
+    "output_written": true
+  },
+  {
+    "value": true,
+    "status": "ACCEPT",
+    "judged": 1,
+    "output_written": true
+  },
+  {
+    "value": 1,
+    "status": "ACCEPT",
+    "judged": 1,
+    "output_written": true
+  },
+  {
+    "value": 1.0,
+    "status": "ACCEPT",
+    "judged": 1,
+    "output_written": true
+  },
+  {
+    "value": "",
+    "status": "ACCEPT",
+    "judged": 1,
+    "output_written": true
+  },
+  {
+    "value": [],
+    "status": "TypeError",
+    "judged": null,
+    "output_written": false
+  },
+  {
+    "value": {},
+    "status": "TypeError",
+    "judged": null,
+    "output_written": false
+  }
+]

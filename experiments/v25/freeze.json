@@ -1,0 +1,141 @@
+{
+  "at": "2026-10-03T14:06:30.089825+00:00",
+  "phase": "before native writer outputs",
+  "paired_input_check": [
+    {
+      "language": "ko",
+      "variant": "ko-M47",
+      "identical_all_fields_except_primary_images": true,
+      "additional_image_count_T": 0,
+      "additional_image_count_V": 2
+    },
+    {
+      "language": "ko",
+      "variant": "ko-R82",
+      "identical_all_fields_except_primary_images": true,
+      "additional_image_count_T": 0,
+      "additional_image_count_V": 2
+    },
+    {
+      "language": "en",
+      "variant": "en-M47",
+      "identical_all_fields_except_primary_images": true,
+      "additional_image_count_T": 0,
+      "additional_image_count_V": 1
+    },
+    {
+      "language": "en",
+      "variant": "en-R82",
+      "identical_all_fields_except_primary_images": true,
+      "additional_image_count_T": 0,
+      "additional_image_count_V": 1
+    }
+  ],
+  "files": [
+    {
+      "name": "writer-inputs/en-0-T/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/en-1-V/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/en-0-V/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/ko-0-V/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/ko-0-T/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/en-1-T/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/ko-1-V/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/ko-1-T/policy.txt",
+      "bytes": 3071,
+      "sha256": "d343af3be38cdb1a408688d460e908c96ba6e097a98f2555b1f14c234432c8b7"
+    },
+    {
+      "name": "writer-inputs/en-0-T/input.json",
+      "bytes": 152974,
+      "sha256": "c03785b0921f873b5e3233243ead7b513dc35bf37b60eaf51f311c49a8a793e3"
+    },
+    {
+      "name": "writer-inputs/en-1-V/input.json",
+      "bytes": 153121,
+      "sha256": "6ec6b2a7994c69dbd8d888d95c549a59f8d475ca2d6e49b8d78ea71a0315719d"
+    },
+    {
+      "name": "writer-inputs/en-0-V/input.json",
+      "bytes": 153121,
+      "sha256": "5788e535f84710bff95cddd36664e7e1cff76c71df258adf31e6768999d0433d"
+    },
+    {
+      "name": "writer-inputs/ko-0-V/input.json",
+      "bytes": 65450,
+      "sha256": "19b5be0bb4440c1c01de9776224cce193c9abf8b98c78dfb2cb3f3b15578aa0e"
+    },
+    {
+      "name": "writer-inputs/ko-0-T/input.json",
+      "bytes": 65160,
+      "sha256": "be6aecbe849c1904bea2691afba6843cde67fd991951582b644acde0dc021d4b"
+    },
+    {
+      "name": "writer-inputs/en-1-T/input.json",
+      "bytes": 152974,
+      "sha256": "397858d6cf002e05ae70f9da15520b3861e3392feda3ad73f005926419757c79"
+    },
+    {
+      "name": "writer-inputs/ko-1-V/input.json",
+      "bytes": 65450,
+      "sha256": "06fe6d08aeee2b6b5009cb5e44e2451981b6e4afbf89b8129a8a39427dff1408"
+    },
+    {
+      "name": "writer-inputs/ko-1-T/input.json",
+      "bytes": 65160,
+      "sha256": "b2b15bdfcd507f8ac2e4f8508d53071ad1f0302ad35dca801cf987291c01bb7d"
+    },
+    {
+      "name": "native-images/en-table-page11.png",
+      "bytes": 233604,
+      "sha256": "f7ebf38b401f9ae252c8fda4781c361efe8604810e79ec66a15090e9ff69edbe"
+    },
+    {
+      "name": "native-images/ko-table-page3.png",
+      "bytes": 215968,
+      "sha256": "d950209fac61d2964acf7c7b0787e9acfec34785cd83407703f1c8c418d84c4d"
+    },
+    {
+      "name": "native-images/ko-table-page2.png",
+      "bytes": 190733,
+      "sha256": "183d714d6ab2341b86038dcfdad4a7f6b842b2e6d6b18f06ba9d05e0f55dbc9c"
+    },
+    {
+      "name": "korean/supplement-article-chart.jpg",
+      "bytes": 57464,
+      "sha256": "49aae10e87c229a96c60c8a4eb06142daa483005a0ff4cc4d1682f05d7eb97df"
+    },
+    {
+      "name": "PREREGISTRATION.md",
+      "bytes": 5606,
+      "sha256": "6c3bdfab6f731e9ca0f9f23a13bbf8d3e2cdc556edc51224c853127beef9f4f2"
+    }
+  ]
+}

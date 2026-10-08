@@ -1,0 +1,131 @@
+{
+  "policy": "Explicit metadata allowlist; no article text, source text, captions, quotations or raw model outputs",
+  "articles": [
+    {
+      "article_id": "K17-A1",
+      "url": "https://www.korea.kr/news/reporterView.do?newsId=148944148",
+      "title": "돌아온 국가장학금 신청 기간! 지원금과 범위도 확대됐어요",
+      "published_display": "2025.06.10 정책기자단 김재은",
+      "body_sha256": "306a14c02811e16bc9d7a09387d92d9b9ceb3b3bc697fb22ad49ac1a6bf64b2f",
+      "full_text_sha256": "026e68542acf8624f09653e7f60150debcf2c630c2f600607d80f216fc8ce4ff",
+      "article_scope": "Full title, subtitle when present, all article body prose, visible captions and in-body related links. Excludes navigation, comments, copyright boilerplate, author biography card and image pixels. Inline markup joined, paragraph/break whitespace normalized. No prose truncation.",
+      "publisher": "대한민국 정책브리핑 국민이 말하는 정책 / 정책기자단",
+      "lineage": "Government portal citizen-policy-reporter feature; primary release is same official-government institutional lineage, not independent media corroboration.",
+      "modification_date": null,
+      "temporal_note": "Retrieved current page later than original publication; no publication-time archive. Scholarship image paths show October 2025 despite June publication; no claim images are original publication version. Flu embedded OG and JSON-LD timezone strings differ; visible date retained.",
+      "read_scope": "Read the complete supplied original and candidate article text and the full supplied source packet. Evidence is scoped and does not independently verify personal anecdotes, interviews, images, or every article claim. No length limit.",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.korea.kr/common/download.do?fileId=198166319&tblKey=GMN",
+          "date": "2025-05-26",
+          "scope": "Main release body: announcement, income definition and immediately linked footnote, support changes, annual-versus-semester timing, application eligibility and closing-time exception, consultation paragraph. The two in-body tables are retained as text; annual-amount table also has original XML cell coordinates/spans. Excludes regional-center contact table, staff contacts, appendices 1–4 (posters and housing criteria), and image pixels. No visual-table certification; selected edit is supported by prose definition and footnote, not table."
+        }
+      ]
+    },
+    {
+      "article_id": "K17-A2",
+      "url": "https://www.korea.kr/news/reporterView.do?newsId=148955683",
+      "title": "더 늦기 전 '어린이 인플루엔자 예방접종' 하세요",
+      "published_display": "2025.12.03 정책기자단 박영미",
+      "body_sha256": "d67c89dfb2dc89429c39bd02ad4de465d0f6a224526b4a0c82683f1cf66e7931",
+      "full_text_sha256": "1fbcfa92fc1a01f1e1e2758786b56a3a5a985e03914621a6d1a9abda6b21c12a",
+      "article_scope": "Full title, subtitle when present, all article body prose, visible captions and in-body related links. Excludes navigation, comments, copyright boilerplate, author biography card and image pixels. Inline markup joined, paragraph/break whitespace normalized. No prose truncation.",
+      "publisher": "대한민국 정책브리핑 국민이 말하는 정책 / 정책기자단",
+      "lineage": "Government portal citizen-policy-reporter feature; primary release is same official-government institutional lineage, not independent media corroboration.",
+      "modification_date": null,
+      "temporal_note": "Retrieved current page later than original publication; no publication-time archive. Scholarship image paths show October 2025 despite June publication; no claim images are original publication version. Flu embedded OG and JSON-LD timezone strings differ; visible date retained.",
+      "read_scope": "Read the complete supplied original and candidate article text and the full supplied source packet. Evidence is scoped and does not independently verify personal anecdotes, interviews, images, or every article claim. No length limit.",
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.korea.kr/common/download.do?fileId=198412351&tblKey=GMN",
+          "date": "2025-11-18",
+          "scope": "Complete named section 인플루엔자 발생 동향 및 전망, including ILI case definition, denominator formula, all adjacent date/age notes, virological table, international comparisons and forecast. Excludes other disease sections and appendices; plotted image pixels unavailable to text packet. Tables are auxiliary; selected edit uses explicit prose case definition."
+        }
+      ]
+    },
+    {
+      "article_id": "EN17-A",
+      "title": "NASA’s DART Data Validates Kinetic Impact as Planetary Defense Method",
+      "publisher": "NASA",
+      "publication_date": "2023-03-01",
+      "language": "Originally English",
+      "news_type": "Agency science news; not independent newsroom",
+      "body_sha256": "e01857b2ac197ab8b08f21bb8adc2cc858490baf63240f46c36c5862f8318561",
+      "read_scope": {
+        "original": "Whole English article title and all article paragraphs/captions, including closing credit and boilerplate where contained in article; page navigation, media contact widget and video content excluded. No displayed subtitle was present.",
+        "candidate": "Whole article; same extraction scope as original.",
+        "sources": "Complete Abstract, Main (including figure captions and equation definitions), and Methods (both Numerical determination and Ejecta plume direction). These sections were read in full. Other cited DART papers, references and supplements are outside the read scope. Complete Abstract and Main, plus complete Methods subsections Shape modelling of Dimorphos and Shape model uncertainties. Includes size result, adjacent earlier estimates, shape definition, uncertainty, mass-density assumptions and warning-time/precursor distinction. Read in full; other Methods subsections and supplements not read.",
+        "verification_scope": "Fixed questions and changes supported by the supplied primary packet; not a claim that every unchanged sentence in the original is independently corroborated."
+      },
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://www.nature.com/articles/s41586-023-05878-z",
+          "date": "2023-03-01",
+          "scope": "Complete Abstract, Main (including figure captions and equation definitions), and Methods (both Numerical determination and Ejecta plume direction). These sections were read in full. Other cited DART papers, references and supplements are outside the read scope."
+        },
+        {
+          "id": "S2",
+          "url": "https://www.nature.com/articles/s41586-023-05810-5",
+          "date": "2023-03-01",
+          "scope": "Complete Abstract and Main, plus complete Methods subsections Shape modelling of Dimorphos and Shape model uncertainties. Includes size result, adjacent earlier estimates, shape definition, uncertainty, mass-density assumptions and warning-time/precursor distinction. Read in full; other Methods subsections and supplements not read."
+        }
+      ],
+      "url": "https://www.nasa.gov/missions/dart/nasas-dart-data-validates-kinetic-impact-as-planetary-defense-method/",
+      "accessed_at_utc": "2026-10-03T07:45:50.382344+00:00",
+      "lineage": "Agency news reporting affiliated research; linked primary research is not independent media corroboration."
+    },
+    {
+      "article_id": "EN17-B",
+      "title": "Oral immunotherapy induces remission of peanut allergy in some young children",
+      "publisher": "NIH/NIAID",
+      "publication_date": "2022-01-20",
+      "language": "Originally English",
+      "news_type": "Agency clinical-research news release; not independent newsroom",
+      "body_sha256": "9c979922d505c8c5121ddfaff81008babac41e29c2362e62236e0dc919238aab",
+      "read_scope": {
+        "original": "Whole English article title and all article paragraphs/captions, including closing credit and boilerplate where contained in article; page navigation, media contact widget and video content excluded. No displayed subtitle was present.",
+        "candidate": "Whole article; same extraction scope as original.",
+        "sources": "Complete registry protocol modules: Identification, Status, Description, Design, Arms/Interventions, Outcomes, Eligibility, acquired from https://clinicaltrials.gov/api/v2/studies/NCT01867671. Complete Description, Arms/Interventions, Outcomes and Eligibility read; administrative Identification/Status/Design retained for provenance. Results module is archived but not used to validate outcome percentages.",
+        "verification_scope": "Fixed questions and changes supported by the supplied primary packet; not a claim that every unchanged sentence in the original is independently corroborated."
+      },
+      "sources": [
+        {
+          "id": "S1",
+          "url": "https://clinicaltrials.gov/study/NCT01867671",
+          "date": "2020-03-16",
+          "scope": "Complete registry protocol modules: Identification, Status, Description, Design, Arms/Interventions, Outcomes, Eligibility, acquired from https://clinicaltrials.gov/api/v2/studies/NCT01867671. Complete Description, Arms/Interventions, Outcomes and Eligibility read; administrative Identification/Status/Design retained for provenance. Results module is archived but not used to validate outcome percentages."
+        }
+      ],
+      "url": "https://www.nih.gov/news-events/news-releases/oral-immunotherapy-induces-remission-peanut-allergy-some-young-children?a=1",
+      "accessed_at_utc": "2026-10-03T07:47:44.864365+00:00",
+      "lineage": "Agency news reporting affiliated research; linked primary research is not independent media corroboration."
+    }
+  ],
+  "korean_primary_details": [
+    {
+      "id": "S1",
+      "article_id": "K17-A1",
+      "url": "https://www.korea.kr/common/download.do?fileId=198166319&tblKey=GMN",
+      "date": "2025-05-26",
+      "scope": "Main release body: announcement, income definition and immediately linked footnote, support changes, annual-versus-semester timing, application eligibility and closing-time exception, consultation paragraph. The two in-body tables are retained as text; annual-amount table also has original XML cell coordinates/spans. Excludes regional-center contact table, staff contacts, appendices 1–4 (posters and housing criteria), and image pixels. No visual-table certification; selected edit is supported by prose definition and footnote, not table.",
+      "packet_sha256": "e152829d677c11369f8d2070176e01288bd4c759bcf82e43559de702dcd9aca7",
+      "lineage": "Originating education ministry/KDCA release, officially redistributed by government korea.kr portal; same institutional lineage as policy-reporter article.",
+      "version_note": "Internal release date and original official attachment frozen; later retrieval, no historical immutable archive.",
+      "limitation": "HWPX XML text + original table coordinates preserved; graphic-only content excluded and not claimed read. No visual rendering used for table-based inference."
+    },
+    {
+      "id": "S1",
+      "article_id": "K17-A2",
+      "url": "https://www.korea.kr/common/download.do?fileId=198412351&tblKey=GMN",
+      "date": "2025-11-18",
+      "scope": "Complete named section 인플루엔자 발생 동향 및 전망, including ILI case definition, denominator formula, all adjacent date/age notes, virological table, international comparisons and forecast. Excludes other disease sections and appendices; plotted image pixels unavailable to text packet. Tables are auxiliary; selected edit uses explicit prose case definition.",
+      "packet_sha256": "3db2c3594c71221e5ecaa692dd7a7528e5b39fafdbde76b78f776ccb8bcdc67f",
+      "lineage": "Originating education ministry/KDCA release, officially redistributed by government korea.kr portal; same institutional lineage as policy-reporter article.",
+      "version_note": "Internal release date and original official attachment frozen; later retrieval, no historical immutable archive.",
+      "limitation": "HWPX XML text + original table coordinates preserved; graphic-only content excluded and not claimed read. No visual rendering used for table-based inference."
+    }
+  ]
+}

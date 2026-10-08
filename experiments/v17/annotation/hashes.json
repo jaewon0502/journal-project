@@ -1,0 +1,25 @@
+{
+  "scope": "Byte-preserved bounded local annotation packet and actual sealed judge outputs. No full original article or full source is bundled.",
+  "portable_file_sha256": {
+    "instruction.md": "c7ca8051a54be39e2e32ff8f29da3b2db771546d0bcd7e261b35aa8a30dde397",
+    "items.json": "7d6fdf3968dcbd59a666cd7d122cf1e359c98f91bf10f23121ce536eee55c375",
+    "judge01.json": "26c3e26474d9f4991f6547d76078196807baec8257f78537ae8aa417b4bae1e1",
+    "judge02.json": "52474d4a8b396c7a456eff4747ba98b7b219cad5218aee383b18cadc5f01b1f8",
+    "prejudge-freeze.json": "1bb115e8a39c38eb73a3c25107753f9d3176fef31251da8c35b754133d18650b",
+    "prereg.md": "a899f6a593034d09bd92a54c1bc5971df6e7b7132a554c64b8665201bbe6f255",
+    "reference-withheld.json": "cf52a1301a144012a069d1516578e9bdf9595e7e8d6a0e75c6a602f8f746bd27",
+    "replay.py": "5435a8e4e22f6b6cead3e879c7a3021f033ad495d951f08be4fbcd4471d17dba",
+    "response-seal.json": "0eaa979415facd20c1a67c477eac23234afa16ef037886d14d744deac5851fcb"
+  },
+  "raw_original_sha256": {
+    "v17-common-v2.md": "5ed2d7854f3c41225570dbe0f19357dc676141817fb2b9bef32d606a9d4dd579",
+    "evaluation/audit/R004.input.json": "6c177b8be0bf98ef1fe4db2e22fff9f9be979cc6ad51da3153321c33bbcd70e1",
+    "evaluation/audit/R004.result.json": "9da00b50ac9bcad88512f5f0679e2a9188507aab65003d33c5c5e77c07d26d5d",
+    "evaluation/audit/R004.observation.json": "7cbe4a2fc1dcb1ba18c8dac12df84f69f2fbae7c356501022d5ade5545e39c0c",
+    "evaluation/audit/R006.input.json": "c19a02831fdce71fc49014da74b8bb0aadbc223bf57b7873c58fd56366eb7f3c",
+    "evaluation/audit/R006.result.json": "baaba0f88e2dc10feb12e5b20dd4657720c7df81578c1b082e0488223a400575",
+    "evaluation/audit/R006.observation.json": "f27fb88510960d2172429fb43f9a05813ba79aa42a17d5cbcdbe7754e4f005ba"
+  },
+  "raw_original_note": "Relative private archive identifiers for provenance only. Originals not bundled; portable replay checks public packet and sealed responses.",
+  "privacy": "No absolute private paths or nested full audit payloads included."
+}

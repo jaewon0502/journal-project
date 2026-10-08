@@ -1,0 +1,36 @@
+{
+  "unit_id": "a267dc49",
+  "results": [
+    {
+      "id": "context_1",
+      "gate_result": "blocked",
+      "reasons": [
+        "invalid quantity/arithmetic"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "completion_target",
+      "gate_result": "eligible_mismatch",
+      "reasons": [],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "other_scope",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    },
+    {
+      "id": "weekday_scope",
+      "gate_result": "blocked",
+      "reasons": [
+        "population: identity not certified"
+      ],
+      "semantic_identity_verified": false
+    }
+  ],
+  "limits": "Exact anchor presence and typed arithmetic only; AI semantic binding may be false. Necessary not sufficient."
+}

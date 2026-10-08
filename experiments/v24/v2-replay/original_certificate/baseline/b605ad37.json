@@ -1,0 +1,87 @@
+{
+  "gate": {
+    "unit_id": "b605ad37",
+    "article_sha256": "a82870dbd3603238b8805f58da591e644b89e2c48617de2c8847663139b5f4e0",
+    "results": [
+      {
+        "id": "context_1",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_2",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "context_3",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: quantity/unit absent"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "received_target",
+        "gate_result": "eligible_mismatch",
+        "reasons": [],
+        "semantic_identity_verified": false,
+        "article_quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+        "article_span": [
+          0,
+          68
+        ],
+        "numeric_span": [
+          59,
+          60
+        ],
+        "original_numeric_token": "8",
+        "article_unit": "kg",
+        "article_value": "8",
+        "expected_value": "192",
+        "normalized_expected_value": "192000",
+        "dimension": "mass"
+      },
+      {
+        "id": "other_measure",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: property: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      },
+      {
+        "id": "per_box_mass",
+        "gate_result": "blocked",
+        "reasons": [
+          "invalid comparison: population: identity not certified"
+        ],
+        "semantic_identity_verified": false
+      }
+    ],
+    "status": "checked",
+    "reasons": [],
+    "limits": "Exact anchors, rational quantities and dimensional arithmetic only; AI semantic binding may be false. Necessary not sufficient. Gate artifacts must be trusted, not model supplied."
+  },
+  "delivery": {
+    "unit_id": "b605ad37",
+    "kind": "deterministic gated delivery v2; not native model generation",
+    "status": "delivered",
+    "full_edited_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+    "accepted_patch_ids": [
+      "P1"
+    ],
+    "blocked_patches": [],
+    "raw_label_violations": [],
+    "local_review_required": [],
+    "semantic_correctness_certified": false,
+    "raw_output_preserved": true,
+    "reasons": []
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "format_version": 1,
+  "scope": "Fictional development only; recorded outputs, no new generation.",
+  "transformation": "Units copied byte-for-byte. Output read_scope replaced with disclosure marker; JSON reserialized. Every other field is preserved, including invalid source_refs. Private originals retained.",
+  "units": [
+    {
+      "path": "units/D171.json",
+      "original_sha256": "2713160d2d602dc7bc743cbdbed5c091a13f69957319c5c39157755219e8bd08",
+      "public_sha256": "2713160d2d602dc7bc743cbdbed5c091a13f69957319c5c39157755219e8bd08"
+    },
+    {
+      "path": "units/D172.json",
+      "original_sha256": "3206df8b4e0e6749326d23658c39b05fcdfb4c85a7b0b59b665925c491e7272b",
+      "public_sha256": "3206df8b4e0e6749326d23658c39b05fcdfb4c85a7b0b59b665925c491e7272b"
+    },
+    {
+      "path": "units/D173.json",
+      "original_sha256": "b38e517edfa0102bfe2ddb352d94639be6c7790d805f5c707b39dc17fe3c5f0e",
+      "public_sha256": "b38e517edfa0102bfe2ddb352d94639be6c7790d805f5c707b39dc17fe3c5f0e"
+    },
+    {
+      "path": "units/D174.json",
+      "original_sha256": "95560d70b8866b6c2a83adc24580d10048a909767bc2b1d6eb2d6e77e16c4654",
+      "public_sha256": "95560d70b8866b6c2a83adc24580d10048a909767bc2b1d6eb2d6e77e16c4654"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "outputs/v1/D171-BASE.json",
+      "phase": "v1",
+      "unit": "D171",
+      "method": "BASE",
+      "original_sha256": "e53feff5dbc225699fbb8ecfbba4a7a51be62be3ca568a8a4c73cdcecade50d2",
+      "public_sha256": "a0b9f0e8df63d8a1d57fe991e6d4c835047b882cd093b95687368f56007f0992",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "repair",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D171-LINK.json",
+      "phase": "v1",
+      "unit": "D171",
+      "method": "LINK",
+      "original_sha256": "de6036cbdd44bea947d4adc150d6d439924c9749c96ff906590eace5cebf0ed9",
+      "public_sha256": "7202668ccf221d636610d667108d4b71e068a9ff42208e1630d68c432e4eb330",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "repair",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D172-BASE.json",
+      "phase": "v1",
+      "unit": "D172",
+      "method": "BASE",
+      "original_sha256": "79569fee685e41baaf76f81bc4e0ba03a93510e3c6faef1c982d1df509bbf012",
+      "public_sha256": "3b3489feb979d43a464345c4008bcb93e70017ce517c7fd999a7c4e83b605e5e",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": null,
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": "9438ecf331a10c7f08a348e0e700f42924ee52732444c3a076a27538cbd62d04"
+    },
+    {
+      "path": "outputs/v1/D172-LINK.json",
+      "phase": "v1",
+      "unit": "D172",
+      "method": "LINK",
+      "original_sha256": "08422ccb5c7a4bcfd7c182dba5ad250e3a7042e71e5a1ed0a53b5479e1a01253",
+      "public_sha256": "d64e2b66b4b20838db1a9e629094391ad2179cddb01f67dee89e07580e3d14e7",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D173-BASE.json",
+      "phase": "v1",
+      "unit": "D173",
+      "method": "BASE",
+      "original_sha256": "e37f1363dfd012179a72618ca7e6c2f97c0b65c27e59bcea0d4b9248b28adbe8",
+      "public_sha256": "fe0a1f38853638d703652065765615c0dac97be4e7de005fdc5cf7bcdd2b112d",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D173-LINK.json",
+      "phase": "v1",
+      "unit": "D173",
+      "method": "LINK",
+      "original_sha256": "dfbc608357017e8a9948f9aed8f8900c6b73da5d24a72a981c0150201abce078",
+      "public_sha256": "82550c65e29ba51670166613da37d266c87a6dcc85b77948271fdde7b2f7b568",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D174-BASE.json",
+      "phase": "v1",
+      "unit": "D174",
+      "method": "BASE",
+      "original_sha256": "b93ba65664828510721f4a87f31f02ca54eb42c588e8eaeddccf3991db48f354",
+      "public_sha256": "cd0e262f3fc633f1c6ca5ede888c1c72b916286d7a45f2d1d95ed92a46092372",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "repair",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v1/D174-LINK.json",
+      "phase": "v1",
+      "unit": "D174",
+      "method": "LINK",
+      "original_sha256": "c388b7c7b7a9e83407aeb88e6294afe819e55324af967c1e2480272fff636da0",
+      "public_sha256": "8a0e5a3e3c0aa0934ade5f0db6264417b27e231af7e205de69cbe5e8d6985a5c",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": "unknown source reference",
+      "expected_decision": "repair",
+      "expected_delivered_sha256": null
+    },
+    {
+      "path": "outputs/v2/D172-BASE.json",
+      "phase": "v2",
+      "unit": "D172",
+      "method": "BASE",
+      "original_sha256": "df685af98bce65cddefce16449c41c04c91afb08559dfad6d6dce17062511d80",
+      "public_sha256": "508ca82391731cb95559f1ddda63b64a98803f86f8dfbe5b4de8ca40997d9354",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": null,
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": "9438ecf331a10c7f08a348e0e700f42924ee52732444c3a076a27538cbd62d04"
+    },
+    {
+      "path": "outputs/v2/D172-LINK.json",
+      "phase": "v2",
+      "unit": "D172",
+      "method": "LINK",
+      "original_sha256": "04d177c02a3e1e436608d6a2d742f6cb49e3ae43cd0db3b3422bb6526df3c081",
+      "public_sha256": "aa63d8a7f0fb84bcf382e9c4cee5f8723efb43acf581595c7278518462177671",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": null,
+      "expected_decision": "no_change",
+      "expected_delivered_sha256": "9438ecf331a10c7f08a348e0e700f42924ee52732444c3a076a27538cbd62d04"
+    },
+    {
+      "path": "outputs/v2/D174-BASE.json",
+      "phase": "v2",
+      "unit": "D174",
+      "method": "BASE",
+      "original_sha256": "c2d43142aca456092d6aad48dd44f5ce494a0b6e7a5bd83915836a496a151548",
+      "public_sha256": "e8085850d94f4535244525261545691f61fa45bd691d084bfa18d4b9af932472",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": null,
+      "expected_decision": "repair",
+      "expected_delivered_sha256": "0ce8891a64ee6b25b70fe1b5bdfbdb20f4dea644c8f87671f94649f32d5a91b3"
+    },
+    {
+      "path": "outputs/v2/D174-LINK.json",
+      "phase": "v2",
+      "unit": "D174",
+      "method": "LINK",
+      "original_sha256": "727b501bfb4aef4c7c027bc8b783c66a1ad83ec14d66336a8408b162c96f7d97",
+      "public_sha256": "5b9c1e9dd9a7227f2b6be4d6ba9d84b95badd1e5ecbae214bc27be8cc4ce8e10",
+      "sanitized_fields": [
+        "read_scope"
+      ],
+      "expected_error": null,
+      "expected_decision": "repair",
+      "expected_delivered_sha256": "0ce8891a64ee6b25b70fe1b5bdfbdb20f4dea644c8f87671f94649f32d5a91b3"
+    }
+  ],
+  "validator": {
+    "../code/check_output.py": "66344452478c4705f2b2bce21a24e689323140a9aa90ee06e45ca7adf531a5b8",
+    "../code/schema.json": "95d3ceeebf6fba8821affad0f8bc291e872f6be9ff3a775c4523ad586cdfaf27"
+  }
+}

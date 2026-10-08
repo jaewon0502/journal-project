@@ -1,0 +1,577 @@
+{
+  "audit_stage": "PRE",
+  "auditor": "independent internal AI, not human",
+  "input_scope": "Only the nine complete supplied JSON inputs under control/inputs/{joined,split,reordered}/{X081,X124,X196}.json were read. No policy/raw/mapping/outputs/other evidence or browsing.",
+  "semantic_rule": "Proposition classifications are invariant across semantically equivalent conjunction, sentence splitting, and order. A mixed sentence cannot receive a single verdict that erases supported clauses or collapses not-established content into refutation.",
+  "records": [
+    {
+      "variant": "joined",
+      "unit_id": "X081",
+      "original_text": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "none",
+      "necessary_local_correction": null,
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "joined",
+      "unit_id": "X124",
+      "original_text": "연구진은 실험실 성체 동물 18마리를 관찰했으며, 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 18마리다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace only 18마리 with 12마리.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "joined",
+      "unit_id": "X196",
+      "original_text": "연구진은 실험실 성체 동물 12마리를 관찰했으며, 야생에서도 같은 효과가 나타난다고 보고서가 입증했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "wild_generalization",
+          "proposition": "야생에서도 같은 효과가 나타난다.",
+          "status": "not_established",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "Neither presence nor absence of a wild effect is established. 같은 효과 has an underspecified referent in the article; the source reports a laboratory temporal decrease, not a demonstrated causal effect."
+        },
+        {
+          "id": "report_proof_attribution",
+          "proposition": "이 보고서가 야생에서도 같은 효과가 나타난다는 것을 입증했다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "The report explicitly cannot establish the wild effect. Its claimed proof is refuted independently of the truth of the wild-effect hypothesis."
+        }
+      ],
+      "attribution_scope": "보고서가 입증했다 explicitly attributes proof of wild generalization to S1. This attribution is contradicted; the embedded wild hypothesis is only not established.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace the unsupported wild-proof clause with a local statement that this report cannot determine effects in the wild, e.g. 야생에서의 효과는 이 보고서로 판단할 수 없다. Preserve the supported laboratory observation clause.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "correctly supported laboratory/adult/12 observation must remain",
+        "uncertainty about wild effects must not become a claim of no wild effect",
+        "report inability to establish wild effects must not become merely absent citation"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "split",
+      "unit_id": "X081",
+      "original_text": "연구진은 실험실 성체 동물 12마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "none",
+      "necessary_local_correction": null,
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "split",
+      "unit_id": "X124",
+      "original_text": "연구진은 실험실 성체 동물 18마리를 관찰했다. 먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 18마리다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace only 18마리 with 12마리.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "split",
+      "unit_id": "X196",
+      "original_text": "연구진은 실험실 성체 동물 12마리를 관찰했다. 야생에서도 같은 효과가 나타난다고 보고서가 입증했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "wild_generalization",
+          "proposition": "야생에서도 같은 효과가 나타난다.",
+          "status": "not_established",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "Neither presence nor absence of a wild effect is established. 같은 효과 has an underspecified referent in the article; the source reports a laboratory temporal decrease, not a demonstrated causal effect."
+        },
+        {
+          "id": "report_proof_attribution",
+          "proposition": "이 보고서가 야생에서도 같은 효과가 나타난다는 것을 입증했다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "The report explicitly cannot establish the wild effect. Its claimed proof is refuted independently of the truth of the wild-effect hypothesis."
+        }
+      ],
+      "attribution_scope": "보고서가 입증했다 explicitly attributes proof of wild generalization to S1. This attribution is contradicted; the embedded wild hypothesis is only not established.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace the unsupported wild-proof clause with a local statement that this report cannot determine effects in the wild, e.g. 야생에서의 효과는 이 보고서로 판단할 수 없다. Preserve the supported laboratory observation clause.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "correctly supported laboratory/adult/12 observation must remain",
+        "uncertainty about wild effects must not become a claim of no wild effect",
+        "report inability to establish wild effects must not become merely absent citation"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "reordered",
+      "unit_id": "X081",
+      "original_text": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "none",
+      "necessary_local_correction": null,
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "reordered",
+      "unit_id": "X124",
+      "original_text": "먹이를 준 뒤 활동량이 감소했다고 보고서는 기록했다. 연구진은 실험실 성체 동물 18마리를 관찰했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 18마리다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "temporal_observation",
+          "proposition": "먹이를 준 뒤 활동량이 감소했다.",
+          "status": "supported",
+          "source": "S1",
+          "scope": "Temporal sequence and measured direction; no claim that feeding caused the decrease."
+        },
+        {
+          "id": "report_attribution",
+          "proposition": "보고서가 먹이를 준 뒤 활동량 감소를 기록했다.",
+          "status": "supported",
+          "source": "S1"
+        }
+      ],
+      "attribution_scope": "보고서는 기록했다 attributes the temporal decrease to S1; observation details are independently supported by S1.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace only 18마리 with 12마리.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "feeding before activity decrease",
+        "activity direction: decrease",
+        "report records this temporal observation, not causal proof"
+      ],
+      "hold": false
+    },
+    {
+      "variant": "reordered",
+      "unit_id": "X196",
+      "original_text": "야생에서도 같은 효과가 나타난다고 보고서가 입증했다. 연구진은 실험실 성체 동물 12마리를 관찰했다.",
+      "atomic_propositions": [
+        {
+          "id": "researchers_observed",
+          "proposition": "연구진이 동물을 관찰했다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "setting",
+          "proposition": "관찰 장소는 실험실이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "population",
+          "proposition": "관찰 대상은 성체 동물이다.",
+          "status": "supported",
+          "source": "S1"
+        },
+        {
+          "id": "sample_size",
+          "proposition": "관찰 대상은 12마리다.",
+          "status": "supported",
+          "source": "S1",
+          "evidence": "연구진은 실험실에서 성체 동물 12마리를 관찰했다."
+        },
+        {
+          "id": "wild_generalization",
+          "proposition": "야생에서도 같은 효과가 나타난다.",
+          "status": "not_established",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "Neither presence nor absence of a wild effect is established. 같은 효과 has an underspecified referent in the article; the source reports a laboratory temporal decrease, not a demonstrated causal effect."
+        },
+        {
+          "id": "report_proof_attribution",
+          "proposition": "이 보고서가 야생에서도 같은 효과가 나타난다는 것을 입증했다.",
+          "status": "contradicted",
+          "source": "S1",
+          "evidence": "야생 개체를 관찰하지 않았으며 야생에서의 효과는 이 보고서로 판단할 수 없다.",
+          "scope": "The report explicitly cannot establish the wild effect. Its claimed proof is refuted independently of the truth of the wild-effect hypothesis."
+        }
+      ],
+      "attribution_scope": "보고서가 입증했다 explicitly attributes proof of wild generalization to S1. This attribution is contradicted; the embedded wild hypothesis is only not established.",
+      "decision": "necessary",
+      "necessary_local_correction": "Replace the unsupported wild-proof clause with a local statement that this report cannot determine effects in the wild, e.g. 야생에서의 효과는 이 보고서로 판단할 수 없다. Preserve the supported laboratory observation clause.",
+      "optional_or_unnecessary": [
+        "No need to add absent control-group/causality caveats where the article only says 뒤 (after).",
+        "Sentence splitting, joining, or reordering is unnecessary."
+      ],
+      "protected_relations": [
+        "researchers → observation → adult animals",
+        "laboratory setting",
+        "sample size 12 (correct 18 only where present)",
+        "correctly supported laboratory/adult/12 observation must remain",
+        "uncertainty about wild effects must not become a claim of no wild effect",
+        "report inability to establish wild effects must not become merely absent citation"
+      ],
+      "hold": false
+    }
+  ],
+  "cross_variant_expectation": {
+    "X081": "All supported; no factual edit necessary.",
+    "X124": "Sample-size contradiction only; necessary 18→12 local correction.",
+    "X196": "Supported lab observation; wild hypothesis not established; attributed report proof contradicted. Necessary local correction of wild-proof clause; no global refutation."
+  },
+  "post_audit_plan": [
+    "Compare actual complete edited article with every protected supported proposition and relation.",
+    "Check retained factual errors and whether necessary local correction was achieved.",
+    "Check unnecessary changes, newly introduced losses or errors, verdict/rationale disagreement, and mixed-proposition verdicts.",
+    "Compare semantically equivalent variants without imposing an issue count."
+  ]
+}

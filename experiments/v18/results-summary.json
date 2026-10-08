@@ -1,0 +1,173 @@
+{
+  "scope": "Frozen primary v18 only; adaptive v3/rollback followups excluded",
+  "writer_output_files": 10,
+  "unique_article_inputs": 8,
+  "new_real_articles": 6,
+  "old_exposed_regression_inputs": 2,
+  "reference_files": 8,
+  "independent_audit_results": 10,
+  "evaluation": {
+    "articles": 4,
+    "necessary_reference_issues": 5,
+    "safe_delivered_reference_repairs": 3,
+    "contract_valid_outputs": 3,
+    "reference_scoped_normal_outputs": 1
+  },
+  "rows": [
+    {
+      "output_id": "K181-v1",
+      "phase": "development",
+      "necessary_reference_issues": 1,
+      "safe_delivered_reference_repairs": 0,
+      "contract_valid": false,
+      "contract_error": "ValueError: inexact article quote",
+      "patch_count": 1,
+      "native_unchanged": false,
+      "native_full_article_sha256": "b1ae440b8a60e085e969211cdea8562cd435dbb7e2304a55803ee7d0603638b4",
+      "input_file_chars": 24089,
+      "output_file_chars": 11827
+    },
+    {
+      "output_id": "E183-v1",
+      "phase": "development",
+      "necessary_reference_issues": 0,
+      "safe_delivered_reference_repairs": 0,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 0,
+      "native_unchanged": true,
+      "native_full_article_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd",
+      "input_file_chars": 87115,
+      "output_file_chars": 19425
+    },
+    {
+      "output_id": "K181-v2",
+      "phase": "development_rerun",
+      "necessary_reference_issues": 1,
+      "safe_delivered_reference_repairs": 1,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 1,
+      "native_unchanged": false,
+      "native_full_article_sha256": "8a5e605ace4884c67fd4eb748b4ff3aec8018da99f91485f92fe3cf232af62b0",
+      "input_file_chars": 24409,
+      "output_file_chars": 6835
+    },
+    {
+      "output_id": "E183-v2",
+      "phase": "development_rerun",
+      "necessary_reference_issues": 0,
+      "safe_delivered_reference_repairs": 0,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 0,
+      "native_unchanged": true,
+      "native_full_article_sha256": "266b819314c2bbe0fec9cfe255d1175407244e581c4dd219dd0d12c27c540dbd",
+      "input_file_chars": 87435,
+      "output_file_chars": 22509
+    },
+    {
+      "output_id": "E181-v2",
+      "phase": "evaluation",
+      "necessary_reference_issues": 1,
+      "safe_delivered_reference_repairs": 1,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 2,
+      "native_unchanged": false,
+      "native_full_article_sha256": "1b42dc9216db1e12c2a2c6a049c677cc8ce017f06dbd0863d50b87833f61047f",
+      "input_file_chars": 26519,
+      "output_file_chars": 14500
+    },
+    {
+      "output_id": "E182-v2",
+      "phase": "evaluation",
+      "necessary_reference_issues": 2,
+      "safe_delivered_reference_repairs": 2,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 2,
+      "native_unchanged": false,
+      "native_full_article_sha256": "54b9c75d030a5601a7fa4bc55c5023a315e48488929586b7580b98f0865fc67b",
+      "input_file_chars": 35239,
+      "output_file_chars": 14122
+    },
+    {
+      "output_id": "K182-v2",
+      "phase": "evaluation",
+      "necessary_reference_issues": 0,
+      "safe_delivered_reference_repairs": 0,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 0,
+      "native_unchanged": true,
+      "native_full_article_sha256": "24abc25bff95e605e9ba9c720605c5e30f09e60cce0fc750dc9115ee5d5d1e42",
+      "input_file_chars": 32685,
+      "output_file_chars": 9520
+    },
+    {
+      "output_id": "K183-v2",
+      "phase": "evaluation",
+      "necessary_reference_issues": 2,
+      "safe_delivered_reference_repairs": 0,
+      "contract_valid": false,
+      "contract_error": "ValueError: cyclic patch dependency",
+      "patch_count": 3,
+      "native_unchanged": false,
+      "native_full_article_sha256": "1365dce953d4181ba0aac08733dea5989ca50f09f2967f790c8b5f39400b4fdf",
+      "input_file_chars": 85662,
+      "output_file_chars": 9633
+    },
+    {
+      "output_id": "REG181-v2",
+      "phase": "regression",
+      "necessary_reference_issues": 1,
+      "safe_delivered_reference_repairs": 1,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 1,
+      "native_unchanged": false,
+      "native_full_article_sha256": "5b6b115deeda3cc974bce1e82e3bfe27a7374421ee2c3fc037b6fabe8245a3da",
+      "input_file_chars": 30633,
+      "output_file_chars": 9371
+    },
+    {
+      "output_id": "REG182-v2",
+      "phase": "regression",
+      "necessary_reference_issues": 1,
+      "safe_delivered_reference_repairs": 1,
+      "contract_valid": true,
+      "contract_error": null,
+      "patch_count": 1,
+      "native_unchanged": false,
+      "native_full_article_sha256": "cc7c1ea9bb2d15b248f57de03da7ec965d0a82760fff0bcbe6e667d9c4e66fc6",
+      "input_file_chars": 35905,
+      "output_file_chars": 13967
+    }
+  ],
+  "input_file_chars_total": 469691,
+  "output_file_chars_total": 131709,
+  "measurement_limits": "Unicode character counts of assigned files only; hidden prompts and token/cost/latency unavailable. Exact deployment and seed not exposed. No humans; same inherited native runtime without requested overrides.",
+  "runtime_observations": {
+    "observed_at_utc": "2026-10-03T08:39:39.149666+00:00",
+    "native_execution": "fresh contexts; inherited model/effort, no requested overrides",
+    "environment_allowlist": {},
+    "configuration_observations": [
+      {
+        "file_name": "config.toml",
+        "exists": false
+      }
+    ],
+    "exact_deployment_seed_token_cost": "not exposed by native tool responses",
+    "new_credentials_or_paid_api": "none"
+  },
+  "elapsed_window_observation": {
+    "start_event": "First development writer input freeze",
+    "start_utc": "2026-10-03T08:47:26.831166+00:00",
+    "end_event": "Latest of ten original writer file modification timestamps observed by filesystem stat",
+    "end_utc": "2026-10-03T08:58:29.235439+00:00",
+    "end_file": "raw/REG181-v2.json",
+    "elapsed_seconds": 662.404273,
+    "interpretation": "Coordinator elapsed window with collection/queue/development work; not pure generation latency, compute, or per-arm timing. Captured filesystem mtime may change upon copying; this observation is preserved separately."
+  }
+}

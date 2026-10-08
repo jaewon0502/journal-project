@@ -1,0 +1,52 @@
+[
+  {
+    "case": "input_quote",
+    "accepted": true
+  },
+  {
+    "case": "modified_quote",
+    "accepted": false,
+    "error": "ValueError: inexact article quote"
+  },
+  {
+    "case": "duplicate_source",
+    "accepted": false,
+    "error": "ValueError: duplicate source id"
+  },
+  {
+    "case": "blank_unit_id",
+    "accepted": true
+  },
+  {
+    "case": "blank_source_id",
+    "accepted": true
+  },
+  {
+    "case": "numeric_source_id",
+    "accepted": true
+  },
+  {
+    "case": "duplicate_protection_id",
+    "accepted": true
+  },
+  {
+    "case": "wrong_output_type",
+    "accepted": false,
+    "error": "ValueError: $.unit_id: expected string"
+  },
+  {
+    "case": "wrong_unit_id",
+    "accepted": false,
+    "error": "ValueError: unit mismatch"
+  },
+  {
+    "case": "partial_delivery",
+    "accepted": false,
+    "error": "ValueError: native whole article differs from declared exact patches"
+  },
+  {
+    "case": "missing_partner",
+    "accepted": false,
+    "error": "ValueError: missing dependency"
+  }
+]

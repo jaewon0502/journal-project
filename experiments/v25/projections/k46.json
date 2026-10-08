@@ -1,0 +1,88 @@
+{
+  "output_id": "k46",
+  "language": "ko",
+  "condition": "T",
+  "variant_id": "ko-R82",
+  "raw_sha256": "91d4ae1f9fe31b0b3bf8e42f7864c69cf767e20dbafbbc26b6405c6651096b28",
+  "input_sha256": "b2b15bdfcd507f8ac2e4f8508d53071ad1f0302ad35dca801cf987291c01bb7d",
+  "original_text_sha256": "232fdf974bd5d79f62f0df09be79de137d6bd05d6bf09fed71c83f62d976fcea",
+  "final_text_sha256": "296e00778cb34d16a8a349a70d7472bfdb08a84fb4b999be3a62c39a7e7eb7b2",
+  "article_unchanged": false,
+  "alignment": [
+    {
+      "question_id": "Q1",
+      "candidate_id": "A",
+      "relation": "same_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "1 (physical 2)",
+        "table": "국내총생산에 대한 지출",
+        "row": "건설투자",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %; 2026-04-23 속보"
+      }
+    },
+    {
+      "question_id": "Q1",
+      "candidate_id": "B",
+      "relation": "different_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "1 (physical 2)",
+        "table": "국내총생산에 대한 지출",
+        "row": "설비투자",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %; 2026-04-23 속보"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "A",
+      "relation": "different_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "2 (physical 3)",
+        "table": "경제활동별 국내총생산",
+        "row": "국내총생산 (GDP)",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %; 2026-04-23 속보"
+      }
+    },
+    {
+      "question_id": "Q2",
+      "candidate_id": "B",
+      "relation": "same_target",
+      "source_id": "공보 2026-04-24호",
+      "source_location": {
+        "page": "2 (physical 3)",
+        "table": "경제활동별 국내총생산",
+        "row": "국내총소득 (GDI)",
+        "column": "2026p / 1/4, unparenthesized",
+        "qualifier": "2020년 연쇄가격 기준; 계절조정계열, 전기대비, %; 2026-04-23 속보"
+      }
+    }
+  ],
+  "claim_audit": [
+    {
+      "question_id": "Q1",
+      "relation": "contradicted"
+    },
+    {
+      "question_id": "Q2",
+      "relation": "supported"
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "건설투자는 건물건설과 토목건설이 나란히 늘어 4.8% 증가했고",
+      "after": "건설투자는 건물건설과 토목건설이 나란히 늘어 2.8% 증가했고",
+      "reason": "The April 23 advance release reports 2.8% for construction investment; 4.8% belongs to equipment investment. Retain the published one-decimal precision.",
+      "question_id": "Q1"
+    }
+  ],
+  "local_annotation_count": 0,
+  "other_concern_count": 0,
+  "exact_delivery": true,
+  "notice": "Projection excludes full article, source quotations and prose reasoning. Raw complete native output privately preserved; does not replace it."
+}

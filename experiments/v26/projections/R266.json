@@ -1,0 +1,56 @@
+{
+  "unit_id": "R266",
+  "input_sha256": "0653e27f466f1db5325e6ccada56ef84673e797cd8c0f4cbdef45e9da0d4ee3d",
+  "raw_sha256": "96ba1713af41689e7f3df4fb2d9d97897e830bf78b9433d4fc137c2f34bdf56b",
+  "original_sha256": "16ae0eb42f08e39b4c571293e96b57846d4acfaf3f3a3c6ab018ca359fbb5c87",
+  "final_sha256": "e3f59f7799f5c621b1fdc8527bceccb9113c69f9c0d957b189a267500223c4bb",
+  "original_chars": 5829,
+  "final_chars": 5881,
+  "patch_count": 5,
+  "patches": [
+    {
+      "id": "P1",
+      "before_chars": 130,
+      "after_chars": 120,
+      "before_sha256": "f4e0005b0ebd3dae36fca1c5ab4bd13eec0efa552412fea791deea7c0b33ba38",
+      "after_sha256": "17c4b84cf50cea7f15365c371c18a0a996ebc145261323870f10a11b6cbe6c3c",
+      "position_in_sequential_input": 1332
+    },
+    {
+      "id": "P2",
+      "before_chars": 34,
+      "after_chars": 44,
+      "before_sha256": "dab896a0a553ff0464397bf657790d31788da59e90cacd891c0df742f6b37fe5",
+      "after_sha256": "645150e210c1f9e461f55fca47dce95593b32a83bba45b5f833da0c6566779bc",
+      "position_in_sequential_input": 1453
+    },
+    {
+      "id": "P3",
+      "before_chars": 138,
+      "after_chars": 128,
+      "before_sha256": "8cdb65285b1aa0f55df1b02778c1697b2ccba46ec57c4fbafb40870415cfe80b",
+      "after_sha256": "8ea5ea0b16a1bbf781606a15e8e9a415f0c66bc5ae319bceb04c3bea3261cd63",
+      "position_in_sequential_input": 3364
+    },
+    {
+      "id": "P4",
+      "before_chars": 135,
+      "after_chars": 169,
+      "before_sha256": "4b7264330e7c254b92af4ff8c5146b523f736a0285d5f8814111647e0339df7e",
+      "after_sha256": "6edecfceab6052f557f11a6f87df39fbc4be1f25fb913056fd5b75bb90b93ee8",
+      "position_in_sequential_input": 4062
+    },
+    {
+      "id": "P5",
+      "before_chars": 53,
+      "after_chars": 81,
+      "before_sha256": "cc1dd5f4b09f22b6bf1f4a4023093bee20d35162226a0447db602e3799981927",
+      "after_sha256": "dce27585bdc54927ed8478f78ebe57c504505585cfed59b54cdb2af0b5b44ff6",
+      "position_in_sequential_input": 4916
+    }
+  ],
+  "clause_count": 55,
+  "annotation_count": 10,
+  "exact_literal_delivery": true,
+  "notice": "Public projection omits full article, quotations and edits that would collectively reproduce it. Private raw/input preserved."
+}

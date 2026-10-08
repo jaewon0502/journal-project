@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "v18 natural whole-article minimal editor output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "unit_id",
+    "findings",
+    "patches",
+    "preservation_decision",
+    "local_hold_reasons",
+    "coverage_gaps",
+    "selected_candidate_delta_safety",
+    "overall_readiness",
+    "overall_reason",
+    "read_scope",
+    "full_edited_article",
+    "protection_items"
+  ],
+  "properties": {
+    "unit_id": {
+      "type": "string"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "question_part",
+          "origin",
+          "factual_error",
+          "conclusion_changing_omission",
+          "optional_clarification",
+          "original_quote",
+          "candidate_quote",
+          "source_refs",
+          "evidence_relations",
+          "changed_proposition_or_counterexample",
+          "necessity",
+          "evidence_support",
+          "preserves_other_meaning",
+          "context_safe",
+          "local_action",
+          "reason",
+          "original_proposition_changed",
+          "required_answer_missing",
+          "answer_present_but_incorrect"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "question_part": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "new_from_edit",
+              "inherited",
+              "source_only"
+            ]
+          },
+          "factual_error": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "conclusion_changing_omission": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "optional_clarification": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "original_quote": {
+            "type": "string"
+          },
+          "candidate_quote": {
+            "type": "string"
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_relations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "supporting_clause",
+                "linked_clause",
+                "relation",
+                "relevance_to_claim"
+              ],
+              "properties": {
+                "supporting_clause": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "document_id",
+                    "locator",
+                    "quote"
+                  ],
+                  "properties": {
+                    "document_id": {
+                      "type": "string"
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "quote": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "linked_clause": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "document_id",
+                        "locator",
+                        "quote"
+                      ],
+                      "properties": {
+                        "document_id": {
+                          "type": "string"
+                        },
+                        "locator": {
+                          "type": "string"
+                        },
+                        "quote": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relation": {
+                  "type": "string",
+                  "enum": [
+                    "supports",
+                    "contradicts",
+                    "definition",
+                    "exception",
+                    "scope",
+                    "effective_date",
+                    "not_applicable",
+                    "unknown"
+                  ]
+                },
+                "relevance_to_claim": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "changed_proposition_or_counterexample": {
+            "type": "string"
+          },
+          "necessity": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "evidence_support": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "preserves_other_meaning": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "context_safe": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "local_action": {
+            "type": "string",
+            "enum": [
+              "patch",
+              "no_change",
+              "hold"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "original_proposition_changed": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown",
+              "not_applicable"
+            ]
+          },
+          "required_answer_missing": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          },
+          "answer_present_but_incorrect": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no",
+              "unknown"
+            ]
+          }
+        }
+      }
+    },
+    "patches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "finding_id",
+          "before",
+          "after",
+          "depends_on"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "finding_id": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          },
+          "after": {
+            "type": "string"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "preservation_decision": {
+      "type": "string",
+      "enum": [
+        "no_change",
+        "repair",
+        "hold"
+      ]
+    },
+    "local_hold_reasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "related_finding",
+          "reason"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "H-E",
+              "H-N",
+              "H-S",
+              "H-D",
+              "H-X"
+            ]
+          },
+          "related_finding": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "scope",
+          "relation_to_local_action",
+          "reason"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "H-C"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "relation_to_local_action": {
+            "type": "string",
+            "enum": [
+              "linked",
+              "unrelated",
+              "unknown"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selected_candidate_delta_safety": {
+      "type": "string",
+      "enum": [
+        "safe",
+        "unsafe",
+        "unknown"
+      ]
+    },
+    "overall_readiness": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "not_ready",
+        "unknown"
+      ]
+    },
+    "overall_reason": {
+      "type": "string"
+    },
+    "read_scope": {
+      "type": "string"
+    },
+    "full_edited_article": {
+      "type": "string"
+    },
+    "protection_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "original_quotes",
+          "relation",
+          "why_preserve",
+          "confidence",
+          "conflict"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "original_quotes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "relation": {
+            "type": "string"
+          },
+          "why_preserve": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "uncertain"
+            ]
+          },
+          "conflict": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

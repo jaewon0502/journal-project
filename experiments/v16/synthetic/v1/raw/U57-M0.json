@@ -1,0 +1,33 @@
+{
+  "unit_id": "U57",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "During the trial, the night gallery admits visitors aged 14 and older.",
+      "candidate_quote": "During the trial, the night gallery admits visitors aged 16 and older.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "Minimum visitor age is 16, inclusive.",
+      "changed_proposition_or_counterexample": "The original incorrectly includes visitors aged 14 and 15. The candidate corrects the inclusive minimum age to 16, matching S1, while preserving the additional ticket requirement and passed-inspection condition. This is a justified correction of an inherited error, not a loss requiring restoration.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "No further edit is necessary. Restoring age 14 would contradict the stipulated primary record. Both fixed questions remain answered in the full candidate, including the attributed criticism and response, unresolved matters, pilot limits, and review conditions."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "Ready within the supplied synthetic exercise: the changed age is supported by S1 and the remaining article preserves the recorded conditions and attributed claims. This is not real-world certification or independent proof of the truth of the group's criticism or the chair's judgment."
+}

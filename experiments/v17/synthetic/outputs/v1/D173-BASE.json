@@ -1,0 +1,52 @@
+{
+  "unit_id": "D173",
+  "findings": [
+    {
+      "id": "F1",
+      "question_part": "순서표 규칙 적용일",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "answer_present_but_incorrect": "no",
+      "original_quote": "이번 순서표 규칙은 2035년 9월 1일부터 적용된다.",
+      "candidate_quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용된다.",
+      "source_refs": [
+        "S1 제1항(적용일) 및 자료 범위 설명"
+      ],
+      "evidence_relations": [
+        {
+          "supporting_clause": {
+            "document_id": "S1",
+            "locator": "제1항(적용일)",
+            "quote": "이번 순서표 규칙은 2035년 9월 2일부터 적용한다."
+          },
+          "linked_clause": {
+            "document_id": "S1",
+            "locator": "자료 범위 설명",
+            "quote": "이 자료는 기사와 질문에 관련된 규칙 전문이며 숨겨진 추가 예외나 적용일 변경은 없다."
+          },
+          "relation": "supports",
+          "relevance_to_claim": "최종 운영 안내서는 후보문의 9월 2일 적용일을 직접 뒷받침한다. 원문의 9월 1일로 복원하면 자료에 어긋난다."
+        }
+      ],
+      "changed_proposition_or_counterexample": "원문의 9월 1일 적용이라는 명제는 후보문에서 9월 2일 적용으로 바뀌었다. 이는 원문의 오류를 바로잡은 변경이며 공개일 9월 12일과도 별도로 제시되어 있다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "원문과의 날짜 차이는 정당한 사실 수정이다. 후보문은 적용일을 정확히 답하므로 추가 수정이나 원문 복원은 필요하지 않다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "selected_candidate_delta_safety": "safe",
+  "overall_readiness": "ready",
+  "overall_reason": "전체 후보문은 제공된 최종 안내서·집계·발언록과 일치한다. 신청 36건, 철회 6건, 검토 30건, 예약 완료 18건과 신청 건수 단위, 적용일과 공개일, 예약 및 공동 시연 조건, 두 발언의 귀속과 가치 판단의 한계, 미의결·미측정 사실이 모두 유지되어 있다. 자료는 어느 방식을 채택해야 하는지 확정하지 않으며 후보문도 공정성 우열을 확정하지 않는다. 필요한 추가 수정은 없다.",
+  "read_scope": "[PUBLIC DERIVATIVE: original read_scope execution metadata withheld; no substantive finding, evidence relation, patch or decision changed.]"
+}

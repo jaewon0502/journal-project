@@ -1,0 +1,843 @@
+{
+  "schema_version": 1,
+  "evidence_status": "AI-only; no human gold; condition-blind post-output audit",
+  "unique_articles": 4,
+  "comparison_variants": 12,
+  "actual_outputs": 24,
+  "fixed_pre_output_denominators": {
+    "uncertain": 2,
+    "normal": 4,
+    "harmful": 6
+  },
+  "methods": {
+    "M0": {
+      "actions": {
+        "no_change": 5,
+        "repair": 6,
+        "hold": 1
+      },
+      "by_frozen_reference": {
+        "harmful": {
+          "denominator": 6,
+          "actions": {
+            "repair": 6
+          },
+          "correct_target_detection": {
+            "yes": 6
+          },
+          "required_repair_success": {
+            "yes": 6
+          },
+          "new_loss": {
+            "no": 6
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 6
+          },
+          "unwarranted_local_hold": {
+            "no": 6
+          },
+          "source_claims_supported": {
+            "yes": 6
+          }
+        },
+        "normal": {
+          "denominator": 4,
+          "actions": {
+            "no_change": 4
+          },
+          "correct_target_detection": {
+            "not_applicable": 4
+          },
+          "required_repair_success": {
+            "not_applicable": 4
+          },
+          "new_loss": {
+            "no": 4
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 4
+          },
+          "unwarranted_local_hold": {
+            "no": 4
+          },
+          "source_claims_supported": {
+            "yes": 4
+          }
+        },
+        "uncertain": {
+          "denominator": 2,
+          "actions": {
+            "no_change": 1,
+            "hold": 1
+          },
+          "correct_target_detection": {
+            "not_applicable": 1,
+            "unknown": 1
+          },
+          "required_repair_success": {
+            "not_applicable": 1,
+            "unknown": 1
+          },
+          "new_loss": {
+            "no": 2
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 2
+          },
+          "unwarranted_local_hold": {
+            "no": 2
+          },
+          "source_claims_supported": {
+            "yes": 2
+          }
+        }
+      },
+      "applied_patch_count": 6,
+      "mechanical_error_count": 0,
+      "overall_readiness": {
+        "unknown": 12
+      },
+      "applied_output_safety": {
+        "denominator": 6,
+        "new_loss": {
+          "no": 6
+        },
+        "unsupported_or_unnecessary_patch": {
+          "no": 6
+        }
+      }
+    },
+    "M1": {
+      "actions": {
+        "no_change": 5,
+        "repair": 6,
+        "hold": 1
+      },
+      "by_frozen_reference": {
+        "harmful": {
+          "denominator": 6,
+          "actions": {
+            "repair": 6
+          },
+          "correct_target_detection": {
+            "yes": 6
+          },
+          "required_repair_success": {
+            "yes": 6
+          },
+          "new_loss": {
+            "no": 6
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 6
+          },
+          "unwarranted_local_hold": {
+            "no": 6
+          },
+          "source_claims_supported": {
+            "yes": 6
+          }
+        },
+        "normal": {
+          "denominator": 4,
+          "actions": {
+            "no_change": 4
+          },
+          "correct_target_detection": {
+            "not_applicable": 4
+          },
+          "required_repair_success": {
+            "not_applicable": 4
+          },
+          "new_loss": {
+            "no": 4
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 4
+          },
+          "unwarranted_local_hold": {
+            "no": 4
+          },
+          "source_claims_supported": {
+            "yes": 4
+          }
+        },
+        "uncertain": {
+          "denominator": 2,
+          "actions": {
+            "no_change": 1,
+            "hold": 1
+          },
+          "correct_target_detection": {
+            "not_applicable": 1,
+            "unknown": 1
+          },
+          "required_repair_success": {
+            "not_applicable": 1,
+            "unknown": 1
+          },
+          "new_loss": {
+            "no": 2
+          },
+          "unsupported_or_unnecessary_patch": {
+            "no": 2
+          },
+          "unwarranted_local_hold": {
+            "no": 2
+          },
+          "source_claims_supported": {
+            "yes": 2
+          }
+        }
+      },
+      "applied_patch_count": 6,
+      "mechanical_error_count": 0,
+      "overall_readiness": {
+        "unknown": 12
+      },
+      "applied_output_safety": {
+        "denominator": 6,
+        "new_loss": {
+          "no": 6
+        },
+        "unsupported_or_unnecessary_patch": {
+          "no": 6
+        }
+      }
+    }
+  },
+  "paired_equal_action_count": 12,
+  "paired_equal_delivered_hash_count": 12,
+  "reference_disagreements": [
+    {
+      "unit_id": "U101",
+      "frozen": "uncertain",
+      "post_audit": "normal",
+      "denominator_changed": false
+    }
+  ],
+  "uncertain_actions": [
+    {
+      "unit_id": "U101",
+      "method": "M0",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "53c4057a3b7130eecc25ceaccc3e3b7882d5002b64be7c6b0263bfeea8cedee2",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U101",
+      "method": "M1",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "53c4057a3b7130eecc25ceaccc3e3b7882d5002b64be7c6b0263bfeea8cedee2",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U206",
+      "method": "M0",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "uncertain",
+      "decision": "hold",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [
+        "H-N"
+      ],
+      "delivered_sha256": "d4b27f65c34a01b088589f6e4386e778b13713918d3bfb5cd0a34723a4836864",
+      "correct_target_detection": "unknown",
+      "required_repair_success": "unknown",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U206",
+      "method": "M1",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "uncertain",
+      "decision": "hold",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [
+        "H-N"
+      ],
+      "delivered_sha256": "d4b27f65c34a01b088589f6e4386e778b13713918d3bfb5cd0a34723a4836864",
+      "correct_target_detection": "unknown",
+      "required_repair_success": "unknown",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    }
+  ],
+  "rows": [
+    {
+      "unit_id": "U101",
+      "method": "M0",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "53c4057a3b7130eecc25ceaccc3e3b7882d5002b64be7c6b0263bfeea8cedee2",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U101",
+      "method": "M1",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "53c4057a3b7130eecc25ceaccc3e3b7882d5002b64be7c6b0263bfeea8cedee2",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U102",
+      "method": "M0",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "19859f39caa9887e736e2d0e6da727c668c79a029dc9fc421c0737bec9fac60b",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U102",
+      "method": "M1",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "19859f39caa9887e736e2d0e6da727c668c79a029dc9fc421c0737bec9fac60b",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U103",
+      "method": "M0",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U103",
+      "method": "M1",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U104",
+      "method": "M0",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U104",
+      "method": "M1",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U105",
+      "method": "M0",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "41becccb037b336011cbd037fad8e44c824c22425f49705c6ae73e26b721cfe9",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U105",
+      "method": "M1",
+      "article_id": "K16-2",
+      "language": "ko",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "41becccb037b336011cbd037fad8e44c824c22425f49705c6ae73e26b721cfe9",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U106",
+      "method": "M0",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U106",
+      "method": "M1",
+      "article_id": "K16-1",
+      "language": "ko",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "5112c81a2e1a47d42d6a7c3942d32c8ab519f16229b22d569bd18bb5b9a9e577",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U201",
+      "method": "M0",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "6efa7ebc19ab56884c2c72f69d1edc7168e3268b8d88a02a928862877dff4132",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U201",
+      "method": "M1",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "6efa7ebc19ab56884c2c72f69d1edc7168e3268b8d88a02a928862877dff4132",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U202",
+      "method": "M0",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U202",
+      "method": "M1",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U203",
+      "method": "M0",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "6efa7ebc19ab56884c2c72f69d1edc7168e3268b8d88a02a928862877dff4132",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U203",
+      "method": "M1",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "6efa7ebc19ab56884c2c72f69d1edc7168e3268b8d88a02a928862877dff4132",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U204",
+      "method": "M0",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "d3854f051efb5380273ad17992742219d43ec52460d8bb4f034e9830f5e72f57",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U204",
+      "method": "M1",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "normal",
+      "post_audit_reference": "normal",
+      "decision": "no_change",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "d3854f051efb5380273ad17992742219d43ec52460d8bb4f034e9830f5e72f57",
+      "correct_target_detection": "not_applicable",
+      "required_repair_success": "not_applicable",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U205",
+      "method": "M0",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U205",
+      "method": "M1",
+      "article_id": "A202",
+      "language": "en",
+      "frozen_reference": "harmful",
+      "post_audit_reference": "harmful",
+      "decision": "repair",
+      "proposed_patch_count": 1,
+      "applied_patch_count": 1,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [],
+      "delivered_sha256": "691d773eac7e364d020428f53f283739656478cad19d75d04e04725ebe2705f4",
+      "correct_target_detection": "yes",
+      "required_repair_success": "yes",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U206",
+      "method": "M0",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "uncertain",
+      "decision": "hold",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [
+        "H-N"
+      ],
+      "delivered_sha256": "d4b27f65c34a01b088589f6e4386e778b13713918d3bfb5cd0a34723a4836864",
+      "correct_target_detection": "unknown",
+      "required_repair_success": "unknown",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    },
+    {
+      "unit_id": "U206",
+      "method": "M1",
+      "article_id": "A201",
+      "language": "en",
+      "frozen_reference": "uncertain",
+      "post_audit_reference": "uncertain",
+      "decision": "hold",
+      "proposed_patch_count": 0,
+      "applied_patch_count": 0,
+      "mechanical_error_count": 0,
+      "overall_readiness": "unknown",
+      "local_hold_codes": [
+        "H-N"
+      ],
+      "delivered_sha256": "d4b27f65c34a01b088589f6e4386e778b13713918d3bfb5cd0a34723a4836864",
+      "correct_target_detection": "unknown",
+      "required_repair_success": "unknown",
+      "new_loss": "no",
+      "unsupported_or_unnecessary_patch": "no",
+      "unwarranted_local_hold": "no",
+      "source_claims_supported": "yes"
+    }
+  ],
+  "hash_verification": {
+    "checked_freeze_entries": 34,
+    "all_match": true,
+    "raw_outputs_checked": 24,
+    "reference_locks_checked": 2
+  },
+  "costs": {
+    "model_tokens": null,
+    "model_latency_seconds": null,
+    "monetary_cost": null,
+    "deployment_snapshot": null,
+    "model_seed": null,
+    "M0_input_characters": 154813,
+    "M1_input_characters": 180502,
+    "alignment_build_wall_seconds": 6.91908648898243,
+    "timing_scope": "local deterministic preparation only, not model latency/cost"
+  },
+  "limitations": [
+    "Correlated variants of four articles; no causal or population generality claim.",
+    "Some audit outputs were accidentally partially exposed before complete input reading; post-audit is condition-blind, not an output-blind pre-reference.",
+    "Prior independent AI references were separately frozen before outputs; original article is not factual truth gold.",
+    "No composite success score; detection, repair, safety, holds and uncertainty remain separate."
+  ]
+}

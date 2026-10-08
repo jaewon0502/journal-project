@@ -1,0 +1,576 @@
+{
+  "unit_id": "a91d4f6e",
+  "comparisons": [
+    {
+      "id": "context_1",
+      "article_quote": "2026년",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the finalized reporting date; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "2026년",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "2026",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_2",
+      "article_quote": "4월",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the finalized reporting date; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "4월",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "4",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "context_3",
+      "article_quote": "8일",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Component of the finalized reporting date; retained as a calendar/clock component, not a count.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "8일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "8일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "8일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "8일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "8일",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "evidence_quantity": {
+        "value": "8",
+        "unit": "unknown"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "해솔시 물품지원센터의 2026년 4월 8일 마감 보고서다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "actual_dispatch",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Parcels actually handed off by the named depot on April 8, excluding future dispatch.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+            }
+          ],
+          "reason": "Dispatch is physical handoff, not a booking."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "오후에는 추가 입고나 발송이 없었다."
+            }
+          ],
+          "reason": "Morning dispatch is the daily total because no afternoon dispatch occurred."
+        }
+      },
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "30",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "other_depot",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Related actual dispatch total belonging to the other depot.",
+      "axes": {
+        "referent": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "센터는 동부 보관소와 서부 보관소의 방한 꾸러미를 따로 집계했다."
+            }
+          ],
+          "reason": "East and west are explicitly separately counted depots."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+            }
+          ],
+          "reason": "These parcels belong to the other depot."
+        },
+        "conditions": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+            }
+          ],
+          "reason": "Both use the stated counting or measurement conditions."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "동부 보관소는 오전 예약 물량 45개를 모두 가정으로 발송했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "reservations",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Booked parcels, a tempting count distinct from actual handoffs.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "보고서의 발송 수량은 예약 건수가 아니라 운송 기사에게 실제 인계한 꾸러미 수다."
+            }
+          ],
+          "reason": "Reservation quantity and dispatch quantity are distinct operational measures."
+        },
+        "population": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "Both cover the same specified collection or subset."
+        },
+        "conditions": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "A booking alone does not establish physical handoff."
+        },
+        "time": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+            }
+          ],
+          "reason": "Both concern the article’s stated period or event."
+        }
+      },
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부 보관소는 같은 시각 예약 물량이 45개였지만, 주소 확인이 끝난 30개만 발송했다."
+        }
+      ],
+      "uncertainty": null
+    },
+    {
+      "id": "future_dispatch",
+      "article_quote": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+      "source_ids": [
+        "S1"
+      ],
+      "expected_quantity_explanation": "Remaining west reservations planned for the next day.",
+      "axes": {
+        "referent": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+            }
+          ],
+          "reason": "The named institution and subject are identical."
+        },
+        "property": {
+          "relation": "same",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+            }
+          ],
+          "reason": "Both quantities measure the stated property."
+        },
+        "population": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+            }
+          ],
+          "reason": "Only remaining reservations."
+        },
+        "conditions": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+            }
+          ],
+          "reason": "Planned rather than completed dispatch."
+        },
+        "time": {
+          "relation": "different",
+          "article_anchor": "해솔시 물품지원센터의 2026년 4월 8일 확정 실적에 따르면, 서부 보관소는 방한 꾸러미 45개를 실제 발송했다.",
+          "source_anchors": [
+            {
+              "source_id": "S1",
+              "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+            }
+          ],
+          "reason": "Next day rather than April 8."
+        }
+      },
+      "article_quantity": {
+        "value": "45",
+        "unit": "count"
+      },
+      "evidence_quantity": {
+        "value": "15",
+        "unit": "count"
+      },
+      "arithmetic": null,
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "서부의 나머지 예약 물량 15개는 다음 날 처리할 예정이었다."
+        }
+      ],
+      "uncertainty": null
+    }
+  ],
+  "uncovered_numeric_claims": [],
+  "scope_limits": [
+    "Only the supplied frozen synthetic source was used; no real-world verification. Calendar and clock units are unknown because the allowed vocabulary has no temporal units."
+  ]
+}

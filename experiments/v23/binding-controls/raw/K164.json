@@ -1,0 +1,17 @@
+{
+  "unit_id": "K164",
+  "bindings": [
+    {"claim_anchor": "발표문에 따르면 첫째 장치의 효율은 4.5배였고", "referent": "첫째 장치", "measured_property": "효율", "scope": "Ratio to the source's baseline; governed by 발표문에 따르면", "time": "past; no date specified", "unit": "배 (ratio)", "source_authority": "release: 발표문", "source_anchor": "첫째 장치의 효율은 기준 대비 4.5배였다.", "attribution_support": "release supports the first-device clause"},
+    {"claim_anchor": "둘째 장치의 효율은 2.8배였다.", "referent": "둘째 장치", "measured_property": "효율", "scope": "Ratio to the source's baseline; original coordinated clause remains governed by 발표문에 따르면", "time": "past; no date specified", "unit": "배 (ratio)", "source_authority": "note: 별도 연구노트 supports the result; release explicitly excludes it", "source_anchor": "둘째 장치의 효율은 기준 대비 2.8배였다.", "attribution_anchor": "이 발표문에는 둘째 장치 결과가 없다.", "attribution_support": "The note supports the second-device value, but this support does not validate attribution to the release.", "contradiction_test": "A result in the note and its absence from the release can both be true because these are different documents. The original attribution and the explicit absence statement concern the same release, so they conflict."}
+  ],
+  "clause_audit": [
+    {"original_quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고", "proposition": "The release reports first-device efficiency of 4.5 times the baseline.", "relation": "supported", "source_witnesses": [{"source_id": "release", "quote": "발표문: 첫째 장치의 효율은 기준 대비 4.5배였다."}], "action": "keep", "reason": "The first-device value and its attribution are supported; preserve this clause."},
+    {"original_quote": "둘째 장치의 효율은 2.8배였다.", "proposition": "Second-device efficiency was 2.8 times the baseline.", "relation": "supported", "source_witnesses": [{"source_id": "note", "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."}], "action": "keep", "reason": "The numerical result is supported independently by the note and needs no factual correction."},
+    {"original_quote": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 둘째 장치의 효율은 2.8배였다.", "proposition": "The release also reports the second-device result.", "relation": "contradicted", "source_witnesses": [{"source_id": "release", "quote": "이 발표문에는 둘째 장치 결과가 없다."}, {"source_id": "note", "quote": "별도 연구노트: 둘째 장치의 효율은 기준 대비 2.8배였다."}], "action": "repair", "reason": "The opening attribution governs both coordinated clauses. Add the actual supporting document before the second clause without changing either supported result."}
+  ],
+  "patches": [{"id": "P1", "before": "둘째 장치의 효율은 2.8배였다.", "after": "별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.", "reason": "Bind the second-device result to the research note that actually reports it."}],
+  "full_edited_text": "발표문에 따르면 첫째 장치의 효율은 4.5배였고, 별도 연구노트에 따르면 둘째 장치의 효율은 2.8배였다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": ["The sources do not identify their baselines or establish that both devices share one; the edited article makes no such claim."]
+}

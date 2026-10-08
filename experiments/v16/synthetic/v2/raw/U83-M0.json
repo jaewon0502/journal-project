@@ -1,0 +1,33 @@
+{
+  "unit_id": "U83",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "inherited",
+      "original_meaning_loss": "no",
+      "factual_error": "no",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "이 가운데 조건부 승인을 받은 노선안은 12개였다.",
+      "candidate_quote": "이 가운데 조건부 승인을 받은 노선안은 9개였다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "심사 24개, 조건부 승인 9개, 불승인 15개.",
+      "changed_proposition_or_counterexample": "동일 접수 기간의 조건부 승인 수가 원문의 12개에서 후보의 9개로 바뀌었다. S1이 9개를 직접 명시하므로 원문에 있던 수치 오류의 정당한 교정이며 복구할 의미손실이 아니다. 운행 전 안전점검 조건과 나머지 질문의 답도 유지된다.",
+      "necessity": "no",
+      "evidence_support": "yes",
+      "preserves_other_meaning": "yes",
+      "context_safe": "yes",
+      "local_action": "no_change",
+      "reason": "후보의 수치는 제공된 합성 기록에 부합한다. 12개로 되돌리면 근거와 충돌하므로 수정하지 않는다. origin은 후보에 남은 오류가 아니라 원문에서 비롯되어 이미 교정된 쟁점을 가리킨다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "no_change",
+  "local_hold_reasons": [],
+  "coverage_gaps": [],
+  "overall_readiness": "ready",
+  "overall_reason": "제공된 허구 기록 범위에서 후보의 승인 수, 운행 조건, 발언 귀속, 집계 범위와 미확정 사항이 뒷받침된다. 이는 합성 과제 내 판정이며 현실 세계의 기사 사실 인증은 아니다."
+}

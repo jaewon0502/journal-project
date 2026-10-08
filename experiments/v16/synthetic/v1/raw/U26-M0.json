@@ -1,0 +1,39 @@
+{
+  "unit_id": "U26",
+  "findings": [
+    {
+      "id": "F1",
+      "origin": "new_from_edit",
+      "original_meaning_loss": "yes",
+      "factual_error": "yes",
+      "conclusion_changing_omission": "no",
+      "optional_clarification": "no",
+      "required_answer_missing": "no",
+      "original_quote": "조건부 승인을 받은 노선안은 12개였다.",
+      "candidate_quote": "조건부 승인을 받은 노선안은 15개였다.",
+      "source_refs": [
+        "S1"
+      ],
+      "source_quote": "심사 24개, 조건부 승인 9개, 불승인 15개.",
+      "changed_proposition_or_counterexample": "동일 접수 기간 조건부 승인 수가 원문의 12개에서 후보의 15개로 바뀌어 첫 질문의 수치 답이 달라졌다. 이는 생략이 아니라 수치 대체다. S1은 조건부 승인 9개와 불승인 15개를 구분하므로 후보의 15개를 직접 반박하며, 원문의 12개도 원래부터 자료와 충돌한다. 운행 전 안전점검 등 나머지 필수 답은 전체 문맥에 유지된다.",
+      "necessity": "yes",
+      "evidence_support": "no",
+      "preserves_other_meaning": "yes",
+      "context_safe": "no",
+      "local_action": "hold",
+      "reason": "새 수치 변경으로 원문 의미가 손실됐지만 15개를 원문의 12개로 복구할 근거는 S1과 충돌한다. 원문 오류를 그대로 복구하면 hold하라는 지침에 따라 복구 패치를 보류한다. S1이 지지하는 사실 정정 수치는 9개이며, 이는 원문의 12개 복원과 다른 작업이다. 답 자체가 빠진 것은 아니므로 required_answer_missing은 no다."
+    }
+  ],
+  "patches": [],
+  "preservation_decision": "hold",
+  "local_hold_reasons": [
+    {
+      "code": "H-X",
+      "related_finding": "F1",
+      "reason": "원문 수치 12개와 후보 수치 15개 모두 S1의 조건부 승인 9개와 충돌한다. 원문 의미 복원과 근거에 따른 사실 정정이 일치하지 않아 원문 수치 복구를 보류한다."
+    }
+  ],
+  "coverage_gaps": [],
+  "overall_readiness": "not_ready",
+  "overall_reason": "합성 자료 범위에서도 고정 질문의 핵심인 조건부 승인 수가 S1과 불일치한다. 다른 본문·부제·캡션의 조건, 귀속, 시간 범위와 미확정 사항은 유지되지만 이 수치 오류는 해결되지 않았다. 실제 세계의 사실 인증은 하지 않는다."
+}

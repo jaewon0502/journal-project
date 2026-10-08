@@ -1,0 +1,84 @@
+{
+  "unit_id": "b605ad37",
+  "clause_audit": [
+    {
+      "quote": "2026년",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_1"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "5월",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_2"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "14일",
+      "relation": "supported",
+      "comparison_ids": [
+        "context_3"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "푸른급식연구소는 2026년 5월 14일 오전에 받은 건조 렌틸콩의 검수 기록을 공개했다."
+        }
+      ],
+      "reason": "The supplied source supports this calendar or clock context. The numeric gate blocks temporal-unit comparison, which supplies no reason to alter the supported wording."
+    },
+    {
+      "quote": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 8킬로그램이었다.",
+      "relation": "contradicted",
+      "comparison_ids": [
+        "received_target"
+      ],
+      "evidence": [
+        {
+          "source_id": "S1",
+          "quote": "이번 기록의 대상은 납품번호 L514인 한 차례 배송뿐이다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "여덟 상자의 내용물 순중량 합계는 192킬로그램으로 확정됐다."
+        },
+        {
+          "source_id": "S1",
+          "quote": "외부 종이 상자와 완충재의 무게는 이 합계에 포함하지 않았다."
+        }
+      ],
+      "reason": "The article specifies the total net contents mass of inspected shipment L514. S1 explicitly confirms 192 kilograms for all eight boxes, excluding packaging. Eight is the box count and 24 kilograms is per box, neither the article target."
+    }
+  ],
+  "patches": [
+    {
+      "id": "P1",
+      "before": "8킬로그램",
+      "after": "192킬로그램",
+      "reason": "The article specifies the total net contents mass of inspected shipment L514. S1 explicitly confirms 192 kilograms for all eight boxes, excluding packaging. Eight is the box count and 24 kilograms is per box, neither the article target.",
+      "comparison_ids": [
+        "received_target"
+      ]
+    }
+  ],
+  "full_edited_text": "푸른급식연구소가 2026년 5월 14일 검수를 마친 납품번호 L514의 건조 렌틸콩 인수량은 내용물 기준 192킬로그램이었다.",
+  "clause_annotations": [],
+  "whole_text_hold": false,
+  "remaining_uncertainty": []
+}
