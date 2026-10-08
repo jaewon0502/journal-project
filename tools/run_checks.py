@@ -11,6 +11,7 @@ def run(args, cwd=ROOT):
         raise SystemExit(result.returncode)
 
 run([sys.executable, str(ROOT / 'tools' / 'validate_release.py')])
+run([sys.executable, str(ROOT / 'tools' / 'build_reader.py'), '--check'])
 run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py', '-v'])
 directories = sorted({p.parent for name in ('legacy', 'v6', 'v7', 'v8', 'v9') for p in (ROOT / 'experiments' / name).rglob('test_*.py')})
 if not directories:
