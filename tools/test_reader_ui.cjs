@@ -8,7 +8,7 @@ const { JSDOM, VirtualConsole } = require('jsdom');
 const html = fs.readFileSync(path.join(__dirname, '../docs/reader/index.html'), 'utf8');
 const source = JSON.parse(fs.readFileSync(path.join(__dirname, '../docs/reader-data.json'), 'utf8'));
 
-function setup(t, { mode = 'review', storageFailure = false, localFailure = false, query = '' } = {}) {
+function setup(t, { mode = 'review', storageFailure = false, localFailure = false, query = '', mobile = false } = {}) {
   const downloads = [], errors = [], scrolls = [];
   const console = new VirtualConsole();
   console.on('jsdomError', error => errors.push(error.message));
@@ -16,7 +16,7 @@ function setup(t, { mode = 'review', storageFailure = false, localFailure = fals
     url: `https://reader.example.test/index.html?mode=${mode}${query}`,
     runScripts: 'dangerously', virtualConsole: console,
     beforeParse(w) {
-      w.matchMedia = () => ({ matches: false });
+      w.matchMedia = query => ({ matches: mobile && query.includes('max-width:680px'), addEventListener() {}, removeEventListener() {} });
       w.HTMLElement.prototype.scrollIntoView = function (options) { scrolls.push({ id: this.id, options }); };
       w.URL.createObjectURL = blob => { downloads.push(blob); return `blob:reader-test-${downloads.length}`; };
       w.URL.revokeObjectURL = () => {};
@@ -244,4 +244,80 @@ test('slow file import cannot replace a newer interaction', async t => {
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(page.get('comments').value, 'new thought');
   assert.equal(page.get('confirm-box').hidden, true);
+});
+
+test('deep links restore the selected case and preserve unrelated URL parameters', t => {
+  const page = setup(t, { mode: 'review', query: '&case=plot-area&context=shared' });
+  assert.equal(page.get('review-target').value, 'plot-area');
+  page.choose('maturity-delay');
+  let url = new URL(page.w.location.href);
+  assert.equal(url.searchParams.get('case'), 'maturity-delay');
+  assert.equal(url.searchParams.get('context'), 'shared');
+  page.click('read-mode'); url = new URL(page.w.location.href);
+  assert.equal(url.searchParams.get('mode'), 'read');
+  assert.equal(url.searchParams.get('case'), 'maturity-delay');
+  assert.equal(page.get('case-maturity-delay').hidden, false);
+});
+
+test('unknown case parameter falls back to a real case without introducing markup', t => {
+  const page = setup(t, { query: '&case=%3Cscript%3Ebad%3C%2Fscript%3E' });
+  assert.equal(page.get('review-target').value, source.cases[0].id);
+  assert.equal(new URL(page.w.location.href).searchParams.get('case'), source.cases[0].id);
+});
+
+test('explicit mode changes move focus and scroll to the visible heading', t => {
+  const page = setup(t, { mode: 'read' }); page.click('review-mode');
+  assert.equal(page.d.activeElement.id, 'review-heading');
+  assert.ok(page.scrolls.some(item => item.id === 'review-heading'));
+  page.click('read-mode'); assert.equal(page.d.activeElement.id, 'reader-heading');
+  assert.ok(page.scrolls.some(item => item.id === 'reader-heading'));
+});
+
+test('every case links the actual input article separately from supporting evidence', t => {
+  const page = setup(t);
+  for (const item of source.cases) {
+    const link = page.get(`case-${item.id}`).querySelector('.input-article-link');
+    assert.equal(link.href, item.article.url);
+    page.choose(item.id);
+    const review = page.get('review-input-article');
+    assert.equal(review.querySelector('a').href, item.article.url);
+    assert.ok(review.textContent.includes(item.article.title));
+    assert.ok(!review.textContent.includes(item.article.scope_note), 'Review must not inherit article verdict/synthetic-error notes');
+  }
+});
+
+test('source access limitations stay visible without leaking source interpretation', t => {
+  const page = setup(t);
+  for (const item of source.cases) {
+    page.choose(item.id);
+    for (const evidence of item.evidence.filter(row => row.access_note)) {
+      assert.ok(page.get(`case-${item.id}`).textContent.includes(evidence.access_note));
+      assert.ok(page.get('review-sources').textContent.includes(evidence.access_note));
+      assert.ok(!page.get('review-sources').textContent.includes(evidence.text));
+    }
+  }
+});
+
+test('mobile item navigation starts compact and selection brings the chosen content into view', t => {
+  const page = setup(t, { mode: 'read', mobile: true });
+  assert.equal(page.get('case-nav-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(page.get('case-nav-panel').hidden, true);
+  page.click('case-nav-toggle');
+  assert.equal(page.get('case-nav-panel').hidden, false);
+  page.d.querySelector('.claim-select[data-id="plot-area"]').click();
+  assert.equal(page.get('case-nav-panel').hidden, true);
+  assert.equal(page.get('case-plot-area').hidden, false);
+  assert.equal(page.d.activeElement.id, 'heading-plot-area');
+  assert.ok(page.scrolls.some(item => item.id === 'heading-plot-area'));
+  assert.equal(new URL(page.w.location.href).searchParams.get('case'), 'plot-area');
+});
+
+test('without JavaScript the full case list and source materials remain readable', () => {
+  const dom = new JSDOM(html);
+  try {
+    const d = dom.window.document;
+    assert.equal(d.getElementById('case-nav-panel').hidden, false);
+    assert.equal(d.querySelectorAll('.case-card[hidden]').length, 0);
+    assert.equal(d.querySelectorAll('.input-article-link').length, source.cases.length);
+  } finally { dom.window.close(); }
 });

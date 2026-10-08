@@ -55,10 +55,20 @@
           "kind": "source_summary",
           "text": "PS 합계 매개변수로 여러 스티렌계 고분자의 신호를 분석한다는 방법상의 범위를 근거로 삼았습니다.",
           "source_date": "2022-03-24",
-          "scope_note": "저자 공개 pre-proof입니다. 최종 출판본 및 별도 보충표와 구분합니다. 쪽 번호는 저장된 감사 기록의 표기입니다."
+          "scope_note": "저자 공개 pre-proof입니다. 최종 출판본 및 별도 보충표와 구분합니다. 쪽 번호는 저장된 감사 기록의 표기입니다.",
+          "access_note": "2026-10-09 자동 접근 요청에 HTTP 403이 반환돼 PDF를 확인하지 못했습니다. 브라우저 접근 여부와 기록의 쪽 번호가 실제 PDF 쪽 번호에 대응하는지는 미확인입니다."
         }
       ],
-      "record_path": "experiments/v28/local-patch.json"
+      "record_path": "experiments/v28/local-patch.json",
+      "article": {
+        "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+        "title_kind": "exact",
+        "url": "https://www.newstree.kr/newsView/ntr202203250001",
+        "source_date": "2022-03-25T11:50:40+09:00",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "검토 대상 기사입니다. 연구 pre-proof와 구분하며 기사 전문은 이 화면에 재배포하지 않습니다."
+      }
     },
     {
       "id": "generation-estimate",
@@ -100,7 +110,16 @@
           "scope_note": "저장된 연구 기록의 근거 설명을 요약했습니다. 이 화면을 만들면서 원자료를 새로 평가하지 않았습니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#정확히-어떤-명제가-문제인가",
+      "article": {
+        "title": "ScienceAlert 기사 · 태양광과 작물 재배",
+        "title_kind": "label",
+        "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+        "source_date": "2026-10-03",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. 검토 대상 기사입니다. Scimex 발표·전문가 반응 및 저자 슬라이드와 구분합니다."
+      }
     },
     {
       "id": "size-attribution",
@@ -142,7 +161,16 @@
           "scope_note": "저장된 연구 기록의 근거 설명을 요약했습니다. 이 화면을 만들면서 원자료를 새로 평가하지 않았습니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#정확히-어떤-명제가-문제인가",
+      "article": {
+        "title": "ScienceAlert 기사 · 태양광과 작물 재배",
+        "title_kind": "label",
+        "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+        "source_date": "2026-10-03",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. 검토 대상 기사입니다. Scimex 발표·전문가 반응 및 저자 슬라이드와 구분합니다."
+      }
     },
     {
       "id": "plot-area",
@@ -185,7 +213,16 @@
           "scope_note": "저장된 연구 기록의 근거 설명을 요약했습니다. 이 화면을 만들면서 원자료를 새로 평가하지 않았습니다."
         }
       ],
-      "record_path": "experiments/v28/DIRECT-EVIDENCE-STATUS.md"
+      "record_path": "experiments/v28/DIRECT-EVIDENCE-STATUS.md#이번에-확보한-직접-근거",
+      "article": {
+        "title": "ScienceAlert 기사 · 태양광과 작물 재배",
+        "title_kind": "label",
+        "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+        "source_date": "2026-10-03",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. 검토 대상 기사입니다. Scimex 발표·전문가 반응 및 저자 슬라이드와 구분합니다."
+      }
     },
     {
       "id": "maturity-delay",
@@ -217,7 +254,16 @@
           "scope_note": "이 도표의 관계만 확인한 근거입니다. 모든 성숙 지표나 다른 전문가 발언을 대신하지 않습니다."
         }
       ],
-      "record_path": "experiments/v28/DIRECT-EVIDENCE-STATUS.md"
+      "record_path": "experiments/v28/DIRECT-EVIDENCE-STATUS.md#이번에-확보한-직접-근거",
+      "article": {
+        "title": "ScienceAlert 기사 · 태양광과 작물 재배",
+        "title_kind": "label",
+        "url": "https://www.sciencealert.com/finally-rose-tinted-solar-panels-could-let-crops-and-electricity-share-the-same-land",
+        "source_date": "2026-10-03",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. 검토 대상 기사입니다. Scimex 발표·전문가 반응 및 저자 슬라이드와 구분합니다."
+      }
     },
     {
       "id": "material-list",
@@ -247,10 +293,20 @@
           "kind": "source_summary",
           "text": "17/22는 정량한계를 넘는 시료의 비율입니다. 재질별 정량 비율이 다르다는 사실만으로 집합적인 재질 나열을 반박하지는 않습니다.",
           "source_date": "2022-03-24",
-          "scope_note": "저자 공개 pre-proof를 사용한 저장 판정입니다. 쪽 번호는 기존 감사 표기이며 이 화면에서 새로 대조한 결과는 아닙니다."
+          "scope_note": "저자 공개 pre-proof를 사용한 저장 판정입니다. 쪽 번호는 기존 감사 표기이며 이 화면에서 새로 대조한 결과는 아닙니다.",
+          "access_note": "2026-10-09 자동 접근 요청에 HTTP 403이 반환돼 PDF를 확인하지 못했습니다. 브라우저 접근 여부와 기록의 쪽 번호가 실제 PDF 쪽 번호에 대응하는지는 미확인입니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#정확히-어떤-명제가-문제인가",
+      "article": {
+        "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+        "title_kind": "exact",
+        "url": "https://www.newstree.kr/newsView/ntr202203250001",
+        "source_date": "2022-03-25T11:50:40+09:00",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "검토 대상 기사입니다. 연구 pre-proof와 구분하며 기사 전문은 이 화면에 재배포하지 않습니다."
+      }
     },
     {
       "id": "precision-80-77",
@@ -280,10 +336,20 @@
           "kind": "source_summary",
           "text": "22명 중 17명, 약 77%라는 정량 결과와 기사의 거친 반올림을 구분해 판단했습니다.",
           "source_date": "2022-03-24",
-          "scope_note": "숫자를 더 세밀하게 쓸 수 있다는 사실만으로 기존 반올림이 거짓이 되지는 않는다는 저장 평가입니다."
+          "scope_note": "숫자를 더 세밀하게 쓸 수 있다는 사실만으로 기존 반올림이 거짓이 되지는 않는다는 저장 평가입니다.",
+          "access_note": "2026-10-09 자동 접근 요청에 HTTP 403이 반환돼 PDF를 확인하지 못했습니다. 브라우저 접근 여부와 기록의 쪽 번호가 실제 PDF 쪽 번호에 대응하는지는 미확인입니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#정확히-어떤-명제가-문제인가",
+      "article": {
+        "title": "\"사람 혈액속에 미세플라스틱 있다\"...처음으로 확인",
+        "title_kind": "exact",
+        "url": "https://www.newstree.kr/newsView/ntr202203250001",
+        "source_date": "2022-03-25T11:50:40+09:00",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "검토 대상 기사입니다. 연구 pre-proof와 구분하며 기사 전문은 이 화면에 재배포하지 않습니다."
+      }
     },
     {
       "id": "evisa-timing",
@@ -325,7 +391,16 @@
           "scope_note": "당시 수집한 역사적 발표를 검토한 기록입니다. 현재의 정책·입국 요건을 안내하지 않습니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#무엇이-유지되고-바뀌었는가",
+      "article": {
+        "title": "Use expired ID to get to UK, says minister in charge of flawed eVisas",
+        "title_kind": "exact",
+        "url": "https://www.theguardian.com/uk-news/2024/dec/03/uk-delays-full-shift-to-digital-immigration-system-amid-evisa-flaws",
+        "source_date": "2024-12-03T19:56:00Z",
+        "date_note": "기존 수집 기록의 최초 게시 시각(UTC)입니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "2024-12-03 기사이며 다음 날의 정부 발표와 구분합니다. 현재 비자·입국 안내가 아닙니다."
+      }
     },
     {
       "id": "sealevel-control",
@@ -359,7 +434,16 @@
           "scope_note": "v27에서 동결한 수집본을 재사용했습니다. NASA 발표에 대한 대조이며 위성 자료 자체 재분석은 아닙니다."
         }
       ],
-      "record_path": "experiments/v28/RESULTS.md"
+      "record_path": "experiments/v28/RESULTS.md#무엇이-유지되고-바뀌었는가",
+      "article": {
+        "title": "PreventionWeb 재게시 기사 · 2024년 해수면 상승",
+        "title_kind": "label",
+        "url": "https://www.preventionweb.net/news/nasa-analysis-shows-unexpected-amount-sea-level-rise-2024",
+        "source_date": "2025-03-13",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "reviewed_article",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. NASA 발표를 재게시한 기사로 독립 취재 근거는 아닙니다."
+      }
     },
     {
       "id": "sealevel-year",
@@ -392,7 +476,16 @@
           "scope_note": "연도 오류는 시험 입력에 주입했습니다. 외부 원기사의 오류로 표시하지 않습니다."
         }
       ],
-      "record_path": "experiments/v27/RESULTS.md"
+      "record_path": "experiments/v27/RESULTS.md#국소적으로-확인된-해법",
+      "article": {
+        "title": "PreventionWeb 재게시 기사 · 2024년 해수면 상승",
+        "title_kind": "label",
+        "url": "https://www.preventionweb.net/news/nasa-analysis-shows-unexpected-amount-sea-level-rise-2024",
+        "source_date": "2025-03-13",
+        "date_note": "기존 수집 기록의 게시일입니다. 현재 페이지의 내용·접근성을 다시 확인한 날짜가 아닙니다.",
+        "relationship": "base_article_for_synthetic_variant",
+        "scope_note": "공개 출처 목록에 원제목이 없어 설명용 이름을 표시합니다. NASA 발표를 재게시한 기사로 독립 취재 근거는 아닙니다. 이 링크는 오류 주입 전의 바탕 기사입니다. 2021 연도 오류는 연구용 입력에 따로 주입했으며 외부 기사에 있었다는 뜻이 아닙니다."
+      }
     }
   ],
   "versions": [
