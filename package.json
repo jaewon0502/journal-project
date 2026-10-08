@@ -1,0 +1,10 @@
+{
+  "name": "journal-reader-checks",
+  "private": true,
+  "scripts": {
+    "test": "node --test tools/test_reader_ui.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.2"
+  }
+}

@@ -19,7 +19,7 @@ def main():
     errors = []
     checked = 0
     for path in sorted(ROOT.rglob('*')):
-        if not path.is_file() or any(p in {'.git', '__pycache__', '.pytest_cache', '.venv'} for p in path.relative_to(ROOT).parts):
+        if not path.is_file() or any(p in {'.git', '__pycache__', '.pytest_cache', '.venv', 'node_modules'} for p in path.relative_to(ROOT).parts):
             continue
         if path == ROOT / '.git':
             continue
