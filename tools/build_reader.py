@@ -110,30 +110,71 @@ JS = r'''
  const data=JSON.parse(document.getElementById('reader-data').textContent);
  const $=id=>document.getElementById(id), cases=new Map(data.cases.map(c=>[c.id,c]));
  const options={necessity:['필요','불필요','불확실'],meaning:['보존됨','보존되지 않음','불확실'],evidence:['충분','불충분','불확실']};
- const namespace='journal-public-reader-'+data.version;
- let selected=data.cases[0].id, filter='all', pending=null;
+ const namespace='journal-public-reader-'+data.version, MAX_TEXT=100000;
+ let selected=data.cases[0].id, filter='all', pending=null, interactionRevision=0;
  let readerSeen=document.documentElement.dataset.mode!=='review', aiSeen=false, priorSeen=false, historyUnknown=false;
- const drafts=new Map(), revealed=new Set();
- try {const previous=JSON.parse(sessionStorage.getItem(namespace+'-exposure')??'null');priorSeen=previous?.seen===true;historyUnknown=previous?.unknown===true;}catch(_){historyUnknown=true;}
- function exposure(){return{readerResultsSeen:readerSeen,aiDetailsRevealed:aiSeen,previousExposureRecorded:priorSeen,previousExposureUnknown:historyUnknown,blindReviewConfirmed:false};}
- function updateExposure(){const seen=readerSeen||aiSeen||priorSeen;try{sessionStorage.setItem(namespace+'-exposure',JSON.stringify({seen,unknown:historyUnknown}));}catch(_){}
-  $('exposure-notice').hidden=!(seen||historyUnknown);$('fresh-notice').hidden=seen||historyUnknown;
-  $('exposure-notice').textContent=seen?'자료 읽기의 AI 판단·처리 결과 또는 비교용 AI 설명을 이미 열었습니다. 이 뒤의 입력을 AI 결과를 보지 않은 독립 평가로 간주하지 않습니다. 노출 이력은 내려받는 기록에도 남습니다.':'이전에 AI 결과를 열었는지 확인할 수 없습니다. 독립 평가 여부를 확인한 것으로 기록하지 않습니다.';
- }
+ const drafts=new Map(), baselines=new Map(), revealed=new Set();
+ try {
+  const previous=JSON.parse(sessionStorage.getItem(namespace+'-exposure')??'null');
+  priorSeen=previous?.seen===true;historyUnknown=previous?.unknown===true;
+ } catch(_) {historyUnknown=true;}
+ const emptyDraft=()=>({judgments:Object.fromEntries(Object.keys(options).map(k=>[k,null])),unverified:'',comments:''});
+ const contentOf=value=>({judgments:Object.fromEntries(Object.keys(options).map(k=>[k,value.judgments[k]])),unverified:value.unverified,comments:value.comments});
+ const sameDraft=(left,right)=>JSON.stringify(contentOf(left))===JSON.stringify(contentOf(right));
  function judgments(){return Object.fromEntries(Object.keys(options).map(k=>[k,document.querySelector('input[name="'+k+'"]:checked')?.value??null]));}
  function draft(){return{judgments:judgments(),unverified:$('unverified').value,comments:$('comments').value};}
- function hasInput(d=draft()){return Object.values(d.judgments).some(v=>v!==null)||d.unverified.trim()!==''||d.comments.trim()!=='';}
- function putDraft(d){Object.keys(options).forEach(k=>document.querySelectorAll('input[name="'+k+'"]').forEach(el=>el.checked=el.value===d.judgments[k]));$('unverified').value=d.unverified;$('comments').value=d.comments;}
- const emptyDraft=()=>({judgments:Object.fromEntries(Object.keys(options).map(k=>[k,null])),unverified:'',comments:''});
+ function hasInput(value=draft()){return Object.values(value.judgments).some(v=>v!==null)||value.unverified.trim()!==''||value.comments.trim()!=='';}
+ function putDraft(value){
+  Object.keys(options).forEach(k=>document.querySelectorAll('input[name="'+k+'"]').forEach(el=>el.checked=el.value===value.judgments[k]));
+  $('unverified').value=value.unverified;$('comments').value=value.comments;
+ }
+ function validContent(value){return value&&value.judgments&&typeof value.unverified==='string'&&typeof value.comments==='string'&&value.unverified.length<=MAX_TEXT&&value.comments.length<=MAX_TEXT&&!Object.entries(options).some(([k,values])=>value.judgments[k]!==null&&!values.includes(value.judgments[k]));}
  function notify(message,type=''){const el=$('review-message');el.textContent=message;el.className='status '+type;}
- function cancelPending(){pending=null;$('confirm-box').hidden=true;}
- function reviewPassage(part,node,aiConclusion=false){node.replaceChildren();const label=document.createElement('span');label.className='text-kind';const text=document.createElement('p');
+ function dirtyCount(){
+  const all=new Map(drafts);all.set(selected,draft());
+  return [...all].filter(([id,value])=>!sameDraft(value,baselines.get(id)??emptyDraft())).length;
+ }
+ function updateDirty(){
+  const count=dirtyCount(),dirty=!sameDraft(draft(),baselines.get(selected)??emptyDraft());
+  const current=dirty?'이 항목: 저장하지 않은 변경 있음':(hasInput()?'이 항목: 저장·복원한 내용과 같음':'이 항목: 입력 없음');
+  const message=current+' · 저장하지 않은 항목 '+count+'개';
+  if($('draft-state').textContent!==message)$('draft-state').textContent=message;
+  $('draft-state').dataset.dirty=String(dirty);
+ }
+ function updateExposure(){
+  const seen=readerSeen||aiSeen||priorSeen;
+  try {sessionStorage.setItem(namespace+'-exposure',JSON.stringify({seen,unknown:historyUnknown}));}
+  catch(_) {historyUnknown=true;}
+  $('exposure-notice').hidden=!(seen||historyUnknown);$('fresh-notice').hidden=seen||historyUnknown;
+  $('exposure-notice').textContent=seen
+   ?'자료 읽기의 AI 판단·처리 결과 또는 비교용 AI 설명을 이미 열었습니다. 이 뒤의 입력을 AI 결과를 보지 않은 독립 평가로 간주하지 않습니다. 노출 이력은 내려받는 기록에도 남습니다.'
+   :'이전에 AI 결과를 열었는지 확인할 수 없거나 노출 이력을 저장할 수 없습니다. 독립 평가 여부를 확인한 것으로 기록하지 않습니다.';
+ }
+ function exposure(){return{readerResultsSeen:readerSeen,aiDetailsRevealed:aiSeen,previousExposureRecorded:priorSeen,previousExposureUnknown:historyUnknown,blindReviewConfirmed:false};}
+ function returnFocus(trigger){if(trigger?.isConnected&&!trigger.closest('[hidden]'))trigger.focus({preventScroll:true});}
+ function cancelPending(restoreFocus=false){
+  const trigger=pending?.trigger;pending=null;interactionRevision++;$('confirm-box').hidden=true;
+  if(restoreFocus)returnFocus(trigger);
+ }
+ function beginAction(){cancelPending();}
+ function ask(message,execute,trigger){
+  cancelPending();pending={execute,trigger,selection:selected,requestDraft:contentOf(draft())};
+  $('confirm-message').textContent=message;$('confirm-box').hidden=false;$('confirm-accept').focus();
+ }
+ function reviewPassage(part,node,aiConclusion=false){
+  node.replaceChildren();const label=document.createElement('span');label.className='text-kind';const text=document.createElement('p');
   if(part.kind==='exact'&&!aiConclusion){label.textContent='공개된 실제 문구';text.textContent=part.text;}
   else{label.textContent='직접 대조 제한';text.textContent=aiConclusion?'이 항목은 이전 AI 평가의 정정 기록입니다. 평가 결과는 아래에서 직접 열기 전까지 숨깁니다.':'이 구간의 실제 문구는 공개되지 않았습니다. 요약이나 처리 결과로 원문을 대신하지 않고, 아래 원자료를 확인해 의견을 기록할 수 있습니다.';}
   node.append(label,text);
  }
- function reviewSources(c){const root=$('review-sources');root.replaceChildren();
-  c.evidence.forEach(source=>{const article=document.createElement('article');article.className='source';const title=document.createElement('h4');title.textContent=source.title;const meta=document.createElement('p');meta.className='source-meta';meta.textContent=(source.source_date||'발행일 미제공')+' · '+(source.location||'세부 위치 미제공');const link=document.createElement('a');link.className='source-link';link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=/#page=\d+/.test(source.url)?'해당 PDF 쪽 열기 ↗':'원자료 열기 ↗';article.append(title,meta);
+ function reviewSources(c){
+  const root=$('review-sources');root.replaceChildren();
+  c.evidence.forEach(source=>{
+   const article=document.createElement('article');article.className='source';
+   const title=document.createElement('h4');title.textContent=source.title;
+   const meta=document.createElement('p');meta.className='source-meta';meta.textContent=(source.source_date||'발행일 미제공')+' · '+(source.location||'세부 위치 미제공');
+   const link=document.createElement('a');link.className='source-link';link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=/#page=\d+/.test(source.url)?'해당 PDF 쪽 열기 ↗':'원자료 열기 ↗';
+   article.append(title,meta);
    if(source.kind==='exact_quote'&&source.text){const label=document.createElement('p');label.className='text-kind';label.textContent='공개된 원자료 직접 인용';const quote=document.createElement('blockquote');quote.textContent=source.text;article.append(label,quote);}
    else{const note=document.createElement('p');note.className='fine';note.textContent='공개된 원자료 직접 인용은 없습니다. 보고서의 요약과 해석은 이 화면에서 숨겼습니다.';article.append(note);}
    article.append(link);root.append(article);
@@ -145,45 +186,128 @@ JS = r'''
   document.querySelectorAll('.case-card').forEach(el=>el.hidden=el.dataset.id!==id);
   document.querySelectorAll('.claim-select').forEach(el=>el.setAttribute('aria-current',String(el.dataset.id===id)));
   $('review-target').value=id;const c=cases.get(id);
-  reviewPassage(c.original,$('review-original'),c.status==='corrected');reviewPassage(c.proposal,$('review-proposal'),c.status==='corrected');
-  reviewSources(c);
+  reviewPassage(c.original,$('review-original'),c.status==='corrected');reviewPassage(c.proposal,$('review-proposal'),c.status==='corrected');reviewSources(c);
   $('review-material-limit').hidden=c.original.kind==='exact'&&c.proposal.kind==='exact'&&c.status!=='corrected';
   $('ai-case-title').textContent=c.title;$('ai-status').textContent=c.status_label;$('ai-summary').textContent=c.summary;$('ai-reason').textContent=c.reason;
   $('ai-original').textContent=c.original.text||'공개 문구 없음';$('ai-proposal').textContent=c.proposal.text||'공개 문구 없음';
   $('ai-remaining').replaceChildren(...c.remaining.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
   $('ai-results').hidden=!revealed.has(id);$('reveal-ai').hidden=revealed.has(id);
-  putDraft(drafts.get(id)??emptyDraft());notify('이 항목의 입력은 저장 버튼을 누르기 전까지 현재 화면에만 남습니다.');
+  putDraft(drafts.get(id)??emptyDraft());notify('이 항목의 입력은 저장 버튼을 누르기 전까지 현재 화면에만 남습니다.');updateDirty();
   if(focus)$('heading-'+id).focus({preventScroll:true});
  }
- function mode(next,focus=true){document.documentElement.dataset.mode=next;$('reader').hidden=next!=='read';$('reviewer').hidden=next!=='review';$('read-mode').setAttribute('aria-pressed',String(next==='read'));$('review-mode').setAttribute('aria-pressed',String(next==='review'));if(next==='read'){readerSeen=true;const activeRow=document.querySelector('.claim-list li[data-id="'+selected+'"]');if(activeRow?.hidden){$('claim-search').value='';filter='all';document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter==='all')));applyFilter();}}updateExposure();try{const url=new URL(location.href);url.searchParams.set('mode',next);history.replaceState(null,'',url);}catch(_){}if(focus)$(next==='read'?'reader-heading':'review-heading').focus({preventScroll:true});}
- $('read-mode').addEventListener('click',()=>mode('read'));$('review-mode').addEventListener('click',()=>mode('review'));$('review-target').addEventListener('change',event=>selectCase(event.target.value));
+ function mode(next,focus=true){
+  cancelPending();document.documentElement.dataset.mode=next;$('reader').hidden=next!=='read';$('reviewer').hidden=next!=='review';
+  $('read-mode').setAttribute('aria-pressed',String(next==='read'));$('review-mode').setAttribute('aria-pressed',String(next==='review'));
+  if(next==='read'){
+   readerSeen=true;const activeRow=document.querySelector('.claim-list li[data-id="'+selected+'"]');
+   if(activeRow?.hidden){$('claim-search').value='';filter='all';document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter==='all')));applyFilter();}
+  }
+  updateExposure();try{const url=new URL(location.href);url.searchParams.set('mode',next);history.replaceState(null,'',url);}catch(_){}
+  if(focus)$(next==='read'?'reader-heading':'review-heading').focus({preventScroll:true});
+ }
+ function applyFilter(){
+  const query=$('claim-search').value.trim().toLocaleLowerCase(),visible=[];
+  document.querySelectorAll('.claim-list li').forEach(li=>{const show=(filter==='all'||filter===li.dataset.status)&&li.dataset.search.toLocaleLowerCase().includes(query);li.hidden=!show;if(show)visible.push(li.dataset.id);});
+  $('count-result').textContent=visible.length+'개 항목 표시';$('empty-results').hidden=visible.length>0;$('claim-content').hidden=visible.length===0;
+  if(visible.length&&!visible.includes(selected))selectCase(visible[0]);
+ }
+ function collect(){
+  updateExposure();const c=cases.get(selected);
+  return{schemaVersion:1,documentId:'journal-public-reader',dataVersion:data.version,researchRef:data.research_ref,reviewTarget:selected,recordType:'personal-review-draft',...draft(),exposure:exposure(),publicHumanReference:{participants:data.human_reference.participants,responses:data.human_reference.responses,unchanged:true},submitted:false,comparisonCompleted:false,actualTextPairAvailable:c.original.kind==='exact'&&c.proposal.kind==='exact'&&c.status!=='corrected',exportedAt:new Date().toISOString(),note:'개인 메모이며 연구 평가에 제출하거나 기존 사람 참고자료 건수에 더하지 않음. 이 화면 이전의 노출 이력 전체는 확인할 수 없음.'};
+ }
+ function checkedSnapshot(){
+  const value=collect();
+  if(!validContent(value)){notify('각 글 입력란은 100,000자까지 보관할 수 있습니다. 내용을 줄이거나 따로 복사해 보관하세요. 입력은 자르지 않았습니다.','error');return null;}
+  return value;
+ }
+ function validate(value){
+  if(!value||value.schemaVersion!==1||value.documentId!=='journal-public-reader'||value.dataVersion!==data.version||value.researchRef!==data.research_ref||value.recordType!=='personal-review-draft'||!cases.has(value.reviewTarget)||!validContent(value)||!value.exposure||['readerResultsSeen','aiDetailsRevealed','previousExposureRecorded','previousExposureUnknown','blindReviewConfirmed'].some(k=>typeof value.exposure[k]!=='boolean'))throw Error('Invalid draft');
+  return value;
+ }
+ function restore(value,trigger){
+  const target=value.reviewTarget,payload=JSON.parse(JSON.stringify(value));
+  const overwrite=target===selected?hasInput():hasInput(drafts.get(target)??emptyDraft());
+  const action=()=>{
+   validate(payload);if(target!==selected)selectCase(target);putDraft(payload);drafts.set(target,draft());baselines.set(target,contentOf(payload));
+   priorSeen=priorSeen||payload.exposure.readerResultsSeen||payload.exposure.aiDetailsRevealed||payload.exposure.previousExposureRecorded;
+   historyUnknown=historyUnknown||payload.exposure.previousExposureUnknown;updateExposure();updateDirty();
+   notify('개인 메모를 복원했습니다. 연구의 기존 사람 참고자료 건수는 바뀌지 않았습니다.','success');
+  };
+  if(overwrite)ask('이 항목의 현재 입력을 복원한 내용으로 바꿉니다. 필요하면 먼저 파일로 내려받으세요.',action,trigger);else action();
+ }
+ function download(content,type,name,messageTarget='review-message'){
+  let url;const message=text=>{if(messageTarget==='review-message')notify(text,'success');else $(messageTarget).textContent=text;};
+  try{
+   url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+   message(messageTarget==='review-message'?'내려받기를 요청했습니다. 완료 여부를 확인할 수 없어 저장하지 않은 상태는 유지합니다. 다운로드 목록에서 파일을 확인하세요.':'이 HTML에 포함된 자료를 내려받도록 요청했습니다. 다운로드 목록에서 파일을 확인하세요.');
+  }catch(_){if(messageTarget==='review-message')notify('내려받기를 시작하지 못했습니다. 입력은 유지됩니다. 브라우저 설정을 확인하거나 글을 복사해 보관하세요.','error');else $(messageTarget).textContent='자료 내려받기를 시작하지 못했습니다. 브라우저의 다운로드 설정을 확인하세요.';}
+  finally{if(url)setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ }
+ function personalFilename(value,ext){return'journal-'+data.version+'-'+value.reviewTarget+'-personal-review.'+ext;}
+ $('read-mode').addEventListener('click',()=>mode('read'));$('review-mode').addEventListener('click',()=>mode('review'));
+ $('review-target').addEventListener('change',event=>selectCase(event.target.value));
  document.querySelectorAll('.claim-select').forEach(button=>button.addEventListener('click',()=>{selectCase(button.dataset.id,true);if(matchMedia('(max-width:680px)').matches)$('heading-'+button.dataset.id).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});}));
  document.querySelectorAll('[data-review-case]').forEach(button=>button.addEventListener('click',()=>{selectCase(button.dataset.reviewCase);mode('review');}));
- function applyFilter(){const query=$('claim-search').value.trim().toLocaleLowerCase(),visible=[];document.querySelectorAll('.claim-list li').forEach(li=>{const show=(filter==='all'||filter===li.dataset.status)&&li.dataset.search.toLocaleLowerCase().includes(query);li.hidden=!show;if(show)visible.push(li.dataset.id);});$('count-result').textContent=visible.length+'개 항목 표시';$('empty-results').hidden=visible.length>0;$('claim-content').hidden=visible.length===0;if(visible.length&&!visible.includes(selected))selectCase(visible[0]);}
- $('claim-search').addEventListener('input',applyFilter);document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{filter=button.dataset.filter;document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el===button)));applyFilter();}));
- $('clear-search').addEventListener('click',()=>{$('claim-search').value='';filter='all';document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter==='all')));applyFilter();$('claim-search').focus();});
- function collect(){const c=cases.get(selected);return{schemaVersion:1,documentId:'journal-public-reader',dataVersion:data.version,researchRef:data.research_ref,reviewTarget:selected,recordType:'personal-review-draft',...draft(),exposure:exposure(),publicHumanReference:{participants:data.human_reference.participants,responses:data.human_reference.responses,unchanged:true},submitted:false,comparisonCompleted:false,actualTextPairAvailable:c.original.kind==='exact'&&c.proposal.kind==='exact'&&c.status!=='corrected',exportedAt:new Date().toISOString(),note:'개인 메모이며 연구 평가에 제출하거나 기존 사람 참고자료 건수에 더하지 않음. 이 화면 이전의 노출 이력 전체는 확인할 수 없음.'};}
- const key=()=>namespace+'-draft-'+selected;
- function ask(message,action){pending=action;$('confirm-message').textContent=message;$('confirm-box').hidden=false;$('confirm-accept').focus();}
- $('confirm-cancel').addEventListener('click',()=>{cancelPending();notify('현재 입력과 저장 기록을 유지했습니다.');});$('confirm-accept').addEventListener('click',()=>{const action=pending;cancelPending();if(action)action();});
- function validate(value){if(!value||value.schemaVersion!==1||value.documentId!=='journal-public-reader'||value.dataVersion!==data.version||value.researchRef!==data.research_ref||value.recordType!=='personal-review-draft'||!cases.has(value.reviewTarget)||!value.judgments||typeof value.unverified!=='string'||typeof value.comments!=='string'||value.unverified.length>100000||value.comments.length>100000||Object.entries(options).some(([k,values])=>value.judgments[k]!==null&&!values.includes(value.judgments[k]))||!value.exposure||['readerResultsSeen','aiDetailsRevealed','previousExposureRecorded','previousExposureUnknown','blindReviewConfirmed'].some(k=>typeof value.exposure[k]!=='boolean'))throw Error('Invalid draft');return value;}
- function restore(value){const target=value.reviewTarget;const overwrite=target===selected?hasInput():hasInput(drafts.get(target)??emptyDraft());const action=()=>{if(target!==selected)selectCase(target);putDraft(value);drafts.set(target,draft());priorSeen=priorSeen||value.exposure.readerResultsSeen||value.exposure.aiDetailsRevealed||value.exposure.previousExposureRecorded;historyUnknown=historyUnknown||value.exposure.previousExposureUnknown;updateExposure();notify('개인 메모를 복원했습니다. 연구의 기존 사람 참고자료 건수는 바뀌지 않았습니다.','success');};if(overwrite)ask('이 항목의 현재 입력을 복원한 내용으로 바꿉니다. 필요하면 먼저 파일로 내려받으세요.',action);else action();}
- $('save').addEventListener('click',()=>{if(!hasInput()){notify('입력된 판단이나 의견이 없습니다. 기존 저장 기록은 덮어쓰지 않았습니다.');return;}const save=()=>{try{localStorage.setItem(key(),JSON.stringify(collect()));notify('이 항목의 개인 메모를 이 브라우저에 저장했습니다. 연구 평가에 제출하지 않았습니다.','success');}catch(_){notify('브라우저 저장을 사용할 수 없습니다. 입력은 유지됩니다. JSON 또는 글로 내려받아 보관하세요.','error');}};try{if(localStorage.getItem(key())!==null)ask('이 항목에 저장한 메모가 있습니다. 현재 입력으로 저장 기록을 바꾸시겠어요?',save);else save();}catch(_){save();}});
- $('restore').addEventListener('click',()=>{try{const raw=localStorage.getItem(key());if(raw===null){notify('이 항목에 저장된 메모가 없습니다. 현재 입력은 유지됩니다.');return;}restore(validate(JSON.parse(raw)));}catch(_){notify('저장 기록을 읽을 수 없거나 형식이 올바르지 않습니다. 현재 입력은 유지됩니다.','error');}});
- function download(content,type,ext){let url;try{url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download='journal-'+data.version+'-'+selected+'-personal-review.'+ext;document.body.append(a);a.click();a.remove();notify('내려받기를 요청했습니다. 브라우저 다운로드 목록에서 파일을 확인하세요.','success');}catch(_){notify('내려받기를 시작하지 못했습니다. 입력은 유지됩니다. 브라우저 설정을 확인하거나 글을 복사해 보관하세요.','error');}finally{if(url)setTimeout(()=>URL.revokeObjectURL(url),1000);}}
- $('export-json').addEventListener('click',()=>download(JSON.stringify(collect(),null,2),'application/json;charset=utf-8','json'));
- $('export-text').addEventListener('click',()=>{const value=collect(),labels={necessity:'수정 필요성',meaning:'의미 보존',evidence:'근거 충분성'};const lines=['Journal 개인 검토 메모',data.version+' / '+selected,'연구 기준: '+data.research_ref,'개인 메모이며 연구에 제출하지 않음','기존 사람 참고자료: '+data.human_reference.participants+'명 · '+data.human_reference.responses+'건 (변경 없음)','','공개 실제 문구의 대조쌍: '+(value.actualTextPairAvailable?'있음':'없음 또는 제한됨'),...Object.entries(labels).map(([k,label])=>label+': '+(value.judgments[k]??'미입력')),'','미확인 사항',value.unverified||'미입력','','자유 의견',value.comments||'미입력','','AI 노출 기록',JSON.stringify(value.exposure,null,2),'독립 평가 또는 비교 완료를 확인한 기록이 아님.','','확인할 원자료',...cases.get(selected).evidence.map(s=>s.title+' / '+s.location+'\n'+s.url),'','내려받은 시각: '+value.exportedAt];download(lines.join('\n'),'text/plain;charset=utf-8','txt');});
- $('import-json').addEventListener('click',()=>$('import-file').click());$('import-file').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;try{if(file.size>1000000)throw Error('Too large');restore(validate(JSON.parse(await file.text())));}catch(_){notify('이 연구 버전의 개인 메모 파일이 아니거나 읽을 수 없습니다. 현재 입력은 유지됩니다.','error');}finally{event.target.value='';}});
- $('clear-form').addEventListener('click',()=>{if(!hasInput()){notify('이 항목의 입력은 이미 비어 있습니다.');return;}ask('이 항목의 현재 입력을 비울까요? 브라우저의 저장 기록과 AI 노출 이력은 유지됩니다.',()=>{putDraft(emptyDraft());drafts.set(selected,draft());notify('현재 입력만 비웠습니다. 저장 기록과 노출 이력은 유지됩니다.');});});
- $('reveal-ai').addEventListener('click',()=>{aiSeen=true;revealed.add(selected);$('ai-results').hidden=false;$('reveal-ai').hidden=true;updateExposure();$('ai-case-title').focus({preventScroll:true});});
- selectCase(selected);mode(document.documentElement.dataset.mode,false);applyFilter();
+ $('claim-search').addEventListener('input',()=>{cancelPending();applyFilter();});
+ document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{cancelPending();filter=button.dataset.filter;document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el===button)));applyFilter();}));
+ $('clear-search').addEventListener('click',()=>{cancelPending();$('claim-search').value='';filter='all';document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter==='all')));applyFilter();$('claim-search').focus();});
+ document.querySelectorAll('#reviewer textarea,#reviewer input[type=radio]').forEach(el=>el.addEventListener('input',()=>{const wasPending=!!pending;cancelPending();drafts.set(selected,draft());updateDirty();if(wasPending)notify('입력이 바뀌어 이전 확인 요청을 취소했습니다. 원하는 작업을 다시 선택하세요.');}));
+ document.querySelectorAll('#reviewer textarea').forEach(el=>el.addEventListener('paste',event=>{
+  const inserted=event.clipboardData?.getData('text/plain');
+  if(typeof inserted==='string'&&el.value.length-(el.selectionEnd-el.selectionStart)+inserted.length>MAX_TEXT){event.preventDefault();cancelPending();notify('붙여넣으면 100,000자를 넘습니다. 일부만 잘라 넣지 않았습니다. 분량을 줄이거나 별도 파일로 보관하세요.','error');}
+ }));
+ window.addEventListener('beforeunload',event=>{if(dirtyCount()>0){event.preventDefault();event.returnValue='';}});
+ $('confirm-cancel').addEventListener('click',()=>{cancelPending(true);notify('현재 입력과 저장 기록을 유지했습니다.');});
+ $('confirm-accept').addEventListener('click',()=>{
+  const operation=pending;if(!operation)return;cancelPending();
+  if(selected!==operation.selection||!sameDraft(draft(),operation.requestDraft)){notify('확인 요청 이후 입력이나 항목이 바뀌었습니다. 원하는 작업을 다시 선택하세요.');returnFocus(operation.trigger);return;}
+  try{operation.execute();}catch(_){notify('작업을 적용하지 못했습니다. 현재 입력과 저장 기록을 확인해 주세요.','error');}
+  returnFocus(operation.trigger);
+ });
+ $('save').addEventListener('click',()=>{
+  beginAction();const payload=checkedSnapshot();if(!payload)return;
+  if(!hasInput(payload)){notify('입력된 판단이나 의견이 없습니다. 기존 저장 기록은 덮어쓰지 않았습니다.');return;}
+  const target=payload.reviewTarget,storageKey=namespace+'-draft-'+target;
+  const save=()=>{
+   if(!validContent(payload)||!hasInput(payload)){notify('빈 입력이나 길이 제한을 넘는 입력은 저장하지 않았습니다.','error');return;}
+   try{localStorage.setItem(storageKey,JSON.stringify(payload));baselines.set(target,contentOf(payload));updateDirty();notify('이 항목의 개인 메모를 이 브라우저에 저장했습니다. 연구 평가에 제출하지 않았습니다.','success');}
+   catch(_){notify('브라우저 저장을 사용할 수 없습니다. 입력은 유지됩니다. JSON 또는 글로 내려받아 보관하세요.','error');}
+  };
+  try{if(localStorage.getItem(storageKey)!==null)ask('이 항목에 저장한 메모가 있습니다. 현재 입력으로 저장 기록을 바꾸시겠어요?',save,$('save'));else save();}catch(_){save();}
+ });
+ $('restore').addEventListener('click',()=>{
+  beginAction();try{const raw=localStorage.getItem(namespace+'-draft-'+selected);if(raw===null){notify('이 항목에 저장된 메모가 없습니다. 현재 입력은 유지됩니다.');return;}restore(validate(JSON.parse(raw)),$('restore'));}
+  catch(_){notify('저장 기록을 읽을 수 없거나 형식이 올바르지 않습니다. 현재 입력은 유지됩니다.','error');}
+ });
+ $('export-json').addEventListener('click',()=>{beginAction();const value=checkedSnapshot();if(value)download(JSON.stringify(value,null,2),'application/json;charset=utf-8',personalFilename(value,'json'));});
+ $('export-text').addEventListener('click',()=>{
+  beginAction();const value=checkedSnapshot();if(!value)return;
+  const labels={necessity:'수정 필요성',meaning:'의미 보존',evidence:'근거 충분성'};
+  const lines=['Journal 개인 검토 메모',data.version+' / '+value.reviewTarget,'연구 기준: '+data.research_ref,'개인 메모이며 연구에 제출하지 않음','기존 사람 참고자료: '+data.human_reference.participants+'명 · '+data.human_reference.responses+'건 (변경 없음)','','공개 실제 문구의 대조쌍: '+(value.actualTextPairAvailable?'있음':'없음 또는 제한됨'),...Object.entries(labels).map(([k,label])=>label+': '+(value.judgments[k]??'미입력')),'','미확인 사항',value.unverified||'미입력','','자유 의견',value.comments||'미입력','','AI 노출 기록',JSON.stringify(value.exposure,null,2),'독립 평가 또는 비교 완료를 확인한 기록이 아님.','','확인할 원자료',...cases.get(value.reviewTarget).evidence.map(source=>source.title+' / '+source.location+'\n'+source.url),'','내려받은 시각: '+value.exportedAt];
+  download(lines.join('\n'),'text/plain;charset=utf-8',personalFilename(value,'txt'));
+ });
+ $('import-json').addEventListener('click',()=>{beginAction();$('import-file').click();});
+ $('import-file').addEventListener('change',async event=>{
+  beginAction();const file=event.target.files?.[0];if(!file)return;
+  const requestedAt=interactionRevision;
+  try{if(file.size>1000000)throw Error('Too large');const value=validate(JSON.parse(await file.text()));if(requestedAt!==interactionRevision){notify('파일을 읽는 동안 입력이나 작업이 바뀌어 가져오기를 취소했습니다. 현재 입력은 유지됩니다.');return;}restore(value,$('import-json'));}
+  catch(_){notify('이 연구 버전의 개인 메모 파일이 아니거나 읽을 수 없습니다. 현재 입력은 유지됩니다.','error');}
+  finally{event.target.value='';}
+ });
+ $('clear-form').addEventListener('click',()=>{
+  beginAction();if(!hasInput()){notify('이 항목의 입력은 이미 비어 있습니다.');return;}
+  const target=selected;
+  ask('이 항목의 현재 입력을 비울까요? 브라우저의 저장 기록과 AI 노출 이력은 유지됩니다.',()=>{putDraft(emptyDraft());drafts.set(target,draft());updateDirty();notify('현재 입력만 비웠습니다. 저장 기록과 노출 이력은 유지됩니다.');},$('clear-form'));
+ });
+ $('reveal-ai').addEventListener('click',()=>{beginAction();aiSeen=true;revealed.add(selected);$('ai-results').hidden=false;$('reveal-ai').hidden=true;updateExposure();$('ai-case-title').focus({preventScroll:true});});
+ $('export-source-data').addEventListener('click',()=>{beginAction();download(JSON.stringify(data,null,2)+'\n','application/json;charset=utf-8','journal-'+data.version+'-reader-data.json','source-download-status');});
+ selectCase(selected);mode(document.documentElement.dataset.mode,false);applyFilter();updateDirty();
 })();
 '''
 
-
 TEMPLATE = r'''<!doctype html><html lang="ko" data-mode="read"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Journal · 검증자료 읽기</title><script>try{document.documentElement.dataset.mode=new URLSearchParams(location.search).get('mode')==='review'?'review':'read'}catch(_){}</script><style>@@CSS@@</style></head><body><a class="skip" href="#main">본문 바로가기</a><header class="topbar"><div class="wrap"><a class="brand" href="@@REPO@@">Journal</a><a href="@@CURRENT_RECORD@@" target="_blank" rel="noopener noreferrer">@@VERSION@@ 연구 기록 ↗</a></div></header><main id="main" class="wrap"><div class="modebar"><div class="mode-toggle" aria-label="읽기 방식"><button type="button" id="read-mode" aria-controls="reader" aria-pressed="true">자료 읽기</button><button type="button" id="review-mode" aria-controls="reviewer" aria-pressed="false">직접 평가하기</button></div><p class="mode-hint">주장 하나에서 원문·수정·근거까지</p></div><noscript><div class="notice">JavaScript가 꺼져 있어 검색·화면 전환·개인 메모 저장을 사용할 수 없습니다. 아래의 모든 공개 검토 항목은 읽을 수 있습니다.</div></noscript>
-<div id="reader"><header class="intro compact"><p class="eyebrow">현재 Git 공개 자료 · @@VERSION@@까지 반영</p><h1 id="reader-heading" tabindex="-1">@@VERSION@@ 검증자료</h1><p class="lead">항목을 고르면 수정 전후와 해당 근거를 함께 볼 수 있습니다.</p></header><section class="overview" aria-label="처리 상태와 확인 범위"><div class="countline">@@COUNTS@@</div><p class="fine">수정 반영은 기사 전체의 사실 확인을 뜻하지 않습니다. <a href="#remaining-limits">범위와 미해결 사항 보기</a></p></section><div class="section-head"><h2>원문·수정·근거 함께 읽기</h2><p>근거 링크에는 문서 제목과 확인 위치를 함께 표시합니다.</p></div><div class="workspace"><aside class="browser" aria-label="검토 항목 찾기"><div class="browser-tools"><label for="claim-search">어떤 내용을 확인할까요?</label><input id="claim-search" type="search" autocomplete="off" placeholder="PS, 발전량, 귀속…"><div class="filters" aria-label="처리 상태 필터"><button type="button" data-filter="all" aria-pressed="true">전체</button><button type="button" data-filter="applied" aria-pressed="false">반영</button><button type="button" data-filter="held" aria-pressed="false">보류</button><button type="button" data-filter="corrected" aria-pressed="false">평가 정정</button><button type="button" data-filter="unchanged" aria-pressed="false">유지</button></div></div><ul class="claim-list">@@CASE_LIST@@</ul><div id="empty-results" class="empty" hidden><p>검색한 항목이 없습니다.</p><button type="button" id="clear-search">검색과 필터 초기화</button></div><p id="count-result" class="count-result" role="status">@@CASE_COUNT@@개 항목 표시</p></aside><div id="claim-content">@@CARDS@@</div></div><div class="reading-bottom"><details id="remaining-limits"><summary>이번 자료의 범위와 미해결 사항</summary><p>@@SCOPE@@</p><ul>@@LIMITS@@</ul></details><details><summary>기존 사람 참고자료와 해석 범위</summary><p>@@HUMAN_SUMMARY@@</p><p><strong>참여자 @@HUMAN_PARTICIPANTS@@명 · 응답 @@HUMAN_RESPONSES@@건.</strong> 아래 개인 메모와 별개의 기존 기록입니다.</p><ul>@@HUMAN_LIMITS@@</ul></details><details><summary>회차별 연구 기록과 기술 정보</summary><p class="fine">이 화면은 공개 기록을 읽기 쉽게 다시 구성한 것입니다. 새 모델 실험이나 새 평가 결과를 만들지 않았습니다. 각 링크는 고정한 연구 커밋의 공개 기록으로 연결됩니다.</p><ul class="versions">@@VERSIONS@@</ul><div class="technical"><p>현재 포함 범위 @@VERSION@@까지 · 원격 기록 확인 2026.10.09 · <a href="@@COMMIT_URL@@" target="_blank" rel="noopener noreferrer">기준 커밋 @@SHORT_REF@@ ↗</a></p><p>데이터: <a href="@@DATA_URL@@" target="_blank" rel="noopener noreferrer">docs/reader-data.json</a><br>연구 기준: <code>@@REF@@</code></p><p>이 화면에는 외부 원문 전문·PDF를 복제하지 않았습니다. 인용하지 않은 문구는 ‘요약’ 또는 ‘미공개’로 표시합니다. 외부 원자료 링크는 인터넷과 해당 출처의 접근 권한이 필요합니다.</p></div></details></div></div>
-<div id="reviewer" class="reviewer"><header class="intro"><p class="eyebrow">개인 검토 메모</p><h1 id="review-heading" tabindex="-1">내 판단부터 기록해 보세요.</h1><p class="lead">선택한 항목의 공개 문구와 원자료를 보고 의견을 적습니다. AI 판단·처리 결과는 아래에서 직접 열기 전까지 숨깁니다.</p></header><div class="review-top"><label for="review-target">검토할 자료</label><select id="review-target">@@REVIEW_OPTIONS@@</select></div><p id="exposure-notice" class="notice warning" hidden></p><p id="fresh-notice" class="notice">이 페이지에서는 AI 처리 결과를 아직 열지 않았습니다. 다른 곳에서 본 결과까지 확인할 수 없으므로 독립 평가를 완료한 것으로 기록하지 않습니다.</p><p class="fine">이 메모는 연구에 제출되지 않습니다. 기존 사람 참고자료인 참여자 @@HUMAN_PARTICIPANTS@@명·응답 @@HUMAN_RESPONSES@@건에 자동으로 합산하지 않습니다.</p><section class="review-section" aria-labelledby="review-material-title"><h2 id="review-material-title">공개 비교 문구와 근거</h2><p id="review-material-limit" class="notice">공개 자료에 직접 대조할 실제 문구가 부족한 항목입니다. 요약과 이전 AI 판정으로 빈칸을 채우지 않았습니다. 원자료를 확인한 뒤 의견을 기록하고, 판단이 어렵다면 ‘불확실’을 선택하세요.</p><div class="comparison"><div><h4>원문 · 공개된 구간</h4><div id="review-original"></div></div><div><h4>수정 제안 · 공개된 구간</h4><div id="review-proposal"></div></div></div><div id="review-sources"></div><p class="fine">원자료가 열리지 않거나 해당 위치를 찾지 못하면 확인한 것으로 간주하지 말고 미확인 사항에 남겨 주세요. PDF 뷰어가 해당 쪽으로 이동하지 않으면 표시한 PDF 쪽 번호를 입력하세요.</p></section><section class="review-section" aria-labelledby="personal-review-title"><h2 id="personal-review-title">내 판단</h2><p class="muted">비워 두어도 괜찮습니다. 항목을 바꾸면 현재 입력은 화면 안에 보관하지만 새로고침하면 저장하지 않은 입력은 사라집니다.</p><div class="fields">@@FIELDS@@</div><label for="unverified">미확인 사항 / 필요한 추가 자료</label><textarea id="unverified" placeholder="아직 확인하지 못한 내용과 필요한 근거를 적어 주세요."></textarea><label for="comments">자유 의견</label><textarea id="comments" placeholder="판단 이유나 더 나은 표현을 적어 주세요."></textarea><div class="action-row"><button type="button" class="primary" id="save">이 항목 저장</button><button type="button" id="restore">저장한 메모 복원</button><button type="button" id="export-json">JSON 내려받기</button><button type="button" id="export-text">글로 내려받기</button><button type="button" id="import-json">JSON 가져오기</button><button type="button" id="clear-form">입력 비우기</button><input type="file" id="import-file" hidden accept=".json,application/json" aria-label="개인 검토 JSON 파일"></div><div id="confirm-box" class="confirm" hidden><p id="confirm-message"></p><button type="button" id="confirm-accept">계속하기</button><button type="button" id="confirm-cancel">취소하고 유지</button></div><p id="review-message" class="status" role="status" aria-live="polite">아직 저장하거나 복원하지 않았습니다.</p><p class="fine">입력은 서버로 전송하지 않으며 자동 저장·자동 복원도 하지 않습니다. AI 결과를 연 이력만 같은 탭에서 새로고침해도 유지하도록 기록합니다. 브라우저 저장은 기기·열기 방식에 따라 지원되지 않거나 사라질 수 있으니 중요한 메모는 파일로도 보관하세요.</p></section><section class="review-section" aria-labelledby="ai-compare-title"><h2 id="ai-compare-title">기존 AI 판단과 비교하기</h2><p class="muted">내 판단을 적은 뒤 열어 보세요. 열었다는 이력은 기록에 남으며 비교를 완료했다는 뜻은 아닙니다.</p><button type="button" id="reveal-ai">AI 판단·처리 결과 열기</button><div id="ai-results" class="ai-details" hidden><h3 id="ai-case-title" tabindex="-1"></h3><p><strong id="ai-status"></strong></p><p id="ai-summary"></p><h4>공개 원문·이전 판단</h4><p id="ai-original"></p><h4>공개 수정·현재 처리</h4><p id="ai-proposal"></p><h4>처리 이유</h4><p id="ai-reason"></p><h4>남은 한계</h4><ul id="ai-remaining"></ul></div></section></div></main><footer class="page-footer"><div class="wrap"><p>Journal · 공개 기록에서 만든 근거 대조 화면</p><p>@@VERSION@@ 연구 묶음 · 일반 성능이나 사람 평가 완료의 인증이 아닙니다.</p></div></footer><script id="reader-data" type="application/json">@@DATA@@</script><script>@@JS@@</script></body></html>'''
+<div id="reader"><header class="intro compact"><p class="eyebrow">현재 Git 공개 자료 · @@VERSION@@까지 반영</p><h1 id="reader-heading" tabindex="-1">@@VERSION@@ 검증자료</h1><p class="lead">항목을 고르면 수정 전후와 해당 근거를 함께 볼 수 있습니다.</p></header><section class="overview" aria-label="처리 상태와 확인 범위"><div class="countline">@@COUNTS@@</div><p class="fine">수정 반영은 기사 전체의 사실 확인을 뜻하지 않습니다. <a href="#remaining-limits">범위와 미해결 사항 보기</a></p></section><div class="section-head"><h2>원문·수정·근거 함께 읽기</h2><p>근거 링크에는 문서 제목과 확인 위치를 함께 표시합니다.</p></div><div class="workspace"><aside class="browser" aria-label="검토 항목 찾기"><div class="browser-tools"><label for="claim-search">어떤 내용을 확인할까요?</label><input id="claim-search" type="search" autocomplete="off" placeholder="PS, 발전량, 귀속…"><div class="filters" aria-label="처리 상태 필터"><button type="button" data-filter="all" aria-pressed="true">전체</button><button type="button" data-filter="applied" aria-pressed="false">반영</button><button type="button" data-filter="held" aria-pressed="false">보류</button><button type="button" data-filter="corrected" aria-pressed="false">평가 정정</button><button type="button" data-filter="unchanged" aria-pressed="false">유지</button></div></div><ul class="claim-list">@@CASE_LIST@@</ul><div id="empty-results" class="empty" hidden><p>검색한 항목이 없습니다.</p><button type="button" id="clear-search">검색과 필터 초기화</button></div><p id="count-result" class="count-result" role="status">@@CASE_COUNT@@개 항목 표시</p></aside><div id="claim-content">@@CARDS@@</div></div><div class="reading-bottom"><details id="remaining-limits"><summary>이번 자료의 범위와 미해결 사항</summary><p>@@SCOPE@@</p><ul>@@LIMITS@@</ul></details><details><summary>기존 사람 참고자료와 해석 범위</summary><p>@@HUMAN_SUMMARY@@</p><p><strong>참여자 @@HUMAN_PARTICIPANTS@@명 · 응답 @@HUMAN_RESPONSES@@건.</strong> 아래 개인 메모와 별개의 기존 기록입니다.</p><ul>@@HUMAN_LIMITS@@</ul></details><details><summary>회차별 연구 기록과 기술 정보</summary><p class="fine">이 화면은 공개 기록을 읽기 쉽게 다시 구성한 것입니다. 새 모델 실험이나 새 평가 결과를 만들지 않았습니다. 각 링크는 고정한 연구 커밋의 공개 기록으로 연결됩니다.</p><ul class="versions">@@VERSIONS@@</ul><div class="technical"><p>현재 포함 범위 @@VERSION@@까지 · 원격 기록 확인 2026.10.09 · <a href="@@COMMIT_URL@@" target="_blank" rel="noopener noreferrer">기준 커밋 @@SHORT_REF@@ ↗</a></p><p>데이터: <button type="button" id="export-source-data">이 화면의 자료 JSON 내려받기</button><br>연구 기준: <code>@@REF@@</code></p><p id="source-download-status" role="status">이 HTML에 포함된 자료를 내려받습니다. 나중에 바뀐 저장소 자료로 대체하지 않습니다.</p><p>이 화면에는 외부 원문 전문·PDF를 복제하지 않았습니다. 인용하지 않은 문구는 ‘요약’ 또는 ‘미공개’로 표시합니다. 외부 원자료 링크는 인터넷과 해당 출처의 접근 권한이 필요합니다.</p></div></details></div></div>
+<div id="reviewer" class="reviewer"><header class="intro"><p class="eyebrow">개인 검토 메모</p><h1 id="review-heading" tabindex="-1">내 판단부터 기록해 보세요.</h1><p class="lead">선택한 항목의 공개 문구와 원자료를 보고 의견을 적습니다. AI 판단·처리 결과는 아래에서 직접 열기 전까지 숨깁니다.</p></header><div class="review-top"><label for="review-target">검토할 자료</label><select id="review-target">@@REVIEW_OPTIONS@@</select></div><p id="exposure-notice" class="notice warning" hidden></p><p id="fresh-notice" class="notice">이 페이지에서는 AI 처리 결과를 아직 열지 않았습니다. 다른 곳에서 본 결과까지 확인할 수 없으므로 독립 평가를 완료한 것으로 기록하지 않습니다.</p><p class="fine">이 메모는 연구에 제출되지 않습니다. 기존 사람 참고자료인 참여자 @@HUMAN_PARTICIPANTS@@명·응답 @@HUMAN_RESPONSES@@건에 자동으로 합산하지 않습니다.</p><section class="review-section" aria-labelledby="review-material-title"><h2 id="review-material-title">공개 비교 문구와 근거</h2><p id="review-material-limit" class="notice">공개 자료에 직접 대조할 실제 문구가 부족한 항목입니다. 요약과 이전 AI 판정으로 빈칸을 채우지 않았습니다. 원자료를 확인한 뒤 의견을 기록하고, 판단이 어렵다면 ‘불확실’을 선택하세요.</p><div class="comparison"><div><h4>원문 · 공개된 구간</h4><div id="review-original"></div></div><div><h4>수정 제안 · 공개된 구간</h4><div id="review-proposal"></div></div></div><div id="review-sources"></div><p class="fine">원자료가 열리지 않거나 해당 위치를 찾지 못하면 확인한 것으로 간주하지 말고 미확인 사항에 남겨 주세요. PDF 뷰어가 해당 쪽으로 이동하지 않으면 표시한 PDF 쪽 번호를 입력하세요.</p></section><section class="review-section" aria-labelledby="personal-review-title"><h2 id="personal-review-title">내 판단</h2><p class="muted">비워 두어도 괜찮습니다. 항목을 바꾸면 현재 입력은 화면 안에 보관하지만 새로고침하면 저장하지 않은 입력은 사라집니다.</p><p id="draft-state" class="status" role="status" aria-live="polite">이 항목: 입력 없음 · 저장하지 않은 항목 0개</p><div class="fields">@@FIELDS@@</div><label for="unverified">미확인 사항 / 필요한 추가 자료</label><p class="fine" id="unverified-limit">최대 100,000자. 입력한 내용을 자동으로 자르지 않습니다.</p><textarea id="unverified" maxlength="100000" aria-describedby="unverified-limit" placeholder="아직 확인하지 못한 내용과 필요한 근거를 적어 주세요."></textarea><label for="comments">자유 의견</label><p class="fine" id="comments-limit">최대 100,000자. 입력한 내용을 자동으로 자르지 않습니다.</p><textarea id="comments" maxlength="100000" aria-describedby="comments-limit" placeholder="판단 이유나 더 나은 표현을 적어 주세요."></textarea><div class="action-row"><button type="button" class="primary" id="save">이 항목 저장</button><button type="button" id="restore">저장한 메모 복원</button><button type="button" id="export-json">JSON 내려받기</button><button type="button" id="export-text">글로 내려받기</button><button type="button" id="import-json">JSON 가져오기</button><button type="button" id="clear-form">입력 비우기</button><input type="file" id="import-file" hidden accept=".json,application/json" aria-label="개인 검토 JSON 파일"></div><div id="confirm-box" class="confirm" hidden><p id="confirm-message"></p><button type="button" id="confirm-accept">계속하기</button><button type="button" id="confirm-cancel">취소하고 유지</button></div><p id="draft-export-note" class="fine">파일 내려받기를 눌러도 실제 완료 여부는 확인할 수 없어 저장하지 않은 상태를 유지합니다. 파일을 확인한 뒤 페이지를 닫아 주세요.</p><p id="review-message" class="status" role="status" aria-live="polite">아직 저장하거나 복원하지 않았습니다.</p><p class="fine">입력은 서버로 전송하지 않으며 자동 저장·자동 복원도 하지 않습니다. AI 결과를 연 이력만 같은 탭에서 새로고침해도 유지하도록 기록합니다. 브라우저 저장은 기기·열기 방식에 따라 지원되지 않거나 사라질 수 있으니 중요한 메모는 파일로도 보관하세요.</p></section><section class="review-section" aria-labelledby="ai-compare-title"><h2 id="ai-compare-title">기존 AI 판단과 비교하기</h2><p class="muted">내 판단을 적은 뒤 열어 보세요. 열었다는 이력은 기록에 남으며 비교를 완료했다는 뜻은 아닙니다.</p><button type="button" id="reveal-ai">AI 판단·처리 결과 열기</button><div id="ai-results" class="ai-details" hidden><h3 id="ai-case-title" tabindex="-1"></h3><p><strong id="ai-status"></strong></p><p id="ai-summary"></p><h4>공개 원문·이전 판단</h4><p id="ai-original"></p><h4>공개 수정·현재 처리</h4><p id="ai-proposal"></p><h4>처리 이유</h4><p id="ai-reason"></p><h4>남은 한계</h4><ul id="ai-remaining"></ul></div></section></div></main><footer class="page-footer"><div class="wrap"><p>Journal · 공개 기록에서 만든 근거 대조 화면</p><p>@@VERSION@@ 연구 묶음 · 일반 성능이나 사람 평가 완료의 인증이 아닙니다.</p></div></footer><script id="reader-data" type="application/json">@@DATA@@</script><script>@@JS@@</script></body></html>'''
 
 
 def render(data):
