@@ -1,0 +1,368 @@
+const {test} = require('node:test');
+const assert = require('node:assert/strict');
+const {prepare, decide, report} = require('../docs/reader/factcheck-engine.js');
+const archived = require('../experiments/source-evidence-ai-review/data/cases.json');
+
+const article = '의회는 심의안을 의결했다.';
+const source = {id: 'minutes', title: '가상 회의록', url: 'https://council.example/minutes',
+  version: '회의일 기준 확정본', locator: '안건 2', excerpt: '심의안 의결.'};
+const sources = [source];
+const decision = {status: 'fact', sourceIds: ['minutes'], acknowledged: true,
+  reason: '안건 2의 의결 결과와 기사의 행위자·행위를 대조했다.'};
+
+test('과거 연구의 한국어 문장 18개를 새 기사로 검토하면 저장 AI 판정이 승계되지 않는다', () => {
+  assert.equal(archived.initial_sentences.length, 18);
+  for (const item of archived.initial_sentences) {
+    const result = report(item.text, [], []);
+    assert.equal(result.complete, false, item.id);
+    assert.equal(result.confirmedCount, 0);
+    assert.equal(result.rows.length, 1, item.id);
+    assert.equal(result.rows[0].text, item.text);
+  }
+});
+
+test('검토한 문장만 재사용하고 원문·시점·위치·발췌·추가 반증이 바뀌면 다시 연다', () => {
+  const [row] = prepare(article, sources, []).rows;
+  const receipt = decide(row, decision, sources);
+  const saved = JSON.parse(JSON.stringify([receipt]));
+  assert.equal(report(article, sources, saved).confirmedCount, 1);
+  assert.equal(report(article, sources, saved).pendingCount, 0);
+  assert.equal(report('기사의 정정 전 내용이다.\n' + article, sources, saved).confirmedCount, 0);
+  for (const key of ['url', 'version', 'locator', 'excerpt']) {
+    const edited = {...source, [key]: key === 'url' ? 'https://council.example/revision' : '정정 내용'};
+    assert.equal(report(article, [edited], saved).confirmedCount, 0, key);
+  }
+  assert.equal(report(article, [source, {...source, id: 'update', excerpt: '의결이 취소됐다.'}], saved).confirmedCount, 0);
+});
+
+test('근거 없는 확인, 존재하지 않는 근거, 확인 동의 없는 판정을 거부한다', () => {
+  const [row] = prepare(article, sources, []).rows;
+  for (const edit of [{sourceIds: []}, {sourceIds: ['missing']}, {acknowledged: false}]) {
+    assert.throws(() => decide(row, {...decision, ...edit}, sources));
+  }
+});
+
+test('정당 역할을 바꿔도 의혹은 사실로 승격되지 않고 발언 확인은 별도로 계산한다', () => {
+  for (const actor of ['여당', '야당']) {
+    const quote = actor + '은 “시장이 횡령했다”고 주장했다.';
+    const transcript = [{...source, excerpt: quote}];
+    const [row] = prepare(quote, transcript, []).rows;
+    assert.throws(() => decide(row, decision, transcript));
+    const record = decide(row, {...decision, status: 'attribution'}, transcript);
+    const result = report(quote, transcript, [record]);
+    assert.equal(result.confirmedCount, 0);
+    assert.equal(result.attributedCount, 1);
+  }
+});
+
+test('둘 중 한 절만 확인할 때 나머지와 원문을 보류 상태로 전달한다', () => {
+  const line = '가 정당은 찬성했고 나 정당은 반대했다.';
+  const [row] = prepare(line, sources, []).rows;
+  const receipt = decide(row, {...decision, status: 'partial', factSpan: '가 정당은 찬성했고',
+    reason: '나 정당의 표결표는 아직 확보하지 못했다.'}, sources);
+  const result = report(line, sources, [receipt]);
+  assert.equal(result.complete, false);
+  assert.equal(result.pendingCount, 1);
+  assert.equal(result.confirmedCount, 0);
+  assert.equal(result.partialCount, 1);
+  assert.equal(result.rows[0].text, line);
+  assert.ok(receipt.remainingSpans.join('').includes('나 정당은 반대했다'));
+  for (const factSpan of [line, '원문에 없는 구절']) {
+    assert.throws(() => decide(row, {...decision, status: 'partial', factSpan}, sources));
+  }
+});
+
+test('공백·문단·소수점이 있는 기사의 모든 내용이 검토 행에 남는다', () => {
+  const line = '표결 결과\r\n\r\n  찬성은 52.7%였다.\n“누구의 책임인가?”라고 물었다.  ';
+  const result = prepare(line, [], []);
+  assert.equal(result.article, line);
+  let prior = 0;
+  const spans = result.rows.flatMap(row => row.positions.map(p => ({...p, text: row.text})));
+  for (const {start, end, text} of spans.sort((a, b) => a.start - b.start)) {
+    assert.ok(start >= prior);
+    assert.equal(line.slice(prior, start).trim(), '');
+    assert.equal(line.slice(start, end), text);
+    prior = end;
+  }
+  assert.equal(line.slice(prior).trim(), '');
+  assert.ok(result.rows.some(row => row.text.includes('52.7%')));
+});
+
+test('연속된 동일 문장의 반복은 한 번 검토하고 원문의 두 위치를 모두 남긴다', () => {
+  const repeated = article + ' ' + article;
+  const first = prepare(repeated, sources, []);
+  assert.equal(first.rows.length, 1);
+  assert.equal(first.rows[0].positions.length, 2);
+  const receipt = decide(first.rows[0], decision, sources);
+  const continued = report(repeated, sources, [receipt]);
+  assert.equal(continued.pendingCount, 0);
+  assert.equal(continued.confirmedCount, 1);
+  assert.equal(continued.rows[0].positions.length, 2);
+});
+
+test('같은 항목에 상충하는 결정이 두 개 들어오면 마지막 항목을 임의 채택하지 않는다', () => {
+  const [row] = prepare(article, sources, []).rows;
+  const verified = decide(row, decision, sources);
+  const conflict = decide(row, {...decision, status: 'contradicted', reason: '별도의 검토자는 이의를 제기했다.'}, sources);
+  for (const records of [[verified, conflict], [conflict, verified]]) {
+    assert.equal(report(article, sources, records).complete, false);
+    assert.equal(report(article, sources, records).confirmedCount, 0);
+  }
+});
+
+test('발언록은 뇌물 의혹의 사실 근거가 되지 않으며, 발언만 확인한 경우 계속 검토한다', () => {
+  for (const text of ['가 정당은 “시장이 뇌물을 받았다”고 주장했다.', '나 정당에 의하면 시장이 돈을 빼돌렸다.']) {
+    const src = [{...source, excerpt: text}];
+    const [row] = prepare(text, src, []).rows;
+    const said = {...decision, status: 'attribution'};
+    assert.throws(() => decide(row, decision, src));
+    assert.throws(() => decide(row, {...said, contentStatus: 'opinion', contentChecked: true, contentReason: '의견이라고 분류했다.'}, src));
+    assert.throws(() => decide(row, {...said, contentStatus: 'supported', contentSourceIds: ['minutes'], contentChecked: true, contentReason: '같은 문서를 참조했다.'}, src));
+    const result = report(text, src, [decide(row, said, src)]);
+    assert.equal(result.complete, false);
+    assert.equal(result.contentUnverifiedCount, 1);
+    assert.equal(result.rows[0].needsReview, true);
+    if (text.includes('뇌물')) assert.throws(() => decide(row, {...decision, status: 'partial', factSpan: '시장이 뇌물을 받았다'}, src));
+  }
+});
+
+test('정책 비판과 확인 가능한 법적 절차는 보존하고, 부정어 삭제와 사실·평가 뒤바꾸기는 막는다', () => {
+  const line = '시의회가 3억 원을 의결한 것은 무책임한 결정이다.';
+  const [mixed] = prepare(line, sources, []).rows;
+  const factSpan = '시의회가 3억 원을 의결한 것은', opinionSpan = '무책임한 결정이다.';
+  const r = decide(mixed, {...decision, status: 'mixed', factSpan, opinionSpan}, sources);
+  assert.equal(report(line, sources, [r]).mixedCount, 1);
+  assert.throws(() => decide(mixed, {...decision, status: 'mixed', factSpan: opinionSpan, opinionSpan: factSpan}, sources));
+  const [denial] = prepare('의회는 예산을 통과시키지 않았다.', sources, []).rows;
+  assert.throws(() => decide(denial, {...decision, status: 'mixed', factSpan: '의회는 예산을 통과', opinionSpan: '시키지 않았다.'}, sources));
+  for (const text of ['법원은 시장에게 횡령 혐의 무죄를 선고했다.', '의회는 「해솔 조례」를 가결했다.']) {
+    assert.ok(prepare(text, sources, []).rows[0].allowedStatuses.includes('fact'));
+  }
+});
+
+test('수치가 있는 미래 전망은 결과 확인으로 올리지 않고, 발언에 섞인 과거 사실을 의견으로 닫지 않는다', () => {
+  const status = {status: 'attribution', contentStatus: 'opinion', contentChecked: true, contentReason: '내년의 전망을 확인했다.'};
+  const refs = [source, {...source, id: 'forecast', url: 'https://stats.example/forecast', excerpt: '내년도 물가 전망치 5%'}];
+  const text = '의원은 “내년 물가가 5% 오를 것”이라고 말했다.';
+  const [row] = prepare(text, refs).rows;
+  assert.equal(decide(row, {...decision, ...status}, refs).contentStatus, 'opinion');
+  assert.throws(() => decide(row, {...decision, ...status, contentStatus: 'supported', contentSourceIds: ['forecast']}, refs));
+  const [combined] = prepare('의원은 “지난달 물가는 2%였고 내년엔 5% 오를 것”이라고 말했다.', refs).rows;
+  assert.throws(() => decide(combined, {...decision, ...status}, refs));
+});
+
+test('문서 식별 쿼리는 유지하며 전재·추적 주소·같은 발췌는 독립된 내용 근거에서 제외한다', () => {
+  const text = '의원은 “예산이 늘었다”고 밝혔다.';
+  const transcript = {...source, url: 'https://portal.example/view?docId=1', excerpt: '예산이 늘었다고 보았다.'};
+  const audit = {...source, id: 'audit', url: 'https://portal.example/view?docId=2', excerpt: '결산표 · 예산 2억에서 3억으로 증가'};
+  const status = {...decision, status: 'attribution', contentStatus: 'supported', contentSourceIds: ['audit'],
+    contentChecked: true, contentReason: '해당 기간의 결산표와 대조했다.'};
+  const check = second => {
+    const refs = [transcript, second];
+    const [row] = prepare(text, refs).rows;
+    return decide(row, status, refs);
+  };
+  assert.equal(check(audit).contentStatus, 'supported');
+  for (const changed of [{url: transcript.url + '&utm_source=news#p2'},
+    {originUrl: transcript.url}, {excerpt: transcript.excerpt}]) assert.throws(() => check({...audit, ...changed}));
+});
+
+test('근거 목록만 확대하면 다시 확인할 초안을 유지하고 정정·문맥·참조 변경에는 자동 승인하지 않는다', () => {
+  const [row] = prepare(article, sources).rows;
+  const receipt = decide(row, decision, sources);
+  const expanded = [...sources, {...source, id: 'correction', excerpt: '후속 회의록'}];
+  const [reopened] = report(article, expanded, [receipt]).rows;
+  assert.equal(reopened.status, 'pending');
+  assert.equal(reopened.priorDecision.reason, receipt.reason);
+  assert.equal(report(article, [{...source, version: '다른 판본'}], [receipt]).rows[0].priorDecision, null);
+  const change = {...decision, status: 'contradicted', correction: '의회는 심의안을 보류했다.'};
+  assert.throws(() => decide(row, change, sources));
+  const corrected = decide(row, {...change, correctionChecked: true}, sources);
+  assert.equal(report(article, sources, [corrected]).rows[0].receipt.correction, change.correction);
+  assert.equal(report(article, sources, [corrected]).complete, false);
+});
+
+test('한 문장에 있는 기자의 독립 주장과 정치인의 인용은 각각 근거가 있어야 검토가 끝난다', () => {
+  const text = '의회는 예산을 삭감했고 시장은 “무책임하다”고 말했다.';
+  const refs = [{...source, excerpt: '무책임하다.'}];
+  const [budget, speech] = prepare(text, refs).rows;
+  assert.equal(budget.text, '의회는 예산을 삭감했고');
+  assert.equal(speech.text, '시장은 “무책임하다”고 말했다.');
+  const said = decide(speech, {...decision, status: 'attribution', contentStatus: 'opinion',
+    contentChecked: true, contentReason: '시장이 내린 평가다.'}, refs);
+  const result = report(text, refs, [said]);
+  assert.equal(result.complete, false);
+  assert.equal(result.pendingCount, 1);
+  assert.equal(result.confirmedCount, 0);
+  assert.equal(result.rows[0].text + ' ' + result.rows[1].text, text);
+  assert.equal(prepare('시장은 “의회는 예산을 삭감했고 주민은 반대했다”고 말했다.', refs).rows.length, 1);
+});
+
+test('닫는 따옴표가 빠져도 다음 줄의 독립 문장은 발언 행에 합쳐지지 않는다', () => {
+  const text = '김 의원은 “시장이 예산을 숨겼다고 말했다.\n\n시 예산은 10억 원 늘었다.\n시장은 반박했다.';
+  const rows = prepare(text, []).rows;
+  assert.deepEqual(rows.map(row => row.text), ['김 의원은 “시장이 예산을 숨겼다고 말했다.', '시 예산은 10억 원 늘었다.', '시장은 반박했다.']);
+  assert.ok(rows[1].allowedStatuses.includes('fact'));
+  for (const row of rows) assert.equal(text.slice(row.positions[0].start, row.positions[0].end), row.text);
+  assert.equal(prepare('시장은 “예산은 늘었다. 주민은 반대했다”고 말했다.', []).rows.length, 1);
+});
+
+const transcript = [{id: 'minutes', title: '가상 회의록', url: 'https://council.example/minutes', version: '확정본', locator: '발언 1', excerpt: '무책임하다.'}];
+const said = (row, extra = {}) => decide(row, {status: 'attribution', sourceIds: ['minutes'], acknowledged: true,
+  reason: '회의록의 발언자와 발언을 대조했다.', contentStatus: 'opinion', contentChecked: true, contentReason: '발언자의 평가다.', ...extra}, transcript);
+
+test('간접 인용 속 두 절은 나누지 않아 화자의 주장을 발언 기록만으로 사실 처리할 수 없다', () => {
+  for (const text of ['김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했다.',
+    "김 의원은 '시장이 예산을 은폐했고 의회가 이를 묵인했다'고 주장했다.",
+    '야당은 시장이 3억 원을 횡령했고 측근이 이를 도왔다고 주장했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 1, text);
+    assert.deepEqual(rows[0].allowedStatuses, ['attribution', 'partial', 'held', 'contradicted']);
+    assert.throws(() => decide(rows[0], {...decision, sourceIds: ['minutes']}, transcript));
+  }
+});
+
+test('따옴표 밖 서술에 사실이 있으면 발언을 의견으로 닫아도 그 사실을 확인한 것으로 세지 않는다', () => {
+  // A connective before a direct quotation gives the narrator clause its own row.
+  for (const text of ['의회는 지난달 예산 3억 원을 삭감했는데 시장은 “무책임하다”고 말했다.',
+    '의회가 예산 3억 원을 삭감하자 시장은 “무책임하다”고 비판했다.',
+    '의회가 지난달 예산 3억 원을 삭감한 뒤 시장은 “무책임하다”고 말했다.']) {
+    const [narrator, speech] = prepare(text, transcript).rows;
+    assert.ok(narrator.allowedStatuses.includes('fact'), text);
+    assert.match(speech.text, /^시장은 “무책임하다”/);
+    assert.equal(report(text, transcript, [said(speech)]).complete, false);
+  }
+  const embedded = '시장은 의회가 예산 3억 원을 삭감한 데 대해 “무책임하다”고 말했다.';
+  const [row] = prepare(embedded, transcript).rows;
+  assert.throws(() => said(row), /사실·의혹/);
+  // The reporting verb and a date only frame the speech.
+  for (const text of ['의원은 “무책임하다”라며 반대했다.', '김 의원은 3일 기자회견에서 “무책임하다”고 비판했다.']) {
+    const [only] = prepare(text, transcript).rows;
+    assert.equal(said(only).contentStatus, 'opinion', text);
+  }
+});
+
+test('인용이 끝나며 문장도 끝나면 다음 서술 문장은 별도 행이 된다', () => {
+  const text = '김 의원은 기자회견을 열었다. “이번 결정은 무책임하다.” 의회는 지난달 예산 3억 원을 삭감했다.';
+  const rows = prepare(text, transcript).rows;
+  assert.deepEqual(rows.map(r => r.text), ['김 의원은 기자회견을 열었다.', '“이번 결정은 무책임하다.”', '의회는 지난달 예산 3억 원을 삭감했다.']);
+  assert.ok(rows[2].allowedStatuses.includes('fact'));
+  assert.equal(prepare('그는 “괜찮다!” 라고 했다.', []).rows.length, 1);
+  assert.equal(prepare('시장은 “괜찮다.”고 말했다. 의회는 예산을 삭감했다.', []).rows.length, 2);
+  // A straight opening quote closed by a curly one still closes the quotation.
+  assert.equal(prepare('시장은 "무책임하다”고 말했다. 의회는 예산 3억 원을 삭감했다.', []).rows.length, 2);
+});
+
+test('평가어를 덧붙여도 의혹 제기는 사실 구절로 바뀌지 않고, 따옴표 친 법안 이름은 발언이 아니다', () => {
+  const [row] = prepare('시장이 3억 원을 횡령했다는 의혹이 제기된 것은 참담한 일이다.', transcript).rows;
+  assert.deepEqual(row.allowedStatuses, ['attribution', 'partial', 'held', 'contradicted']);
+  assert.ok(prepare('법원은 시장의 횡령 혐의에 무죄를 선고했다.', []).rows[0].allowedStatuses.includes('fact'));
+  for (const text of ['국회는 “노란봉투법”을 가결했다.', '국회는 "노란봉투법"을 가결했다.']) {
+    assert.ok(prepare(text, []).rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['그는 “개혁”이라고 말했다.', '시장은 “무책임하다”고 말했다.', '단체는 “시장은 사퇴하라”는 성명을 냈다.']) {
+    assert.deepEqual(prepare(text, []).rows[0].allowedStatuses, ['attribution', 'partial', 'held', 'contradicted'], text);
+  }
+});
+
+test('발언자 뒤의 날짜는 발언 내용이 아니고, 모바일 주소는 같은 문서다', () => {
+  const [row] = prepare('김 의원은 3일 시장의 결정이 무책임하다고 비판했다.', transcript).rows;
+  assert.equal(said(row).contentStatus, 'opinion');
+  const [cut] = prepare('김 의원은 시장이 예산 3억 원을 삭감했다고 비판했다.', transcript).rows;
+  assert.throws(() => said(cut));
+  const refs = [{id: 'web', title: '연설', url: 'https://www.news.example/view/1', version: '1', locator: '1문단', excerpt: '예산을 삭감했다.'},
+    {id: 'mobile', title: '연설 모바일', url: 'https://m.news.example/view/1', version: '1', locator: '1문단', excerpt: '예산 삭감 기록'}];
+  const [speech] = prepare('김 의원은 시장이 예산을 삭감했다고 말했다.', refs).rows;
+  assert.throws(() => decide(speech, {status: 'attribution', sourceIds: ['web'], acknowledged: true, reason: '발언 대조',
+    contentStatus: 'supported', contentChecked: true, contentReason: '내용 대조', contentSourceIds: ['mobile']}, refs), /다른 원자료/);
+});
+
+test('대조 후보는 조사가 붙은 낱말도 같은 낱말로 찾는다', () => {
+  const refs = [{id: 'plan', title: '집행 계획', url: 'https://city.example/plan', version: '1', locator: '표 1', excerpt: '주거 예산 집행 실적'}];
+  for (const text of ['시는 주거 예산으로 집행했다.', '시는 주거 예산에서는 줄였다.', '시는 주거 예산에는 손대지 않았다.']) {
+    assert.match(prepare(text, refs).rows[0].sourceMatches[0].reason, /예산/, text);
+  }
+});
+
+const rowTexts = text => prepare(text, transcript).rows.map(r => r.text);
+const opinionClosed = text => { const rows = prepare(text, transcript).rows; try { said(rows.at(-1)); return true; } catch { return false; } };
+
+test('반박 인용이 붙어도 간접 인용 속 의혹은 사실 행으로 떨어지지 않는다', () => {
+  for (const text of ['야당은 시장이 3억 원을 횡령했고 측근이 이를 도왔다고 주장했지만 시장은 “사실무근”이라고 반박했다.',
+    '김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했고, 시장은 “사실무근”이라고 반박했다.',
+    '김 의원은 시장은 예산을 은폐했고 의회는 이를 묵인했다고 주장했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.ok(rows.every(row => !row.allowedStatuses.includes('fact')), text);
+  }
+});
+
+test('서술 사실과 다른 화자의 발언은 나누고, 한 화자의 문장은 쪼개지 않는다', () => {
+  for (const text of ['시의회는 예산 3억 원을 삭감했고 시장은 이에 유감이라고 밝혔다.', '정부는 지원금을 30% 인상했지만 야당은 부족하다고 지적했다.',
+    '시는 예산 3억 원을 집행했으나 의회는 절차가 부당했다고 주장했다.', '의회는 예산 3억 원을 삭감했고 시장은 ‘무책임하다’고 말했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['김 의원은 예산이 삭감되자 지역 주민들이 피해를 입게 됐다며 “대책이 필요하다”고 말했다.',
+    '김 의원은 시장과 면담한 뒤 취재진이 묻자 “사퇴는 없다”고 답했다.', '김 의원은 어제 시장과 통화했는데 시장이 “사과하겠다”고 말했다고 전했다.',
+    '경찰은 압수수색을 한 뒤 김 의원이 “정치 탄압”이라고 반발했다고 밝혔다.', '시공사는 하자 보수 기간이 끝났다며 “책임이 없다”고 밝혔다.',
+    '입주민들은 아파트 하자 보수 업체가 “책임을 피한다”고 주장했다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+});
+
+test('인용 뒤에 화자만 밝히는 문장과 인용에 붙은 말은 인용과 한 행으로 남는다', () => {
+  for (const text of ['“이번 결정은 무책임하다.” 김 의원은 3일 기자회견에서 이같이 말했다.', '“이번 결정은 무책임하다.” 김 의원의 말이다.',
+    '“이게 맞습니까?” 김 의원이 물었다.', '김 의원은 “이번 결정은 무책임하다!” 하며 목소리를 높였다.',
+    '시민들 사이에서는 “이게 맞나?” 하는 의문이 나온다.', '참가자들은 “예산 삭감 철회하라!” “시장은 사퇴하라!” 등의 구호를 외쳤다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+  assert.ok(opinionClosed('“이번 결정은 무책임하다.” 김 의원은 3일 기자회견에서 이같이 말했다.'));
+});
+
+test('발언 꼬리의 입장 동사는 사실이 아니지만, 따옴표 밖 사건과 기간은 사실로 남는다', () => {
+  for (const text of ['김 의원은 “무책임한 정책”이라며 예산안 처리에 반대했다.', '김 의원은 “졸속 행정”이라며 시의 계획에 강하게 반대했다.']) {
+    assert.ok(opinionClosed(text), text);
+  }
+  for (const text of ['시장은 “무책임하다”는 비판을 의식하며 예산을 삭감했다.', '시장은 “무책임하다”는 비판을 받고 예산을 삭감했다.',
+    '김 의원은 3일 만에 입장을 바꿔 시장의 결정이 무책임하다고 비판했다.', '김 의원은 10일 넘게 침묵하다가 시장의 결정이 무책임하다고 비판했다.']) {
+    assert.equal(opinionClosed(text), false, text);
+  }
+});
+
+test('평가·수치·사건·의혹을 담은 인용은 이름이 아니라 발언으로 남는다', () => {
+  for (const text of ['야당은 “포퓰리즘 정책”을 문제 삼았다.', '여당 의원들의 “무책임한 졸속 처리”가 도마에 올랐다.',
+    '김 의원의 “예산 삭감은 부당”이 논란이 됐다.', '야당은 “10조 원 퍼주기”를 문제 삼았다.', '김 의원은 “시장의 3억 원 횡령”을 거론했다.']) {
+    assert.equal(prepare(text, transcript).rows[0].allowedStatuses[0], 'attribution', text);
+  }
+});
+
+test('수사기관 발표로 전하는 문장은 통째로 남아 뒤쪽 절도 사실로 닫을 수 없다', () => {
+  for (const text of ['검찰에 따르면 시장은 업자에게 3억 원을 받았는데 측근이 이를 전달했다.', '공소장에 따르면 시장은 업자에게 3억 원을 요구한 뒤 측근이 이를 전달받았다.',
+    '시장은 업자에게 3억 원을 받았고, 측근은 이를 차명계좌로 옮겼다고 검찰은 밝혔다.', '김씨는 3일 오후 시청에 침입했고, 직원들이 이를 제지하자 흉기를 휘둘렀다고 경찰은 밝혔다.',
+    '시장은 “사과하겠다”고 말한 뒤 의원들이 반발하자 “오해”라고 해명했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 1, text);
+    assert.ok(!rows[0].allowedStatuses.includes('fact'), text);
+  }
+});
+
+test('과거형 연결어와 수식어가 있어도 서술 사실과 발언을 나누고, 인용 뒤 화자 문장은 붙여 둔다', () => {
+  for (const text of ['같은 날 의회는 예산 3억 원을 삭감했고 시장은 “무책임하다”고 말했다.', '의회는 예산 3억 원을 추가 삭감했고 시장은 “무책임하다”고 말했다.',
+    '의회는 예산 3억 원을 삭감했고 시장이 “무책임하다”고 반발했다.', '국회는 노란봉투법을 통과시켰고 야당은 “날치기 처리”라고 반발했다.',
+    '국회는 내년부터 시행되는 종부세 개편안을 의결했고 야당은 “부자 감세”라고 비판했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['“예산 삭감은 부당합니다.” 김 의원은 3일 SNS에 이 같은 글을 올렸다.', '“예산 삭감은 부당합니다.” 김 의원이 3일 기자회견에서 한 말이다.', '그는 “왜 안 되나?” 물었다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+  for (const text of ['“등록금 동결은 불가능하다.” 등록금은 올해 5% 인상됐다.', '“예산을 반드시 지키겠다.” 하지만 예산은 결국 그렇게 삭감됐다.',
+    '“예산을 지키겠다.” 하는 수 없이 의회는 예산 3억 원을 삭감했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[1].allowedStatuses.includes('fact'), text);
+  }
+  assert.ok(prepare('“노란봉투법”은 지난달 국회를 통과했다.', []).rows[0].allowedStatuses.includes('fact'));
+});
