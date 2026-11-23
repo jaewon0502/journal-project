@@ -213,7 +213,34 @@
     return {accuracy: accuracyFor(report, saved?.coreRowIds ?? []), bias: biasFor(saved?.ratings ?? {}), saved, stale};
   }
 
-  const api = Object.freeze({version, severityLabels, dimensions, bind, matches, save, evaluate});
+  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'reason', 'impact', 'direction'];
+  function copyFields(raw) {
+    return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
+  }
+  function restoreDraft(report, sources, raw) {
+    if (!raw || typeof raw !== 'object' || !matches(raw.binding, report) || !raw.entries || typeof raw.entries !== 'object') return null;
+    const entries = {};
+    for (const dim of dimensions) {
+      const d = raw.entries[dim.id];
+      if (!d || typeof d !== 'object' || fields.some(k => d[k] != null && typeof d[k] !== 'string')) continue;
+      const clean = copyFields(d);
+      if (!['', '0', '1', '2', '3', ...(dim.allowNA ? ['na'] : [])].includes(clean.level)) continue;
+      if (clean.rowId && !report.rows.some(row => row.id === clean.rowId)) continue;
+      if (clean.sourceId && !sources.some(s => s.id === clean.sourceId)) continue;
+      if (clean.compareRowId && !report.rows.some(row => row.id === clean.compareRowId)) continue;
+      if (d.previous) {
+        try {
+          const checked = save(report, sources, {coreRowIds: [], ratings: {[dim.id]: d.previous}});
+          clean.previous = checked.ratings[dim.id];
+        } catch (_) { /* An unvalidated prior entry cannot be restored as a finding. */ }
+      }
+      entries[dim.id] = clean;
+    }
+    if (!Object.keys(entries).length) return null;
+    return {binding: bind(report), activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
+  }
+
+  const api = Object.freeze({version, severityLabels, dimensions, bind, matches, save, evaluate, draftFields: fields, copyFields, restoreDraft});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalArticleRubric = api;
 })(globalThis);

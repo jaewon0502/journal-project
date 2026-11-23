@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "scope": "Two Korean official historical tables. One document is searched per query. The gold answer is the listed paragraph containing the requested value, contradictory value, definition or time basis.",
+  "scoring": {
+    "positive": "Hit@1 and Hit@3 count a query once if a returned candidate paragraph is in gold. Header or neighbouring context does not count as a data row. A counterexample with the correct date and scope counts even when the number in the query is wrong.",
+    "control": "Report separately how many queries with no answer in the excerpt returned at least one candidate. A candidate is not an automated verdict.",
+    "paragraphs": "1-based non-empty lines in the source excerpt, in the given order. Whitespace within cells is normalized and a tab separates table cells. Dates, numeric formatting and source row order are retained."
+  },
+  "sources": {
+    "bok": {
+      "title": "한국은행 기준금리 추이",
+      "author": "한국은행",
+      "url": "https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSeCd=01&menuNo=200643",
+      "accessed": "2026-11-23",
+      "published": null,
+      "anchor": "한국은행 기준금리 추이 표 제목·머리글, 2024년 11월부터 2022년 1월까지 변경일자 행, 표 바로 아래 주석. 금리는 연 %.",
+      "lines": [
+        "한국은행 기준금리 추이",
+        "변경일자\t기준금리",
+        "2024\t11월 28일\t3.00",
+        "2024\t10월 11일\t3.25",
+        "2023\t01월 13일\t3.50",
+        "2022\t11월 24일\t3.25",
+        "2022\t10월 12일\t3.00",
+        "2022\t08월 25일\t2.50",
+        "2022\t07월 13일\t2.25",
+        "2022\t05월 26일\t1.75",
+        "2022\t04월 14일\t1.50",
+        "2022\t01월 14일\t1.25",
+        "2008년 2월 까지는 콜금리 목표, 2008년 3월부터는 한국은행 기준금리"
+      ]
+    },
+    "wage": {
+      "title": "연도별 최저임금 결정현황",
+      "author": "최저임금위원회",
+      "url": "https://www.minimumwage.go.kr/minWage/policy/decisionMain.do",
+      "accessed": "2026-11-23",
+      "published": null,
+      "anchor": "연도별 최저임금 결정현황 표 제목·단위·머리글, 2025년부터 2020년까지 적용연도 6개 행. 적용연도 날짜 셀 안의 줄바꿈만 공백으로 바꿈.",
+      "lines": [
+        "연도별 최저임금 결정현황",
+        "(단위:원, %)",
+        "적용연도\t시간급\t일급 (8시간 기준)\t월급 (209시간 기준,고시기준)\t인상률 (인상액)\t심의 의결일\t결정 고시일",
+        "'25.01.01 ~'25.12.31\t10,030\t80,240\t2,096,270\t1.7 (170)\t24.07.12\t24.08.05",
+        "'24.01.01 ~'24.12.31\t9,860\t78,880\t2,060,740\t2.5 (240)\t23.07.19\t23.08.04",
+        "'23.01.01 ~'23.12.31\t9,620\t76,960\t2,010,580\t5.0 (460)\t22.06.29\t22.08.05",
+        "'22.01.01 ~'22.12.31\t9,160\t73,280\t1,914,440\t5.05 (440)\t21.07.12\t21.08.05",
+        "'21.01.01 ~'21.12.31\t8,720\t69,760\t1,822,480\t1.5 (130)\t20.07.14\t20.08.05",
+        "'20.01.01 ~'20.12.31\t8,590\t68,720\t1,795,310\t2.87 (240)\t19.07.12\t19.08.05"
+      ]
+    }
+  },
+  "queries": [
+    {"id":"b1","source":"bok","query":"2023년 1월 13일 한국은행 기준금리는 얼마였나?","gold":[5],"answer":"3.50%"},
+    {"id":"b2","source":"bok","query":"2024년 10월 11일 기준금리가 3.00%로 바뀌었다는 보도를 확인해 줘.","gold":[4],"answer":"3.25%. 3.00%는 같은 해 11월 28일의 값."},
+    {"id":"b3","source":"bok","query":"2022년 4월 기준금리를 변경한 날짜와 금리는?","gold":[11],"answer":"4월 14일, 1.50%"},
+    {"id":"b4","source":"bok","query":"한국은행이 표에서 콜금리 목표를 기준금리로 바꿔 표시한 첫 달은?","gold":[13],"answer":"2008년 3월"},
+    {"id":"w1","source":"wage","query":"2025년 시간급 최저임금이 10,030원이라는 근거는?","gold":[4],"answer":"10,030원"},
+    {"id":"w2","source":"wage","query":"2022년 적용 최저임금 일급이 76,960원이었나?","gold":[7],"answer":"73,280원. 76,960원은 2023년 일급."},
+    {"id":"w3","source":"wage","query":"2020년 최저임금 인상액은 240원인데 인상률은 얼마였나?","gold":[9],"answer":"2.87%. 2024년 인상액도 240원이지만 비율은 2.5%."},
+    {"id":"w4","source":"wage","query":"최저임금위원회의 고시 기준 월급을 산출할 때 한 달에 몇 시간을 쓰는가?","gold":[3],"answer":"209시간"},
+    {"id":"bc","source":"bok","query":"2024년 10월 11일 기준금리 변경에 반대표를 낸 금통위원은 몇 명인가?","gold":[],"answer":null},
+    {"id":"wc","source":"wage","query":"2024년 시간급 최저임금 미만을 받은 노동자는 몇 명인가?","gold":[],"answer":null}
+  ]
+}

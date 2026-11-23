@@ -2,8 +2,12 @@
   'use strict';
   const el = id => document.getElementById(id);
   const core = window.JournalEditorStudy, cases = window.JournalStudyCases;
-  const storeKey = 'journal-editor-study-workspace-v1';
+  const stageLabels = {select:'자료 선택', locate:'근거 위치 확인', decide:'판정 기록'};
+  const stageButtons = [...document.querySelectorAll('[data-phase]')];
+  const participantOnly = document.documentElement.hasAttribute('data-participant-kit');
+  let storeKey = participantOnly ? null : 'journal-editor-study-workspace-v1';
   const collectionType = 'journal-editor-study-collection-v1';
+  const invitePattern = /^J1-([1-9]\d{0,8})-(E[A-F0-9]{16})$/;
   let records = [], invitations = [], session = null, viewKind = 'editor';
   let frame = null, frameNonce = null, liveStart = null, storageVersion = null, storageLocked = false;
   const node = (tag, text, cls) => {
@@ -38,7 +42,7 @@
     el('frame-host').replaceChildren();
   }
   function persist() {
-    if (storageLocked) return;
+    if (storageLocked || !storeKey) return;
     try {
       const prior = localStorage.getItem(storeKey);
       if (prior !== storageVersion) {
@@ -53,21 +57,30 @@
       message('global-status', '브라우저 저장이 제한되어 있습니다. 창을 닫기 전에 기록을 JSON으로 내려받으세요.', true);
     }
   }
-  try {
-    storageVersion = localStorage.getItem(storeKey);
-    if (storageVersion) {
-      const saved = JSON.parse(storageVersion);
-      if (!Array.isArray(saved.records) || saved.records.some(r => r?.kind !== 'editor')) throw new Error();
-      records = core.mergeRecords([], saved.records);
-      invitations = Array.isArray(saved.invitations) ? saved.invitations : [];
-      session = saved.session;
-      if (session && !currentRecord()) throw new Error();
-      if (session?.state === 'running') session.state = 'interrupted';
+  function restoreWorkspace() {
+    try {
+      storageVersion = localStorage.getItem(storeKey);
+      if (storageVersion) {
+        const saved = JSON.parse(storageVersion);
+        if (!Array.isArray(saved.records) || saved.records.some(r => r?.kind !== 'editor')) throw new Error();
+        const restored = core.mergeRecords([], saved.records);
+        let roster = mergeInvitations([], saved.invitations ?? []);
+        const current = restored.find(r => r.participantId === saved.session?.id);
+        if (saved.session && !current) throw new Error();
+        if (!participantOnly && current && !onRoster(roster, current.ordinal, current.participantId)) {
+          // Older shared-device workspaces kept their locally enrolled session but no roster entry.
+          roster = mergeInvitations(roster, [registration(current.ordinal, current.participantId, true)]);
+        }
+        checkRosterConflicts(restored, roster);
+        records = restored; invitations = roster; session = saved.session;
+        if (session?.state === 'running') session.state = 'interrupted';
+      }
+    } catch (_) {
+      if (storageVersion) storageLocked = true;
+      message('global-status', '기기에 보관된 상태를 읽지 못했습니다. 내려받은 JSON을 가져오거나 다른 브라우저에서 시작하세요.', true);
     }
-  } catch (_) {
-    if (storageVersion) storageLocked = true;
-    message('global-status', '기기에 보관된 상태를 읽지 못했습니다. 내려받은 JSON을 가져오거나 다른 브라우저에서 시작하세요.', true);
   }
+  if (!participantOnly) restoreWorkspace();
   window.addEventListener('storage', event => {
     if (event.key === storeKey && event.newValue !== storageVersion) {
       storageLocked = true;
@@ -114,20 +127,23 @@
   }
   function showInvitations() {
     el('export-all').disabled = !records.length && !invitations.length;
-    table('invites', ['발급 묶음', '전달할 초대 코드', '이 기기 수집 상태'], invitations.map(inv => [
+    table('invites', ['발급 묶음', '전달할 초대 코드', '이 기기 수집 상태'], invitations.filter(inv => !inv.atDevice).map(inv => [
       String(Math.ceil(inv.ordinal / 4)), inv.code,
       records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'
     ]), '발급된 초대 코드가 없습니다.');
   }
   function showDashboard() {
     const demo = viewKind === 'demo';
-    const a = core.analyze(demo ? core.demoRecords() : records, viewKind);
+    const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
+    const a = core.analyze(demo ? core.demoRecords() : confirmed, viewKind);
     el('real-view').setAttribute('aria-pressed', String(!demo));
     el('demo-view').setAttribute('aria-pressed', String(demo));
     el('data-notice').textContent = demo ? '가상 수치 예시 · 계산 방법을 보여 주기 위해 만든 응답과 시간입니다. 실제 편집자 집계에는 들어가지 않습니다.'
       : a.completeBlocks ? '기사 편집·검증 업무를 수행한다고 본인이 응답한 참여자의 기록입니다. 완성된 배정 묶음만 지표에 반영했습니다.'
       : '실제 참여 기록 · 완성된 4인 묶음이 생기면 시간과 판정 차이를 표시합니다.';
     if (a.completeBlocks > 0 && a.completeBlocks <= 2) el('data-notice').textContent += ' 사례·방식·정당 표기별 응답은 각 ' + a.completeBlocks + '명으로, 한 사람의 응답에도 격차가 크게 바뀝니다.';
+    if (!demo && confirmed.length < records.length) el('data-notice').textContent +=
+      ' 명부 미확인 ' + (records.length - confirmed.length) + '명은 보관 중입니다. 아래에서 원래 명부나 개별 배정 코드를 확인하세요.';
     el('data-notice').classList.toggle('sample', demo);
     el('counts').replaceChildren(...['등록 ' + a.enrolled + '명', '4과제 완료 ' + a.completed + '명',
       '분석 ' + a.included + '명 · ' + a.trialCount + '건', '분석 미포함 ' + a.excluded + '명',
@@ -142,6 +158,22 @@
         !b ? '성향 표지만 다른 두 조건의 사실 채택률 차이' : b.reductionPct == null ? '원자료 차이 0%p · 상대 감소율 산출 불가'
           : '원자료 차이 대비 ' + fmt(Math.abs(b.reductionPct)) + '% ' + (b.reductionPct >= 0 ? '감소' : '증가'))
     );
+    const phases = a.phases;
+    el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
+      '건. 단계별 비교에는 전원이 세 단계를 기록한 ' + phases.completeBlocks + '묶음 · ' + phases.included + '명 · ' + phases.trialCount + '건을 사용합니다.';
+    const stageRows = [], pairRows = [];
+    if (phases.byStage) {
+      for (const name of core.stages) {
+        const stage = phases.byStage[name];
+        stageRows.push([stageLabels[name], fmt(stage.manualSeconds), fmt(stage.journalSeconds), fmt(stage.savedSeconds)]);
+        for (const person of stage.editorPairs) {
+          pairRows.push([person.participantId, stageLabels[name], fmt(person.manualSeconds), fmt(person.journalSeconds), fmt(person.savedSeconds)]);
+        }
+      }
+    }
+    table('phase-table',['단계', '원자료 평균(초)', '저널 평균(초)', '절감(초)'], stageRows, '세 단계가 모두 기록된 4인 묶음을 기다리고 있습니다.');
+    el('phase-pairs').hidden = !phases.included;
+    table('phase-pair-table',['참여 코드','단계','원자료 평균(초)','저널 평균(초)','절감(초)'],pairRows,'');
     const q = a.quality;
     const warnings = [];
     if (q) {
@@ -172,7 +204,19 @@
   }
 
   // Allocation and registrations are saved before task material is disclosed.
-  const inviteConflict = (list, ordinal, id) => list.some(inv => (inv.ordinal === ordinal) !== (inv.id === id));
+  function inviteConflict(list, ordinal, id) {
+    return list.some(inv => (inv.ordinal === ordinal) !== (inv.id === id));
+  }
+  function onRoster(list, ordinal, id) {
+    return list.some(inv => inv.ordinal === ordinal && inv.id === id);
+  }
+  function registration(ordinal, id, atDevice = false) {
+    return {ordinal, id, code:'J1-' + ordinal + '-' + id, ...(atDevice ? {atDevice:true} : {})};
+  }
+  function checkRosterConflicts(list, roster) {
+    if (list.some(r => inviteConflict(roster, r.ordinal, r.participantId)))
+      throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
+  }
   function vacantSlots() {
     const used = new Set([...records, ...invitations].map(r => r.ordinal));
     let start = 1;
@@ -180,6 +224,7 @@
     return [0,1,2,3].map(d => start + d).filter(n => !used.has(n));
   }
   function mergeInvitations(existing, incoming) {
+    if (!Array.isArray(incoming)) throw new Error('초대 코드 명부 형식을 확인하세요.');
     const merged = [...existing];
     for (const raw of incoming) {
       const ordinal = raw?.ordinal, id = raw?.id;
@@ -188,9 +233,20 @@
       }
       if (merged.some(inv => inv.ordinal === ordinal && inv.id === id)) continue;
       if (inviteConflict(merged, ordinal, id)) throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
-      merged.push({ordinal, id, code: raw.code});
+      merged.push(registration(ordinal, id, raw.atDevice === true));
     }
     return merged;
+  }
+  function importRosters(groups) {
+    const pending = groups.map(group => mergeInvitations([], group)).filter(group => group.length);
+    let roster = invitations;
+    if (!roster.length && pending.length) roster = pending.shift();
+    while (pending.length) {
+      const index = pending.findIndex(group => group.some(inv => onRoster(roster, inv.ordinal, inv.id)));
+      if (index < 0) throw new Error('가져온 명부와 기존 명부에 일치하는 배정이 없습니다. 같은 연구의 원래 백업을 확인하세요. 다른 연구의 백업은 별도 브라우저 프로필에서 열 수 있습니다.');
+      roster = mergeInvitations(roster, pending.splice(index, 1)[0]);
+    }
+    return roster;
   }
   function issueCodes() {
     const available = vacantSlots();
@@ -206,25 +262,74 @@
     try {
       if (!el('qualified').checked) throw new Error('편집 업무와 참여 조건을 확인하세요.');
       const code = el('invite-code').value.trim().toUpperCase();
-      const m = /^J1-([1-9]\d{0,8})-(E[A-F0-9]{16})$/.exec(code);
-      if (code && !m) throw new Error('연구자가 전달한 초대 코드를 다시 확인하세요.');
+      const m = invitePattern.exec(code);
+      if ((participantOnly || code) && !m) throw new Error('연구자가 전달한 초대 코드를 다시 확인하세요.');
+      if (participantOnly) {
+        // A freshly opened participant kit does not select anyone's saved record
+        // until its holder supplies their own invitation, including on a shared device.
+        storeKey = 'journal-editor-study-participant-v1/' + code;
+        storageVersion = null; storageLocked = false; records = []; invitations = []; session = null;
+        restoreWorkspace();
+        if (storageLocked || (records.length && (records.length !== 1 || !currentRecord() ||
+            currentRecord().ordinal !== Number(m[1]) || currentRecord().participantId !== m[2]))) {
+          session = null;
+          throw new Error('이 코드의 저장 기록과 배정이 일치하지 않습니다. 진행자에게 확인하세요.');
+        }
+        if (session) { message('enroll-status', ''); renderParticipant(); return; }
+      }
       const slots = vacantSlots();
       const ordinal = m ? Number(m[1]) : slots[sampleIndex(slots.length)];
       const id = m ? m[2] : 'E' + idBytes();
       if (records.some(r => r.ordinal === ordinal || r.participantId === id) ||
         inviteConflict(invitations, ordinal, id)) throw new Error('이미 사용하거나 다른 참여자에게 배정한 코드입니다. 연구자에게 확인하세요.');
+      if (!participantOnly && m && !onRoster(invitations, ordinal, id) && invitations.some(inv => !inv.atDevice))
+        throw new Error('이 진행자의 명부에 없는 초대 코드입니다. 배정받은 코드를 확인하세요.');
       const r = core.createRecord(id, ordinal, 'editor', true);
       records = core.mergeRecords(records, [r]);
+      if (!participantOnly && !onRoster(invitations, ordinal, id)) invitations.push(registration(ordinal, id, true));
       session = {id, state:'ready', activeMs:0, segmentAt:null, used:false, verdict:'', source:'', reason:''};
       persist(); message('enroll-status', ''); renderParticipant(); el('trial-heading').focus();
     } catch (err) { message('enroll-status', err.message, true); }
   }
   function clearTaskState(next) {
-    Object.assign(session, {state:next, activeMs:0, segmentAt:null, used:false, verdict:'', source:'', reason:''});
+    Object.assign(session, {state:next, activeMs:0, segmentAt:null, stage:null, phaseMs:null, phaseOmitted:false, used:false, verdict:'', source:'', reason:''});
     liveStart = null; dropFrame();
   }
   function elapsed() {
     return session.activeMs + (session.state === 'running' && liveStart !== null ? clock() - liveStart : 0);
+  }
+  function updateStages() {
+    const enabled = !!session.phaseMs;
+    for (const button of stageButtons) {
+      button.disabled = !enabled;
+      button.setAttribute('aria-pressed', String(enabled && button.dataset.phase === session.stage));
+    }
+    el('phase-omit').checked = !!session.phaseOmitted;
+    el('phase-omit').disabled = !session.phaseMs;
+    el('phase-note').textContent = enabled && !session.phaseOmitted
+      ? '자료 선택은 문서를 고르는 시간, 근거 위치 확인은 그 안의 표·문구를 찾고 읽는 시간입니다. 결론과 이유를 정리할 때 판정 기록을 누르세요. 세 단계를 모두 표시해야 단계별 비교에 포함됩니다.'
+      : '이 과제는 전체 검토 시간만 분석합니다.';
+  }
+  function bankTime() {
+    const now = clock();
+    const total = session.activeMs + (now - liveStart);
+    // Round cumulative boundaries, so switching phases frequently cannot change total time.
+    if (session.phaseMs) session.phaseMs[session.stage] += Math.round(total) - Math.round(session.activeMs);
+    session.activeMs = total;
+    liveStart = now; session.segmentAt = Date.now();
+  }
+  function switchStage(name) {
+    if (session?.state !== 'running' || !session.phaseMs || name === session.stage) return;
+    bankTime();
+    session.stage = name;
+    session.phaseMs[name] ??= 0;
+    persist(); updateStages();
+  }
+  function phaseResult(total) {
+    if (session.phaseOmitted || !session.phaseMs || !core.stages.every(key => Object.hasOwn(session.phaseMs, key))) return null;
+    const ms = {...session.phaseMs};
+    ms[session.stage] += total - Math.round(session.activeMs);
+    return ms;
   }
   function updateTime() {
     if (!session || ['done','withdrawn'].includes(session.state)) return;
@@ -233,19 +338,24 @@
   }
   function start() {
     if (!session || !['ready','paused','interrupted'].includes(session.state)) return;
+    if (session.state === 'ready') {
+      session.stage = 'select'; session.phaseMs = {select:0}; session.phaseOmitted = false;
+    }
     if (session.state === 'interrupted') {
       const delta = Date.now() - session.segmentAt;
       if (!Number.isSafeInteger(session.segmentAt) || delta < 0) {
         message('session-status', '시계가 바뀌어 경과 시간을 복원할 수 없습니다. 중단 기록으로 종료하세요.', true); return;
       }
       session.activeMs += delta;
+      // No phase boundaries can be verified while the task page was closed.
+      session.phaseMs = null; session.stage = null;
     }
     liveStart = clock(); session.segmentAt = Date.now(); session.state = 'running';
     persist(); renderParticipant(); el('trial-heading').focus();
   }
   function pause() {
     if (session?.state !== 'running') return;
-    session.activeMs = elapsed(); session.segmentAt = null; liveStart = null; session.state = 'paused';
+    bankTime(); session.segmentAt = null; liveStart = null; session.state = 'paused';
     persist(); renderParticipant(); el('resume-trial').focus();
   }
   function withdraw() {
@@ -296,7 +406,8 @@
       const a = assignment();
       if (a.method === 'journal' && !session.used) throw new Error('위 저널 화면에서 자료를 대조한 뒤 문장 판단을 먼저 기록하세요.');
       if (!el('verdict').value || !el('source').value) throw new Error('최종 판정과 대표 근거 선택을 확인하세요.');
-      const r = core.addTrial(currentRecord(), {elapsedMs:Math.max(1, Math.round(elapsed())), verdict:el('verdict').value, reason:el('reason').value,
+      const elapsedMs = Math.max(1, Math.round(elapsed()));
+      const r = core.addTrial(currentRecord(), {elapsedMs, phaseMs:phaseResult(elapsedMs), verdict:el('verdict').value, reason:el('reason').value,
         sourceIds:el('source').value === 'none' ? [] : [el('source').value], journalUsed:a.method === 'journal' && session.used});
       records = core.mergeRecords(records, [r]);
       clearTaskState(r.trials.length === 4 ? 'done' : 'ready'); persist();
@@ -333,6 +444,7 @@
     el('pause-pane').hidden = s !== 'paused'; el('recovery').hidden = s !== 'interrupted';
     updateTime();
     if (s !== 'running') return;
+    updateStages();
     const c = stimulus();
     el('stimulus-title').textContent = c.title; el('stimulus-article').textContent = c.article;
     el('stimulus-sources').replaceChildren(...c.sources.map(source => {
@@ -354,53 +466,76 @@
   }
   function route() {
     const inSession = !!session;
-    const participant = location.hash === '#participate' || inSession;
-    el('participant').hidden = !participant; el('dashboard').hidden = participant;
+    const participant = participantOnly || location.hash === '#participate' || inSession;
+    el('participant').hidden = !participant;
+    if (!participantOnly) el('dashboard').hidden = participant;
     if (participant) renderParticipant(); else showDashboard();
   }
-  el('real-view').onclick = () => { viewKind = 'editor'; showDashboard(); };
-  el('demo-view').onclick = () => { viewKind = 'demo'; showDashboard(); };
-  el('issue-codes').onclick = issueCodes;
   el('enroll').onsubmit = enroll;
   el('begin-trial').onclick = el('resume-unbroken').onclick = el('resume-trial').onclick = start;
+  for (const button of stageButtons) button.onclick = () => switchStage(button.dataset.phase);
+  el('phase-omit').onchange = () => {
+    if (session?.state !== 'running') return;
+    session.phaseOmitted = el('phase-omit').checked; persist(); updateStages();
+  };
   el('pause-trial').onclick = pause; el('withdraw').onclick = el('stop-interrupted').onclick = withdraw;
   el('answer').onsubmit = submitTrial;
   el('answer').addEventListener('input',cacheAnswer);
   el('export-one').onclick = el('export-finished').onclick = exportSelf;
   // F4: the next person on a shared device returns to an empty enrollment form, not to the aggregate view.
   el('leave-session').onclick = () => {
+    if (participantOnly) { location.reload(); return; }
     session = null; persist(); el('enroll').reset(); message('enroll-status', '');
     if (location.hash !== '#participate') location.hash = 'participate';
     route(); el('invite-code').focus();
   };
-  el('export-all').onclick = () => {
-    if (records.length || invitations.length) download({type:collectionType,records,invitations},'journal-editor-study-collection.json');
-  };
-  el('import-trigger').onclick = () => el('import-files').click();
-  el('import-files').onchange = async event => {
-    const files = [...event.target.files]; event.target.value = '';
-    if (!files.length) return;
-    try {
-      const incoming = [], incomingInvites = [];
-      for (const file of files) {
-        const parsed = JSON.parse(await file.text());
-        const data = parsed?.type === collectionType ? parsed.records : [parsed];
-        if (!Array.isArray(data) || data.some(r => !r || r.kind !== 'editor')) throw new Error('실제 편집자용 참여 기록을 선택하세요.');
-        incoming.push(...data);
-        if (parsed?.type === collectionType && parsed.invitations !== undefined) {
-          if (!Array.isArray(parsed.invitations)) throw new Error('초대 코드 명부 형식을 확인하세요.');
-          incomingInvites.push(...parsed.invitations);
+  if (!participantOnly) {
+    el('recover-roster').onsubmit = event => {
+      event.preventDefault();
+      try {
+        const m = invitePattern.exec(el('roster-code').value.trim().toUpperCase());
+        if (!m) throw new Error('원래 배정한 초대 코드 전체를 입력하세요.');
+        const roster = mergeInvitations(invitations, [registration(Number(m[1]), m[2])]);
+        checkRosterConflicts(records, roster);
+        invitations = roster; persist(); showDashboard(); el('roster-code').value = '';
+        message('import-status','확인한 배정을 명부에 반영했습니다. 보관된 기록이 있으면 함께 집계합니다.');
+      } catch (err) { message('import-status', err.message, true); }
+    };
+    el('real-view').onclick = () => { viewKind = 'editor'; showDashboard(); };
+    el('demo-view').onclick = () => { viewKind = 'demo'; showDashboard(); };
+    el('issue-codes').onclick = issueCodes;
+    el('export-all').onclick = () => {
+      if (records.length || invitations.length) download({type:collectionType,records,invitations},'journal-editor-study-collection.json');
+    };
+    el('import-trigger').onclick = () => el('import-files').click();
+    el('import-files').onchange = async event => {
+      const files = [...event.target.files]; event.target.value = '';
+      if (!files.length) return;
+      try {
+        const incoming = [], rosterGroups = [], individuals = [];
+        for (const file of files) {
+          const parsed = JSON.parse(await file.text());
+          const data = parsed?.type === collectionType ? parsed.records : [parsed];
+          if (!Array.isArray(data) || data.some(r => !r || r.kind !== 'editor')) throw new Error('실제 편집자용 참여 기록을 선택하세요.');
+          incoming.push(...data);
+          if (parsed?.type !== collectionType) individuals.push(...data);
+          if (parsed?.type === collectionType && parsed.invitations !== undefined) {
+            if (!Array.isArray(parsed.invitations)) throw new Error('초대 코드 명부 형식을 확인하세요.');
+            rosterGroups.push(parsed.invitations);
+          }
         }
-      }
-      const updated = core.mergeRecords(records, incoming);
-      const roster = mergeInvitations(invitations, incomingInvites);
-      for (const r of updated) {
-        if (inviteConflict(roster, r.ordinal, r.participantId)) throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
-      }
-      records = updated; invitations = roster; persist(); showDashboard();
-      message('import-status', files.length + '개 파일을 확인했습니다. 현재 등록 ' + records.length + '명입니다.');
-    } catch (err) { message('import-status', '가져오지 못했습니다. ' + err.message, true); }
-  };
+        const updated = core.mergeRecords(records, incoming);
+        const roster = importRosters(rosterGroups);
+        checkRosterConflicts(updated, roster);
+        if (individuals.some(r => !onRoster(roster, r.ordinal, r.participantId)))
+          throw new Error('이 진행자의 명부에 없는 개인 기록입니다. 원래 명부를 먼저 가져오거나 별도로 보관한 배정 코드를 확인하세요.');
+        records = updated; invitations = roster; persist(); showDashboard();
+        const matched = records.filter(r => onRoster(roster, r.ordinal, r.participantId)).length;
+        message('import-status', files.length + '개 파일을 확인했습니다. 현재 등록 ' + matched + '명입니다.' +
+          (matched < records.length ? ' 명부 미확인 ' + (records.length - matched) + '명의 기록을 보관했습니다.' : ''));
+      } catch (err) { message('import-status', '가져오지 못했습니다. ' + err.message, true); }
+    };
+  }
   window.addEventListener('beforeunload', event => {
     if (session?.state === 'running') { event.preventDefault(); event.returnValue = ''; }
   });

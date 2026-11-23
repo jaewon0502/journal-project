@@ -366,3 +366,141 @@ test('과거형 연결어와 수식어가 있어도 서술 사실과 발언을 �
   }
   assert.ok(prepare('“노란봉투법”은 지난달 국회를 통과했다.', []).rows[0].allowedStatuses.includes('fact'));
 });
+
+test('PDF 파일 순번만 연결하고 인쇄 쪽·웹 문서·모의 출처를 구별한다', () => {
+  const {sourceTarget} = require('../docs/reader/factcheck-engine.js');
+  const src = {id:'s',title:'예산안',url:'https://office.example/download.do?fid=87#old',locator:'인쇄 16쪽, 표 2, 전국 2023년 행',
+    excerpt:'확정 총액',version:'2025년도'};
+  assert.equal(sourceTarget(src).page,null);
+  const exact = sourceTarget({...src,pdfPage:'34'});
+  assert.equal(exact.page,'34'); assert.equal(exact.href,'https://office.example/download.do?fid=87#page=34');
+  assert.deepEqual(sourceTarget({...src,url:'https://office.example/note.html#table-9'}),
+    {page:null,href:'https://office.example/note.html#table-9'});
+  const pdf = {...src,url:'https://office.example/BUDGET.PDF?rev=1#page=9&zoom=125'};
+  assert.equal(sourceTarget(pdf).page,'9');
+  assert.equal(sourceTarget({...pdf,pdfPage:'34'}).href,'https://office.example/BUDGET.PDF?rev=1#page=34&zoom=125');
+  assert.equal(sourceTarget({...pdf,url:'https://office.example/BUDGET.PDF#nameddest=table2&page=4'}).page,null);
+  assert.equal(sourceTarget({...src,url:'https://example.invalid/report.pdf',pdfPage:'2'}),null);
+  assert.equal(sourceTarget({...src,originUrl:'https://stage.invalid/demo'}),null);
+  for (const value of ['0','2.5','+7','4-5','NaN','9007199254740992',{},2])
+    assert.throws(() => prepare('확정했다.',[{...src,pdfPage:value}]),/쪽번호/);
+  assert.throws(() => prepare('확정했다.',[{...src,url:'https://office.example/report.xlsx',pdfPage:'34'}]),/PDF 파일/);
+});
+
+function compareSources(claim, packets) {
+  const refs = packets.map(([id, title, version, locator, excerpt]) =>
+    ({id, title, version, locator, excerpt, url: 'https://records.example/' + id}));
+  const [row] = prepare(claim, refs).rows;
+  assert.equal(row.status, 'pending');
+  assert.equal(row.receipt, null);
+  return row.sourceMatches.map(match => match.id);
+}
+
+test('예정 물량과 실제 처리 물량은 같은 사업이라도 다른 기록을 먼저 제시한다', () => {
+  const refs = [
+    ['a', '매화항 준설 계획', '확정본', '준설 예정 물량', '매화항 준설 물량은 18만 톤으로 계획했다.'],
+    ['b', '매화항 준설 결과', '검수본', '검수 수량', '매화항에서 준설한 실제 물량은 12만 톤이었다.']
+  ];
+  assert.equal(compareSources('매화항의 준설 계획에 담긴 예정 물량은 18만 톤이었다.', refs)[0], 'a');
+  assert.equal(compareSources('매화항의 실제 준설 물량은 18만 톤이었다.', refs)[0], 'b');
+});
+
+test('같은 제목이어도 질문과 다른 대상이나 다른 연도의 확정본이 앞서지 않는다', () => {
+  const refs = [
+    ['a', '적송구 관측 결과', '초안', '2023년 조도', '적송구 야간 조도 조사에서 2023년에는 7럭스를 관측했다.'],
+    ['b', '적송구 관측 결과', '최종', '2022년 조도', '적송구 야간 조도 조사에서 2022년에 관측한 평균은 12럭스였다.'],
+    ['c', '단풍구 관측 결과', '최종', '2023년 조도', '단풍구 야간 조도 조사에서 2023년에 관측한 평균은 12럭스였다.']
+  ];
+  assert.equal(compareSources('2023년 적송구의 야간 조도 조사에서 관측한 평균은 12럭스였다.', refs)[0], 'a');
+});
+
+test('요구 단계 문서와 배정 단계 문서의 수치 차이는 자료 우선순위와 판정을 구분한다', () => {
+  const refs = [
+    ['a', '장비 구매 요구서', '초안', '요구액', '검사 장비 구매 요구액은 62억 원이다.'],
+    ['b', '장비 구매 배정표', '확정본', '구매비', '올해 확정된 검사 장비 구매비는 49억 원이다.']
+  ];
+  assert.equal(compareSources('검사 장비 구매를 위해 요구한 예산은 62억 원이다.', refs)[0], 'a');
+  assert.equal(compareSources('확정된 검사 장비 구매 예산은 62억 원이다.', refs)[0], 'b');
+});
+
+test('같은 제목·위치라도 명시한 판본과 분기를 따라가며 발행 연도를 적용 기간으로 읽지 않는다', () => {
+  const refs = [
+    ['a', '급수량 집계표', '2025년 발행 잠정본', '표 3', '2024년 2분기 급수량은 15만 톤이었다.'],
+    ['b', '급수량 집계표', '2025년 발행 확정본', '표 3', '2024년 2분기에 실제 집계된 급수량은 10만 톤이었다.'],
+    ['c', '급수량 집계표', '2024년 확정본', '표 3', '2024년 1분기 급수량은 15만 톤이었다.']
+  ];
+  assert.equal(compareSources('2024년 2분기 급수량 잠정 집계는 15만 톤이었다.', refs)[0], 'a');
+  assert.equal(compareSources('2024년 2분기 급수량 확정 집계는 15만 톤이었다.', refs)[0], 'b');
+});
+
+test('발언의 원문을 찾는 행에서는 같은 문구를 되풀이한 사업 안내와 원발언을 구별한다', () => {
+  const refs = [
+    ['a', '사업 안내', '최종본', '공급량 결과', '농업용수 공급량이 절반으로 줄었다. 농업용수 사업에 관한 설명이다.'],
+    ['b', '간담회 녹취록', '속기본', '답변 2', '담당자 발언 원문. 농업용수 공급량이 절반으로 줄었다.']
+  ];
+  assert.equal(compareSources('담당자는 “농업용수 공급량이 절반으로 줄었다”고 밝혔다.', refs)[0], 'b');
+});
+
+test('서로 다른 시설을 다룬 자료의 확정 표기나 같은 숫자로 해당 시설의 초안이 밀리지 않는다', () => {
+  const refs = [
+    ['a', '청명터널 배수 설비', '초안', '사업비', '청명터널의 배수 설비 예산은 8억 원으로 제출했다.'],
+    ['b', '석류터널 배수 설비', '확정본', '사업비', '석류터널의 배수 설비 확정 예산은 5억 원이었다.']
+  ];
+  assert.equal(compareSources('청명터널의 배수 설비 확정 예산은 5억 원이었다.', refs)[0], 'a');
+});
+
+test('고정 표현인 자료·연도만 겹치면 후보 표시를 생략하고 기간 중간 해를 범위 밖으로 밀지 않는다', () => {
+  const refs = [
+    ['a', '동물 구조 내역', '점검본', '구조 현황', '2022년부터 2024년까지 산양 구조 자료이며 개체 수를 따로 집계했다.'],
+    ['b', '항만 공사 실적', '확정본', '표 2', '2023년 자료를 토대로 올해 준설 깊이를 확정했다.']
+  ];
+  assert.deepEqual(compareSources('2023년 산양 구조 자료의 개체 수를 집계했다.', refs), ['a']);
+});
+
+test('자료에 등장하는 두 기준을 명시해 비교하면 특정 판본을 일괄 우대하지 않는다', () => {
+  const refs = [
+    ['a', '잠정 확정치 비교표', '작업본', '정정 이력', '용수량 집계의 잠정치와 확정치를 비교해 차이가 난 이유를 정리했다.'],
+    ['b', '정오표', '확정본', '변경 사항', '최종 수치 한 건을 공고했다. 당시 잠정치는 제공하지 않는다.']
+  ];
+  assert.equal(compareSources('용수량 집계의 잠정치와 확정치를 비교했다.', refs)[0], 'a');
+});
+
+function candidateRow(claim, excerpts) {
+  const records = excerpts.map((excerpt, i) => ({...source, id: 'x' + i, title:'배관 교체 기록',
+    locator:'공사 이력', excerpt, url:'https://archive.example/pipe/' + i}));
+  return prepare(claim, records).rows[0];
+}
+
+test('공사 자체에만 겹치는 후보는 유지하되 후속 결과의 측정값이 없으면 확인할 지표를 알린다', () => {
+  const q = '배관 교체 이후 월간 누수량은 전년보다 절반 줄었다.';
+  const notes = ['배관 교체 계획은 길이 2km였다.', '공사 완료 후 실제 교체한 배관은 1.8km다.'];
+  const r = candidateRow(q, notes);
+  assert.match(r.sourceCaution, /누수량/);
+  assert.ok(r.sourceIds.length);
+  assert.deepEqual(r.sourceIds, r.sourceMatches.map(x => x.id));
+  assert.equal(r.status, 'pending');
+  assert.equal(r.receipt, null);
+  for (const measurement of ['월간 누수량은 같은 기간에 증가했다.', '월간 누수량은 측정할 수 없었다.', '누수량은 전년과 동일하다.']) {
+    assert.equal(candidateRow(q, [...notes, measurement]).sourceCaution, null);
+  }
+});
+
+test('시점을 모른다는 문장만 보류하고 이미 확정한 시점, 다른 불확실성, 발언의 귀속은 보존한다', () => {
+  const refs = ['배관 교체 수량은 계획과 분기 말 검수 결과가 서로 다르다.'];
+  for (const q of ['배관 교체 수량의 기준 시점은 불분명하다.', '배관 교체 수량이 어느 기간 기준인지 알 수 없다.']) {
+    assert.match(candidateRow(q, refs).sourceCaution, /시점|기간/);
+  }
+  for (const q of ['배관 교체 시점은 5월로 분명하다.', '배관 교체 시점은 당초 불분명했지만 5월로 확인됐다.',
+      '배관 교체 시점은 분명하지만 지출 경로는 불분명하다.', '조합장은 “배관 교체 시점은 불분명하다”고 밝혔다.']) {
+    assert.equal(candidateRow(q, refs).sourceCaution, null, q);
+  }
+});
+
+test('한 보고서의 예산 편성표와 집행 실적표는 해당 표의 위치와 발췌를 기준으로 구별한다', () => {
+  const packets = [
+    ['b', '회계감사팀 · 수리시설 예산안 분석', '발간본', '수리시설 특별회계 집행 실적', '특별회계 수리시설 예산과 실제 지출액을 비교했다.'],
+    ['a', '회계감사팀 · 수리시설 예산안 분석', '발간본', '수리시설 예산안 · 전년 예산 대비 증감률', '수리시설 편성액과 전년 예산의 차이는 7.4%다.']
+  ];
+  assert.equal(compareSources('제출안의 특별회계 수리시설 예산은 지난 회계연도보다 7.4% 많았다.', packets)[0], 'a');
+  assert.equal(compareSources('특별회계 수리시설 예산의 실제 집행액은 전년보다 적었다.', packets)[0], 'b');
+});

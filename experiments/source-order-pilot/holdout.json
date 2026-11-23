@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-24",
+  "purpose": "Evaluate the first recommended source document, with small fictional records. Each claim is independently submitted as an article. Finding the expected document says nothing about whether the numerical or attributed claim is true.",
+  "design": {
+    "population": "Two fictional administrative files, three documents each, with six answerable and two inconclusive claims written before baseline or candidate engine inspection. References never leave the local machine.",
+    "unit": "One base claim, not one permutation. Six answerable base claims are the denominator of each Hit@1 reading. Also report score for all answerable presentations out of 54, labeled repeated measures, not independent cases. No retuning or alternative gold after first measurement.",
+    "measures": "Primary = number of answerable base claims with correct sourceMatches[0].id in every order/party presentation, divided by six. Canonical = neutral text in original order. Any = source appears anywhere in matched list; report separately with the canonical denominator. Compare sourceIds[0], which the UI uses as its open document, against sourceMatches[0].id as a separate consistency check.",
+    "controls": "Two inconclusive claims have no unique source. Describe whether a sole default document is recommended, whether several are offered, or none is offered. Empty sourceIds means no automatic opening. Existence of a recommendation does not mean the software issues a verdict. Do not give positive Hit credit to a control. Count by canonical case and expose all presentations.",
+    "controlsForPresentation": "Three rotations place every semantic document first once. Opaque identifiers attach to the input slot, so the same correct record takes each ID and each position once. Documents themselves have no party labels. Test each claim in each order with neutral prose, 가온당 and 나래당 labels applied in exactly the same position. Within an order separately count changes of first semantic document between the two party labels.",
+    "limits": "Synthetic data deliberately balance planning, interim, final, quotation, and ambiguous claims. This evaluates recommendation order, not article accuracy, true political bias, evidentiary sufficiency, editing time, or population prevalence."
+  },
+  "prefixes": {"neutral":"","party-a":"가온당 검토 기록에 따르면, ","party-b":"나래당 검토 기록에 따르면, "},
+  "slotIds": ["r-417","r-052","r-836"],
+  "orders": [[0,1,2],[1,2,0],[2,0,1]],
+  "bundles": {
+    "bridge": [
+      {"key":"reed","title":"물초교량 조명 교체 준비안","version":"2024-02-13 제정","locator":"사업 설계 2쪽","excerpt":"푸른여울 시설원이 승인한 물초교량 조명 교체 계획의 수량은 40개다. 승인 당시 공사 구간은 동쪽 난간으로 한정했다."},
+      {"key":"flint","title":"물초교량 조명 교체 현장 일지","version":"2024-06-28 작성","locator":"공정 확인 3번째 줄","excerpt":"푸른여울 시설원이 6월 28일 현장을 점검했다. 이날까지 동쪽 난간에서 교체를 마친 조명은 26개였고 나머지 구간은 작업 중이었다."},
+      {"key":"jade","title":"물초교량 조명 교체 준공 검사서","version":"2024-09-12 서명","locator":"인수 명세 4항","excerpt":"푸른여울 시설원이 물초교량 조명 공사를 9월 12일 인수했다. 동쪽 난간에 실제 설치해 검사한 조명은 총 38개다. 예비품은 이 수량에서 제외했다."}
+    ],
+    "seed": [
+      {"key":"pine","title":"솔안마루 종자목록 공개 설명회 속기록","version":"2025-05-16 녹취 대조","locator":"문답 2번","excerpt":"솔안마루 기록원 설명회에서 오새봄 원장은 “목록 공개는 누구나 종자의 쓰임을 살필 수 있게 하는 첫걸음입니다”라고 말했다. 공개 실적은 이날 발표하지 않았다."},
+      {"key":"moss","title":"솔안마루 종자목록 공개 일정표","version":"2025-04-08 승인","locator":"봄 기획 회의 별지","excerpt":"솔안마루 기록원은 첫 공개 대상으로 종자목록 12권을 편성했다. 승인안에는 첫 게시 예정일이 6월 2일로 적혀 있다."},
+      {"key":"fern","title":"솔안마루 종자목록 공개 작업 기록","version":"2025-06-05 마감","locator":"누리집 공개 이력 1번","excerpt":"솔안마루 기록원의 누리집에 종자목록 9권이 6월 4일 처음 게시됐다. 나머지 3권은 검토 중이어서 공개된 목록에서 뺐다."}
+    ]
+  },
+  "claims": [
+    {"id":"p1","bundle":"bridge","text":"물초교량 조명 교체 사업이 2월 승인됐을 때 동쪽 난간의 목표 수량은 40개였다.","gold":"reed","type":"approved plan"},
+    {"id":"p2","bundle":"bridge","text":"6월 말 점검 당시 물초교량 동쪽 난간에서는 벌써 조명 38개의 교체를 마친 상태였다.","gold":"flint","type":"interim progress with later figure"},
+    {"id":"p3","bundle":"bridge","text":"9월 인수한 물초교량에는 예비품을 빼고 조명 40개가 실제 설치됐다.","gold":"jade","type":"completion with planning figure"},
+    {"id":"p4","bundle":"seed","text":"솔안마루 기록원이 4월에 정한 종자목록 첫 게시 예정일은 6월 2일이었다.","gold":"moss","type":"planned publication date"},
+    {"id":"p5","bundle":"seed","text":"오새봄 원장은 설명회에서 목록 공개가 종자의 쓰임을 살필 첫걸음이라고 말했다.","gold":"pine","type":"utterance attribution only"},
+    {"id":"p6","bundle":"seed","text":"솔안마루 기록원 누리집에 처음 게시된 종자목록은 9권이었다.","gold":"fern","type":"actual publication"},
+    {"id":"u1","bundle":"bridge","text":"물초교량 조명 교체 후 야간 보행사고는 전년보다 절반 줄었다.","gold":null,"type":"unmeasured downstream outcome"},
+    {"id":"u2","bundle":"seed","text":"솔안마루 기록원의 종자목록 공개 수량은 어떤 시점을 기준으로 한 것인지 불분명하다.","gold":null,"type":"unspecified planning versus publication reference"}
+  ]
+}

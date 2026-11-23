@@ -316,3 +316,247 @@ test('기록 전 문장에 입력해도 기사 평가가 남고, 제외된 평�
   click('save-work');
   assert.equal(JSON.parse(await snapshot()).articleAssessment.ratings.wording.reason, 'RUBRIC-REASON');
 });
+
+test('공식 다운로드 주소에 확인한 PDF 쪽·표·행을 연결하고 복원과 쪽 변경을 검증한다', async t => {
+  const a=open(t);
+  const raw='https://www.nabo.go.kr/board/file/down.do?fid=33318263';
+  a.set('article','정부는 일반회계 예비비를 편성했다.');
+  a.el('article-form').requestSubmit();
+  const location='예산안 표, 2025년 요구액 행, 인쇄 12쪽';
+  for (const [id,val] of Object.entries({title:'예산안 분석',url:raw,version:'심사본',locator:location,pdfPage:'34',excerpt:'일반회계 예비비'}))
+    a.set('source-'+id,val);
+  a.el('source-form').requestSubmit();
+  const sourceLink=a.doc.querySelector('#row-sources .source-page-links > a');
+  assert.equal(sourceLink.href,raw+'#page=34');
+  assert.match(sourceLink.textContent,/34쪽/);
+  assert.ok(!sourceLink.closest('details'));
+  assert.ok(a.el('row-sources').textContent.includes(location));
+  a.doc.querySelector('#row-sources input').click();
+  a.set('verdict','fact');
+  a.set('reason','제시한 표의 예비비 행을 대조했다.');
+  a.click('acknowledged'); a.el('decision-form').requestSubmit();
+  assert.equal(a.doc.querySelector('#report-rows .source-page-links > a').href,raw+'#page=34');
+  a.click('export-report'); const txt=await a.snapshot();
+  assert.ok(txt.includes(raw+'#page=34')); assert.ok(txt.includes(location));
+  a.click('save-work'); const data=JSON.parse(await a.snapshot());
+  assert.equal(data.sources[0].pdfPage,'34');
+  const b=open(t); await loadWorkspace(b,data);
+  assert.equal(b.doc.querySelector('#report-rows .source-page-links > a').href,raw+'#page=34');
+  b.el('source-list').querySelector('button').click(); b.set('source-pdfPage','37');
+  b.el('source-form').requestSubmit();
+  assert.equal(b.el('acknowledged').checked,false);
+  assert.equal(b.el('row-list').children.length,1);
+  b.click('save-work'); assert.equal(JSON.parse(await b.snapshot()).receipts.length,0);
+  b.el('source-list').querySelector('button').click();
+  b.set('source-url','https://office.example/changed.pdf');
+  assert.equal(b.el('source-pdfPage').value,'');
+  b.set('source-pdfPage','17');
+  b.click('save-work'); const draft=JSON.parse(await b.snapshot());
+  const c=open(t); await loadWorkspace(c,draft);
+  assert.equal(c.el('source-pdfPage').value,'17');
+});
+
+test('첨부용 PDF는 같은 판본의 여러 쪽에만 연결되고 작업 파일에서는 빠진다', async t => {
+  const a=open(t);
+  const url='https://office.example/attachment.do?file=3';
+  const base={title:'예산서',url,version:'심사본',locator:'예산표 일반회계 행',excerpt:'일반회계 예비비'};
+  const sources=[{...base,id:'a',pdfPage:'34'},{...base,id:'b',pdfPage:'37'},
+    {...base,id:'c',pdfPage:'34',version:'정정본'}];
+  const data={format:'journal-local-factcheck-v1',article:'정부가 예산을 편성했다.',articleDraft:'정부가 예산을 편성했다.',
+    demo:false,sources,receipts:[],rowDrafts:[],sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}};
+  await loadWorkspace(a,data);
+  const catalog=a.el('source-list');
+  for (const source of sources) {
+    const label = a.el('row-sources').querySelector('input[value="' + source.id + '"]').closest('label');
+    assert.ok(label.textContent.includes(source.title + ' · ' + source.version));
+    assert.equal(label.querySelector('input').checked, false);
+  }
+  const picker=catalog.querySelector('input[type=file]');
+  let revoked=0;
+  a.w.URL.revokeObjectURL=()=>revoked++;
+  async function select(bytes, filename, message) {
+    const status=picker.closest('details').querySelector('[role=status]');
+    const ready=new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>{observer.disconnect();reject(new Error(status.textContent));},1000);
+      const observer=new a.w.MutationObserver(()=>{
+        if(status.textContent.includes(message)) {observer.disconnect(); clearTimeout(timer);resolve();}
+      });
+      observer.observe(status,{childList:true,subtree:true});
+    });
+    Object.defineProperty(picker,'files',{value:[new a.w.File([bytes],filename)],configurable:true});
+    picker.dispatchEvent(new a.w.Event('change'));
+    await ready;
+  }
+  await select('<html>','not-a-pdf.pdf','PDF 형식');
+  assert.equal(catalog.querySelectorAll('[data-pdf-key] a').length,0);
+  await select('%PDF-1.7','personal-copy.pdf','인용한 문장');
+  const localLinks=[...catalog.querySelectorAll('[data-pdf-key] a')].map(a=>a.getAttribute('href'));
+  assert.deepEqual(localLinks,['blob:journal#page=34','blob:journal#page=37']);
+  a.click('save-work');
+  const exported=await a.snapshot();
+  assert.doesNotMatch(exported,/personal-copy|blob:journal/);
+  await loadWorkspace(a,data);
+  assert.equal(catalog.querySelectorAll('[data-pdf-key] a').length,0);
+  assert.ok(revoked>0);
+});
+
+test('자료 찾기에서 표 제목과 단위를 따로 살피고 선택한 행만 발췌한다', t => {
+  const {el, click, set} = open(t);
+  const excerpt = '  서울    39,456    0.55';
+  set('document-text', ['[표 12] 시군구별 출생아 수와 합계출산율', '(단위: 명)', '지역   출생아 수   합계출산율',
+    '가 지역    210    0.81', '나 지역    320    0.92', '다 지역    430    0.73', excerpt,
+    '\f', '다음 쪽 다른 자료'].join('\n'));
+  set('document-query', '서울 39,456명 0.55명');
+  click('find-passages');
+  const hit = el('finder-results').querySelector('.source');
+  assert.equal(hit.querySelector('blockquote').textContent, excerpt);
+  const context = hit.querySelector('details');
+  assert.equal(context.open, false);
+  assert.match(context.textContent, /표 12.*단위.*합계출산율/s);
+  assert.ok(!context.textContent.includes('다음 쪽'));
+  assert.equal(context.querySelector('li[value="7"] strong').textContent.trim(), '선택한 문단');
+  hit.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, excerpt);
+  assert.equal(el('source-locator').value, '');
+});
+
+test('다른 기간에 같은 숫자가 있을 때 카드에 기준 시점을 표시하고 검색 순위와 발췌문을 보존한다', t => {
+  const {el, click, set, w} = open(t);
+  const doc = ['[표 1] 월별 생산량', '연월   생산량', '2024년 1월    781    4.5',
+    '2024년 2월    905    4.6', '2024년 3월    532    4.4'].join('\n');
+  const query = '2024년 2월 생산량은 781개다.';
+  set('document-text', doc); set('document-query', query); click('find-passages');
+  const cards = [...el('finder-results').querySelectorAll('.source')];
+  assert.deepEqual(cards.map(x => x.querySelector('blockquote').textContent),
+    Array.from(w.JournalEvidenceFinder.find(doc, query), r => r.text));
+  const wrongMonth = cards.find(x => x.querySelector('blockquote').textContent.startsWith('2024년 1월'));
+  assert.match(wrongMonth.querySelector('.callout').textContent, /2024년 2월.*2024년 1월/);
+  wrongMonth.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, '2024년 1월    781    4.5');
+  assert.equal(el('source-locator').value, '');
+  set('document-query', '2024년 2월 전월 대비 생산량은 781개다.'); click('find-passages');
+  assert.equal(el('finder-results').querySelector('.source .callout'),null);
+});
+
+test('후보에서 여덟 문단 떨어진 같은 쪽 원문만 선택해 발췌하고 새 검색에서 선택을 지운다', t => {
+  const {el, click, set, w} = open(t);
+  const lines = ['입구 앞쪽', '고용률 대표문단', ...Array.from({length: 7}, (_, i) => '행 ' + (i+1)),
+    '  기준 행    24.5    48.6', '다음 문단', '\f다른 페이지'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '대표문단');
+  click('find-passages');
+  const details = el('finder-results').querySelector('.source details');
+  details.open = true;
+  details.dispatchEvent(new w.Event('toggle'));
+  assert.ok(!details.textContent.includes('다른 페이지'));
+  const exact = details.querySelector('li[value="10"] input');
+  exact.click();
+  details.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, lines[9]);
+  assert.equal(el('source-locator').value, '');
+  assert.match(el('source-status').textContent, /10번째/);
+  assert.equal(el('source-excerpt').value.startsWith('  '), true);
+  set('document-query', '다른 질문');
+  assert.equal(el('finder-results').childElementCount, 0);
+});
+
+test('날짜가 겹쳐도 자료에 없는 단위를 묻는 질문에는 미확인 안내를 먼저 보여준다', t => {
+  const {el, click, set} = open(t);
+  const source = '연도\t운영비(천원)\n2023년\t1,200\n2024년\t1,450';
+  set('document-text', source);
+  set('document-query', '2024년에 도서관을 방문한 사람은 몇 명인가?');
+  click('find-passages');
+  assert.match(el('finder-status').textContent, /단위 ‘명’.*찾지 못했/);
+  const fallback = el('finder-results').firstElementChild;
+  assert.equal(fallback.tagName, 'DETAILS');
+  assert.equal(fallback.open, false);
+  assert.equal(el('source-excerpt').value, '');
+  set('document-text', source.replace('운영비(천원)', '방문 인원(명)'));
+  click('find-passages');
+  assert.doesNotMatch(el('finder-status').textContent, /찾지 못했/);
+  assert.match(el('finder-results').querySelector('blockquote').textContent, /2024/);
+});
+
+test('짧은 비교 문장에서 실제 기사 첫 줄을 명시하고 해당 지표의 표를 다시 찾는다', t => {
+  const {el, click, set} = open(t);
+  const title = '2023년 독서실 이용자 증가 2만 1천 명';
+  const claim = '증가 폭이 절반 수준으로 줄었습니다.';
+  set('article', title + '\n' + claim);
+  el('article-form').requestSubmit();
+  const row = [...el('row-list').querySelectorAll('button')].find(b => b.textContent.includes('절반'));
+  row.click();
+  click('go-find');
+  set('document-text', ['2023년 연간 통계', '< 서비스 이용 추이 >', ' ’21년  ’22년  ’23년',
+    '독서실 이용자(만명, 전년대비증감)    8.4    3.8    2.1',
+    '온라인 가입자(만명, 전년대비증감)    8.4    3.8    2.1'].join('\n'));
+  click('find-passages');
+  assert.ok(el('search-context-options').open);
+  assert.match(el('finder-status').textContent, /비교할 지표/);
+  assert.equal(el('use-article-title').hidden, false);
+  click('use-article-title');
+  assert.equal(el('search-context').value, title);
+  assert.match(el('finder-status').textContent, /기사 문맥을 함께 사용/);
+  assert.match(el('finder-results').querySelector('blockquote').textContent, /독서실 이용자/);
+  set('document-query', '다른 기사에서 입력한 질문');
+  assert.equal(el('search-context').value, '');
+  assert.equal(el('use-article-title').hidden, true);
+  assert.equal(el('finder-results').childElementCount, 0);
+});
+
+test('연도가 겹친 두 열을 같이 보여 주고 선택한 행의 원문을 보존한다', t => {
+  const {el, click, set} = open(t);
+  const row = '전체\t38.0\t40.1\t65.0\t67.2';
+  set('document-text', ['조사 결과', '2019\t2022\t2019\t2022', row].join('\n'));
+  set('document-query', '2022년 전체 수치 67.2는 어느 항목에 해당하나?');
+  click('find-passages');
+  const card = [...el('finder-results').querySelectorAll('.source')].find(c => c.querySelector('blockquote').textContent === row);
+  assert.match(card.textContent, /2022년 · 2번째 수치 열 40.1/);
+  assert.match(card.textContent, /2022년 · 4번째 수치 열 67.2/);
+  assert.match(card.textContent, /원표에서 각 열의 상위 제목/);
+  card.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, row);
+});
+
+test('원표의 같은 비율과 괄호 증감이 충돌하면 해당 열에서만 알리고 발췌는 직접 선택한다', t => {
+  const {el, click, set} = open(t);
+  const row = '전체\t30.0\t35.0(+5.0)\t62.1\t62.1(−4.5)';
+  set('document-text', ['단위: % / () 증감','일반\t\t정밀\t','구 분','2022\t2024\t2022\t2024',row].join('\n'));
+  for (const [label, expected] of [['정밀', true], ['일반', false]]) {
+    set('document-query', '2024년 전체 ' + label + ' 점검률은 얼마였나?');
+    click('find-passages');
+    const card = [...el('finder-results').querySelectorAll('.source')].find(c => c.querySelector('blockquote').textContent === row);
+    assert.ok(card);
+    assert.equal(card.textContent.includes('두 표시값과 괄호 증감이 어긋납니다'), expected);
+    if (expected) assert.match(card.textContent, /2022년 3번째 열은 62.1, 2024년 4번째 열은 62.1\(−4.5\)/);
+    assert.equal(el('source-excerpt').value, '');
+  }
+});
+
+test('중량을 물었을 때 대금만 있는 표와 중량을 다른 단위로 수록한 표를 구분한다', t => {
+  const {el, click, set} = open(t);
+  set('document-query','2025년에 운송한 화물의 무게는 몇 톤인가?');
+  for (const [unit, missing] of [['천원', true], ['kg', false], ['천 톤', false]]) {
+    set('document-text', ['구분\t2024년\t2025년', '단위: ' + unit, '화물\t1,200\t1,450'].join('\n'));
+    click('find-passages');
+    assert.equal(el('finder-status').textContent.includes('단위 ‘중량’'), missing);
+    assert.equal(el('finder-results').firstElementChild.tagName === 'DETAILS', missing);
+    assert.equal(el('source-excerpt').value, '');
+  }
+});
+
+test('결과를 뒷받침할 자료가 부족하면 후보를 닫아 두고 편집자가 직접 대조할 수 있다', async t => {
+  const {claims, bundles} = require('../experiments/source-order-pilot/holdout.json');
+  const claim = claims.find(c => c.type === 'unmeasured downstream outcome');
+  const sources = bundles[claim.bundle].map(({key, ...source}) =>
+    ({...source, id: key, url: 'https://source-order.invalid/' + key}));
+  const p = open(t);
+  await loadWorkspace(p, {format:'journal-local-factcheck-v1', article:claim.text, articleDraft:claim.text,
+    demo:false, sources, receipts:[], rowDrafts:[], sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
+  const area = p.el('row-sources');
+  assert.ok(area.querySelector(':scope > .callout')?.textContent);
+  assert.equal(area.querySelectorAll('details[open],input:checked').length, 0);
+  const details = area.querySelector('.source details');
+  details.open = true;
+  assert.ok(details.textContent.includes(sources.find(s => s.id === details.parentElement.querySelector('input').value).excerpt));
+  assert.equal(p.el('verdict').value, '');
+});

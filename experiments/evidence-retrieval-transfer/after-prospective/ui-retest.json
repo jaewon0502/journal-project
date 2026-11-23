@@ -1,0 +1,136 @@
+{
+  "fixtureHash": "09b371de9a1371825fcfb84213d93c7fc2a81afd8063680069eaf6859861f4a3",
+  "ruleHash": "c3803305c82cfc9d2af9eb8f3b810851e5d33db0d2184156be74607719176dba",
+  "hashes": {
+    "factcheck.html": "95d7ab4ebca6d76c4e13be6dd5e330bf39c3ec4bbfaf0107b153f33f227a45ae",
+    "factcheck-ui.js": "354b8173f1eb29180cf6420b4852af58a45d79ac53b0486f8151ff34892fd6e9",
+    "evidence-search.js": "1528d2376ddc932415e267709a3d13cce38ca26f4e49ea18eeee248b1905c0fb",
+    "evidence-trend.js": "1d8b402c09bd15e2e4ecde060f9a87c2d6ec9e40ca20ba0d8c885169f4de9bfe",
+    "evidence-finder.js": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "evidence-period.js": "f0f05d007e9b377507105adcfeea8fec41074b7e4d94f43b8d23cd9fce29e64d",
+    "evidence-columns.js": "f2951cdba57042df8666d6950f3556df98b510d0555463c33478c8123f1ea2da"
+  },
+  "browser": "157.0.8103.79",
+  "results": [
+    {
+      "id": "x1",
+      "gold": [
+        4
+      ],
+      "candidates": [
+        4,
+        6,
+        1
+      ],
+      "visible": [
+        4,
+        6,
+        1
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "x2",
+      "gold": [
+        7
+      ],
+      "candidates": [
+        7,
+        2,
+        3
+      ],
+      "visible": [
+        7,
+        2,
+        3
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "x3",
+      "gold": [
+        8
+      ],
+      "candidates": [
+        8,
+        1,
+        2
+      ],
+      "visible": [
+        8,
+        1,
+        2
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "x0",
+      "gold": [],
+      "candidates": [],
+      "visible": [],
+      "foldLabels": [],
+      "status": "질문에서 묻는 단위 ‘중량’에 해당하는 표기를 찾지 못했습니다. 원표의 단위와 주석을 확인하세요."
+    },
+    {
+      "id": "c1",
+      "gold": [
+        8
+      ],
+      "candidates": [
+        8,
+        3
+      ],
+      "visible": [
+        8,
+        3
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 2개"
+    },
+    {
+      "id": "c2",
+      "gold": [
+        7
+      ],
+      "candidates": [
+        7,
+        3
+      ],
+      "visible": [
+        7,
+        3
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 2개"
+    },
+    {
+      "id": "c3",
+      "gold": [
+        13
+      ],
+      "candidates": [
+        13,
+        1,
+        5
+      ],
+      "visible": [
+        13,
+        1,
+        5
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "c0",
+      "gold": [],
+      "candidates": [],
+      "visible": [],
+      "foldLabels": [],
+      "status": "질문에서 묻는 단위 ‘원’에 해당하는 표기를 찾지 못했습니다. 원표의 단위와 주석을 확인하세요."
+    }
+  ]
+}

@@ -21,7 +21,7 @@ button:hover,a:hover{color:#13392e}button:hover{background:var(--pale)}button.pr
 .mast{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.mast p{margin:0}.count{font-variant-numeric:tabular-nums;font-weight:650}.review-grid{display:grid;grid-template-columns:minmax(170px, .73fr) minmax(0,2fr);gap:20px;margin-top:15px}.queue{min-width:0}
 #row-list{list-style:none;margin:8px 0;padding:0;max-height:570px;overflow:auto;display:grid;gap:5px}.row-button{display:block;width:100%;text-align:left;overflow-wrap:anywhere;font-size:.9rem;font-weight:500}.row-button[aria-current=true]{background:var(--pale);border-color:var(--green);box-shadow:inset 3px 0 var(--green)}.row-button strong{display:block;font-size:.78rem}
 blockquote{margin:9px 0;padding:10px 14px;border-left:3px solid #8ca595;background:#f1f4ee;white-space:pre-wrap;overflow-wrap:anywhere}.verbatim{white-space:pre-wrap;overflow-wrap:anywhere}.case{min-width:0}fieldset{min-width:0;border:1px solid var(--line);border-radius:5px;margin:12px 0;padding:10px 13px}.source{border-top:1px solid var(--line);padding:9px 0}.source:first-child{border:0}.source p{margin:2px 0}
-.source-line,.check-line{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}.source-line input,.check-line input{margin:4px 0}.check-line{font-size:.88rem;line-height:1.55}.check-line span{flex:1}.source-title{font-weight:650}.source blockquote,.report-row blockquote{font-size:.9rem}.meta{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}.hints{padding-left:1.4em;color:var(--warn);font-size:.9rem}.hints:empty{display:none}
+.source-page-links{display:flex;gap:.25rem .8rem;flex-wrap:wrap;overflow-wrap:anywhere}.source-page-links span:empty{display:none}.source details label input[type=file]{display:block;max-width:100%}.source-line,.check-line{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}.source-line input,.check-line input{margin:4px 0}.check-line{font-size:.88rem;line-height:1.55}.check-line span{flex:1}.source-title{font-weight:650}.source blockquote,.report-row blockquote{font-size:.9rem}.meta{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}.hints{padding-left:1.4em;color:var(--warn);font-size:.9rem}.hints:empty{display:none}
 .status-group{display:flex;gap:7px 15px;flex-wrap:wrap;padding:8px 0;border-block:1px solid var(--line);font-size:.89rem}.report-row{padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.report-row:first-child{border:0}.report-label{font-size:.86rem;font-weight:700;color:var(--green)}.report-row p{margin-bottom:5px}
 .badge{font-size:.78rem;background:var(--pale);padding:2px 6px;display:inline-block;border-radius:4px;margin:0 4px}.skip{position:absolute;left:-9999px}.skip:focus{position:static}.filebar{margin:15px 0}.filebar summary{font-size:.91rem}.filebar p{margin:5px 0}
 @media(max-width:680px){.review-grid,.split{grid-template-columns:minmax(0,1fr)}.review-grid{gap:10px}#row-list{max-height:180px}.intro{margin-top:22px}.mast{display:block}.panel{margin:10px 0}}@media print{header,.skip,.intro,.filebar,#article-panel,#sources-panel,#review-panel,.actions,.message,footer,#demo-notice{display:none!important}#result-panel{border:0;margin:0;padding:0}.report-row{break-inside:avoid}html{background:white}main{width:100%;padding:0}}
@@ -30,12 +30,16 @@ blockquote{margin:9px 0;padding:10px 14px;border-left:3px solid #8ca595;backgrou
 .study-frame #go-add-source,.study-frame #go-find{display:none!important}
 .study-frame main{padding:0 .6rem}.study-frame #review-panel{margin:.4rem 0}
 header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
+.finder-lines{max-height:24rem;overflow:auto;padding:0 0 0 3.2rem;border-block:1px solid var(--line)}
+.finder-lines li{padding:.25rem 0}.finder-lines label{display:flex;align-items:baseline;gap:.5rem;font-weight:400;cursor:pointer}
+.finder-lines input[type=radio]{flex:none;width:auto;margin:0;padding:0;accent-color:var(--green)}
+.finder-lines label:has(:checked){font-weight:700;color:var(--green)}
 </style>
-<script src="evidence-finder.js" defer></script><script src="factcheck-engine.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="factcheck-ui.js" defer></script>
+<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-search.js" defer></script><script src="evidence-columns.js" defer></script><script src="factcheck-engine.js" defer></script><script src="source-reader.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="factcheck-ui.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#article">기사 입력으로 이동</a>
-<header><strong>Journal</strong><nav aria-label="저널 도구"><a href="editor-study.html">편집자 측정</a><a href="index.html">연구 자료 읽기</a></nav></header>
+<header><strong>Journal</strong><nav aria-label="저널 도구"><a href="article-compare.html">평가 비교</a><a href="editor-study.html">편집자 측정</a><a href="index.html">연구 자료 읽기</a></nav></header>
 <main>
 <section class="intro"><h1>기사 팩트체크</h1><p>기사와 원자료를 대조하고, 확인한 사실과 추가 취재가 필요한 대목을 기록합니다.</p></section>
 <details class="panel" id="rubric-guide"><summary>기사 한 편의 정확성과 편향을 평가하는 기준</summary>
@@ -58,11 +62,13 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <details id="finder"><summary>원자료 본문에서 근거 구간 찾기</summary><p class="hint">현재 문장의 표현과 겹치는 문단을 찾습니다. 앞뒤 문맥과 주장 지지 여부는 원문에서 확인하세요. 문단 순서는 붙여넣은 글 안의 위치입니다. 인용할 때는 원본의 쪽·표·절을 입력하세요. 붙여넣은 전문은 작업 파일에 담지 않습니다.</p>
 <label class="field" for="document-text">원자료 본문</label><textarea rows="4" id="document-text"></textarea>
 <label class="field" for="document-query">찾을 주장 또는 표현</label><input id="document-query">
+<details id="search-context-options"><summary>기사에서 비교 대상·기간 보충</summary><label class="field" for="search-context">기사 제목이나 앞뒤 문장에 나온 지표·기간</label><textarea rows="2" id="search-context"></textarea><div class="actions"><button type="button" id="use-article-title" hidden>기사 첫 줄로 다시 찾기</button><button type="button" id="use-article-context" hidden>앞뒤 구절로 다시 찾기</button></div></details>
 <div class="actions"><button type="button" id="find-passages">근거 후보 찾기</button></div><p id="finder-status" class="message" role="status"></p><div id="finder-results"></div></details>
 <form id="source-form"><h3 id="source-form-title">원자료 추가</h3>
 <label class="field" for="source-title">자료 이름</label><input id="source-title" required placeholder="예산안 의결 회의록">
 <div class="split"><div><label class="field" for="source-url">확인한 문서 주소</label><input type="url" id="source-url" required placeholder="https://"></div><div><label class="field" for="source-version">판본 또는 기준일</label><input id="source-version" required placeholder="2026-09-03 정정본"></div></div>
-<label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="제2호 안건, 4쪽 표 1">
+<label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="통계표 12, 서울특별시 행, 2023년 열, 인쇄 41쪽">
+<label class="field" for="source-pdfPage">PDF 뷰어에서 확인한 쪽번호 (선택)</label><input id="source-pdfPage" type="text" inputmode="numeric" pattern="[1-9][0-9]*" aria-describedby="pdf-page-hint" placeholder="예: 44"><p id="pdf-page-hint" class="hint">확인한 문서 주소가 PDF를 직접 열거나 내려받는 주소일 때 입력하세요. 표지부터 1쪽으로 세는 PDF 파일 순서입니다. 표·행·연도와 인쇄 쪽수는 위 확인 위치에 적으세요.</p>
 <label class="field" for="source-excerpt">해당 구간 원문</label><textarea id="source-excerpt" rows="2" required></textarea>
 <div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
 <section class="panel" id="review-panel"><div class="mast"><h2>문장 검토</h2><p class="count" id="counts"></p></div>

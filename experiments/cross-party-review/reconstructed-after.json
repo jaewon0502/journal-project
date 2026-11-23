@@ -1,0 +1,179 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "[AI가 재구성한 검토 문장] 2025회계연도 정부안에는 일반회계 예비비 4조 8,000억 원이 편성됐다.\n이 정부안의 일반회계 예비비는 2024회계연도 예산 대비 14.3% 증가한 규모다.\n국회 예산결산특별위원회가 처리한 감액안의 예비비는 정부안의 절반인 2조 4,000억 원이다.\n일본의 수출 규제에 따른 기술개발 등 여러 용도로 2019년 한 해에 지출한 일반회계 예비비 총액은 2조 6,901억 원이다.\n코로나19 같은 특수 상황을 제외한 평년의 정부 예비비 집행 규모는 약 1조 4,000억 원이다.\n12월 2일 민주당 예결소위 의원 기자회견문에 적힌 재해복구용 추가 재원 수단의 명칭은 국고채무부담행위다.",
+  "articleDraft": "[AI가 재구성한 검토 문장] 2025회계연도 정부안에는 일반회계 예비비 4조 8,000억 원이 편성됐다.\n이 정부안의 일반회계 예비비는 2024회계연도 예산 대비 14.3% 증가한 규모다.\n국회 예산결산특별위원회가 처리한 감액안의 예비비는 정부안의 절반인 2조 4,000억 원이다.\n일본의 수출 규제에 따른 기술개발 등 여러 용도로 2019년 한 해에 지출한 일반회계 예비비 총액은 2조 6,901억 원이다.\n코로나19 같은 특수 상황을 제외한 평년의 정부 예비비 집행 규모는 약 1조 4,000억 원이다.\n12월 2일 민주당 예결소위 의원 기자회견문에 적힌 재해복구용 추가 재원 수단의 명칭은 국고채무부담행위다.",
+  "sources": [
+    {
+      "id": "plan-table",
+      "title": "국회예산정책처 · 2025년도 예산안 위원회별 분석 [기획재정위원회]",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33318263",
+      "originUrl": "",
+      "version": "2024년 10월 발간",
+      "locator": "파일 34쪽(인쇄 20쪽), 2025년도 예비비 예산안 현황, 예비비 행 × 2024 예산(A)·2025 예산안(B)·증감률 열",
+      "excerpt": "값 전사, 억원. 2024 예산 42,000. 2025 예산안 48,000. 표의 증감률은 14.3%.",
+      "pdfPage": "34"
+    },
+    {
+      "id": "settlement-2023",
+      "title": "국회예산정책처 · 2025년도 예산안 위원회별 분석 [기획재정위원회]",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33318263",
+      "originUrl": "",
+      "version": "2024년 10월 발간",
+      "locator": "파일 37쪽(인쇄 23쪽), 최근 4년간 일반회계 예비비 집행 실적, 2023년 예산·지출결정액·지출액 행 × 일반회계 예비비 열",
+      "excerpt": "값 전사, 억원. 2023년 예산 46,000, 지출결정액 13,940, 지출액 13,091.",
+      "pdfPage": "37"
+    },
+    {
+      "id": "total-2019",
+      "title": "국회예산정책처 · 2019회계연도 결산 총괄분석 Ⅰ",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33316159",
+      "originUrl": "https://www.nabo.go.kr/ko/report/analysisView.do?idx=7281",
+      "version": "2020년 8월 발간",
+      "locator": "파일 53쪽(인쇄 42쪽), 2019회계연도 예비비 사용 현황, 일반회계 행 × 지출액 열",
+      "excerpt": "값 전사, 억원. 일반회계 예비비의 연도 합계 지출액 26,901.",
+      "pdfPage": "53"
+    },
+    {
+      "id": "purposes-2019",
+      "title": "국회예산정책처 · 2019회계연도 결산 총괄분석 Ⅰ",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33316159",
+      "originUrl": "https://www.nabo.go.kr/ko/report/analysisView.do?idx=7281",
+      "version": "2020년 8월 발간",
+      "locator": "파일 54쪽(인쇄 43쪽), 2019회계연도 예비비 사용명세별 집행현황, 재해대책비·영유아보육료지원 행 × 지출액 열",
+      "excerpt": "값 전사, 억원. 목적예비비 중 재해대책비 6,654, 영유아보육료지원 712. 일반회계·특별회계 합계 지출액 26,901.",
+      "pdfPage": "54"
+    },
+    {
+      "id": "briefing",
+      "title": "KTV 국민방송 · 야당 단독감액안 정부 입장 합동 브리핑",
+      "url": "https://www.youtube.com/watch?v=88xuB7ZOliQ",
+      "originUrl": "",
+      "version": "2024-12-02 브리핑",
+      "locator": "영상 설명의 발표 전문, 최상목 부총리 발언 중 2019년과 예비비를 언급한 문단",
+      "excerpt": "발표 요지. 최상목 부총리는 예결위 감액안으로 예비비가 2조 4,000억 원으로 줄었다고 말했다. 일본 수출 규제에 따른 기술개발 등을 예로 들며 2019년 한 해 예비비 지출이 약 2조 7,000억 원이었다고 설명했다."
+    },
+    {
+      "id": "committee",
+      "title": "더불어민주당 예산안심사소위 위원 일동 · 예결위 수정안 의결 관련 기자브리핑",
+      "url": "https://www.youtube.com/watch?v=k2ynHDD2amk",
+      "originUrl": "https://www.theminjoo.kr/main/sub/news/view.php?brd=188&post=1208164&search=&sno=1720",
+      "version": "2024-12-02 기자회견",
+      "locator": "참여 의원 윤준병이 올린 영상 설명의 기자회견문, 예비비의 통상 집행 규모와 재해복구 재원을 언급한 문단",
+      "excerpt": "회견문 요지. 예결소위 민주당 의원들은 감액 이후 2조 4천억 원이 남았으며 평소 약 1조 4천억 원을 집행해 왔다고 설명했다. 재해복구 추가 재원을 언급한 대목의 표기는 “국고채무부담행위”다."
+    }
+  ],
+  "receipts": [
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-0",
+      "articleBinding": "1f069e0184c70909f90944b9714564a817a00afc62f90725736f1d7e65f09924",
+      "binding": "3f758b86bec62736cde9f24f4ba29045dfeac45e7632fb97b708360ec111856a",
+      "references": "7d247f60bba8f7a2b92ee1774364cb6678580ce7d4f740f03bb969d6790aedaa",
+      "recordedAt": "2026-11-23T07:40:02.980Z",
+      "status": "fact",
+      "sourceIds": [
+        "plan-table"
+      ],
+      "reason": "AI 원자료 대조. 정부가 제안한 2025년 예비비 행에 48,000억원이 적혀 있다.",
+      "acknowledged": true,
+      "checksum": "b5ac512429a0d7b922de985e9af9fb36a0099de9ab61352872668ab1f113e4d0"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-60",
+      "articleBinding": "7bc32fbccdfbc33b541748c32547268fb71b1a234d7191c5ca491f7cdc8b1e4f",
+      "binding": "bce1c870e88328f260affeedd00e2a37495c3edb6520fa3690c3e1b315ee1b6c",
+      "references": "7d247f60bba8f7a2b92ee1774364cb6678580ce7d4f740f03bb969d6790aedaa",
+      "recordedAt": "2026-11-23T07:40:02.980Z",
+      "status": "fact",
+      "sourceIds": [
+        "plan-table"
+      ],
+      "reason": "AI 원자료 대조. 2024년 예산 42,000억원을 분모로 삼아 6,000억원 증가분을 나누면 14.2857…%다. 표의 14.3%와 일치한다.",
+      "acknowledged": true,
+      "checksum": "1ae56cfde89c1bdad95b1da4231903d3e428bc75852e9629ab4c4ceb5bc9139e"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-107",
+      "articleBinding": "8789990e58848ba29fc35b642b1ae6f3a5e9a8a567fbb74304f7346cf5b05920",
+      "binding": "d36404dfd96740e93dc8e10ffe2b6afcfe77e1fa77c8184fae50e4f2e8f2a3a4",
+      "references": "97efef6853bc860e8e8137904cc3c8b6b3d3a398b4b1a34b611e3dd2bd01d330",
+      "recordedAt": "2026-11-23T07:40:02.980Z",
+      "status": "fact",
+      "sourceIds": [
+        "briefing",
+        "committee",
+        "plan-table"
+      ],
+      "reason": "AI 원자료 대조. 당일 정부 브리핑과 민주당 예결소위 회견문은 예결위안에 남은 예비비를 2조 4,000억원으로 명시한다. 정부안 4조 8,000억원의 절반이다.",
+      "acknowledged": true,
+      "checksum": "78c4dba90f25bcbb0a6ece7d61cf70e99813eef5668fc6c6f81c93d1f5bf4ed4"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-159",
+      "articleBinding": "b63db9a2e69785c33bc32ef56c3b7d139760489b914502cbb8cc9db40f31ae96",
+      "binding": "76d8660c4f649998eb07e07f2c843329841c6a008ac60c3d5cf8826fdc41694f",
+      "references": "b1e6b1ab78171bcfd23bd64615f73f076dfaa13b2dd5e06ca085c075223a433a",
+      "recordedAt": "2026-11-23T07:40:02.980Z",
+      "status": "fact",
+      "sourceIds": [
+        "briefing",
+        "purposes-2019",
+        "total-2019"
+      ],
+      "reason": "AI 원자료 대조. 결산에서 2조 6,901억원은 일반회계 예비비 연간 지출 전체로 확인된다. 발표는 수출 규제 대응 기술개발을 그해 용도의 한 예로 들었으며, 결산에는 재해대책비와 보육료도 실렸다.",
+      "acknowledged": true,
+      "checksum": "c0f0315fc29dd6c7ea24acff107486c35c5754959b52aed3e29d62a4957b9e0d"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-230",
+      "articleBinding": "a14b69276ffda3058cf524c84643ce75d184ccba168c690d373d246b549b199e",
+      "binding": "58e571d3522dfac02acaa84649dfd744920ac154daed32c09b1d863d21f7937b",
+      "references": "f9c7ac0d7f7c8afd1d276552e8273b0004b9d68ebfbc18c875846265784c770d",
+      "recordedAt": "2026-11-23T07:40:02.981Z",
+      "status": "held",
+      "sourceIds": [
+        "committee",
+        "settlement-2023"
+      ],
+      "reason": "AI 원자료 대조. 민주당 예결소위가 제시한 규모는 확인된다. 대상 연도와 제외 기준, 대표값 산출 방식이 없어 실제 평년 집행 규모를 재현할 수 없다. 2023년 지출액 13,091억원은 한 해 값이다.",
+      "acknowledged": true,
+      "checksum": "c169fa430b4c07cba66977c10cc493fa73e7635909e17a32687376d53120489b"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-285",
+      "articleBinding": "3fe08133b2dfea4156bb7c389786892a0f57d4a6e87d65787b1e6f1fba97e8b5",
+      "binding": "d442f83687cf7f851128a7b8c0da65fc10cea4931af598ef98d1d47b6bd92f5c",
+      "references": "222629e2b9111f3c0aeb0074478b6a3b30e8cfa765ba560a9d9f3fa0e731e791",
+      "recordedAt": "2026-11-23T07:40:02.981Z",
+      "status": "fact",
+      "sourceIds": [
+        "committee"
+      ],
+      "reason": "AI 원자료 대조. 재해복구용 추가 재원에 관해 기자회견문이 명시한 제도 명칭을 확인했다. 그 수단의 실제 집행 가능성이나 충분성은 이 명제의 범위 밖이다.",
+      "acknowledged": true,
+      "checksum": "4913d393ba260180150a1f4fddf27e7c7c83ddcae037ca6fe3b071551021e3cb"
+    }
+  ],
+  "demo": true,
+  "articleAssessment": null,
+  "articleAssessmentDraft": null,
+  "rowDrafts": [],
+  "currentId": null,
+  "sourceDraft": {
+    "id": null,
+    "fields": {
+      "title": "",
+      "url": "",
+      "originUrl": "",
+      "version": "",
+      "locator": "",
+      "excerpt": "",
+      "pdfPage": ""
+    }
+  }
+}

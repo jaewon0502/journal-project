@@ -1,6 +1,8 @@
 (() => {
   'use strict';
   const engine = window.JournalFactcheck;
+  const workspace = window.JournalWorkspaceSnapshot;
+  const {schema, sourceFields, isMock} = workspace;
   const byId = id => document.getElementById(id);
   const labels = {
     partial: '일부 확인 · 나머지 보류', pending: '미검토', fact: '사실 확인', attribution: '발언 귀속 확인',
@@ -37,7 +39,6 @@
     {id: 'vote', title: '해솔시의회 본회의 의결록 (모의 자료)', url: 'https://example.invalid/journal/vote', version: '연습 판본 1', locator: '제3호 안건 의결 결과', excerpt: '돌봄버스 시범사업 예산안 3억 원. 표결 결과는 찬성 7표, 반대 4표로 가결되었다.'},
     {id: 'briefing', title: '들길당 브리핑 속기록 (모의 자료)', url: 'https://example.invalid/journal/briefing', version: '연습 판본 1', locator: '대변인 발언 02분 10초', excerpt: '들길당 대변인: 운영비가 두 배가 될 것이라고 봅니다. 이는 우리 당의 전망이며 시가 발표한 확정액은 아닙니다.'}
   ];
-  const schema = 'journal-local-factcheck-v1';
   let article = '', sources = [], receipts = [], demo = false, result = null;
   let currentId = null, editingId = null, dirty = false;
   let drafts = new Map();
@@ -93,25 +94,24 @@
     if (result.attributedCount) summary.push('발언 내용 중 미확인 ' + result.contentUnverifiedCount + '개 · 의견/전망 ' + result.contentOpinionCount + '개 · 별도 근거 확인 ' + result.contentSupportedCount + '개');
     return summary;
   }
-  function isMock(source) {
-    return [source.url, source.originUrl].filter(Boolean).some(value => {
-      try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
-    });
-  }
   function sourceSummary(s) {
     return [s.title || s.id, s.version, s.locator].join(' · ');
   }
   function sourceLink(source) {
-    if (isMock(source)) return node('small', '화면에 제공된 모의 원자료');
-    const a = node('a', '원자료 열기 ↗');
-    a.href = source.url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    return a;
+    return window.JournalSourceReader.link(source) || node('small', '화면에 제공된 모의 원자료');
   }
-  function sourceDetails(source) {
+  function citationAddress(source) {
+    const target = engine.sourceTarget(source);
+    if (!target?.page) return source.url;
+    return 'PDF 뷰어 ' + target.page + '쪽 · ' + target.href;
+  }
+  function sourceDetails(source, showLink = true) {
     const section = node('div', undefined, 'source');
-    section.append(node('p', sourceSummary(source), 'meta'), sourceLink(source), node('blockquote', source.excerpt));
+    section.append(node('p', sourceSummary(source), 'meta'));
+    if (showLink) section.append(sourceLink(source));
+    section.append(node('blockquote', source.excerpt));
+    const local = window.JournalSourceReader.localControl(source);
+    if (local) section.append(local);
     if (source.originUrl) section.append(node('p', '최초 원문 · ' + source.originUrl, 'meta'));
     return section;
   }
@@ -134,7 +134,6 @@
       catalog.append(part);
     }
   }
-  const sourceFields = ['title', 'url', 'locator', 'excerpt', 'version', 'originUrl'];
   let sourceBaseline = {};
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
@@ -142,7 +141,13 @@
   }
   function clearSourceForm(reuse = {}) {
     editingId = null;
-    sourceBaseline = {title: reuse.title || '', url: reuse.url || '', version: reuse.version || '', originUrl: reuse.originUrl || ''};
+    let documentUrl = reuse.url || '';
+    if (documentUrl && engine.sourceTarget(reuse)?.page) {
+      const url = new URL(documentUrl);
+      url.hash = '';
+      documentUrl = url.href;
+    }
+    sourceBaseline = {title: reuse.title || '', url: documentUrl, version: reuse.version || '', originUrl: reuse.originUrl || ''};
     byId('source-form').reset();
     for (const [field, value] of Object.entries(sourceBaseline)) byId('source-' + field).value = value;
     byId('source-form-title').textContent = '원자료 추가';
@@ -180,6 +185,7 @@
     const area = byId('row-sources');
     area.replaceChildren();
     if (!sources.length) area.append(node('p', '연결할 원자료를 먼저 추가하세요.', 'hint'));
+    else if (row.sourceCaution) area.append(node('p', row.sourceCaution, 'callout'));
     const matches = new Map((row.sourceMatches || []).map(match => [match.id, match.reason]));
     const suggested = new Set(row.sourceIds || []);
     const ranks = new Map(row.sourceIds.map((id, i) => [id, i]));
@@ -191,13 +197,13 @@
       check.type = 'checkbox';
       check.value = source.id;
       check.checked = selectedIds.includes(source.id);
-      label.append(check, node('span', source.title || source.id));
+      label.append(check, node('span', (source.title || source.id) + ' · ' + source.version));
       if (suggested.has(source.id)) label.append(node('span', '대조 후보', 'badge'));
       const details = node('details');
-      details.open = source.id === row.sourceIds[0];
-      details.append(node('summary', source.locator), sourceDetails(source));
+      details.open = row.sourceCaution ? check.checked : source.id === row.sourceIds[0];
+      details.append(node('summary', source.locator), sourceDetails(source, false));
       if (matches.has(source.id)) details.append(node('small', matches.get(source.id)));
-      part.append(label, details);
+      part.append(label, sourceLink(source), details);
       area.append(part);
     }
     filterSources();
@@ -217,6 +223,7 @@
     byId('row-text').textContent = row.text;
     byId('row-context').textContent = row.context || row.text;
     byId('document-query').value = row.text;
+    clearSearchContext();
     byId('finder-results').replaceChildren();
     message('finder-status', '');
     byId('row-hints').replaceChildren(...row.hints.map(hint => node('li', hint)));
@@ -247,8 +254,8 @@
       input.checked = (values.contentSourceIds || []).includes(s.id);
       label.append(input, node('span', sourceSummary(s)));
       const details = node('details');
-      details.append(node('summary', '근거 위치와 발췌 보기'), sourceDetails(s));
-      item.append(label, details);
+      details.append(node('summary', '근거 위치와 발췌 보기'), sourceDetails(s, false));
+      item.append(label, sourceLink(s), details);
       return item;
     }));
     byId('correction-checked').checked = savedDraft?.correctionChecked === true;
@@ -318,34 +325,16 @@
           const s = sources.find(source => source.id === id);
           const detail = node('details');
           const prefix = r.status === 'attribution' ? (r.contentSourceIds?.includes(id) ? '내용 근거 · ' : '원발언 · ') : '';
-          detail.append(node('summary', prefix + sourceSummary(s)), sourceDetails(s));
-          part.append(detail);
+          detail.append(node('summary', prefix + sourceSummary(s)), sourceDetails(s, false));
+          part.append(detail, sourceLink(s));
         }
       }
       rows.append(part);
     }
   }
-  function decisionKey(d = {}) {
-    const content = [d.status || '', d.reason || '', [...(d.sourceIds || [])].sort()];
-    if (['partial','mixed'].includes(d.status)) content.push(d.factSpan || '');
-    if (d.status === 'mixed') content.push(d.opinionSpan || '');
-    if (d.status === 'contradicted') content.push(d.correction || '');
-    if (d.status === 'attribution') content.push(d.contentStatus || 'unverified', d.contentReason || '', [...(d.contentSourceIds || [])].sort());
-    return JSON.stringify(content);
-  }
-  function draftChangesRecord(id, previous) {
-    const draft = drafts.get(id);
-    return !!draft && (draft.afterEdit || decisionKey(draft) !== decisionKey(previous));
-  }
   function refresh(keepForm = false) {
-    const priorRecords = new Map(receipts.map(r => [r.rowId, r]));
-    const active = receipts.filter(r => !draftChangesRecord(r.rowId, r));
-    result = engine.report(article, sources, active);
+    result = workspace.activeReport(article, sources, receipts, drafts);
     demo = demo || sources.some(isMock);
-    for (const row of result.rows) {
-      row.draftPending = draftChangesRecord(row.id, priorRecords.get(row.id));
-      if (row.draftPending) row.reviewNote = '판단을 작성하고 있습니다. 기록하기 전까지 확인한 결과에서 제외합니다.';
-    }
     byId('workspace').hidden = false;
     byId('demo-notice').hidden = !demo;
     byId('new-work').hidden = false;
@@ -377,10 +366,12 @@
     if (find) {
       byId('finder').open = true;
       byId('document-query').value = currentRow()?.text || '';
+      clearSearchContext();
     }
     byId(find ? 'document-text' : 'source-title').focus();
   }
   function resetWork(text, initialSources, initialReceipts, sample) {
+    window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
     articleAssessment = null;
     articleAssessmentDraft = null;
@@ -393,6 +384,7 @@
     clearSourceForm();
     byId('article').value = text;
     byId('document-text').value = '';
+    clearSearchContext();
     byId('finder-results').replaceChildren();
     byId('row-filter').value = 'open';
     byId('sources-panel').open = false;
@@ -488,10 +480,14 @@
   byId('source-cancel').addEventListener('click', () => clearSourceForm());
   byId('source-form').addEventListener('submit', event => {
     event.preventDefault();
-    const source = Object.fromEntries(sourceFields.map(field => [field, byId('source-' + field).value.trim()]));
+    const source = Object.fromEntries(sourceFields.map(field => {
+      const value = byId('source-' + field).value;
+      return [field, field === 'excerpt' ? value : value.trim()];
+    }));
     let n = sources.length + 1;
     while (sources.some(s => s.id === 'source-' + n)) n++;
     source.id = editingId || 'source-' + n;
+    if (!source.pdfPage) delete source.pdfPage;
     const next = editingId ? sources.map(s => s.id === editingId ? source : s) : [...sources, source];
     try {
       // Editing a cited source invalidates the receipts that cite it. Keep the reviewer's
@@ -511,32 +507,169 @@
   });
   byId('go-add-source').addEventListener('click', () => openSourceTools(false));
   byId('go-find').addEventListener('click', () => openSourceTools(true));
+  function useExcerpt(entry) {
+    if (byId('source-excerpt').value && !confirm('입력한 발췌문을 선택한 문단으로 바꿀까요? 기존 위치가 이 구간과 일치하는지도 확인하세요.')) return;
+    byId('source-excerpt').value = entry.text;
+    message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. 원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.');
+    dirty = true;
+    byId('source-locator').focus();
+  }
+  function documentRows(text) {
+    const rows = [];
+    let page = 0;
+    for (const line of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
+      if (line.includes('\f')) page++;
+      if (line.trim()) rows.push({paragraph: rows.length + 1, text: line, page});
+    }
+    return rows;
+  }
+  function addNearbyRows(details, list, passage, rows) {
+    const center = rows[passage.paragraph - 1];
+    if (!center || center.text !== passage.text) return;
+    const nearby = rows.slice(Math.max(0, passage.paragraph - 13), passage.paragraph + 12)
+      .filter(row => row.page === center.page);
+    const included = new Set([...passage.context, ...nearby].map(row => row.paragraph));
+    list.replaceChildren();
+    list.className = 'finder-lines';
+    let selected = center;
+    for (const index of [...included].sort((a, b) => a - b)) {
+      const entry = rows[index - 1];
+      const item = node('li');
+      item.value = index;
+      const label = node('label'), radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'finder-line-' + passage.paragraph;
+      radio.value = String(index);
+      radio.checked = entry === center;
+      radio.addEventListener('change', () => { selected = entry; });
+      label.append(radio, node('span', (entry === center ? '검색 후보 · ' : '') + entry.text, 'verbatim'));
+      item.append(label);
+      list.append(item);
+    }
+    details.insertBefore(node('p', '후보 앞뒤 최대 12문단과 표 머리글입니다. 발췌할 행을 선택하세요.'), list);
+    details.append(button('선택한 행을 발췌문으로 사용', () => useExcerpt(selected)));
+  }
+  function clearSearchContext() {
+    byId('search-context').value = '';
+    byId('search-context-options').open = false;
+    const row = currentRow();
+    const sameQuery = row && row.text === byId('document-query').value.trim();
+    byId('use-article-context').hidden = !sameQuery || !row.context || row.context === row.text;
+    const lead = firstArticleLine();
+    byId('use-article-title').hidden = !sameQuery || !lead || lead === row.text;
+  }
+  function firstArticleLine() {
+    const lines = article.trim().split(/\r\n|[\n\r\u2028\u2029]/u);
+    return lines.length > 1 ? lines[0].trim() : '';
+  }
+  function searchWithContext(context) {
+    const row = currentRow();
+    if (!context || row?.text !== byId('document-query').value.trim()) return;
+    byId('search-context').value = context;
+    if (byId('document-text').value.trim()) byId('find-passages').click();
+  }
+  byId('use-article-context').addEventListener('click', () => searchWithContext(currentRow()?.context));
+  byId('use-article-title').addEventListener('click', () => searchWithContext(firstArticleLine()));
   byId('find-passages').addEventListener('click', () => {
     const text = byId('document-text').value;
     const query = byId('document-query').value.trim();
     const area = byId('finder-results');
     area.replaceChildren();
     if (!text.trim() || !query) return message('finder-status', '원자료 본문과 찾을 표현을 입력하세요.', true);
-    const passages = window.JournalEvidenceFinder.find(text, query);
-    message('finder-status', passages.length ? '겹치는 표현이 있는 문단 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
+    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext: byId('search-context').value.trim()});
+    const passages = lookup.passages;
+    let rows;
+    const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
+    const notices = [];
+    if (lookup.gap) notices.push(lookup.gap);
+    if (lookup.state === 'needs-context') {
+      notices.push(lookup.reason === 'no-series'
+        ? '이 지표와 기간을 함께 비교할 수 있는 연간 표를 확인하지 못했습니다. 자료의 기간과 표 머리글을 확인하세요.'
+        : '비교할 지표와 기간을 특정하기 어렵습니다. 기사 제목이나 앞뒤 문장의 지표·기간을 보충하세요.');
+      byId('search-context-options').open = true;
+    } else if (lookup.state === 'candidates') {
+      notices.push('비교할 기간과 지표가 나타난 표의 행 ' + passages.length + '개를 찾았습니다.' +
+        (lookup.usedArticleContext ? ' 입력한 기사 문맥을 함께 사용했습니다.' : ''));
+    } else if (!lookup.gap) {
+      notices.push(passages.length ? '겹치는 표현이 있는 문단 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
+    }
+    if (lookup.needsPublicationDate) notices.push('‘올해’처럼 상대적인 시점은 기사 발행일과 원표의 연도를 대조하세요.');
+    if (ambiguities.length) notices.push('같은 번호의 표 제목이 여러 개 있습니다.');
+    message('finder-status', notices.join(' '));
+    for (const item of ambiguities) {
+      const block = node('div', undefined, 'callout');
+      block.append(node('strong', '표 ' + item.number + ' · 서로 다른 제목 ' + item.headings.length + '개'));
+      const entries = node('ul');
+      for (const h of item.headings) {
+        entries.append(node('li', '붙여넣은 본문 ' + h.paragraph + '문단 · ' + h.title));
+      }
+      block.append(entries, node('p', '확인하려는 대상과 기간에 맞는 표를 고르고 원본에서 쪽과 표 제목을 확인하세요.'));
+      area.append(block);
+    }
+    let results = area;
+    if (passages.length && (lookup.gap || lookup.state === 'needs-context')) {
+      results = node('details');
+      results.append(node('summary', '표현이 겹친 위치 ' + passages.length + '개 보기'));
+      area.append(results);
+    }
     for (const passage of passages) {
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
-      block.append(button('이 문단을 발췌문으로 사용', () => {
-        if (byId('source-excerpt').value && !confirm('입력한 발췌문을 선택한 문단으로 바꿀까요? 기존 위치가 이 구간과 일치하는지도 확인하세요.')) return;
-        byId('source-excerpt').value = passage.text;
-        message('source-status', '붙여넣은 글의 ' + passage.paragraph + '번째 문단을 옮겼습니다. 원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.');
-        dirty = true;
-        byId('source-locator').focus();
-      }));
-      area.append(block);
+      const period = window.JournalEvidencePeriod.different(query, passage);
+      if (period) {
+        block.append(node('p', '질문에 적힌 시점은 ' + period.requested + ', 이 행 첫 칸은 ' + period.source
+          + '입니다. 원표에서 기준 시점을 확인하세요.', 'callout'));
+      }
+      const columns = window.JournalEvidenceColumns.forRow(text, query, passage);
+      if (columns) {
+        const values = columns.cells.map(c => c.year + '년 · ' + c.column + '번째 수치 열 ' + c.value);
+        block.append(node('p', '연도 머리글(' + columns.headerParagraph + '문단) 기준 · ' + values.join(' / ')));
+        if (columns.ambiguousYears.length)
+          block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
+      }
+      const changes = window.JournalEvidenceColumns.changeNote(text, query, passage);
+      for (const diff of changes?.comparisons || []) {
+        block.append(node('p', '같은 묶음의 ' + diff.prior.year + '년 ' + diff.prior.column + '번째 열은 ' +
+          diff.prior.value + ', ' + diff.current.year + '년 ' + diff.current.column + '번째 열은 ' +
+          diff.current.value + '입니다. 두 표시값과 괄호 증감이 어긋납니다. 원보고서나 통계표에서 확인하세요.', 'callout'));
+      }
+      if (passage.context.length) {
+        const details = node('details');
+        details.append(node('summary', '주변 원문 확인'));
+        const list = node('ol');
+        const entries = [...passage.context, passage].sort((a, b) => a.paragraph - b.paragraph);
+        for (const entry of entries) {
+          const item = node('li');
+          item.value = entry.paragraph;
+          if (entry === passage) item.append(node('strong', '선택한 문단 '));
+          item.append(node('span', entry.text, 'verbatim'));
+          list.append(item);
+        }
+        details.append(list);
+        details.addEventListener('toggle', function expand() {
+          if (!details.open) return;
+          details.removeEventListener('toggle', expand);
+          rows ??= documentRows(text);
+          addNearbyRows(details, list, passage, rows);
+        });
+        block.append(details);
+      }
+      block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
+      results.append(block);
     }
   });
-  for (const id of ['document-text', 'document-query']) byId(id).addEventListener('input', () => {
+  for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
+    if (id === 'document-query') clearSearchContext();
     byId('finder-results').replaceChildren();
     message('finder-status', '');
   });
-  byId('source-form').addEventListener('input', () => { dirty = true; });
+  byId('source-form').addEventListener('input', event => {
+    dirty = true;
+    if (event.target.id === 'source-url' && byId('source-pdfPage').value) {
+      byId('source-pdfPage').value = '';
+      message('source-status', '문서 주소를 바꿨습니다. 새 주소에서 확인한 PDF 쪽번호를 입력하세요.');
+    }
+  });
   byId('row-filter').addEventListener('change', () => showQueue());
   byId('source-search').addEventListener('input', filterSources);
   byId('decision-form').addEventListener('input', event => {
@@ -549,7 +682,7 @@
       const previousDraft = drafts.get(currentId);
       drafts.set(currentId, {...decisionDraft(), afterEdit: previousDraft?.afterEdit === true, ...(previousDraft?.sourceEdit ? {sourceEdit: true} : {})});
       const prior = receipts.find(r => r.rowId === currentId);
-      if (!!currentRow().draftPending !== !!draftChangesRecord(currentId, prior)) refresh(true);
+      if (!!currentRow().draftPending !== !!workspace.draftChangesRecord(drafts.get(currentId), prior)) refresh(true);
     }
     dirty = true;
   });
@@ -588,22 +721,8 @@
       message('file-status', '작업 파일 내려받기를 요청했습니다. 닫기 전에 파일이 저장됐는지 확인하세요.');
     } catch (err) { message('file-status', '작업 파일을 만들 수 없습니다. ' + err.message, true); }
   }
-  function validDraft(d) {
-    return d && typeof d.status === 'string' && (d.status === '' || Object.hasOwn(labels, d.status)) &&
-      typeof d.reason === 'string' && Array.isArray(d.sourceIds) && d.sourceIds.every(id => typeof id === 'string') &&
-      typeof d.factSpan === 'string' && typeof d.opinionSpan === 'string' &&
-      (d.contentStatus == null || Object.hasOwn(contentLabels, d.contentStatus)) &&
-      (d.contentSourceIds == null || (Array.isArray(d.contentSourceIds) && d.contentSourceIds.every(id => typeof id === 'string'))) &&
-      ['contentReason','correction'].every(key => d[key] == null || typeof d[key] === 'string');
-  }
   function restoreWork(w) {
-    if (!w || w.format !== schema || typeof w.article !== 'string' || typeof w.articleDraft !== 'string' ||
-        typeof w.demo !== 'boolean' || !Array.isArray(w.sources) || !Array.isArray(w.receipts) ||
-        !Array.isArray(w.rowDrafts) || !w.rowDrafts.every(d => d && typeof d.rowId === 'string' && validDraft(d.data)) ||
-        !w.sourceDraft || !w.sourceDraft.fields || !sourceFields.every(k => typeof w.sourceDraft.fields[k] === 'string' || (k === 'originUrl' && w.sourceDraft.fields[k] == null))) {
-      throw new Error('이 화면에서 저장한 형식의 작업 파일이 필요합니다.');
-    }
-    if (!(w.article.trim() || w.articleDraft.trim())) throw new Error('작업 파일에 기사 본문이 없습니다.');
+    workspace.validateWork(w);
     // Ask explicitly before applying any receipt from a file. A structurally valid record does not identify its author.
     if (!canReplace()) return;
     const hasJudgments = w.receipts.length > 0 || w.articleAssessment != null || w.articleAssessmentDraft != null;
@@ -630,14 +749,11 @@
         byId('workspace').hidden = true;
       }
     }
-    const previous = rubric.evaluate(result, sources, trust ? w.articleAssessment : null);
-    articleAssessmentDraft = trust ? rubricUI.restoreDraft(result, sources, w.articleAssessmentDraft) : null;
-    const dropped = previous.stale || (trust && w.articleAssessmentDraft != null && !articleAssessmentDraft);
-    articleAssessment = previous.saved;
-    if (articleAssessment && articleAssessmentDraft) {
-      // An open edit cannot count as a recorded judgment, even in an inconsistent import.
-      for (const id of Object.keys(articleAssessmentDraft.entries)) delete articleAssessment.ratings[id];
-    }
+    const reviewed = workspace.review(result, sources, trust ? w.articleAssessment : null,
+      trust ? w.articleAssessmentDraft : null);
+    articleAssessment = reviewed.assessment.saved;
+    articleAssessmentDraft = reviewed.draft;
+    const dropped = reviewed.dropped;
     renderArticleAssessment();
     dirty = false;
     if (trust && dropped) {
@@ -693,7 +809,7 @@
       lines.push(item.title + ' · ' + r.level + '단계 · ' + rubric.severityLabels[r.level],
         '기사 구절' + location(r.rowId) + ' · ' + r.quote);
       if (r.compareQuote) lines.push('비교 구절' + location(r.compareRowId) + ' · ' + r.compareQuote);
-      lines.push('원자료 · ' + sourceSummary(source), source.url, '자료 구절 · ' + r.sourceQuote, '판단 이유 · ' + r.reason);
+      lines.push('원자료 · ' + sourceSummary(source), citationAddress(source), '자료 구절 · ' + r.sourceQuote, '판단 이유 · ' + r.reason);
       if (source.originUrl) lines.push('최초 원문 · ' + source.originUrl);
       if (r.impact) lines.push('독자가 다르게 받아들일 내용 · ' + r.impact);
       if (r.direction) lines.push('검토자가 기록한 영향 방향 · ' + r.direction);
@@ -722,7 +838,7 @@
         for (const id of [...r.sourceIds, ...(r.contentSourceIds || [])]) {
           const source = sources.find(s => s.id === id);
           const prefix = r.status === 'attribution' ? (r.contentSourceIds?.includes(id) ? '내용 근거 · ' : '원발언 · ') : '근거 · ';
-          lines.push(prefix + sourceSummary(source), source.url, source.excerpt);
+          lines.push(prefix + sourceSummary(source), citationAddress(source), source.excerpt);
           if (source.originUrl) lines.push('최초 원문 · ' + source.originUrl);
         }
       }

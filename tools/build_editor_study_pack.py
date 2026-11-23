@@ -1,0 +1,102 @@
+"""Build the offline participant kit for the four-person editor experiment."""
+import argparse
+from io import BytesIO
+from pathlib import Path
+import re
+import subprocess
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+
+from build_field_participant_packs import Assets, READER, ROOT, html
+
+
+def public_cases():
+    # Project only material the participant sees. Never copy the coordinator's
+    # case objects or hidden properties into the ZIP, even if a future field is added.
+    project = """
+const cases = require(process.argv[1]);
+const material = Object.fromEntries(cases.ids.map(id => [id, Object.fromEntries(['A','B'].map(label => {
+  const {caseId, title, question, article, sources} = cases.get(id, label);
+  const docs = sources.map(({id,title,version,locator,excerpt,url}) => ({id,title,version,locator,excerpt,url}));
+  return [label, {caseId, title, question, article, sources:docs}];
+}))]));
+process.stdout.write(JSON.stringify(material));
+"""
+    contents = subprocess.check_output(['node', '-e', project, str(READER / 'editor-study-cases.js')], text=True)
+    return """(function () {
+  'use strict';
+  const cases = """ + contents + """;
+  globalThis.JournalStudyCases = Object.freeze({
+    ids: Object.freeze(Object.keys(cases)),
+    get(id, variant) {
+      const item = cases[id][variant];
+      return {...item, sources:item.sources.map(source => ({...source}))};
+    }
+  });
+})();
+"""
+
+
+def participant_core():
+    # Share the exact planner, submission validation and merge rules, stopping
+    # before the first coordinator-only function (block analysis and example data).
+    source = (READER / 'editor-study-core.js').read_text()
+    core, marker, analysis = source.partition('  function blockRoster(records) {')
+    if not marker or 'function demoRecords()' not in analysis or 'function mergeRecords(' not in core:
+        raise ValueError('편집자용 코어와 진행자 집계 코드의 경계를 다시 확인하세요.')
+    return core + '  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords});\n});\n'
+
+
+def participant_page():
+    source = (READER / 'editor-study.html').read_text()
+    head, dashboard, body = source.partition('<section id="dashboard">')
+    _, participant, tail = body.partition('<section id="participant" hidden>')
+    if not dashboard or not participant:
+        raise ValueError('참여 영역과 진행자 영역의 위치를 확인하세요.')
+    page = head + '<section id="participant">' + tail
+    page = page.replace('<html lang="ko">', '<html lang="ko" data-participant-kit>')
+    page = re.sub(r'<header>.*?</header>', '<header><strong>Journal</strong><span>편집자 검토 과제</span></header>', page, count=1)
+    page, count = re.subn(r'(<section id="enroll-box"[^>]*><h2>.*?</h2>)<p>.*?</p>', r'\1<p>진행자에게 받은 초대 코드를 입력하세요. 이어서 참여할 때도 같은 코드를 씁니다. 이 브라우저에 기록을 저장하며, 마지막에 내려받은 JSON을 직접 전달합니다.</p>', page, count=1)
+    if count != 1:
+        raise ValueError('참여용 등록 안내를 확인하세요.')
+    return page.replace(' (공용 기기는 비움)', '').replace('id="invite-code" type="text"', 'id="invite-code" required type="text"')
+
+
+def packet_bytes():
+    packet = {}
+    for name, page in [('editor-study.html', participant_page()), ('factcheck.html', html('factcheck.html', 'journal', ''))]:
+        packet[name] = page.encode()
+        scanner = Assets()
+        scanner.feed(page)
+        for asset in scanner.names:
+            if Path(asset).name != asset:
+                raise ValueError('참여용 리소스 경로를 확인하세요.')
+            if asset == 'editor-study-cases.js':
+                packet[asset] = public_cases().encode()
+            elif asset == 'editor-study-core.js':
+                packet[asset] = participant_core().encode()
+            else:
+                packet[asset] = (READER / asset).read_bytes()
+    packet['시작 안내.txt'] = (
+        '압축을 모두 푼 뒤 editor-study.html을 여세요. 진행자에게 받은 본인의 초대 코드로 등록합니다. '
+        '중간에 창을 닫았다면 같은 폴더와 브라우저에서 같은 코드를 입력하세요. '
+        '네 과제를 마치거나 중단한 뒤 내 참여 기록을 내려받아 진행자에게 전달하세요.\n').encode()
+    result = BytesIO()
+    with ZipFile(result, 'w') as archive:
+        for name, contents in sorted(packet.items()):
+            info = ZipInfo(name, (2024, 1, 1, 0, 0, 0))
+            info.external_attr = 0o644 << 16
+            archive.writestr(info, contents, compress_type=ZIP_DEFLATED)
+    return result.getvalue()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, default=Path.home() / 'Downloads' / 'Journal-편집자-파일럿')
+    args = parser.parse_args()
+    output = args.output.expanduser().resolve()
+    if output.is_relative_to(ROOT):
+        parser.error('저장소 밖의 배부 폴더를 지정하세요.')
+    output.mkdir(parents=True, exist_ok=True)
+    dest = output / 'participant-editor-study.zip'
+    dest.write_bytes(packet_bytes())
+    print(dest)

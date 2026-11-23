@@ -1,0 +1,175 @@
+{
+  "fixtureHash": "dd857b5953ad13d8203bc1b3eb414a7a64688e724c16c1f7dd740e29ea26b09e",
+  "finderHash": "8a14225e171f0449818f576c782ac095f3b65830b6077de168d7c8f399e2cdbb",
+  "metrics": {
+    "answerable": 10,
+    "hitAt1": 10,
+    "hitAt3": 10,
+    "controls": 4,
+    "controlsWithCandidates": 3,
+    "controlsWithNoCandidates": 1
+  },
+  "rows": [
+    {
+      "id": "r1",
+      "source": "road",
+      "gold": [
+        9
+      ],
+      "candidates": [
+        9
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "r2",
+      "source": "road",
+      "gold": [
+        7
+      ],
+      "candidates": [
+        7,
+        8
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "r3",
+      "source": "road",
+      "gold": [
+        4
+      ],
+      "candidates": [
+        4
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "r4",
+      "source": "road",
+      "gold": [
+        2
+      ],
+      "candidates": [
+        2,
+        1
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v1",
+      "source": "vote",
+      "gold": [
+        8
+      ],
+      "candidates": [
+        8,
+        3,
+        4
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v2",
+      "source": "vote",
+      "gold": [
+        6
+      ],
+      "candidates": [
+        6,
+        3,
+        4
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v3",
+      "source": "vote",
+      "gold": [
+        10
+      ],
+      "candidates": [
+        10,
+        9,
+        12
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v4",
+      "source": "vote",
+      "gold": [
+        13
+      ],
+      "candidates": [
+        13,
+        14,
+        5
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v5",
+      "source": "vote",
+      "gold": [
+        14
+      ],
+      "candidates": [
+        14,
+        3,
+        13
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "v6",
+      "source": "vote",
+      "gold": [
+        5
+      ],
+      "candidates": [
+        5,
+        3,
+        14
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "rc1",
+      "source": "road",
+      "gold": [],
+      "candidates": [
+        8
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "rc2",
+      "source": "road",
+      "gold": [],
+      "candidates": [],
+      "firstGoldRank": null
+    },
+    {
+      "id": "vc1",
+      "source": "vote",
+      "gold": [],
+      "candidates": [
+        10,
+        9,
+        12
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "vc2",
+      "source": "vote",
+      "gold": [],
+      "candidates": [
+        3,
+        4
+      ],
+      "firstGoldRank": null
+    }
+  ]
+}
