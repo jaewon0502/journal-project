@@ -206,3 +206,163 @@ test('닫는 따옴표가 빠져도 다음 줄의 독립 문장은 발언 행에
   for (const row of rows) assert.equal(text.slice(row.positions[0].start, row.positions[0].end), row.text);
   assert.equal(prepare('시장은 “예산은 늘었다. 주민은 반대했다”고 말했다.', []).rows.length, 1);
 });
+
+const transcript = [{id: 'minutes', title: '가상 회의록', url: 'https://council.example/minutes', version: '확정본', locator: '발언 1', excerpt: '무책임하다.'}];
+const said = (row, extra = {}) => decide(row, {status: 'attribution', sourceIds: ['minutes'], acknowledged: true,
+  reason: '회의록의 발언자와 발언을 대조했다.', contentStatus: 'opinion', contentChecked: true, contentReason: '발언자의 평가다.', ...extra}, transcript);
+
+test('간접 인용 속 두 절은 나누지 않아 화자의 주장을 발언 기록만으로 사실 처리할 수 없다', () => {
+  for (const text of ['김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했다.',
+    "김 의원은 '시장이 예산을 은폐했고 의회가 이를 묵인했다'고 주장했다.",
+    '야당은 시장이 3억 원을 횡령했고 측근이 이를 도왔다고 주장했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 1, text);
+    assert.deepEqual(rows[0].allowedStatuses, ['attribution', 'partial', 'held', 'contradicted']);
+    assert.throws(() => decide(rows[0], {...decision, sourceIds: ['minutes']}, transcript));
+  }
+});
+
+test('따옴표 밖 서술에 사실이 있으면 발언을 의견으로 닫아도 그 사실을 확인한 것으로 세지 않는다', () => {
+  // A connective before a direct quotation gives the narrator clause its own row.
+  for (const text of ['의회는 지난달 예산 3억 원을 삭감했는데 시장은 “무책임하다”고 말했다.',
+    '의회가 예산 3억 원을 삭감하자 시장은 “무책임하다”고 비판했다.',
+    '의회가 지난달 예산 3억 원을 삭감한 뒤 시장은 “무책임하다”고 말했다.']) {
+    const [narrator, speech] = prepare(text, transcript).rows;
+    assert.ok(narrator.allowedStatuses.includes('fact'), text);
+    assert.match(speech.text, /^시장은 “무책임하다”/);
+    assert.equal(report(text, transcript, [said(speech)]).complete, false);
+  }
+  const embedded = '시장은 의회가 예산 3억 원을 삭감한 데 대해 “무책임하다”고 말했다.';
+  const [row] = prepare(embedded, transcript).rows;
+  assert.throws(() => said(row), /사실·의혹/);
+  // The reporting verb and a date only frame the speech.
+  for (const text of ['의원은 “무책임하다”라며 반대했다.', '김 의원은 3일 기자회견에서 “무책임하다”고 비판했다.']) {
+    const [only] = prepare(text, transcript).rows;
+    assert.equal(said(only).contentStatus, 'opinion', text);
+  }
+});
+
+test('인용이 끝나며 문장도 끝나면 다음 서술 문장은 별도 행이 된다', () => {
+  const text = '김 의원은 기자회견을 열었다. “이번 결정은 무책임하다.” 의회는 지난달 예산 3억 원을 삭감했다.';
+  const rows = prepare(text, transcript).rows;
+  assert.deepEqual(rows.map(r => r.text), ['김 의원은 기자회견을 열었다.', '“이번 결정은 무책임하다.”', '의회는 지난달 예산 3억 원을 삭감했다.']);
+  assert.ok(rows[2].allowedStatuses.includes('fact'));
+  assert.equal(prepare('그는 “괜찮다!” 라고 했다.', []).rows.length, 1);
+  assert.equal(prepare('시장은 “괜찮다.”고 말했다. 의회는 예산을 삭감했다.', []).rows.length, 2);
+  // A straight opening quote closed by a curly one still closes the quotation.
+  assert.equal(prepare('시장은 "무책임하다”고 말했다. 의회는 예산 3억 원을 삭감했다.', []).rows.length, 2);
+});
+
+test('평가어를 덧붙여도 의혹 제기는 사실 구절로 바뀌지 않고, 따옴표 친 법안 이름은 발언이 아니다', () => {
+  const [row] = prepare('시장이 3억 원을 횡령했다는 의혹이 제기된 것은 참담한 일이다.', transcript).rows;
+  assert.deepEqual(row.allowedStatuses, ['attribution', 'partial', 'held', 'contradicted']);
+  assert.ok(prepare('법원은 시장의 횡령 혐의에 무죄를 선고했다.', []).rows[0].allowedStatuses.includes('fact'));
+  for (const text of ['국회는 “노란봉투법”을 가결했다.', '국회는 "노란봉투법"을 가결했다.']) {
+    assert.ok(prepare(text, []).rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['그는 “개혁”이라고 말했다.', '시장은 “무책임하다”고 말했다.', '단체는 “시장은 사퇴하라”는 성명을 냈다.']) {
+    assert.deepEqual(prepare(text, []).rows[0].allowedStatuses, ['attribution', 'partial', 'held', 'contradicted'], text);
+  }
+});
+
+test('발언자 뒤의 날짜는 발언 내용이 아니고, 모바일 주소는 같은 문서다', () => {
+  const [row] = prepare('김 의원은 3일 시장의 결정이 무책임하다고 비판했다.', transcript).rows;
+  assert.equal(said(row).contentStatus, 'opinion');
+  const [cut] = prepare('김 의원은 시장이 예산 3억 원을 삭감했다고 비판했다.', transcript).rows;
+  assert.throws(() => said(cut));
+  const refs = [{id: 'web', title: '연설', url: 'https://www.news.example/view/1', version: '1', locator: '1문단', excerpt: '예산을 삭감했다.'},
+    {id: 'mobile', title: '연설 모바일', url: 'https://m.news.example/view/1', version: '1', locator: '1문단', excerpt: '예산 삭감 기록'}];
+  const [speech] = prepare('김 의원은 시장이 예산을 삭감했다고 말했다.', refs).rows;
+  assert.throws(() => decide(speech, {status: 'attribution', sourceIds: ['web'], acknowledged: true, reason: '발언 대조',
+    contentStatus: 'supported', contentChecked: true, contentReason: '내용 대조', contentSourceIds: ['mobile']}, refs), /다른 원자료/);
+});
+
+test('대조 후보는 조사가 붙은 낱말도 같은 낱말로 찾는다', () => {
+  const refs = [{id: 'plan', title: '집행 계획', url: 'https://city.example/plan', version: '1', locator: '표 1', excerpt: '주거 예산 집행 실적'}];
+  for (const text of ['시는 주거 예산으로 집행했다.', '시는 주거 예산에서는 줄였다.', '시는 주거 예산에는 손대지 않았다.']) {
+    assert.match(prepare(text, refs).rows[0].sourceMatches[0].reason, /예산/, text);
+  }
+});
+
+const rowTexts = text => prepare(text, transcript).rows.map(r => r.text);
+const opinionClosed = text => { const rows = prepare(text, transcript).rows; try { said(rows.at(-1)); return true; } catch { return false; } };
+
+test('반박 인용이 붙어도 간접 인용 속 의혹은 사실 행으로 떨어지지 않는다', () => {
+  for (const text of ['야당은 시장이 3억 원을 횡령했고 측근이 이를 도왔다고 주장했지만 시장은 “사실무근”이라고 반박했다.',
+    '김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했고, 시장은 “사실무근”이라고 반박했다.',
+    '김 의원은 시장은 예산을 은폐했고 의회는 이를 묵인했다고 주장했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.ok(rows.every(row => !row.allowedStatuses.includes('fact')), text);
+  }
+});
+
+test('서술 사실과 다른 화자의 발언은 나누고, 한 화자의 문장은 쪼개지 않는다', () => {
+  for (const text of ['시의회는 예산 3억 원을 삭감했고 시장은 이에 유감이라고 밝혔다.', '정부는 지원금을 30% 인상했지만 야당은 부족하다고 지적했다.',
+    '시는 예산 3억 원을 집행했으나 의회는 절차가 부당했다고 주장했다.', '의회는 예산 3억 원을 삭감했고 시장은 ‘무책임하다’고 말했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['김 의원은 예산이 삭감되자 지역 주민들이 피해를 입게 됐다며 “대책이 필요하다”고 말했다.',
+    '김 의원은 시장과 면담한 뒤 취재진이 묻자 “사퇴는 없다”고 답했다.', '김 의원은 어제 시장과 통화했는데 시장이 “사과하겠다”고 말했다고 전했다.',
+    '경찰은 압수수색을 한 뒤 김 의원이 “정치 탄압”이라고 반발했다고 밝혔다.', '시공사는 하자 보수 기간이 끝났다며 “책임이 없다”고 밝혔다.',
+    '입주민들은 아파트 하자 보수 업체가 “책임을 피한다”고 주장했다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+});
+
+test('인용 뒤에 화자만 밝히는 문장과 인용에 붙은 말은 인용과 한 행으로 남는다', () => {
+  for (const text of ['“이번 결정은 무책임하다.” 김 의원은 3일 기자회견에서 이같이 말했다.', '“이번 결정은 무책임하다.” 김 의원의 말이다.',
+    '“이게 맞습니까?” 김 의원이 물었다.', '김 의원은 “이번 결정은 무책임하다!” 하며 목소리를 높였다.',
+    '시민들 사이에서는 “이게 맞나?” 하는 의문이 나온다.', '참가자들은 “예산 삭감 철회하라!” “시장은 사퇴하라!” 등의 구호를 외쳤다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+  assert.ok(opinionClosed('“이번 결정은 무책임하다.” 김 의원은 3일 기자회견에서 이같이 말했다.'));
+});
+
+test('발언 꼬리의 입장 동사는 사실이 아니지만, 따옴표 밖 사건과 기간은 사실로 남는다', () => {
+  for (const text of ['김 의원은 “무책임한 정책”이라며 예산안 처리에 반대했다.', '김 의원은 “졸속 행정”이라며 시의 계획에 강하게 반대했다.']) {
+    assert.ok(opinionClosed(text), text);
+  }
+  for (const text of ['시장은 “무책임하다”는 비판을 의식하며 예산을 삭감했다.', '시장은 “무책임하다”는 비판을 받고 예산을 삭감했다.',
+    '김 의원은 3일 만에 입장을 바꿔 시장의 결정이 무책임하다고 비판했다.', '김 의원은 10일 넘게 침묵하다가 시장의 결정이 무책임하다고 비판했다.']) {
+    assert.equal(opinionClosed(text), false, text);
+  }
+});
+
+test('평가·수치·사건·의혹을 담은 인용은 이름이 아니라 발언으로 남는다', () => {
+  for (const text of ['야당은 “포퓰리즘 정책”을 문제 삼았다.', '여당 의원들의 “무책임한 졸속 처리”가 도마에 올랐다.',
+    '김 의원의 “예산 삭감은 부당”이 논란이 됐다.', '야당은 “10조 원 퍼주기”를 문제 삼았다.', '김 의원은 “시장의 3억 원 횡령”을 거론했다.']) {
+    assert.equal(prepare(text, transcript).rows[0].allowedStatuses[0], 'attribution', text);
+  }
+});
+
+test('수사기관 발표로 전하는 문장은 통째로 남아 뒤쪽 절도 사실로 닫을 수 없다', () => {
+  for (const text of ['검찰에 따르면 시장은 업자에게 3억 원을 받았는데 측근이 이를 전달했다.', '공소장에 따르면 시장은 업자에게 3억 원을 요구한 뒤 측근이 이를 전달받았다.',
+    '시장은 업자에게 3억 원을 받았고, 측근은 이를 차명계좌로 옮겼다고 검찰은 밝혔다.', '김씨는 3일 오후 시청에 침입했고, 직원들이 이를 제지하자 흉기를 휘둘렀다고 경찰은 밝혔다.',
+    '시장은 “사과하겠다”고 말한 뒤 의원들이 반발하자 “오해”라고 해명했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 1, text);
+    assert.ok(!rows[0].allowedStatuses.includes('fact'), text);
+  }
+});
+
+test('과거형 연결어와 수식어가 있어도 서술 사실과 발언을 나누고, 인용 뒤 화자 문장은 붙여 둔다', () => {
+  for (const text of ['같은 날 의회는 예산 3억 원을 삭감했고 시장은 “무책임하다”고 말했다.', '의회는 예산 3억 원을 추가 삭감했고 시장은 “무책임하다”고 말했다.',
+    '의회는 예산 3억 원을 삭감했고 시장이 “무책임하다”고 반발했다.', '국회는 노란봉투법을 통과시켰고 야당은 “날치기 처리”라고 반발했다.',
+    '국회는 내년부터 시행되는 종부세 개편안을 의결했고 야당은 “부자 감세”라고 비판했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[0].allowedStatuses.includes('fact'), text);
+  }
+  for (const text of ['“예산 삭감은 부당합니다.” 김 의원은 3일 SNS에 이 같은 글을 올렸다.', '“예산 삭감은 부당합니다.” 김 의원이 3일 기자회견에서 한 말이다.', '그는 “왜 안 되나?” 물었다.']) {
+    assert.equal(rowTexts(text).length, 1, text);
+  }
+  for (const text of ['“등록금 동결은 불가능하다.” 등록금은 올해 5% 인상됐다.', '“예산을 반드시 지키겠다.” 하지만 예산은 결국 그렇게 삭감됐다.',
+    '“예산을 지키겠다.” 하는 수 없이 의회는 예산 3억 원을 삭감했다.']) {
+    const rows = prepare(text, transcript).rows;
+    assert.equal(rows.length, 2, text);
+    assert.ok(rows[1].allowedStatuses.includes('fact'), text);
+  }
+  assert.ok(prepare('“노란봉투법”은 지난달 국회를 통과했다.', []).rows[0].allowedStatuses.includes('fact'));
+});

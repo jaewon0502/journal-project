@@ -26,7 +26,7 @@
 .rub-evidence {margin:.5rem 0}
 .rub-evidence dt {font-weight:640;font-size:.85rem}
 .rub-evidence dd {margin:.12rem 0 .55rem;white-space:pre-wrap}
-.rub-feedback:empty {display:none}
+.rub-feedback:empty {margin:0}
 .rub-feedback {margin:.5rem 0;color:var(--green)}
 .rub-feedback.error {color:#8c371f}
 @media (max-width:450px){.rub-metric {padding:.5rem}.rub-metrics{gap:.45rem}.rub-note{line-height:1.5}}

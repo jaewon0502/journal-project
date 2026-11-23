@@ -14,7 +14,6 @@
   };
   function message(id, text, error = false) {
     const n = el(id);
-    n.hidden = !text;
     n.textContent = text;
     n.classList.toggle('error', error);
   }
@@ -114,6 +113,7 @@
     box.append(node('small', caption)); return box;
   }
   function showInvitations() {
+    el('export-all').disabled = !records.length && !invitations.length;
     table('invites', ['발급 묶음', '전달할 초대 코드', '이 기기 수집 상태'], invitations.map(inv => [
       String(Math.ceil(inv.ordinal / 4)), inv.code,
       records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'
@@ -168,16 +168,29 @@
       String(v.block), String(v.enrolled), String(v.completed), v.missingOrdinals.join(', ') || '—', v.unfinishedOrdinals.join(', ') || '—'
     ]), '등록된 배정 묶음이 없습니다.');
     el('manage-records').hidden = demo;
-    el('export-all').disabled = !records.length;
     showInvitations();
   }
 
   // Allocation and registrations are saved before task material is disclosed.
+  const inviteConflict = (list, ordinal, id) => list.some(inv => (inv.ordinal === ordinal) !== (inv.id === id));
   function vacantSlots() {
     const used = new Set([...records, ...invitations].map(r => r.ordinal));
     let start = 1;
     while ([0,1,2,3].every(d => used.has(start + d))) start += 4;
     return [0,1,2,3].map(d => start + d).filter(n => !used.has(n));
+  }
+  function mergeInvitations(existing, incoming) {
+    const merged = [...existing];
+    for (const raw of incoming) {
+      const ordinal = raw?.ordinal, id = raw?.id;
+      if (typeof ordinal !== 'number' || !/^[1-9]\d{0,8}$/.test(String(ordinal)) || typeof id !== 'string' || !/^E[A-F0-9]{16}$/.test(id) || raw.code !== 'J1-' + ordinal + '-' + id) {
+        throw new Error('초대 코드 명부 형식을 확인하세요.');
+      }
+      if (merged.some(inv => inv.ordinal === ordinal && inv.id === id)) continue;
+      if (inviteConflict(merged, ordinal, id)) throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
+      merged.push({ordinal, id, code: raw.code});
+    }
+    return merged;
   }
   function issueCodes() {
     const available = vacantSlots();
@@ -199,11 +212,11 @@
       const ordinal = m ? Number(m[1]) : slots[sampleIndex(slots.length)];
       const id = m ? m[2] : 'E' + idBytes();
       if (records.some(r => r.ordinal === ordinal || r.participantId === id) ||
-        invitations.some(inv => inv.ordinal === ordinal && inv.id !== id)) throw new Error('이미 사용하거나 다른 참여자에게 배정한 코드입니다. 연구자에게 확인하세요.');
+        inviteConflict(invitations, ordinal, id)) throw new Error('이미 사용하거나 다른 참여자에게 배정한 코드입니다. 연구자에게 확인하세요.');
       const r = core.createRecord(id, ordinal, 'editor', true);
       records = core.mergeRecords(records, [r]);
       session = {id, state:'ready', activeMs:0, segmentAt:null, used:false, verdict:'', source:'', reason:''};
-      persist(); message('enroll-status', ''); renderParticipant();
+      persist(); message('enroll-status', ''); renderParticipant(); el('trial-heading').focus();
     } catch (err) { message('enroll-status', err.message, true); }
   }
   function clearTaskState(next) {
@@ -228,16 +241,16 @@
       session.activeMs += delta;
     }
     liveStart = clock(); session.segmentAt = Date.now(); session.state = 'running';
-    persist(); renderParticipant();
+    persist(); renderParticipant(); el('trial-heading').focus();
   }
   function pause() {
     if (session?.state !== 'running') return;
     session.activeMs = elapsed(); session.segmentAt = null; liveStart = null; session.state = 'paused';
-    persist(); renderParticipant();
+    persist(); renderParticipant(); el('resume-trial').focus();
   }
   function withdraw() {
     if (!session || !confirm('제출한 과제는 미완료 참여 기록으로 보관됩니다. 이번 참여를 중단할까요?')) return;
-    clearTaskState('withdrawn'); persist(); renderParticipant();
+    clearTaskState('withdrawn'); persist(); renderParticipant(); el('ended-heading').focus();
   }
   function mountJournal() {
     if (frame) return;
@@ -354,28 +367,43 @@
   el('answer').onsubmit = submitTrial;
   el('answer').addEventListener('input',cacheAnswer);
   el('export-one').onclick = el('export-finished').onclick = exportSelf;
-  el('leave-session').onclick = () => { session = null; persist(); location.hash = 'dashboard'; route(); };
-  el('export-all').onclick = () => { if (records.length) download({type:collectionType,records},'journal-editor-study-collection.json'); };
+  // F4: the next person on a shared device returns to an empty enrollment form, not to the aggregate view.
+  el('leave-session').onclick = () => {
+    session = null; persist(); el('enroll').reset(); message('enroll-status', '');
+    if (location.hash !== '#participate') location.hash = 'participate';
+    route(); el('invite-code').focus();
+  };
+  el('export-all').onclick = () => {
+    if (records.length || invitations.length) download({type:collectionType,records,invitations},'journal-editor-study-collection.json');
+  };
   el('import-trigger').onclick = () => el('import-files').click();
   el('import-files').onchange = async event => {
     const files = [...event.target.files]; event.target.value = '';
     if (!files.length) return;
     try {
-      const incoming = [];
+      const incoming = [], incomingInvites = [];
       for (const file of files) {
         const parsed = JSON.parse(await file.text());
         const data = parsed?.type === collectionType ? parsed.records : [parsed];
         if (!Array.isArray(data) || data.some(r => !r || r.kind !== 'editor')) throw new Error('실제 편집자용 참여 기록을 선택하세요.');
         incoming.push(...data);
+        if (parsed?.type === collectionType && parsed.invitations !== undefined) {
+          if (!Array.isArray(parsed.invitations)) throw new Error('초대 코드 명부 형식을 확인하세요.');
+          incomingInvites.push(...parsed.invitations);
+        }
       }
       const updated = core.mergeRecords(records, incoming);
+      const roster = mergeInvitations(invitations, incomingInvites);
       for (const r of updated) {
-        if (invitations.some(i => i.ordinal === r.ordinal && i.id !== r.participantId || i.id === r.participantId && i.ordinal !== r.ordinal)) throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
+        if (inviteConflict(roster, r.ordinal, r.participantId)) throw new Error('이 기기에서 발급한 초대 코드와 배정 정보가 다릅니다.');
       }
-      records = updated; persist(); showDashboard();
+      records = updated; invitations = roster; persist(); showDashboard();
       message('import-status', files.length + '개 파일을 확인했습니다. 현재 등록 ' + records.length + '명입니다.');
     } catch (err) { message('import-status', '가져오지 못했습니다. ' + err.message, true); }
   };
+  window.addEventListener('beforeunload', event => {
+    if (session?.state === 'running') { event.preventDefault(); event.returnValue = ''; }
+  });
   window.addEventListener('hashchange',route);
   setInterval(updateTime, 1000); route();
 })();

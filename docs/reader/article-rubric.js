@@ -49,11 +49,25 @@
   ];
 
   // A row binding already covers the complete article and the versioned source
-  // catalogue. Preserve row order and receipt identity, including unresolved drafts.
+  // catalogue. Bind to the content of each decision, not to its timestamp or checksum:
+  // re-recording the same judgment, or typing on a row that was never recorded, changes
+  // no verdict. A draft only counts while it hides a recorded decision.
   function bind(report) {
+    return JSON.stringify([version, report.rows.map(row => {
+      const {recordedAt, checksum, ...judgment} = row.receipt ?? {};
+      return [row.id, row.binding, row.status, row.receipt ? judgment : null, !!(row.draftPending && row.receipt)];
+    })]);
+  }
+
+  // Work files written before the content binding used receipt checksums. Such a binding
+  // still identifies the same decisions when it matches the current report exactly.
+  function legacyBind(report) {
     return JSON.stringify([version, report.rows.map(row => [
       row.id, row.binding, row.status, row.receipt?.checksum ?? null, !!row.draftPending
     ])]);
+  }
+  function matches(binding, report) {
+    return binding === bind(report) || binding === legacyBind(report);
   }
 
   function bindCore(report) {
@@ -188,7 +202,7 @@
         // A headline or central assertion belongs to the article text, even when a
         // new fact decision invalidates framing judgments made against older evidence.
         saved = save(report, sources, {coreRowIds: stored.coreRowIds, ratings: {}});
-        if (stored.binding === saved.binding) {
+        if (matches(stored.binding, report)) {
           saved = save(report, sources, stored);
           stale = false;
         } else if (object(stored.ratings) && !Object.keys(stored.ratings).length) {
@@ -199,7 +213,7 @@
     return {accuracy: accuracyFor(report, saved?.coreRowIds ?? []), bias: biasFor(saved?.ratings ?? {}), saved, stale};
   }
 
-  const api = Object.freeze({version, severityLabels, dimensions, bind, save, evaluate});
+  const api = Object.freeze({version, severityLabels, dimensions, bind, matches, save, evaluate});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalArticleRubric = api;
 })(globalThis);

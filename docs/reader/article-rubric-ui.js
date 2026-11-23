@@ -62,7 +62,7 @@
     return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
   }
   function restoreDraft(report, sources, raw) {
-    if (!raw || typeof raw !== 'object' || raw.binding !== api.bind(report) || !raw.entries || typeof raw.entries !== 'object') return null;
+    if (!raw || typeof raw !== 'object' || !api.matches(raw.binding, report) || !raw.entries || typeof raw.entries !== 'object') return null;
     const entries = {};
     for (const dim of api.dimensions) {
       const d = raw.entries[dim.id];
@@ -81,7 +81,7 @@
       entries[dim.id] = clean;
     }
     if (!Object.keys(entries).length) return null;
-    return {binding: raw.binding, activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
+    return {binding: api.bind(report), activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
   }
 
   function render(container, report, sources, saved, onChange, rawDraft, onDraft) {
@@ -104,15 +104,24 @@
         onDraft(result);
       }
     }
+    // Ratings excluded as stale still sit in the saved assessment. They come back if the
+    // reviewer cancels the sentence edit, so a rubric change must not erase them silently.
+    const staleRatings = review.stale && saved && typeof saved.ratings === 'object' && saved.ratings ? Object.keys(saved.ratings).length : 0;
+    let discardConfirmed = false;
     function commit(coreRowIds, ratings) {
+      if (staleRatings && !discardConfirmed) {
+        if (!root.confirm('현재 판단과 맞지 않아 제외한 이전 기사 평가 ' + staleRatings + '개가 지워집니다. 계속할까요? 취소하면 이전 평가를 보관하므로 작업 파일을 먼저 저장할 수 있습니다.')) return false;
+        discardConfirmed = true;
+      }
       assessment = coreRowIds.length || Object.keys(ratings).length ? api.save(report, sources, {coreRowIds, ratings}) : null;
       review = api.evaluate(report, sources, assessment);
       if (typeof onChange === 'function') onChange(assessment);
+      return true;
     }
     function replaceRating(id, value) {
       const ratings = {...assessment?.ratings};
       if (value) ratings[id] = value; else delete ratings[id];
-      commit(assessment?.coreRowIds || [], ratings);
+      return commit(assessment?.coreRowIds || [], ratings);
     }
     function metric(label, numerator, denominator, value) {
       const box = text('div', undefined, 'rub-metric');
@@ -145,7 +154,7 @@
         check.onchange = () => {
           const ids = new Set(assessment?.coreRowIds || []);
           if (check.checked) ids.add(a.rowId); else ids.delete(a.rowId);
-          commit([...ids], assessment?.ratings || {});
+          if (!commit([...ids], assessment?.ratings || {})) { check.checked = !check.checked; return; }
           accuracySummary();
         };
         const bar = text('div', undefined, 'rub-unit');
@@ -223,7 +232,9 @@
             body.querySelector('select')?.focus();
           }), btn('미평가로 되돌리기', () => {
             if (!root.confirm('이 항목의 판단을 지우고 미평가로 되돌릴까요?')) return;
-            replaceRating(dim.id, null); show(); biasSummary(); feedback.textContent = '미평가로 되돌렸습니다.';
+            if (!replaceRating(dim.id, null)) return;
+            show(); biasSummary(); feedback.textContent = '미평가로 되돌렸습니다.';
+            body.querySelector('select')?.focus();
           }));
           return;
         }
@@ -262,10 +273,11 @@
         save.type = 'submit';
         const cancel = btn('작성 취소', () => {
           const d = draft.entries[dim.id];
-          if (d?.previous) replaceRating(dim.id, d.previous);
+          if (d?.previous && !replaceRating(dim.id, d.previous)) return;
           delete draft.entries[dim.id]; draft.activeId = ''; writeDraft();
           feedback.textContent = d?.previous ? '이전 판단을 복원했습니다.' : '작성 중인 입력을 비웠습니다.';
           show(); biasSummary();
+          body.querySelector('select, button')?.focus();
         });
         actions.append(save, cancel);
         form.append(field('판정 단계', controls.level), articleGroup, reasonLabel, impactLabel, directionLabel, actions);
@@ -308,7 +320,10 @@
             direction: raw.level === '0' ? '' : raw.direction
           } : {level: raw.level, reason: raw.reason};
           try {
-            replaceRating(dim.id, rating);
+            if (!replaceRating(dim.id, rating)) {
+              feedback.classList.remove('error'); feedback.textContent = '기록하지 않았습니다. 제외한 이전 평가를 보관합니다.';
+              return;
+            }
             delete draft.entries[dim.id]; draft.activeId = ''; writeDraft();
             feedback.classList.remove('error'); feedback.textContent = '근거와 판단을 기록했습니다.';
             show(); biasSummary(); body.querySelector('button')?.focus();

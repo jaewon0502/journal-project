@@ -74,6 +74,26 @@
   }
 
   const quoteEnds = new Map([['“','”'], ['‘','’'], ['「','」'], ['『','』'], ['"','"']]);
+  // Pasted text often opens with a straight " and closes with a curly ”.
+  const closes = (expected, ch) => expected === ch || (expected === '"' && ch === '”');
+  // After a quotation that ends with . ! or ?, the unit continues when what follows attaches
+  // the quote to a speaker: a particle or verb on the quote itself (”라고 · ”고 · 하며 · 등의),
+  // another double quotation in the same series, or a next sentence that only names the
+  // speaker (김 의원은 이같이 말했다 · 이 같은 글을 올렸다 · 김 의원이 한 말이다 · 그가 물었다).
+  const reportingVerb = /(?:말|밝|전|주장|강조|설명|반박|비판|지적|촉구|반대|찬성|답|물|되물|덧붙|비난|평가|해명|요구|호소|우려|반발|질타|꼬집|반문|토로|외)(?:했|혔|었|였|쳤)다[.!?]?$/u;
+  const frameVerb = /(?:말|밝|전|주장|강조|설명|반박|비판|지적|촉구|반대|찬성|답|물|되물|덧붙|비난|평가|해명|요구|호소|우려|반발|질타|꼬집|반문|토로|외|올|남|높)(?:했|혔|었|였|쳤|렸|겼)다[.!?]?$/u;
+  const frameReference = /이같이|이 같이|이와 같이|이렇게|이처럼|이같은|이 같은|이와 같은|이런|이러한/u;
+  function quoteContinues(after) {
+    if (/^(?:고\s)|^\s*(?:이?라고|이?라며|이?라면서|라는|하고|하며|하는(?!\s*수\s*없이)|하면서|하던|며\s|면서|등(?=\s|의)|[“"])/u.test(after)) return true;
+    const line = after.split(/[\r\n]/u)[0];
+    const end = line.search(/[.!?。！？](?=\s|$)/u);
+    const next = (end < 0 ? line : line.slice(0, end + 1)).trim();
+    if (!next || /[“"‘「『]/u.test(next)) return false;
+    return (frameReference.test(next) && frameVerb.test(next))
+      || (next.split(/\s+/u).length <= 2 && frameVerb.test(next))
+      || /^\S+(?:\s\S+)?(?:이|가|은|는)\s+\S*(?:물었|답했|되물었|반문했)다[.!?]?$/u.test(next)
+      || /(?:의|한)\s*(?:말|설명|주장|지적|입장|얘기|반응|글)이다[.!?]?$/u.test(next);
+  }
   function segments(article) {
     const result = [], quotes = [];
     let start = 0;
@@ -96,8 +116,15 @@
         emit(i + 1);
         continue;
       }
-      if (ch === quotes.at(-1)) quotes.pop();
-      else if (quoteEnds.has(ch)) quotes.push(quoteEnds.get(ch));
+      if (quotes.length && closes(quotes.at(-1), ch)) {
+        quotes.pop();
+        // “…다.” 의회는 …: a quotation that ends its own sentence also ends the unit,
+        // unless what follows attaches it to a speaker.
+        if (!quotes.length && /[.!?。！？]/u.test(article[i - 1] ?? '') && /\s/u.test(article[i + 1] ?? '')
+          && !quoteContinues(article.slice(i + 1))) emit(i + 1);
+        continue;
+      }
+      if (quoteEnds.has(ch)) { quotes.push(quoteEnds.get(ch)); continue; }
       if (quotes.length) continue;
       if (/[.!?。！？]/u.test(ch) && /\s/u.test(article[i + 1] ?? '')) emit(i + 1);
     }
@@ -114,30 +141,65 @@
   const eventFact = /의결|가결|부결|표결|집행|통과|인상|인하|삭감|증액|감액|폐지|도입|인정했|선고|기소|체포|구속|증가|감소|늘렸|늘린|늘었|줄였|줄인|줄었|찬성했|반대했/;
   // A transcript cannot verify a narrator's independent assertion in a neighbouring clause.
   // Split only outside quotations, at a coordinated predicate followed by a new explicit subject.
+  // In indirect speech ("A는 B가 X했고 C가 Y했다고 주장했다") the left clause belongs to the
+  // reported claim. A clause that is not itself reported speech is split off only when
+  //  - it has a single subject (no embedded "B가" after the speaker), and
+  //  - the next clause is speech of its own: a direct quotation, or a topic-marked speaker
+  //    ("시장은 …라고 밝혔다"), and
+  //  - it does not open with the speaker topic while the next clause has a new 이/가 subject
+  //    ("김 의원은 시장과 면담한 뒤 취재진이 묻자 …" is one speaker's sentence).
+  //  - a direct speaker on the right ("…했고 시장이 “…”고 반발했다") may follow a topic.
+  // A sentence reported as a whole (검찰에 따르면 … / …했다고 검찰은 밝혔다) is never split.
+  const subjectWord = /[가-힣](?:은|는|이|가)$/u;
+  // Adnominal forms (같은 · 많은 · 시행되는) and nouns ending in 이/가 (추가 · 국가 · 어린이)
+  // are not subjects.
+  const notSubject = /^(?:같|많|적|높|낮|작|좋|넓|깊|않|받|맡|늦|짧|옳|젊)은$|(?:하|되|있|없|않|오)는$|^(?:추가|국가|물가|평가|대가|작가|전문가|원가|단가|증가|참가|부가|주가|어린이|아이|사이|차이|높이|길이|넓이|깊이|같이|많이)$/u;
+  const subjectsOf = clause => clause.split(/\s+/u).map(word => word.replace(/^[“"‘'「『(]+|[,，]$/gu, ''))
+    .filter(word => subjectWord.test(word) && !notSubject.test(word));
+  // Past-tense syllables (final ㅆ: 했 · 였 · 켰 · 렸 …) close a coordinated clause.
+  const past = Array.from({length: 11172}, (_, i) => i % 28 === 20 ? String.fromCharCode(0xAC00 + i) : '').join('');
+  const reportedWhole = /^(?:\S+\s+){0,2}?\S*에\s*(?:따르면|의하면)\s|(?:다|라)고\s+(?:\S+\s)?\S+(?:은|는|이|가)\s+(?:\S+\s+)?\S*(?:밝|말|전|주장|설명|강조|발표|덧붙|확인|보도|지적)(?:했|혔|였)다/u;
   function splitReportedClauses(text) {
-    if (!attributed.test(text)) return [{text, start: 0}];
-    const connective = /(?:했고|였고|었고|았고|됐고|였으며|했으며|됐으며|했지만|됐지만|했으나)[,，]?\s+/gu;
-    const subject = /^(?:[^\s“”"「」『』]{1,20}\s+){0,3}[^\s“”"「」『』]+(?:은|는|이|가|측도|측은)\s+/u;
+    if (!attributed.test(text) || reportedWhole.test(text)) return [{text, start: 0}];
+    const connective = new RegExp('(?:[' + past + '](?:고|으며|지만|으나|는데)|(?<=[가-힣])(?:하자|되자)|(?<=[가-힣])[한된]\\s+(?:뒤|후))[,，]?\\s+', 'gu');
+    // Lazy: the first subject-marked word after the connective (의회는, not 의회는 절차가).
+    const subject = /^(?:[^\s“”"‘’「」『』]{1,20}\s+){0,3}?[^\s“”"‘’「」『』]+(?:은|는|이|가|측도|측은)\s+/u;
+    const matches = [...text.matchAll(connective)];
     const chunks = [], stack = [];
     let cursor = 0, scanned = 0;
-    for (const match of text.matchAll(connective)) {
+    for (const match of matches) {
       const end = match.index + match[0].length;
       for (; scanned < end; scanned++) {
         const ch = text[scanned];
-        if (stack.at(-1) === ch) stack.pop();
+        if (stack.length && closes(stack.at(-1), ch)) stack.pop();
         else if (quoteEnds.has(ch)) stack.push(quoteEnds.get(ch));
       }
-      if (stack.length || !subject.test(text.slice(end))) continue;
-      const left = text.slice(cursor, end).trimEnd();
-      if (!attributed.test(left) && !attributed.test(text.slice(end))) continue;
+      const head = stack.length ? null : subject.exec(text.slice(end));
+      if (!head) continue;
+      const left = text.slice(cursor, end).trimEnd(), rest = text.slice(end);
+      const subjects = subjectsOf(left);
+      const leftTopic = /(?:은|는)$/u.test(subjects[0] ?? '');
+      const rightTopic = /(?:은|는|측은)\s+$/u.test(head[0]);
+      // "시장이 “…”고 반발했다": the new subject speaks directly, with no further report layer.
+      const directSpeaker = /^[“"‘]/u.test(rest.slice(head[0].length)) && !/[”"’](?:이?라고|고)\s+[^“”"]*(?:다|라)고\s/u.test(rest);
+      if (leftTopic && !rightTopic && !directSpeaker) continue;
+      if (!attributed.test(left)) {
+        if (subjects.length > 1) continue;
+        if (!/[“"‘「『]/u.test(rest) && !(rightTopic && attributed.test(rest))) continue;
+      }
       chunks.push({text: left, start: cursor});
       cursor = end;
     }
     chunks.push({text: text.slice(cursor), start: cursor});
     return chunks;
   }
+  // A short quoted name followed by a case particle (“노란봉투법”을) is a title, not speech.
+  // A quotation ending like a sentence (“시장은 사퇴하라”는) or carrying an evaluation,
+  // a figure, an event or an allegation is always speech.
+  const nameQuote = /[“"]([^“”"\n]{1,30}[^다라요까죠\s.!?])[”"](?=(?:을|를|이|가|은|는|의|과|와|에|에서|으로|로|도)(?:[\s.,]|$))/gu;
+  const asTitle = (match, name) => [assessment, quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
   function triage(text) {
-    const speech = attributed.test(text), suspicion = allegation.test(text);
+    const speech = attributed.test(text.replace(nameQuote, asTitle)), suspicion = allegation.test(text);
     const number = quantitative.test(text), evaluation = assessment.test(text);
     const mixed = evaluation && (number || eventFact.test(text));
     const hints = [];
@@ -148,8 +210,9 @@
     if (mixed) hints.push('같은 문장에 확인할 사실과 평가 표현이 있습니다. 확인한 구절을 지정하세요.');
     let allowedStatuses = [...states];
     if (speech) allowedStatuses = ['attribution', 'partial', 'held', 'contradicted'];
-    else if (mixed) allowedStatuses = ['mixed', 'partial', 'held', 'contradicted'];
+    // An evaluative word must not turn a reported allegation into a checkable fact span.
     else if (allegationQualifier.test(text) && !proceeding.test(text)) allowedStatuses = ['attribution', 'partial', 'held', 'contradicted'];
+    else if (mixed) allowedStatuses = ['mixed', 'partial', 'held', 'contradicted'];
     else if (number || eventFact.test(text) || suspicion) allowedStatuses = ['fact', 'partial', 'held', 'contradicted', 'mixed'];
     else if (evaluation) allowedStatuses = ['opinion', 'mixed', 'partial', 'held', 'contradicted'];
     return {hints, allowedStatuses};
@@ -160,7 +223,7 @@
     const matches = text.toLowerCase().match(/[\p{L}\p{N}]+(?:[.,]\d+)?[%％]?/gu) ?? [];
     const result = new Set();
     for (const raw of matches) {
-      const word = raw.replace(/([가-힣]{2,})(?:에서는|에서|으로|에게|에는|의|을|를|가|이|는|은|에|와|과|도|로)$/u, '$1');
+      const word = raw.replace(/([가-힣]{2,}?)(?:에서는|에서|으로|에게|에는|의|을|를|가|이|는|은|에|와|과|도|로)$/u, '$1');
       if ((word.length > 1 || /\d/u.test(word)) && !stopWords.has(word)) result.add(word);
     }
     return result;
@@ -199,11 +262,14 @@
   }
   // A substring of a quote, conditional, or denial can reverse its meaning.
   // Partial checks are for independently readable clauses separated in the original.
+  // Clause ends accepted for a separately checked span, incl. any past-tense syllable + 고 (통과시켰고).
+  const clauseEnd = new RegExp('(?:[' + past + ']고|으며|하며|지만|으나|는데|한데|반면|이고|되고|것은|것이)$', 'u');
+  const separateEnd = new RegExp('(?:[' + past + ']고|지만|으나|으며|하고|하며|인데|는데|했다)[,;\\s]*$', 'u');
   function clauseBoundary(left, right) {
     if (!left.trim() || !right.trim()) return true;
     if (/[,;:，；：·]/u.test(left.trimEnd().at(-1)) || /^[,;:，；：·]/u.test(right.trimStart())) return true;
     if (!/\s$/u.test(left) && !/^\s/u.test(right)) return false;
-    return /(?:했고|였고|었고|았고|으며|하며|지만|으나|는데|한데|반면|이고|되고|됐고|것은|것이)$/u.test(left.trimEnd())
+    return clauseEnd.test(left.trimEnd())
       || /^(?:하지만|그러나|반면|그리고|한편|반대로)\s/u.test(right.trimStart());
   }
   function checkedClause(text, range) {
@@ -214,8 +280,7 @@
       || /(?:라면|다면|경우|때에만|때만|전제로|조건으로|않고|아니라)[,\s]*$/u.test(left)) throw new Error('발언·조건·부정에 속한 표현은 독립된 사실 구절로 저장할 수 없습니다.');
     // If speech is present, a partial fact can only be a separate clause outside it.
     if (attributed.test(text)) {
-      const separate = (attributed.test(left) && /(?:했고|였고|었고|았고|지만|으나|으며|하고|하며|인데|했다)[,;\s]*$/u.test(left))
-        || (attributed.test(right) && /(?:했고|였고|었고|았고|지만|으나|으며|하고|하며|인데|했다)[,;\s]*$/u.test(span));
+      const separate = (attributed.test(left) && separateEnd.test(left)) || (attributed.test(right) && separateEnd.test(span));
       if (!separate) throw new Error('원발언 속 주장은 발언 확인에서 내용의 별도 근거와 함께 검토하세요.');
     }
   }
@@ -226,7 +291,8 @@
       if (/^(?:utm_.*|gclid|fbclid|page|pageNo)$/iu.test(key)) parsed.searchParams.delete(key);
     }
     parsed.searchParams.sort();
-    return parsed.host.toLowerCase().replace(/^www\./u, '') + parsed.pathname.replace(/\/+$/u, '') + parsed.search;
+    // A mobile or www copy is the same document as the desktop page.
+    return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '') + parsed.search;
   }
   function excerptIdentity(source) {
     return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
@@ -234,7 +300,10 @@
   const forecast = /(?:될|할|늘|오를|내릴|줄|높아질|낮아질|늘어날|감소할|증가할|이길|패할|거둘|받을|넘을|이어질|커질)\s*(?:것|전망|예정|계획|가능성)|예상(?:된|한|했)|전망(?:된|한|했)/u;
   function speechScope(text) {
     const quotes = [...text.matchAll(/[“"]([^“”"]+)[”"]/gu)].map(match => match[1]);
-    const content = quotes.length ? quotes.join(', ') : text;
+    // Without quotation marks, a calendar date right after the speaker belongs to the frame,
+    // not the claim. A duration (3일 만에, 10일 넘게) is part of what is reported.
+    const content = quotes.length ? quotes.join(', ')
+      : text.replace(/^(\S+(?:\s\S+)?(?:은|는)\s+)(?:지난\s*)?(?:\d{4}년\s*)?(?:\d{1,2}월\s*)?\d{1,2}일(?!\s*(?:만|넘게|째|간|동안|이상|연속|가량|여|사이|내내|남짓|이내|안|뒤|후))\s+/u, '$1');
     // A projection may contain numbers. An observed fact in the same quote still needs evidence.
     const clauses = content.split(/[,;]|(?:였고|했고|됐고|었고|았고|이며|지만|으나|으며|이고)\s+/u).filter(part => part.trim());
     const hasForecast = clauses.some(part => forecast.test(part));
@@ -243,7 +312,16 @@
       if (forecast.test(part)) return true;
       return assessment.test(part) && !quantitative.test(part) && !eventFact.test(part);
     });
-    return {hasForecast, allNonfactual};
+    // Narrator text outside the quotation ("의회가 3억 원을 삭감하자 시장은 “…”고 말했다")
+    // can carry its own facts. The reporting tail attached to the closing quote and ending in
+    // a reporting or stance verb (”이라며 예산안 처리에 반대했다) is not one of them, and dates
+    // (년·월·일·회) only place the speech in time.
+    const tail = /[”"](?:이?라고|고|이?라며|다며|며|면서|이?라면서)\s+[^“”"]*$/u.exec(text);
+    const framed = tail && reportingVerb.test(tail[0].trim()) ? text.slice(0, tail.index + 1) : text;
+    const frame = quotes.length ? framed.replace(/[“"][^“”"]+[”"]/gu, ' ') : '';
+    const frameFact = allegation.test(frame) || eventFact.test(frame)
+      || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
+    return {hasForecast, allNonfactual: allNonfactual && !frameFact};
   }
   function contentFields(row, decision, catalog, speechIds) {
     const contentStatus = decision.contentStatus ?? 'unverified';

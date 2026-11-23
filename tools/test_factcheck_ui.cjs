@@ -237,3 +237,82 @@ test('반복된 제목과 본문을 대조한 위치, 평가 단계와 미결 �
   pending.click('export-report');
   assert.match(await pending.snapshot(), /제목·도입부와 본문 · 작성 중 · 미평가/);
 });
+
+function recordFirstFact(page) {
+  const {doc, el, set, click} = page;
+  click('load-demo');
+  doc.querySelector('#row-sources input[value="vote"]').click();
+  set('verdict', 'fact');
+  set('reason', '의결록 제3호 표결 수치와 일치');
+  click('acknowledged');
+  el('decision-form').requestSubmit();
+}
+
+test('인용한 원자료를 수정하면 기록한 판단을 다시 확인할 초안으로 남긴다', async t => {
+  const page = open(t);
+  const {w, el, set, click, snapshot} = page;
+  recordFirstFact(page);
+  el('source-list').querySelector('button').click();
+  set('source-title', '해솔시의회 본회의 의결록 (모의 자료) 수정');
+  el('source-form').requestSubmit();
+  assert.match(el('source-status').textContent, /판단 1개를 다시 확인할 초안/);
+  el('row-filter').value = 'all'; el('row-filter').dispatchEvent(new w.Event('change'));
+  el('row-list').querySelector('button').click();
+  assert.equal(el('reason').value, '의결록 제3호 표결 수치와 일치');
+  assert.equal(el('verdict').value, 'fact');
+  assert.equal(el('acknowledged').checked, false);
+  assert.match(el('row-heading').textContent, /판단 작성 중/);
+  assert.match(el('prior-note').textContent, /인용한 원자료를 수정/);
+  assert.equal(el('result-tag').textContent, '추가 확인 필요');
+  set('reason', '수정한 의결록과 다시 대조했다'); click('acknowledged');
+  el('decision-form').requestSubmit();
+  click('save-work');
+  const work = JSON.parse(await snapshot());
+  assert.deepEqual(work.receipts.map(r => r.reason), ['수정한 의결록과 다시 대조했다']);
+  assert.equal(work.rowDrafts.length, 0);
+
+  // Saving a source without a change keeps the recorded decision.
+  el('source-list').querySelector('button').click();
+  el('source-form').requestSubmit();
+  el('row-list').querySelector('button').click();
+  assert.match(el('row-heading').textContent, /사실 확인/);
+});
+
+test('기록 전 문장에 입력해도 기사 평가가 남고, 제외된 평가는 확인 없이 지워지지 않는다', async t => {
+  const seed = open(t);
+  recordFirstFact(seed);
+  seed.click('save-work');
+  const job = JSON.parse(await seed.snapshot());
+  const report = seed.w.JournalFactcheck.report(job.article, job.sources, job.receipts);
+  const row = report.rows[0], vote = job.sources.find(s => s.id === 'vote');
+  job.articleAssessment = seed.w.JournalArticleRubric.save(report, job.sources, {coreRowIds: [], ratings: {wording: {
+    level: 0, rowId: row.id, quote: row.text, sourceId: vote.id, sourceQuote: vote.excerpt, reason: 'RUBRIC-REASON'}}});
+
+  const page = open(t);
+  const {w, el, set, click, snapshot} = page;
+  await loadWorkspace(page, job);
+  const rubricBox = () => el('article-rubric');
+  const core = () => rubricBox().querySelector('input[data-core-row]');
+  assert.match(rubricBox().textContent, /근거로 채점 1\/4/);
+  set('reason', '확');                               // a sentence that was never recorded
+  assert.match(rubricBox().textContent, /근거로 채점 1\/4/);
+  assert.equal(rubricBox().querySelector(':scope > .callout'), null);
+  core().click();
+  set('reason', '');
+  click('save-work');
+  assert.equal(JSON.parse(await snapshot()).articleAssessment.ratings.wording.reason, 'RUBRIC-REASON');
+
+  // Re-opening the recorded sentence hides its decision, so the rating is excluded but kept.
+  el('row-filter').value = 'all'; el('row-filter').dispatchEvent(new w.Event('change'));
+  el('row-list').querySelector('button').click();
+  set('reason', '다시 보는 중');
+  assert.match(rubricBox().textContent, /근거로 채점 0\/4/);
+  w.confirm = () => false;
+  const box = core(), before = box.checked;
+  box.click();
+  assert.equal(core().checked, before);
+  set('reason', '의결록 제3호 표결 수치와 일치');      // back to the recorded decision
+  assert.match(rubricBox().textContent, /근거로 채점 1\/4/);
+  click('save-work');
+  assert.equal(JSON.parse(await snapshot()).articleAssessment.ratings.wording.reason, 'RUBRIC-REASON');
+});

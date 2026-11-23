@@ -15,7 +15,7 @@
 <header><a class="brand" href="factcheck.html">Journal</a><span>편집자 비교 실험</span></header>
 <main id="main">
 <noscript><p class="notice">실험을 진행하고 기록을 집계하려면 JavaScript가 필요합니다.</p></noscript>
-<p id="global-status" role="status" class="status" hidden></p>
+<p id="global-status" role="status" class="status"></p>
 <section id="dashboard">
 <div class="headline"><div><h1>팩트체크 효과 측정</h1><p>같은 편집자가 원자료만 읽었을 때와 저널을 함께 썼을 때를 비교합니다.</p></div><a class="button primary" href="#participate">편집자 참여</a></div>
 <div class="tabs" aria-label="집계 대상"><button id="real-view" aria-pressed="true">실제 편집자 기록</button><button id="demo-view" aria-pressed="false">가상 수치 예시</button></div>
@@ -35,7 +35,7 @@
 <section id="enroll-box" class="box"><h2>참여 등록</h2><p>공용 기기에서는 등록하면 자동 배정됩니다. 다른 기기로 참여하는 경우 연구자에게 받은 초대 코드를 입력하세요. 이름과 연락처는 수집하지 않습니다. 결과는 이 브라우저에 저장되며 JSON으로 내려받아 직접 전달할 수 있습니다.</p><form id="enroll">
 <label>연구자에게 받은 초대 코드 (공용 기기는 비움)<input id="invite-code" type="text" maxlength="60" autocomplete="off" autocapitalize="characters" placeholder="연구자에게 받은 코드"></label>
 <label class="check"><input type="checkbox" id="qualified" required>기사의 편집·사실 검증을 실제로 수행하는 편집자로서, 이 실험 사례와 기준 답을 사전에 보지 않았고 기록에 동의합니다.</label>
-<div class="actions"><button class="primary" type="submit">참여 등록</button><a href="#dashboard">집계 화면으로</a></div><p id="enroll-status" class="status" role="status"></p></form></section>
+<div class="actions"><button class="primary" type="submit">참여 등록</button></div><p id="enroll-status" class="status" role="status"></p></form></section>
 <section id="run" class="box" hidden><div class="runbar"><h2 id="trial-heading" tabindex="-1"></h2><div id="timer" aria-label="경과 시간">00:00</div></div><p id="trial-info" class="subtle"></p>
 <div id="start-pane"><p>시작하면 기사와 원자료가 열리고 시간을 잽니다. 자료를 읽거나 저널을 쓰는 시간은 포함됩니다. 과제 사이에는 쉬어도 됩니다.</p><button id="begin-trial" class="primary">과제 시작</button></div>
 <div id="recovery" class="notice" hidden><strong>진행 중이던 과제가 다시 열렸습니다.</strong><p>창을 닫은 동안의 시간은 자동으로 분리할 수 없습니다. 쉬지 않고 검토를 이어갔다면 그 시간을 포함해 계속하세요. 중단이 있었다면 이번 참여를 미완료로 보관합니다.</p><div class="actions"><button id="resume-unbroken">쉬지 않고 검토를 이어갔습니다</button><button id="stop-interrupted">중단 기록하고 종료</button></div></div>
@@ -48,7 +48,7 @@
 <label>판단 이유<textarea id="reason" rows="2" required maxlength="4000" placeholder="어떤 근거로 판단했는지 간략히 적으세요."></textarea></label><div class="actions"><button class="primary" type="submit">이 과제 제출</button></div><p id="answer-status" class="status" role="status"></p></form></div>
 </section>
 <section id="session-actions" class="actions" hidden><button id="export-one">내 참여 기록 내려받기</button><button id="withdraw">참여 중단</button></section>
-<section id="ended" class="box" hidden><h2 id="ended-heading" tabindex="-1"></h2><p id="ended-text"></p><div id="personal-time" hidden></div><div class="actions"><button id="export-finished" class="primary">내 참여 기록 내려받기</button><button id="leave-session">참여 화면 닫기</button></div></section>
+<section id="ended" class="box" hidden><h2 id="ended-heading" tabindex="-1"></h2><p id="ended-text"></p><div id="personal-time" hidden></div><div class="actions"><button id="export-finished" class="primary">내 참여 기록 내려받기</button><button id="leave-session">다음 참여자 등록 화면으로</button></div></section>
 <p id="session-status" class="status" role="status"></p>
 </section>
 </main>

@@ -144,3 +144,27 @@ test('같은 제목·리드도 기사 안의 두 위치가 다를 때만 대조�
   delete old.ratings.framing.compareRowId;
   assert.equal(rubric.evaluate(r,sources,old).bias.assessed,1);
 });
+
+test('같은 판단을 다시 기록하거나 기록 전 문장에 입력해도 기사 평가는 무효가 되지 않는다', () => {
+  const r = state(article, [['fact']]);
+  const saved = form(r, {omission: entry(r.rows[0], 0)});
+  assert.equal(rubric.evaluate(r, sources, saved).stale, false);
+  r.rows[1].draftPending = true;                       // a row with no recorded decision
+  assert.equal(rubric.evaluate(r, sources, saved).stale, false);
+  const again = state(article, [['fact']]);            // identical decision, new timestamp and checksum
+  assert.equal(rubric.evaluate(again, sources, saved).stale, false);
+  const changed = state(article, [['held']]);
+  assert.equal(rubric.evaluate(changed, sources, saved).stale, true);
+  r.rows[0].draftPending = true;                       // a draft that hides the recorded decision
+  assert.equal(rubric.evaluate(r, sources, saved).stale, true);
+});
+
+test('이전 형식으로 저장한 평가도 현재 판단과 같으면 그대로 집계한다', () => {
+  const r = state(article, [['fact']]);
+  const saved = form(r, {omission: entry(r.rows[0], 0)});
+  const legacy = JSON.stringify([rubric.version, r.rows.map(row => [row.id, row.binding, row.status, row.receipt?.checksum ?? null, !!row.draftPending])]);
+  const old = {...saved, binding: legacy};
+  assert.equal(rubric.evaluate(r, sources, old).stale, false);
+  assert.equal(rubric.evaluate(r, sources, old).bias.assessed, 1);
+  assert.equal(rubric.evaluate(state(article, [['held']]), sources, old).stale, true);
+});

@@ -224,7 +224,9 @@
     const savedDraft = drafts.get(row.id);
     const values = savedDraft || row.receipt || row.priorDecision || {};
     if (row.priorDecision && !row.receipt) byId('prior-note').textContent = '이전 판단을 초안으로 불러왔습니다. 원문과 인용한 자료는 같지만 자료 목록이 달라졌습니다. 추가 근거나 반증을 확인한 뒤 다시 기록하세요.';
-    if (savedDraft?.afterEdit) byId('prior-note').textContent = '원문 수정 전의 판단을 초안으로 옮겼습니다. 이 구간과 주변 문맥은 같으며, 현재 기사를 대조한 뒤 다시 기록해야 합니다.';
+    if (savedDraft?.afterEdit) byId('prior-note').textContent = savedDraft.sourceEdit
+      ? '인용한 원자료를 수정해 이전 판단을 초안으로 옮겼습니다. 수정한 자료를 다시 대조한 뒤 기록하세요.'
+      : '원문 수정 전의 판단을 초안으로 옮겼습니다. 이 구간과 주변 문맥은 같으며, 현재 기사를 대조한 뒤 다시 기록해야 합니다.';
     for (const option of byId('verdict').options) {
       option.disabled = !!option.value && !row.allowedStatuses.includes(option.value);
     }
@@ -426,16 +428,20 @@
         if (!d) continue;
         const target = newGroups.get(key) || [];
         if (oldRows.length !== 1 || target.length !== 1) { unmapped++; continue; }
-        recovered.set(target[0].id, {
-          status: d.status || '', reason: d.reason || '', sourceIds: [...(d.sourceIds || [])],
-          factSpan: d.factSpan || '', opinionSpan: d.opinionSpan || '', correction: d.correction || '',
-          contentStatus: d.contentStatus || 'unverified', contentSourceIds: [...(d.contentSourceIds || [])],
-          contentReason: d.contentReason || '', acknowledged: false, correctionChecked: false, contentChecked: false,
-          afterEdit: true
-        });
+        recovered.set(target[0].id, draftFrom(d));
       }
     }
     return {recovered, unmapped};
+  }
+  // An earlier decision becomes an unconfirmed draft: the reviewer must check it again.
+  function draftFrom(d) {
+    return {
+      status: d.status || '', reason: d.reason || '', sourceIds: [...(d.sourceIds || [])],
+      factSpan: d.factSpan || '', opinionSpan: d.opinionSpan || '', correction: d.correction || '',
+      contentStatus: d.contentStatus || 'unverified', contentSourceIds: [...(d.contentSourceIds || [])],
+      contentReason: d.contentReason || '', acknowledged: false, correctionChecked: false, contentChecked: false,
+      afterEdit: true
+    };
   }
 
   byId('article-form').addEventListener('submit', event => {
@@ -488,13 +494,19 @@
     source.id = editingId || 'source-' + n;
     const next = editingId ? sources.map(s => s.id === editingId ? source : s) : [...sources, source];
     try {
-      engine.prepare(article, next, []);
+      // Editing a cited source invalidates the receipts that cite it. Keep the reviewer's
+      // input as an unconfirmed draft instead of blanking the sentence.
+      const kept = new Set(engine.prepare(article, next, receipts).rows.filter(r => r.receipt || r.priorDecision).map(r => r.id));
+      const moved = engine.report(article, sources, receipts).rows.filter(r => (r.receipt || r.priorDecision) && !kept.has(r.id));
       sources = next;
+      for (const row of moved) drafts.set(row.id, {...draftFrom(drafts.get(row.id) || row.receipt || row.priorDecision), sourceEdit: true});
+      receipts = receipts.filter(r => !moved.some(row => row.id === r.rowId));
       for (const draft of drafts.values()) { draft.acknowledged = false; draft.correctionChecked = false; draft.contentChecked = false; }
       dirty = true;
       clearSourceForm(source);
       refresh();
-      message('source-status', '원자료를 저장했습니다. 문장 검토에서 연결할 수 있습니다.');
+      message('source-status', moved.length ? '원자료를 저장했습니다. 이 자료를 인용한 판단 ' + moved.length + '개를 다시 확인할 초안으로 옮겼습니다.'
+        : '원자료를 저장했습니다. 문장 검토에서 연결할 수 있습니다.');
     } catch (err) { message('source-status', err.message, true); }
   });
   byId('go-add-source').addEventListener('click', () => openSourceTools(false));
@@ -534,7 +546,8 @@
     if (!['content-checked','acknowledged'].includes(event.target.id)) byId('content-checked').checked = false;
     if (!['correction-checked','acknowledged'].includes(event.target.id)) byId('correction-checked').checked = false;
     if (currentId) {
-      drafts.set(currentId, {...decisionDraft(), afterEdit: drafts.get(currentId)?.afterEdit === true});
+      const previousDraft = drafts.get(currentId);
+      drafts.set(currentId, {...decisionDraft(), afterEdit: previousDraft?.afterEdit === true, ...(previousDraft?.sourceEdit ? {sourceEdit: true} : {})});
       const prior = receipts.find(r => r.rowId === currentId);
       if (!!currentRow().draftPending !== !!draftChangesRecord(currentId, prior)) refresh(true);
     }

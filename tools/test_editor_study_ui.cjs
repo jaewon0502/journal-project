@@ -82,3 +82,90 @@ test('저널 조건은 배정된 자식 화면의 확인된 판단이 도착해�
   p.el('answer').requestSubmit();
   assert.equal(p.workspace().records[0].trials[0].journalUsed, true);
 });
+
+function captureDownloads(p) {
+  const blobs = [];
+  p.w.URL.createObjectURL = blob => { blobs.push(blob); return 'blob:study'; };
+  p.w.URL.revokeObjectURL = () => {};
+  p.w.document.addEventListener('click', event => { if (event.target.closest('a[download]')) event.preventDefault(); });
+  return blobs;
+}
+async function importFiles(p, texts) {
+  const input = p.el('import-files');
+  const files = texts.map((text, i) => new p.w.File([text], 'study-' + i + '.json', {type: 'application/json'}));
+  Object.defineProperty(input, 'files', {value: files, configurable: true});
+  const done = new Promise(resolve => {
+    const observer = new p.w.MutationObserver(() => { if (p.el('import-status').textContent) { observer.disconnect(); resolve(); } });
+    observer.observe(p.el('import-status'), {childList: true, subtree: true, characterData: true});
+  });
+  input.dispatchEvent(new p.w.Event('change'));
+  await done;
+}
+const issuedCodes = p => [...p.el('invites').querySelectorAll('tbody tr')].map(tr => tr.cells[1].textContent);
+
+test('참여 등록 화면에서 집계로 갈 수 없고, 참여를 닫으면 빈 등록 화면으로 돌아간다', t => {
+  const p = page(t, '#participate');
+  assert.equal(p.el('enroll-box').querySelector('a[href="#dashboard"]'), null);
+  p.w.confirm = () => true;
+  p.enroll(1);
+  p.el('withdraw').click();
+  p.el('leave-session').click();
+  assert.equal(p.el('dashboard').hidden, true);
+  assert.equal(p.el('enroll-box').hidden, false);
+  assert.equal(p.el('qualified').checked, false);
+  assert.equal(p.el('invite-code').value, '');
+});
+
+test('초대 코드 명부가 모은 기록 파일과 함께 옮겨져 같은 번호를 다시 발급하지 않는다', async t => {
+  const p = page(t);
+  const blobs = captureDownloads(p);
+  p.el('issue-codes').click();
+  assert.equal(p.el('export-all').disabled, false);
+  p.el('export-all').click();
+  const exported = JSON.parse(await blobs.at(-1).text());
+  assert.equal(exported.invitations.length, 4);
+
+  const q = page(t, '', 'https://study-copy.example/editor-study.html');
+  await importFiles(q, [JSON.stringify(exported)]);
+  assert.doesNotMatch(q.el('import-status').textContent, /가져오지 못했습니다/);
+  q.el('issue-codes').click();
+  const ordinals = issuedCodes(q).map(code => Number(code.split('-')[1])).sort((a, b) => a - b);
+  assert.deepEqual(ordinals, [1, 2, 3, 4, 5, 6, 7, 8]);
+
+  const forged = {...exported, invitations: [{...exported.invitations[0], ordinal: 9, code: 'J1-9-' + exported.invitations[0].id}]};
+  await importFiles(q, [JSON.stringify(forged)]);
+  assert.match(q.el('import-status').textContent, /가져오지 못했습니다/);
+});
+
+test('발급한 코드의 번호와 식별자가 어긋나면 등록하지 않는다', t => {
+  const p = page(t, '#participate');
+  p.el('issue-codes').click();
+  const id = issuedCodes(p).find(code => code.startsWith('J1-1-')).split('-')[2];
+  p.el('invite-code').value = 'J1-7-' + id;
+  p.el('qualified').checked = true;
+  p.el('enroll').requestSubmit();
+  assert.match(p.el('enroll-status').textContent, /다른 참여자에게 배정한 코드/);
+  assert.equal(p.workspace().records.length, 0);
+});
+
+test('화면이 바뀌면 키보드 초점이 새 단계로 옮겨지고 진행 중 과제에서만 이탈을 확인한다', t => {
+  const p = page(t, '#participate');
+  const active = () => p.w.document.activeElement.id;
+  const leave = () => { const e = new p.w.Event('beforeunload', {cancelable: true}); p.w.dispatchEvent(e); return e.defaultPrevented; };
+  assert.equal(p.el('global-status').hidden, false);
+  p.enroll(1);
+  assert.equal(active(), 'trial-heading');
+  assert.equal(leave(), false);
+  p.el('begin-trial').click();
+  assert.equal(active(), 'trial-heading');
+  assert.equal(leave(), true);
+  p.el('pause-trial').click();
+  assert.equal(active(), 'resume-trial');
+  assert.equal(leave(), false);
+  p.el('resume-trial').click();
+  assert.equal(active(), 'trial-heading');
+  p.w.confirm = () => true;
+  p.el('withdraw').click();
+  assert.equal(active(), 'ended-heading');
+  assert.doesNotMatch(fs.readFileSync(path.join(folder, 'editor-study.css'), 'utf8'), /\.status:empty\{display:none\}/);
+});
