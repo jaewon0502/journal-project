@@ -52,6 +52,38 @@
     return Array.from(hash, word => word.toString(16).padStart(8, '0')).join('');
   }
 
+  function physicalPage(value) {
+    if (typeof value !== 'string' || !/^[1-9]\d*$/u.test(value) || !Number.isSafeInteger(Number(value))) {
+      throw new Error('PDF를 직접 열어 확인한 쪽번호를 1 이상의 정수로 입력하세요.');
+    }
+    return value;
+  }
+
+  function sourceTarget(source) {
+    const url = new URL(source.url);
+    const mock = [url, ...(source.originUrl ? [new URL(source.originUrl)] : [])].some(u =>
+      !['http:', 'https:'].includes(u.protocol) || u.username || u.password || /(^|\.)invalid$/iu.test(u.hostname.replace(/\.$/u, '')));
+    if (mock) return null;
+    const fragment = new URLSearchParams(url.hash.slice(1));
+    const values = fragment.getAll('page');
+    let page = null;
+    if (source.pdfPage != null && source.pdfPage !== '') {
+      page = physicalPage(source.pdfPage);
+      if (/\.(?:html?|xlsx?|csv|docx?|hwpx?|pptx?|txt|png|jpe?g|zip)$/iu.test(url.pathname)) {
+        throw new Error('쪽번호를 연결하려면 확인한 문서 주소에 PDF 파일을 여는 주소를 입력하세요.');
+      }
+      // Direct PDF download endpoints may have no .pdf suffix. An explicit viewer
+      // page is the editor's assertion about that file, never about its landing page.
+      const view = new URLSearchParams({page});
+      for (const key of ['zoom','view']) if (fragment.has(key)) view.set(key, fragment.get(key));
+      url.hash = view.toString();
+    } else if (/\.pdf$/iu.test(url.pathname) && values.length === 1 && /^[1-9]\d*$/u.test(values[0])
+        && Number.isSafeInteger(Number(values[0])) && !fragment.has('nameddest')) {
+      page = values[0];
+    }
+    return {href: url.href, page};
+  }
+
   function sourceCatalog(sources) {
     if (!Array.isArray(sources)) throw new Error('근거 목록 형식을 확인하세요.');
     const items = new Map();
@@ -65,9 +97,14 @@
         try { url = new URL(address); } catch (_) { throw new Error('원문 주소를 확인하세요.'); }
         if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('원문의 HTTP 또는 HTTPS 주소를 입력하세요.');
       }
+      const hasPage = entry.pdfPage != null && entry.pdfPage !== '';
+      if (hasPage) {
+        physicalPage(entry.pdfPage);
+        sourceTarget(entry);
+      }
       if (items.has(entry.id)) throw new Error('근거 식별자가 중복됐습니다.');
       if (entry.title != null && typeof entry.title !== 'string') throw new Error('근거 제목을 확인하세요.');
-      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version});
+      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version, ...(hasPage ? {pdfPage: entry.pdfPage} : {})});
     }
     const ordered = [...items.keys()].sort().map(id => items.get(id));
     return {items, key: digest(ordered)};
@@ -219,27 +256,132 @@
   }
 
   const stopWords = new Set(['했다','한다','됐다','이다','있다','없다','대한','대해','이번','것이다','the','and','of','to']);
-  function terms(text) {
-    const matches = text.toLowerCase().match(/[\p{L}\p{N}]+(?:[.,]\d+)?[%％]?/gu) ?? [];
+  function terms(text, includeSurface = false) {
+    const tokens = text.normalize('NFKC').toLowerCase().match(/[\p{L}\p{N}]+(?:[.,]\d+)?[%％]?/gu) ?? [];
     const result = new Set();
-    for (const raw of matches) {
-      const word = raw.replace(/([가-힣]{2,}?)(?:에서는|에서|으로|에게|에는|의|을|를|가|이|는|은|에|와|과|도|로)$/u, '$1');
-      if ((word.length > 1 || /\d/u.test(word)) && !stopWords.has(word)) result.add(word);
+    for (const raw of tokens) {
+      const word = raw.replace(/([가-힣]{2,}?)(?:에서는|에서|으로|에게|에는|보다|까지|부터|의|을|를|가|이|는|은|에|와|과|도|로)$/u, '$1')
+        .replace(/([가-힣]{2,}?)(?:했다는|했으며|했다|한다|하는|됐다|되는|된|한)$/u, '$1');
+      if ((word.length < 2 && !/\d/u.test(word)) || stopWords.has(word)) continue;
+      result.add(word);
+      if (includeSurface) result.add(raw);
     }
     return result;
   }
+
+  // A finalized plan still describes a plan. Read the document's purpose before its version.
+  const preliminary = /초안|시안|가안|(?:요구|요청|신청)(?:서|안|액|량|하|한|했)|제안서|건의서|사전\s*검토|심의안|계획|예정|일정|전망|예측|목표|잠정/u;
+  const observed = /확정|최종|승인|의결|가결|부결|실제|실적|결산|집계|관측|측정|결과|접수|제출했|준공|검수|마감|줄었다|늘었다|감소했다|증가했다/u;
+  function claimStage(text) {
+    const plan = preliminary.test(text), result = observed.test(text);
+    if (plan && result) return 0;
+    return plan ? -1 : result ? 1 : 0;
+  }
+  function sourceStage(source) {
+    const heading = source.title + ' ' + source.locator;
+    if (preliminary.test(heading)) return -1;
+    if (observed.test(heading)) return 1;
+    return claimStage(source.version);
+  }
+  function revisionStage(text) {
+    const draft = /초안|초고|잠정|가안|초기본/u.test(text), final = /확정|최종|결정본/u.test(text);
+    return draft === final ? 0 : draft ? -1 : 1;
+  }
+  function sourceScope(text) {
+    // An interior month, quarter or year may be omitted from a printed interval.
+    if (/\d\s*(?:년|월|분기)?\s*(?:[~∼〜–—-]\s*\d|부터|까지)/u.test(text)) return [];
+    const years = new Set(Array.from(text.matchAll(/(?<!\d)((?:19|20)\d{2})\s*년/gu), m => m[1]));
+    const quarters = new Set(Array.from(text.matchAll(/(?<!\d)([1-4])\s*분기/gu), m => m[1]));
+    const months = new Set(Array.from(text.matchAll(/(?<!\d)(1[0-2]|0?[1-9])\s*월/gu), m => Number(m[1])));
+    return [years, quarters, months];
+  }
+  function budgetBasis(text) {
+    if (!/예산|회계|편성액|지출|집행액|사업비|결산/u.test(text)) return 0;
+    const allocation = /예산안|편성|(?:요구|제출|정부|부처)안/u.test(text);
+    const spending = /집행|지출|결산/u.test(text);
+    return allocation === spending ? 0 : allocation ? -1 : 1;
+  }
+  function indexSource(source) {
+    const heading = source.title + ' ' + source.locator;
+    const content = heading + ' ' + source.excerpt;
+    return {source, words: terms(content, true), heading: terms(heading, true),
+      stage: sourceStage(source), revision: revisionStage(source.version), scope: sourceScope(content),
+      basis: budgetBasis(source.locator + ' ' + source.excerpt), compact: content.normalize('NFKC').replace(/\s/gu, '')};
+  }
+
+  // Two otherwise identical titles can name different places, facilities or measurements.
+  // Keep a competing title in view when its excerpt also addresses the requested subject.
+  function indexCatalog(sources) {
+    const indexed = [...sources].map(indexSource), alternatives = new Map();
+    for (const candidate of indexed) {
+      candidate.titleSlots = [];
+      const parts = candidate.source.title.normalize('NFKC').toLowerCase().trim().split(/\s+/u);
+      if (parts.length < 2 || parts.length > 12) continue;
+      for (const [i, part] of parts.entries()) {
+        const frame = JSON.stringify([...parts.slice(0, i), '', ...parts.slice(i + 1)]);
+        if (!alternatives.has(frame)) alternatives.set(frame, new Set());
+        const slot = alternatives.get(frame);
+        slot.add(part);
+        candidate.titleSlots.push(slot);
+      }
+    }
+    return indexed;
+  }
+  const contextOnly = new Set(['올해','지난해','내년','최종','확정','자료','기준','공개','현재','대상','해당','실제']);
   function suggest(text, indexed) {
-    const claim = terms(text), matches = [];
-    for (const {source, words} of indexed) {
+    const claim = terms(text), matches = [], askedSlots = new Map();
+    const stage = claimStage(text), revision = revisionStage(text), scope = sourceScope(text), basis = budgetBasis(text);
+    const quotes = attributed.test(text.replace(nameQuote, asTitle))
+      ? Array.from(text.matchAll(/“([^”]+)”|"([^"]+)"/gu), m => m[1] || m[2]).filter(q => q.length >= 6) : [];
+    for (const candidate of indexed) {
+      const {source, words, heading} = candidate;
       const exact = source.excerpt.includes(text) || (source.excerpt.length >= 6 && text.includes(source.excerpt));
       const common = [...claim].filter(word => words.has(word));
-      if (!exact && !common.some(word => /\p{L}/u.test(word))) continue;
-      const score = (exact ? 100 : 0) + common.length;
+      if (!exact && !common.some(word => /\p{L}/u.test(word) && !/^\d/u.test(word) && !contextOnly.has(word))) continue;
+      // Absolute figure agreement is weak evidence. A conflicting figure can answer the same question.
+      const overlap = common.reduce((sum, word) => sum + (/\d/u.test(word) ? 0.5 : 1) + (heading.has(word) ? 0.75 : 0), 0);
+      const scopeConflict = scope.some((wanted, i) => wanted.size === 1 && candidate.scope[i]?.size === 1 &&
+        ![...wanted].some(value => candidate.scope[i].has(value))) || candidate.titleSlots.some(slot => {
+        if (slot.size < 2) return false;
+        if (!askedSlots.has(slot)) {
+          const named = [...slot].filter(part => claim.has(part));
+          askedSlots.set(slot, named.length === 1 ? named[0] : null);
+        }
+        const named = askedSlots.get(slot);
+        return named && !words.has(named);
+      });
+      const quotedSpeech = quotes.some(q => source.excerpt.includes(q)) &&
+        /발언|속기|녹취|회의록|연설|회견|인터뷰|성명|입장문|답변서/u.test(source.title + ' ' + source.locator);
+      const score = overlap + (exact || quotedSpeech ? 4 : 0) +
+        (common.length >= 2 ? 3 * stage * candidate.stage + 2 * revision * candidate.revision : 0) +
+        (common.length >= 2 || common.some(word => heading.has(word)) ? 3 * basis * candidate.basis : 0);
       const reason = exact ? '입력 문장과 같은 구절' : `함께 나온 표현 · ${common.slice(0, 4).join(', ')}`;
-      matches.push({id: source.id, score, reason});
+      matches.push({id: source.id, score, scopeConflict, reason});
     }
-    matches.sort((a, b) => b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+    matches.sort((a, b) => Number(a.scopeConflict) - Number(b.scopeConflict) ||
+      b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
     return matches.slice(0, 4).map(({id, reason}) => ({id, reason}));
+  }
+
+  // Limit caution to an expressly unresolved reference or a named post-event change.
+  // A document measuring the same outcome still belongs in view when its numbers disagree.
+  const unclearTime = /(?:시점|시기|기준일|기준년도?|기준\s*연도|기간|언제)(?:을|를|이|가|은|는|에)?\s*(?:을?\s*기준(?:으로)?\s*)?(?:(?:한\s*것|삼은\s*것|말한\s*것|것)?인지|인지는|인지가|인지를)?\s*(?:불분명하다|불명확하다|명확하지\s*않다|분명하지\s*않다|알\s*수\s*없다|확인되지\s*않았다|밝혀지지\s*않았다)[.!?。]?$/u;
+  function sourceCaution(text, indexed) {
+    if (unclearTime.test(text)) return '어느 시점이나 기간의 수치인지 기사 작성자 또는 원자료에서 확인하세요.';
+    if (!/(?:줄었다|늘었다|감소했다|증가했다|낮아졌다|높아졌다|단축됐다|줄었는가|늘었는가)[.!?。]?$/u.test(text)) return null;
+    const after = /(?:^|\s)(?:이후|후|뒤)(?:에는|에)?\s+([^.,;!?]{1,100})/u.exec(text);
+    if (!after || !/보다|대비|절반|배로|%|퍼센트/u.test(after[1])) return null;
+    const subjects = [...after[1].matchAll(/(?:^|\s)([가-힣]{2,16})(?:은|는|이|가)(?=\s)/gu)];
+    if (subjects.length !== 1) return null;
+    const subject = subjects[0][1];
+    if (/^(?:수치|결과|효과|대상|것|경우)$/u.test(subject)) return null;
+    const stem = subject.replace(/(?:률|율|량|도)$/u, '');
+    // A shared noun also covers close compounds and differences in word spacing.
+    const keys = [subject];
+    if (stem.length >= 2) keys.push(stem);
+    if (subject.length >= 4) keys.push(subject.slice(-2));
+    if (indexed.some(record => keys.some(key => record.compact.includes(key)))) return null;
+    return `‘${subject}’의 변화량과 비교 기간을 확인할 수 있는 원문 구간을 찾아보세요.`;
   }
 
   function strictSpan(text, span, name) {
@@ -424,7 +566,7 @@
     const catalog = sourceCatalog(sources);
     const articleKey = digest([protocol, article]);
     const scope = digest([articleKey, catalog.key]);
-    const indexed = [...catalog.items.values()].map(source => ({source, words: terms(`${source.title} ${source.excerpt}`)}));
+    const indexed = indexCatalog(catalog.items.values());
     const decisions = new Map();
     for (const receipt of receipts) {
       if (!receipt || typeof receipt.rowId !== 'string') continue;
@@ -448,6 +590,7 @@
       const row = {id: `unit-${start}`, text, positions, context: article.slice(before.start, after.end),
         articleBinding: digest([articleKey, positions]), priorDecision: null,
         binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text), sourceMatches,
+        sourceCaution: sourceMatches.length ? sourceCaution(text, indexed) : null,
         sourceIds: sourceMatches.map(match => match.id), status: 'pending', receipt: null, reviewNote: ''};
       restore(row, decisions.get(row.id) ?? [], catalog);
       row.needsReview = unresolved.has(row.status) || row.receipt?.contentStatus === 'unverified';
@@ -462,7 +605,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare});
+  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);

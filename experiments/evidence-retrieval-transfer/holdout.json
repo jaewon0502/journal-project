@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "registered": "2026-11-24",
+  "scoring": {
+    "unit": "One question and one provided excerpt. Number nonempty lines from 1. Score a named value, definition or footnote only when the candidate center is the prespecified row itself.",
+    "positive": "Report exact Hit@1 and Hit@3 over answerable questions, including contradictory claims. Top-k is row-level retrieval; columns, the answer and an editorial decision are not scored. Adjacent context, a header over the correct data and matching a different year do not count.",
+    "negative": "Keep unanswered questions in a separate denominator. Report how many returned at least one candidate, and how many returned zero. A candidate is not a verdict. Zero results alone is not a measured correct human abstention.",
+    "freeze": "Queries, rows, answers, source selection and scoring rule were fixed before executing either retrieval implementation."
+  },
+  "sources": {
+    "road": {
+      "agency": "한국도로교통공단",
+      "title": "교통사고분석시스템(TAAS) 교통사고 추세",
+      "url": "https://taas.koroad.or.kr/sta/acs/gus/selectTfcacdTrend.do?menuId=WEB_KMP_OVT_TAC_TCO",
+      "accessed": "2026-11-24",
+      "published": null,
+      "locator": "기본 조회 표에서 2018~2024년 일곱 행과 두 줄 머리글. 사고·사망·부상 순서, 각 수치 옆은 전년 대비 증감률. 셀 사이만 탭으로 구분. 2023년 사고 건수가 198,296이고 증감률이 0.7%인 표.",
+      "lines": [
+        "연도\t사고\t사망\t부상",
+        "(건)\t전년대비 증감률\t(명)\t전년대비 증감률\t(명)\t전년대비 증감률",
+        "2018년\t217,148\t0.4%\t3,781\t-9.7%\t323,037\t0.1%",
+        "2019년\t229,600\t5.7%\t3,349\t-11.4%\t341,712\t5.8%",
+        "2020년\t209,654\t-8.7%\t3,081\t-8.0%\t306,194\t-10.4%",
+        "2021년\t203,130\t-3.1%\t2,916\t-5.4%\t291,608\t-4.8%",
+        "2022년\t196,836\t-3.1%\t2,735\t-6.2%\t281,803\t-3.4%",
+        "2023년\t198,296\t0.7%\t2,551\t-6.7%\t283,799\t0.7%",
+        "2024년\t196,349\t-1.0%\t2,521\t-1.2%\t278,482\t-1.9%"
+      ]
+    },
+    "vote": {
+      "agency": "중앙선거관리위원회 원자료, 국가지표체계 공표표",
+      "title": "선거투표율",
+      "url": "https://index.go.kr/unity/potal/eNara/sub/showStblGams3.do?stts_cd=426801",
+      "accessed": "2026-11-24",
+      "published": null,
+      "locator": "선거투표율 표, 대통령선거 2017·2022·2025년, 국회의원선거 2020·2024년, 지방선거 2018·2022년 열 선택. 전체·성별·19세·20대 및 30대 전후반 행, 주석 1·2. 원래 열 순서를 유지. 발췌본 3문단의 머리글은 각각 3, 2, 2개 열을 덮음. 줄바꿈 없는 공백 정규화, 탭으로 셀 분리.",
+      "lines": [
+        "선거투표율",
+        "[단위 : %]",
+        "- 대통령선거 투표율\t- 국회의원선거 투표율\t- 지방선거 투표율",
+        "2017\t2022\t2025\t2020\t2024\t2018\t2022",
+        "전체\t77.2\t77.1\t79.4\t66.2\t67.0\t60.2\t50.9",
+        "성\t남자\t76.2\t76.8\t78.6\t66.3\t66.5\t59.9\t50.6",
+        "여자\t77.3\t77.5\t80.3\t66.7\t67.9\t61.2\t52.5",
+        "연령집단\t19세\t77.7\t72.5\t75.6\t68.0\t57.7\t54.1\t35.7",
+        "20대 전반\t77.1\t71.6\t75.1\t60.9\t53.4\t52.9\t37.0",
+        "20대 후반\t74.9\t70.4\t74.0\t56.7\t51.6\t51.0\t35.6",
+        "30대 전반\t74.3\t70.9\t74.9\t56.5\t53.7\t53.0\t36.9",
+        "30대 후반\t74.1\t70.6\t75.1\t57.6\t56.7\t55.4\t38.6",
+        "1) 투표율 = (투표자수 ÷ 선거인수) × 100.",
+        "2) 전체 투표율은 실제 투표율이고, 성별 및 연령집단별 투표율은 중앙선거관리위원회가 선거 후 실시하는 표본조사 투표율임."
+      ]
+    }
+  },
+  "queries": [
+    {"id":"r1","source":"road","query":"2024년 교통사고로 목숨을 잃은 사람은 몇 명인가?","gold":[9],"answer":"2,521명","anchor":"2024년 행, 사망 (명) 열"},
+    {"id":"r2","source":"road","query":"2022년 교통사고로 다친 사람이 283,799명이었다는 기사 수치는 맞나?","gold":[7],"answer":"281,803명. 기사 속 값은 2023년이다.","anchor":"2022년 행, 부상 (명) 열"},
+    {"id":"r3","source":"road","query":"2019년 교통사고 건수는 전년보다 몇 퍼센트 증가했나?","gold":[4],"answer":"5.7%","anchor":"2019년 행, 사고 전년대비 증감률 열"},
+    {"id":"r4","source":"road","query":"연간 사고 수와 사망·부상 수를 각각 어떤 단위로 집계했나?","gold":[2],"answer":"사고는 건, 사망·부상은 명.","anchor":"두 번째 머리글, 사고·사망·부상의 하위 단위"},
+    {"id":"v1","source":"vote","query":"2022년 지방선거에서 19세 투표율이 54.1%였다는 보도를 확인해 줘.","gold":[8],"answer":"35.7%. 54.1%는 2018년 지방선거 값이다.","anchor":"19세 행, 지방선거의 2022 열"},
+    {"id":"v2","source":"vote","query":"2024년 국회의원선거에서 남성 유권자의 투표율은 얼마였나?","gold":[6],"answer":"66.5%","anchor":"성·남자 행, 국회의원선거의 2024 열"},
+    {"id":"v3","source":"vote","query":"2018년 지방선거에서 20대 후반의 투표율은 얼마였나?","gold":[10],"answer":"51.0%","anchor":"20대 후반 행, 지방선거의 2018 열"},
+    {"id":"v4","source":"vote","query":"선거에 참여한 사람의 비율을 구할 때 전체 인구와 선거인 중 무엇을 분모로 쓰는가?","gold":[13],"answer":"선거인수","anchor":"주석 1, 투표율 산식"},
+    {"id":"v5","source":"vote","query":"성별과 연령집단별 투표율은 모두 전수를 집계했나, 선거 이후 표본을 조사했나?","gold":[14],"answer":"성별·연령집단별 수치는 선거 후 실시한 표본조사 투표율이다.","anchor":"주석 2, 전체·하위집단 수치의 수집 방식"},
+    {"id":"v6","source":"vote","query":"2022년 지방선거 전체 투표율이 같은 해 대통령선거만큼 높았는가?","gold":[5],"answer":"지방선거 50.9%, 대통령선거 77.1%.","anchor":"전체 행, 2022년 두 선거의 열"},
+    {"id":"rc1","source":"road","query":"2023년 교통사고 재산 피해액은 몇 원인가?","gold":[],"answer":null,"anchor":"표에 연도와 사고 건수는 있지만 금액 열은 없음."},
+    {"id":"rc2","source":"road","query":"교통사고 부상자의 평균 입원 기간은 며칠인가?","gold":[],"answer":null,"anchor":"표에는 부상자 수만 있고 진료·입원 일수는 없음."},
+    {"id":"vc1","source":"vote","query":"2022년 지방선거에서 20대 후반이 기권한 이유로 무엇을 가장 많이 꼽았나?","gold":[],"answer":null,"anchor":"표에는 투표율이 있지만 기권 사유 조사가 없음."},
+    {"id":"vc2","source":"vote","query":"2024년 국회의원선거에서 선거비용으로 총 몇 원을 보전받았나?","gold":[],"answer":null,"anchor":"표에 선거별 연도와 투표율이 있지만 비용 열은 없음."}
+  ]
+}

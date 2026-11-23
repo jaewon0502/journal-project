@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="article-compare.css">
+<title>기사 평가 비교 · Journal</title>
+<script src="factcheck-engine.js" defer></script>
+<script src="article-rubric.js" defer></script>
+<script src="workspace-snapshot.js" defer></script>
+<script src="article-compare-example.js" defer></script>
+<script src="article-compare-core.js" defer></script>
+<script src="article-compare-ui.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#inputs">작업 파일 선택으로 이동</a>
+<header><strong>Journal</strong><nav aria-label="저널 도구"><a href="factcheck.html">기사 팩트체크</a><a href="editor-study.html">편집자 측정</a></nav></header>
+<main>
+<h1>기사 평가 비교</h1>
+<p class="intro">팩트체크 화면에서 저장한 작업 파일 두 개로 기사의 수정 효과나 편집자 간 판정 차이를 확인하세요.</p>
+<noscript><p>파일을 비교하려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
+<section class="panel" id="inputs" tabindex="-1" aria-label="비교 조건과 작업 파일">
+<fieldset class="modes"><legend>비교할 대상</legend>
+<label><input type="radio" name="mode" value="revision" checked> 수정 전후</label>
+<label><input type="radio" name="mode" value="reviewers"> 두 편집자의 평가</label>
+</fieldset>
+<p id="mode-note" class="note"></p>
+<div class="pair">
+<div><label for="file-left" id="label-left">수정 전 작업 파일</label><input id="file-left" type="file" accept=".json,application/json" aria-describedby="preview-left"><div id="preview-left" class="preview" role="status"></div></div>
+<div><label for="file-right" id="label-right">수정 후 작업 파일</label><input id="file-right" type="file" accept=".json,application/json" aria-describedby="preview-right"><div id="preview-right" class="preview" role="status"></div></div>
+</div>
+<label id="ack-wrap" class="ack" hidden><input type="checkbox" id="ack"> 두 파일이 같은 기사의 수정 전과 수정 후 기록임을 확인했습니다.</label>
+<div class="actions"><button id="compare" class="primary" type="button" disabled>작업 파일 비교</button><button id="example" type="button">가상 예시 보기</button></div>
+<p id="status" class="status" role="status"></p>
+</section>
+<section id="result" aria-labelledby="result-title" hidden>
+<div class="result-head"><h2 tabindex="-1" id="result-title">비교 결과</h2><a href="#inputs">파일 선택으로</a></div>
+<div id="output"></div>
+</section>
+</main>
+<footer>파일은 현재 브라우저에서 읽습니다. <a href="../article-rubric.md">기사 평가 기준과 계산식</a></footer>
+</body>
+</html>

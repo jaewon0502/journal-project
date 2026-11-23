@@ -1,0 +1,1784 @@
+{
+  "fixtureSha": "5b509ff0d910320f33806afca105bd2abf23ed84e33bef9c757f063173b7823c",
+  "baselineSha": "62ede658b6c2bc7758c10f2b49565ac612d0314d4e6029542e3b44c690bd9338",
+  "candidateSha": "b5c14dd7b19e70980d0271dac25449f9459f7ecf44b0b97d074310ae4236600f",
+  "baseline": {
+    "metrics": {
+      "answerableClaims": 6,
+      "robustHitAt1": 4,
+      "canonicalHitAt1": 6,
+      "canonicalHitAnywhere": 6,
+      "correctRepeatedPresentations": 47,
+      "repeatedAnswerablePresentations": 54,
+      "partyPairFirstRecommendationChanges": 0,
+      "partyPairComparisons": 24,
+      "firstRecommendationDiffersFromOpened": 0,
+      "allPresentations": 72,
+      "canonicalControls": {
+        "controls": 2,
+        "noRecommendation": 0,
+        "soleRecommendation": 0,
+        "multipleRecommendations": 2,
+        "defaultOpened": 2
+      },
+      "repeatedControls": {
+        "controls": 18,
+        "noRecommendation": 0,
+        "soleRecommendation": 0,
+        "multipleRecommendations": 18,
+        "defaultOpened": 18
+      }
+    },
+    "rows": [
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "pine",
+          "fern"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      }
+    ]
+  },
+  "candidate": {
+    "metrics": {
+      "answerableClaims": 6,
+      "robustHitAt1": 6,
+      "canonicalHitAt1": 6,
+      "canonicalHitAnywhere": 6,
+      "correctRepeatedPresentations": 54,
+      "repeatedAnswerablePresentations": 54,
+      "partyPairFirstRecommendationChanges": 0,
+      "partyPairComparisons": 24,
+      "firstRecommendationDiffersFromOpened": 0,
+      "allPresentations": 72,
+      "canonicalControls": {
+        "controls": 2,
+        "noRecommendation": 0,
+        "soleRecommendation": 0,
+        "multipleRecommendations": 2,
+        "defaultOpened": 2
+      },
+      "repeatedControls": {
+        "controls": 18,
+        "noRecommendation": 0,
+        "soleRecommendation": 0,
+        "multipleRecommendations": 18,
+        "defaultOpened": 18
+      }
+    },
+    "rows": [
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p1",
+        "gold": "reed",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "reed",
+          "jade",
+          "flint"
+        ],
+        "opened": "reed"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p2",
+        "gold": "flint",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "flint",
+          "reed",
+          "jade"
+        ],
+        "opened": "flint"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p3",
+        "gold": "jade",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "pine",
+          "fern"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "pine",
+          "fern"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "pine",
+          "fern"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p4",
+        "gold": "moss",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "moss",
+          "fern",
+          "pine"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p5",
+        "gold": "pine",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "pine",
+          "fern"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "p6",
+        "gold": "fern",
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "flint",
+          "reed"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u1",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "jade",
+          "reed",
+          "flint"
+        ],
+        "opened": "jade"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "neutral",
+        "recommended": [
+          "moss",
+          "pine",
+          "fern"
+        ],
+        "opened": "moss"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 0,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "neutral",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 1,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "moss",
+          "pine"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "neutral",
+        "recommended": [
+          "pine",
+          "fern",
+          "moss"
+        ],
+        "opened": "pine"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-a",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      },
+      {
+        "id": "u2",
+        "gold": null,
+        "rotation": 2,
+        "label": "party-b",
+        "recommended": [
+          "fern",
+          "pine",
+          "moss"
+        ],
+        "opened": "fern"
+      }
+    ]
+  }
+}

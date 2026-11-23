@@ -1,0 +1,183 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "2023년 전국 합계출산율은 0.72명이었다.\n통계청의 2023년 출생 통계 표 1에서 전국 합계출산율은 2022년 0.78명에서 2023년 0.72명으로 낮아졌다.\n같은 자료의 표 12에서 2023년 서울의 합계출산율은 0.55명이었다.\n2023년 전국 출생아 수는 약 23만 명으로 전년 대비 7.7% 줄었다.\n가상 토론의 참가자는 “양육지원금 때문에 출생아가 더 줄었다”고 주장했다.\n이 두 통계표만으로는 지원금이 출생아 수를 바꿨는지 가려낼 수 없다.",
+  "articleDraft": "2023년 전국 합계출산율은 0.72명이었다.\n통계청의 2023년 출생 통계 표 1에서 전국 합계출산율은 2022년 0.78명에서 2023년 0.72명으로 낮아졌다.\n같은 자료의 표 12에서 2023년 서울의 합계출산율은 0.55명이었다.\n2023년 전국 출생아 수는 약 23만 명으로 전년 대비 7.7% 줄었다.\n가상 토론의 참가자는 “양육지원금 때문에 출생아가 더 줄었다”고 주장했다.\n이 두 통계표만으로는 지원금이 출생아 수를 바꿨는지 가려낼 수 없다.",
+  "sources": [
+    {
+      "id": "birth",
+      "title": "통계청 · 2023년 출생 통계",
+      "url": "https://kostat.go.kr/boardDownload.es?bid=204&list_no=432388&seq=1",
+      "originUrl": "https://mods.go.kr/board.es?act=view&bid=204&list_no=432388&mid=a10301020300",
+      "version": "2024-08-28 발표",
+      "locator": "통계표 1 전국 2022·2023년 행, 통계표 12 전국·서울 행",
+      "excerpt": "수치 전사. 표 1의 연도별 전국 출생아 수와 합계출산율: 2022년 249,186명·0.78명, 2023년 230,028명·0.72명. 표 12의 2023년 출생아 수와 합계출산율: 전국 230,028명·0.72명, 서울 39,456명·0.55명."
+    },
+    {
+      "id": "debate",
+      "title": "이 연습을 위해 작성한 가상 토론 메모",
+      "url": "https://example.invalid/journal/birth-policy-pilot",
+      "originUrl": "",
+      "version": "모의 기록 1판",
+      "locator": "유일한 발언",
+      "excerpt": "참가자 한 명의 발언 — 양육지원금 때문에 출생아가 더 줄었다."
+    }
+  ],
+  "receipts": [
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-0",
+      "articleBinding": "6ed72658e67941fa0eadaba6da391b6788828c168b2edd52cd69b9988a1b0eaa",
+      "binding": "81ed7db40a2794d97083ee536327242c4da13eed197d7f365904611824a88f52",
+      "references": "e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380",
+      "recordedAt": "2026-11-23T06:23:31.853Z",
+      "status": "fact",
+      "sourceIds": [
+        "birth"
+      ],
+      "reason": "표 12의 전국 0.72명과 서울 0.55명 중 제목에 사용된 지역과 값을 대조했다.",
+      "acknowledged": true,
+      "checksum": "9864d4de72921cb4d790d17814fd23120f55763acb1744a7d830e7c3a7e698eb"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-26",
+      "articleBinding": "af2ee6b8812f0e8f0ef541e868d48b4b1fa14ab924b7cadd75e7a2fb1e84dae7",
+      "binding": "bcbb85791d700d034b42885d40199a07e26e1fef117e1e7337d3fad5d6a81acb",
+      "references": "e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380",
+      "recordedAt": "2026-11-23T06:23:31.853Z",
+      "status": "fact",
+      "sourceIds": [
+        "birth"
+      ],
+      "reason": "표 1에서 2022년과 2023년 전국 합계출산율은 각각 0.78명과 0.72명이다.",
+      "acknowledged": true,
+      "checksum": "26231ebf5e1272ea2812f0539e7acaf84fa8f5adc417ea6c4234436ba05d1f92"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-93",
+      "articleBinding": "feadf53d01e8720881f4e4df9c011c8192678a501de7c2d8c998f8b832930e6a",
+      "binding": "ae1c8e0ad8fd9edd73a1d055cb767286ea8e73bc0c896344cfa8a57495a001c3",
+      "references": "e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380",
+      "recordedAt": "2026-11-23T06:23:31.854Z",
+      "status": "fact",
+      "sourceIds": [
+        "birth"
+      ],
+      "reason": "표 12의 2023년 서울 행 합계출산율은 0.55명이다.",
+      "acknowledged": true,
+      "checksum": "1b0f4fe0b6b9650c6723eff6ef76abc1d27f264e740923474fb2dc1ff9430da5"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-134",
+      "articleBinding": "a732239ad7972c933c8e39244c899b80ec0f7d7ba93e1f0f7dcc9eb9d758905f",
+      "binding": "9a5d1a4243a34031ce2d599dde54e0adf16817b900a264cc7b7b39d643e3179f",
+      "references": "e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380",
+      "recordedAt": "2026-11-23T06:23:31.854Z",
+      "status": "fact",
+      "sourceIds": [
+        "birth"
+      ],
+      "reason": "2022년 249,186명에서 2023년 230,028명으로 19,158명 감소했다. 19,158 ÷ 249,186 × 100은 약 7.7%다.",
+      "acknowledged": true,
+      "checksum": "597d58392809bd08fe3d26c679b1f26601c9de94b5753bd4ae2d51bef0a7c782"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-176",
+      "articleBinding": "e074265f3c2daacd61429581d703e275b21d84e6bf17b024400547f191a7ad28",
+      "binding": "36f07941c4f5f438f2f31ee0be51466a3b6fcd9efd7cf5c6ce46daf005f3cc80",
+      "references": "b7f248b775b0a1539b5cf1bc45126b7ebf403e14921af3477b38e234e2493bc6",
+      "recordedAt": "2026-11-23T06:23:31.854Z",
+      "status": "attribution",
+      "sourceIds": [
+        "debate"
+      ],
+      "reason": "가상 토론 메모와 발언 문구는 일치한다. 출생 통계에는 지원금 노출에 따른 비교 또는 인과효과 추정값이 없어 발언 내용은 미확인으로 둔다.",
+      "acknowledged": true,
+      "contentStatus": "unverified",
+      "checksum": "30c9a7b1b556fcbbd18410acb2dbbc2db5c72520046d8e0cc523eb6a53736339"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-218",
+      "articleBinding": "6d94969c063f484fd059fe1df2502be0d9b29833ba5b19e03e3ef5f261c23605",
+      "binding": "abdc2e4b46452b27102eb7480cf397f7e986fea4d96c8e2d73103519ab4ef70a",
+      "references": "e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380",
+      "recordedAt": "2026-11-23T06:23:31.854Z",
+      "status": "fact",
+      "sourceIds": [
+        "birth"
+      ],
+      "reason": "표 1은 연도별 현황, 표 12는 지역별 현황이다. 어느 표에도 지원금 지급에 따른 비교 및 인과효과 추정값이 없다.",
+      "acknowledged": true,
+      "checksum": "48b58753ce73667cf24fc34a868f1ad52e2b8cdac101ff2c9a0f1f8f8e237506"
+    }
+  ],
+  "demo": true,
+  "articleAssessment": {
+    "version": "journal-article-rubric-v1",
+    "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"81ed7db40a2794d97083ee536327242c4da13eed197d7f365904611824a88f52\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"6ed72658e67941fa0eadaba6da391b6788828c168b2edd52cd69b9988a1b0eaa\",\"binding\":\"81ed7db40a2794d97083ee536327242c4da13eed197d7f365904611824a88f52\",\"references\":\"e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380\",\"status\":\"fact\",\"sourceIds\":[\"birth\"],\"reason\":\"표 12의 전국 0.72명과 서울 0.55명 중 제목에 사용된 지역과 값을 대조했다.\",\"acknowledged\":true},false],[\"unit-26\",\"bcbb85791d700d034b42885d40199a07e26e1fef117e1e7337d3fad5d6a81acb\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-26\",\"articleBinding\":\"af2ee6b8812f0e8f0ef541e868d48b4b1fa14ab924b7cadd75e7a2fb1e84dae7\",\"binding\":\"bcbb85791d700d034b42885d40199a07e26e1fef117e1e7337d3fad5d6a81acb\",\"references\":\"e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380\",\"status\":\"fact\",\"sourceIds\":[\"birth\"],\"reason\":\"표 1에서 2022년과 2023년 전국 합계출산율은 각각 0.78명과 0.72명이다.\",\"acknowledged\":true},false],[\"unit-93\",\"ae1c8e0ad8fd9edd73a1d055cb767286ea8e73bc0c896344cfa8a57495a001c3\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-93\",\"articleBinding\":\"feadf53d01e8720881f4e4df9c011c8192678a501de7c2d8c998f8b832930e6a\",\"binding\":\"ae1c8e0ad8fd9edd73a1d055cb767286ea8e73bc0c896344cfa8a57495a001c3\",\"references\":\"e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380\",\"status\":\"fact\",\"sourceIds\":[\"birth\"],\"reason\":\"표 12의 2023년 서울 행 합계출산율은 0.55명이다.\",\"acknowledged\":true},false],[\"unit-134\",\"9a5d1a4243a34031ce2d599dde54e0adf16817b900a264cc7b7b39d643e3179f\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-134\",\"articleBinding\":\"a732239ad7972c933c8e39244c899b80ec0f7d7ba93e1f0f7dcc9eb9d758905f\",\"binding\":\"9a5d1a4243a34031ce2d599dde54e0adf16817b900a264cc7b7b39d643e3179f\",\"references\":\"e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380\",\"status\":\"fact\",\"sourceIds\":[\"birth\"],\"reason\":\"2022년 249,186명에서 2023년 230,028명으로 19,158명 감소했다. 19,158 ÷ 249,186 × 100은 약 7.7%다.\",\"acknowledged\":true},false],[\"unit-176\",\"36f07941c4f5f438f2f31ee0be51466a3b6fcd9efd7cf5c6ce46daf005f3cc80\",\"attribution\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-176\",\"articleBinding\":\"e074265f3c2daacd61429581d703e275b21d84e6bf17b024400547f191a7ad28\",\"binding\":\"36f07941c4f5f438f2f31ee0be51466a3b6fcd9efd7cf5c6ce46daf005f3cc80\",\"references\":\"b7f248b775b0a1539b5cf1bc45126b7ebf403e14921af3477b38e234e2493bc6\",\"status\":\"attribution\",\"sourceIds\":[\"debate\"],\"reason\":\"가상 토론 메모와 발언 문구는 일치한다. 출생 통계에는 지원금 노출에 따른 비교 또는 인과효과 추정값이 없어 발언 내용은 미확인으로 둔다.\",\"acknowledged\":true,\"contentStatus\":\"unverified\"},false],[\"unit-218\",\"abdc2e4b46452b27102eb7480cf397f7e986fea4d96c8e2d73103519ab4ef70a\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-218\",\"articleBinding\":\"6d94969c063f484fd059fe1df2502be0d9b29833ba5b19e03e3ef5f261c23605\",\"binding\":\"abdc2e4b46452b27102eb7480cf397f7e986fea4d96c8e2d73103519ab4ef70a\",\"references\":\"e720ddf1346bbe85da8d7f5c3cddf1a6373eadbb0008eb6a69b0e68b9a400380\",\"status\":\"fact\",\"sourceIds\":[\"birth\"],\"reason\":\"표 1은 연도별 현황, 표 12는 지역별 현황이다. 어느 표에도 지원금 지급에 따른 비교 및 인과효과 추정값이 없다.\",\"acknowledged\":true},false]]]",
+    "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"6ed72658e67941fa0eadaba6da391b6788828c168b2edd52cd69b9988a1b0eaa\"],[\"unit-26\",\"af2ee6b8812f0e8f0ef541e868d48b4b1fa14ab924b7cadd75e7a2fb1e84dae7\"],[\"unit-93\",\"feadf53d01e8720881f4e4df9c011c8192678a501de7c2d8c998f8b832930e6a\"],[\"unit-134\",\"a732239ad7972c933c8e39244c899b80ec0f7d7ba93e1f0f7dcc9eb9d758905f\"],[\"unit-176\",\"e074265f3c2daacd61429581d703e275b21d84e6bf17b024400547f191a7ad28\"],[\"unit-218\",\"6d94969c063f484fd059fe1df2502be0d9b29833ba5b19e03e3ef5f261c23605\"]]]",
+    "coreRowIds": [
+      "unit-0"
+    ],
+    "ratings": {
+      "wording": {
+        "level": 0,
+        "rowId": "unit-176",
+        "quote": "가상 토론의 참가자는 “양육지원금 때문에 출생아가 더 줄었다”고 주장했다.",
+        "sourceId": "debate",
+        "sourceQuote": "양육지원금 때문에 출생아가 더 줄었다",
+        "reason": "가상 참가자의 주장으로 인용했고 마지막 문장에 통계표가 밝힐 수 있는 인과관계의 한계도 설명했다.",
+        "impact": "",
+        "compareQuote": "",
+        "compareRowId": "",
+        "direction": ""
+      },
+      "framing": {
+        "level": 0,
+        "rowId": "unit-0",
+        "quote": "2023년 전국 합계출산율은 0.72명이었다.",
+        "sourceId": "birth",
+        "sourceQuote": "전국 230,028명·0.72명, 서울 39,456명·0.55명",
+        "reason": "제목의 전국 합계출산율과 본문의 같은 해 전국 값이 일치한다.",
+        "impact": "",
+        "compareQuote": "통계청의 2023년 출생 통계 표 1에서 전국 합계출산율은 2022년 0.78명에서 2023년 0.72명으로 낮아졌다.",
+        "compareRowId": "unit-26",
+        "direction": ""
+      },
+      "omission": {
+        "level": 0,
+        "rowId": "unit-218",
+        "quote": "이 두 통계표만으로는 지원금이 출생아 수를 바꿨는지 가려낼 수 없다.",
+        "sourceId": "birth",
+        "sourceQuote": "2022년 249,186명·0.78명, 2023년 230,028명·0.72명",
+        "reason": "전국 및 서울의 범위와 비교 기간을 밝히고, 연도·지역 통계에서 지원금의 효과를 분리하기 어렵다는 한계를 명시했다.",
+        "impact": "",
+        "compareQuote": "",
+        "compareRowId": "",
+        "direction": ""
+      },
+      "standards": {
+        "level": "na",
+        "reason": "공식 통계와 가상 참가자 한 명의 주장을 소개한다. 같은 증거를 두고 검증 기준을 비교할 두 당사자의 주장이나 행위가 없다."
+      }
+    }
+  },
+  "articleAssessmentDraft": null,
+  "rowDrafts": [],
+  "currentId": "unit-0",
+  "sourceDraft": {
+    "id": null,
+    "fields": {
+      "title": "",
+      "url": "",
+      "originUrl": "",
+      "version": "",
+      "locator": "",
+      "excerpt": ""
+    }
+  }
+}

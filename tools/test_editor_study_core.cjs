@@ -145,3 +145,38 @@ test('실측 자격·배정·방식·시간·대표 근거·네 회차 한도를
   assert.throws(() => study.addTrial(full, trial));
   assert.deepEqual(start.trials, []);
 });
+
+test('각 단계는 네 명 모두 기록한 묶음에서만 비교하고 이전 전체 시간과 예시를 보존한다', () => {
+  function timed(i) {
+    return observations(i, task => ({phaseMs: task.method === 'manual'
+      ? {select:30000,locate:60000,decide:30000} : {select:20000,locate:45000,decide:25000}}));
+  }
+  const records = Array.from({length:8}, (_, i) => timed(i+1));
+  records[1].trials[0].phaseMs = null;
+  delete records[2].trials[2].phaseMs;
+  const result = study.analyze(records.concat(study.demoRecords()));
+  assert.equal(result.included,8);
+  assert.equal(result.phases.availableTrials,30);
+  assert.deepEqual([result.phases.included,result.phases.completeBlocks,result.phases.trialCount],[4,1,16]);
+  assert.deepEqual(study.stages.map(s=>result.phases.byStage[s].savedSeconds),[10,15,5]);
+  assert.deepEqual(result.phases.byStage.locate.editorPairs.map(p=>p.participantId),['E5','E6','E7','E8']);
+  assert.equal(study.analyze(records.slice(0,4)).phases.byStage,null);
+  assert.equal(study.analyze(study.demoRecords()).phases.availableTrials,0);
+  assert.equal(study.analyze(study.demoRecords(),'demo').phases.included,8);
+});
+
+test('JSON의 단계 시간은 합계를 검증하고 기존 v1 내보내기와 합칠 때 보존한다', () => {
+  const old = observations(1);
+  const enriched = structuredClone(old);
+  enriched.trials[0].phaseMs = {select:40000,locate:40000,decide:40000};
+  const partial = {...enriched, trials:enriched.trials.slice(0,1)};
+  for (const pair of [[old,partial],[partial,old]]) assert.deepEqual(study.mergeRecords([pair[0]],[pair[1]]),[enriched]);
+  for (const bad of [{select:1,locate:2},[], {select:1.5,locate:0,decide:119998.5},
+    {select:120001,locate:-1,decide:0},{select:4,locate:5,decide:6},
+    {select:40000,locate:40000,decide:40000, extra:0}]) {
+    const changed=structuredClone(enriched); changed.trials[0].phaseMs=bad;
+    assert.throws(()=>study.validateRecord(changed),/단계/);
+  }
+  const missed=structuredClone(enriched); missed.trials[0].phaseMs=null;
+  assert.throws(()=>study.mergeRecords([missed],[enriched]),/서로 다른/);
+});

@@ -1,0 +1,8 @@
+#setup label,#answer label{display:block;margin:.75rem 0;font-weight:600}
+main input:not([type=checkbox]),main select,main textarea{display:block;box-sizing:border-box;max-width:100%;min-height:2.4rem;padding:.42rem;font:inherit}
+main textarea,#locator,#documentUrl{width:100%}
+button[aria-pressed=true]{background:#245b46;color:#fff}
+#clock{font-variant-numeric:tabular-nums}
+fieldset{min-width:0;margin:1rem 0;border:1px solid #bcbeb4;border-radius:.4rem}
+#entries article{border-block-start:1px solid #c3c9be;padding:1rem 0}
+#entries a, #entries p{overflow-wrap:anywhere}

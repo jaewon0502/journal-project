@@ -1,0 +1,13 @@
+{
+  "questions": ["labour-growth", "labour-period"],
+  "queryFrom": "transfer-retry.json@285f7ebee74b258c5dc13aeff5f800ccb9cd6530f4e980c2982a0a566c5539f3",
+  "goldFrom": "transfer-gold.json@fd417b44ab97b93a6fa230e2b6527c620cd0d0beee1912547c3bfef0fd320300",
+  "steps": [
+    "Start a fresh Chrome context per task and enter the unchanged article selection and whole 91-page extracted document.",
+    "Run the one frozen retry, confirm first result is source paragraph 814 and no direct centre is gold. Open the larger view for that result. Record the actual number of user actions from the three results and any additional disclosure needed.",
+    "Within the same candidate's visible expanded contents confirm report page 28 heading and table title (paragraph 817), year header (818), all-employment change in 10k persons (822). A nearby alternative age line cannot replace 822.",
+    "Select 822 using its own control, compare copied text exactly against the original line and verify the saved work JSON has that exact excerpt, the correct locator and no recorded fact decision. If leading or trailing spaces have been stripped record this explicitly.",
+    "For growth, calculate 15.9/32.7. For the period claim, read 81.6, 32.7, 15.9 in the labelled columns and separately confirm the date on the SBS article.",
+    "Report tasks, unique tables, verbatim export, and need for an outside source separately. Timing and human success rates are excluded."
+  ]
+}

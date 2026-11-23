@@ -1,0 +1,168 @@
+{
+  "engineSha": "b5c14dd7b19e70980d0271dac25449f9459f7ecf44b0b97d074310ae4236600f",
+  "browser": "157.0.8103.79",
+  "htmlSha": "95d7ab4ebca6d76c4e13be6dd5e330bf39c3ec4bbfaf0107b153f33f227a45ae",
+  "uiSha": "354b8173f1eb29180cf6420b4852af58a45d79ac53b0486f8151ff34892fd6e9",
+  "rows": [
+    {
+      "id": "p1",
+      "label": "party-a",
+      "opened": "reed",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p2",
+      "label": "party-a",
+      "opened": "flint",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p3",
+      "label": "party-a",
+      "opened": "jade",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "u1",
+      "label": "party-a",
+      "opened": "jade",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p1",
+      "label": "party-b",
+      "opened": "reed",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p2",
+      "label": "party-b",
+      "opened": "flint",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p3",
+      "label": "party-b",
+      "opened": "jade",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "u1",
+      "label": "party-b",
+      "opened": "jade",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p4",
+      "label": "party-a",
+      "opened": "moss",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p5",
+      "label": "party-a",
+      "opened": "pine",
+      "suggested": 2,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p6",
+      "label": "party-a",
+      "opened": "fern",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "u2",
+      "label": "party-a",
+      "opened": "fern",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p4",
+      "label": "party-b",
+      "opened": "moss",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p5",
+      "label": "party-b",
+      "opened": "pine",
+      "suggested": 2,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "p6",
+      "label": "party-b",
+      "opened": "fern",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    },
+    {
+      "id": "u2",
+      "label": "party-b",
+      "opened": "fern",
+      "suggested": 3,
+      "checkedSources": 0,
+      "verdict": "",
+      "acknowledged": false,
+      "attributionContent": "unverified"
+    }
+  ]
+}

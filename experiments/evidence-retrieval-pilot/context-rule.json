@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "fixtureHash": "14be8517e99104ff7a4d3b7ec4b1344ed3ddfeaa75961c92015898f97f27723a",
+  "population": "The eight answerable items in holdout.json only.",
+  "criterion": "For a query missed by the existing center-row Hit@3 criterion, count it once if any of the top three displayed candidates shows a gold paragraph as additional context. The result card must visibly associate the original paragraph number with the complete original text on initial render after searching. Normalize whitespace for display comparison only. Exclude background data, unrelated page text, hidden or collapsed content requiring a click, mere adjacency and unlabelled numbers. Additional context cannot change center-row scores.",
+  "report": "Report context-only extra queries out of the full eight and out of center misses. Report center-or-visible-context count out of eight separately. This is exposure to a source line, not proof of reading, a correct verdict or minutes saved."
+}

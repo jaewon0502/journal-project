@@ -7,11 +7,16 @@ const path = require('node:path');
 const {JSDOM} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
-function page(t, hash = '', url = 'https://study.example/editor-study.html') {
+function page(t, hash = '', url = 'https://study.example/editor-study.html', prior, participantKit = false) {
   const dom = new JSDOM(fs.readFileSync(path.join(folder, 'editor-study.html'), 'utf8'), {url: url + hash, runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window;
+  if (participantKit) {
+    w.document.documentElement.setAttribute('data-participant-kit', '');
+    w.document.getElementById('dashboard').remove();
+  }
   let ticks = 0;
+  if (prior) w.localStorage.setItem('journal-editor-study-workspace-v1',JSON.stringify(prior));
   Object.defineProperty(w.performance, 'now', {value:() => ticks});
   const el = id => w.document.getElementById(id);
   for (const script of w.document.querySelectorAll('script[src]')) w.eval(fs.readFileSync(path.join(folder, script.getAttribute('src')), 'utf8'));
@@ -168,4 +173,182 @@ test('화면이 바뀌면 키보드 초점이 새 단계로 옮겨지고 진행 
   p.el('withdraw').click();
   assert.equal(active(), 'ended-heading');
   assert.doesNotMatch(fs.readFileSync(path.join(folder, 'editor-study.css'), 'utf8'), /\.status:empty\{display:none\}/);
+});
+
+test('양쪽 검토 조건에서 같은 단계 버튼으로 되돌아간 시간과 재제출 시도를 누적한다', t => {
+  for (const ordinal of [1,3]) {
+    const p=page(t,'#participate'); p.enroll(ordinal); p.el('begin-trial').click();
+    const choose=name=>p.w.document.querySelector('[data-phase="'+name+'"]').click();
+    p.advance(100); choose('locate'); p.advance(200); choose('select'); p.advance(50);
+    p.el('pause-trial').click(); p.advance(700); p.el('resume-trial').click(); p.advance(10); choose('locate');
+    p.advance(40); choose('decide'); p.advance(10);
+    if (ordinal===3) {
+      p.answer(); // Retry: the assigned Journal frame has not recorded a judgment yet.
+      assert.equal(p.workspace().records[0].trials.length,0);
+      const frame=p.w.document.querySelector('iframe');
+      const send=data=>p.w.dispatchEvent(new p.w.MessageEvent('message',{data,source:frame.contentWindow,origin:p.w.location.origin}));
+      let task; frame.contentWindow.postMessage=m=>{task=m;}; send({type:'journal-study-ready'});
+      send({type:'journal-study-used',nonce:task.nonce,status:'fact',sourceIds:['doc-2'],reason:'주체와 기간을 확인했다.'});
+    }
+    p.advance(20); p.answer();
+    const trial=p.workspace().records[0].trials[0], expected={select:160,locate:240,decide:30};
+    assert.deepEqual(trial.phaseMs,expected);
+    assert.equal(trial.elapsedMs,430);
+  }
+});
+
+test('표시를 놓친 과제는 총시간만 남고 예시의 단계 평균은 실제 집계로 넘어오지 않는다', t => {
+  const q=page(t);
+  q.el('demo-view').click();
+  assert.match(q.el('phase-counts').textContent,/8명 · 32건/);
+  assert.equal(q.el('phase-table').querySelectorAll('tbody tr').length,3);
+  q.el('real-view').click();
+  assert.equal(q.el('phase-table').querySelectorAll('tbody tr').length,0);
+  for(const omitted of [true,false]) {
+    const p=page(t,'#participate'); p.enroll(1); p.el('begin-trial').click();
+    if(omitted) {
+      for(const name of ['locate','decide']) p.w.document.querySelector('[data-phase="'+name+'"]').click();
+      p.el('phase-omit').click();
+    }
+    p.advance(32);p.answer();
+    const trial=p.workspace().records[0].trials[0];
+    assert.equal(trial.phaseMs,null);assert.equal(trial.elapsedMs,32);
+  }
+});
+
+test('다시 열린 과제는 휴식 시점의 단계만 복원하고 중단 중인 단계 시간은 추정하지 않는다', t => {
+  const p=page(t,'#participate'); p.enroll(1); p.el('begin-trial').click();
+  const choose=(v,name)=>v.w.document.querySelector('[data-phase="'+name+'"]').click();
+  p.advance(100); choose(p,'locate'); p.advance(80); p.el('pause-trial').click();
+  const paused=p.workspace();
+  const q=page(t,'#participate',undefined,paused); q.el('resume-trial').click();
+  q.advance(10); choose(q,'decide'); q.advance(30); q.answer();
+  assert.deepEqual(q.workspace().records[0].trials[0].phaseMs,{select:100,locate:90,decide:30});
+  const interrupted=structuredClone(paused);
+  interrupted.session.state='running';interrupted.session.segmentAt=Date.now()-100;
+  const r=page(t,'#participate',undefined,interrupted);
+  assert.equal(r.el('recovery').hidden,false);
+  r.el('resume-unbroken').click(); r.advance(20); r.answer();
+  assert.equal(r.workspace().records[0].trials[0].phaseMs,null);
+  assert.ok(r.workspace().records[0].trials[0].elapsedMs>=300);
+});
+
+test('배포본은 코드 입력 후에만 본인 기록을 복원하고 연구자·다른 편집자의 상태를 섞지 않는다', t => {
+  const key = n => 'journal-editor-study-participant-v1/J1-' + n + '-E0000000000000001';
+  const pilot = page(t, '', undefined, undefined, true);
+  pilot.el('qualified').checked = true; pilot.el('enroll').requestSubmit();
+  assert.match(pilot.el('enroll-status').textContent, /초대 코드/);
+  assert.equal(pilot.w.localStorage.length, 0);
+  pilot.enroll(1);
+  pilot.el('begin-trial').click(); pilot.advance(1000); pilot.answer();
+  const stored = pilot.w.localStorage.getItem(key(1));
+  assert.equal(JSON.parse(stored).records[0].trials.length, 1);
+  assert.equal(pilot.workspace(), null);
+
+  const reentry = page(t, '#dashboard', undefined, undefined, true);
+  reentry.w.localStorage.setItem(key(1), stored);
+  reentry.w.localStorage.setItem('journal-editor-study-workspace-v1', '진행자의 별도 저장소');
+  assert.equal(reentry.el('dashboard'), null);
+  assert.equal(reentry.el('enroll-box').hidden, false);
+  assert.equal(reentry.el('trial-heading').textContent, '');
+  reentry.enroll(2);
+  assert.equal(reentry.el('trial-heading').textContent.includes('과제 1 / 4'), true);
+  assert.equal(reentry.w.localStorage.getItem(key(1)), stored);
+  assert.equal(reentry.w.localStorage.getItem('journal-editor-study-workspace-v1'), '진행자의 별도 저장소');
+
+  const owner = page(t, '', undefined, undefined, true);
+  owner.w.localStorage.setItem(key(1), stored);
+  owner.enroll(1);
+  assert.match(owner.el('trial-heading').textContent, /과제 2 \/ 4/);
+});
+
+function completedRecord(ordinal, id) {
+  const core = require('../docs/reader/editor-study-core.js');
+  const cases = require('../docs/reader/editor-study-cases.js');
+  let record = core.createRecord(id, ordinal, 'editor', true);
+  for (const trial of core.plan(ordinal)) {
+    const c = cases.get(trial.caseId, trial.variant);
+    const manual = trial.method === 'manual';
+    record = core.addTrial(record, {elapsedMs:manual ? 60000 : 30000,
+      verdict:manual ? (trial.variant === 'A' ? 'supported' : 'insufficient') : c.expectedVerdict,
+      reason:'격리된 집계 검증', sourceIds:[c.expectedSourceIds[0]], journalUsed:!manual});
+  }
+  return record;
+}
+
+test('다른 묶음의 개인 기록 네 개는 지표에 들어가지 않고 발급 명부의 16건만 집계한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const roster = p.workspace().invitations;
+  const records = roster.map(i => completedRecord(i.ordinal, i.id));
+  const other = [5,6,7,8].map(n => completedRecord(n, 'E' + String(n).padStart(16, '0')));
+  await importFiles(p, [...other, records[0]].map(r => JSON.stringify(r)));
+  assert.match(p.el('import-status').textContent, /명부에 없는 개인 기록/);
+  assert.match(p.el('counts').textContent, /분석 0명 · 0건/);
+  assert.match(p.el('metrics').textContent, /측정 대기/);
+  assert.equal(p.workspace().records.length, 0);
+  const foreignInvites = other.map(r => ({ordinal:r.ordinal, id:r.participantId, code:'J1-' + r.ordinal + '-' + r.participantId}));
+  await importFiles(p, [JSON.stringify({type:'journal-editor-study-collection-v1', records:other, invitations:foreignInvites})]);
+  assert.match(p.el('import-status').textContent, /기존 명부에 일치하는 배정이 없습니다/);
+  assert.equal(p.workspace().records.length, 0);
+  const fresh = page(t);
+  await importFiles(fresh, [JSON.stringify({type:'journal-editor-study-collection-v1', records:[], invitations:roster}),
+    ...records.map(r => JSON.stringify(r))]);
+  assert.match(fresh.el('counts').textContent, /분석 4명 · 16건/);
+  assert.match(fresh.el('metrics').textContent, /시간 절감률50%/);
+  assert.match(fresh.el('metrics').textContent, /격차 감소100%p/);
+  await importFiles(fresh, [JSON.stringify(records[0])]);
+  assert.equal(fresh.workspace().records.length, 4);
+});
+
+test('예전 명부 없는 백업은 재저장·재복원해도 보관 상태를 유지하고 직접 확인한 배정만 복구한다', async t => {
+  const p = page(t);
+  const records = [1,2,3,4].map(n => completedRecord(n, 'E' + String(n).padStart(16,'0')));
+  await importFiles(p, [JSON.stringify({type:'journal-editor-study-collection-v1', records})]);
+  assert.equal(p.workspace().records.length, 4);
+  assert.match(p.el('counts').textContent, /등록 0명/);
+  assert.match(p.el('data-notice').textContent, /명부 미확인 4명/);
+  const next = page(t, '', undefined, p.workspace());
+  assert.match(next.el('metrics').textContent, /측정 대기/);
+  const downloads = captureDownloads(next);
+  next.el('export-all').click();
+  const backup = await downloads[0].text();
+  const final = page(t);
+  await importFiles(final, [backup]);
+  assert.match(final.el('data-notice').textContent, /명부 미확인 4명/);
+  final.el('roster-code').value = 'J1-1-EAAAAAAAAAAAAAAAA';
+  final.el('recover-roster').requestSubmit();
+  assert.match(final.el('import-status').textContent, /다릅니다/);
+  assert.deepEqual(final.workspace().invitations, []);
+  for (const [index,r] of records.entries()) {
+    final.el('roster-code').value = 'J1-' + r.ordinal + '-' + r.participantId;
+    final.el('recover-roster').requestSubmit();
+    assert.match(final.el('counts').textContent, new RegExp('등록 ' + (index + 1) + '명'));
+    if (index < 3) assert.match(final.el('metrics').textContent, /측정 대기/);
+  }
+  assert.match(final.el('counts').textContent, /분석 4명 · 16건/);
+  assert.match(final.el('metrics').textContent, /시간 절감률50%/);
+});
+
+test('공용 기기의 직접 등록은 백업에서 확인되며 예전 진행 중 참여도 원래 배정으로 이어간다', async t => {
+  const p = page(t, '#participate');
+  p.el('qualified').checked = true;
+  p.el('enroll').requestSubmit();
+  const direct = p.workspace();
+  assert.equal(direct.invitations.length, 1);
+  assert.equal(direct.invitations[0].atDevice, true);
+  assert.equal(direct.invitations[0].id, direct.records[0].participantId);
+  const old = {...direct, invitations:[]};
+  const resumed = page(t, '#participate', undefined, old);
+  assert.match(resumed.el('trial-heading').textContent, /과제 1/);
+  resumed.el('begin-trial').click();
+  assert.deepEqual(resumed.workspace().invitations, direct.invitations);
+  const downloads = captureDownloads(p);
+  p.el('export-all').click();
+  const moved = page(t);
+  await importFiles(moved, [await downloads[0].text()]);
+  assert.match(moved.el('counts').textContent, /등록 1명/);
+  assert.match(moved.el('invites').textContent, /발급된 초대 코드가 없습니다/);
+  await importFiles(moved, [JSON.stringify(direct.records[0])]);
+  assert.match(moved.el('import-status').textContent, /현재 등록 1명/);
 });

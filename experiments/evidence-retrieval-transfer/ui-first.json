@@ -1,0 +1,230 @@
+{
+  "fixtureHash": "dd857b5953ad13d8203bc1b3eb414a7a64688e724c16c1f7dd740e29ea26b09e",
+  "ruleHash": "c3803305c82cfc9d2af9eb8f3b810851e5d33db0d2184156be74607719176dba",
+  "hashes": {
+    "factcheck.html": "d13c5f75c9e81c05d2b92b8052db6748f509b38aaeafe57e1b44dcfbcbf433e1",
+    "factcheck-ui.js": "f6b582447cb50f273012087093aaf3b88a9cd9e8e153f60f5e976f90707ca8dc",
+    "evidence-search.js": "06169af5b4373b50436540144c6a35c2c56a1f324e7701abcea6365737bcc7ff",
+    "evidence-trend.js": "1d8b402c09bd15e2e4ecde060f9a87c2d6ec9e40ca20ba0d8c885169f4de9bfe",
+    "evidence-finder.js": "356496ce122f013cfbb12015281ece4a961fccd0a190fdaaebbc84b9662855a1",
+    "evidence-period.js": "f0f05d007e9b377507105adcfeea8fec41074b7e4d94f43b8d23cd9fce29e64d"
+  },
+  "browser": "157.0.8103.79",
+  "results": [
+    {
+      "id": "r1",
+      "gold": [
+        9
+      ],
+      "candidates": [
+        9
+      ],
+      "visible": [
+        9
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 1개"
+    },
+    {
+      "id": "r2",
+      "gold": [
+        7
+      ],
+      "candidates": [
+        7,
+        8
+      ],
+      "visible": [
+        7,
+        8
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 2개"
+    },
+    {
+      "id": "r3",
+      "gold": [
+        4
+      ],
+      "candidates": [
+        4
+      ],
+      "visible": [
+        4
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 1개"
+    },
+    {
+      "id": "r4",
+      "gold": [
+        2
+      ],
+      "candidates": [
+        2,
+        1
+      ],
+      "visible": [
+        2,
+        1
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 2개"
+    },
+    {
+      "id": "v1",
+      "gold": [
+        8
+      ],
+      "candidates": [
+        8,
+        3,
+        4
+      ],
+      "visible": [
+        8,
+        3,
+        4
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "v2",
+      "gold": [
+        6
+      ],
+      "candidates": [
+        6,
+        3,
+        4
+      ],
+      "visible": [
+        6,
+        3,
+        4
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "v3",
+      "gold": [
+        10
+      ],
+      "candidates": [
+        10,
+        9,
+        12
+      ],
+      "visible": [
+        10,
+        9,
+        12
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "v4",
+      "gold": [
+        13
+      ],
+      "candidates": [
+        13,
+        14,
+        5
+      ],
+      "visible": [
+        13,
+        14,
+        5
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "v5",
+      "gold": [
+        14
+      ],
+      "candidates": [
+        14,
+        3,
+        13
+      ],
+      "visible": [
+        14,
+        3,
+        13
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "v6",
+      "gold": [
+        5
+      ],
+      "candidates": [
+        5,
+        3,
+        14
+      ],
+      "visible": [
+        5,
+        3,
+        14
+      ],
+      "foldLabels": [],
+      "status": "겹치는 표현이 있는 문단 3개"
+    },
+    {
+      "id": "rc1",
+      "gold": [],
+      "candidates": [
+        8
+      ],
+      "visible": [],
+      "foldLabels": [
+        "표현이 겹친 위치 1개 보기"
+      ],
+      "status": "질문에서 묻는 단위 ‘원’에 해당하는 표기를 찾지 못했습니다. 원표의 단위와 주석을 확인하세요."
+    },
+    {
+      "id": "rc2",
+      "gold": [],
+      "candidates": [],
+      "visible": [],
+      "foldLabels": [],
+      "status": "질문에서 묻는 단위 ‘일수’에 해당하는 표기를 찾지 못했습니다. 원표의 단위와 주석을 확인하세요."
+    },
+    {
+      "id": "vc1",
+      "gold": [],
+      "candidates": [
+        10,
+        9,
+        12
+      ],
+      "visible": [],
+      "foldLabels": [
+        "표현이 겹친 위치 3개 보기"
+      ],
+      "status": "질문은 이유를 묻고 있습니다. 붙여 넣은 표에서 이유를 설명하는 항목을 확인하지 못했습니다. 조사 문항이나 원문 해설을 확인하세요."
+    },
+    {
+      "id": "vc2",
+      "gold": [],
+      "candidates": [
+        3,
+        4
+      ],
+      "visible": [],
+      "foldLabels": [
+        "표현이 겹친 위치 2개 보기"
+      ],
+      "status": "질문에서 묻는 단위 ‘원’에 해당하는 표기를 찾지 못했습니다. 원표의 단위와 주석을 확인하세요."
+    }
+  ]
+}

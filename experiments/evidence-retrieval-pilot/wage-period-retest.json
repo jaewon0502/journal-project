@@ -1,0 +1,219 @@
+{
+  "scope": "Replay of previously disclosed original minimum-wage queries, not a new holdout.",
+  "before": {
+    "fixtureHash": "14be8517e99104ff7a4d3b7ec4b1344ed3ddfeaa75961c92015898f97f27723a",
+    "periodHash": "d6a74a7af7fece1cd74659daeea04c0fea0aa5f1fd0115cc6f8e68accadf6234",
+    "uiHash": "73ee129e30d523fe2b866328182ceb9e8380d0efe605e2b7089f896a45df5ba3",
+    "finderHash": "90921959ada13a036f5ad1e1051f1bc25ed0f1b80a8aca4501f10090167af86e",
+    "browser": "157.0.8103.79",
+    "results": [
+      {
+        "id": "w1",
+        "gold": [
+          4
+        ],
+        "cards": [
+          {
+            "paragraph": 4,
+            "warnings": []
+          },
+          {
+            "paragraph": 1,
+            "warnings": []
+          },
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w2",
+        "gold": [
+          7
+        ],
+        "cards": [
+          {
+            "paragraph": 6,
+            "warnings": []
+          },
+          {
+            "paragraph": 1,
+            "warnings": []
+          },
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w3",
+        "gold": [
+          9
+        ],
+        "cards": [
+          {
+            "paragraph": 3,
+            "warnings": []
+          },
+          {
+            "paragraph": 5,
+            "warnings": []
+          },
+          {
+            "paragraph": 9,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w4",
+        "gold": [
+          3
+        ],
+        "cards": [
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "fixtureHash": "14be8517e99104ff7a4d3b7ec4b1344ed3ddfeaa75961c92015898f97f27723a",
+    "periodHash": "ee28923d2eb54b3485f4560331af700b6b76e865a08e9bebdd54ca0441f0ec3f",
+    "uiHash": "73ee129e30d523fe2b866328182ceb9e8380d0efe605e2b7089f896a45df5ba3",
+    "finderHash": "90921959ada13a036f5ad1e1051f1bc25ed0f1b80a8aca4501f10090167af86e",
+    "browser": "157.0.8103.79",
+    "results": [
+      {
+        "id": "w1",
+        "gold": [
+          4
+        ],
+        "cards": [
+          {
+            "paragraph": 4,
+            "warnings": []
+          },
+          {
+            "paragraph": 1,
+            "warnings": []
+          },
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w2",
+        "gold": [
+          7
+        ],
+        "cards": [
+          {
+            "paragraph": 6,
+            "warnings": [
+              "질문에 적힌 시점은 2022년, 이 행 첫 칸은 '23.01.01 ~ '23.12.31입니다. 원표에서 기준 시점을 확인하세요."
+            ]
+          },
+          {
+            "paragraph": 1,
+            "warnings": []
+          },
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w3",
+        "gold": [
+          9
+        ],
+        "cards": [
+          {
+            "paragraph": 3,
+            "warnings": []
+          },
+          {
+            "paragraph": 5,
+            "warnings": [
+              "질문에 적힌 시점은 2020년, 이 행 첫 칸은 '24.01.01 ~ '24.12.31입니다. 원표에서 기준 시점을 확인하세요."
+            ]
+          },
+          {
+            "paragraph": 9,
+            "warnings": []
+          }
+        ]
+      },
+      {
+        "id": "w4",
+        "gold": [
+          3
+        ],
+        "cards": [
+          {
+            "paragraph": 3,
+            "warnings": []
+          }
+        ]
+      }
+    ],
+    "manualRecovery": {
+      "id": "w2",
+      "firstCandidate": 6,
+      "expansions": 1,
+      "selectedParagraph": 7,
+      "excerptMatchedExactly": true
+    }
+  },
+  "weatherRegression": {
+    "reference": "period-retest.json",
+    "comparedWithPeriodHash": "ee28923d2eb54b3485f4560331af700b6b76e865a08e9bebdd54ca0441f0ec3f",
+    "allCandidateOrdersAndWarningTextsIdentical": true,
+    "metrics": {
+      "wrongYear": {
+        "intended": 2,
+        "returned": 2,
+        "passed": 2,
+        "warned": 2
+      },
+      "wrongMonth": {
+        "intended": 2,
+        "returned": 2,
+        "passed": 2,
+        "warned": 2
+      },
+      "same": {
+        "intended": 2,
+        "returned": 2,
+        "passed": 2,
+        "warned": 0
+      },
+      "twoYears": {
+        "intended": 2,
+        "returned": 2,
+        "passed": 2,
+        "warned": 0
+      },
+      "relative": {
+        "intended": 1,
+        "returned": 1,
+        "passed": 1,
+        "warned": 0
+      },
+      "exploratoryRankFirst": {
+        "intended": 1,
+        "returned": 1,
+        "passed": null,
+        "warned": 0
+      }
+    }
+  }
+}

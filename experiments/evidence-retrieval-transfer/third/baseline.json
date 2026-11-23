@@ -1,0 +1,98 @@
+{
+  "fixtureHash": "602e38135903a93a899a445f2e054e2830b3b805326922bd8d4885bb13a67928",
+  "finderHash": "90921959ada13a036f5ad1e1051f1bc25ed0f1b80a8aca4501f10090167af86e",
+  "metrics": {
+    "answerable": 5,
+    "hitAt1": 1,
+    "hitAt3": 2,
+    "controls": 2,
+    "controlsWithCandidates": 2,
+    "controlsWithNoCandidates": 0
+  },
+  "rows": [
+    {
+      "id": "d1",
+      "source": "read",
+      "gold": [
+        9
+      ],
+      "candidates": [
+        1,
+        9,
+        3
+      ],
+      "firstGoldRank": 2
+    },
+    {
+      "id": "d2",
+      "source": "read",
+      "gold": [
+        11
+      ],
+      "candidates": [
+        11,
+        1,
+        3
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "d3",
+      "source": "read",
+      "gold": [
+        14
+      ],
+      "candidates": [
+        1,
+        3,
+        5
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "d4",
+      "source": "read",
+      "gold": [
+        6
+      ],
+      "candidates": [
+        1,
+        3,
+        5
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "d5",
+      "source": "read",
+      "gold": [
+        2
+      ],
+      "candidates": [
+        1
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "d6",
+      "source": "read",
+      "gold": [],
+      "candidates": [
+        1,
+        3,
+        5
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "d7",
+      "source": "read",
+      "gold": [],
+      "candidates": [
+        9,
+        3
+      ],
+      "firstGoldRank": null
+    }
+  ]
+}

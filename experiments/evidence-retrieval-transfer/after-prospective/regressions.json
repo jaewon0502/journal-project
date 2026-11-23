@@ -1,0 +1,609 @@
+{
+  "pilot": {
+    "fixtureHash": "14be8517e99104ff7a4d3b7ec4b1344ed3ddfeaa75961c92015898f97f27723a",
+    "finderHash": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "metrics": {
+      "answerable": 8,
+      "hitAt1": 8,
+      "hitAt3": 8,
+      "controls": 2,
+      "controlsReturningCandidates": 2
+    },
+    "results": [
+      {
+        "id": "b1",
+        "gold": [
+          5
+        ],
+        "candidates": [
+          5,
+          1,
+          13
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "b2",
+        "gold": [
+          4
+        ],
+        "candidates": [
+          4,
+          3,
+          7
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "b3",
+        "gold": [
+          11
+        ],
+        "candidates": [
+          11,
+          6,
+          7
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "b4",
+        "gold": [
+          13
+        ],
+        "candidates": [
+          13,
+          1,
+          2
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "w1",
+        "gold": [
+          4
+        ],
+        "candidates": [
+          4,
+          1,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "w2",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          7,
+          6,
+          1
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "w3",
+        "gold": [
+          9
+        ],
+        "candidates": [
+          9,
+          3,
+          5
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "w4",
+        "gold": [
+          3
+        ],
+        "candidates": [
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "bc",
+        "gold": [],
+        "candidates": [
+          4,
+          3,
+          7
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "wc",
+        "gold": [],
+        "candidates": [
+          5,
+          1,
+          3
+        ],
+        "firstGoldRank": null
+      }
+    ]
+  },
+  "road-vote": {
+    "fixtureHash": "dd857b5953ad13d8203bc1b3eb414a7a64688e724c16c1f7dd740e29ea26b09e",
+    "finderHash": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "metrics": {
+      "answerable": 10,
+      "hitAt1": 10,
+      "hitAt3": 10,
+      "controls": 4,
+      "controlsWithCandidates": 3,
+      "controlsWithNoCandidates": 1
+    },
+    "rows": [
+      {
+        "id": "r1",
+        "source": "road",
+        "gold": [
+          9
+        ],
+        "candidates": [
+          9
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "r2",
+        "source": "road",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          7,
+          8
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "r3",
+        "source": "road",
+        "gold": [
+          4
+        ],
+        "candidates": [
+          4
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "r4",
+        "source": "road",
+        "gold": [
+          2
+        ],
+        "candidates": [
+          2,
+          1
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v1",
+        "source": "vote",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8,
+          3,
+          4
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v2",
+        "source": "vote",
+        "gold": [
+          6
+        ],
+        "candidates": [
+          6,
+          3,
+          4
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v3",
+        "source": "vote",
+        "gold": [
+          10
+        ],
+        "candidates": [
+          10,
+          9,
+          12
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v4",
+        "source": "vote",
+        "gold": [
+          13
+        ],
+        "candidates": [
+          13,
+          14,
+          5
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v5",
+        "source": "vote",
+        "gold": [
+          14
+        ],
+        "candidates": [
+          14,
+          3,
+          13
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "v6",
+        "source": "vote",
+        "gold": [
+          5
+        ],
+        "candidates": [
+          5,
+          3,
+          14
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "rc1",
+        "source": "road",
+        "gold": [],
+        "candidates": [
+          8
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "rc2",
+        "source": "road",
+        "gold": [],
+        "candidates": [],
+        "firstGoldRank": null
+      },
+      {
+        "id": "vc1",
+        "source": "vote",
+        "gold": [],
+        "candidates": [
+          10,
+          9,
+          12
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "vc2",
+        "source": "vote",
+        "gold": [],
+        "candidates": [
+          3,
+          4
+        ],
+        "firstGoldRank": null
+      }
+    ]
+  },
+  "forest": {
+    "fixtureHash": "26eb0623ebfd042a24fbf3bde19e88a81f578118d8222abcc33f22e1829f381c",
+    "finderHash": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "metrics": {
+      "answerable": 5,
+      "hitAt1": 5,
+      "hitAt3": 5,
+      "controls": 2,
+      "controlsWithCandidates": 1,
+      "controlsWithNoCandidates": 1
+    },
+    "rows": [
+      {
+        "id": "f1",
+        "source": "forest",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "f2",
+        "source": "forest",
+        "gold": [
+          10
+        ],
+        "candidates": [
+          10,
+          11
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "f3",
+        "source": "forest",
+        "gold": [
+          12
+        ],
+        "candidates": [
+          12
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "f4",
+        "source": "forest",
+        "gold": [
+          1,
+          2
+        ],
+        "candidates": [
+          2
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "f5",
+        "source": "forest",
+        "gold": [
+          13
+        ],
+        "candidates": [
+          13,
+          1,
+          2
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "fc1",
+        "source": "forest",
+        "gold": [],
+        "candidates": [],
+        "firstGoldRank": null
+      },
+      {
+        "id": "fc2",
+        "source": "forest",
+        "gold": [],
+        "candidates": [
+          1,
+          13
+        ],
+        "firstGoldRank": null
+      }
+    ]
+  },
+  "reading": {
+    "fixtureHash": "602e38135903a93a899a445f2e054e2830b3b805326922bd8d4885bb13a67928",
+    "finderHash": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "metrics": {
+      "answerable": 5,
+      "hitAt1": 5,
+      "hitAt3": 5,
+      "controls": 2,
+      "controlsWithCandidates": 0,
+      "controlsWithNoCandidates": 2
+    },
+    "rows": [
+      {
+        "id": "d1",
+        "source": "read",
+        "gold": [
+          9
+        ],
+        "candidates": [
+          9,
+          1,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "d2",
+        "source": "read",
+        "gold": [
+          11
+        ],
+        "candidates": [
+          11,
+          1,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "d3",
+        "source": "read",
+        "gold": [
+          14
+        ],
+        "candidates": [
+          14,
+          1,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "d4",
+        "source": "read",
+        "gold": [
+          6
+        ],
+        "candidates": [
+          6,
+          1,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "d5",
+        "source": "read",
+        "gold": [
+          2
+        ],
+        "candidates": [
+          2,
+          1
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "d6",
+        "source": "read",
+        "gold": [],
+        "candidates": [],
+        "firstGoldRank": null
+      },
+      {
+        "id": "d7",
+        "source": "read",
+        "gold": [],
+        "candidates": [],
+        "firstGoldRank": null
+      }
+    ]
+  },
+  "labour": {
+    "scope": "개발에 노출된 한 기사와 공식 원자료 1건. 검색 후보를 평가하며 실제 편집시간·정치 편향은 미측정.",
+    "trendSha256": "1d8b402c09bd15e2e4ecde060f9a87c2d6ec9e40ca20ba0d8c885169f4de9bfe",
+    "ordinarySha256": "c2f87284ab11685d7a0cd466afc99d1367326697e1a1a38a0f5b3774775be886",
+    "textSha256": "c49ed71c04e00adc0f3ecff89fe9a5fd646f403870b5e6eb0b18e0d2673ad53b",
+    "original": {
+      "summary": {
+        "attempted": 3,
+        "top1": 1,
+        "top3": 1,
+        "needsContext": 2,
+        "needsPublicationDate": 1
+      },
+      "cases": [
+        {
+          "taskId": "labour-growth",
+          "state": "needs-context",
+          "reason": "missing-subject",
+          "usedArticleContext": false,
+          "needsPublicationDate": false,
+          "centreRank": null,
+          "candidates": []
+        },
+        {
+          "taskId": "labour-rate",
+          "state": "ordinary",
+          "reason": null,
+          "usedArticleContext": false,
+          "needsPublicationDate": false,
+          "centreRank": 1,
+          "candidates": [
+            {
+              "page": 32,
+              "paragraph": 940,
+              "context": [
+                938,
+                939,
+                941,
+                942
+              ]
+            },
+            {
+              "page": 8,
+              "paragraph": 166,
+              "context": [
+                164,
+                165,
+                167,
+                168
+              ]
+            },
+            {
+              "page": 42,
+              "paragraph": 1276,
+              "context": [
+                1274,
+                1275,
+                1277,
+                1278
+              ]
+            }
+          ]
+        },
+        {
+          "taskId": "labour-period",
+          "state": "needs-context",
+          "reason": "missing-subject",
+          "usedArticleContext": false,
+          "needsPublicationDate": true,
+          "centreRank": null,
+          "candidates": []
+        }
+      ]
+    },
+    "contextualRetry": {
+      "summary": {
+        "attempted": 2,
+        "top1": 2,
+        "top3": 2,
+        "needsContext": 0,
+        "needsPublicationDate": 1
+      },
+      "cases": [
+        {
+          "taskId": "labour-growth",
+          "state": "candidates",
+          "reason": null,
+          "usedArticleContext": true,
+          "needsPublicationDate": false,
+          "centreRank": 1,
+          "candidates": [
+            {
+              "page": 28,
+              "paragraph": 822,
+              "context": [
+                817,
+                818
+              ]
+            }
+          ]
+        },
+        {
+          "taskId": "labour-period",
+          "state": "candidates",
+          "reason": null,
+          "usedArticleContext": true,
+          "needsPublicationDate": true,
+          "centreRank": 1,
+          "candidates": [
+            {
+              "page": 28,
+              "paragraph": 822,
+              "context": [
+                817,
+                818
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "uniqueCorrectRetryCentres": 1
+  }
+}

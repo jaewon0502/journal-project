@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "source": {
+    "author": "기상청",
+    "title": "2024 지진연보 발간 보도자료, 표 4. 기상청 계기 관측(1978년) 이후 지진 규모 순위(20위까지)",
+    "published": "2025-02-20",
+    "accessed": "2026-11-23",
+    "url": "https://www.weather.go.kr/kma/servlet/NeoboardProcess?bid=press&fno=3&k=ATC202502191322353_7c239c8d-e06e-429e-bcf2-d449b7a7c3b4.pdf&mode=download&num=1194462&ses=USERSESSION",
+    "locator": "인쇄 13쪽 표 4의 순위 1, 2, 공동 8위 울산 행. 각 행의 발생일시부터 지리적 위치까지 원래 순서 그대로 발췌하고 열은 탭으로 나눴다. 별도 탐색 1개는 순위와 규모도 보존했다."
+  },
+  "lines": [
+    "2016-09-12 20:32:54\t35.76\t129.19\t경북 경주시 남남서쪽 8.7km 지역",
+    "2017-11-15 14:29:31\t36.11\t129.37\t경북 포항시 북구 북쪽 8km 지역",
+    "2016-07-05 20:33:03\t35.51\t129.99\t울산 동구 동쪽 52km 해역"
+  ],
+  "fullRow": "1\t5.8\t2016-09-12 20:32:54\t35.76\t129.19\t경북 경주시 남남서쪽 8.7km 지역",
+  "success": "Score only preregistered query-row pairs. Search all three source lines unless sourceForm is full. Report returned targets out of intended targets. A nonreturned target is unobserved, never a pass. For explicit wrong years and wrong months, a visible mismatch warning on the correct target card must state the conflicting periods accurately. For matching periods, a comparison explicitly spanning two years, and an unanchored relative year, a categorical mismatch warning is an error. Report separate numerators and denominators for each category. Exploratory input with an unselected leading rank is reported without contributing to the primary score. A warning is not a fact verdict; this checks display behavior.",
+  "probes": [
+    {"id":"y1","query":"2017년 경주시 남남서쪽 8.7km 지역 지진의 발생 시각은?","type":"wrongYear","targets":[1],"asked":[2017]},
+    {"id":"y2","query":"2016년 포항시 북구 북쪽 8km 지역 지진의 발생 시각은?","type":"wrongYear","targets":[2],"asked":[2016]},
+    {"id":"m1","query":"2016년 7월 경주시 남남서쪽 8.7km 지역 지진의 발생 시각은?","type":"wrongMonth","targets":[1],"asked":[2016,7]},
+    {"id":"m2","query":"2016년 9월 울산 동구 동쪽 52km 해역 지진의 발생 시각은?","type":"wrongMonth","targets":[3],"asked":[2016,9]},
+    {"id":"s1","query":"2016년 9월 경주시 남남서쪽 8.7km 지역 지진의 발생 시각은?","type":"same","targets":[1],"asked":[2016,9]},
+    {"id":"s2","query":"2017년 포항시 북구 북쪽 8km 지역 지진의 발생 시각은?","type":"same","targets":[2],"asked":[2017]},
+    {"id":"c1","query":"2016년 경주시 지진과 2017년 포항시 지진의 발생 시각을 비교해 줘.","type":"twoYears","targets":[1,2],"asked":[2016,2017]},
+    {"id":"r1","query":"지난해 울산 동구 동쪽 52km 해역에서 지진이 일어난 시각은?","type":"relative","targets":[3],"asked":[]},
+    {"id":"x1","query":"2017년 경주시 남남서쪽 8.7km 지역 지진의 발생 시각은?","type":"exploratoryRankFirst","sourceForm":"full","targets":[1],"asked":[2017]}
+  ]
+}

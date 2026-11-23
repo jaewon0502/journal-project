@@ -1,0 +1,89 @@
+{
+  "fixtureHash": "26eb0623ebfd042a24fbf3bde19e88a81f578118d8222abcc33f22e1829f381c",
+  "finderHash": "356496ce122f013cfbb12015281ece4a961fccd0a190fdaaebbc84b9662855a1",
+  "metrics": {
+    "answerable": 5,
+    "hitAt1": 2,
+    "hitAt3": 3,
+    "controls": 2,
+    "controlsWithCandidates": 2,
+    "controlsWithNoCandidates": 0
+  },
+  "rows": [
+    {
+      "id": "f1",
+      "source": "forest",
+      "gold": [
+        8
+      ],
+      "candidates": [
+        8
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "f2",
+      "source": "forest",
+      "gold": [
+        10
+      ],
+      "candidates": [
+        11,
+        10
+      ],
+      "firstGoldRank": 2
+    },
+    {
+      "id": "f3",
+      "source": "forest",
+      "gold": [
+        12
+      ],
+      "candidates": [
+        12
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "f4",
+      "source": "forest",
+      "gold": [
+        1,
+        2
+      ],
+      "candidates": [],
+      "firstGoldRank": null
+    },
+    {
+      "id": "f5",
+      "source": "forest",
+      "gold": [
+        13
+      ],
+      "candidates": [
+        1,
+        2
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "fc1",
+      "source": "forest",
+      "gold": [],
+      "candidates": [
+        10
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "fc2",
+      "source": "forest",
+      "gold": [],
+      "candidates": [
+        1,
+        13
+      ],
+      "firstGoldRank": null
+    }
+  ]
+}

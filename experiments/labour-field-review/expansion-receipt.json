@@ -1,0 +1,54 @@
+{
+  "browser": "157.0.8103.79",
+  "tests": [
+    {
+      "id": "labour-growth",
+      "summaryClicks": 1,
+      "center": 814,
+      "tableTitle": 817,
+      "header": 818,
+      "copied": 822,
+      "draftExact": true,
+      "exportedExact": true,
+      "trimmedEqual": true,
+      "draftOuterSpaces": [
+        72,
+        71
+      ],
+      "sourceOuterSpaces": [
+        72,
+        71
+      ],
+      "storedOuterSpaces": [
+        72,
+        71
+      ],
+      "draftLocator": ""
+    },
+    {
+      "id": "labour-period",
+      "summaryClicks": 1,
+      "center": 814,
+      "tableTitle": 817,
+      "header": 818,
+      "copied": 822,
+      "draftExact": true,
+      "exportedExact": true,
+      "trimmedEqual": true,
+      "draftOuterSpaces": [
+        72,
+        71
+      ],
+      "sourceOuterSpaces": [
+        72,
+        71
+      ],
+      "storedOuterSpaces": [
+        72,
+        71
+      ],
+      "draftLocator": ""
+    }
+  ],
+  "articleDate": "작성\n2025.01.15 10:07"
+}

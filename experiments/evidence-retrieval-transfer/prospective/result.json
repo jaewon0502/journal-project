@@ -1,0 +1,256 @@
+{
+  "fixtureHash": "09b371de9a1371825fcfb84213d93c7fc2a81afd8063680069eaf6859861f4a3",
+  "baselineHash": "90921959ada13a036f5ad1e1051f1bc25ed0f1b80a8aca4501f10090167af86e",
+  "candidateHash": "51467c1eb7ecdb9b482a36267b88e3a72d50df93d8300e2dbf287b03c9682160",
+  "periodHash": "f0f05d007e9b377507105adcfeea8fec41074b7e4d94f43b8d23cd9fce29e64d",
+  "baseline": {
+    "overall": {
+      "answerable": 6,
+      "hitAt1": 3,
+      "hitAt3": 4,
+      "controls": 2,
+      "controlsWithCandidates": 2,
+      "controlsWithNoCandidates": 0
+    },
+    "perSource": {
+      "customs": {
+        "answerable": 3,
+        "hitAt1": 1,
+        "hitAt3": 1,
+        "controls": 1,
+        "controlsWithCandidates": 1,
+        "controlsWithNoCandidates": 0
+      },
+      "consumer": {
+        "answerable": 3,
+        "hitAt1": 2,
+        "hitAt3": 3,
+        "controls": 1,
+        "controlsWithCandidates": 1,
+        "controlsWithNoCandidates": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "x1",
+        "source": "customs",
+        "gold": [
+          4
+        ],
+        "candidates": [
+          6,
+          1,
+          2
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "x2",
+        "source": "customs",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          2,
+          3
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "x3",
+        "source": "customs",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8,
+          1,
+          2
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "x0",
+        "source": "customs",
+        "gold": [],
+        "candidates": [
+          2,
+          3
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "c1",
+        "source": "consumer",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "c2",
+        "source": "consumer",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          7,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "c3",
+        "source": "consumer",
+        "gold": [
+          13
+        ],
+        "candidates": [
+          1,
+          5,
+          13
+        ],
+        "firstGoldRank": 3
+      },
+      {
+        "id": "c0",
+        "source": "consumer",
+        "gold": [],
+        "candidates": [
+          12,
+          3
+        ],
+        "firstGoldRank": null
+      }
+    ]
+  },
+  "candidate": {
+    "overall": {
+      "answerable": 6,
+      "hitAt1": 4,
+      "hitAt3": 4,
+      "controls": 2,
+      "controlsWithCandidates": 2,
+      "controlsWithNoCandidates": 0
+    },
+    "perSource": {
+      "customs": {
+        "answerable": 3,
+        "hitAt1": 1,
+        "hitAt3": 1,
+        "controls": 1,
+        "controlsWithCandidates": 1,
+        "controlsWithNoCandidates": 0
+      },
+      "consumer": {
+        "answerable": 3,
+        "hitAt1": 3,
+        "hitAt3": 3,
+        "controls": 1,
+        "controlsWithCandidates": 1,
+        "controlsWithNoCandidates": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "x1",
+        "source": "customs",
+        "gold": [
+          4
+        ],
+        "candidates": [
+          6,
+          1,
+          2
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "x2",
+        "source": "customs",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          2,
+          3
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "x3",
+        "source": "customs",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8,
+          1,
+          2
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "x0",
+        "source": "customs",
+        "gold": [],
+        "candidates": [
+          2,
+          3
+        ],
+        "firstGoldRank": null
+      },
+      {
+        "id": "c1",
+        "source": "consumer",
+        "gold": [
+          8
+        ],
+        "candidates": [
+          8,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "c2",
+        "source": "consumer",
+        "gold": [
+          7
+        ],
+        "candidates": [
+          7,
+          3
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "c3",
+        "source": "consumer",
+        "gold": [
+          13
+        ],
+        "candidates": [
+          13,
+          1,
+          5
+        ],
+        "firstGoldRank": 1
+      },
+      {
+        "id": "c0",
+        "source": "consumer",
+        "gold": [],
+        "candidates": [
+          12,
+          3
+        ],
+        "firstGoldRank": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "fixtureHash": "14be8517e99104ff7a4d3b7ec4b1344ed3ddfeaa75961c92015898f97f27723a",
+  "finderHash": "90921959ada13a036f5ad1e1051f1bc25ed0f1b80a8aca4501f10090167af86e",
+  "metrics": {
+    "answerable": 8,
+    "hitAt1": 5,
+    "hitAt3": 6,
+    "controls": 2,
+    "controlsReturningCandidates": 2
+  },
+  "results": [
+    {
+      "id": "b1",
+      "gold": [
+        5
+      ],
+      "candidates": [
+        5,
+        1,
+        13
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "b2",
+      "gold": [
+        4
+      ],
+      "candidates": [
+        4,
+        3,
+        7
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "b3",
+      "gold": [
+        11
+      ],
+      "candidates": [
+        1,
+        2,
+        13
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "b4",
+      "gold": [
+        13
+      ],
+      "candidates": [
+        13,
+        1
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "w1",
+      "gold": [
+        4
+      ],
+      "candidates": [
+        4,
+        1,
+        3
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "w2",
+      "gold": [
+        7
+      ],
+      "candidates": [
+        6,
+        1,
+        3
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "w3",
+      "gold": [
+        9
+      ],
+      "candidates": [
+        3,
+        5,
+        9
+      ],
+      "firstGoldRank": 3
+    },
+    {
+      "id": "w4",
+      "gold": [
+        3
+      ],
+      "candidates": [
+        3
+      ],
+      "firstGoldRank": 1
+    },
+    {
+      "id": "bc",
+      "gold": [],
+      "candidates": [
+        4,
+        3,
+        7
+      ],
+      "firstGoldRank": null
+    },
+    {
+      "id": "wc",
+      "gold": [],
+      "candidates": [
+        1,
+        3
+      ],
+      "firstGoldRank": null
+    }
+  ]
+}

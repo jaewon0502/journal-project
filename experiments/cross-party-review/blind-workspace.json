@@ -1,0 +1,71 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "예비비 반토막 공방... \"민생 외면\" vs \"적정 수준\"\n정부 \"재해·통상 대응 무력화\"\n민주당 \"국고채 등 대처 가능\"\n2019년 일본 수출 규제에 예비비 2조7,000억 원을 썼던",
+  "articleDraft": "예비비 반토막 공방... \"민생 외면\" vs \"적정 수준\"\n정부 \"재해·통상 대응 무력화\"\n민주당 \"국고채 등 대처 가능\"\n2019년 일본 수출 규제에 예비비 2조7,000억 원을 썼던",
+  "sources": [
+    {
+      "id": "nabo25",
+      "title": "국회예산정책처 · 2025년도 예산안 위원회별 분석 [기획재정위원회]",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33318263",
+      "originUrl": "",
+      "version": "2024년 10월 발간",
+      "locator": "인쇄 20~23쪽(파일 34~37쪽), 일반회계 예비비 규모의 적정성 검토 필요",
+      "excerpt": "표 수치 전사, 단위 억원. 예비비 2024 예산 42,000, 2025 예산안 48,000. 2023 일반회계 예비비 예산 46,000, 지출결정액 13,940, 지출액 13,091.",
+      "pdfPage": "34"
+    },
+    {
+      "id": "nabo19",
+      "title": "국회예산정책처 · 2019회계연도 결산 총괄분석 Ⅰ",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33316159",
+      "originUrl": "https://www.nabo.go.kr/ko/report/analysisView.do?idx=7281",
+      "version": "2020년 8월 발간",
+      "locator": "인쇄 42~43쪽(파일 53~54쪽), 예비비 사용 총괄명세서",
+      "excerpt": "표 수치 전사, 단위 억원. 연간 합계 지출액 26,901. 사용명세별 지출액 중 재해대책비 6,654, 영유아보육료지원 712.",
+      "pdfPage": "53"
+    },
+    {
+      "id": "briefing",
+      "title": "KTV 국민방송 · 야당 단독감액안 정부 입장 합동 브리핑",
+      "url": "https://www.youtube.com/watch?v=88xuB7ZOliQ",
+      "originUrl": "",
+      "version": "2024-12-02 브리핑",
+      "locator": "영상 설명의 발표 전문, 최상목 부총리 발언 중 2019년과 예비비를 언급한 문단",
+      "excerpt": "“한 해 동안 총 2조 7,000억 원의 예비비를 사용한 바 있습니다.” 최 부총리는 일본 수출 규제 대응 기술개발을 당시 소요의 예로 들고 이듬해 통상 변화에 제때 대처하기 어렵다고 말했다."
+    },
+    {
+      "id": "committee",
+      "title": "더불어민주당 예산안심사소위 위원 일동 · 예결위 수정안 의결 관련 기자브리핑",
+      "url": "https://www.youtube.com/watch?v=k2ynHDD2amk",
+      "originUrl": "https://www.theminjoo.kr/main/sub/news/view.php?brd=188&post=1208164&search=&sno=1720",
+      "version": "2024-12-02 기자회견",
+      "locator": "참여 의원 윤준병이 올린 영상 설명의 기자회견문, 예비비의 통상 집행 규모와 재해복구 재원을 언급한 문단",
+      "excerpt": "“통상 정부가 집행한 규모인 1.4조원 수준”을 고려해 감액했다고 밝혔다. 재해복구 추가 재원의 명칭으로 “국고채무부담행위”를 들었다."
+    },
+    {
+      "id": "ppp",
+      "title": "국민의힘 · 박준태 원내대변인 논평",
+      "url": "https://www.peoplepowerparty.kr/news/comment_view_all/104503?gubun_list=all&page=732",
+      "originUrl": "",
+      "version": "2024-12-01 논평",
+      "locator": "본문 세 번째 문단, 여야 상임위 합의와 정부 예비비를 언급한 대목",
+      "excerpt": "“예측 불가능한 일이 발생했을 때 필요한 정부 예비비마저 절반 수준으로 삭감했습니다.”"
+    }
+  ],
+  "receipts": [],
+  "demo": false,
+  "articleAssessment": null,
+  "articleAssessmentDraft": null,
+  "rowDrafts": [],
+  "currentId": null,
+  "sourceDraft": {
+    "id": null,
+    "fields": {
+      "title": "",
+      "url": "",
+      "originUrl": "",
+      "version": "",
+      "locator": "",
+      "excerpt": ""
+    }
+  }
+}

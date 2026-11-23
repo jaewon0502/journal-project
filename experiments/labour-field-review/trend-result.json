@@ -1,0 +1,123 @@
+{
+  "scope": "개발에 노출된 한 기사와 공식 원자료 1건. 검색 후보를 평가하며 실제 편집시간·정치 편향은 미측정.",
+  "trendSha256": "1d8b402c09bd15e2e4ecde060f9a87c2d6ec9e40ca20ba0d8c885169f4de9bfe",
+  "ordinarySha256": "06804c1cb0a3e01f79012091552ebc6195cf0d93f01270f4cc57ee4019ad116b",
+  "textSha256": "c49ed71c04e00adc0f3ecff89fe9a5fd646f403870b5e6eb0b18e0d2673ad53b",
+  "original": {
+    "summary": {
+      "attempted": 3,
+      "top1": 1,
+      "top3": 1,
+      "needsContext": 2,
+      "needsPublicationDate": 1
+    },
+    "cases": [
+      {
+        "taskId": "labour-growth",
+        "state": "needs-context",
+        "reason": "missing-subject",
+        "usedArticleContext": false,
+        "needsPublicationDate": false,
+        "centreRank": null,
+        "candidates": []
+      },
+      {
+        "taskId": "labour-rate",
+        "state": "ordinary",
+        "reason": null,
+        "usedArticleContext": false,
+        "needsPublicationDate": false,
+        "centreRank": 1,
+        "candidates": [
+          {
+            "page": 32,
+            "paragraph": 940,
+            "context": [
+              938,
+              939,
+              941,
+              942
+            ]
+          },
+          {
+            "page": 8,
+            "paragraph": 166,
+            "context": [
+              164,
+              165,
+              167,
+              168
+            ]
+          },
+          {
+            "page": 42,
+            "paragraph": 1276,
+            "context": [
+              1274,
+              1275,
+              1277,
+              1278
+            ]
+          }
+        ]
+      },
+      {
+        "taskId": "labour-period",
+        "state": "needs-context",
+        "reason": "missing-subject",
+        "usedArticleContext": false,
+        "needsPublicationDate": true,
+        "centreRank": null,
+        "candidates": []
+      }
+    ]
+  },
+  "contextualRetry": {
+    "summary": {
+      "attempted": 2,
+      "top1": 2,
+      "top3": 2,
+      "needsContext": 0,
+      "needsPublicationDate": 1
+    },
+    "cases": [
+      {
+        "taskId": "labour-growth",
+        "state": "candidates",
+        "reason": null,
+        "usedArticleContext": true,
+        "needsPublicationDate": false,
+        "centreRank": 1,
+        "candidates": [
+          {
+            "page": 28,
+            "paragraph": 822,
+            "context": [
+              817,
+              818
+            ]
+          }
+        ]
+      },
+      {
+        "taskId": "labour-period",
+        "state": "candidates",
+        "reason": null,
+        "usedArticleContext": true,
+        "needsPublicationDate": true,
+        "centreRank": 1,
+        "candidates": [
+          {
+            "page": 28,
+            "paragraph": 822,
+            "context": [
+              817,
+              818
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "uniqueCorrectRetryCentres": 1
+}

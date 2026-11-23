@@ -1,0 +1,62 @@
+{
+  "protocol": {
+    "population": "Two previously unused official series, selected together. Three answerable queries and one missing measure per table. No engine outputs inspected during selection.",
+    "freeze": "Scores for both sources must use one identical candidate hash on the first and only prospective comparison against the fixed baseline. Preserve the outcome even when it worsens.",
+    "selection": "Use the full small numeric block and the original headers. Mix natural questions, adjacent-period or adjacent-measure false numbers, and one definition. Do not rank-test variants or inject labels into data rows.",
+    "primary": "For answerable queries Hit@k = count whose predefined evidence row appears among the first k candidate centers / 6, k = 1, 3. Rank is 1-based. A header or context-only match does not count. Also report separately per source, denominator 3. These ranks assess row retrieval, not individual cell interpretation.",
+    "controls": "Separately report raw candidates returned versus none out of 2 unanswerable queries. An unranked answer, explicit UI abstention, and a candidate excerpt are distinct outcomes. This raw rank experiment does not measure UI abstention, article accuracy, bias or editor time.",
+    "unit": "1-based nonempty source lines. Join the displayed source lines with LF. Whitespace and tabs in a displayed row separate physical table cells. Year/month group labels and repeated rows stay separate, with no header enrichment.",
+    "ties": "Use original deterministic engine order. No alternate gold or scoring adjustments after freeze."
+  },
+  "sources": {
+    "customs": {
+      "producer": "관세청",
+      "publication": "2025년 1월 월간 수출입 현황 [확정치], 2025-02-17",
+      "authorityUrl": "https://www.customs.go.kr/kcs/na/ntt/selectNttInfo.do?bbsId=1362&mi=2891&nttSn=10131214&nttSnUrl=0d6cf45ec0389ee7ade33c0e060bc107",
+      "layoutPdfMirror": "https://www.kormia.co.kr/data/2025/03/7bf1d3b5c0d5fea6f0ea51485b8b6e8f.pdf",
+      "pdfSha256": "2183f6c06191fc9ad163a59c4dd54f5b2affc37f40b1b1f09d36bc63d36e4de4",
+      "anchor": "PDF sheet 1, printed page 1 on the left, first numeric table under the overview. Visually transcribed the unit, two tiers of headers, data and changes as physically displayed; separate amount and growth subrows and month ranges retained. Agency HTML independently agrees on every numeric cell. The HTML serializes amount and growth in one cell; this input follows the PDF layout. The merged 2025 header also spans the preceding 12월 leaf in the printed table; leave it as printed and ask no question that relies on assigning a year to that leaf.",
+      "lines": [
+        "(단위 : 백만 달러, %)",
+        "구분\t2024년\t\t2025년",
+        "1월\t1~1월\t12월\t1월\t1~1월",
+        "수  출\t54,710\t54,710\t61,359\t49,128\t49,128",
+        "(전년동기대비)\t(18.1)\t(18.1)\t(6.6)\t(△10.2)\t(△10.2)",
+        "수  입\t54,475\t54,475\t54,866\t50,988\t50,988",
+        "(전년동기대비)\t(△7.7)\t(△7.7)\t(3.3)\t(△6.4)\t(△6.4)",
+        "무역수지\t235\t235\t6,493\t-1,860\t-1,860"
+      ]
+    },
+    "consumer": {
+      "producer": "한국소비자원",
+      "publication": "소비자피해 구제건수와 구제율 및 구제내용, 소비자 피해구제 연보 및 사례집 기반 통계표",
+      "authorityUrl": "https://www.index.go.kr/unity/potal/eNara/sub/showStblGams3.do?freq=Y&idx_cd=F0147&period=N&stts_cd=F014701",
+      "anchor": "Government national indicators table F014701, 2016–2025 header, the complete nine-row numeric body and note 3. Tab between cells. The shared 구제내용 label appears only in its first row as in the HTML. Two other scope notes are outside this excerpt. All control labels and source URLs are excluded from engines.",
+      "lines": [
+        "소비자피해 구제건수와 구제율 및 구제내용",
+        "[단위 : 건, 건/만 명, %]",
+        "2016\t2017\t2018\t2019\t2020\t2021\t2022\t2023\t2024\t2025",
+        "구제건수 2)\t17,366\t19,699\t20,479\t24,261\t21,745\t21,586\t22,798\t24,904\t30,261\t34,971",
+        "구제율 3)\t3.39\t3.84\t3.97\t4.69\t4.19\t4.17\t4.41\t4.82\t5.85\t6.77",
+        "구제내용\t수리·보수\t7.2\t8.6\t7.6\t6.5\t5.4\t5.3\t5.4\t5.7\t5.0\t5.1",
+        "교환\t9.8\t9.9\t9.0\t7.8\t6.3\t5.3\t5.0\t5.3\t4.6\t4.3",
+        "환급\t45.9\t46.0\t48.9\t56.3\t59.5\t63.7\t64.4\t58.7\t60.5\t53.2",
+        "계약해제·이행\t16.6\t15.0\t15.6\t13.4\t13.4\t12.9\t11.3\t14.9\t14.4\t21.0",
+        "부당행위 시정\t2.9\t2.6\t3.1\t1.7\t1.9\t1.4\t1.1\t2.1\t2.4\t2.7",
+        "배상\t17.7\t18.0\t15.8\t14.3\t13.4\t11.4\t12.8\t13.4\t13.1\t13.7",
+        "합계\t100.0\t100.0\t100.0\t100.0\t100.0\t100.0\t100.0\t100.0\t100.0\t100.0",
+        "3) 구제율 = (구제건수 ÷ 총인구) × 10,000. 총인구는 2022년 기준 추계인구"
+      ]
+    }
+  },
+  "queries": [
+    {"id":"x1","source":"customs","query":"2025년 1월 수출액이 50,988백만 달러였다는 보도는 맞을까?","gold":[4],"answer":"49,128백만 달러. 보도 수치는 같은 달의 수입액이다."},
+    {"id":"x2","source":"customs","query":"2025년 1월 수입은 전년 동기 대비 몇 퍼센트 줄었나?","gold":[7],"answer":"6.4% 감소. 수입 금액 바로 다음 전년동기대비 행."},
+    {"id":"x3","source":"customs","query":"2024년 1월 무역수지는 235백만 달러 흑자였나?","gold":[8],"answer":"235백만 달러 흑자."},
+    {"id":"x0","source":"customs","query":"2025년 1월 수출 물량은 모두 몇 톤이었나?","gold":[],"answer":"중량 미수록."},
+    {"id":"c1","source":"consumer","query":"2023년 소비자 피해구제에서 환급 비중이 60.5%였나?","gold":[8],"answer":"58.7%. 60.5%는 2024년."},
+    {"id":"c2","source":"consumer","query":"2021년에 교환으로 합의한 사건이 전체 구제에서 차지한 비중은 얼마인가?","gold":[7],"answer":"5.3%."},
+    {"id":"c3","source":"consumer","query":"인구 1만 명당 구제율을 계산할 때 분모는 접수 사건 수인가, 총인구인가?","gold":[13],"answer":"총인구. 2022년 기준 추계인구를 사용."},
+    {"id":"c0","source":"consumer","query":"2024년 소비자 피해구제에서 환급된 금액의 합계는 몇 원인가?","gold":[],"answer":"환급 금액 합계 미수록."}
+  ]
+}

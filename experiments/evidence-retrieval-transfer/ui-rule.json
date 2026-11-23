@@ -1,0 +1,10 @@
+{
+  "fixtureHash": "dd857b5953ad13d8203bc1b3eb414a7a64688e724c16c1f7dd740e29ea26b09e",
+  "unit": "One search in Chrome with the assigned source excerpt. Record initially rendered candidate positions and status. Count controls separately from answerable questions; do not silently discard empty result sets.",
+  "flags": {
+    "candidateExposure": "At least one original row is shown as a possible passage, regardless of caution.",
+    "explicitCaution": "The default result text explicitly says the proposed evidence is insufficient to confirm the claim, signals a pending or held decision, or calls for additional original evidence due to the insufficiency. A generic statement of matching words or search tips alone does not satisfy this criterion. Record the actual text.",
+    "observedHumanAbstention": "Not measured. Even a clear caution is not an observed editor decision."
+  },
+  "breakdown": "Report counts with denominators for the four unanswered controls and ten answerable questions (for answerable controls report caution exposure only, not false editorial decisions). A cautious result with candidates is distinct from a return of zero candidates."
+}

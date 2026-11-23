@@ -4,7 +4,7 @@
 
   const api = root.JournalArticleRubric;
   const lastBinding = new WeakMap();
-  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'reason', 'impact', 'direction'];
+  const {draftFields: fields, copyFields, restoreDraft} = api;
   const text = (tag, value, cls) => {
     const el = document.createElement(tag);
     if (value !== undefined) el.textContent = value;
@@ -46,44 +46,11 @@
     return [s.title || s.id, s.version, s.locator].filter(Boolean).join(' · ');
   }
   function sourceLink(s) {
-    if (!s) return null;
-    try {
-      const url = new URL(s.url);
-      if (!['http:', 'https:'].includes(url.protocol) || /(^|\.)invalid$/.test(url.hostname) || url.username || url.password) return null;
-      const link = text('a', '원자료 열기 ↗');
-      link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
-      return link;
-    } catch (_) { return null; }
+    return s ? root.JournalSourceReader.link(s) : null;
   }
   function scoreName(value) {
     return value === 'na' ? '해당 없음' : String(value) + '단계 · ' + api.severityLabels[value];
   }
-  function copyFields(raw) {
-    return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
-  }
-  function restoreDraft(report, sources, raw) {
-    if (!raw || typeof raw !== 'object' || !api.matches(raw.binding, report) || !raw.entries || typeof raw.entries !== 'object') return null;
-    const entries = {};
-    for (const dim of api.dimensions) {
-      const d = raw.entries[dim.id];
-      if (!d || typeof d !== 'object' || fields.some(k => d[k] != null && typeof d[k] !== 'string')) continue;
-      const clean = copyFields(d);
-      if (!['', '0', '1', '2', '3', ...(dim.allowNA ? ['na'] : [])].includes(clean.level)) continue;
-      if (clean.rowId && !report.rows.some(row => row.id === clean.rowId)) continue;
-      if (clean.sourceId && !sources.some(s => s.id === clean.sourceId)) continue;
-      if (clean.compareRowId && !report.rows.some(row => row.id === clean.compareRowId)) continue;
-      if (d.previous) {
-        try {
-          const checked = api.save(report, sources, {coreRowIds: [], ratings: {[dim.id]: d.previous}});
-          clean.previous = checked.ratings[dim.id];
-        } catch (_) { /* An unvalidated prior entry cannot be restored as a finding. */ }
-      }
-      entries[dim.id] = clean;
-    }
-    if (!Object.keys(entries).length) return null;
-    return {binding: api.bind(report), activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
-  }
-
   function render(container, report, sources, saved, onChange, rawDraft, onDraft) {
     if (!container || !api) return;
     const binding = api.bind(report);

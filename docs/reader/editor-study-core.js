@@ -10,6 +10,7 @@
   'use strict';
   const protocol = 'journal-editor-study-v1';
   const methods = ['manual', 'journal'];
+  const stages = Object.freeze(['select', 'locate', 'decide']);
   const verdicts = ['supported', 'contradicted', 'insufficient', 'opinion'];
   const slots = 4;
   const idPattern = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
@@ -52,6 +53,16 @@
     return {protocol, participantId, ordinal, kind, editorAttested, trials: []};
   }
 
+  function checkedPhases(ms, elapsedMs) {
+    if (ms === null) return null; // Participant missed a transition or interrupted the split timer.
+    if (typeof ms !== 'object' || Array.isArray(ms) || Object.keys(ms).length !== stages.length ||
+        !stages.every(stage => Object.hasOwn(ms, stage) && Number.isSafeInteger(ms[stage]) && ms[stage] >= 0) ||
+        stages.reduce((sum, stage) => sum + ms[stage], 0) !== elapsedMs) {
+      throw new Error('세 단계의 시간과 전체 검토 시간 합계를 확인하세요.');
+    }
+    return Object.fromEntries(stages.map(stage => [stage, ms[stage]]));
+  }
+
   function checkedTrial(expected, observation, fromFile) {
     if (!observation || typeof observation !== 'object') throw new Error('누락된 회차 기록입니다.');
     for (const key of ['position', 'caseId', 'method', 'variant']) {
@@ -72,7 +83,9 @@
         !sourceIds.every(id => item.sources.some(source => source.id === id))) {
       throw new Error('제공된 자료 중 대표 근거 하나 또는 근거 없음을 선택하세요.');
     }
-    return {...expected, elapsedMs, verdict, reason: reason.trim(), sourceIds: [...sourceIds], journalUsed};
+    const trial = {...expected, elapsedMs, verdict, reason: reason.trim(), sourceIds: [...sourceIds], journalUsed};
+    if (Object.hasOwn(observation, 'phaseMs')) trial.phaseMs = checkedPhases(observation.phaseMs, elapsedMs);
+    return trial;
   }
 
   function validateRecord(input) {
@@ -107,14 +120,23 @@
       }
       if (previous) {
         const common = Math.min(previous.trials.length, record.trials.length);
+        const longer = record.trials.length > previous.trials.length ? record : previous;
+        const trials = [...longer.trials];
         for (let i = 0; i < common; i++) {
-          if (JSON.stringify(previous.trials[i]) !== JSON.stringify(record.trials[i])) {
+          const {phaseMs: priorPhases, ...prior} = previous.trials[i];
+          const {phaseMs: nextPhases, ...next} = record.trials[i];
+          if (JSON.stringify(prior) !== JSON.stringify(next) ||
+              (priorPhases !== undefined && nextPhases !== undefined && JSON.stringify(priorPhases) !== JSON.stringify(nextPhases))) {
             throw new Error('같은 참가자·회차에 서로 다른 기록이 있습니다. 원본을 확인하세요.');
           }
+          // A v1 export from an earlier viewer may omit the optional phase field.
+          if (priorPhases !== undefined) trials[i] = previous.trials[i];
+          else if (nextPhases !== undefined) trials[i] = record.trials[i];
         }
-        if (record.trials.length <= previous.trials.length) continue;
+        byId.set(id, {...longer, trials});
+      } else {
+        byId.set(id, record);
       }
-      byId.set(id, record);
       bySlot.set(slot, id);
     }
     return [...byId.values()].sort((a, b) => a.kind.localeCompare(b.kind) || a.ordinal - b.ordinal);
@@ -140,14 +162,14 @@
     });
   }
 
-  function timeStats(records) {
+  function timeStats(records, stage) {
     let manualSeconds = 0, journalSeconds = 0;
     const editorPairs = [];
     for (const record of records) {
       const seconds = {};
       for (const method of methods) {
         const trials = record.trials.filter(t => t.method === method);
-        seconds[method] = trials.reduce((sum, t) => sum + t.elapsedMs / 1000, 0) / trials.length;
+        seconds[method] = trials.reduce((sum, t) => sum + (stage ? t.phaseMs[stage] : t.elapsedMs) / 1000, 0) / trials.length;
       }
       manualSeconds += seconds.manual / records.length;
       journalSeconds += seconds.journal / records.length;
@@ -155,7 +177,19 @@
         savedSeconds: seconds.manual - seconds.journal});
     }
     const savedSeconds = manualSeconds - journalSeconds;
-    return {manualSeconds, journalSeconds, savedSeconds, reductionPct: 100 * savedSeconds / manualSeconds, editorPairs};
+    return {manualSeconds, journalSeconds, savedSeconds, reductionPct: manualSeconds ? 100 * savedSeconds / manualSeconds : null, editorPairs};
+  }
+
+  function phaseStats(sample) {
+    // Only whole already-eligible 4-person blocks retain the case/order/party balance.
+    const incomplete = new Set(sample.filter(record => record.trials.some(t => !t.phaseMs))
+      .map(record => Math.floor((record.ordinal - 1) / slots)));
+    const eligible = sample.filter(record => !incomplete.has(Math.floor((record.ordinal - 1) / slots)));
+    return {
+      availableTrials: sample.reduce((n, r) => n + r.trials.filter(t => t.phaseMs).length, 0),
+      included: eligible.length, trialCount: eligible.length * slots, completeBlocks: eligible.length / slots,
+      byStage: eligible.length ? Object.fromEntries(stages.map(stage => [stage, timeStats(eligible, stage)])) : null
+    };
   }
 
   function emptyCells() {
@@ -213,6 +247,7 @@
     const counts = {kind, enrolled: records.length, completed, included: sample.length, excluded: records.length - sample.length,
       completeBlocks: eligible.size, pendingBlocks: blocks.length - eligible.size, blocks, trialCount: sample.length * slots,
       recordedTrials: records.reduce((total, record) => total + record.trials.length, 0)};
+    counts.phases = phaseStats(sample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
     return {...counts, time: timeStats(sample), ...verdictStats(sample)};
   }
@@ -227,7 +262,8 @@
         const cueWithError = negativeIndex % 2 === 0 ? 'A' : 'B';
         const falseEndorsement = negativeIndex >= 0 && task.variant === cueWithError &&
           (task.method === 'manual' || i < slots);
-        record = addTrial(record, {elapsedMs: task.method === 'manual' ? 120000 : 90000,
+        const phaseMs = task.method === 'manual' ? {select:30000,locate:60000,decide:30000} : {select:25000,locate:40000,decide:25000};
+        record = addTrial(record, {elapsedMs: task.method === 'manual' ? 120000 : 90000, phaseMs,
           verdict: falseEndorsement ? 'supported' : gold.expectedVerdict,
           sourceIds: [gold.expectedSourceIds[0]], reason: '계산 방법을 보여 주기 위해 생성한 예시 응답입니다.', journalUsed: task.method === 'journal'});
       }
@@ -235,5 +271,5 @@
     });
   }
 
-  return Object.freeze({protocol, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords});
+  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords});
 });
