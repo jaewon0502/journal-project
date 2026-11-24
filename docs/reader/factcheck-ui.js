@@ -1028,7 +1028,7 @@
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
     if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope) {
-      for (const p of passages) if (!p.annualRate && !p.changeRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
+      for (const p of passages) if (!p.annualRate && !p.changeRows && !p.labourYearRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
     if ([...annualRows.values()].some(row => row?.scopeIssue === 'population'))
@@ -1077,7 +1077,14 @@
         continue;
       }
       const block = node('div', undefined, 'source');
-      block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
+      const years = passage.labourYearRows;
+      const comparisonExcerpt = years && citationRows([...passage.context, passage]);
+      if (years) {
+        block.append(node('strong', years.previous + '년과 ' + years.current + '년 연간 ' + years.measure),
+          node('blockquote', comparisonExcerpt.text, 'verbatim'));
+      } else {
+        block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
+      }
       if (!lookup.fiscalTable && passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
       const speaker = passage.speaker;
       let excerpt = speaker ? {text:speaker.excerpt, paragraph:passage.paragraph, startParagraph:speaker.paragraph} : passage;
@@ -1117,6 +1124,9 @@
         } else {
           block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
         }
+      } else if (years) {
+        excerpt = comparisonExcerpt;
+        tableLocation = passage.context[0].text.trim() + ' · ' + years.previous + '년·' + years.current + '년 연간 행 · ' + years.measure + ' 열';
       } else if (passage.labourScope) {
         block.append(node('p', '원자료의 기간 · ' + passage.context[0].text.trim()));
         excerpt = citationRows([...passage.context, passage]);
@@ -1163,7 +1173,8 @@
         block.append(preview);
       }
       if (tableLocation) {
-        const label = passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
+        const label = years ? '두 해의 행과 표 머리글·주석 발췌' :
+          passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
         block.append(button(label, () => useExcerpt(excerpt, tableLocation)));
       } else {
         const navigation = passage.matrixNavigation;

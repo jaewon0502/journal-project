@@ -1236,6 +1236,42 @@ test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가�
   assert.ok((await resumed.snapshot()).includes('원표와 대조함'));
 });
 
+test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에 원표의 머리글과 연간 행, 분모 주석을 함께 남긴다', async t => {
+  const p = open(t);
+  const headers = ['1. 전체 경제활동인구 총괄', '                                                                          (단위: 천명)',
+    '               15세 이상 인구                           경제활동 고용률', '                                                                     1)',
+    '                                                                          실업률2)', '                     경 제 활 동 인 구          비 경 제 참 가 율',
+    '                           취업자     실업자 활동인구         (%)   (%)               (%)'];
+  const otherYear = '  2022       45,260 28,922  28,089    833   16,339   63.9 62.1            2.9';
+  const earlier = '  2023       45,407 29,203  28,416    787   16,204   64.3 62.6            2.7';
+  const later = '  2024       45,570 29,399  28,576    823   16,172   64.5 62.7            2.8';
+  const quarter = '2022.4/4     45,317   28,957    28,216     741    16,360   63.9   62.3    2.6   (2.8)';
+  const definition = '주: 1) 취업자/15세이상인구×100';
+  const document = [...headers, otherYear, earlier, later, quarter, definition, '   2) 실업자/경제활동인구×100, (        )내는 계절조정 실업률'];
+  const expected = [...headers, '[…]', earlier, later, '[…]', definition].join('\n');
+  const question = '2024년 연간 15세 이상 고용률은 2023년보다 얼마나 올랐나?';
+  p.set('article',question); p.el('article-form').requestSubmit(); p.click('go-find');
+  p.set('document-text',document.join('\n')); p.set('document-query',question); p.click('find-passages');
+  const card = p.el('finder-results').querySelector('.source');
+  assert.ok(card); assert.equal(card.querySelector(':scope > blockquote').textContent,expected);
+  assert.match(card.querySelector('strong').textContent,/2023년과 2024년 연간 고용률/);
+  assert.equal(p.el('source-excerpt').value,'');
+  const pick = card.querySelector(':scope > button');
+  assert.match(pick.textContent,/두 해의 행/); pick.click();
+  const location = '1. 전체 경제활동인구 총괄 · 2023년·2024년 연간 행 · 고용률 열';
+  assert.equal(p.el('source-locator').value,location); assert.equal(p.el('source-excerpt').value,expected);
+  const nearby = card.querySelector('details'); nearby.open = true; nearby.dispatchEvent(new p.w.Event('toggle'));
+  nearby.querySelector('button').click();
+  assert.equal(p.el('source-excerpt').value,expected); assert.ok(nearby.textContent.includes(definition));
+  nearby.querySelector('input[value="11"]').click(); nearby.querySelector('button').click();
+  assert.equal(p.el('source-excerpt').value,quarter); assert.equal(p.el('source-locator').value,'');
+  pick.click();
+  p.set('source-title','경제활동인구조사'); p.set('source-url','https://agency.example/survey.pdf'); p.set('source-version','2025-01-15');
+  p.click('source-save-link'); p.click('save-work');
+  const saved = JSON.parse(await p.snapshot());
+  assert.equal(saved.sources[0].excerpt,expected); assert.equal(saved.sources[0].locator,location); assert.equal(saved.receipts.length,0);
+});
+
 test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치를 볼 수 있고 판정은 편집자가 한다', t => {
   const {doc, el, set, click} = open(t);
   click('load-demo');

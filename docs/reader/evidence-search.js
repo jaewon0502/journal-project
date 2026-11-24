@@ -287,6 +287,80 @@
   // Unknown text on either side of the metric may qualify the population.
   const rateTailTerms = /퍼센트포인트|퍼센트|포인트|전년동월|전월|전년|대비|보다|얼마나|얼마|몇|올랐|오른|올라|오르지|않았|내렸|내린|떨어졌|상승|하락|증가|감소|변동|변했|같았|동일|그대로|기록|맞습니까|맞나요|맞나|맞는가|사실인가|주장|인가요|인가|였나요|였나|했나요|했나|했는가|했다|이다|입니다|습니다|나요|다는|라는|라고|으로|에서|[이가는은을를로과와의인한했나다]|\d+(?:\.\d+)?|[%p?.!'‘’“”"]/giu;
 
+  // In the labour-force overview the years label rows, not columns. Keep the
+  // printed rows and definition together; do not infer a column by PDF spacing.
+  function labourYearRows(text, question, separateContext) {
+    const q = compactLabour(question);
+    const baseline = /((?:19|20)\d{2})년(?:도)?(?:보다|대비|에비해)/u.exec(q);
+    if (!baseline || !q.includes('고용률') || !/전체\s*경제활동인구\s*총괄/u.test(text)) return null;
+    const period = /((?:19|20)\d{2})년(?:도)?(?:의)?(연간|한해(?:동안)?)/u.exec(q);
+    const previous = Number(baseline[1]), current = period && Number(period[1]);
+    const rest = period && q.replace(period[0],'').replace(baseline[0],'');
+    const subject = rest && rateSubject.exec(rest);
+    const age = subject?.groups.age;
+    const tail = subject && rest.slice(subject[0].length);
+    const supported = !separateContext && current === previous + 1 && age && !subject.groups.ageLabel &&
+      subject.groups.metric === '고용률' && !/전월|전년/u.test(tail) && !tail.replace(rateTailTerms,'');
+    const caption = /^(?:\d+[.)]|표\d+)?전체경제활동인구총괄$/u;
+    let table = null, paragraph = 0, titles = 0, hit = null;
+    for (const raw of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
+      if (raw.includes('\f')) table = null;
+      if (!raw.trim()) continue;
+      const row = {paragraph:++paragraph,text:raw}, line = compactLabour(raw);
+      if (caption.test(line)) {
+        titles++;
+        table = supported ? {header:[row],years:new Map(),width:0,subannual:false} : null;
+        continue;
+      }
+      if (!table) continue;
+      const cells = raw.normalize('NFKC').trim().split(/\s+/u);
+      if (/^(?:19|20)\d{2}년?$/u.test(cells[0])) {
+        const year = Number(cells[0].replace('년',''));
+        const numeric = cells.slice(1).every(value => /^(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?$/u.test(value));
+        if (table.subannual || table.years.has(year) || !numeric || cells.length < 4 ||
+            (table.width && table.width !== cells.length)) { table = null; continue; }
+        table.width = cells.length;
+        table.years.set(year,row);
+        continue;
+      }
+      if (!table.width) {
+        // Only printed column headings and unit markers may precede the year
+        // block. Other captions or a demographic restriction invalidate it.
+        const residue = line.replace(age+'인구','').replace(/경제활동|비경제|활동인구|인구|취업자|실업자|참가율|고용률|실업률|구분|연도|단위|천명|명|[%,:()\d]/gu,'');
+        if (table.header.length > 10 || residue) table = null;
+        else table.header.push(row);
+        continue;
+      }
+      // A quarterly/monthly row, including a continuation like “2/4” or
+      // “12”, is never added to the year lookup.
+      if (/^(?:(?:19|20)\d{2}[.]\s*)?\d{1,2}(?:\/4)?\s+\d/u.test(raw.trim())) {
+        table.subannual = true;
+        continue;
+      }
+      const definition = /^(?:주(?:석)?[:：]?)?\d+[)]취업자(?:수)?\/([^/]+)인구[×x*]100[.]?$/iu.exec(line);
+      const header = table.header.slice(1).map(r => compactLabour(r.text)).join('');
+      const earlier = table.years.get(previous), later = table.years.get(current);
+      const percentColumns = (header.match(/\(%\)/gu) || []).length;
+      // Check the number of numeric fields without assigning a value to a
+      // position. The overview counts population and employment, optionally
+      // the labour force, unemployed and inactive, followed by percentage columns.
+      const expectedWidth = 3 + percentColumns + Number(header.replace('비경제활동인구','').includes('경제활동인구')) +
+        Number(header.includes('비경제')) + Number(header.includes('실업자'));
+      if (definition?.[1] === age && header.includes(age+'인구') && header.includes('고용률') &&
+          percentColumns && table.width === expectedWidth && header.includes('취업자') &&
+          earlier && later && Math.abs(later.paragraph - earlier.paragraph) === 1) {
+        hit = {...later,matched:[String(current)],context:[...table.header,earlier,row],
+          labourYearRows:{previous,current,measure:'고용률'}};
+      }
+      table = null;
+    }
+    if (!titles) return null;
+    const passages = titles === 1 && hit ? [hit] : [];
+    return {passages,state:'ordinary',usedArticleContext:false,needsPublicationDate:false,
+      gap:passages.length ? null : '같은 대상의 연간 두 행과 고용률 분모 각주를 한 표에서 특정하지 못했습니다. 원표의 기간·대상·열을 확인하세요.',
+      ...(passages.length && {notice:'두 해의 연간 행과 고용률 분모 각주를 찾았습니다. 고용률 열에서 두 표시값의 차이(%p)와 상대 변화율(%)을 구별하세요.'})};
+  }
+
   function labourSummary(text, question, separateContext) {
     const q = compactLabour(question);
     const year = /((?:19|20)\d{2})년(?:도)?(?:에는|에|의)?/u.exec(q);
@@ -354,6 +428,10 @@
     if (table.state === 'ordinary') {
       const separate = context && context !== query.trim();
       const labour = labourSummary(documentText, query, separate);
+      if (!labour?.passages.length) {
+        const rows = labourYearRows(documentText,query,separate);
+        if (rows) return rows;
+      }
       if (labour) return labour;
       const statedYear = separate && /^((?:19|20)\d{2})\s*(?:회계\s*연도|년도|년)$/u.exec(context);
       const years = statedYear && fiscal.years(query);
