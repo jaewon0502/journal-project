@@ -33,6 +33,40 @@
 
   const lineBreak = /\r\n|[\n\r\u2028\u2029]/u;
 
+  // In prose, the same digits can count households, people or cases. Bind the
+  // printed unit to its amount and preceding subject within the same clause.
+  const amount = /(?<![\d.+−△▲▼-])(?<!\d,)[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:\s*([십백천만억조]+))?\s*((?:%|퍼센트)\s*(?:포인트|p)|퍼센트|%|가구|명|건|개|원|달러|유로|엔)/giu;
+  const amountEnding = /^(?:$|[^\p{L}\p{N}/]|으로|에서|까지|부터|였|입니다|입니까|이다|인가|이었|이고|이며|이라고|라는|[의은는을를이가로에와과도만다](?![\p{L}\p{N}]))/u;
+  const amountModifiers = /^(?:모두|각각|합계|대략|정확히|가량|약|총)$/u;
+  function proseAmounts(text) {
+    const normalized = text.normalize('NFKC');
+    const readings = [];
+    let start = 0;
+    for (const m of normalized.matchAll(amount)) {
+      const prefix = normalized.slice(start, m.index);
+      start = m.index + m[0].length;
+      if (!amountEnding.test(normalized.slice(start)) || /\d\s*[십백천만억조]+\s*$/u.test(prefix)) continue;
+      const clause = prefix.split(/[,;:。.!?\n\r|]/u).at(-1);
+      const subject = [...terms(clause).keys()].filter(key => /^\p{L}+$/u.test(key) && !amountModifiers.test(key)).slice(-3);
+      const unit = m[2].toLowerCase().replace(/\s+/gu,'').replace('퍼센트','%').replace('포인트','p');
+      const years = [...clause.matchAll(/(?<!\d)((?:19|20)\d{2})\s*년/gu)].map(match => match[1]);
+      readings.push({subject, unit, scale:m[1], years});
+    }
+    return readings;
+  }
+
+  function proseAmountMatch(row, requested, year) {
+    if (!requested?.subject.length || row.table) return 0;
+    let best = 0;
+    for (const found of proseAmounts(row.text)) {
+      if ((year && found.years.length && !found.years.includes(year)) ||
+          found.unit !== requested.unit || found.subject.at(-1) !== requested.subject.at(-1) ||
+          !requested.subject.every(word => found.subject.includes(word))) continue;
+      best = Math.max(best, found.scale === requested.scale ? 2 : 1);
+    }
+    return best;
+  }
+
   function tableAmbiguities(documentText, query) {
     const references = /(?<![\p{L}\d])(?:통계)?표\s*(\d+)(?!\d|[.\-]\d|\s*(?:개|건|장|명)(?=$|[\s.,의이가를도씩는에]))/gu;
     const wanted = new Map([...query.normalize('NFKC').matchAll(references)].map(m => [m[1], new Map()]));
@@ -399,6 +433,8 @@
     const rows = sourceRows(documentText);
     markTables(rows);
     const asked = periods?.requestedPeriod(query);
+    const quantities = proseAmounts(query);
+    const quantity = quantities.length === 1 ? quantities[0] : null;
     const dateParts = new Set(asked ? [Number(asked.year), asked.month, asked.day].filter(Number.isFinite) : []);
     const asksUnits = /(?:어떤|무슨|어느)\s*단위|단위(?:가|는|를)?\s*(?:각각\s*)?(?:무엇|뭐|알려)/u.test(query);
     const asksRatio = /분모|분자|산식|계산식/u.test(query);
@@ -477,11 +513,12 @@
         score = Math.max(...row.keys.map(weight));
       }
       if (contentsEntry.test(row.text.trim())) score *= 0.5;
-      scored.push({row, score, matchesTarget});
+      scored.push({row, score, matchesTarget, amountMatch:proseAmountMatch(row, quantity, asked?.year)});
     }
     // A cited value can be the very error under investigation. A named metric
     // in its requested date row is a stronger locator than that number elsewhere.
-    scored.sort((a, b) => b.matchesTarget - a.matchesTarget || b.score - a.score || a.row.paragraph - b.row.paragraph);
+    scored.sort((a, b) => b.matchesTarget - a.matchesTarget || b.amountMatch - a.amountMatch ||
+      b.score - a.score || a.row.paragraph - b.row.paragraph);
     return scored.slice(0, 3).map(({row}) => {
       const {paragraph, text, matched} = row;
       const hit = {paragraph, text, matched};

@@ -129,6 +129,31 @@ test('질문의 숫자가 다른 연도에 있어도 실제 검색 후보에는 
   }
 });
 
+test('연도별 교통사고 원표에서 휴일·계절에 해당하는 값은 같은 숫자의 연간 합계로 대신하지 않는다', () => {
+  const table = require('../experiments/evidence-retrieval-transfer/nov25/holdout.json').lines.join('\n');
+  function read(source, query) {
+    const passage = search(source, query).passages[0];
+    return columns.inspectAnnualRow(source, query, passage);
+  }
+  for (const phrase of ['설 연휴', '추석에는', '공휴일에', '여름', '겨울철', '연말', '주말']) {
+    const answer = read(table, '2024년 ' + phrase + ' 교통사고 사망자는 2,521명이었나?');
+    assert.equal(answer.rowParagraph, 5);
+    assert.equal(answer.metric, null, phrase);
+    assert.equal(answer.scopeIssue, 'period', phrase);
+    assert.equal(answer.cells.find(cell => cell.heading === '사망자수').value, '2521');
+  }
+  assert.equal(read(table, '2024년 말 교통사고 사망자는 2,521명이었나?').scopeIssue, 'period');
+  assert.equal(read(table, '2024년 교통사고 사망자는 2,521명이었나?').metric.value, '2521');
+  const qualified = '연도\t사망자수\t설 연휴 사망자수\n2023\t65\t2\n2024\t72\t3';
+  const match = read(qualified, '2024년 설 연휴 사망자는 몇 명이었나?');
+  assert.equal(match.metric.value, '3');
+  assert.equal(match.scopeIssue, undefined);
+  for (const topic of ['돌봄', '설비', '연말정산']) {
+    const withTopic = read('연도\t사고건수\n2023\t4\n2024\t8', '2024년 ' + topic + ' 사고건수는 8건인가?');
+    assert.equal(withTopic.scopeIssue, undefined, topic);
+  }
+});
+
 test('비율·인구당 지표와 절대 건수, 복수 연도·항목, 중복 키·빈 칸·불연속 구간을 분리한다', () => {
   const lines = ['연도\t사망자수\t부상자수', '2023\t63\t90', '2024\t68\t95'];
   const cell = (source, question, paragraph=3) => columns.annualMetricCell(source.join('\n'), question,
@@ -191,6 +216,40 @@ test('연도별 비율과 퍼센트포인트 변화량을 같은 셀로 안내�
   assert.equal(row(reported.replace('+3.6%p', '+3.6%'), q).metric, null);
   assert.equal(row(reported, '2024년 영업이익률 증감폭은 몇 퍼센트인가?').metric, null);
   assert.equal(row(reported, '2024년 영업이익률과 영업이익률 증감폭은 각각 몇 퍼센트포인트인가?').metric, null);
+});
+
+test('연도 행에서 지표에 직접 묻는 단위, 열 표제와 원문 값의 단위 및 배율이 일치해야 한다', () => {
+  const read = (heading, value, question) => {
+    const source = '연도\t' + heading + '\n2024\t25\n2025\t' + value;
+    const passage = {paragraph:3, text:'2025\t' + value};
+    return columns.inspectAnnualRow(source, '2025년 ' + question, passage);
+  };
+  for (const [heading, value, q] of [
+    ['지원자수(명)', '300', '지원자수는 300건이었나?'],
+    ['지원자수(명)', '300건', '지원자 수는 300명이었나?'],
+    ['지원자수', '300건', '지원자 수는 몇 명인가?'],
+    ['지원자수(명)', '300건', '지원자 수는 얼마인가?'],
+    ['지원자수(천명)', '300', '지원자 수는 300명이었나?'],
+    ['지원자수(명)', '3천 명', '지원자 수는 몇 명인가?'],
+    ['예산(억원)', '300', '예산은 약 300만원이었나?'],
+    ['예산(원)', '27', '예산은 27억 달러였나?'],
+    ['매출(억원)', '27', '매출은 27억 달러인가?'],
+    ['매출(억 달러)', '27억 유로', '매출은 27억 달러인가?'],
+    ['매출(억 엔)', '27', '매출은 27만 엔인가?']
+  ]) {
+    const answer = read(heading, value, q);
+    assert.equal(answer.metric, null, q);
+    assert.equal(answer.scopeIssue, 'unit', q);
+    assert.equal(answer.cells[0].value, value, q);
+  }
+  assert.equal(read('지원자수(천 명)', '3천명', '지원자 수는 3천 명인가?').metric.value, '3천명');
+  assert.equal(read('지원자수(명)', '300명', '앞서 신고한 12건을 확인한 결과 지원자 수는 몇 명인가?').metric.value, '300명');
+  assert.equal(read('지원자수(명)', '300명', '지원자 수는 300명인가? 별도 자료는 12건이었다.').metric.value, '300명');
+  assert.equal(read('사망자수', '300', '사망자 수는 몇 명이었나?').metric.value, '300');
+  assert.equal(read('수입중량(kg)', '3kg', '수입중량은 3킬로그램인가?').metric.value, '3kg');
+  for (const currency of ['달러', '유로', '엔'])
+    assert.equal(read('매출(억 ' + currency + ')', '27억 ' + currency,
+      '매출은 27억 ' + currency + '인가?').metric.value, '27억 ' + currency);
 });
 
 test('집계 단계를 표제에 연결할 수 없으면 전체나 일부 합격자 수를 단정하지 않는다', () => {

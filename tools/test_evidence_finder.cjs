@@ -37,6 +37,40 @@ test('수치는 단위와 크기를 붙여 비교하고, 조사처럼 끝나는 
   assert.ok(find('회의 개회.\n어린이 수당 확대.', '어린이가 받는 수당')[0].matched.includes('어린이'));
 });
 
+test('같은 금액의 다른 통화보다 질문한 매출의 원화 문단을 찾고, 기사와 다른 금액도 남긴다', () => {
+  const q = '2025년 매출은 27억 원이었나?';
+  const wrong = ['2025년 매출은 27억 달러였다.', '2025년 매출은 27억 유로였다.', '2025년 매출은 27억 엔이었다.'];
+  for (const amount of ['27억 원', '26억 원']) {
+    const right = '2025년 매출은 ' + amount + '이었다.';
+    const hits = find([...wrong, right].join('\n'), q);
+    assert.deepEqual([hits[0].paragraph, hits[0].text], [4, right]);
+    assert.ok(hits.some(h => wrong.includes(h.text)));
+  }
+  const scales = ['2025년 매출은 27만 원이었다.', ...wrong, '2025년 매출은 26억 원이었다.'];
+  assert.equal(find(scales.join('\n'), q)[0].paragraph, 5);
+});
+
+test('세대와 인원 등 서로 다른 단위를 구분하고 다른 항목의 수치로 해당 문단을 우대하지 않는다', () => {
+  const q = '2025년 지원 가구는 300가구였다.';
+  const source = ['2025년 지원 가구는 300명으로 집계했다. 인근 조사 대상은 300가구였다.',
+    '2025년 지원 가구는 300건으로 집계했고 모집 대상은 300가구였다.',
+    '2025년 지원 가구는 300원으로 집계했다.', '2024년 지원 가구는 300가구였다.'];
+  for (const amount of ['300가구', '299가구']) {
+    const right = '2025년 지원 가구는 ' + amount + '로 집계했다.';
+    assert.equal(find([...source, right].join('\n'), q)[0].text, right);
+  }
+});
+
+test('접미어와 복합 금액에서 부분 일치한 단위로 원문 순위를 올리지 않는다', () => {
+  const q = '2025년 지급액은 50만 원인가?';
+  const right = '2025년 지급액은 49만 원이었다.';
+  const source = ['2025년 지급액은 50만 원산지표시 대상과 관련된다.',
+    '2025년 지급액은 2억 50만 원이었다.', '2025년 지급액은 50만 원/건이었다.', right];
+  assert.equal(find(source.join('\n'), q)[0].text, right);
+  const points = ['찬성률은 2% 증가했다.', '찬성률은 1.5퍼센트포인트 상승했다.'];
+  assert.equal(find(points.join('\n'), '찬성률은 2%p 올랐다.')[0].paragraph, 2);
+});
+
 test('같은 낱말의 원형과 활용형을 한 번만 세어 관련 문단을 앞에 둔다', () => {
   const doc = ['시의회는 오전 10시 본회의를 열었다.', '시의회는 회의 시작 전 묵념을 했다.', '시의회는 다음 회기 일정을 공지했다.',
     '시의회가 돌봄 예산 3억 원 삭감안을 의결했다.', '교육 예산은 동결됐다.', '복지 예산은 늘었다.', '주거 예산은 줄었다.',

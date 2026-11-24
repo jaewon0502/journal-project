@@ -106,6 +106,9 @@
   const stageQualifier = /최종|잠정|확정|예비(?!비)|중간|예상|전망|(?:\d+|일|이|삼)차(?:\s|전형|집계|발표|시험|심사)/u;
   const perUnit = /(?:[명인건대구세원회]|\d[만천백]?)\s*(?:당|마다)/u;
   const countAsked = /(?:몇|\d[\d,.]*)\s*(?:명|건|개|회)(?!당|마다)/u;
+  // Dates expressed as holidays or seasons may restrict an otherwise annual
+  // question. Require a complete time expression, so 돌봄 and 연말정산 stay intact.
+  const partOfYear = /(?<![\p{L}\p{N}])(?:설(?:날|\s*(?:연휴|명절|당일))|추석(?:\s*연휴)?|한가위|명절|연휴|공휴일|휴일|평일|주말|(?:봄|여름|가을|겨울)(?:철|휴가철)?|연초|연말|(?:19|20)\d{2}년(?:도)?\s*(?:초반|중반|후반|초|말))(?=(?:에는|에도|동안|기간|당일|에|의|은|는|을|를|만|간|께|쯤)?(?:$|[^\p{L}\p{N}]))/u;
   // A total in the selected column cannot establish a subgroup count. Look
   // outside the printed heading, so a named subgroup column can still be used.
   function asksForSubset(text) {
@@ -148,7 +151,7 @@
       if (!i) continue;
       const row = cellsOf(line);
       if (!row || row.kind !== header.kind || row.cells.length !== header.cells.length ||
-          !row.cells.slice(1).every(cell => numericCell.test(cell))) return null;
+          !row.cells.slice(1).every(cell => matrixValue.test(cell.normalize('NFKC')) || /^[-—–…]$/u.test(cell))) return null;
       const year = yearCell.exec(row.cells[0])?.[1];
       if (!year || years.has(year)) return null;
       years.add(year);
@@ -157,8 +160,8 @@
     if (!selected) return null;
     const cells = headings.map((heading, i) => ({heading, column:i + 2, value:selected[i + 1]}));
     const location = {headerParagraph:1, rowParagraph:passage.paragraph, year:asked.year};
-    const cell = requestedMetric(normalized, labels, cells);
-    return {...location, cells, metric:cell && {...location, ...cell}};
+    const selection = requestedMetric(normalized, labels, cells, location);
+    return {...location, cells, ...(selection || {metric:null})};
   }
 
   // Only an administrative action that modifies the object being counted is
@@ -167,12 +170,12 @@
   const qualifiedActor = /[\p{L}\p{N}]+(?:이|가|만|에서)\s+(?:(?:새로|다시|직접)\s+)?$/u;
   const countedObject = /^\s+(?!결과|자료|사실|내용)[\p{L}\p{N}]+(?:\([\p{L}\p{N}]+\))?(?:\s+수)?(?:은|는|이|가)\s*(?:(?:모두|총|약|정확히)\s*)?(?:몇|\d[\d,.]*)\s*(?:종|건|곳|개|명|회|장)/u;
 
-  function requestedMetric(normalized, labels, cells) {
+  function requestedMetric(normalized, labels, cells, location) {
     const mentions = [];
     labels.forEach((label, col) => {
-      // Only remove an explicit count unit or the final 수 in an agent noun
+      // Only remove a recognized printed unit or the final 수 in an agent noun
       // (사망자수 → 사망자). Keep qualifiers part of the printed metric.
-      const base = label.replace(/\((?:명|건|개|회|(?:%|퍼센트)(?:포인트|p)?)\)$/iu, '');
+      const base = label.replace(unitSuffix, '');
       if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || (derivedMeasure.test(base) && !pointUnit.test(label))) return;
       const count = /[자원]수$/u.test(base);
       const tokens = [...(count ? base.slice(0,-1) : base)].join('\\s*') + (count ? '(?:\\s*수)?' : '');
@@ -195,13 +198,22 @@
       text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
     // A stage or a comparison must be part of the printed heading to license
     // that column. A final report may still contain several different counts.
+    if (partOfYear.test(remaining)) return {metric:null, scopeIssue:'period'};
+    const cell = cells[col - 1];
+    const printed = matrixValue.exec(cell.value.normalize('NFKC'));
+    const units = [unitSuffix.exec(label)?.[1], printed?.[1]];
+    for (const mention of mentions.filter(m => m.col === col)) {
+      const amount = directAmountUnit.exec(normalized.slice(mention.end));
+      if (amount) units.push(amount[1]);
+    }
+    if (new Set(units.filter(Boolean).map(normalizedMatrixUnit)).size > 1)
+      return {metric:null, scopeIssue:'unit'};
     if (asksForSubset(remaining) || stageQualifier.test(remaining) || derivedMeasure.test(remaining)) return null;
     if (pointUnit.test(label) !== pointUnit.test(normalized)) return null;
     if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
         (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
-    const cell = cells[col - 1];
     if (/%|퍼센트/u.test(cell.value) && (!ratioMeasure.test(label) || pointUnit.test(cell.value) !== pointUnit.test(label))) return null;
-    return /\d/u.test(cell.value) ? cell : null;
+    return printed ? {metric:{...location, ...cell}} : null;
   }
 
   function annualMetricCell(documentText, query, passage) {
@@ -210,9 +222,13 @@
 
   // A complete matrix with a named stub and distinct years printed across it.
   // Keep a scale as part of its unit: the raw cell is never converted.
-  const matrixUnit = '(?:(?:%|퍼센트)\\s*(?:포인트|p)?|(?:[십백천만억조]+\\s*)?(?:가구|시간|개월|킬로그램|킬로미터|톤|kg|km|원|건|명|개|회|대|종|곳|장|권|점|일|분))';
+  const matrixUnit = '(?:(?:%|퍼센트)\\s*(?:포인트|p)?|(?:[십백천만억조]+\\s*)?(?:가구|시간|개월|킬로그램|킬로미터|톤|kg|km|원|달러|유로|엔|건|명|개|회|대|종|곳|장|권|점|일|분))';
   const matrixNumber = '[+△▲▼−-]?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?';
   const matrixValue = new RegExp('^' + matrixNumber + '\\s*(' + matrixUnit + ')?$', 'iu');
+  // Read the amount immediately predicated of the named metric. Counts in a
+  // date, sample description or another sentence do not specify its unit.
+  const directAmountUnit = new RegExp('^\\s*(?:(?:모두|총|약|정확히)\\s*)?(?:몇|얼마(?:나)?|' + matrixNumber +
+    ')\\s*(' + matrixUnit + ')(?=$|[\\s?!.。,:]|[은는이가을를](?=\\s)|입니|이었|였|이[다며고라면]|인[가데지]|일까|으로|로)', 'iu');
   const unitSuffix = new RegExp('\\(\\s*(' + matrixUnit + ')\\s*\\)$', 'iu');
   const unitLine = new RegExp('^단\\s*위\\s*:\\s*(' + matrixUnit + ')$', 'iu');
   const askedValue = new RegExp('^(?:몇|얼마(?:나)?|' + matrixNumber + ')\\s*(' + matrixUnit + ')?', 'iu');

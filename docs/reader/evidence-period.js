@@ -1,5 +1,5 @@
 // Describe explicit dates in a query and the first cell of a candidate row.
-// This is display-only: it cannot change retrieval order, quotations or verdicts.
+// Periods are navigation cues. All dates refer to the printed local calendar.
 (function (root) {
   'use strict';
 
@@ -168,7 +168,12 @@
       (!asked.day || asked.day === cell.day));
   }
 
-  const api = {different, requestedPeriod, matchesTablePeriod};
+  function dateCell(text) {
+    const period = periodAtYear(text.normalize('NFKC').trim(), false);
+    return period?.day && /^\.?$/u.test(period.tail) ? period : null;
+  }
+
+  const api = {different, requestedPeriod, matchesTablePeriod, dateCell};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidencePeriod = api;
 })(globalThis);

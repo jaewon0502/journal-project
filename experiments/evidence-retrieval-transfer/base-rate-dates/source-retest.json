@@ -1,0 +1,49 @@
+{
+  "positive": 4,
+  "first": 4,
+  "topThree": 4,
+  "results": [
+    {
+      "id": "bok-january-decision",
+      "expectedLine": 9,
+      "candidates": [
+        9
+      ],
+      "rank": 1,
+      "notice": "‘기준금리’ 열에 단위가 없습니다. 원표에서 수치의 단위를 확인하세요."
+    },
+    {
+      "id": "bok-april-correction",
+      "expectedLine": 8,
+      "candidates": [
+        8
+      ],
+      "rank": 1,
+      "notice": "‘기준금리’ 열에 단위가 없습니다. 원표에서 수치의 단위를 확인하세요."
+    },
+    {
+      "id": "bok-reverse-lookup",
+      "expectedLine": 6,
+      "candidates": [
+        6
+      ],
+      "rank": 1,
+      "notice": "‘기준금리’ 열에 단위가 없습니다. 원표에서 수치의 단위를 확인하세요."
+    },
+    {
+      "id": "bok-november-date",
+      "expectedLine": 10,
+      "candidates": [
+        10
+      ],
+      "rank": 1
+    },
+    {
+      "id": "bok-outside-excerpt",
+      "expectedLine": null,
+      "candidates": [],
+      "coverageNotice": "붙여 넣은 표의 ‘변경일자’ 열에 질문의 날짜가 없습니다. 원표에서 그 날짜의 행을 확인하세요.",
+      "state": "ordinary"
+    }
+  ]
+}

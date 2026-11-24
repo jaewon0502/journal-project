@@ -729,11 +729,14 @@
     const area = byId('finder-results');
     area.replaceChildren();
     if (!text.trim() || !query) return message('finder-status', '원자료 본문과 찾을 표현을 입력하세요.', true);
-    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext: byId('search-context').value.trim()});
+    const articleContext = byId('search-context').value.trim();
+    const separateContext = articleContext && articleContext !== query;
+    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext});
     const passages = lookup.passages;
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const notices = [];
+    if (lookup.notice) notices.push(lookup.notice);
     if (lookup.gap) notices.push(lookup.gap);
     if (lookup.state === 'needs-context') {
       notices.push(lookup.reason === 'no-series'
@@ -769,6 +772,10 @@
     for (const passage of passages) {
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
+      if (passage.datedCell) {
+        const cell = passage.datedCell;
+        block.append(node('p', '자료 행의 ' + cell.column + '열 · ' + cell.heading + ' · 원문 표기 ' + cell.value));
+      }
       const period = window.JournalEvidencePeriod.different(query, passage);
       if (period) {
         block.append(node('p', '질문에 적힌 시점은 ' + period.requested + ', 이 행 첫 칸은 ' + period.source
@@ -790,7 +797,14 @@
           '문단 · 왼쪽에서 ' + matrix.column + '번째 열)'));
       }
       const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
-      const metric = annual?.metric;
+      const metric = !separateContext && annual?.metric;
+      if (annual?.scopeIssue === 'period') {
+        block.append(node('p', '질문은 한 해의 특정 기간을 묻습니다. 연간 합계와 구별해 그 기간을 따로 집계한 원표를 확인하세요.', 'callout'));
+      } else if (annual?.scopeIssue === 'unit') {
+        block.append(node('p', '수치의 단위가 서로 다릅니다. 질문·표 머리글·셀에 적힌 단위와 배율을 대조하세요.', 'callout'));
+      } else if (separateContext && annual?.metric) {
+        block.append(node('p', '추가한 기사 문맥의 조건이 이 표에 적용되는지 확인하세요. 아래에서 해당 연도의 원표 항목을 펼칠 수 있습니다.', 'callout'));
+      }
       if (metric) {
         block.append(node('p', metric.year + '년 · ' + metric.heading + ' · 원문 값 ' + metric.value +
           ' (머리글 ' + metric.headerParagraph + '문단 · 자료 ' + metric.rowParagraph +

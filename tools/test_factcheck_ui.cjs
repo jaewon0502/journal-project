@@ -919,6 +919,53 @@ test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치�
   assert.doesNotMatch(el('finder-results').textContent, /원문 값/);
 });
 
+test('선택한 연도의 총계와 기간·기사 문맥·단위가 다르면 후보 행만 원문대로 확인한다', t => {
+  const {el, set, click, doc, w} = open(t);
+  click('load-demo');
+  const source = ['연도\t지원자수(명)', '2024\t210', '2025\t300'];
+  const direct = '2025년 지원자수는 300명이었나?';
+  set('document-text', source.join('\n'));
+  set('document-query', direct);
+  click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 300/);
+  for (const [query, context, reason] of [
+    ['2025년 설 연휴 지원자수는 300명이었나?', '', /특정 기간/],
+    [direct, '신청 기간을 2025년 설 연휴로 한정했다.', /추가한 기사 문맥/],
+    ['2025년 지원자수는 300건이었나?', '', /단위가 서로 다릅니다/]
+  ]) {
+    set('document-query', query); set('search-context', context); click('find-passages');
+    const card = [...doc.querySelectorAll('#finder-results .source')]
+      .find(n => n.querySelector('blockquote')?.textContent === source[2]);
+    assert.ok(card);
+    assert.match(card.textContent, reason);
+    assert.doesNotMatch(card.textContent, /원문 값 300/);
+    const details = [...card.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent.includes('원표 항목'));
+    details.open = true;
+    details.dispatchEvent(new w.Event('toggle'));
+    assert.match(details.textContent, /2열 · 지원자수\(명\) · 300/);
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', direct); click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 300/);
+});
+
+test('두 정당 지지율이 각각 40%였던 날을 찾으면 해당 정당의 열과 원문 행을 보여 준다', t => {
+  const {el, doc, set, click} = open(t);
+  click('load-demo');
+  const lines = ['조사일\t여당 지지율(%)\t야당 지지율(%)',
+    '2025-04-01\t40.0\t28.0', '2025-04-02\t29.0\t40.0'];
+  set('document-text', lines.join('\n'));
+  for (const [side, paragraph, column] of [['여당',1,2],['야당',2,3]]) {
+    set('document-query', side + ' 지지율이 40%인 날짜는?'); click('find-passages');
+    const card = doc.querySelector('#finder-results .source');
+    assert.equal(card.querySelector('blockquote').textContent, lines[paragraph]);
+    assert.ok(card.textContent.includes('자료 행의 ' + column + '열 · ' + side + ' 지지율(%) · 원문 표기 40.0'));
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', '지지율이 40%인 날짜는?'); click('find-passages');
+  assert.doesNotMatch(el('finder-results').textContent, /자료 행의 \d+열/);
+});
+
 test('연도가 가로인 표에서 선택한 행을 원문 그대로 옮기고 편집자가 적은 위치를 보존한다', async t => {
   const {el, set, click, snapshot} = open(t);
   set('article', '2023년 장비 대여는 87건이었다.');
