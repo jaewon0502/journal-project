@@ -94,6 +94,45 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   assert.equal(json.demo, true);
 });
 
+test('판단 저장 뒤 미검토 문장을 우선하고 보류 문장만 남으면 다음 항목을 연다', t => {
+  const {doc, el, set, click} = open(t);
+  const subjects = ['돌봄 사업', '교통 사업', '문화 사업', '주택 사업'];
+  set('article', subjects.map(subject => `${subject}은 무책임한 정책이다.`).join('\n'));
+  el('article-form').requestSubmit();
+  function record(verdict, reason) {
+    set('verdict', verdict);
+    set('reason', reason);
+    click('acknowledged');
+    el('decision-form').requestSubmit();
+  }
+  function expectRow(index) {
+    assert.equal(el('row-text').textContent, `${subjects[index]}은 무책임한 정책이다.`);
+    assert.equal(doc.activeElement, el('row-heading'));
+  }
+  const waiting = '발언의 앞뒤 문맥을 확인할 자료를 기다린다.';
+  record('held', waiting);
+  record('held', waiting);
+  el('row-list').querySelector('button').click();
+  record('held', '회의 영상이 공개되면 발언 문맥을 확인한다.');
+  expectRow(2);
+  record('held', waiting);
+  record('held', waiting);
+  expectRow(0);
+  assert.match(el('counts').textContent, /추가 확인 4개/);
+  assert.match(el('review-status').textContent, /4번 문장/);
+
+  click('acknowledged');
+  el('decision-form').requestSubmit();
+  expectRow(0);
+  record('held', '당일 회의 영상과 회의록을 함께 확인한다.');
+  expectRow(1);
+  for (let i = 0; i < 3; i++) record('opinion', '원문의 비판은 정책에 대한 가치판단이다.');
+  expectRow(0);
+  record('held', waiting);
+  expectRow(0);
+  assert.match(el('counts').textContent, /추가 확인 1개/);
+});
+
 test('참석자 수를 확인해도 기자가 덧붙인 사업비 주장은 결과 파일에서 미결로 남는다', async t => {
   const p = open(t);
   p.set('article', '사업비가 2배 증가한 가운데 위원장은 “참여자는 50명”이라고 말했다.');
@@ -713,6 +752,36 @@ test('근거를 찾던 문장에만 새 자료를 연결하고 기존 이유는 
   el('decision-form').requestSubmit();
   click('save-work');
   assert.equal(JSON.parse(await snapshot()).receipts[0].status, 'fact');
+});
+
+test('같은 원자료로 다음 문장을 찾으면 새 후보만 표시하고 발췌와 판단은 편집자에게 남긴다', async t => {
+  const {el, click, set, doc, snapshot} = open(t);
+  const first = '시의회는 돌봄 예산을 확정했다.';
+  const second = '도서관은 신간 도서를 구입했다.';
+  const privateNote = '내보내지 않을 문서 메모';
+  set('article', [first, second].join('\n'));
+  el('article-form').requestSubmit();
+  click('go-find');
+  assert.equal(doc.activeElement, el('document-text'));
+  assert.equal(el('finder-status').textContent, '');
+
+  set('document-text', [first, second, privateNote].join('\n'));
+  click('find-passages');
+  assert.equal(el('finder-results').querySelector('blockquote').textContent, first);
+  el('row-list').children[1].querySelector('button').click();
+  click('go-find');
+  assert.equal(el('document-query').value, second);
+  assert.equal(el('finder-results').querySelector('blockquote')?.textContent, second);
+  assert.equal(doc.activeElement, el('find-passages'));
+  assert.equal(el('source-excerpt').value, '');
+  assert.equal(el('source-locator').value, '');
+  assert.equal(el('acknowledged').checked, false);
+  click('save-work');
+  const serialized = await snapshot();
+  assert.ok(!serialized.includes(privateNote));
+  const work = JSON.parse(serialized);
+  assert.equal(work.sources.length, 0);
+  assert.equal(work.receipts.length, 0);
 });
 
 test('먼저 연 큰 파일이 늦게 읽혀도 마지막으로 고른 기사를 덮지 않는다', async t => {

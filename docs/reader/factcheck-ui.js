@@ -426,8 +426,15 @@
     }
     if (find) {
       byId('finder').open = true;
-      byId('document-query').value = currentRow()?.text || '';
+      byId('document-query').value = row?.text || '';
       clearSearchContext();
+      if (row && byId('document-text').value.trim()) {
+        findPassages();
+        byId('find-passages').focus();
+        return;
+      }
+      byId('finder-results').replaceChildren();
+      message('finder-status', '');
     }
     byId(find ? 'document-text' : 'source-title').focus();
   }
@@ -719,11 +726,11 @@
     const row = currentRow();
     if (!context || row?.text !== byId('document-query').value.trim()) return;
     byId('search-context').value = context;
-    if (byId('document-text').value.trim()) byId('find-passages').click();
+    if (byId('document-text').value.trim()) findPassages();
   }
   byId('use-article-context').addEventListener('click', () => searchWithContext(currentRow()?.context));
   byId('use-article-title').addEventListener('click', () => searchWithContext(firstArticleLine()));
-  byId('find-passages').addEventListener('click', () => {
+  function findPassages() {
     const text = byId('document-text').value;
     const query = byId('document-query').value.trim();
     const area = byId('finder-results');
@@ -864,7 +871,8 @@
       results.append(block);
     }
     if (browser) area.append(browser.details);
-  });
+  }
+  byId('find-passages').addEventListener('click', findPassages);
   for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
     if (id === 'document-query') clearSearchContext();
     byId('finder-results').replaceChildren();
@@ -907,12 +915,15 @@
       const receipt = engine.decide(row, decisionDraft(), sources);
       receipts = receipts.filter(r => r && r.rowId !== row.id).concat(receipt);
       drafts.delete(row.id);
-      const later = result.rows.slice(result.rows.indexOf(row) + 1);
-      const earlier = result.rows.slice(0, result.rows.indexOf(row));
-      currentId = [...later,...earlier].find(r => r.needsReview && r.status === 'pending')?.id || row.id;
+      const savedIndex = result.rows.indexOf(row);
+      const remaining = [...result.rows.slice(savedIndex + 1), ...result.rows.slice(0, savedIndex)].filter(isOpen);
+      const pending = remaining.find(candidate => candidate.status === 'pending');
+      const changed = workspace.draftChangesRecord(receipt, row.receipt || undefined);
+      const next = pending || (changed ? remaining[0] : null);
+      currentId = next?.id || row.id;
       dirty = true;
       refresh();
-      message('review-status', labels[receipt.status] + ' 판단을 기록했습니다.');
+      message('review-status', (savedIndex + 1) + '번 문장에 ‘' + labels[receipt.status] + '’ 판단을 기록했습니다.');
       if (studyFrame && studyNonce) {
         studyReply('journal-study-used', {status: receipt.status, sourceIds: receipt.sourceIds, reason: receipt.reason});
       }
