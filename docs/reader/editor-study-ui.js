@@ -144,6 +144,40 @@
       records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'
     ]), '발급된 초대 코드가 없습니다.');
   }
+  function showTimedQuality(a) {
+    const q = a.timedQuality;
+    el('timed-quality-sample').textContent = '판정 비교에 포함된 ' + a.included + '명 중 시간까지 기록된 4인 묶음의 ' +
+      a.timing.included + '명을 비교합니다. 각 방식에서 오답에 쓴 시간까지 더해 판정과 대표 근거가 모두 맞은 건수로 나눕니다.';
+    const warnings = [], rows = [];
+    let change = '', editors = '';
+    if (q) {
+      const arms = [q.manual, q.journal];
+      rows.push(['검토 시간 합계', ...arms.map(v => fmt(v.elapsedMs / 1000) + '초')],
+        ['판정과 근거 모두 일치', ...arms.map(v => ratio(v.verified, v.total))],
+        ['근거 없는 사실 채택¹', ...arms.map(v => ratio(v.unsafe, v.unsafeTotal))],
+        ['검증 성공 1건당 시간', ...arms.map(v => v.verified ? fmt(v.secondsPerVerified) + '초' : '산출 불가 (성공 0건)')]);
+      if (q.journal.verified / q.journal.total < q.manual.verified / q.manual.total) warnings.push('판정과 근거를 모두 맞힌 비율이 낮아졌습니다.');
+      if (q.journal.unsafeTotal && q.manual.unsafeTotal && q.journal.unsafe / q.journal.unsafeTotal > q.manual.unsafe / q.manual.unsafeTotal)
+        warnings.push('근거가 부족한데도 사실로 채택한 비율이 높아졌습니다.');
+      const d = q.perVerified;
+      if (d.savedSeconds === null) change = '한쪽 이상에서 검증 성공이 0건이어서 성공 1건당 시간 차이를 계산할 수 없습니다.';
+      else if (d.savedSeconds === 0) change = '두 방식의 검증 성공 1건당 시간이 같습니다.';
+      else change = '저널을 썼을 때 검증 성공 1건당 시간이 ' + fmt(Math.abs(d.savedSeconds)) + '초(' +
+        fmt(Math.abs(d.reductionPct)) + '%) ' + (d.savedSeconds > 0 ? '줄었습니다.' : '늘었습니다.');
+      const f = q.faster;
+      editors = f.total ? '더 빨라진 편집자 ' + f.total + '명 중 검증 성공 건수가 줄어든 사람은 ' + f.fewerVerified +
+        '명, 같은 사람은 ' + f.sameVerified + '명, 늘어난 사람은 ' + f.moreVerified + '명입니다.' : '두 과제의 평균 검토 시간이 줄어든 편집자는 없습니다.';
+    }
+    const warning = el('timed-quality-warning');
+    warning.hidden = !warnings.length;
+    warning.textContent = warnings.length ? '시간을 비교한 편집자들이 저널을 썼을 때 ' + warnings.join(' ') : '';
+    table('timed-quality-table', ['지표', '원자료', '저널'], rows, '네 명 모두 시간을 기록한 묶음이 생기면 결과가 표시됩니다.');
+    el('timed-quality-change').hidden = !q;
+    el('timed-quality-change').textContent = change;
+    el('timed-quality-editors').hidden = !q;
+    el('timed-quality-editors').textContent = editors;
+    if (q) el('timed-quality-table').append(node('p', '¹ 기준 판정이 반박·근거 불충분·의견인 과제 중 ‘근거로 지지됨’을 고른 비율입니다.', 'subtle'));
+  }
   function showDashboard() {
     const demo = viewKind === 'demo';
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
@@ -196,6 +230,7 @@
       biasCard.append(node('small', '완성 ' + a.completeBlocks + '묶음 · 하나씩 제외한 범위는 2묶음부터 계산합니다.'));
     }
     el('metrics').replaceChildren(timeCard, biasCard);
+    showTimedQuality(a);
     const phases = a.phases;
     el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.timing.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
       '건. 단계별 비교에는 전원이 세 단계를 기록한 ' + phases.completeBlocks + '묶음 · ' + phases.included + '명 · ' + phases.trialCount + '건을 사용합니다.';

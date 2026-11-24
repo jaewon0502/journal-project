@@ -40,9 +40,13 @@ test('실측이 비었을 때 예시 수치가 실측으로 남지 않는다', t
   assert.match(p.el('metrics').textContent, /25%p/);
   assert.match(p.el('metrics').textContent, /120초/);
   assert.match(p.el('quality').textContent, /4\/8/);
+  assert.ok(p.el('timed-quality-table').querySelector('tbody'));
   p.el('real-view').click();
   assert.match(p.el('metrics').textContent, /측정 대기/);
   assert.doesNotMatch(p.el('metrics').textContent, /25%/);
+  assert.equal(p.el('timed-quality-table').querySelector('tbody'), null);
+  assert.equal(p.el('timed-quality-warning').hidden, true);
+  assert.equal(p.el('timed-quality-change').textContent, '');
   assert.equal(p.workspace(), null);
 });
 
@@ -334,6 +338,63 @@ function completedRecord(ordinal, id) {
   }
   return record;
 }
+
+test('시간이 절반으로 줄어도 같은 편집자들의 성공률 하락을 전체 집계가 가리지 않는다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click(); p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const r = completedRecord(inv.ordinal, inv.id);
+    for (const trial of r.trials) {
+      const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+      const succeeds = (trial.method === 'manual') === (inv.ordinal <= 4);
+      trial.verdict = succeeds ? gold.expectedVerdict : 'supported';
+      trial.sourceIds = succeeds ? [gold.expectedSourceIds[0]] : [];
+      trial.elapsedMs = trial.method === 'manual' ? 120000 : 60000;
+    }
+    if (inv.ordinal === 5) {
+      r.trials[0].elapsedMs = null;
+      r.trials[0].observedMs = 5000;
+    }
+    return r;
+  });
+  await importFiles(p, records.map(r => JSON.stringify(r)));
+  const rows = () => [...p.el('timed-quality-table').querySelectorAll('tbody tr')].map(row => [...row.cells].map(c => c.textContent));
+  assert.match(p.el('metrics').textContent, /시간 절감률50%/);
+  assert.equal(p.el('quality-warning').hidden, true);
+  assert.match(p.el('quality').textContent, /판정과 근거 모두 일치50% \(8\/16\)50% \(8\/16\)/);
+  assert.match(p.el('timed-quality-sample').textContent, /8명 중.*4명/);
+  assert.deepEqual(rows().map(row => row.slice(1)), [
+    ['960초','480초'], ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)']
+  ]);
+  assert.equal(p.el('timed-quality-warning').hidden, false);
+  assert.match(p.el('timed-quality-warning').textContent, /맞힌 비율이 낮아졌습니다.*채택한 비율이 높아졌습니다/);
+  assert.match(p.el('timed-quality-change').textContent, /성공이 0건/);
+  assert.match(p.el('timed-quality-editors').textContent, /빨라진 편집자 4명 중.*줄어든 사람은 4명/);
+  p.el('demo-view').click();
+  assert.doesNotMatch(p.el('timed-quality-change').textContent, /성공이 0건/);
+  p.el('real-view').click();
+  assert.equal(rows()[1][2], '0% (0/8)');
+});
+
+test('시간 단축과 성공당 시간 증가를 서로 다른 분모로 표시한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const r = completedRecord(inv.ordinal, inv.id);
+    for (const trial of r.trials) {
+      const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+      trial.verdict = gold.expectedVerdict;
+      trial.sourceIds = trial.method === 'manual' || inv.ordinal === 1 ? [gold.expectedSourceIds[0]] : [];
+      trial.elapsedMs = trial.method === 'manual' ? 120000 : 60000;
+    }
+    return r;
+  });
+  await importFiles(p, records.map(r => JSON.stringify(r)));
+  assert.match(p.el('metrics').textContent, /시간 절감률50%/);
+  assert.match(p.el('timed-quality-table').textContent, /검증 성공 1건당 시간120초240초/);
+  assert.match(p.el('timed-quality-change').textContent, /120초\(100%\) 늘었습니다/);
+  assert.match(p.el('timed-quality-editors').textContent, /줄어든 사람은 3명, 같은 사람은 1명/);
+});
 
 test('다른 묶음의 개인 기록 네 개는 지표에 들어가지 않고 발급 명부의 16건만 집계한다', async t => {
   const p = page(t);
