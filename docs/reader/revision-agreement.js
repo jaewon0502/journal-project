@@ -17,7 +17,22 @@
     const label = role === 'before' ? '원본' : '수정본';
     if (a.articleSha256 !== b.articleSha256) throw new Error('두 편집자에게 배포한 ' + label + '의 기사 원문이 다릅니다.');
     if (a.sourcesSha256 !== b.sourcesSha256) throw new Error('두 편집자에게 배포한 ' + label + '의 원자료 묶음이 다릅니다.');
-    return comparison.compare(snapshot(first[role], first.key.demo), snapshot(second[role], second.key.demo), 'reviewers').dimensions;
+    return comparison.compare(snapshot(first[role], first.key.demo), snapshot(second[role], second.key.demo), 'reviewers');
+  }
+
+  function jointFact(row) {
+    const article = row.left === 'contradicted' || row.right === 'contradicted';
+    const quote = row.left === 'quotedConflict' || row.right === 'quotedConflict';
+    let flag = 'none';
+    if (article) flag = quote ? 'both' : 'article';
+    else if (quote) flag = 'quote';
+    let outcome;
+    if (row.sameReceipt) outcome = 'shared';
+    else if (row.left === 'unresolved' || row.right === 'unresolved') outcome = 'pending';
+    else if (row.left === 'excluded' && row.right === 'excluded') outcome = 'excluded';
+    else if (!row.sameJudgment) outcome = 'disputed';
+    else outcome = row.limitedAgreement ? 'limited' : row.left;
+    return {outcome, flag};
   }
 
   function change(before, after) {
@@ -71,14 +86,17 @@
     })]);
   }
 
-  function comparedScores(joint, key) {
+  function savedComparison(joint, key) {
     const saved = compared.get(joint);
     if (!saved || !saved.keys.includes(keySignature(key))) {
       throw new Error('두 편집자 결과를 대조한 뒤 같은 비교에 사용한 대응표로 기록을 저장하세요.');
     }
-    // Return only the original comparison's public fields, even if the caller edited its display result.
-    return JSON.parse(saved.scores);
+    return saved;
   }
+
+  // Each export gets a fresh copy of the original comparison, independent of caller edits.
+  function comparedScores(joint, key) { return JSON.parse(savedComparison(joint, key).scores); }
+  function comparedFacts(joint, key) { return JSON.parse(savedComparison(joint, key).facts); }
 
   function compare(first, second) {
     if (first.key.pairId === second.key.pairId) throw new Error('같은 배포 묶음을 두 번 선택했습니다. 편집자별로 따로 배포한 두 묶음이 필요합니다.');
@@ -86,18 +104,20 @@
     if (first.sourceChanged || second.sourceChanged) throw new Error('배포 후 등록된 원자료가 달라진 작업이 있습니다. 배포 당시 자료로 평가한 파일을 선택하세요.');
 
     const before = compareRole(first, second, 'before');
-    const after = new Map(compareRole(first, second, 'after').map(d => [d.id, d]));
-    const dimensions = before.map(d => ({
-      id: d.id, title: d.title, first: transition(d.left, after.get(d.id).left), second: transition(d.right, after.get(d.id).right)
+    const after = compareRole(first, second, 'after');
+    const afterById = new Map(after.dimensions.map(d => [d.id, d]));
+    const dimensions = before.dimensions.map(d => ({
+      id: d.id, title: d.title, first: transition(d.left, afterById.get(d.id).left), second: transition(d.right, afterById.get(d.id).right)
     }));
-    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions};
+    const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
+    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts};
     const scores = ({before, after}) => ({before, after});
-    compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)],
+    compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], facts: JSON.stringify(facts),
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }
 
-  const api = Object.freeze({compare, comparedScores, summarizeScores});
+  const api = Object.freeze({compare, comparedScores, comparedFacts, summarizeScores});
   if (useNode) module.exports = api;
   else root.JournalRevisionAgreement = api;
 })(globalThis);

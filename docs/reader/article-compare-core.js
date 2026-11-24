@@ -60,6 +60,10 @@
       const sameJudgment = isDecided(a.category) && isDecided(b.category)
         ? a.category === b.category && sameScope : null;
       const leftRow = leftRows.get(a.rowId), rightRow = rightRows.get(b.rowId);
+      const receipt = leftRow.receipt;
+      // A matching supported judgment can cover only a factual span or the attribution of an opinion.
+      const limitedAgreement = sameJudgment === true && a.category === 'supported' &&
+        (receipt.status === 'mixed' || (receipt.status === 'attribution' && receipt.contentStatus === 'opinion'));
       // The reader restores this checksum only after validating the decision, its evidence and recording time.
       const sameReceipt = sameJudgment !== null && !!leftRow.receipt?.checksum &&
         leftRow.receipt.checksum === rightRow.receipt?.checksum;
@@ -75,7 +79,7 @@
         }
       }
       return {rowId: a.rowId, text: leftRow.text, left: a.category, right: b.category, openScopeDifference,
-        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment, sameReceipt,
+        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment, sameReceipt, limitedAgreement,
         coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId), differentSources};
     });
     const pairs = rows.filter(r => r.sameJudgment !== null);
