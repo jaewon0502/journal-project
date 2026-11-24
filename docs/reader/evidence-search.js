@@ -4,6 +4,7 @@
   const node = typeof module === 'object' && module.exports;
   const finder = node ? require('./evidence-finder.js') : root.JournalEvidenceFinder;
   const trend = node ? require('./evidence-trend.js') : root.JournalEvidenceTrend;
+  const columns = node ? require('./evidence-columns.js') : root.JournalEvidenceColumns;
 
   const measures = [
     {unit: '명', ask: /몇\s*(?:명|사람)|인원(?:수|은|이)?\s*(?:얼마|몇)/u,
@@ -43,7 +44,10 @@
     const table = trend.find(documentText, query, {articleContext});
     const gap = coverageNotice(documentText, query);
     let passages = table.hits;
-    if (table.state !== 'candidates') passages = finder.find(documentText, query, {includeContext: true});
+    if (table.state !== 'candidates') {
+      const matrixCell = table.state === 'ordinary' ? columns.findYearMatrixCell(documentText, query) : null;
+      passages = finder.find(documentText, query, {includeContext: true, matrixCell});
+    }
     return {passages, gap, state: table.state, usedArticleContext: table.usedArticleContext,
       needsPublicationDate: table.needsPublicationDate, reason: table.reason};
   }
