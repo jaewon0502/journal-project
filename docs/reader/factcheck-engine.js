@@ -245,7 +245,8 @@
   const reportedWhole = /^(?:\S+\s+){0,2}?\S*에\s*(?:따르면|의하면)\s|(?:다|라)고\s+(?:\S+\s)?\S+(?:은|는|이|가)\s+(?:\S+\s+)?\S*(?:밝|말|전|주장|설명|강조|발표|덧붙|확인|보도|지적)(?:했|혔|였)다/u;
   function splitReportedClauses(text) {
     if (!attributed.test(text) || reportedWhole.test(text)) return [{text, start: 0}];
-    const connective = new RegExp('(?:[' + past + '](?:고|으며|지만|으나|는데)|(?<=[가-힣])(?:하자|되자)|(?<=[가-힣])[한된]\\s+(?:뒤|후))[,，]?\\s+', 'gu');
+    const connective = new RegExp('(?:[' + past + '](?:고|으며|지만|으나|는데도?)|(?<=[가-힣])(?:하자|되자)|(?<=[가-힣])[한된]\\s+(?:뒤|후)' +
+      '|(?:[한된난진른던힌인]|있는|없는)\\s+(?:가운데|상황에서))[,，]?\\s+', 'gu');
     // Lazy: the first subject-marked word after the connective (의회는, not 의회는 절차가).
     const subject = /^(?:[^\s“”"‘’「」『』]{1,20}\s+){0,3}?[^\s“”"‘’「」『』]+(?:은|는|이|가|측도|측은)\s+/u;
     const matches = [...text.matchAll(connective)];
@@ -521,6 +522,7 @@
     return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
   }
   const forecast = /(?:될|할|늘|오를|내릴|줄|높아질|낮아질|늘어날|감소할|증가할|이길|패할|거둘|받을|넘을|이어질|커질)\s*(?:것|전망|예정|계획|가능성)|예상(?:된|한|했)|전망(?:된|한|했)/u;
+  const relativeQuantity = /절반|반값|반액|과반|(?:\d+|[일이삼사오육칠팔구십백천만]+)분의\s*(?:\d+|[일이삼사오육칠팔구십백천만]+)|(?<![가-힣])(?:한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[일이삼사오육칠팔구십백천만]+)\s*배(?=$|[\s\p{P}]|가|나|는|를|만|로|라|인|였|이|에|씩|다|일|임|입|의|보다|와)/u;
   function speechScope(text) {
     const quotes = [...text.matchAll(/[“"]([^“”"]+)[”"]/gu)].map(match => match[1]);
     // Without quotation marks, a calendar date right after the speaker belongs to the frame,
@@ -535,14 +537,14 @@
       if (forecast.test(part)) return true;
       return hasAssessment(part) && !quantitative.test(part) && !eventFact.test(part);
     });
-    // Narrator text outside the quotation ("의회가 3억 원을 삭감하자 시장은 “…”고 말했다")
-    // can carry its own facts. The reporting tail attached to the closing quote and ending in
-    // a reporting or stance verb (”이라며 예산안 처리에 반대했다) is not one of them, and dates
-    // (년·월·일·회) only place the speech in time.
-    const tail = /[”"](?:이?라고|고|이?라며|다며|며|면서|이?라면서)\s+[^“”"]*$/u.exec(text);
-    const framed = tail && reportingVerb.test(tail[0].trim()) ? text.slice(0, tail.index + 1) : text;
-    const frame = quotes.length ? framed.replace(/[“"][^“”"]+[”"]/gu, ' ') : '';
-    const frameFact = allegation.test(frame) || eventFact.test(frame)
+    // A date places a speech in time. An outside amount, allegation or event
+    // ("의회가 3억 원을 삭감하자 시장은 …") can instead make an independent claim.
+    // Remove the speaker's bare name and the final speech verb, not everything
+    // after the quote: a second action or reported figure can follow it.
+    const frame = quotes.length ? text.replace(/(?<!\S)[가-힣]+(?:은|는|이|가)\s+(?=[“"])/gu, '')
+      .replace(/[“"][^“”"]+[”"]/gu, ' ')
+      .replace(/[가-힣]+에(?:도|는)?\s+(?:찬성|반대)했다[.!?]?$/u, '').replace(reportingVerb, '') : '';
+    const frameFact = allegation.test(frame) || eventFact.test(frame) || relativeQuantity.test(frame)
       || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
     return {hasForecast, allNonfactual: allNonfactual && !frameFact, quotes, frameFact};
   }
@@ -593,6 +595,9 @@
     if (contentStatus === 'opinion') {
       if (!scope.allNonfactual) throw new Error('발언에 남은 사실·의혹을 별도 근거로 확인하거나 내용 미확인으로 남겨 주세요.');
       return {contentStatus, contentChecked: true, contentReason: decision.contentReason};
+    }
+    if (scope.frameFact && contentStatus === 'supported') {
+      throw new Error('인용 밖에도 확인할 사실이 있습니다. 발언 귀속만 기록하거나, 독립적으로 확인한 절이 있으면 ‘일부 사실만 확인’을 골라 그 구절을 지정하세요.');
     }
     const content = scope.quotes.length ? scope.quotes.join(' ') : scopedText;
     if (/(?:것으로|것이라(?:고)?|으로|로)\s*(?:추정|추산)(?:된|될|됐|했|하|한|되|됩)/u.test(content)) {

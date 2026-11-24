@@ -555,6 +555,89 @@ test('대조 후보는 조사가 붙은 낱말도 같은 낱말로 찾는다', (
 const rowTexts = text => prepare(text, transcript).rows.map(r => r.text);
 const opinionClosed = text => { const rows = prepare(text, transcript).rows; try { said(rows.at(-1)); return true; } catch { return false; } };
 
+const attendanceSources = [
+  {id:'speech', url:'https://council.example/speech', version:'확정본', locator:'속기록 1쪽', excerpt:'위원장: 참여자는 50명이다.'},
+  {id:'register', url:'https://audit.example/people', version:'확정본', locator:'참여 집계표', excerpt:'지난해 사업 참여자 50명.'}
+];
+const attendanceDecision = {status:'attribution', sourceIds:['speech'], acknowledged:true, reason:'속기록에서 발언자를 확인했다.',
+  contentChecked:true, contentStatus:'supported', contentSourceIds:['register'], contentReason:'참여 집계표에서 50명을 확인했다.'};
+
+test('인용 앞뒤의 독립된 사업비 서술은 실제 위치에 남고 참여자 수를 검증해도 함께 확정되지 않는다', () => {
+  for (const party of ['여당', '야당']) {
+    for (const parts of [
+      ['사업비가 2배 증가한 가운데,', party + ' 위원장은 “참여자는 50명”이라고 말했다.'],
+      ['사업비가 2배 늘어난 상황에서', party + ' 위원장은 “참여자는 50명”이라고 말했다.'],
+      [party + ' 사업비가 두 배인 상황에서', '위원장은 “참여자는 50명”이라고 말했다.'],
+      ['공사비가 절반이었는데도', party + ' 위원장은 “참여자는 50명”이라고 말했다.'],
+      ['내년 예산을 두 배 올리기로 한 상황에서', party + ' 위원장은 “참여자는 50명”이라고 말했다.'],
+      [party + ' 위원장은 “참여자는 50명”이라고 밝힌 가운데', '사업비는 2배 증가했다.']
+    ]) {
+      const article = '  ' + parts.join('  ');
+      const rows = prepare(article, attendanceSources).rows;
+      assert.deepEqual(rows.map(r => r.text), parts, article);
+      for (const row of rows) assert.equal(article.slice(row.positions[0].start, row.positions[0].end), row.text);
+      const speech = rows.find(r => r.text.includes('“'));
+      const saved = decide(speech, attendanceDecision, attendanceSources);
+      const result = report(article, attendanceSources, [saved]);
+      assert.deepEqual([result.complete, result.pendingCount, result.contentSupportedCount], [false, 1, 1]);
+      assert.equal(result.rows.find(r => r.needsReview).text, parts.find(part => !part.includes('“')));
+    }
+  }
+});
+
+test('분리할 수 없는 기자 서술은 인용 내용의 원자료만으로 승인할 수 없다', () => {
+  for (const article of [
+    '시장은 의회가 보조금 30억 원을 삭감한 데 대해 “참여자는 50명”이라고 말했다.',
+    '위원장은 ‘참여자는 50명’이라고 밝히면서 사업비를 2배 늘렸다.',
+    '위원장은 “참여자는 50명”이라고 말한 뒤 사업비를 2배 증액했다고 밝혔다.',
+    '사업비가 두 배라는 조사에 대해 위원장은 “참여자는 50명”이라고 말했다.',
+    '원가가 절반이라는 설명에 관해 위원장은 “참여자는 50명”이라고 말했다.',
+    '사업비가 삼분의 일이라는 보도에 관해 위원장은 “참여자는 50명”이라고 말했다.',
+    '뇌물 의혹을 받는 위원장은 “참여자는 50명”이라고 말했다.'
+  ]) {
+    const [row] = prepare(article, attendanceSources).rows;
+    assert.equal(row.text, article);
+    assert.throws(() => decide(row, attendanceDecision, attendanceSources), /인용 밖.*발언 귀속.*일부 사실만 확인/, article);
+    const saved = decide(row, {...attendanceDecision, contentStatus:'unverified'}, attendanceSources);
+    const result = report(article, attendanceSources, [saved]);
+    assert.deepEqual([result.complete, result.pendingCount, result.attributedCount], [false, 1, 1]);
+  }
+  for (const article of ['위원장은 3일 기자회견에서 “참여자는 50명”이라고 말했다.',
+    '예산집행감시단은 “참여자는 50명”이라고 말했다.']) {
+    const rows = prepare(article, attendanceSources).rows;
+    assert.equal(rows.length, 1, article);
+    assert.equal(decide(rows[0], attendanceDecision, attendanceSources).contentStatus, 'supported', article);
+  }
+  assert.equal(opinionClosed('위원장은 “무책임하다”라며 예산 삭감에 반대했다.'), true);
+  const article = '위원장은 “사업비가 두 배인 상황에서 참여자는 50명”이라고 말했다.';
+  const sources = [{...attendanceSources[0], excerpt:article},
+    {...attendanceSources[1], excerpt:'참여 집계표와 결산 비교표. 참여자 50명, 사업비는 1억 원에서 2억 원으로 증가.'}];
+  const rows = prepare(article, sources).rows;
+  assert.deepEqual(rows.map(row => row.text), [article]);
+  const saved = decide(rows[0], {...attendanceDecision, contentReason:'집계표와 결산 비교표에서 인용 속 인원과 사업비를 모두 대조했다.'}, sources);
+  assert.equal(report(article, sources, [saved]).complete, true);
+});
+
+test('이전 판본의 범위 밖 승인만 재검토로 돌아가고 단독 인용의 기록은 유지된다', () => {
+  // Valid receipts saved by 16c9eaf using the same sources and editor inputs.
+  for (const [article, articleBinding, binding, checksum, keep] of [
+    ['사업비가 2배 증가한 가운데 위원장은 “참여자는 50명”이라고 말했다.', '87e3e86776d90fcaa896f848d70b4ff425ecf231bd72ede2fdaad1952615463a',
+      '68c902850e1b0a303239855d42019ada19cabbbd1005ee0a971f1a4c33c17ff5', '25228eb43009b15297de5119d04e8be9414f5ef0f7bd7b0bb4548dd8ac89412e', false],
+    ['시장은 의회가 보조금 30억 원을 삭감한 데 대해 “참여자는 50명”이라고 말했다.', 'c2712d91eca0561f6d2592c01ec6e8730c00a314d44e6004276d17d9260ac350',
+      '50db604603764725eb7e2986e02bbb6f7d03b8557018fbe89ba5b3d20c4d3ead', 'dfb73b30a720d58876207defc21f8840f945fb2b8d6727d4131816ee51630626', false],
+    ['위원장은 3일 기자회견에서 “참여자는 50명”이라고 말했다.', '6220b987388fd90aee7f271ff17a4953bf171314917b65918bfa23557b3afa43',
+      '380150b5d4c92c217579b213386bc855995065aa55638439f04a4c5531f9d26b', '5bba0a8b9592c886d5d70c7c740688b3b51b021d6c59376403d99c43202089f9', true]
+  ]) {
+    const saved = {...attendanceDecision, protocol:'journal-review/1', rowId:'unit-0', articleBinding, binding,
+      references:'7f4cf1c937923ed100ce672f9f249034e7ec4bcb57354a2c2457b8e6e1e4eeb7', recordedAt:'2026-11-24T00:00:00.000Z', checksum};
+    const result = report(article, attendanceSources, [saved]);
+    assert.equal(result.complete, keep, article);
+    assert.equal(result.contentSupportedCount, keep ? 1 : 0);
+    if (keep) assert.equal(result.rows[0].receipt.checksum, checksum);
+    else assert.ok(result.rows.every(row => row.status === 'pending' && row.receipt === null));
+  }
+});
+
 test('반박 인용이 붙어도 간접 인용 속 의혹은 사실 행으로 떨어지지 않는다', () => {
   for (const text of ['야당은 시장이 3억 원을 횡령했고 측근이 이를 도왔다고 주장했지만 시장은 “사실무근”이라고 반박했다.',
     '김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했고, 시장은 “사실무근”이라고 반박했다.',
