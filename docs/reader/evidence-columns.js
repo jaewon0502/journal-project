@@ -260,6 +260,18 @@
     return unitLine.exec(/^\(.*\)$/u.test(first) ? first.slice(1,-1).trim() : first)?.[1];
   }
 
+  function matrixCaption(line) {
+    const text = line.normalize('NFKC').trim();
+    if (/[\t|]/u.test(text)) return false;
+    const number = /^(?:표\s*\d+(?:[.-]\d+)*(?:\s*[.:]\s*|\s+)|\[\s*표\s*\d+(?:[.-]\d+)*\s*\]|<\s*표\s*\d+(?:[.-]\d+)*\s*>)/u.exec(text);
+    if (!number) return false;
+    const title = text.slice(number[0].length).trim();
+    const reference = /(?<![\p{L}\p{N}])표\s*\d|^[\]>]|^(?:을|를|은|는|에|에서|의|와|과)(?:\s|$)|^(?:참고|참조)$/u;
+    const sentence = /(?:[.?!。]|한다|된다|있다|없다|습니다|입니다|하세요)$/u;
+    return (title.match(/\p{L}/gu) || []).length >= 2 && !boundary.test(title) && !matrixLegend(title) &&
+      !yearCell.test(title) && !reference.test(title) && !sentence.test(title);
+  }
+
   function matrixLine(line) {
     if (!line) return null;
     // The legacy grouped layout trims blank stubs. Here column 1 must really
@@ -276,7 +288,11 @@
     if (start < 0) return null;
     const block = lines.slice(start);
     while (block.length && !block.at(-1).trim()) block.pop();
-    const index = matrixLegend(block[0]) ? 1 : 0;
+    const caption = matrixCaption(block[0]) ? {paragraph:1, text:block[0]} : null;
+    const afterCaption = caption ? 1 : 0;
+    const unit = block[afterCaption];
+    const legend = unit && matrixLegend(unit) ? {paragraph:afterCaption + 1, text:unit} : null;
+    const index = afterCaption + (legend ? 1 : 0);
     const header = matrixLine(block[index]);
     if (!header || header.cells.length < 3 || !/[가-힣]/u.test(header.cells[0]) || yearCell.test(header.cells[0])) return null;
     const years = header.cells.slice(1).map(cell => yearCell.exec(cell)?.[1]);
@@ -296,8 +312,7 @@
       if (values.some(value => !matrixValue.test(value.normalize('NFKC')) && !/^(?:[-—–…]|)$/u.test(value))) return null;
       rows.push({paragraph:i + 1, label:rowLabel, values, text:block[i]});
     }
-    return rows.length ? {headerParagraph:index + 1, headers:header.cells, years, rows,
-      legend:index ? {paragraph:1, text:block[0]} : null} : null;
+    return rows.length ? {headerParagraph:index + 1, headers:header.cells, years, rows, caption, legend} : null;
   }
 
   function matrixYear(matrix, query) {
@@ -310,7 +325,9 @@
   function findYearMatrixCell(source, query) {
     const matrix = typeof source === 'string' ? parseYearMatrix(source) : source;
     const year = matrixYear(matrix, query);
-    if (!year) return null;
+    // A table title can restrict all rows to a period, population or change.
+    // Keep it alongside the manually browsable grid until its scope is known.
+    if (!year || matrix.caption) return null;
     // A named stub can change the meaning of every level in the grid (e.g.
     // change since last year). Its digits are still available in the raw grid.
     const stub = matrix.headers[0].normalize('NFKC');

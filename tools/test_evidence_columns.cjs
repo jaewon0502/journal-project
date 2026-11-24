@@ -304,7 +304,7 @@ test('직접 볼 수 있는 행렬에는 원문 표제·단위 줄·빈 셀·줄
   assert.deepEqual(matrix, {headerParagraph:2, headers:['구분','2022년','2023년도'], years:['2022','2023'],
     rows:[{paragraph:4,label:'정기 작업(건)',values:['1,005',''],text:raw},
       {paragraph:5,label:'야간 정비',values:['—','+8'],text:'| 야간 정비 | — | +8 |'}],
-    legend:{paragraph:1,text:'  (단위: 건) '}});
+    caption:null,legend:{paragraph:1,text:'  (단위: 건) '}});
   const {find} = require('../docs/reader/evidence-finder.js');
   const passage = find(source,'정기 작업에서 나온 자료', {includeContext:true}).find(p => p.text === raw);
   assert.equal(passage.paragraph, matrix.rows[0].paragraph);
@@ -368,4 +368,40 @@ test('한글·라틴 약어·한자 행을 같은 표로 읽고 대소문자만 
   assert.equal(columns.findYearMatrixRow(matrix,'2023년 PV를 어느 곳에 두었나?').rowParagraph,3);
   assert.equal(columns.findYearMatrixRow(matrix,'2023년 PV와 LNG 실적은?'),null);
   for (const name of ['Pv','12.5','']) assert.equal(columns.parseYearMatrix(source+'\n'+name+'\t4\t5'),null);
+});
+
+test('번호가 붙은 원문 표 제목과 선택적 단위의 위치를 유지하고 제목의 적용 범위를 수치로 단정하지 않는다', () => {
+  const rows = ['구분\t2021년\t2022년','열람 신청(건)\t7\t+9','원문 대출(건)\t17\t11'];
+  const query = '2022년 열람 신청은 몇 건인가?';
+  assert.equal(columns.findYearMatrixCell(rows.join('\n'),query).value,'+9');
+  const {find} = require('../docs/reader/evidence-finder.js');
+  for (const caption of ['표 8. 1월 열람 실적','  <표 12> 정회원 연간 이용 건수의 전년 대비 증감  ',
+    '[표 7-1] 야간 이용자 합계']) {
+    for (const units of [[],['  (단위： 건) ']]) {
+      const source = ['',caption,...units,...rows,''].join('\n');
+      const grid = columns.parseYearMatrix(source);
+      assert.deepEqual(grid.caption,{paragraph:1,text:caption});
+      assert.deepEqual(grid.legend,units.length ? {paragraph:2,text:units[0]} : null);
+      assert.equal(grid.headerParagraph,2 + units.length);
+      const row = grid.rows[0];
+      assert.deepEqual(row,{paragraph:3 + units.length, label:'열람 신청(건)',values:['7','+9'],text:rows[1]});
+      const hit = find(source,'열람 신청', {includeContext:true}).find(p => p.text === rows[1]);
+      assert.equal(hit.paragraph,row.paragraph);
+      assert.equal(columns.findYearMatrixCell(grid,query),null);
+      assert.deepEqual(columns.findYearMatrixRow(grid,query),{headerParagraph:grid.headerParagraph,
+        rowParagraph:row.paragraph,rowLabel:row.label,year:'2022'});
+    }
+  }
+});
+
+test('표 번호만 있거나 다른 문단·제목·표가 끼면 행렬에 임의로 붙이지 않는다', () => {
+  const grid = '항목\t2021\t2022\n보수\t8\t9';
+  for (const preamble of ['표 4', '[표 4]', '<표 3> 2022년도', '표 7 (단위: 건)', '표 7 단위: 건',
+    '<표 3] 외부 열람', '위 표 4의 설명', '표 4를 참고하면', '표 4 에 따르면', '표 4 참조',
+    '표 4 보수 내역을 설명한다.', '표 4 보수 내역을 설명한다', '[표 4] [표 5] 보수 내역', '표 7\t보수 내역', '그림 4. 보수 내역',
+    '보수 내역', '자료를 옮겼다.\n표 4 보수 내역', '<표 4> 보수 내역\n[표 5] 대출 현황',
+    '표 4 보수 내역\n다음 쪽 통계에서 발췌', '단위: 건\n표 4 보수 내역', '표 4 보수 내역\n단위: 건\n단위: 명']) {
+    assert.equal(columns.parseYearMatrix(preamble+'\n'+grid),null,preamble);
+  }
+  assert.equal(columns.parseYearMatrix('표 4 보수 내역\n'+grid+'\n[표 5] 정비 현황\n'+grid),null);
 });
