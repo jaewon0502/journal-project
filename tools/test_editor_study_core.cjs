@@ -154,8 +154,8 @@ test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토
   assert.deepEqual([result.quality.manual.qualityCorrect, result.quality.journal.qualityCorrect], [10,10]);
   assert.equal(result.time.reductionPct, 50);
   assert.deepEqual(result.timedQuality, {
-    manual:{total:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000, secondsPerVerified:10},
-    journal:{total:8, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000, secondsPerVerified:20},
+    manual:{total:8, correct:8, citationCorrect:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000, secondsPerVerified:10},
+    journal:{total:8, correct:5, citationCorrect:5, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000, secondsPerVerified:20},
     perVerified:{savedSeconds:-10, reductionPct:-100},
     faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}
   });

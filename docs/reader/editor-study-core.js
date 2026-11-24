@@ -297,7 +297,7 @@
   function timedQualityStats(records) {
     if (!records.length) return null;
     const arms = Object.fromEntries(methods.map(method => [method,
-      {total:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
+      {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
     const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
     for (const record of records) {
       const elapsedMs = {manual:0, journal:0}, verified = {manual:0, journal:0};
@@ -306,6 +306,8 @@
         arm.total++;
         arm.elapsedMs += trial.elapsedMs;
         elapsedMs[method] += trial.elapsedMs;
+        if (grade.correct) arm.correct++;
+        if (grade.sourceCorrect) arm.citationCorrect++;
         if (grade.verified) {
           arm.verified++;
           verified[method]++;

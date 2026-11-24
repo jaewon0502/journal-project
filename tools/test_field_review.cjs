@@ -846,6 +846,87 @@ function assignment(participant, changes = {}) {
   return {participant, caseId, articleUrl, taskId, prompt, method:'manual', ...changes};
 }
 
+test('완료자만 보면 50% 빠르고 성공률이 높아도 전체 배정의 성공률 차이는 양쪽 방향으로 열려 있다', () => {
+  const slots = Array.from({length:8}, (_, i) => assignment('E' + i, {method:i < 4 ? 'manual' : 'journal'}));
+  const returns = slots.slice(0, 5).map((a, i) => ({
+    trial:trial({...a, id:a.participant, kind:'editor', phaseMs:{search:i < 4 ? 60000 : 30000, locate:0, decide:0}}),
+    locationGrade:i === 3 ? 'no' : 'yes', verdictGrade:'yes'
+  }));
+  const {assignmentComparisons:[task], groups} = c.allocationReport(slots, returns, new Set());
+  assert.deepEqual(task.manual.yieldBounds, {verified:3, failed:1, withdrawn:0, unknown:0});
+  assert.deepEqual(task.journal.yieldBounds, {verified:1, failed:0, withdrawn:0, unknown:3});
+  assert.deepEqual(task.difference, {low:-50, high:25});
+  const [time] = c.compareTimes(groups)[0].byVersion;
+  assert.deepEqual([time.savedPct, time.perVerified.savedPct], [50, 62.5]);
+});
+
+test('중도 종료·오답과 판정할 수 없는 배정을 구별하고 복원·교차 사용의 정답은 원래 배정에 센다', () => {
+  const ids = ['crossed', 'pending', 'failed', 'ended', 'other', 'repeat', 'absent'];
+  const slots = ids.map(id => assignment(id, {method:'journal'}));
+  const row = (id, changes = {}, locationGrade = '', verdictGrade = '') => ({
+    trial:trial({...assignment(id), kind:'editor', id, ...changes}), locationGrade, verdictGrade
+  });
+  const returns = [
+    row('crossed', {recovered:true}, 'yes', 'yes'), row('pending', {}, 'yes'),
+    row('failed', {found:'missing'}), row('ended', {status:'withdrawn', recovered:true}),
+    row('other', {taskId:'wrong'}, 'yes', 'yes'), row('repeat', {}, 'yes', 'yes'),
+    row('not-assigned', {}, 'yes', 'yes')
+  ];
+  const repeated = new Set(['repeat']);
+  const unrelated = assignment('different', {prompt:'다른 문장'});
+  const report = c.allocationReport([...slots, unrelated], returns, repeated);
+  assert.equal(report.assignmentComparisons.length, 2);
+  const [task, other] = report.assignmentComparisons;
+  assert.equal(task.journal.assigned, 7);
+  assert.deepEqual(task.journal.yieldBounds, {verified:1, failed:1, withdrawn:1, unknown:4});
+  assert.equal(task.difference, null);
+  assert.deepEqual(other.manual.yieldBounds, {verified:0, failed:0, withdrawn:0, unknown:1});
+  assert.equal(other.difference, null);
+  assert.equal(report.outsideRoster, 1);
+  const neither = c.allocationReport([assignment('M'), assignment('J', {method:'journal'})], [], new Set());
+  assert.deepEqual(neither.assignmentComparisons[0].difference, {low:-100, high:100});
+});
+
+test('시간 카드가 같은 번호의 다른 기사를 구별해 전체 배정 성공률로 연결하고 다시 가리면 결과도 없앤다', async t => {
+  const p = page(t, 'field-summary');
+  const first = assignment('manual');
+  const second = assignment('other', {articleUrl:'https://news.example/second', prompt:'두 번째 기사 문장'});
+  const journal = {...first, participant:'journal', method:'journal'};
+  const absent = {...journal, participant:'not-returned'};
+  await p.upload('roster-file', {format:c.assignmentFormat, assignments:[first,second,journal,absent]});
+  const submission = a => trial({...a, id:a.participant, kind:'editor', locator:'표 행 ' + a.participant});
+  await p.upload('imports', ...[second,first,journal].map(submission));
+  const grade = id => {
+    p.gradeLocation('표 행 ' + id, 'yes');
+    const entry = [...p.el('entries').children].find(card => card.textContent.includes('표 행 ' + id));
+    const verdict = entry.querySelectorAll('select')[1];
+    verdict.value = 'yes';
+    verdict.dispatchEvent(new p.window.Event('change', {bubbles:true}));
+  };
+  grade('manual'); grade('journal');
+  assert.equal(p.el('allocation-yield').textContent, '');
+  p.el('toggle-results').click();
+  const cards = p.el('allocation-comparisons').querySelectorAll('article');
+  assert.equal(cards.length, 2);
+  for (const card of cards) {
+    const link = card.querySelector('a[href^="#"]');
+    assert.ok(link);
+    const quality = p.el(link.hash.slice(1)).closest('article');
+    const url = card.querySelector('a[href^="https:"]').href;
+    assert.equal(quality.querySelector('a[href^="https:"]').href, url);
+    if (url === first.articleUrl) {
+      assert.match(quality.textContent, /50\.0% ~ 100\.0%/);
+      assert.match(quality.textContent, /-50\.0%p ~ 0\.0%p/);
+    } else {
+      assert.match(quality.textContent, /배정 0건/);
+    }
+  }
+  assert.equal(p.el('comparisons').querySelectorAll('a[href^="#"]').length, 0);
+  p.el('toggle-results').click();
+  assert.equal(p.el('allocation-yield').textContent, '');
+  assert.equal(p.el('allocation-comparisons').textContent, '');
+});
+
 test('기사 쿼리 공백 부호와 추적 변수 차이를 배정 중복과 반복 노출 양쪽에 똑같이 적용한다', async t => {
   const base = 'https://paper.example/story';
   const articleUrl = base + '?article=employment%20report&year=2025#/view/1';

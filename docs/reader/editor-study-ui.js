@@ -153,12 +153,19 @@
     if (q) {
       const arms = [q.manual, q.journal];
       rows.push(['검토 시간 합계', ...arms.map(v => fmt(v.elapsedMs / 1000) + '초')],
+        ['기준 판정 일치', ...arms.map(v => ratio(v.correct, v.total))],
+        ['대표 근거 일치', ...arms.map(v => ratio(v.citationCorrect, v.total))],
         ['판정과 근거 모두 일치', ...arms.map(v => ratio(v.verified, v.total))],
         ['근거 없는 사실 채택¹', ...arms.map(v => ratio(v.unsafe, v.unsafeTotal))],
         ['검증 성공 1건당 시간', ...arms.map(v => v.verified ? fmt(v.secondsPerVerified) + '초' : '산출 불가 (성공 0건)')]);
-      if (q.journal.verified / q.journal.total < q.manual.verified / q.manual.total) warnings.push('판정과 근거를 모두 맞힌 비율이 낮아졌습니다.');
-      if (q.journal.unsafeTotal && q.manual.unsafeTotal && q.journal.unsafe / q.journal.unsafeTotal > q.manual.unsafe / q.manual.unsafeTotal)
-        warnings.push('근거가 부족한데도 사실로 채택한 비율이 높아졌습니다.');
+      for (const [key, label] of [['correct', '기준 판정 일치율'], ['citationCorrect', '대표 근거 일치율'], ['verified', '판정·근거 동시 일치율']]) {
+        const drop = 100 * (q.manual[key] / q.manual.total - q.journal[key] / q.journal.total);
+        if (drop > 0) warnings.push(label + ' ' + fmt(drop) + '%p 하락');
+      }
+      if (q.journal.unsafeTotal && q.manual.unsafeTotal) {
+        const rise = 100 * (q.journal.unsafe / q.journal.unsafeTotal - q.manual.unsafe / q.manual.unsafeTotal);
+        if (rise > 0) warnings.push('근거 없는 사실 채택률 ' + fmt(rise) + '%p 상승');
+      }
       const d = q.perVerified;
       if (d.savedSeconds === null) change = '한쪽 이상에서 검증 성공이 0건이어서 성공 1건당 시간 차이를 계산할 수 없습니다.';
       else if (d.savedSeconds === 0) change = '두 방식의 검증 성공 1건당 시간이 같습니다.';
@@ -170,7 +177,7 @@
     }
     const warning = el('timed-quality-warning');
     warning.hidden = !warnings.length;
-    warning.textContent = warnings.length ? '시간을 비교한 편집자들이 저널을 썼을 때 ' + warnings.join(' ') : '';
+    warning.textContent = warnings.length ? '시간을 비교한 ' + a.timing.included + '명이 저널을 썼을 때 원자료 대비 ' + warnings.join(', ') + '.' : '';
     table('timed-quality-table', ['지표', '원자료', '저널'], rows, '네 명 모두 시간을 기록한 묶음이 생기면 결과가 표시됩니다.');
     el('timed-quality-change').hidden = !q;
     el('timed-quality-change').textContent = change;

@@ -364,17 +364,48 @@ test('시간이 절반으로 줄어도 같은 편집자들의 성공률 하락�
   assert.match(p.el('quality').textContent, /판정과 근거 모두 일치50% \(8\/16\)50% \(8\/16\)/);
   assert.match(p.el('timed-quality-sample').textContent, /8명 중.*4명/);
   assert.deepEqual(rows().map(row => row.slice(1)), [
-    ['960초','480초'], ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)']
+    ['960초','480초'], ['100% (8/8)','50% (4/8)'], ['100% (8/8)','0% (0/8)'],
+    ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)']
   ]);
   assert.equal(p.el('timed-quality-warning').hidden, false);
-  assert.match(p.el('timed-quality-warning').textContent, /맞힌 비율이 낮아졌습니다.*채택한 비율이 높아졌습니다/);
+  assert.match(p.el('timed-quality-warning').textContent, /판정·근거 동시 일치율 100%p 하락.*근거 없는 사실 채택률 100%p 상승/);
   assert.match(p.el('timed-quality-change').textContent, /성공이 0건/);
   assert.match(p.el('timed-quality-editors').textContent, /빨라진 편집자 4명 중.*줄어든 사람은 4명/);
   p.el('demo-view').click();
   assert.doesNotMatch(p.el('timed-quality-change').textContent, /성공이 0건/);
   p.el('real-view').click();
-  assert.equal(rows()[1][2], '0% (0/8)');
+  assert.deepEqual(rows().find(row => row[0] === '판정과 근거 모두 일치'), ['판정과 근거 모두 일치','100% (8/8)','0% (0/8)']);
 });
+
+for (const lower of ['기준 판정', '대표 근거']) {
+  test('검증 성공률이 같아도 시간을 비교한 묶음에서 ' + lower + ' 일치율만 낮아지면 표시한다', async t => {
+    const p = page(t);
+    p.el('issue-codes').click(); p.el('issue-codes').click();
+    const records = p.workspace().invitations.map(inv => {
+      const r = completedRecord(inv.ordinal, inv.id);
+      for (const trial of r.trials) {
+        const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+        const matched = trial.variant === 'A';
+        // Block 2 reverses the difference seen in the timed block. All A trials pass both checks.
+        const targetCorrect = matched || (trial.method === 'manual') === (inv.ordinal <= 4);
+        const verdictCorrect = lower === '기준 판정' ? targetCorrect : matched;
+        const sourceCorrect = lower === '대표 근거' ? targetCorrect : matched;
+        trial.verdict = verdictCorrect ? gold.expectedVerdict : 'opinion';
+        trial.sourceIds = sourceCorrect ? [gold.expectedSourceIds[0]] : [];
+      }
+      if (inv.ordinal === 5) Object.assign(r.trials[0], {elapsedMs:null, observedMs:5000});
+      return r;
+    });
+    await importFiles(p, records.map(r => JSON.stringify(r)));
+    const warning = p.el('timed-quality-warning');
+    assert.equal(p.el('quality-warning').hidden, true);
+    assert.match(p.el('timed-quality-change').textContent, /50%\) 줄었습니다/);
+    assert.match(p.el('timed-quality-table').textContent, /판정과 근거 모두 일치50% \(4\/8\)50% \(4\/8\)/);
+    assert.ok(p.el('timed-quality-table').textContent.includes(lower + ' 일치100% (8/8)50% (4/8)'));
+    assert.equal(warning.hidden, false);
+    assert.equal(warning.textContent, '시간을 비교한 4명이 저널을 썼을 때 원자료 대비 ' + lower + ' 일치율 50%p 하락.');
+  });
+}
 
 test('시간 단축과 성공당 시간 증가를 서로 다른 분모로 표시한다', async t => {
   const p = page(t);

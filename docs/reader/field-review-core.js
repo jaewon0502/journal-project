@@ -300,7 +300,29 @@
     }
     const groups = group(matched);
     for (const g of groups) arms.get(armKey(g)).outcomes = g;
-    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked};
+    const byTask = new Map();
+    for (const arm of arms.values()) {
+      const {caseId, articleUrl, taskId, prompt} = arm;
+      const verified = arm.outcomes?.verified ?? 0;
+      const known = arm.outcomes?.verificationKnown ?? 0;
+      // An explicit withdrawal ends this assigned attempt. An unmatched return
+      // cannot establish whether the editor produced a correct assigned answer.
+      arm.yieldBounds = {verified, failed:known - verified, withdrawn:arm.withdrawn,
+        unknown:arm.assigned - known - arm.withdrawn};
+      const key = JSON.stringify([caseId, articleUrl, taskId, prompt]);
+      if (!byTask.has(key)) byTask.set(key, {caseId, articleUrl, taskId, prompt, difference:null});
+      byTask.get(key)[arm.method] = arm;
+    }
+    for (const comparison of byTask.values()) {
+      const {manual, journal} = comparison;
+      if (!manual || !journal) continue;
+      const m = manual.yieldBounds, j = journal.yieldBounds;
+      comparison.difference = {
+        low:100 * (j.verified / journal.assigned - (m.verified + m.unknown) / manual.assigned),
+        high:100 * ((j.verified + j.unknown) / journal.assigned - m.verified / manual.assigned)
+      };
+    }
+    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()]};
   }
 
   const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url, kitVersion,

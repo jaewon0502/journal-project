@@ -136,7 +136,7 @@
     }
     return details;
   }
-  function showComparisons(groups, area) {
+  function showComparisons(groups, area, yieldTargets) {
     area.replaceChildren();
     if (!groups.length) {
       area.append(node('p', '같은 배포본·과제의 평소 도구 기록과 저널 기록을 불러오면 절감률을 계산합니다.'));
@@ -148,7 +148,17 @@
       article.href = task.articleUrl;
       article.target = '_blank';
       article.rel = 'noopener noreferrer';
-      card.append(node('h3', task.caseId + ' · ' + task.taskId), node('p', task.prompt), article);
+      card.append(node('h3', task.caseId + ' · ' + task.taskId), node('p', task.prompt));
+      const yieldId = yieldTargets?.get(trialTarget(task));
+      if (yieldId) {
+        const link = node('a', '전체 배정에서 이 과제의 검증 성공률 보기');
+        link.href = '#' + yieldId;
+        link.setAttribute('aria-label', link.textContent + ' · ' + task.caseId + ' · ' + task.taskId + ' · ' + task.prompt);
+        const line = node('p', '');
+        line.append(link);
+        card.append(line);
+      }
+      card.append(article);
       const arms = [task.manual, task.journal].filter(Boolean);
       if (arms.some(g => g.totalTimed))
         card.append(node('p', '완료 시간 평균 · ' + kitCoverage(arms, n => n.totalTimed)));
@@ -217,6 +227,41 @@
         ' (반박·근거 부족으로 판정한 과제) · 기준 판정 미확인 ' + referencePending + '건')
     ];
   }
+  function assignmentYieldCard(task) {
+    const card = node('article', '');
+    card.className = 'case';
+    const article = node('a', '과제의 기사 열기 ↗');
+    article.href = task.articleUrl;
+    article.target = '_blank';
+    article.rel = 'noopener noreferrer';
+    card.append(node('h4', task.caseId + ' · ' + task.taskId), node('p', task.prompt), article);
+    for (const method of ['manual', 'journal']) {
+      const arm = task[method];
+      if (!arm) {
+        card.append(node('p', labels[method] + ' · 배정 0건'));
+        continue;
+      }
+      const { verified, failed, withdrawn, unknown } = arm.yieldBounds;
+      const percent = count => (100 * count / arm.assigned).toFixed(1) + '%';
+      const range = unknown ? percent(verified) + ' ~ ' + percent(verified + unknown) : percent(verified);
+      card.append(node('p', labels[method] + ' · 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
+        node('p', '성공 ' + verified + '건 · 위치 또는 판정 불일치 ' + failed + '건 · 중도 종료 ' + withdrawn +
+          '건 · 결과 미확인 ' + unknown + '건'));
+    }
+    if (!task.difference) {
+      card.append(node('p', '같은 과제를 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.'));
+      return card;
+    }
+    const points = n => (n > 0 ? '+' : '') + n.toFixed(1) + '%p';
+    const { low, high } = task.difference;
+    const range = low === high ? points(low) : points(low) + ' ~ ' + points(high);
+    card.append(node('strong', '성공률 차이 (저널 사용 배정 − 평소 도구 배정) ' + range));
+    if (low < 0 && high > 0)
+      card.append(node('p', '미확인 결과에 따라 어느 쪽의 성공률이 더 높은지 달라질 수 있습니다.'));
+    else if (low !== high && (low === 0 || high === 0))
+      card.append(node('p', '미확인 결과에 따라 두 방식의 성공률이 같을 수도 있습니다.'));
+    return card;
+  }
   function showAllocations(report) {
     el('allocation-counts').textContent = assignmentCounts(report.all) +
       '. 명부 밖 코드의 현업 기록 ' + report.outsideRoster + '건 · 등록한 기사를 찾을 수 없는 현업 기록 ' +
@@ -231,7 +276,15 @@
         ...qualityLines(arm.outcomes));
       el('allocation-arms').append(card);
     }
-    showComparisons(report.groups, el('allocation-comparisons'));
+    const yieldTargets = new Map();
+    for (const comparison of report.assignmentComparisons) {
+      const card = assignmentYieldCard(comparison);
+      card.id = 'assigned-yield-' + (yieldTargets.size + 1);
+      card.tabIndex = -1;
+      yieldTargets.set(trialTarget(comparison), card.id);
+      el('allocation-yield').append(card);
+    }
+    showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
   function stats() {
     const rows = selected(),
@@ -259,6 +312,7 @@
     el('allocation-results').hidden = !showingResults || !hasAssignments;
     el('allocation-counts').textContent = '';
     el('allocation-arms').replaceChildren();
+    el('allocation-yield').replaceChildren();
     el('allocation-comparisons').replaceChildren();
     if (!showingResults) {
       el('comparisons').replaceChildren();
