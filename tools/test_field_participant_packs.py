@@ -2,12 +2,15 @@ from html.parser import HTMLParser
 from io import BytesIO
 import json
 from pathlib import Path
+from shutil import copytree
 import sys
+from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_field_participant_packs import CASES, html, packet_bytes
+from build_field_participant_packs import CASES, READER, html, packet_bytes, packet_pair
 
 
 class EmbeddedCase(HTMLParser):
@@ -15,11 +18,15 @@ class EmbeddedCase(HTMLParser):
         super().__init__()
         self.inside = False
         self.payload = ''
+        self.versions = []
         self.feed(source)
 
     def handle_starttag(self, tag, attrs):
-        self.inside = (tag == 'script' and dict(attrs).get('id') == 'assigned-tasks' and
-                       dict(attrs).get('type') == 'application/json')
+        attrs = dict(attrs)
+        if tag == 'meta' and attrs.get('name') == 'journal-field-kit':
+            self.versions.append(attrs['content'])
+        self.inside = (tag == 'script' and attrs.get('id') == 'assigned-tasks' and
+                       attrs.get('type') == 'application/json')
 
     def handle_data(self, data):
         if self.inside:
@@ -31,6 +38,35 @@ class EmbeddedCase(HTMLParser):
 
 
 class FieldKits(unittest.TestCase):
+    def paired_version(self, pair):
+        versions = set()
+        for data in pair.values():
+            with ZipFile(BytesIO(data)) as z:
+                page = EmbeddedCase(z.read('field-review.html').decode())
+                self.assertEqual(len(page.versions), 1)
+                self.assertRegex(page.versions[0], r'^[a-f0-9]{64}$')
+                versions.update(page.versions)
+        self.assertEqual(len(versions), 1)
+        return versions.pop()
+
+    def test_both_arms_identify_the_same_reproducible_pair_and_track_changes(self):
+        pair = packet_pair()
+        self.assertEqual(pair, packet_pair())
+        original = self.paired_version(pair)
+        with TemporaryDirectory() as folder:
+            reader = copytree(READER, Path(folder) / 'reader')
+            with patch('build_field_participant_packs.READER', reader):
+                for name in ('factcheck-ui.js', 'field-review-core.js', 'field-review.html'):
+                    with self.subTest(name=name):
+                        asset = reader / name
+                        before = asset.read_bytes()
+                        asset.write_bytes(before + b'\n')
+                        self.assertNotEqual(self.paired_version(packet_pair()), original)
+                        asset.write_bytes(before)
+                # Changes to the coordinator dashboard do not change the delivered pair.
+                (reader / 'field-summary.js').write_bytes(b'// coordinator only')
+                self.assertEqual(packet_pair(), pair)
+
     def test_ready_to_distribute_kits_match_source_without_scoring_keys(self):
         for case in ('cross-party-review', 'labour-field-review'):
             key = json.loads((CASES / case / 'coordinator-key.json').read_bytes())

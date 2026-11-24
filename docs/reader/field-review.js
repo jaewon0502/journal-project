@@ -181,7 +181,8 @@
       format: c.format,
       id: crypto.randomUUID(),
       kind: el('kind').value,
-      ...selected
+      ...selected,
+      kitVersion: c.kitVersion(document.querySelector('meta[name="journal-field-kit"]')?.content)
     };
     session = {
       base,

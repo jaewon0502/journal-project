@@ -296,6 +296,7 @@ test('수동·저널 배정을 유지하고 실제 도구 사용 응답과 다�
     el('submit').click();
     const output = await p.download('download');
     assert.equal(output.method, arm);
+    assert.equal(output.kitVersion, null);
     assert.equal(output.journalUse, el('journalUse').value);
     el('next').click();
     assert.deepEqual(
@@ -356,6 +357,39 @@ test('배부본은 번호 선택과 시작을 기다리고 수동으로 다시 �
     assert.equal(el('start').disabled, true);
   }
 });
+test('참여 기록은 시간을 시작할 때의 배포본을 보관하고 이전 기록을 새 버전으로 표시하지 않는다', async t => {
+  const first = '1'.repeat(64), next = '2'.repeat(64);
+  function kit(version, saved) {
+    return page(t, 'field-review', w => {
+      const meta = w.document.createElement('meta');
+      meta.name = 'journal-field-kit';
+      meta.content = version;
+      w.document.head.append(meta);
+      w.document.getElementById('case-file').dataset.caseId = fixture.caseId;
+      w.document.getElementById('method').disabled = true;
+      if (saved) w.localStorage.setItem(saved.key, JSON.stringify(saved.session));
+    });
+  }
+  const p = kit(first);
+  await p.upload('case-file', fixture);
+  p.el('participant').value = 'E01';
+  p.select('#task', fixture.tasks[0].id);
+  p.el('start').click();
+  const key = p.window.localStorage.key(0);
+  const session = JSON.parse(p.window.localStorage.getItem(key));
+  assert.equal(session.base.kitVersion, first);
+  p.el('withdraw').click();
+  assert.equal((await p.download('download')).kitVersion, first);
+  for (const legacy of [false, true]) {
+    if (legacy) delete session.base.kitVersion;
+    const restored = kit(next, {key, session});
+    restored.el('withdraw').click();
+    const result = await restored.download('download');
+    assert.equal(result.recovered, true);
+    assert.equal(result.kitVersion, legacy ? undefined : first);
+  }
+});
+
 test('배정과 실제 사용이 다른 완료 건수와 과거 미확인 파일을 배정별로 센다', () => {
   const rows = [
     { journalUse: 'yes' },
@@ -883,4 +917,42 @@ test('한 편집자가 서로 다른 기사를 배정받으면 과제와 기사�
   const conflict = report([row('crossed identifiers',{...a, articleUrl:b.articleUrl})]);
   assert.deepEqual([conflict.all.excluded,conflict.all.completed,conflict.groups.length],[2,0,0]);
   assert.equal(c.allocationReport(slots,[qualified],new Set(['exact'])).all.excluded,1);
+});
+
+test('배포본 수는 시간 지표별로 원래 배정에 연결된 표본과 기록상 방식 표본에 맞춘다', async t => {
+  const p = page(t, 'field-summary');
+  const first = 'a'.repeat(64), second = 'b'.repeat(64), outside = 'c'.repeat(64), excluded = 'd'.repeat(64);
+  const record = (id, changes) => trial({id, participant:id, kind:'editor', ...changes});
+  const left = record('A', {method:'journal', kitVersion:first});
+  await p.upload('roster-file', {format:c.assignmentFormat, assignments:[
+    assignment('A'), assignment('B', {method:'journal'}), assignment('C'), assignment('D'),
+    assignment('R'), assignment('wrong'), assignment('repeat')
+  ]});
+  await p.upload('imports', left, record('B', {kitVersion:first}),
+    record('C', {method:'journal', kitVersion:second, status:'withdrawn'}),
+    record('outside', {kitVersion:outside}), record('R', {kitVersion:excluded, recovered:true}),
+    record('practice', {kitVersion:excluded, kind:'practice'}),
+    record('wrong', {taskId:'other', kitVersion:excluded}),
+    record('repeat', {kitVersion:excluded}), record('repeat2', {kitVersion:excluded, participant:'repeat'}));
+  assert.doesNotMatch(p.el('entries').textContent, new RegExp(first));
+  let assigned = p.report('allocation-comparisons');
+  assert.match(assigned, /완료 시간 평균 · 기록에 적힌 배포본 1종 · 버전 미확인 0건/);
+  assert.match(assigned, /완료·중도 종료 시간 · 기록에 적힌 배포본 2종 · 버전 미확인 0건. 여러 버전/);
+  assert.ok(assigned.includes('평소 검증 도구 · ' + second + ' · 완료 0건 (단계별 측정 0건) · 중도 종료 1건'));
+  assert.ok(!assigned.includes(excluded) && !assigned.includes(outside));
+  const recorded = p.report('comparisons', 'article');
+  assert.ok(recorded.includes('평소 검증 도구와 저널 · ' + second + ' · 완료 0건'));
+  assert.ok(recorded.includes(outside) && !recorded.includes(excluded));
+  await p.upload('imports', record('D', {}), record('malformed', {kitVersion:[first]}));
+  assigned = p.report('allocation-comparisons');
+  assert.match(assigned, /완료 시간 평균 · 기록에 적힌 배포본 1종 · 버전 미확인 1건/);
+  assert.match(p.report('comparisons', 'article'), /완료 시간 평균 · 기록에 적힌 배포본 2종 · 버전 미확인 2건/);
+  const exported = await p.download('save');
+  assert.equal(exported.entries.find(r => r.trial.id === 'A').trial.kitVersion, first);
+  await p.upload('imports', {...left, kitVersion:second});
+  assert.match(p.el('status').textContent, /내용이 다른 파일/);
+  assert.equal(p.report('allocation-comparisons'), assigned);
+  p.select('#kind', 'practice');
+  const practice = p.report('comparisons');
+  assert.ok(practice.includes(excluded) && !practice.includes(first));
 });

@@ -111,6 +111,32 @@
     const percent = savedPct === null ? '기준 시간 0초로 비율 산출 대기' : Math.abs(savedPct).toFixed(1) + '%';
     return seconds(Math.abs(savedMs), 1) + ' ' + change + ' (' + percent + ')';
   }
+  function kitCoverage(groups, count) {
+    const versions = new Set();
+    let unknown = 0;
+    for (const group of groups) {
+      for (const [version, counts] of group.timedKits) {
+        const n = count(counts);
+        if (!n) continue;
+        if (version) versions.add(version);
+        else unknown += n;
+      }
+    }
+    return '기록에 적힌 배포본 ' + versions.size + '종 · 버전 미확인 ' + unknown + '건.' +
+      (versions.size > 1 ? ' 여러 버전의 시간을 함께 집계했습니다.' : '') +
+      (unknown ? ' 미확인 기록은 어느 버전에서 측정했는지 알 수 없습니다.' : '');
+  }
+  function kitDetails(groups) {
+    const details = node('details', '');
+    details.append(node('summary', '시간 집계에 포함된 배포본 ID와 건수'));
+    for (const group of groups) {
+      for (const [version, counts] of group.timedKits) {
+        details.append(node('p', labels[group.method] + ' · ' + (version || '버전 미확인') +
+          ' · 완료 ' + counts.completed + '건 (단계별 측정 ' + counts.split + '건) · 중도 종료 ' + counts.withdrawn + '건'));
+      }
+    }
+    return details;
+  }
   function showComparisons(groups, area) {
     area.replaceChildren();
     if (!groups.length) {
@@ -124,6 +150,9 @@
       article.target = '_blank';
       article.rel = 'noopener noreferrer';
       card.append(node('h3', task.caseId + ' · ' + task.taskId), node('p', task.prompt), article);
+      const arms = [task.manual, task.journal].filter(Boolean);
+      if (arms.some(g => g.totalTimed))
+        card.append(node('p', '완료 시간 평균 · ' + kitCoverage(arms, n => n.completed)));
       if (task.savedMs === null) {
         card.append(node('strong', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
       } else {
@@ -140,6 +169,8 @@
           ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
       }
       card.append(node('h4', '검증 성공 1건당 투입 시간'));
+      if (arms.some(g => g.totalTimed + g.timedWithdrawn))
+        card.append(node('p', '완료·중도 종료 시간 · ' + kitCoverage(arms, n => n.completed + n.withdrawn)));
       for (const method of ['manual', 'journal']) {
         const group = task[method];
         if (!group || !(group.totalTimed + group.timedWithdrawn)) {
@@ -154,6 +185,7 @@
       }
       if (task.perVerified.savedMs !== null)
         card.append(node('strong', '검증 성공 1건당 ' + timeChangeText(task.perVerified)));
+      if (arms.some(g => g.timedKits.size)) card.append(kitDetails(arms));
       area.append(card);
     }
   }
@@ -268,6 +300,7 @@
             '건)'
         )
       );
+      if (g.timed) d.append(node('p', '단계별 평균 · ' + kitCoverage([g], n => n.split)));
       el('groups').append(d);
     }
   }
@@ -396,7 +429,8 @@
       t.locator || '',
       t.verdict || '',
       t.reason || '',
-      t.journalUse || ''
+      t.journalUse || '',
+      c.kitVersion(t.kitVersion)
     ]);
   }
   function loadKey(v) {

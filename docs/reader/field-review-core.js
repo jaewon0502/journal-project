@@ -4,6 +4,9 @@
   const phases = ['search', 'locate', 'decide'];
   const format = 'journal-field-trial-v1';
   const text = (v) => typeof v === 'string' && !!v.trim();
+  function kitVersion(value) {
+    return typeof value === 'string' && value.length === 64 && !/[^a-f0-9]/.test(value) ? value : null;
+  }
   function url(value) {
     try {
       const u = new URL(value);
@@ -101,6 +104,7 @@
           timed: 0,
           totalTimed: 0,
           totalMs: 0,
+          timedKits: new Map(),
           timedGraded: 0,
           timedVerified: 0,
           timedOutcomePending: 0,
@@ -121,6 +125,13 @@
         });
       const g = groups.get(key);
       const elapsedMs = phases.reduce((sum, p) => sum + t.phaseMs[p], 0);
+      if (!t.recovered) {
+        const version = kitVersion(t.kitVersion);
+        if (!g.timedKits.has(version)) g.timedKits.set(version, {completed:0, withdrawn:0, split:0});
+        const counts = g.timedKits.get(version);
+        counts[t.status]++;
+        if (t.status === 'completed' && t.split) counts.split++;
+      }
       if (t.status === 'withdrawn') {
         g.withdrawn++;
         if (!t.recovered) {
@@ -294,7 +305,7 @@
     return {all, arms:[...arms.values()], groups, outsideRoster, unlinked};
   }
 
-  const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url,
+  const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url, kitVersion,
     assignmentFormat, articleIdentity, mergeAssignments, allocationReport };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFieldReview = api;
