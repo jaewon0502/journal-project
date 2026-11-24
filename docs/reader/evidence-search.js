@@ -6,6 +6,7 @@
   const trend = node ? require('./evidence-trend.js') : root.JournalEvidenceTrend;
   const columns = node ? require('./evidence-columns.js') : root.JournalEvidenceColumns;
   const periods = node ? require('./evidence-period.js') : root.JournalEvidencePeriod;
+  const fiscal = node ? require('./evidence-fiscal.js') : root.JournalEvidenceFiscal;
 
   const measures = [
     {unit: '명', ask: /몇\s*(?:명|사람)|인원(?:수|은|이)?\s*(?:얼마|몇)/u,
@@ -153,11 +154,44 @@
     return null;
   }
 
+  const fiscalAmount = /\d[\d,.]*\s*[십백천만억조]*\s*원/u;
+  function fiscalProse(text, query) {
+    const stage = fiscal.request(query);
+    // Preserve the table readers and ordinary navigation for layouts that may
+    // express the stage in a header rather than beside each printed amount.
+    if (!stage || /[\t|｜\f]|\S {2,}\S|^[ 　]*[（(]?단\s*위\s*[:：]/mu.test(text)) return null;
+    const wantedYears = fiscal.years(query);
+    const wantedProject = fiscal.project(query);
+    const targets = new Map();
+    const rows = text.split(/\r\n|[\n\r\u2028\u2029]/u).filter(line => line.trim());
+    for (const [index, row] of rows.entries()) {
+      if (!fiscalAmount.test(row)) continue;
+      const scopes = new Map();
+      for (const part of fiscal.clauses(row)) {
+        if (part.stage !== stage || !fiscalAmount.test(part.text)) continue;
+        if (wantedProject && part.project && wantedProject !== part.project) continue;
+        if (wantedYears.size && part.years.size && ![...part.years].some(year => wantedYears.has(year))) continue;
+        const projectMatched = Boolean(wantedProject && part.project === wantedProject);
+        if (!scopes.has(projectMatched)) scopes.set(projectMatched, {evidence:[], coveredYears:new Set()});
+        const scope = scopes.get(projectMatched);
+        for (const year of part.years) if (wantedYears.has(year)) scope.coveredYears.add(year);
+        scope.evidence.push(part.text);
+      }
+      for (const [projectMatched, {evidence, coveredYears}] of scopes) {
+        const rank = 1 + Number(projectMatched) + coveredYears.size;
+        const scoped = (!wantedProject || projectMatched) && wantedYears.size === coveredYears.size;
+        if ((targets.get(index + 1)?.rank || 0) < rank) targets.set(index + 1, {rank, text:evidence.join(' '), stage:scoped ? stage : null});
+      }
+    }
+    const fullScope = [...targets.values()].some(match => match.stage);
+    return {targets, gap:fullScope ? null : fiscal.gap(stage)};
+  }
+
   function search(documentText, query, {articleContext = ''} = {}) {
     const table = trend.find(documentText, query, {articleContext});
     const context = articleContext.trim();
     const dated = table.state === 'ordinary' && (!context || context === query.trim()) && datedRows(documentText, query);
-    const gap = dated ? dated.gap || null : coverageNotice(documentText, query);
+    let gap = dated ? dated.gap || null : coverageNotice(documentText, query);
     const yearMatrix = table.state === 'ordinary' ? columns.parseYearMatrix(documentText) : null;
     let passages = dated ? dated.passages : table.hits;
     if (!dated && table.state !== 'candidates') {
@@ -166,7 +200,10 @@
       const checkCell = yearMatrix && (!context || context === query.trim());
       const matrixCell = checkCell ? columns.findYearMatrixCell(yearMatrix, query) : null;
       const matrixNavigation = yearMatrix && !matrixCell ? columns.findYearMatrixRow(yearMatrix, query) : null;
-      passages = finder.find(documentText, query, {includeContext: true, matrixCell, matrixNavigation});
+      const budget = !gap && table.state === 'ordinary' && !yearMatrix && (!context || context === query.trim()) &&
+        fiscalProse(documentText, query.normalize('NFKC'));
+      if (budget?.gap) gap = budget.gap;
+      passages = finder.find(documentText, query, {includeContext: true, matrixCell, matrixNavigation, fiscalTargets:budget?.targets});
     }
     return {passages, gap, state: table.state, usedArticleContext: table.usedArticleContext,
       needsPublicationDate: table.needsPublicationDate, reason: table.reason,

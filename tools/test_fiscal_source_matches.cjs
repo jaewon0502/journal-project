@@ -1,0 +1,128 @@
+const {test} = require('node:test');
+const assert = require('node:assert/strict');
+const {prepare, decide} = require('../docs/reader/factcheck-engine.js');
+const housing = require('../docs/reader/editor-study-cases.js');
+const fiscal = require('../docs/reader/evidence-fiscal.js');
+
+const record = (id, title, locator, excerpt) => ({id, title, locator, excerpt, version:'공개본',
+  url:'https://study.invalid/fiscal/' + id});
+const records = [
+  record('ministry', '돌봄 사업 요구서', '부처 요구액', '돌봄 사업의 부처 요구액은 130억 원이다.'),
+  record('cabinet', '국회 제출 예산안', '정부안', '돌봄 사업의 정부 제출 예산안은 120억 원이다.'),
+  record('adopted', '의결 예산서', '확정액', '돌봄 사업의 확정 예산은 110억 원이다.'),
+  record('accounts', '세출 결산서', '집행액', '돌봄 사업의 실제 집행액은 90억 원이다.')
+];
+const row = (q, sources) => prepare(q, sources).rows[0];
+const permutations = values => values.length < 2 ? [values] :
+  values.flatMap((value, i) => permutations(values.filter((_, j) => j !== i)).map(rest => [value, ...rest]));
+
+test('부처 요구·정부 제출·의결·집행 중 다른 단계와 같은 금액을 적어도 기사에서 물은 단계가 먼저다', () => {
+  for (const [label, id] of [['부처 요구액','ministry'], ['정부안','cabinet'], ['본예산','adopted'], ['집행액','accounts']]) {
+    for (const amount of [90, 110, 120, 130]) {
+      const q = `돌봄 사업의 ${label}은 ${amount}억 원이다.`;
+      for (const order of permutations(records)) {
+        const r = row(q, order);
+        assert.equal(r.sourceIds[0], id, q);
+        assert.match(r.sourceMatches[0].reason, /예산 단계 · /u, q);
+        assert.equal(r.sourceCaution, null, q);
+        assert.equal(r.status, 'pending');
+      }
+    }
+  }
+});
+
+test('의결 자료를 찾지 못하면 관련 후보를 남기고, 실제 반증을 고른 편집자의 판단을 보존한다', () => {
+  for (const variant of ['A','B']) {
+    const {article, sources, expectedSourceIds} = housing.get('repair', variant);
+    const r = row(article, sources);
+    assert.equal(r.sourceIds[0], expectedSourceIds[0]);
+    assert.equal(r.sourceCaution, null);
+    const receipt = decide(r, {status:'contradicted', acknowledged:true, sourceIds:expectedSourceIds,
+      reason:'같은 범위의 의결액은 지난해 10억 원, 올해 11억 원으로 10% 증가했다.'}, sources);
+    assert.equal(prepare(article, sources, [receipt]).rows[0].status, 'contradicted');
+    const incomplete = row(article, sources.filter(s => !expectedSourceIds.includes(s.id)));
+    assert.ok(incomplete.sourceIds.includes('doc-1'));
+    assert.equal(incomplete.sourceCaution, fiscal.gap('approved'));
+    assert.equal(incomplete.status, 'pending');
+  }
+});
+
+test('자료 제목이 정부안이어도 해당 구간에 든 집행액은 정부 제출액의 빈자리를 메우지 않는다', () => {
+  const heading = record('audit', '돌봄 사업 정부안 분석', '표 7 집행실적', '돌봄 사업의 실제 지출액은 120억 원이다.');
+  const q = '돌봄 사업의 정부안은 120억 원이다.';
+  assert.equal(row(q, [heading, records[0]]).sourceCaution, fiscal.gap('proposal'));
+  assert.equal(row(q, [heading, records[1]]).sourceIds[0], 'cabinet');
+});
+
+test('집행 자료의 위치 표시는 금액만 적힌 행에는 적용해도 지출 예정이나 미공개 설명에는 적용하지 않는다', () => {
+  const q = '돌봄 사업의 실제 집행액은 120억 원이다.';
+  const inAccounts = excerpt => record('accounts', '세출 결산서', '집행액', excerpt);
+  assert.equal(row(q, [inAccounts('돌봄 사업 110억 원.')]).sourceCaution, null);
+  assert.equal(row(q, [{...inAccounts('돌봄 사업 110'), locator:'집행액 (단위: 억 원)'}]).sourceCaution, null);
+  for (const excerpt of ['돌봄 사업의 실제 지출액은 아직 공개되지 않았다.',
+    '돌봄 사업에 120억 원을 집행할 예정이다.', '돌봄 사업의 실제 지출액은 별도 부록에 기재했다.']) {
+    assert.equal(row(q, [inAccounts(excerpt)]).sourceCaution, fiscal.gap('spent'));
+  }
+});
+
+test('다른 사업이나 다른 연도에만 요청한 단계가 나오면 비교에 맞는 원문을 더 요청한다', () => {
+  const q = '2024년 돌봄 사업의 본예산은 130억 원이다.';
+  const request = record('care', '돌봄 사업 요구서', '요구액', '2024년 돌봄 사업의 부처 요구액은 130억 원이다.');
+  const mixed = record('history', '돌봄 사업 연혁', '연도별 사업비',
+    '2023년 확정 예산은 130억 원, 2024년 부처 요구액은 140억 원이다.');
+  const other = record('road', '도로 사업 결산', '재원', '2024년 도로 사업의 확정 예산은 130억 원이다.');
+  const crossed = record('crossed', '연도별 재정 기록', '의결 내역',
+    '2023년 돌봄 사업의 확정 예산은 90억 원이다. 2024년 도로 사업의 확정 예산은 130억 원이다.');
+  const correct = record('decision', '의회 의결 자료', '소관 사업별 확정액', '2024년 돌봄 사업의 확정 예산은 110억 원이다.');
+  assert.equal(row(q, [request, mixed, other, crossed]).sourceCaution, fiscal.gap('approved'));
+  assert.equal(row(q, [request, mixed, other, crossed, correct]).sourceIds[0], 'decision');
+  assert.equal(row(q, [request, mixed, other, crossed, correct]).sourceCaution, null);
+  assert.equal(row('2024년 하천정비 사업의 본예산은 130억 원이다.', [other]).sourceCaution, fiscal.gap('approved'));
+});
+
+test('단계를 지정하지 않은 예산·비금융 기사와 발언 원문에는 재정 단계 보완 경고를 붙이지 않는다', () => {
+  for (const q of ['돌봄 사업 예산은 110억 원이다.', '돌봄 사업의 작년 참여 인원은 110명이다.',
+    '위원장은 “돌봄 사업의 본예산은 110억 원이다”라고 말했다.']) {
+    assert.equal(row(q, [records[0]]).sourceCaution, null, q);
+  }
+});
+
+test('금액이 같아도 다른 연령대의 사업이나 연도가 빠진 자료가 같은 사업의 해당 연도 의결액을 앞서지 않는다', () => {
+  const q = '2024년 청년 주거 지원 사업의 본예산은 130억 원이다.';
+  const sameYearDifferentProgram = record('older', '주거 지원 사업 예산', '본예산',
+    '2024년 노인 주거 지원 사업의 확정 예산은 130억 원이다.');
+  const sameProgramNoYear = record('undated', '주거 지원 사업 예산', '본예산',
+    '청년 주거 지원 사업의 확정 예산은 130억 원이다.');
+  const correct = record('vote', '시의회 공고', '표 7', '2024년 청년 주거 지원 사업의 확정 예산은 110억 원이다.');
+  const yearInHeading = {...correct, title:'2024년 시의회 의결 예산', excerpt:'청년 주거 지원 사업의 확정 예산은 110억 원이다.'};
+  for (const wrong of [sameYearDifferentProgram, sameProgramNoYear]) {
+    assert.equal(row(q, [wrong]).sourceCaution, fiscal.gap('approved'));
+    for (const right of [correct, yearInHeading]) {
+      for (const refs of [[right, wrong], [wrong, right]]) {
+        assert.equal(row(q, refs).sourceIds[0], right.id);
+        assert.equal(row(q, refs).sourceCaution, null);
+      }
+    }
+  }
+});
+
+test('확정 예산서라는 제목은 의결을 명시적으로 부정한 발췌문을 덮어쓰지 않는다', () => {
+  const query = '2024년 청년 주거 지원 사업의 본예산은 130억 원이다.';
+  const denied = record('denied', '2024년 청년 주거 지원 사업 확정 예산서', '확정액',
+    '2024년 청년 주거 지원 사업의 본예산은 130억 원으로 최종 확정되지 않았다.');
+  const adopted = record('approved', '시의회 공고', '의결 내역', '2024년 청년 주거 지원 사업의 확정액은 110억 원이다.');
+  assert.equal(row(query, [denied]).sourceCaution, fiscal.gap('approved'));
+  for (const order of [[denied, adopted], [adopted, denied]]) {
+    assert.equal(row(query, order).sourceIds[0], 'approved');
+    assert.equal(row(query, order).sourceCaution, null);
+  }
+});
+
+test('한 문장에 전년도 의결액과 올해 요구액이 함께 나올 때 올해 의결액을 확인한 것으로 표시하지 않는다', () => {
+  const query = '2024년 청년 주거 지원 사업의 본예산은 130억 원이다.';
+  const mixed = record('mixed', '시의회 공고', '사업비 증감',
+    '2023년 청년 주거 지원 사업의 확정 예산은 90억 원이었고 2024년 청년 주거 지원 사업의 요구액은 130억 원이었다.');
+  assert.equal(row(query, [mixed]).sourceCaution, fiscal.gap('approved'));
+  const current = {...mixed, excerpt:'2024년 청년 주거 지원 사업의 정부안은 130억 원이었으며 국회 확정액은 110억 원이었다.'};
+  assert.equal(row(query, [current]).sourceCaution, null);
+});

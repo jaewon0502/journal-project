@@ -426,7 +426,7 @@
     return matches.length === 1 ? matches[0] : {};
   }
 
-  function find(documentText, query, {includeContext = false, matrixCell = null, matrixNavigation = null} = {}) {
+  function find(documentText, query, {includeContext = false, matrixCell = null, matrixNavigation = null, fiscalTargets = null} = {}) {
     const periods = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
     const wanted = [...terms(query)];
     if (!wanted.length) return [];
@@ -489,7 +489,9 @@
         row.text.split(/\t+| {2,}|\s*\|\s*/u).slice(0, 2).some(cell => [term, label].includes(cell.trim()))) &&
         row.table.headings.some(h => h.keys.some(k => namedMetrics.includes(k)));
       const matchesTarget = row === target.row ? 2 : Number(dateAndMetric || unitRow || formulaRow || groupRow || false);
-      if (!row.keys.length && !matchesTarget) continue;
+      const fiscalTarget = fiscalTargets?.get(row.paragraph);
+      if (fiscalTargets?.size && !fiscalTarget && !matchesTarget) continue;
+      if (!row.keys.length && !matchesTarget && !fiscalTarget) continue;
       const direct = row.keys.reduce((sum, key) => sum + weight(key), 0);
       let score = direct;
       if (row.table) {
@@ -513,15 +515,22 @@
         score = Math.max(...row.keys.map(weight));
       }
       if (contentsEntry.test(row.text.trim())) score *= 0.5;
-      scored.push({row, score, matchesTarget, amountMatch:proseAmountMatch(row, quantity, asked?.year)});
+      scored.push({row, score, matchesTarget, fiscalRank:fiscalTarget?.rank || 0,
+        amountMatch:proseAmountMatch(fiscalTarget || row, quantity, asked?.year)});
     }
     // A cited value can be the very error under investigation. A named metric
     // in its requested date row is a stronger locator than that number elsewhere.
-    scored.sort((a, b) => b.matchesTarget - a.matchesTarget || b.amountMatch - a.amountMatch ||
+    scored.sort((a, b) => b.matchesTarget - a.matchesTarget || b.fiscalRank - a.fiscalRank || b.amountMatch - a.amountMatch ||
       b.score - a.score || a.row.paragraph - b.row.paragraph);
     return scored.slice(0, 3).map(({row}) => {
       const {paragraph, text, matched} = row;
       const hit = {paragraph, text, matched};
+      const fiscalTarget = fiscalTargets?.get(paragraph);
+      if (fiscalTarget) {
+        if (fiscalTarget.stage) hit.fiscalStage = fiscalTarget.stage;
+        const scoped = terms(fiscalTarget.text);
+        hit.matched = matched.filter(key => !/^\d/u.test(key) || scoped.has(key));
+      }
       if (matrixCell?.rowParagraph === paragraph) hit.matrixCell = matrixCell;
       else if (matrixNavigation?.rowParagraph === paragraph) hit.matrixNavigation = matrixNavigation;
       if (includeContext) {

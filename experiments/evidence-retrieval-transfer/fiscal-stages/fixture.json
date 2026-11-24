@@ -1,0 +1,63 @@
+{
+  "baseline": "1cec0285877f45917271f6f341471f0794b69631",
+  "sources": {
+    "legislativeReview": {
+      "publisher": "국회예산정책처",
+      "title": "2024년도 예산안 심의결과",
+      "published": "2024-01-12",
+      "url": "https://korea.nabo.go.kr/En/report/findAnalysisAllInfo.do?bbsId=BMSR00154&boardId=3250&gubunCd=B154003&pageIndex=6",
+      "location": "영문판 요약 첫 문단. 2023년 9월 1일 정부 제출, 12월 21일 국회 의결, 2024년도 총지출의 두 금액."
+    },
+    "adoption": {
+      "publisher": "기획재정부",
+      "title": "내년 예산안 656조 6000억 원 국회 통과…“서민·사회적 약자 지원 확대”",
+      "published": "2023-12-21",
+      "url": "https://www.korea.kr/news/policyFocusView.do?newsId=148924053&pkgId=49500798",
+      "location": "본문 첫 두 문단과 본회의 사진 설명, 사진 바로 다음 문단."
+    },
+    "settlement": {
+      "publisher": "국회예산정책처",
+      "title": "2024회계연도 결산 재정총량 분석",
+      "published": "2025-07-28",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33318702",
+      "catalog": "https://nabo.go.kr/ko/report/analysisView.do?idx=8815&key=2509250001",
+      "location": "인쇄본 4쪽 ‘2024회계연도 총지출 결산’의 총지출 행. 2023 결산 610.7, 2024 예산 656.6, 2024 결산 638.0. 단위는 조 원."
+    }
+  },
+  "documents": {
+    "threeStages": {
+      "lines": [
+        "2023회계연도 중앙정부 총지출은 결산 기준 610.7조 원이었다.",
+        "정부가 국회에 낸 2024년도 예산안에서 중앙정부 총지출은 656.9조 원이었다.",
+        "국회 본회의가 의결한 2024년도 확정예산의 중앙정부 총지출은 656.6조 원이었다.",
+        "2024회계연도 중앙정부 총지출 결산액은 638.0조 원이었다."
+      ],
+      "sourceIds": ["settlement", "legislativeReview", "adoption", "settlement"]
+    },
+    "atAdoption": {
+      "lines": [
+        "2024년도 예산안의 중앙정부 총지출로 정부가 국회에 제출한 금액은 656.9조 원이었다.",
+        "2023년 12월 21일 국회 본회의에서 확정된 2024년도 중앙정부 총지출 예산은 656.6조 원이었다."
+      ],
+      "sourceIds": ["adoption", "adoption"]
+    },
+    "proceedings": {
+      "lines": [
+        "정부는 2023년 9월 1일 국회에 2024년도 예산안을 제출했다.",
+        "2024년도 예산안 수정안 표결에서 찬성한 의원은 237명이었다."
+      ],
+      "sourceIds": ["legislativeReview", "adoption"]
+    }
+  },
+  "cases": [
+    {"id":"proposal","document":"threeStages","query":"정부가 제출한 2024년도 총지출 예산안은 얼마였나?","kind":"stage","expectedParagraph":2},
+    {"id":"adopted","document":"threeStages","query":"국회 본회의가 의결한 2024년도 중앙정부 총지출은 얼마인가?","kind":"stage","expectedParagraph":3},
+    {"id":"settled","document":"threeStages","query":"2024회계연도 결산에서 중앙정부가 실제로 지출한 금액은 얼마인가?","kind":"stage","expectedParagraph":4},
+    {"id":"proposed-number-as-final","document":"threeStages","query":"국회가 확정한 2024년도 중앙정부 총지출이 656.9조 원이라는 주장은 맞는가?","kind":"stage","expectedParagraph":3},
+    {"id":"approved-number-as-actual","document":"threeStages","query":"2024년도 중앙정부 총지출 결산액이 656.6조 원이었다는 보도는 맞는가?","kind":"stage","expectedParagraph":4},
+    {"id":"previous-year-settled","document":"threeStages","query":"2023회계연도 중앙정부 총지출의 결산액은 얼마였나?","kind":"stage","expectedParagraph":1},
+    {"id":"settlement-missing","document":"atAdoption","query":"2024회계연도 중앙정부 총지출의 결산액은 얼마였나?","kind":"gap","expectedParagraph":null},
+    {"id":"fiscal-year-missing","document":"threeStages","query":"2022회계연도 중앙정부 총지출의 결산액은 얼마였나?","kind":"gap","expectedParagraph":null},
+    {"id":"procedural-vote","document":"proceedings","query":"2024년도 예산안 수정안 표결에서 찬성한 의원은 몇 명이었나?","kind":"ordinary","expectedParagraph":2}
+  ]
+}

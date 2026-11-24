@@ -780,6 +780,7 @@
     for (const passage of passages) {
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
+      if (passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
       if (passage.datedCell) {
         const cell = passage.datedCell;
         block.append(node('p', '자료 행의 ' + cell.column + '열 · ' + cell.heading + ' · 원문 표기 ' + cell.value));
