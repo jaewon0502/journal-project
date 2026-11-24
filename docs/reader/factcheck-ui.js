@@ -827,6 +827,18 @@
         diff.current.value + '입니다. 두 표시값과 괄호 증감이 어긋납니다. 원보고서나 통계표에서 확인하세요.', 'callout'));
     }
   }
+  function priorChangeCard(passage) {
+    const {previous:earlier, current} = passage.changeRows;
+    const location = '‘' + earlier.datedRowLabel + '’·‘' + current.datedRowLabel + '’ 행 · ‘' + earlier.datedCell.heading + '’ 열';
+    const excerpt = citationRows([...passage.context, passage]);
+    const card = node('div', undefined, 'source');
+    card.append(node('strong', earlier.datedCell.heading + ' · 변경 이력'),
+      node('p', '표에서 앞선 변경일 ' + earlier.datedRowLabel + ' · 원문 표기 ' + earlier.datedCell.value),
+      node('p', '질문의 변경일 ' + current.datedRowLabel + ' · 원문 표기 ' + current.datedCell.value),
+      node('blockquote', excerpt.text, 'verbatim'),
+      button('머리글과 두 변경일을 발췌', () => useExcerpt(excerpt, location)));
+    return card;
+  }
   function annualRateCard(passage) {
     const {population, measure, previous, current, change} = passage.annualRate;
     const label = population.replace(/세(이상|이하)/u, '세 $1') + ' ' + measure;
@@ -867,7 +879,7 @@
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
     if (!lookup.fiscalTable && !lookup.transcript) {
-      for (const p of passages) if (!p.annualRate) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
+      for (const p of passages) if (!p.annualRate && !p.changeRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
     if ([...annualRows.values()].some(row => row?.scopeIssue === 'population'))
@@ -909,6 +921,10 @@
       results.append(node('summary', '표현이 겹친 위치 ' + fallbackCount + '개 보기'));
     }
     for (const passage of passages) {
+      if (passage.changeRows) {
+        results.append(priorChangeCard(passage));
+        continue;
+      }
       if (passage.annualRate) {
         results.append(annualRateCard(passage));
         continue;

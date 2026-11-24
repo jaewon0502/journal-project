@@ -117,3 +117,53 @@ test('정당별 같은 지지율을 각 표기의 날짜로 찾고 표기가 없
   const raw = search(fullWidth,'여당 지지율이 40%인 날짜는?').passages[0];
   assert.deepEqual(raw.datedCell,{heading:'여당 지지율（％）', column:2, value:'４０．００'});
 });
+
+test('변경 전을 물으면 인상 당일과 원표에 보이는 앞선 변경일을 시간순으로 구별한다', () => {
+  const source = require('node:fs').readFileSync(
+    require('node:path').join(__dirname,'../experiments/evidence-retrieval-transfer/base-rate-dates/source-table.tsv'), 'utf8').trimEnd();
+  const [header, ...rows] = source.split('\n');
+  for (const order of [rows, rows.toReversed()]) {
+    const table = [header, ...order].join('\n');
+    for (const question of ['기준금리는 인상 전 몇 퍼센트였나?', '인상 직전의 기준금리는 얼마인가?',
+      '기준금리를 올리기 전에는 얼마였나요?', '기준금리는 변경 전 1.50%였나?', '기준금리는 인상이 있기 전에는 얼마였나?']) {
+      const {passages, notice} = search(table, '2022년 4월 14일 ' + question);
+      assert.equal(passages.length,1);
+      const {previous:earlier, current} = passages[0].changeRows;
+      assert.equal(passages[0].datedCell,undefined);
+      assert.equal(earlier.text,rows[7]);
+      assert.equal(earlier.datedCell.value,'1.25');
+      assert.equal(current.text,rows[6]);
+      assert.equal(current.datedCell.value,'1.50');
+      assert.deepEqual(passages[0].context.map(x=>x.text),[header,current.text]);
+      assert.match(notice,/생략된 변경/);
+      assert.match(notice,/단위가 없습니다/);
+    }
+    const after = search(table, '2022년 4월 14일 기준금리는 인상 뒤 몇 퍼센트였나?');
+    assert.equal(after.passages[0].datedCell.value,'1.50');
+    assert.equal(after.passages[0].changeRows, undefined);
+  }
+});
+
+test('앞선 변경일을 정할 수 없는 발췌와 관측 표에서는 당일 값을 변경 전 값으로 제시하지 않는다', () => {
+  const query = '2022년 4월 14일 요율은 조정 전 얼마인가?';
+  const header = '변경일 | 요율(%)';
+  const jan = '2022-01-14 | 1.25', apr = '2022-04-14 | 1.50', may = '2022-05-26 | 1.75';
+  for (const [lines, reason] of [
+    [[header, apr], /앞선 행이 없습니다/], [[header, may, apr], /앞선 행이 없습니다/],
+    [[header, jan, may], /변경일/], [[header, apr, apr, jan], /변경일/],
+    [[header, jan, may, apr], /순서/], [[header, jan, jan, apr], /중복/],
+    [[header.replace('변경일','측정일'),jan,apr], /변경 이력/]
+  ]) {
+    const result = search(lines.join('\n'),query);
+    assert.deepEqual(result.passages,[]);
+    assert.match(result.gap, reason);
+  }
+  const sparse = search([header,'2020-01-02 | 0.50',apr].join('\n'),query);
+  assert.equal(sparse.passages[0].datedCell,undefined);
+  assert.match(sparse.notice,/생략된 변경/);
+  const source = [header,jan,apr].join('\n');
+  for (const q of ['2022년 4월 14일 요율은 조정 전날 얼마인가?', '2022년 4월 14일 요율은 변경 한 달 전 얼마인가?',
+    '조정 전 요율이 1.25%인 날짜는?','2022년 4월 14일 수도권 요율은 변경 전 얼마인가?']) {
+    assert.ok(search(source,q).passages.every(hit => !hit.datedCell && !hit.changeRows),q);
+  }
+});

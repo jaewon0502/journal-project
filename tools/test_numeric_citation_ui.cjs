@@ -134,3 +134,24 @@ test('분리된 연·월일 셀과 단위 없는 머리글을 원표대로 인�
   assert.equal(p.el('source-locator').value, '‘2023 01월 13일’ 행 · ‘기준금리’ 열 (붙여넣은 본문 3문단 · 자료 행 3열)');
   assert.equal(p.el('source-excerpt').value, [lines[0], '[…]', lines[2]].join('\n'));
 });
+
+test('인상 전 기준금리를 찾으면 머리글과 두 변경일을 원표 순서대로 발췌해 작업 파일에 보관한다', async t => {
+  const p = editor(t);
+  const rows = readFileSync(path.join(__dirname,'../experiments/evidence-retrieval-transfer/base-rate-dates/source-table.tsv'),'utf8').trimEnd().split('\n');
+  const card = p.find('4월 인상 전 기준금리는 1.25%였다.', rows,'2022년 4월 14일 기준금리는 인상 전 몇 퍼센트였나?');
+  assert.match(card.textContent,/앞선 변경일 2022 01월 14일 · 원문 표기 1.25/);
+  assert.match(card.textContent,/질문의 변경일 2022 04월 14일 · 원문 표기 1.50/);
+  assert.match(p.el('finder-status').textContent,/생략된 변경/);
+  const excerpt = [rows[0], '[…]', rows[7], rows[8]].join('\n');
+  assert.equal(card.querySelector('blockquote').textContent,excerpt);
+  card.querySelector(':scope > button').click();
+  const locator = '‘2022 01월 14일’·‘2022 04월 14일’ 행 · ‘기준금리’ 열';
+  assert.equal(p.el('source-excerpt').value,excerpt);
+  assert.equal(p.el('source-locator').value,locator);
+  p.set('source-title', '한국은행 기준금리 추이'); p.set('source-url','https://www.bok.or.kr/portal/singl/baseRate/list.do');
+  p.set('source-version','원표 발췌'); p.el('source-save-link').click();
+  const work = JSON.parse(await p.save('save-work'));
+  assert.equal(work.sources[0].excerpt,excerpt);
+  assert.equal(work.sources[0].locator,locator);
+  assert.equal(work.receipts.length,0);
+});

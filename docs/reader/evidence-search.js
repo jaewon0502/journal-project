@@ -72,17 +72,42 @@
     return !/수도권|지역별|성별|연령별|도시별|가운데|한정|대상자|중에서/u.test(rest);
   }
 
+  // A value printed on a change date describes the new state. A prior-value
+  // question requires the earlier printed row as well, with its own date.
+  const beforeChange = /(?:(?:변경|인상|인하|조정|개정|시행|상승|하락|결정|발표)(?:되기|하기|[이가]\s*(?:있기|이뤄지기|이루어지기))?|(?:올리|내리|바꾸|바뀌|오르|내려가)기)\s*(?:바로\s*)?(?:직전|이전|전)(?:에는|의|에|은|과|후)?(?!\p{L})/u;
+  const earlierTime = /(?<!\p{L})(?:전날|전일|직전|전)(?:에는|의|에|은|과|후)?(?!\p{L})/u;
+
+  function priorChangeRows(history, selected, heading, declaredUnit) {
+    const gap = '질문에 적힌 변경일과 그보다 앞선 변경일을 원표에서 함께 확인하세요.';
+    if (selected.length !== 1) return {passages:[], gap};
+    if (history.length < 2) return {passages:[], gap:'발췌한 표에 이 변경일보다 앞선 행이 없습니다. ' + gap};
+    const direction = Math.sign(history[1].date - history[0].date);
+    if (!direction || history.some((row, i) => i && Math.sign(row.date - history[i - 1].date) !== direction))
+      return {passages:[], gap:'날짜가 중복되거나 행 순서가 일정하지 않습니다. ' + gap};
+    const current = selected[0];
+    const index = history.findIndex(row => row.hit === current);
+    const previous = history[index - direction]?.hit;
+    if (!previous) return {passages:[], gap:'발췌한 표에 이 변경일보다 앞선 행이 없습니다. ' + gap};
+    return {passages:[{paragraph:previous.paragraph, text:previous.text, matched:previous.matched,
+      changeRows:{previous, current}, context:[previous.context[0], current]}],
+      notice:'붙여 넣은 변경 이력에서 두 날짜를 찾았습니다. 사이에 생략된 변경이 있는지 원표에서 확인하세요.' +
+        (declaredUnit ? '' : ' ‘' + heading + '’ 열에 단위가 없습니다. 원표에서 단위를 확인하세요.')};
+  }
+
   // An intact dated series can be read in either direction. Keep the raw lines
   // and their order even when several observations print the same value.
   function datedRows(text, question) {
     const query = question.normalize('NFKC');
-    const asked = periods.requestedPeriod(query);
+    const change = beforeChange.exec(query);
+    const lookupQuery = change ? query.replace(change[0], ' ').trim() : query;
+    if (earlierTime.test(lookupQuery)) return null;
+    const asked = periods.requestedPeriod(lookupQuery);
     if ((!asked?.month && !dateQuestion.test(query)) || text.includes('\f') ||
-        /대비|이상|이하|초과|미만|이전|이후|부터|까지|무렵|평균|최[고저]|보다|증감|등락|상승|하락|인상폭|인하폭/u.test(query)) return null;
+        /대비|이상|이하|초과|미만|이전|이후|부터|까지|무렵|평균|최[고저]|보다|증감|등락|상승|하락|인상폭|인하폭/u.test(lookupQuery)) return null;
     const sourceLines = text.split(/\r\n|[\n\r\u2028\u2029]/u);
     const lines = sourceLines.slice(sourceLines.findIndex(line => line.trim()));
     while (lines.length && !lines.at(-1).trim()) lines.pop();
-    if (lines.length < 3) return null;
+    if (lines.length < (change ? 2 : 3)) return null;
     const delimiter = /[|｜]/u.test(lines[0]) ? /[|｜]/u : lines[0].includes('\t') ? /\t/u : /[ \u3000]{2,}/u;
     const cells = line => line.trim().replace(/^[|｜]|[|｜]$/gu,'').split(delimiter).map(s => s.trim());
     const [key, ...headings] = cells(lines[0]);
@@ -97,7 +122,7 @@
     const onlyDate = measures.length === 1 && asked?.month && !asked.day && /(?:바꾼|변경한|발표한|관측한|측정한)\s*날/u.test(query) &&
       !/지역|수도권|한정|가운데|에서/u.test(query);
     const matches = measures.map((m,i) => ({name:m[1].trim(), unit:cleanUnit(m[2]), i})).filter(m =>
-      namesDatedMeasure(query,m.name) || (onlyDate && !m.name.includes(' ') &&
+      namesDatedMeasure(lookupQuery,m.name) || (onlyDate && !m.name.includes(' ') &&
         words.some(word => word.length >= 2 && m.name.endsWith(word))));
     if (matches.length !== 1) return null;
     const column = matches[0];
@@ -114,7 +139,9 @@
     if (dateQuestion.test(query) && quantities.length && !reverse) return null;
     if (reverse && ((!asked && /(?:19|20)\d{2}|\d+\s*(?:년|월|일)/u.test(query)) ||
         /전년|지난|올해|작년|내년|최근|직전|이듬해|다음|최초|처음|마지막|가장|기간|동안|아니|아닌|아닐|않|제외|주말|평일|분기|반기|연휴|봄철|여름|가을|겨울/u.test(query))) return null;
-    const selected = [];
+    if (change && (!asked?.day || reverse || measures.length !== 1 || !/^변경일(?:자)?$/u.test(key.replace(/\s+/gu,''))))
+      return {passages:[], gap:'변경 전 수치를 확인하려면 해당 날짜와 앞선 변경을 기록한 같은 지표의 변경 이력이 필요합니다.'};
+    const selected = [], history = [];
     let splitDate;
     for (let i = 1; i < lines.length; i++) {
       const raw = cells(lines[i]);
@@ -133,14 +160,18 @@
         v && (!v[2] || cleanUnit(v[2]) === cleanUnit(measures[c][2])))) return null;
       const within = !asked || (date.year === asked.year &&
         (!asked.month || date.month === asked.month) && (!asked.day || date.day === asked.day));
-      if (within && (!reverse || decimal(quantity[1]) === decimal(data[column.i][1]))) {
+      const match = within && (!reverse || decimal(quantity[1]) === decimal(data[column.i][1]));
+      if (change || match) {
         const index = (split ? 2 : 1) + column.i;
-        selected.push({paragraph:i + 1, text:lines[i], matched:reverse ? [raw[index]] : raw.slice(0,split ? 2 : 1),
+        const hit = {paragraph:i + 1, text:lines[i], matched:reverse ? [raw[index]] : raw.slice(0,split ? 2 : 1),
           datedCell:{heading:headings[column.i], column:index + 1, value:raw[index]},
           datedRowLabel:raw.slice(0, split ? 2 : 1).join(' '),
-          context:[{paragraph:1, text:lines[0]}]});
+          context:[{paragraph:1, text:lines[0]}]};
+        if (match) selected.push(hit);
+        if (change) history.push({hit, date:Number(date.year) * 10000 + date.month * 100 + date.day});
       }
     }
+    if (change) return priorChangeRows(history, selected, column.name, column.unit);
     if (selected.length) {
       const notices = [];
       if (!column.unit && (requestedValues.length || !dateQuestion.test(query)))
