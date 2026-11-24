@@ -359,3 +359,13 @@ test('표의 기준과 네 위치의 인쇄 단위를 지키고 유니코드 공
     assert.equal(columns.findYearMatrixCell(columns.parseYearMatrix(changed),q),null);
   }
 });
+
+test('한글·라틴 약어·한자 행을 같은 표로 읽고 대소문자만 다른 중복 및 숫자만 있는 표제는 유보한다', () => {
+  const source = '구분\t2022년\t2023년\n공구 대여(건)\t7\t9\nPV\t2\t3\nLNG\t10\t14\n甲種\t3\t6';
+  const matrix = columns.parseYearMatrix(source);
+  assert.deepEqual(matrix.rows.map(row => row.label), ['공구 대여(건)','PV','LNG','甲種']);
+  assert.equal(columns.findYearMatrixCell(matrix,'2023년 공구 대여는 몇 건인가?').value,'9');
+  assert.equal(columns.findYearMatrixRow(matrix,'2023년 PV를 어느 곳에 두었나?').rowParagraph,3);
+  assert.equal(columns.findYearMatrixRow(matrix,'2023년 PV와 LNG 실적은?'),null);
+  for (const name of ['Pv','12.5','']) assert.equal(columns.parseYearMatrix(source+'\n'+name+'\t4\t5'),null);
+});

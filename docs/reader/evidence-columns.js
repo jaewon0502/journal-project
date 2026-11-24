@@ -290,8 +290,8 @@
       const [rowLabel, ...values] = row.cells;
       const printed = rowLabel.normalize('NFKC');
       const label = printed.replace(unitSuffix, '').trim();
-      const key = label.replace(/\s+/gu, '');
-      if (!/[가-힣]/u.test(label) || yearCell.test(label) || labels.has(key) || values.every(cell => yearCell.test(cell))) return null;
+      const key = label.replace(/\s+/gu, '').toLowerCase();
+      if (!/\p{L}/u.test(label) || yearCell.test(label) || labels.has(key) || values.every(cell => yearCell.test(cell))) return null;
       labels.add(key);
       if (values.some(value => !matrixValue.test(value.normalize('NFKC')) && !/^(?:[-—–…]|)$/u.test(value))) return null;
       rows.push({paragraph:i + 1, label:rowLabel, values, text:block[i]});
