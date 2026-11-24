@@ -229,6 +229,28 @@
       editorPairs, medianSavedSeconds, fasterEditors, slowerEditors, unchangedEditors:savings.length - fasterEditors - slowerEditors};
   }
 
+  function timingCoverage(records) {
+    if (!records.length) return null;
+    const counts = {total:records.length, faster:0, slower:0, unchanged:0, unknown:0, possibleFaster:0};
+    for (const record of records) {
+      const lower = {manual:0n, journal:0n};
+      const partial = {manual:false, journal:false};
+      for (const trial of record.trials) {
+        // Each arm has two trials. Preserve one-millisecond differences even if their sum exceeds a safe integer.
+        // The full timer records at least 1 ms per submitted task, even if the observed segment rounded to zero.
+        lower[trial.method] += BigInt(trial.elapsedMs ?? Math.max(1, trial.observedMs));
+        if (trial.elapsedMs === null) partial[trial.method] = true;
+      }
+      if (!partial.journal && lower.manual > lower.journal) counts.faster++;
+      else if (!partial.manual && lower.manual < lower.journal) counts.slower++;
+      else if (!partial.manual && !partial.journal) counts.unchanged++;
+      else counts.unknown++;
+      // At an exact manual time equal to the journal lower bound, only a tie or slowdown is possible.
+      if (partial.manual || lower.manual > lower.journal) counts.possibleFaster++;
+    }
+    return counts;
+  }
+
   function phaseStats(sample) {
     // Only whole already-eligible 4-person blocks retain the case/order/party balance.
     const incomplete = new Set(sample.filter(record => record.trials.some(t => !t.phaseMs))
@@ -408,6 +430,7 @@
       recordedTrials: records.reduce((total, record) => total + record.trials.length, 0)};
     counts.timing = {included:timedSample.length, trialCount:timedSample.length * slots, partialTrials:partialTrials.length,
       observedMs:partialTrials.reduce((sum, t) => sum + t.observedMs, 0)};
+    counts.timingCoverage = timingCoverage(sample);
     counts.phases = phaseStats(timedSample);
     counts.timedQuality = timedQualityStats(timedSample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
@@ -433,5 +456,23 @@
     });
   }
 
-  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords});
+  function partialTimeDemoRecords() {
+    return Array.from({length: 3 * slots}, (_, index) => {
+      const ordinal = index + 1;
+      let record = createRecord('demo-partial-' + ordinal, ordinal, 'demo', false);
+      const tasks = plan(ordinal);
+      const times = index < slots ? {manual:120000, journal:60000} : {manual:60000, journal:120000};
+      // Only the first person in each later block has an interrupted journal task.
+      const partial = index > 0 && index % slots === 0 ? tasks.find(t => t.method === 'journal') : null;
+      for (const task of tasks) {
+        const gold = cases.get(task.caseId, task.variant);
+        const timing = task === partial ? {elapsedMs:null, observedMs:120000} : {elapsedMs:times[task.method]};
+        record = addTrial(record, {...timing, verdict:gold.expectedVerdict, sourceIds:gold.expectedSourceIds,
+          reason:'시간 기록이 일부 빠진 경우의 계산 예시입니다.', journalUsed:task.method === 'journal'});
+      }
+      return record;
+    });
+  }
+
+  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords, partialTimeDemoRecords});
 });

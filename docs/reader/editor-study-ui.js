@@ -144,6 +144,19 @@
       records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'
     ]), '발급된 초대 코드가 없습니다.');
   }
+  function showTimingCoverage(a) {
+    const c = a.timing.partialTrials ? a.timingCoverage : null;
+    el('timing-coverage').hidden = !c;
+    el('timing-coverage-summary').textContent = c ? '네 명 모두 과제를 마친 묶음의 ' + c.total + '명 중 단축 ' + c.faster +
+      '명 · 동일 ' + c.unchanged + '명 · 증가 ' + c.slower + '명 · 미확정 ' + c.unknown + '명' : '';
+    let range = '';
+    if (c) {
+      const low = fmt(100 * c.faster / c.total), high = fmt(100 * c.possibleFaster / c.total);
+      range = c.faster === c.possibleFaster ? c.faster + '명 (' + low + '%)' :
+        c.faster + '~' + c.possibleFaster + '명 (' + low + '~' + high + '%)';
+    }
+    el('timing-coverage-range').textContent = c ? '이 ' + c.total + '명 중 검토 시간이 줄어든 인원은 ' + range + '입니다.' : '';
+  }
   function showTimedQuality(a) {
     const q = a.timedQuality;
     el('timed-quality-sample').textContent = '판정 비교에 포함된 ' + a.included + '명 중 시간까지 기록된 4인 묶음의 ' +
@@ -188,7 +201,10 @@
   function showDashboard() {
     const demo = viewKind === 'demo';
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
-    const a = core.analyze(demo ? core.demoRecords() : confirmed, viewKind);
+    let sample = confirmed;
+    if (demo) sample = el('demo-example').value === 'partial' ? core.partialTimeDemoRecords() : core.demoRecords();
+    const a = core.analyze(sample, viewKind);
+    el('demo-options').hidden = !demo;
     el('real-view').setAttribute('aria-pressed', String(!demo));
     el('demo-view').setAttribute('aria-pressed', String(demo));
     el('data-notice').textContent = demo ? '가상 수치 예시 · 계산 방법을 보여 주기 위해 만든 응답과 시간입니다. 실제 편집자 집계에는 들어가지 않습니다.'
@@ -218,7 +234,7 @@
       t ? '사례당 평균 ' + fmt(Math.abs(t.savedSeconds)) + '초 ' + (t.savedSeconds >= 0 ? '단축' : '증가') : '사례 1건의 평균 검토 시간');
     if (a.timing.partialTrials) timeCard.append(node('small', '시간 비교 ' + a.timing.included + '명 · ' +
       a.timing.trialCount + '건. 전체 시간이 불명확한 ' + a.timing.partialTrials + '건에서 확인한 시간은 합계 ' +
-      fmt(a.timing.observedMs / 1000) + '초입니다. 해당 4인 묶음은 판정 비교에만 포함했습니다.'));
+      fmt(a.timing.observedMs / 1000) + '초입니다. 해당 과제가 있는 묶음은 평균 시간 계산에서 제외했습니다.'));
     if (t) {
       const median = t.medianSavedSeconds;
       const change = median === 0 ? '차이 없음' : fmt(Math.abs(median)) + '초 ' + (median > 0 ? '단축' : '증가');
@@ -237,6 +253,7 @@
       biasCard.append(node('small', '완성 ' + a.completeBlocks + '묶음 · 하나씩 제외한 범위는 2묶음부터 계산합니다.'));
     }
     el('metrics').replaceChildren(timeCard, biasCard);
+    showTimingCoverage(a);
     showTimedQuality(a);
     const phases = a.phases;
     el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.timing.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
@@ -627,6 +644,7 @@
     };
     el('real-view').onclick = () => { viewKind = 'editor'; showDashboard(); };
     el('demo-view').onclick = () => { viewKind = 'demo'; showDashboard(); };
+    el('demo-example').onchange = showDashboard;
     el('issue-codes').onclick = issueCodes;
     el('export-all').onclick = () => {
       if (records.length || invitations.length) download({type:collectionType,records,invitations},'journal-editor-study-collection.json');

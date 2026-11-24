@@ -93,6 +93,7 @@
   }
   function group(records) {
     const groups = new Map();
+    const completedTimes = new Map();
     for (const { trial: t, locationGrade, verdictGrade, expected } of records) {
       const key = JSON.stringify([t.caseId, t.taskId, t.prompt, t.articleUrl, t.method, t.kind]);
       if (!groups.has(key))
@@ -129,8 +130,14 @@
       const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
       if (!t.recovered) {
         const version = kitVersion(t.kitVersion);
-        if (!g.timedKits.has(version)) g.timedKits.set(version, newTimeTotals());
-        for (const totals of [g, g.timedKits.get(version)]) {
+        if (!g.timedKits.has(version)) {
+          const kit = newTimeTotals();
+          g.timedKits.set(version, kit);
+          completedTimes.set(kit, []);
+        }
+        const kit = g.timedKits.get(version);
+        if (t.status === 'completed') completedTimes.get(kit).push(elapsedMs);
+        for (const totals of [g, kit]) {
           if (t.status === 'withdrawn') {
             totals.timedWithdrawn++;
             totals.withdrawnMs += elapsedMs;
@@ -170,6 +177,11 @@
         if (verdictGrade === 'yes') g.verdictHits++;
       }
     }
+    for (const [kit, times] of completedTimes) {
+      times.sort((a, b) => a - b);
+      const middle = Math.floor(times.length / 2);
+      kit.medianMs = times.length ? (times[middle] + times[Math.floor((times.length - 1) / 2)]) / 2 : null;
+    }
     return [...groups.values()];
   }
   function compareTimes(groups) {
@@ -196,6 +208,7 @@
         const manualMs = manual?.totalTimed ? manual.totalMs / manual.totalTimed : null;
         const journalMs = journal?.totalTimed ? journal.totalMs / journal.totalTimed : null;
         return { version, manual, journal, ...change(version, manualMs, journalMs),
+          median: change(version, manual?.medianMs ?? null, journal?.medianMs ?? null),
           perVerified: change(version, msPerVerified(manual), msPerVerified(journal)) };
       });
       return { ...task, byVersion };

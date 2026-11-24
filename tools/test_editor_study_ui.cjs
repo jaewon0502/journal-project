@@ -33,6 +33,31 @@ function page(t, hash = '', url = 'https://study.example/editor-study.html', pri
   return {w, el, workspace, enroll, answer, advance:ms => {ticks += ms;}};
 }
 
+test('진행자는 시간 누락 예시에서 4명과 12명의 결과를 대조하고 개인 실측으로 돌아갈 수 있다', t => {
+  const p = page(t);
+  const options = p.el('demo-options'), selector = p.el('demo-example'), coverage = p.el('timing-coverage');
+  assert.ok(options.hidden);
+  p.el('demo-view').click();
+  assert.equal(options.hidden, false);
+  assert.ok(coverage.hidden);
+  selector.value = 'partial';
+  selector.dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('data-notice').textContent, /가상 수치 예시/);
+  assert.match(p.el('metrics').textContent, /50%/);
+  assert.match(p.el('timing-coverage-summary').textContent, /12명.*단축 4명.*증가 8명/);
+  assert.match(p.el('timing-coverage-range').textContent, /33\.3%/);
+  assert.equal(coverage.hidden, false);
+  p.el('real-view').click();
+  assert.ok(options.hidden && coverage.hidden);
+  assert.match(p.el('counts').textContent, /등록 0명/);
+  assert.equal(p.el('timing-coverage-summary').textContent, '');
+  p.el('demo-view').click();
+  selector.value = 'complete';
+  selector.dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('counts').textContent, /등록 8명/);
+  assert.ok(coverage.hidden);
+});
+
 test('실측이 비었을 때 예시 수치가 실측으로 남지 않는다', t => {
   const p = page(t);
   assert.match(p.el('counts').textContent, /등록 0명/);
@@ -610,6 +635,35 @@ test('실제 네 명의 집단 평균이 개선되어도 개인별 중앙값 증
   assert.match(card(),/단축 8명 · 동일 0명 · 증가 0명/);
   p.el('real-view').click();
   assert.match(card(),/단축 1명 · 동일 0명 · 증가 3명/);
+});
+
+test('중단한 타이머가 있으면 완성한 묶음 전체의 시간 단축 가능 범위를 따로 표시한다', async t => {
+  const p = page(t);
+  for (let block = 0; block < 3; block++) p.el('issue-codes').click();
+  const files = p.workspace().invitations.slice(0, 9).map(({ordinal, id}) => {
+    const record = completedRecord(ordinal, id);
+    for (const trial of record.trials) {
+      const manual = trial.method === 'manual';
+      trial.elapsedMs = manual === (ordinal <= 4) ? 60000 : 30000;
+      if (ordinal === 8 && trial.variant === 'A') {
+        trial.elapsedMs = null; trial.observedMs = 20000;
+      }
+    }
+    return JSON.stringify(record);
+  });
+  await importFiles(p, files);
+  const panel = p.el('timing-coverage');
+  assert.equal(panel.hidden, false);
+  assert.match(p.el('counts').textContent, /4과제 완료 9명/);
+  assert.match(panel.textContent, /네 명 모두 과제를 마친 묶음의 8명/);
+  assert.match(panel.textContent, /단축 4명 · 동일 0명 · 증가 3명 · 미확정 1명/);
+  assert.match(panel.textContent, /4~5명 \(50~62.5%\)/);
+  assert.doesNotMatch(panel.textContent, /E[0-9a-f]{16}/i);
+  p.el('demo-view').click();
+  assert.equal(panel.hidden, true);
+  assert.equal(p.el('timing-coverage-range').textContent, '');
+  p.el('real-view').click();
+  assert.equal(panel.hidden, false);
 });
 
 test('집계 화면에서 정당 격차 감소폭의 묶음별 범위를 실제 등록 파일로 계산한다', async t => {

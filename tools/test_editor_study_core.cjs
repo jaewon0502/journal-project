@@ -364,6 +364,46 @@ test('한 사람의 큰 절감이 과반 편집자의 증가를 가려도 개인
   assert.equal(ties.medianSavedSeconds,0);
 });
 
+test('전체시간 비교에서 빠진 편집자도 관측 시간만으로 증가가 확정되면 인원에 포함한다', () => {
+  const records = Array.from({length:12}, (_, i) => {
+    let interrupted = false;
+    return observations(i + 1, task => {
+      if ((i === 4 || i === 8) && task.method === 'journal' && !interrupted) {
+        interrupted = true;
+        return {elapsedMs:null, observedMs:120000};
+      }
+      const manual = task.method === 'manual';
+      return {elapsedMs:manual === (i < 4) ? 120000 : 60000};
+    });
+  });
+  const a = study.analyze([...records, observations(13), records[4], ...study.demoRecords()]);
+  assert.equal(a.time.reductionPct, 50);
+  assert.equal(a.timing.included, 4);
+  assert.deepEqual(a.timingCoverage, {total:12, faster:4, slower:8, unchanged:0, unknown:0, possibleFaster:4});
+  assert.equal(study.analyze(records.slice(2, 4)).timingCoverage, null);
+});
+
+test('한쪽 하한 동률, 양쪽 중단과 1밀리초 차이를 구분해 가능한 단축 인원을 센다', () => {
+  const partial = ms => ({elapsedMs:null, observedMs:ms});
+  const full = ms => ({elapsedMs:ms});
+  const max = Number.MAX_SAFE_INTEGER;
+  const pairs = [
+    [partial(10), full(10)], [full(10), partial(10)], [partial(5), partial(20)], [full(10), full(10)],
+    [partial(11), full(10)], [full(8), partial(3)], [partial(0), full(5)], [full(max), full(max - 1)]
+  ];
+  const records = pairs.map(([manual, journal], i) => {
+    const arms = {manual:[manual, full(i === 7 ? max : 40)], journal:[journal, full(i === 7 ? max : 40)]};
+    return observations(i + 1, task => arms[task.method].shift());
+  });
+  const a = study.analyze(records);
+  assert.equal(a.time, null);
+  assert.deepEqual(a.timingCoverage, {total:8, faster:2, slower:0, unchanged:1, unknown:5, possibleFaster:6});
+  const minimum = [1, 2, 3, 4].map(ordinal => observations(ordinal, task =>
+    ordinal === 1 && task.method === 'journal' && task.variant === 'A' ? partial(0) : full(1)));
+  assert.deepEqual(study.analyze(minimum).timingCoverage,
+    {total:4, faster:0, slower:0, unchanged:3, unknown:1, possibleFaster:0});
+});
+
 test('한 묶음 제외 범위는 남은 사례별 분모에서 재계산하며 격차 방향이 바뀔 수 있다', () => {
   // Half of the cases reverse A and B, so pooling across different articles would hide every gap.
   const contrast = {manual:[1,1,-1], journal:[1,0,-1]};

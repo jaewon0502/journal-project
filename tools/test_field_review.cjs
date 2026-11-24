@@ -572,8 +572,8 @@ test('같은 기사·문장의 시간 절감률과 같은 시간 표본의 판�
   p.gradeLocation(a.locator, 'yes');
   const first = p.report('comparisons', 'article');
   assert.match(first, /10\.0초 절감 \(50\.0%\)/);
-  assert.match(first, /평균 20\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
-  assert.match(first, /평균 10\.0초 \(1건\) · 근거 위치와 판정 모두 일치 0\.0% \(0\/1\)/);
+  assert.match(first, /평균 20\.0초 · 중앙값 20\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
+  assert.match(first, /평균 10\.0초 · 중앙값 10\.0초 \(1건\) · 근거 위치와 판정 모두 일치 0\.0% \(0\/1\)/);
   // Repeated exposure invalidates both attempts by that participant.
   await p.upload('imports', { ...b, id: 'again' });
   assert.doesNotMatch(p.report('comparisons'), /50\.0%/);
@@ -616,8 +616,8 @@ test('두 배포본 모두 느린데 표본을 합치면 빨라 보이는 경우
       assert.ok(result.includes('완료 시간 ' + seconds + ' 더 걸림 (20.0%)'));
       assert.ok(result.includes('검증 성공 1건당 ' + seconds + ' 더 걸림 (20.0%)'));
     }
-    assert.match(result, /평균 100\.0초 \(9건\) · 근거 위치와 판정 모두 일치 100\.0% \(9\/9\)/);
-    assert.match(result, /평균 120\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
+    assert.match(result, /평균 100\.0초 · 중앙값 100\.0초 \(9건\) · 근거 위치와 판정 모두 일치 100\.0% \(9\/9\)/);
+    assert.match(result, /평균 120\.0초 · 중앙값 120\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
   }
 });
 
@@ -638,7 +638,44 @@ test('배포본이 겹치지 않거나 버전을 모르면 두 방식의 시간�
   assert.match(result, /같은 배포본인지 확인할 수 없어/);
   assert.match(result, /90\.0초\/건/);
   assert.match(result, /10\.0초\/건/);
+  assert.match(result, /중앙값 90\.0초/);
+  assert.match(result, /중앙값 10\.0초/);
+  assert.doesNotMatch(result, /평균과 중앙값이 반대/);
   assert.doesNotMatch(result, /초 절감|초 더 걸림|초 차이 없음/);
+});
+
+test('현장 집단별 중앙값은 평균과 같은 완료 표본을 쓰고 방향이 뒤집히면 표시한다', async t => {
+  const p = page(t, 'field-summary');
+  const make = (method, seconds, name, extra = {}) => trial({
+    id:name, participant:name, kind:'editor', method, phaseMs:{search:seconds * 1000, locate:0, decide:0}, ...extra
+  });
+  const records = [make('manual', 240, 'private-a'), make('manual', 30, 'private-b'), make('manual', 30, 'private-c'),
+    make('journal', 40, 'private-d', {split:false}), make('journal', 80, 'private-e'),
+    make('journal', 400, 'private-f', {recovered:true}), make('manual', 1000, 'private-g', {status:'withdrawn'})];
+  await p.upload('roster-file', {format:c.assignmentFormat,
+    assignments:records.map(r => assignment(r.participant, {method:r.method === 'manual' ? 'journal' : 'manual'}))});
+  await p.upload('imports', ...records);
+  const recorded = p.report('comparisons');
+  assert.match(recorded, /완료 시간 40\.0초 절감 \(40\.0%\)/);
+  assert.match(recorded, /평소 검증 도구 · 평균 100\.0초 · 중앙값 30\.0초 \(3건\)/);
+  assert.match(recorded, /평소 검증 도구와 저널 · 평균 60\.0초 · 중앙값 60\.0초 \(2건\)/);
+  assert.match(recorded, /평균과 중앙값이 반대 방향입니다.*중앙값은.*30\.0초 깁니다/);
+  const assigned = p.report('allocation-comparisons');
+  assert.match(assigned, /완료 시간 40\.0초 더 걸림 \(66\.7%\)/);
+  assert.match(assigned, /평소 검증 도구 · 평균 60\.0초 · 중앙값 60\.0초 \(2건\)/);
+  assert.match(assigned, /평소 검증 도구와 저널 · 평균 100\.0초 · 중앙값 30\.0초 \(3건\)/);
+  assert.match(assigned, /평균과 중앙값이 반대 방향입니다.*중앙값은.*30\.0초 짧습니다/);
+  assert.doesNotMatch(recorded + assigned, /private-/);
+});
+
+test('평균과 중앙값이 반대로 1밀리초씩 바뀌면 차이가 0초로 표시되지 않는다', async t => {
+  const p = page(t, 'field-summary');
+  const times = [60000, 60000, 60006, 60001, 60001, 60001];
+  await p.upload('imports', ...times.map((ms, i) => trial({id:'t' + i, participant:'p' + i, kind:'editor',
+    method:i < 3 ? 'manual' : 'journal', phaseMs:{search:ms, locate:0, decide:0}})));
+  const result = p.report('comparisons');
+  assert.match(result, /0\.1초 미만 절감 \(0\.1% 미만\)/);
+  assert.match(result, /1밀리초 깁니다/);
 });
 
 test('오답과 중도 종료 시간, 성공 여부 대기는 해당 배포본의 성공당 시간에만 반영한다', () => {
@@ -997,7 +1034,7 @@ test('근거와 판정을 서로 다른 답안에서 맞히면 두 항목 동시
     assert.match(result, /판정 일치율 50\.0% \(1\/2\)/);
     assert.match(result, /근거 위치와 판정 모두 일치 0\.0% \(0\/2\) · 성공 여부 확인 대기 0건/);
   }
-  assert.match(p.report('allocation-comparisons'), /평소 검증 도구 · 평균 1\.2초 \(1건\)/);
+  assert.match(p.report('allocation-comparisons'), /평소 검증 도구 · 평균 1\.2초 · 중앙값 1\.2초 \(1건\)/);
   p.gradeLocation(second.locator, '');
   assert.match(p.report('allocation-arms'), /근거 위치와 판정 모두 일치 0\.0% \(0\/1\) · 성공 여부 확인 대기 1건/);
   p.gradeLocation(first.locator, '');

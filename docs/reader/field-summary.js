@@ -108,8 +108,12 @@
   const seconds = (n, count) => (count ? (n / count / 1000).toFixed(1) + '초' : '산출 대기');
   function timeChangeText({ savedMs, savedPct }) {
     const change = savedMs < 0 ? '더 걸림' : savedMs > 0 ? '절감' : '차이 없음';
-    const percent = savedPct === null ? '기준 시간 0초로 비율 산출 대기' : Math.abs(savedPct).toFixed(1) + '%';
-    return seconds(Math.abs(savedMs), 1) + ' ' + change + ' (' + percent + ')';
+    const amount = Math.abs(savedMs);
+    const duration = amount > 0 && amount < 50 ? '0.1초 미만' : seconds(amount, 1);
+    if (savedPct === null) return duration + ' ' + change + ' (기준 시간 0초로 비율 산출 대기)';
+    const rate = Math.abs(savedPct);
+    const percent = rate > 0 && rate < 0.05 ? '0.1% 미만' : rate.toFixed(1) + '%';
+    return duration + ' ' + change + ' (' + percent + ')';
   }
   function kitCoverage(groups, count) {
     const versions = new Set();
@@ -188,9 +192,16 @@
         card.append(node('p', labels[method] + ' · 비교 가능한 완료 기록 0건'));
         continue;
       }
-      card.append(node('p', labels[method] + ' · 평균 ' + seconds(group.totalMs, group.totalTimed) +
+      card.append(node('p', labels[method] + ' · 평균 ' + seconds(group.totalMs, group.totalTimed) + ' · 중앙값 ' + seconds(group.medianMs, 1) +
         ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.totalTimed - group.timedOutcomePending) +
         ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
+    }
+    const medianDifference = comparison.median.savedMs;
+    if ((comparison.savedMs > 0 && medianDifference < 0) || (comparison.savedMs < 0 && medianDifference > 0)) {
+      const difference = Math.abs(medianDifference);
+      const gap = difference < 50 ? difference.toLocaleString('ko-KR') + '밀리초' : seconds(difference, 1);
+      card.append(node('p', '평균과 중앙값이 반대 방향입니다. 저널 집단의 완료 시간 중앙값은 평소 검증 도구 집단보다 ' +
+        gap + (medianDifference > 0 ? ' 짧습니다.' : ' 깁니다.')));
     }
     card.append(node('h5', '검증 성공 1건당 투입 시간'));
     for (const method of ['manual', 'journal']) {
