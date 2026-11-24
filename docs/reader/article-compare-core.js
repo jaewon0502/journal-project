@@ -64,9 +64,10 @@
       // A matching supported judgment can cover only a factual span or the attribution of an opinion.
       const limitedAgreement = sameJudgment === true && a.category === 'supported' &&
         (receipt.status === 'mixed' || (receipt.status === 'attribution' && receipt.contentStatus === 'opinion'));
-      // The reader restores this checksum only after validating the decision, its evidence and recording time.
-      const sameReceipt = sameJudgment !== null && !!leftRow.receipt?.checksum &&
-        leftRow.receipt.checksum === rightRow.receipt?.checksum;
+      // A copied exclusion cannot remove a passage from the independent review denominator.
+      // Partial, held and unchecked decisions stay unresolved even if their receipts match.
+      const sameReceipt = a.category !== 'unresolved' && b.category !== 'unresolved' &&
+        !!receipt?.checksum && receipt.checksum === rightRow.receipt?.checksum;
       const openScopeDifference = a.category === 'unresolved' && b.category === 'unresolved' && !sameScope
         && !!leftRow.receipt && !!rightRow.receipt && !leftRow.draftPending && !rightRow.draftPending;
       const differentSources = [];

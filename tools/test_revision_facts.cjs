@@ -122,6 +122,20 @@ test('검증한 동일 기록은 독립 판정에서 빼고 작성 중·변조�
   assert.throws(() => comparedFacts(joint, {...reviews[0].key, demo:false}), /대응표/);
 });
 
+test('독립적으로 확인한 의견만 검토율 분모에서 빼고 복사한 의견 기록은 분모에 남긴다', async () => {
+  const rows = [
+    ['예산은 10억 원이다.', 'fact', 'fact'],
+    ['정책은 바람직하다.', 'opinion', 'opinion'],
+    ['결정은 무책임하다.', 'opinion', 'opinion']
+  ];
+  const {joint, reviews} = await assess(rows, undefined, (work, role, editor, previous) => {
+    if (role === 'before' && editor === 1) work.receipts[2] = structuredClone(previous.before.receipts[2]);
+  });
+  const observations = comparedFacts(joint, reviews[1].key).before;
+  assert.deepEqual(observations, [fact('supported'), fact('excluded'), fact('shared')]);
+  assert.deepEqual(summarize(observations).coverage, ratio(1,2));
+});
+
 test('구간 기록은 허용된 판정·충돌 조합만 받고 분모가 비면 비율을 비워 둔다', () => {
   const flags = ['none','article','quote','both'];
   const allowed = {
