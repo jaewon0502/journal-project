@@ -18,6 +18,7 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
   const inputs = await example.files(), record = await summary(inputs);
   const saved = await cases.create(record, inputs.map(i => ({...i, name:'로컬/기사/' + i.name})), [kept]);
   const opened = cases.read(JSON.parse(JSON.stringify(saved)));
+  assert.equal(saved.version, 2);
   assert.deepEqual(opened.items, inputs.map(({name, data}) => ({name, data})));
   assert.equal(opened.reviewId, series.reviewId(record));
   assert.ok(saved.items.every(i => !Object.hasOwn(i, 'raw') && !i.name.includes('/')));
@@ -34,6 +35,27 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
   opened.notes[0].reason = '대조 메모 편집 중';
   assert.equal(saved.items.find(i => i.data.sources).data.sources[0].excerpt, originalSource);
   assert.equal(saved.notes[0].reason, kept.reason);
+});
+
+test('기존 v3 요약으로 저장했던 진행자 파일은 여섯 파일로 복원하고 다시 저장하면 v4 전체 판정을 담는다', async () => {
+  const items = (await example.files()).map(({name, data}) => ({name, data}));
+  // Generated with the released v3 writer and the deterministic six-file library exercise.
+  const archive = {format:'journal-retention-case', version:1, items, notes:[kept],
+    reviewId:'d84450c81cbaf6819e0fbdcf7429c585d2e26c6d9d3a3b68a940cada59811b59',
+    evidenceDigest:'0c7287d7171a677583dbc7264db7bead549d3c3035513bcf3598b52c3c3fae92',
+    checksum:'0f5d1623bb44c2a2d31f83eca7897029097b55d99b73d07d05994cbb8a1f1def'};
+  const opened = cases.read(JSON.parse(JSON.stringify(archive)));
+  const rebuilt = await summary(opened.items);
+  assert.equal(rebuilt.version, 4);
+  assert.deepEqual(cases.verify(archive, rebuilt), [kept]);
+  const legacy = {...rebuilt, version:3};
+  delete legacy.factContext;
+  const upgraded = await cases.create(legacy, opened.items, opened.notes);
+  assert.equal(upgraded.version, 2);
+  assert.equal(upgraded.reviewId, series.reviewId(rebuilt, 4));
+  assert.notEqual(upgraded.reviewId, archive.reviewId);
+  assert.deepEqual(cases.verify(upgraded, rebuilt), [kept]);
+  assert.throws(() => cases.verify(upgraded, legacy));
 });
 
 test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않고 자료·판정 이유·수기 기록 변경을 감지한다', async () => {
@@ -55,6 +77,7 @@ test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않�
     v => { v.notes[0].reason += ' 추가'; },
     v => { v.notes[0].status = 'open'; },
     v => { v.notes[0].after = 0; },
+    v => { v.version = 1; },
     v => { v.reviewId = '0'.repeat(64); }
   ]) {
     const changed = structuredClone(saved);
@@ -66,6 +89,17 @@ test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않�
   assert.deepEqual(series.summarize([wrong]).improved, series.summarize([record]).improved);
   assert.throws(() => cases.verify(saved, wrong), /요약이 일치하지/);
   await assert.rejects(() => cases.create(wrong, items, [kept]), /다시 계산한 평가/);
+  const changedCore = structuredClone(record);
+  changedCore.factContext.beforeCore[0] = 1;
+  assert.equal(series.reviewId(changedCore, 3), series.reviewId(record, 3));
+  assert.notEqual(series.reviewId(changedCore), series.reviewId(record));
+  await assert.rejects(() => cases.create(changedCore, items, [kept]), /다시 계산한 평가/);
+  assert.throws(() => cases.verify(saved, changedCore), /요약이 일치하지/);
+  const changedFiles = structuredClone(items);
+  const original = changedFiles.find(i => i.data.blindReview?.slot === 'B').data;
+  original.articleAssessment.coreRowIds.push(engine.report(original.article, original.sources, original.receipts).rows[0].id);
+  assert.deepEqual(await summary(changedFiles), changedCore);
+  await assert.rejects(() => cases.create(record, changedFiles, [kept]), /다시 계산한 평가/);
   const dirty = structuredClone(items);
   dirty.find(i => i.data.sources).data.sources[0].excerpt += ' 추가';
   await assert.rejects(() => cases.create(record, dirty, []), /배포 후 등록된 원자료/);
@@ -82,7 +116,8 @@ test('수기 유지는 두 편집자의 수정본 전체 지지에만 연결하�
   const base = await summary(await example.files());
   const supported = {outcome:'supported', flag:'none'}, pending = {outcome:'pending', flag:'none'};
   const record = {...base, facts:{before:Array(6).fill(supported), after:[supported, pending, supported]},
-    factMatches:[[0, 0], [1, null], [2, 1], [3, null], [4, null], [5, null]]};
+    factMatches:[[0, 0], [1, null], [2, 1], [3, null], [4, null], [5, null]],
+    factContext:{beforeCore:[0,0,0,0,0,0], afterCore:[0,0,0], matches:[[0,0],[2,1]]}};
   const notes = [
     {...kept, before:5, after:2}, {...kept, before:1, after:2},
     {before:2, after:1, status:'changed', reason:'수정본은 지원 예상치인지 확정치인지 밝히지 않았다.'},
@@ -123,7 +158,7 @@ test('현장 형식의 자료와 연습 자료는 서로의 판단을 복원할 
   const saved = await cases.create(record, inputs, [note]);
   assert.deepEqual(cases.verify(saved, await summary(cases.read(saved).items)), [note]);
   await assert.rejects(() => cases.create(record, demo, []), /연습·실제/);
-  const old = {...record, version:2}; delete old.factMatches;
+  const old = {...record, version:2}; delete old.factMatches; delete old.factContext;
   assert.throws(() => cases.verify(saved, old));
   await assert.rejects(() => cases.create(old, inputs, []));
 });

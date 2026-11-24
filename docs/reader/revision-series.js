@@ -19,9 +19,9 @@
   }
 
   function makeRecord(joint, key) {
-    const {dimensions, facts, factMatches} = agreement.recordFields(joint, key);
-    return readRecord({format, version: 3, demo: key.demo, before: edition(key.mapping.before),
-      after: edition(key.mapping.after), dimensions, facts, factMatches});
+    const {dimensions, facts, factMatches, factContext} = agreement.recordFields(joint, key);
+    return readRecord({format, version: 4, demo: key.demo, before: edition(key.mapping.before),
+      after: edition(key.mapping.after), dimensions, facts, factMatches, factContext});
   }
 
   function readFactRows(rows) {
@@ -53,12 +53,45 @@
     });
   }
 
+  function readFactContext(context, facts, factMatches) {
+    if (!exactKeys(context, ['beforeCore', 'afterCore', 'matches']) || !Array.isArray(context.matches)) {
+      throw new Error('핵심 주장 표시와 원본·수정본 전체 구절 대응 기록을 확인하세요.');
+    }
+    function readCore(counts, length) {
+      if (!Array.isArray(counts) || counts.length !== length || !Array.from(counts).every(count => [0, 1, 2].includes(count))) {
+        throw new Error('각 구절을 핵심 주장으로 표시한 편집자 수는 0명에서 2명이어야 합니다.');
+      }
+      return counts.slice();
+    }
+    const beforeCore = readCore(context.beforeCore, facts.before.length);
+    const afterCore = readCore(context.afterCore, facts.after.length);
+    const revisedIndexes = new Set();
+    let previous = -1;
+    const matches = Array.from(context.matches, pair => {
+      if (!Array.isArray(pair) || pair.length !== 2) throw new Error('전체 구절 대응 기록의 번호 쌍을 확인하세요.');
+      const [before, after] = pair;
+      if (!Number.isInteger(before) || before <= previous || before >= beforeCore.length ||
+          !Number.isInteger(after) || after < 0 || after >= afterCore.length || revisedIndexes.has(after)) {
+        throw new Error('전체 구절 대응 번호의 순서, 범위와 중복을 확인하세요.');
+      }
+      previous = before;
+      revisedIndexes.add(after);
+      return [before, after];
+    });
+    const linked = new Map(matches);
+    if (factMatches.some(([before, after]) => (linked.get(before) ?? null) !== after)) {
+      throw new Error('공동 지지 구절의 대응과 전체 구절 대응 기록이 다릅니다.');
+    }
+    return {beforeCore, afterCore, matches};
+  }
+
   function readRecord(record) {
     const version = record?.version;
     const keys = ['format', 'version', 'demo', 'before', 'after', 'dimensions'];
-    if (version === 2 || version === 3) keys.push('facts');
-    if (version === 3) keys.push('factMatches');
-    if (![1, 2, 3].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    if (version >= 2) keys.push('facts');
+    if (version >= 3) keys.push('factMatches');
+    if (version === 4) keys.push('factContext');
+    if (![1, 2, 3, 4].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
     const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
@@ -90,7 +123,8 @@
       if (!exactKeys(record.facts, ['before', 'after'])) throw new Error('원본과 수정본의 사실 검토 구간을 확인하세요.');
       result.facts = {before: readFactRows(record.facts.before), after: readFactRows(record.facts.after)};
     }
-    if (version === 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
+    if (version >= 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
+    if (version === 4) result.factContext = readFactContext(record.factContext, result.facts, result.factMatches);
     return result;
   }
 
@@ -105,9 +139,10 @@
   // roles, each editor's complete rating profile, and fact observations in passage order.
   function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (![2, 3].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    if (![2, 3, 4].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
     const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
-    if (version === 3) fields.push(record.factMatches);
+    if (version >= 3) fields.push(record.factMatches);
+    if (version === 4) fields.push(record.factContext);
     return engine.digestValue(fields);
   }
 
@@ -138,8 +173,11 @@
           if (prior.facts && record.facts && JSON.stringify(prior.facts) !== JSON.stringify(record.facts)) {
             throw recordError([previous.index, index], '같은 기사 판본의 사실 검토 판정이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          if (prior.version === 3 && record.version === 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
+          if (prior.version >= 3 && record.version >= 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
             throw recordError([previous.index, index], '같은 기사 판본의 원본·수정본 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
+          }
+          if (prior.version === 4 && record.version === 4 && JSON.stringify(prior.factContext) !== JSON.stringify(record.factContext)) {
+            throw recordError([previous.index, index], '같은 기사 판본의 핵심 주장 표시 또는 전체 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
           if (record.version > prior.version) {
             previous.index = index;
@@ -159,17 +197,21 @@
     const articles = unique.map(r => ({before: r.before, after: r.after,
       sourceChanged: r.before.sourcesSha256 !== r.after.sourcesSha256, ...summarizeScores(r.dimensions),
       facts: r.facts ? {before: factReview.summarize(r.facts.before), after: factReview.summarize(r.facts.after)} : null,
-      factTrace: r.version === 3 ? factReview.summarizeFactMatches(r.factMatches, r.facts.after) : null}));
+      factTrace: r.factMatches ? factReview.summarizeFactMatches(r.factMatches, r.facts.after) : null,
+      factAudit: r.factContext ? factReview.auditFacts(r.facts, r.factContext) : null}));
     const dimensions = rubric.dimensions.map(({id, title}, i) =>
       ({id, title, ...summarizeScores(unique.map(r => r.dimensions[i]))}));
     const unchanged = unique.filter(r => r.before.sourcesSha256 === r.after.sourcesSha256);
     const unchangedScores = summarizeScores(unchanged.flatMap(r => r.dimensions));
     const withFacts = unique.filter(r => r.facts);
     const improvedArticles = articles.filter(a => a.improved.numerator > 0);
+    const improvedAudits = improvedArticles.map(a => a.factAudit).filter(audit => audit !== null);
     const facts = {articleCount: withFacts.length, missingArticles: articles.length - withFacts.length,
       before: factReview.summarize(withFacts.flatMap(r => r.facts.before)),
       after: factReview.summarize(withFacts.flatMap(r => r.facts.after)),
       improvedArticles: improvedArticles.length,
+      audit: {improvedArticles: improvedAudits.length, missingImprovedArticles: improvedArticles.length - improvedAudits.length,
+        ...factReview.sumFactAudits(improvedAudits)},
       improvedWithUnconfirmedRetention: improvedArticles.filter(a => a.factTrace && a.factTrace.retained < a.factTrace.total).length,
       improvedWithoutTrace: improvedArticles.filter(a => !a.factTrace).length,
       improvedWithFewerFactRows: improvedArticles.filter(a => a.facts && a.facts.after.coverage.denominator < a.facts.before.coverage.denominator).length,

@@ -27,6 +27,11 @@ test('도서관 연습 파일 여섯 개는 다시 열어도 같은 기록과 �
   const library = fixtures.find(item => item.name === '도서관 운영 연습 기사');
   assert.deepEqual(series.makeRecord(joint, first.key), JSON.parse(JSON.stringify(library.record)));
   assert.deepEqual(series.makeRecord(joint, second.key), series.makeRecord(joint, first.key));
+  assert.deepEqual(Array.from(fixtures, item => item.record.version), [3, 4]);
+  const results = series.summarize(Array.from(fixtures, item => item.record));
+  assert.deepEqual(results.facts.audit, {improvedArticles: 1, missingImprovedArticles: 0,
+    core: {total: 0, retained: 0, changed: 0, unmatched: 0},
+    flags: {total: 1, previouslyFlagged: 1, previouslySupported: 0, previouslyUnflagged: 0, unmatched: 0, core: 0}});
 
   for (const role of ['before', 'after']) {
     const [one, two] = [first, second].map(review => workspace.read(review[role]));

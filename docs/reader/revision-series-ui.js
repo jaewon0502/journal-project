@@ -192,6 +192,43 @@
     if (part.childElementCount) part.prepend(element('h4', '원본에서 확인한 사실이 수정본에도 남았는지 대조'));
     return part;
   }
+  function auditCounts(audit) {
+    const part = document.createDocumentFragment();
+    const {core, flags} = audit;
+    if (core.total) {
+      const pct = Number((100 * core.retained / core.total).toFixed(1));
+      part.append(element('p', '수정 후에도 근거로 확인된 원본 핵심 사실 ' + pct + '% (' + core.retained + '/' + core.total + '개)'));
+      if (core.unmatched || core.changed) part.append(element('p', '수정본 대응 구절 미확인 ' + core.unmatched +
+        '개 · 대응 구절은 있으나 전체 지지 미확인 ' + core.changed + '개', 'warn'));
+    } else part.append(element('p', '두 편집자가 모두 핵심으로 표시하고 근거로 확인한 원본 구절이 없어 유지율을 계산할 수 없습니다.', 'note'));
+    part.append(element('p', '수정본에서 충돌 표시가 있는 구절 ' + flags.total + '개 · 두 편집자가 모두 핵심으로 표시한 구절 ' + flags.core + '개'));
+    if (flags.total) {
+      const origins = element('ul');
+      for (const [label, value] of [
+        ['원본에도 충돌 표시가 있던 구절', flags.previouslyFlagged],
+        ['원본에서는 두 편집자가 전체 내용을 확인한 구절', flags.previouslySupported],
+        ['원본에 충돌 표시가 없고 전체 지지도 확인되지 않은 구절', flags.previouslyUnflagged],
+        ['원본 대응 구절을 찾지 못한 경우', flags.unmatched]
+      ]) origins.append(element('li', label + ' ' + value + '개'));
+      part.append(origins);
+    }
+    return part;
+  }
+
+  function auditPanel(facts) {
+    const panel = element('section');
+    panel.id = 'series-core-audit';
+    const audit = facts.audit;
+    panel.append(element('h4', '편향이 개선된 기사에서 핵심 사실은 얼마나 유지됐나'),
+      element('p', '편향이 한 항목 이상 개선된 ' + facts.improvedArticles + '건 중 핵심 표시와 판본 간 구절을 대조할 수 있는 기사 ' + audit.improvedArticles + '건'));
+    if (audit.improvedArticles) {
+      panel.append(auditCounts(audit), element('p', '유지율의 분모는 두 편집자가 원본에서 모두 핵심으로 표시하고 구절 전체를 근거로 확인한 사실입니다. 같은 문구와 문맥을 연결했을 때 수정본에서도 두 사람이 전체를 확인한 구절을 셉니다.', 'note'));
+      if (audit.flags.total) panel.append(element('p', '충돌 표시는 한 명 이상이 원자료와 차이를 발견했다는 뜻입니다. 원문과 자료가 어떻게 달라졌는지는 아래 기사 링크에서 확인하세요.', 'note'));
+    }
+    if (audit.missingImprovedArticles) panel.append(element('p', '이전 형식으로 저장한 개선 기사 ' + audit.missingImprovedArticles +
+      '건은 이 집계에서 빠졌습니다. 원래 작업 파일 4개와 대응표 2개를 다시 열어 요약을 저장하면 포함됩니다.', 'note'));
+    return panel;
+  }
   function factPanel(report, sources, builtIn) {
     const panel = element('section', null, 'panel');
     panel.id = 'series-facts';
@@ -200,6 +237,7 @@
     panel.append(element('p', '구절별 검토 상태가 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
     if (facts.missingArticles) panel.append(element('p', '이전 형식 요약 ' + facts.missingArticles +
       '건에는 구절별 사실 판정이 없습니다. 두 편집자의 작업 파일과 대응표를 다시 열어 기사별 요약을 저장하면 함께 집계할 수 있습니다.', 'note'));
+    if (facts.improvedArticles) panel.append(auditPanel(facts));
     if (!facts.articleCount) {
       if (facts.improvedArticles) panel.append(retentionPanel(report, sources));
       return panel;
@@ -249,6 +287,7 @@
         item.append(element('p', '두 편집자의 구절 전체 지지율 ' + rateText(original.support) + ' → ' + rateText(revised.support)),
           element('p', '수정본 공동 판정 범위 ' + rateText(revised.coverage) + ' · 한 명 이상 충돌 표시 ' + revised.flagged + '개 구절'),
           element('p', '사실 확인 대상 ' + original.coverage.denominator + '개 → ' + revised.coverage.denominator + '개'));
+        if (article.factAudit) item.append(auditCounts(article.factAudit));
         const trace = article.factTrace;
         if (!trace) item.append(element('p', '이전 요약에 구절 대응 기록이 없어 원본 사실의 유지 여부를 집계할 수 없습니다.', 'note'));
         else if (!trace.total) item.append(element('p', '원본에서 두 편집자가 구절 전체를 근거로 확인한 사실이 없습니다.', 'note'));

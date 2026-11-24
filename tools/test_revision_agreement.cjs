@@ -19,7 +19,7 @@ function work(article, version) {
 const manuscripts = () => [work('사업비는 20억 원이다.\n예산표의 확정액은 10억 원이다.', '초판'),
   work('사업비는 10억 원이다.\n예산표의 확정액은 10억 원이다.', '수정판')];
 
-function rate(work, levels) {
+function rate(work, levels, coreIndexes = []) {
   const report = engine.report(work.article, work.sources, work.receipts);
   const [row, other] = report.rows;
   const source = work.sources[0];
@@ -27,7 +27,7 @@ function rate(work, levels) {
     ? {level, reason:'이 기사에는 비교할 두 주체가 없다.'}
     : {level, rowId:row.id, quote:row.text, compareRowId:other.id, compareQuote:other.text, sourceId:source.id,
       sourceQuote:source.excerpt, reason:'예산표와 기사 서술을 대조했다.', impact:'독자가 확정액을 다르게 이해한다.'}]));
-  work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:[], ratings});
+  work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:coreIndexes.map(i => report.rows[i].id), ratings});
 }
 
 // Fixed, distinct assignment bytes exercise both blind slot mappings without depending on chance.
@@ -127,20 +127,33 @@ test('새 주장으로 판정 수가 유지돼도 공동 지지했던 원본 구
     })));
   // Copy one actual saved verdict between editors. That passage no longer has independent support.
   reviews[1].before.receipts[3] = structuredClone(reviews[0].before.receipts[3]);
-  rate(reviews[1].before, {wording:2});
+  rate(reviews[0].before, {wording:2}, [1,3]);
+  rate(reviews[1].before, {wording:2}, [3,6]);
+  rate(reviews[0].after, {wording:0}, [0]);
+  rate(reviews[1].after, {wording:0}, [0,6]);
   const result = compare(...reviews);
   const expected = [[0,0], [1,1], [2,2], [6,null]];
+  const expectedContext = {beforeCore:[0,1,0,2,0,0,1], afterCore:[2,0,0,0,0,0,1],
+    matches:[[0,0],[1,1],[2,2],[3,3],[4,4]]};
   assert.deepEqual(result.improved, ratio(1,1));
   assert.deepEqual(result.factMatches, expected);
   assert.deepEqual(result.facts.before.map(f => f.outcome), ['supported','supported','supported','pending','shared','pending','supported']);
   assert.deepEqual(result.factMatches.map(([, after]) => after === null ? null : result.facts.after[after].outcome),
     ['supported','pending','limited',null]);
   assert.deepEqual(compare(reviews[1], reviews[0]).factMatches, expected);
+  assert.deepEqual(result.factContext, expectedContext);
+  assert.deepEqual(compare(reviews[1], reviews[0]).factContext, expectedContext);
   result.factMatches[0][1] = null;
+  result.factContext.beforeCore.fill(2);
+  result.factContext.matches.length = 0;
   const saved = recordFields(result, reviews[0].key);
   assert.deepEqual(saved.factMatches, expected);
+  assert.deepEqual(saved.factContext, expectedContext);
   saved.factMatches[1][1] = 0;
+  saved.factContext.afterCore[6] = 0;
+  saved.factContext.matches[0][1] = 4;
   assert.deepEqual(recordFields(result, reviews[1].key).factMatches, expected);
+  assert.deepEqual(recordFields(result, reviews[1].key).factContext, expectedContext);
 });
 
 test('도입부가 추가되면 문맥이 유지된 공동 지지 구절은 수정본에서 옮겨진 순번으로 이어진다', async () => {

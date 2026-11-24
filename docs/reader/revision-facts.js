@@ -44,7 +44,47 @@
     return {total: factMatches.length, retained, unmatched, changed};
   }
 
-  const api = Object.freeze({validRow, summarize, summarizeFactMatches});
+  function emptyAudit() {
+    return {core: {total: 0, retained: 0, changed: 0, unmatched: 0},
+      flags: {total: 0, previouslyFlagged: 0, previouslySupported: 0, previouslyUnflagged: 0, unmatched: 0, core: 0}};
+  }
+
+  function auditFacts(facts, context) {
+    const {core, flags} = emptyAudit();
+    const revisedRows = new Map(context.matches);
+    const originalRows = new Map(context.matches.map(([before, after]) => [after, before]));
+    for (const [index, row] of facts.before.entries()) {
+      if (context.beforeCore[index] !== 2 || row.outcome !== 'supported') continue;
+      core.total++;
+      const revised = revisedRows.get(index);
+      if (revised === undefined) core.unmatched++;
+      else if (facts.after[revised].outcome === 'supported') core.retained++;
+      else core.changed++;
+    }
+    for (const [index, row] of facts.after.entries()) {
+      if (row.flag === 'none') continue;
+      flags.total++;
+      if (context.afterCore[index] === 2) flags.core++;
+      const original = originalRows.get(index);
+      if (original === undefined) flags.unmatched++;
+      else if (facts.before[original].flag !== 'none') flags.previouslyFlagged++;
+      else if (facts.before[original].outcome === 'supported') flags.previouslySupported++;
+      else flags.previouslyUnflagged++;
+    }
+    return {core, flags};
+  }
+
+  function sumFactAudits(audits) {
+    const result = emptyAudit();
+    for (const audit of audits) {
+      for (const group of Object.keys(result)) {
+        for (const key of Object.keys(result[group])) result[group][key] += audit[group][key];
+      }
+    }
+    return result;
+  }
+
+  const api = Object.freeze({validRow, summarize, summarizeFactMatches, auditFacts, sumFactAudits});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalRevisionFacts = api;
 })(globalThis);

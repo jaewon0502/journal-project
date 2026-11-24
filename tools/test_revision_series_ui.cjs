@@ -337,3 +337,27 @@ test('예시를 연 뒤에 끝난 이전 파일 읽기는 예시 집계를 덮�
   assert.match(p.get('series-improved').textContent, /75%3\/4개 항목/);
   assert.doesNotMatch(p.get('series-articles').textContent, /늦은.json/);
 });
+
+test('편향 개선 점수가 같아도 원본 핵심 사실 유지와 충돌 표시의 출처를 구별한다', async t => {
+  const p = page(t);
+  const supported = {outcome:'supported', flag:'none'};
+  const flagged = {outcome:'contradicted', flag:'article'};
+  const pending = {outcome:'pending', flag:'none'};
+  const record = {...one, version:4, facts:{
+    before:[supported, supported, flagged, pending], after:[supported, flagged, flagged, flagged]},
+    factMatches:[[0,0], [1,null]], factContext:{beforeCore:[2,0,0,0], afterCore:[0,2,0,0], matches:[[0,0],[2,1],[3,2]]}};
+  for (const [core, expected] of [[[2,0,0,0], '100% (1/1개)'], [[0,2,0,0], '0% (0/1개)']]) {
+    record.factContext.beforeCore = core;
+    p.select(file('비교할 기사.json', record));
+    await flushed();
+    const section = p.get('series-core-audit');
+    assert.ok(section.textContent.includes(expected));
+    assert.match(section.textContent, /충돌 표시가 있는 구절 3개 · 두 편집자가 모두 핵심으로 표시한 구절 1개/);
+    assert.match(section.textContent, /원본에도 충돌 표시가 있던 구절 1개.*전체 내용을 확인한 구절 0개.*전체 지지도 확인되지 않은 구절 1개.*대응 구절을 찾지 못한 경우 1개/);
+    assert.ok(p.get('series-articles').textContent.includes(expected));
+  }
+  p.select(file('이전 모의 기사.json', one));
+  await flushed();
+  assert.match(p.get('series-core-audit').textContent, /대조할 수 있는 기사 0건.*이전 형식으로 저장한 개선 기사 1건/);
+  assert.doesNotMatch(p.get('series-core-audit').textContent, /0%|0\/0|충돌 표시가 있는 구절 0개/);
+});

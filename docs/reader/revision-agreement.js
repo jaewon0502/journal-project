@@ -129,7 +129,8 @@
   function recordFields(joint, key) {
     const saved = savedComparison(joint, key);
     if (!saved.completeReturns) throw new Error('각 편집자의 원본과 수정본 네 파일에 구절 판정이나 편향 평가를 하나 이상 기록한 뒤 요약을 저장하세요.');
-    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts), factMatches: JSON.parse(saved.factMatches)};
+    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts),
+      factMatches: JSON.parse(saved.factMatches), factContext: JSON.parse(saved.factContext)};
   }
 
   function compare(first, second) {
@@ -147,16 +148,18 @@
     const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
     const matched = comparison.matchRevisionRows(before.view, after.view);
     const revisedIndexes = new Map(after.facts.rows.map((row, index) => [row.rowId, index]));
+    const coreCount = row => Number(row.coreLeft) + Number(row.coreRight);
+    const factContext = {beforeCore: before.facts.rows.map(coreCount), afterCore: after.facts.rows.map(coreCount), matches: []};
     const factMatches = [];
-    for (const [index, fact] of facts.before.entries()) {
-      if (fact.outcome !== 'supported') continue;
-      const revisedId = matched.get(before.facts.rows[index].rowId);
-      factMatches.push([index, revisedIndexes.get(revisedId) ?? null]);
+    for (const [index, row] of before.facts.rows.entries()) {
+      const revised = revisedIndexes.get(matched.get(row.rowId)) ?? null;
+      if (revised !== null) factContext.matches.push([index, revised]);
+      if (facts.before[index].outcome === 'supported') factMatches.push([index, revised]);
     }
-    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, factMatches, missingReturns};
+    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, factMatches, factContext, missingReturns};
     const scores = ({before, after}) => ({before, after});
     compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], completeReturns: !missingReturns.length, facts: JSON.stringify(facts),
-      factMatches: JSON.stringify(factMatches),
+      factMatches: JSON.stringify(factMatches), factContext: JSON.stringify(factContext),
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }

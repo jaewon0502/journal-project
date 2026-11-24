@@ -82,39 +82,42 @@
     return checkedNotes(record, notes);
   }
 
-  function noteChecksum(reviewId, evidenceDigest, notes) {
-    return digest([format, 1, reviewId, evidenceDigest, notes.map(n => [n.before, n.after, n.status, n.reason])]);
+  function noteChecksum(version, reviewId, evidenceDigest, notes) {
+    return digest([format, version, reviewId, evidenceDigest, notes.map(n => [n.before, n.after, n.status, n.reason])]);
   }
 
   async function create(record, items, notes) {
-    const reviewId = series.reviewId(record, 3);
+    const inputVersion = record?.version === 3 ? 3 : 4;
+    const inputId = series.reviewId(record, inputVersion);
     const embedded = copyItems(items, false);
     const saved = checkedNotes(record, notes);
     const reviews = await blind.resolveBundle(embedded);
     if (reviews[0].key.demo !== record.demo) throw new Error('대조 기록의 연습·실제 기사 구분이 다릅니다.');
     const rebuilt = series.makeRecord(agreement.compare(...reviews), reviews[0].key);
-    if (series.reviewId(rebuilt) !== reviewId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
+    if (series.reviewId(rebuilt, inputVersion) !== inputId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
+    // Even an older selected summary becomes a full v4 identity after its six files have been resolved.
+    const reviewId = inputVersion === 4 ? inputId : series.reviewId(rebuilt, 4);
     const evidenceDigest = evidenceId(embedded);
-    return {format, version:1, reviewId, evidenceDigest, items:embedded, notes:saved,
-      checksum:noteChecksum(reviewId, evidenceDigest, saved)};
+    return {format, version:2, reviewId, evidenceDigest, items:embedded, notes:saved,
+      checksum:noteChecksum(2, reviewId, evidenceDigest, saved)};
   }
 
   function read(data) {
     if (!exactKeys(data, ['format', 'version', 'reviewId', 'evidenceDigest', 'items', 'notes', 'checksum']) ||
-        data.format !== format || data.version !== 1 ||
+        data.format !== format || ![1, 2].includes(data.version) ||
         ![data.reviewId, data.evidenceDigest, data.checksum].every(s => typeof s === 'string' && /^[0-9a-f]{64}$/u.test(s))) {
       throw new Error('진행자가 저장한 구절 대조 기록 파일을 선택하세요.');
     }
     const items = copyItems(data.items, true), notes = cleanNotes(data.notes);
     if (evidenceId(items) !== data.evidenceDigest) throw new Error('저장한 대조 기록의 작업 파일이나 대응표 내용이 달라졌습니다.');
-    if (noteChecksum(data.reviewId, data.evidenceDigest, notes) !== data.checksum) throw new Error('저장한 대조 기록의 판단이나 식별값이 달라졌습니다.');
+    if (noteChecksum(data.version, data.reviewId, data.evidenceDigest, notes) !== data.checksum) throw new Error('저장한 대조 기록의 판단이나 식별값이 달라졌습니다.');
     return {items, notes, reviewId:data.reviewId};
   }
 
   // Pass the summary rebuilt by the normal blind assignment resolver when reopening.
   function verify(data, record) {
     const saved = read(data);
-    if (series.reviewId(record, 3) !== saved.reviewId) throw new Error('대조 기록과 다시 계산한 기사 요약이 일치하지 않습니다.');
+    if (series.reviewId(record, data.version === 1 ? 3 : 4) !== saved.reviewId) throw new Error('대조 기록과 다시 계산한 기사 요약이 일치하지 않습니다.');
     return checkedNotes(record, saved.notes);
   }
 

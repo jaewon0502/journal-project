@@ -4,7 +4,9 @@ const engine = require('../docs/reader/factcheck-engine.js');
 const workspace = require('../docs/reader/workspace-snapshot.js');
 const blind = require('../docs/reader/blind-revision.js');
 const {compare, comparedFacts} = require('../docs/reader/revision-agreement.js');
-const {summarize, validRow} = require('../docs/reader/revision-facts.js');
+const {summarize, validRow, auditFacts} = require('../docs/reader/revision-facts.js');
+const rubric = require('../docs/reader/article-rubric.js');
+const series = require('../docs/reader/revision-series.js');
 
 const sources = [
   {id:'minutes', title:'회의록', url:'https://assembly.example/minutes', version:'확정본',
@@ -151,6 +153,49 @@ test('구간 기록은 허용된 판정·충돌 조합만 받고 분모가 비�
   }
   assert.deepEqual(summarize([]).support, ratio(0,0));
   assert.deepEqual(summarize([fact('excluded')]).coverage, ratio(0,0));
+});
+
+test('원본 핵심 사실의 유지와 수정본 충돌의 전후 상태를 대응 구간별로 센다', () => {
+  const facts = {
+    before: [fact('supported'), fact('supported'), fact('supported'), fact('shared', 'article'),
+      fact('limited'), fact('supported'), fact('pending'), fact('excluded')],
+    after: [fact('disputed', 'both'), fact('supported'), fact('pending', 'quote'), fact('contradicted', 'article'),
+      fact('quotedConflict', 'quote'), fact('pending'), fact('shared')]
+  };
+  const context = {beforeCore: [2, 2, 2, 2, 2, 1, 0, 2], afterCore: [2, 0, 2, 1, 0, 2, 0],
+    matches: [[0, 1], [1, 0], [3, 2], [4, 3], [5, 5], [6, 6]]};
+  assert.deepEqual(auditFacts(facts, context), {
+    core: {total: 3, retained: 1, changed: 1, unmatched: 1},
+    flags: {total: 4, previouslyFlagged: 1, previouslySupported: 1, previouslyUnflagged: 1, unmatched: 1, core: 2}
+  });
+});
+
+test('두 편집자의 독립 지정부터 내보내기까지 같은 종전 기록에서 서로 다른 핵심 보존 결과를 회수한다', async () => {
+  const before = ['첫 번째 보도다.', '회의가 열렸다.', '자료는 공개됐다.', '예산은 10억 원이다.'];
+  const after = [...before.slice(0, -1), '참석자는 30명이었다.'];
+  const rows = texts => texts.map(text => [text, 'fact', 'fact']);
+  const records = [];
+  for (const coreIndex of [0, 3]) {
+    const {joint, reviews} = await assess(rows(before), rows(after), (work, role, editor, previous) => {
+      if (role === 'before' && editor === 1) work.receipts[1] = structuredClone(previous.before.receipts[1]);
+      const observed = engine.report(work.article, work.sources, work.receipts);
+      const row = observed.rows[0], source = work.sources[0];
+      work.articleAssessment = rubric.save(observed, work.sources, {
+        coreRowIds: role === 'before' ? [observed.rows[coreIndex].id, observed.rows[1].id] : [],
+        ratings: {wording: {level: role === 'before' ? 2 : 0, rowId: row.id, quote: row.text, sourceId: source.id,
+          sourceQuote: source.excerpt, reason: '원자료와 해당 구절의 표현을 대조했다.', impact: '예산에 대한 인상이 달라질 수 있다.'}}
+      });
+    });
+    records.push(series.makeRecord(joint, reviews[0].key));
+  }
+  assert.equal(series.reviewId(records[0], 3), series.reviewId(records[1], 3));
+  assert.notEqual(series.reviewId(records[0]), series.reviewId(records[1]));
+  for (const [i, exported] of records.entries()) {
+    const result = series.summarize([JSON.parse(JSON.stringify(exported))]);
+    assert.equal(result.facts.audit.improvedArticles, 1);
+    assert.equal(result.articles[0].facts.before.shared, 1);
+    assert.deepEqual(result.facts.audit.core, {total: 1, retained: 1 - i, changed: 0, unmatched: i});
+  }
 });
 
 test('예비비 사례의 배포 파일로 양쪽에 같은 검토 기록을 회수하면 공동 사실 확인 건수는 0이다', async () => {

@@ -155,12 +155,52 @@
     }
     return reference;
   }
+  function ratingPassage(snapshot, label, quote, rowId) {
+    const {article, rows} = snapshot;
+    let first = -1, last = -1, start;
+    if (rowId) {
+      first = last = rows.findIndex(row => row.id === rowId && row.text.includes(quote));
+      if (first >= 0) {
+        const row = rows[first], offset = row.text.indexOf(quote);
+        if (row.positions.length === 1 && offset === row.text.lastIndexOf(quote)) start = row.positions[0].start + offset;
+      }
+    } else {
+      // Older comparison quotes have no row ID and can span more than one row.
+      const offset = article.indexOf(quote);
+      if (offset >= 0 && offset === article.lastIndexOf(quote)) {
+        const containing = at => rows.findIndex(row => row.positions.some(pos => pos.start <= at && at < pos.end));
+        first = containing(offset);
+        last = containing(offset + quote.length - 1);
+        start = offset;
+      }
+    }
+    const passage = element('div', null, 'rating-passage');
+    if (first < 0 || last < first) {
+      passage.append(note(label + ' · 구간 위치 확인 불가'), element('blockquote', quote));
+      return passage;
+    }
+    const range = first === last ? String(first + 1) : (first + 1) + '–' + (last + 1);
+    passage.append(note(label + ' · 구간 ' + range + ' · 앞뒤 문맥'));
+    const from = rows[first - 1]?.positions.at(-1).start ?? rows[first].positions[0].start;
+    const to = rows[last + 1]?.positions[0].end ?? rows[last].positions.at(-1).end;
+    const surrounding = (a, b) => article.slice(a, b).replace(/[\r\n]+/gu, ' ');
+    const context = element('blockquote');
+    if (start === undefined) {
+      passage.append(element('blockquote', quote), note('선택한 구간 안에 같은 표현이 여러 번 나와 정확한 위치를 특정할 수 없습니다.'));
+      context.textContent = surrounding(from, to);
+    } else {
+      context.append(document.createTextNode(surrounding(from, start)), element('mark', quote),
+        document.createTextNode(surrounding(start + quote.length, to)));
+    }
+    passage.append(context);
+    return passage;
+  }
   function ratingEvidence(s, r, name) {
     const div = element('div');
     div.append(element('h4', name + ' · ' + level(r?.level)));
     if (!r) { div.append(note('저장된 단계가 없습니다.')); return div; }
-    if (r.quote) div.append(note('기사 구절'), element('blockquote', r.quote));
-    if (r.compareQuote) div.append(note('기사의 비교 구절'), element('blockquote', r.compareQuote));
+    if (r.quote) div.append(ratingPassage(s, '기사 구절', r.quote, r.rowId));
+    if (r.compareQuote) div.append(ratingPassage(s, '기사의 비교 구절', r.compareQuote, r.compareRowId));
     if (r.sourceQuote) div.append(sourceReference(s, r.sourceId, '원자료'), element('blockquote', r.sourceQuote));
     div.append(element('p', '판단 이유 · ' + r.reason));
     if (r.impact) div.append(element('p', '독자 판단에 미치는 영향 · ' + r.impact));
@@ -454,6 +494,7 @@
       const originalRow = editors[0].snapshots[0].rows[before], text = originalRow.text;
       const item = detail('원본 ' + (before + 1) + '번 · ' + text);
       item.dataset.retentionBefore = before;
+      if (joint.factContext.beforeCore[before] === 2) item.append(note('두 편집자가 원본에서 모두 핵심 사실로 표시한 구절입니다.'));
       const candidate = after === null ? wording.get(text) : null;
       for (const [edition, index] of [before, after ?? candidate].entries()) {
         if (index == null) {
@@ -501,6 +542,7 @@
         }});
     }
     panel.append(window.JournalRevisionFactsView(before, after));
+    const originalRows = new Map(joint.factContext.matches.map(([before, after]) => [after, before]));
     for (const role of ['after', 'before']) {
       const isAfter = role === 'after';
       const sameEdition = editors.map(editor => editor.snapshots[isAfter ? 1 : 0]);
@@ -513,6 +555,18 @@
         seen.set(passage, previous + row.positions.length);
         if (fact.flag === 'none' && fact.outcome !== 'disputed') return;
         const item = detail(passage);
+        if (isAfter && fact.flag !== 'none') {
+          const original = originalRows.get(index);
+          let origin = '원본 대응 구절 미확인';
+          if (original !== undefined) {
+            const prior = joint.facts.before[original];
+            const state = prior.flag !== 'none' ? '충돌 표시 있음' :
+              prior.outcome === 'supported' ? '두 편집자가 구절 전체를 근거로 확인' : '충돌 표시 없음 · 전체 지지 미확인';
+            origin = '원본 ' + (original + 1) + '번 구절 · ' + state;
+          }
+          item.append(note('수정본 ' + (index + 1) + '번 구절 · ' + origin));
+          if (joint.factContext.afterCore[index] === 2) item.append(note('두 편집자가 수정본에서 모두 핵심 사실로 표시한 구절입니다.'));
+        }
         if (totals.get(passage) > 1) markRepeatedPassage(item, sameEdition[0], index, previous + 1, totals.get(passage));
         const pair = element('div', null, 'pair');
         sameEdition.forEach((snapshot, i) => {
@@ -796,8 +850,9 @@
     }
     const record = reopened?.record ?? window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
     const series = window.JournalRevisionSeries;
-    if (series.reviewId(record) !== reviewTarget.id &&
-        (reviewTarget.retention || series.reviewId(record, 2) !== reviewTarget.id)) {
+    const oldestVersion = reviewTarget.retention ? 3 : 2;
+    const versions = [4, 3, 2].filter(version => version <= record.version && version >= oldestVersion);
+    if (!versions.some(version => series.reviewId(record, version) === reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
     let panel, group, row, title;

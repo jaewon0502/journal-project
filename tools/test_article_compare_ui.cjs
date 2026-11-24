@@ -179,7 +179,11 @@ test('원본 사실 대조 링크는 같은 문구라도 문맥이 바뀐 위치
     assert.match(side.querySelector('blockquote').textContent, /100개.*20개/);
   }
   assert.match(p.el('joint-facts').textContent, /수정본 전문 보기.*조사 도서관 100곳 중 20곳/);
-  for (const invalid of [series.reviewId(record, 2), series.reviewId({...record, factMatches:[[1,1]]})]) {
+  p.w.location.hash = target(series.reviewId(record, 3));
+  await t.waitFor(() => assert.ok(p.el('joint-facts')?.querySelector('.fact-retention[open]')));
+  const altered = structuredClone(record);
+  altered.factContext.beforeCore[0] = (altered.factContext.beforeCore[0] + 1) % 3;
+  for (const invalid of [series.reviewId(record, 2), series.reviewId(altered)]) {
     const changed = new Promise(resolve => p.w.addEventListener('hashchange', resolve, {once:true}));
     p.w.location.hash = target(invalid);
     await changed;
@@ -595,6 +599,75 @@ test('파일이나 나머지 판정이 달라도 양쪽에 동일한 저장 기�
   assert.doesNotMatch(output.textContent, /동일 기록을 제외한 사실 판정 일치율/);
 });
 
+test('일반 비교에서 반복 구절은 저장한 구간까지만 표시하고 구형 비교 구절은 고유한 원문 범위를 보여 준다', async t => {
+  const p = page(t);
+  const tag = '<img src=x>';
+  function rated(heading) {
+    const source = {id:'s', title:'조사표', url:'https://example.org/table', version:'2판', locator:'표 2', excerpt:'조사 결과'};
+    const article = [heading, '중간 기록.', '마지막 기록.'].join('\n');
+    const work = {...workspace(article), sources:[source]};
+    const report = engine.report(article, work.sources, []);
+    work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:[], ratings:{framing:{
+      level:0, rowId:report.rows[0].id, quote:tag, compareQuote:'중간 기록.\n마지막 기록.',
+      sourceId:source.id, sourceQuote:source.excerpt, reason:'두 구간을 확인했다.'
+    }}});
+    return JSON.stringify(work);
+  }
+  p.load('left', '원본.json', rated('원본 ' + tag + '와 ' + tag + '.'));
+  p.load('right', '수정본.json', rated(['수정본 ' + tag + '.', '수정본 ' + tag + '.'].join('\n')));
+  await p.settled();
+  p.el('ack').click();
+  p.el('compare').click();
+  const framing = [...p.el('output').querySelectorAll('details')].find(d => d.firstElementChild.textContent.startsWith('제목·도입부와 본문'));
+  for (const [i, side] of [...framing.querySelectorAll('.pair > div')].entries()) {
+    const [main, comparison] = side.querySelectorAll('.rating-passage');
+    assert.match(main.textContent, /기사 구절 · 구간 1.*정확한 위치를 특정할 수 없습니다/s);
+    assert.equal(main.querySelector('mark'), null);
+    assert.equal(main.querySelectorAll('img').length, 0);
+    assert.equal(main.querySelector('blockquote').textContent, tag);
+    assert.match(main.lastElementChild.textContent, i ? /수정본/ : /원본/);
+    assert.match(comparison.firstElementChild.textContent, /비교 구절 · 구간 2–3/);
+    assert.equal(comparison.querySelector('mark').textContent, '중간 기록.\n마지막 기록.');
+    assert.match(side.textContent, /원자료 · 조사표 · 2판 · 표 2/);
+  }
+});
+
+test('블라인드 회수 뒤 두 편집자가 같은 표현을 고른 네 판정에서 각자 지정한 두 구간을 강조한다', async t => {
+  const p = page(t);
+  const files = await require('../docs/reader/revision-evidence-example.js').files();
+  const works = files.filter(f => f.data.article);
+  for (const [i, file] of works.entries()) {
+    const work = file.data;
+    const report = engine.report(work.article, work.sources, work.receipts);
+    const first = [0, 1, 1, 0][i];
+    const framing = {...work.articleAssessment.ratings.framing, rowId:report.rows[first].id, quote:'도서관',
+      compareRowId:report.rows[1 - first].id, compareQuote:'도서관'};
+    work.articleAssessment = rubric.save(report, work.sources, {...work.articleAssessment,
+      ratings:{...work.articleAssessment.ratings, framing}});
+    file.raw = JSON.stringify(work);
+  }
+  p.selectFiles('blind-bundle-files', files.reverse().map(f => ({name:f.name, text:async () => f.raw})));
+  await t.waitFor(() => assert.ok(p.el('agreement-export')));
+  const ratings = p.el('output').querySelectorAll('[data-bias-axis="framing"] .pair > div > div');
+  assert.equal(ratings.length, 4);
+  for (const [i, rating] of [...ratings].entries()) {
+    const article = works[i].data.article;
+    const lines = article.split('\n');
+    assert.match(rating.firstElementChild.textContent, i % 2 ? /수정 후/ : /수정 전/);
+    const passages = rating.querySelectorAll('.rating-passage');
+    assert.equal(passages.length, 2);
+    for (const [j, passage] of [...passages].entries()) {
+      const first = [0, 1, 1, 0][i];
+      const line = j ? 1 - first : first;
+      assert.ok(passage.firstElementChild.textContent.includes('구간 ' + (line + 1)));
+      const mark = passage.querySelector('mark');
+      assert.equal(mark.textContent, '도서관');
+      const prefix = article.slice(0, article.indexOf(lines[line]) + lines[line].indexOf('도서관'));
+      assert.equal(mark.previousSibling.textContent, prefix.replaceAll('\n', ' '));
+    }
+  }
+});
+
 test('진행자가 파일을 따로 저장하고 역순으로 회수해도 실제 판본에 맞춰 채점 결과를 표시한다', async t => {
   const p = page(t, '#blind-revision');
   assert.equal(p.el('blind-revision').open, true);
@@ -821,7 +894,7 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
-  assert.equal(record.version, 3);
+  assert.equal(record.version, 4);
   assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
   assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
   assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});
