@@ -61,6 +61,10 @@
   }
 
   async function resolve(key, one, two) {
+    return resolvePair(key, one, two);
+  }
+
+  async function resolvePair(key, one, two, strictFileError) {
     if (!validKey(key)) throw new Error('배포할 때 따로 보관한 진행자용 대응표 파일을 확인하세요.');
     const bySlot = new Map();
     for (const work of [one, two]) {
@@ -74,13 +78,20 @@
     for (const role of roles) {
       const side = key.mapping[role];
       const work = bySlot.get(side.slot);
-      const snapshot = workspace.read(work);
-      if (snapshot.demo !== key.demo) throw new Error('배포 당시의 연습·실제 기사 구분과 다릅니다. 회수한 작업 파일을 확인하세요.');
-      const current = await fingerprints(work);
-      if (side.articleSha256 !== current.articleSha256) {
-        throw new Error('배포한 기사 원문과 다릅니다. 배정된 기사 본문을 그대로 평가한 작업 파일을 선택하세요.');
+      try {
+        const snapshot = workspace.read(work);
+        if (snapshot.demo !== key.demo) throw new Error('배포 당시의 연습·실제 기사 구분과 다릅니다. 회수한 작업 파일을 확인하세요.');
+        const current = await fingerprints(work);
+        if (side.articleSha256 !== current.articleSha256) {
+          throw new Error('배포한 기사 원문과 다릅니다. 배정된 기사 본문을 그대로 평가한 작업 파일을 선택하세요.');
+        }
+        if (side.sourcesSha256 !== current.sourcesSha256) {
+          if (strictFileError) throw new Error('배포 후 등록된 원자료가 달라졌습니다. 배포 당시 자료로 평가한 파일을 선택하세요.');
+          result.sourceChanged = true;
+        }
+      } catch (error) {
+        throw strictFileError ? strictFileError(role, error.message) : error;
       }
-      if (side.sourcesSha256 !== current.sourcesSha256) result.sourceChanged = true;
       result[role] = work;
     }
     return result;
@@ -92,29 +103,31 @@
     }
     const keys = [];
     const files = new Map();
-    for (const item of items) {
+    const returns = [];
+    function fileError(index, message) {
+      return new Error((index + 1) + '번 파일' + (items[index]?.name ? ' ' + items[index].name : '') + ' · ' + message);
+    }
+    for (const [index, item] of items.entries()) {
       const data = item?.data;
       if (data?.format === format) {
-        if (!validKey(data)) throw new Error('진행자용 대응표를 확인하세요. 선택한 파일 · ' + item.name);
-        if (files.has(data.pairId)) throw new Error('같은 배포 묶음의 대응표가 두 개입니다. 편집자별 대응표를 하나씩 선택하세요.');
+        if (!validKey(data)) throw fileError(index, '진행자용 대응표를 확인하세요.');
+        if (files.has(data.pairId)) throw fileError(index, '같은 배포 묶음의 대응표가 두 개입니다. 편집자별 대응표를 하나씩 선택하세요.');
         keys.push(data);
         files.set(data.pairId, new Map());
+      } else {
+        const tag = workspace.blindTag(data?.blindReview);
+        if (data?.format !== workspace.schema || !tag) throw fileError(index, 'A·B로 배정한 작업 파일이나 진행자용 대응표를 선택하세요.');
+        returns.push({tag, index});
       }
     }
     if (keys.length !== 2) throw new Error('서로 다른 두 편집자에게 배포한 진행자용 대응표가 하나씩 필요합니다.');
-    for (const item of items) {
-      const data = item?.data;
-      if (data?.format === format) continue;
-      const tag = workspace.blindTag(data?.blindReview);
-      if (data?.format !== workspace.schema || !tag) {
-        throw new Error('A·B로 배정한 작업 파일을 선택하세요. 확인할 파일 · ' + (item?.name || '이름 없음'));
-      }
+    for (const {tag, index} of returns) {
       const group = files.get(tag.pairId);
-      if (!group) throw new Error('선택한 대응표와 다른 묶음의 작업 파일입니다. 확인할 파일 · ' + item.name);
+      if (!group) throw fileError(index, '선택한 대응표와 다른 묶음의 작업 파일입니다.');
       if (group.has(tag.slot)) {
-        throw new Error('같은 묶음의 ' + tag.slot + ' 파일을 두 번 선택했습니다. A와 B를 하나씩 선택하세요.');
+        throw fileError(index, (group.get(tag.slot) + 1) + '번과 같은 묶음의 ' + tag.slot + ' 파일입니다. A와 B를 하나씩 선택하세요.');
       }
-      group.set(tag.slot, item);
+      group.set(tag.slot, index);
     }
     keys.sort((a, b) => a.pairId.localeCompare(b.pairId));
     const [first, second] = keys;
@@ -131,15 +144,12 @@
     return Promise.all(keys.map(async key => {
       // Four distinct work files tagged A/B across these two keys fill all four slots.
       const group = files.get(key.pairId);
-      const ordered = roles.map(role => group.get(key.mapping[role].slot));
+      const indexOf = role => group.get(key.mapping[role].slot);
+      const ordered = roles.map(role => items[indexOf(role)]);
       const code = key.pairId.slice(0, 8);
-      try {
-        const result = await resolve(key, ordered[0].data, ordered[1].data);
-        if (result.sourceChanged) throw new Error('배포 후 등록된 원자료가 달라졌습니다. 배포 당시 자료로 평가한 파일을 선택하세요.');
-        return {...result, key, ordered, code};
-      } catch (error) {
-        throw new Error('묶음 ' + code + ' · ' + error.message);
-      }
+      const result = await resolvePair(key, ordered[0].data, ordered[1].data,
+        (role, message) => fileError(indexOf(role), '묶음 ' + code + ' · ' + message));
+      return {...result, key, ordered, code};
     }));
   }
 

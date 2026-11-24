@@ -162,12 +162,13 @@ test('빠졌거나 다른 배정의 파일, 같은 슬롯이나 대응표를 반
   const [key,A,B] = bundleFiles(a);
   const second = bundleFiles(b);
   await assert.rejects(blind.resolveBundle([key,A,B,...second.slice(0,2)]), /여섯/);
-  await assert.rejects(blind.resolveBundle([key,A,B,key,...second.slice(1)]), /같은 배포 묶음의 대응표/);
+  await assert.rejects(blind.resolveBundle([key,A,B,key,...second.slice(1)]), /4번 파일 돌아온 결과.json.*같은 배포 묶음의 대응표/);
   await assert.rejects(blind.resolveBundle([A,B,A,...second]), /대응표가 하나씩/);
-  await assert.rejects(blind.resolveBundle([key,A,{...A},...second]), /두 번/);
-  await assert.rejects(blind.resolveBundle([bundleFiles(other)[0],A,B,...second]), /다른 묶음/);
-  await assert.rejects(blind.resolveBundle([key,A,{name:'통계.json',data:{}},...second]), /배정한 작업 파일.*통계.json/);
-  await assert.rejects(blind.resolveBundle([{...key,data:{...key.data,pairId:'x'}},A,B,...second]), /진행자용 대응표/);
+  await assert.rejects(blind.resolveBundle([key,A,{...A},...second]), /3번 파일 돌아온 결과.json.*2번과 같은 묶음의 A/);
+  await assert.rejects(blind.resolveBundle([bundleFiles(other)[0],A,B,...second]), /2번 파일 돌아온 결과.json.*다른 묶음/);
+  await assert.rejects(blind.resolveBundle([key,A,{name:'통계.json',data:{}},...second]), /3번 파일 통계.json.*배정한 작업 파일/);
+  await assert.rejects(blind.resolveBundle([{name:'통계.json',data:{}},A,B,...second]), /1번 파일 통계.json.*배정한 작업 파일/);
+  await assert.rejects(blind.resolveBundle([{...key,data:{...key.data,pairId:'x'}},A,B,...second]), /1번 파일 돌아온 결과.json.*진행자용 대응표/);
 });
 
 test('판본, 평가 자료와 연습 여부를 배정 사이와 각 편집자가 돌려준 파일에서 모두 확인한다', async () => {
@@ -186,6 +187,10 @@ test('판본, 평가 자료와 연습 여부를 배정 사이와 각 편집자�
   ]) {
     const changed = structuredClone(second);
     update(changed[1].data);
-    await assert.rejects(blind.resolveBundle([...first,...changed]), message);
+    await assert.rejects(blind.resolveBundle([...first,...changed]), error => {
+      assert.match(error.message, /5번 파일 돌아온 결과.json/);
+      assert.match(error.message, message);
+      return true;
+    });
   }
 });
