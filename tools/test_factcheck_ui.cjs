@@ -6,7 +6,7 @@ const {JSDOM, VirtualConsole} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
 function open(t) {
-  const errors = [], blobs = [];
+  const errors = [], blobs = [], filenames = [];
   const console = new VirtualConsole();
   console.on('jsdomError', error => errors.push(error.message));
   const dom = new JSDOM(readFileSync(path.join(folder, 'factcheck.html'), 'utf8'), {
@@ -17,7 +17,10 @@ function open(t) {
   w.confirm = () => true;
   w.URL.createObjectURL = blob => { blobs.push(blob); return 'blob:journal'; };
   w.URL.revokeObjectURL = () => {};
-  doc.addEventListener('click', event => { if (event.target.closest('a[download]')) event.preventDefault(); });
+  doc.addEventListener('click', event => {
+    const link = event.target.closest('a[download]');
+    if (link) { event.preventDefault(); filenames.push(link.download); }
+  });
   for (const script of doc.querySelectorAll('script[src]')) {
     w.eval(readFileSync(path.join(folder, script.getAttribute('src')), 'utf8'));
   }
@@ -33,7 +36,7 @@ function open(t) {
     el(id).value = value;
     el(id).dispatchEvent(new w.Event('input', {bubbles: true}));
   };
-  return {w, doc, el, set, snapshot, click: id => el(id).click()};
+  return {w, doc, el, set, snapshot, filename: () => filenames.at(-1), click: id => el(id).click()};
 }
 
 async function loadWorkspace(page, data, accept = true) {
@@ -708,6 +711,102 @@ test('독립 평가 파일에는 확정한 기사와 원자료만 남고 판정�
   owner.set('article', '수정 중인 기사');
   owner.click('save-review-input');
   assert.match(owner.el('file-status').textContent, /검토 목록을 만든 뒤/);
+});
+
+test('A/B 작업 파일은 편집 판단과 중립 표지만 이어 저장하고 독립 평가용 내보내기는 표지를 제거한다', async t => {
+  const seed = open(t);
+  recordFirstFact(seed);
+  seed.set('reason', '별도 근거를 확인 중이다.');
+  seed.click('save-work');
+  const work = JSON.parse(await seed.snapshot());
+  const originalReceipt = {...work.receipts[0]};
+  const privateNote = '진행자 전용 역할 메모';
+  work.role = privateNote;
+  work.sources[0].internalNote = privateNote;
+  work.receipts[0].role = privateNote;
+  work.rowDrafts[0].data.role = privateNote;
+  const editor = open(t);
+  for (const slot of ['A', 'B']) {
+    const tag = {pairId: '0123456789abcdef0123456789abcdef', slot};
+    await loadWorkspace(editor, {...work, blindReview: tag});
+    const notice = editor.el('blind-notice');
+    assert.ok(!notice.hidden);
+    assert.ok(notice.textContent.includes('블라인드 평가 ' + slot + ' · 묶음 01234567'));
+    editor.click('save-work');
+    assert.equal(editor.filename(), 'journal-work-' + tag.pairId + '-' + slot + '.json');
+    const raw = await editor.snapshot();
+    assert.ok(!raw.includes(privateNote));
+    const returned = JSON.parse(raw);
+    assert.deepEqual(returned.blindReview, tag);
+    assert.deepEqual(returned.receipts, [originalReceipt]);
+    assert.equal(returned.rowDrafts[0].data.reason, '별도 근거를 확인 중이다.');
+    await loadWorkspace(editor, returned);
+    assert.equal(editor.el('reason').value, '별도 근거를 확인 중이다.');
+    editor.click('save-review-input');
+    assert.equal(editor.filename(), 'journal-independent-review.json');
+    const clean = JSON.parse(await editor.snapshot());
+    assert.ok(!Object.hasOwn(clean, 'blindReview'));
+    assert.deepEqual(clean.receipts, []);
+    assert.deepEqual(clean.rowDrafts, []);
+    assert.ok(!JSON.stringify(clean).includes(privateNote));
+  }
+});
+
+test('A/B 평가에서 원문을 편집 중인 작업을 다시 열고 되돌릴 수 있고 변경 확정 뒤에는 일반 기사로 저장한다', async t => {
+  const seed = open(t);
+  recordFirstFact(seed);
+  seed.click('save-work');
+  const tagged = JSON.parse(await seed.snapshot());
+  tagged.blindReview = {pairId: 'a'.repeat(32), slot: 'B'};
+  const page = open(t);
+  await loadWorkspace(page, tagged);
+  const replacement = '새 기사입니다.';
+  page.set('article', replacement);
+  assert.match(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.click('save-work');
+  const draft = JSON.parse(await page.snapshot());
+  assert.deepEqual(draft.blindReview, tagged.blindReview);
+  assert.throws(() => page.w.JournalWorkspaceSnapshot.read(draft), /기사를 수정 중/);
+  await loadWorkspace(page, draft);
+  assert.equal(page.el('article').value, replacement);
+  assert.match(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.w.confirm = () => false;
+  page.el('article-form').requestSubmit();
+  assert.equal(page.el('article').value, tagged.article);
+  assert.doesNotMatch(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.click('save-work');
+  assert.deepEqual(JSON.parse(await page.snapshot()).blindReview, tagged.blindReview);
+  page.w.confirm = () => true;
+  page.set('article', replacement);
+  page.el('article-form').requestSubmit();
+  assert.match(page.el('review-status').textContent, /A\/B 표지를 해제/);
+  assert.ok(page.el('blind-notice').hidden);
+  page.click('save-work');
+  assert.equal(page.filename(), 'journal-factcheck-work.json');
+  assert.ok(!Object.hasOwn(JSON.parse(await page.snapshot()), 'blindReview'));
+});
+
+test('연습 기사나 표지 없는 기존 파일을 열면 이전 A/B 표지를 지우고 추가 역할 필드가 있는 표지도 전달하지 않는다', async t => {
+  const page = open(t);
+  page.click('load-demo');
+  page.click('save-review-input');
+  const old = JSON.parse(await page.snapshot());
+  const tag = {pairId: 'b'.repeat(32), slot: 'A'};
+  for (const replace of [
+    () => page.click('load-demo'),
+    () => loadWorkspace(page, old),
+    () => loadWorkspace(page, {...old, blindReview: {...tag, role: 'private-version'}})
+  ]) {
+    await loadWorkspace(page, {...old, blindReview: tag});
+    assert.ok(!page.el('blind-notice').hidden);
+    await replace();
+    assert.ok(page.el('blind-notice').hidden);
+    page.click('save-work');
+    assert.equal(page.filename(), 'journal-factcheck-work.json');
+    const raw = await page.snapshot();
+    assert.ok(!Object.hasOwn(JSON.parse(raw), 'blindReview'));
+    assert.ok(!raw.includes('private-version'));
+  }
 });
 
 test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가는 근거가 일치할 때만 복원한다', async t => {

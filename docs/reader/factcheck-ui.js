@@ -40,6 +40,7 @@
     {id: 'briefing', title: '들길당 브리핑 속기록 (모의 자료)', url: 'https://example.invalid/journal/briefing', version: '연습 판본 1', locator: '대변인 발언 02분 10초', excerpt: '들길당 대변인: 운영비가 두 배가 될 것이라고 봅니다. 이는 우리 당의 전망이며 시가 발표한 확정액은 아닙니다.'}
   ];
   let article = '', sources = [], receipts = [], demo = false, result = null;
+  let blindReview = null;
   let currentId = null, editingId = null, sourceForRow = null, dirty = false;
   let latestImport = 0;
   let drafts = new Map();
@@ -65,6 +66,15 @@
     const target = byId(id);
     target.textContent = text;
     target.classList.toggle('error', error);
+  }
+  function showBlindNotice() {
+    const notice = byId('blind-notice');
+    notice.hidden = !blindReview;
+    const action = byId('article').value === article
+      ? '평가를 마치면 ‘작업 파일 내려받기’로 저장하세요.'
+      : '원문을 수정 중입니다. 배부받은 원문으로 되돌려야 이 묶음에서 비교할 수 있습니다. 바꾼 원문을 확정하면 A/B 표지가 해제됩니다.';
+    const text = blindReview ? '블라인드 평가 ' + blindReview.slot + ' · 묶음 ' + blindReview.pairId.slice(0, 8) + ' · ' + action : '';
+    if (notice.textContent !== text) notice.textContent = text;
   }
   function button(text, action) {
     const el = node('button', text);
@@ -388,7 +398,7 @@
     }
     byId(find ? 'document-text' : 'source-title').focus();
   }
-  function resetWork(text, initialSources, initialReceipts, sample) {
+  function resetWork(text, initialSources, initialReceipts, sample, tag = null) {
     window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
     articleAssessment = null;
@@ -397,10 +407,12 @@
     sources = initialSources;
     receipts = initialReceipts;
     demo = sample;
+    blindReview = tag;
     drafts = new Map();
     currentId = null;
     clearSourceForm();
     byId('article').value = text;
+    showBlindNotice();
     byId('document-text').value = '';
     clearSearchContext();
     byId('finder-results').replaceChildren();
@@ -444,13 +456,13 @@
     return {recovered, unmapped};
   }
   // An earlier decision becomes an unconfirmed draft: the reviewer must check it again.
-  function draftFrom(d) {
+  function draftFrom(d, afterEdit = true) {
     return {
       status: d.status || '', reason: d.reason || '', sourceIds: [...(d.sourceIds || [])],
       factSpan: d.factSpan || '', opinionSpan: d.opinionSpan || '', correction: d.correction || '',
       contentStatus: d.contentStatus || 'unverified', contentSourceIds: [...(d.contentSourceIds || [])],
       contentReason: d.contentReason || '', acknowledged: false, correctionChecked: false, contentChecked: false,
-      afterEdit: true
+      afterEdit
     };
   }
 
@@ -465,6 +477,7 @@
         if (unmapped && !confirm('검토한 구간 또는 주변 문맥이 달라져 이전 입력 ' + unmapped + '개를 새 기사에 옮길 수 없습니다. 계속할까요? 취소하면 기존 기사를 유지하므로 작업 파일을 먼저 저장할 수 있습니다.')) {
           byId('article').value = article;
           byId('workspace').hidden = false;
+          showBlindNotice();
           message('article-status', '기존 기사와 판단을 유지했습니다. 이전 작업을 보관하려면 작업 파일을 내려받으세요.');
           return;
         }
@@ -472,9 +485,14 @@
         receipts = [];
         currentId = null;
         if (recovered.size || unmapped) recoveryMessage = '이전 입력 ' + recovered.size + '개를 확인 전 초안으로 옮겼습니다. 문맥이 달라 옮기지 않은 입력은 ' + unmapped + '개입니다.';
+        if (blindReview) {
+          blindReview = null;
+          recoveryMessage = ['원문을 변경해 A/B 표지를 해제했습니다.', recoveryMessage].filter(Boolean).join(' ');
+        }
       }
       latestImport++;
       article = text;
+      showBlindNotice();
       dirty = true;
       refresh();
       byId('article-panel').open = false;
@@ -484,11 +502,15 @@
   });
   byId('article').addEventListener('input', () => {
     dirty = true;
+    showBlindNotice();
     byId('workspace').hidden = byId('article').value !== article || !article;
     message('article-status', byId('workspace').hidden && article ? '변경한 원문을 검토하려면 검토 목록을 다시 만드세요.' : '');
   });
   byId('new-work').addEventListener('click', () => {
-    if (canReplace()) { dirty = false; location.reload(); }
+    if (!canReplace()) return;
+    dirty = false;
+    latestImport++;
+    location.reload();
   });
   byId('load-demo').addEventListener('click', () => {
     if (!canReplace()) return;
@@ -847,16 +869,20 @@
   function sourceFormData() {
     return Object.fromEntries(sourceFields.map(k => [k, byId('source-' + k).value]));
   }
-  function exportWork() {
-    if (!hasWork()) return message('file-status', '저장할 기사를 먼저 입력하세요.', true);
+  function currentWork() {
     const rowDrafts = [...drafts].map(([rowId, data]) => ({rowId, data: {...data, acknowledged: false, correctionChecked: false, contentChecked: false}}));
-    const workspace = {
+    return {
       format: schema, article, sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: byId('article').value,
+      ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
         ...(suggestedLocator ? {suggestedLocator} : {})}
     };
+  }
+  function exportWork() {
+    if (!hasWork()) return message('file-status', '저장할 기사를 먼저 입력하세요.', true);
     try {
-      download(JSON.stringify(workspace, null, 2), 'journal-factcheck-work.json', 'application/json');
+      const name = blindReview ? 'journal-work-' + blindReview.pairId + '-' + blindReview.slot + '.json' : 'journal-factcheck-work.json';
+      download(JSON.stringify(currentWork(), null, 2), name, 'application/json');
       message('file-status', '작업 파일 내려받기를 요청했습니다. 닫기 전에 파일이 저장됐는지 확인하세요.');
     } catch (err) { message('file-status', '작업 파일을 만들 수 없습니다. ' + err.message, true); }
   }
@@ -864,16 +890,8 @@
     if (!result?.rows.length || byId('article').value !== article) {
       return message('file-status', '현재 기사로 검토 목록을 만든 뒤 독립 평가용 파일을 저장하세요.', true);
     }
-    // Only the article and committed evidence are shared. Imported files can carry
-    // additional user metadata; select the fields the source form actually uses.
-    const packet = {
-      format: schema, article, articleDraft: article, demo,
-      sources: sources.map(source => Object.fromEntries(['id', ...sourceFields]
-        .filter(key => source[key] != null).map(key => [key, source[key]]))),
-      receipts: [], rowDrafts: [], articleAssessment: null, articleAssessmentDraft: null,
-      currentId: null, sourceDraft: {id: null, fields: Object.fromEntries(sourceFields.map(key => [key, '']))}
-    };
     try {
+      const packet = workspace.independentInput(currentWork());
       download(JSON.stringify(packet, null, 2), 'journal-independent-review.json', 'application/json');
       message('file-status', '독립 평가용 파일 내려받기를 요청했습니다. 두 편집자는 이 파일을 각자 열고 평가한 뒤 작업 파일을 저장하세요.');
     } catch (err) { message('file-status', '독립 평가용 파일을 만들 수 없습니다. ' + err.message, true); }
@@ -884,12 +902,23 @@
     if (!canReplace()) return;
     const hasJudgments = w.receipts.length > 0 || w.rowDrafts.length > 0 || w.articleAssessment != null || w.articleAssessmentDraft != null;
     const trust = !hasJudgments || confirm('이 파일의 판단과 작성 중인 초안을 본인 또는 신뢰하는 검토자가 기록했습니까? 확인을 누르면 해당 기록을 복원합니다. 취소를 누르면 기사와 원자료만 열어 새로 검토합니다.');
-    const keep = trust ? w.receipts.filter(r => r && typeof r.rowId === 'string') : [];
-    engine.prepare(w.article || w.articleDraft, w.sources, keep);
-    resetWork(w.article || w.articleDraft, w.sources, keep, w.demo || w.sources.some(isMock));
+    const text = w.article || w.articleDraft;
+    let keep = trust ? w.receipts.filter(r => r && typeof r.rowId === 'string') : [];
+    const checked = engine.prepare(text, w.sources, keep);
+    const blindFile = Object.hasOwn(w, 'blindReview');
+    const tag = w.article.trim() ? workspace.blindTag(w.blindReview) : null;
+    // A returned blind file may carry extra metadata on evidence, decisions or drafts.
+    // Restore only the fields understood by the editor, including for a malformed tag.
+    const catalog = blindFile ? w.sources.map(workspace.sourceInput) : w.sources;
+    if (blindFile) keep = checked.rows.map(row => row.receipt || row.priorDecision).filter(Boolean);
+    resetWork(text, catalog, keep, w.demo || catalog.some(isMock), tag);
     if (trust) {
       const validIds = new Set(result.rows.map(r => r.id));
-      drafts = new Map(w.rowDrafts.filter(d => validIds.has(d.rowId)).map(d => [d.rowId, {...d.data, acknowledged: false, correctionChecked: false, contentChecked: false}]));
+      drafts = new Map(w.rowDrafts.filter(d => validIds.has(d.rowId)).map(({rowId, data}) => {
+        const restored = blindFile ? {...draftFrom(data, data.afterEdit === true), sourceEdit: data.sourceEdit === true}
+          : {...data, acknowledged: false, correctionChecked: false, contentChecked: false};
+        return [rowId, restored];
+      }));
       currentId = validIds.has(w.currentId) ? w.currentId : null;
       const prefill = sources.find(s => s.id === w.sourceDraft.prefillId);
       clearSourceForm(prefill);
@@ -905,6 +934,7 @@
         suggestedLocator = byId('source-locator').value;
       refresh();
       byId('article').value = w.articleDraft;
+      showBlindNotice();
       if (w.articleDraft !== article) {
         byId('article-panel').open = true;
         byId('workspace').hidden = true;
