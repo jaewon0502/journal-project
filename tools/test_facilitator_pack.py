@@ -88,6 +88,7 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertEqual(set(reviewer.namelist()), {'factcheck.html'} | dependencies.local)
                 self.assertNotIn('blind-revision.js', reviewer.namelist())
                 self.assertNotIn('article-compare.html', reviewer.namelist())
+                self.assertTrue({'retention-case.js', 'retention-notes-ui.js'}.isdisjoint(reviewer.namelist()))
                 self.assertTrue({'revision-series.html', 'revision-series.js', 'revision-series-ui.js',
                                  'revision-series-example.js', 'revision-facts.js',
                                  'revision-facts-view.js', 'revision-evidence-example.js'}.isdisjoint(reviewer.namelist()))
@@ -101,8 +102,13 @@ class FacilitatorPack(unittest.TestCase):
             out = Path(folder)
             roster = out / '첫-4인-초대명부.json'
             roster.write_bytes(b'private-roster-not-for-distribution')
+            private_case = out / '진행자용-대조기록-예시.json'
+            private_case.write_bytes(b'private-coordinator-notes-not-for-distribution')
             for _ in range(2):
                 subprocess.run([sys.executable, str(builder), '--output', folder], check=True, capture_output=True)
             self.assertEqual(roster.read_bytes(), b'private-roster-not-for-distribution')
-            self.assertEqual({p.name for p in out.iterdir()}, {roster.name, '집계도구.zip'})
+            self.assertEqual(private_case.read_bytes(), b'private-coordinator-notes-not-for-distribution')
+            self.assertEqual({p.name for p in out.iterdir()}, {roster.name, private_case.name, '집계도구.zip'})
+            with ZipFile(out / '집계도구.zip') as rebuilt:
+                self.assertNotIn(private_case.name, rebuilt.namelist())
             self.assertEqual((out / '집계도구.zip').read_bytes(), packet_bytes())

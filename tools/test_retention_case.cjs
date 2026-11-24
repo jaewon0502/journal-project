@@ -16,7 +16,7 @@ const kept = {before:1, after:1, status:'retained', reason:'두 판본과 조사
 
 test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자료·개별 판단과 사후 판단을 복원한다', async () => {
   const inputs = await example.files(), record = await summary(inputs);
-  const saved = cases.create(record, inputs.map(i => ({...i, name:'로컬/기사/' + i.name})), [kept]);
+  const saved = await cases.create(record, inputs.map(i => ({...i, name:'로컬/기사/' + i.name})), [kept]);
   const opened = cases.read(JSON.parse(JSON.stringify(saved)));
   assert.deepEqual(opened.items, inputs.map(({name, data}) => ({name, data})));
   assert.equal(opened.reviewId, series.reviewId(record));
@@ -38,7 +38,7 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
 
 test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않고 자료·판정 이유·수기 기록 변경을 감지한다', async () => {
   const items = await example.files(), record = await summary(items);
-  const saved = cases.create(record, items, [kept]);
+  const saved = await cases.create(record, items, [kept]);
   function reordered(value) {
     if (!value || typeof value !== 'object') return value;
     if (Array.isArray(value)) return value.map(reordered);
@@ -65,13 +65,13 @@ test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않�
   wrong.dimensions[0].first.before = 3;
   assert.deepEqual(series.summarize([wrong]).improved, series.summarize([record]).improved);
   assert.throws(() => cases.verify(saved, wrong), /요약이 일치하지/);
-  assert.throws(() => cases.create(wrong, items, [kept]), /다시 계산한 평가/);
+  await assert.rejects(() => cases.create(wrong, items, [kept]), /다시 계산한 평가/);
   const dirty = structuredClone(items);
   dirty.find(i => i.data.sources).data.sources[0].excerpt += ' 추가';
-  assert.throws(() => cases.create(record, dirty, []), /짝이 맞는/);
-  assert.throws(() => cases.create(record, [items[0], ...items.slice(2)], []), /네 개와 대응표 두 개/);
-  assert.throws(() => cases.create(record, [items[0], items[0], ...items.slice(2)], []), /대응표|묶음/);
-  assert.throws(() => cases.create(record, [{name:'다른.json', data:record}, ...items.slice(1)], []), /작업 파일과 대응표/);
+  await assert.rejects(() => cases.create(record, dirty, []), /배포 후 등록된 원자료/);
+  await assert.rejects(() => cases.create(record, [items[0], ...items.slice(2)], []), /네 개와 대응표 두 개/);
+  await assert.rejects(() => cases.create(record, [items[0], items[0], ...items.slice(2)], []), /대응표|묶음/);
+  await assert.rejects(() => cases.create(record, [{name:'다른.json', data:record}, ...items.slice(1)], []), /작업 파일과 대응표/);
   assert.throws(() => cases.read({...saved, article:'끼워 넣은 값'}), /진행자가 저장한/);
   const extra = structuredClone(saved);
   extra.items[0].path = '별도경로';
@@ -120,10 +120,10 @@ test('현장 형식의 자료와 연습 자료는 서로의 판단을 복원할 
   const record = await summary(inputs), demo = await example.files();
   assert.equal(record.demo, false);
   const note = {before:0, after:null, status:'notFound', reason:'수정본에는 시간 한 건만 실려 있었다.'};
-  const saved = cases.create(record, inputs, [note]);
+  const saved = await cases.create(record, inputs, [note]);
   assert.deepEqual(cases.verify(saved, await summary(cases.read(saved).items)), [note]);
-  assert.throws(() => cases.create(record, demo, []), /연습·실제/);
+  await assert.rejects(() => cases.create(record, demo, []), /연습·실제/);
   const old = {...record, version:2}; delete old.factMatches;
   assert.throws(() => cases.verify(saved, old));
-  assert.throws(() => cases.create(old, inputs, []));
+  await assert.rejects(() => cases.create(old, inputs, []));
 });

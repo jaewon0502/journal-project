@@ -118,6 +118,71 @@ test('원본 사실 대조 링크는 같은 문구라도 문맥이 바뀐 위치
   }
 });
 
+test('사후 대조한 개인 파일 하나로 이어 열고 두 편집자의 익명 요약을 그대로 내보낸다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const series = require('../docs/reader/revision-series.js');
+  const p = page(t, '#blind-revision');
+  const items = await example.files();
+  p.selectFiles('blind-bundle-files', items.map(item => ({name:item.name, text:async () => item.raw})));
+  await t.waitFor(() => assert.ok(p.el('agreement-export')));
+  function capture(view) {
+    let downloaded;
+    view.w.Blob = Blob;
+    view.w.URL.createObjectURL = value => { downloaded = value; return 'blob:local-file'; };
+    view.w.URL.revokeObjectURL = () => {};
+    view.w.HTMLAnchorElement.prototype.click = function () {};
+    return async button => {
+      downloaded = null;
+      button.click();
+      await t.waitFor(() => assert.ok(downloaded));
+      return JSON.parse(await downloaded.text());
+    };
+  }
+  const download = capture(p);
+  const original = await download(p.el('agreement-export'));
+  const row = p.el('joint-facts').querySelector('[data-retention-before="1"]');
+  const reason = '두 판본 모두 조사한 도서관 100곳 중 20곳으로 같은 대상과 수치를 명시했다.';
+  const edit = (el, value, event) => {
+    el.value = value;
+    el.dispatchEvent(new p.w.Event(event, {bubbles:true}));
+  };
+  edit(row.querySelector('[data-retention-state]'), 'retained', 'change');
+  edit(row.querySelector('[data-retention-target]'), '2', 'input');
+  edit(row.querySelector('[data-retention-reason]'), reason, 'input');
+  const saved = await download(p.el('joint-facts').querySelector('[data-retention-save]'));
+  assert.equal(saved.items.length, 6);
+  assert.deepEqual(saved.notes, [{before:1, after:1, status:'retained', reason}]);
+  const file = value => ({name:'진행자용 대조 기록.json', text:async () => JSON.stringify(value)});
+  const fresh = page(t, '#blind-revision');
+  fresh.selectFiles('blind-bundle-files', [file(saved)]);
+  await t.waitFor(() => assert.ok(fresh.el('agreement-export')));
+  const summary = fresh.el('joint-facts').querySelector('[data-retention-summary]');
+  assert.match(summary.textContent, /자동 대응으로 확인 0개.*진행자가 유지 확인 1개.*검토 남음 0개/);
+  assert.equal(fresh.w.document.activeElement, summary);
+  assert.equal(fresh.el('joint-facts').querySelector('[data-retention-reason]').value, reason);
+  assert.deepEqual(await capture(fresh)(fresh.el('agreement-export')), original);
+  assert.equal(JSON.stringify(original).includes(reason), false);
+
+  const linked = page(t, '#review=' + series.reviewId(original) + '&focus=retention');
+  const bad = structuredClone(saved);
+  bad.notes[0].reason = '파일에 기록된 판단을 바꿈';
+  linked.selectFiles('blind-bundle-files', [file(bad)]);
+  await t.waitFor(() => assert.ok(linked.el('blind-bundle-status').classList.contains('error')));
+  assert.equal(linked.el('result').hidden, true);
+  linked.el('blind-bundle-clear').click();
+  linked.selectFiles('blind-bundle-files', [file(saved)]);
+  await t.waitFor(() => assert.ok(linked.el('joint-facts')));
+  assert.equal(linked.el('joint-facts').querySelector('[data-retention-reason]').value, reason);
+  assert.equal(linked.el('agreement-export'), null);
+  const practice = page(t, '#review=' + series.reviewId(original) + '&focus=retention&example=library');
+  await t.waitFor(() => assert.ok(practice.el('joint-facts')));
+  practice.el('review-example-resume').click();
+  assert.equal(practice.w.document.activeElement, practice.el('blind-bundle-files'));
+  practice.selectFiles('blind-bundle-files', [file(saved)]);
+  await t.waitFor(() => assert.match(practice.el('review-target-status').textContent, /대조 기록을 복원/));
+  assert.equal(practice.el('joint-facts').querySelector('[data-retention-reason]').value, reason);
+});
+
 test('다른 폴더의 같은 이름 파일도 모아서 비교하고 잘못 고른 한 개만 교체한다', async t => {
   const p = page(t, '#blind-revision');
   const before = require('../experiments/article-review-pilot/a-original.json');

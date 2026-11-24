@@ -4,6 +4,7 @@
   const useNode = typeof module === 'object' && !!module.exports;
   const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const workspace = useNode ? require('./workspace-snapshot.js') : root.JournalWorkspaceSnapshot;
+  const blind = useNode ? require('./blind-revision.js') : root.JournalBlindRevision;
   const series = useNode ? require('./revision-series.js') : root.JournalRevisionSeries;
   const agreement = useNode ? require('./revision-agreement.js') : root.JournalRevisionAgreement;
   const format = 'journal-retention-case';
@@ -54,7 +55,9 @@
       }
       if (typeof reason !== 'string' || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/u.test(reason) ||
           (status !== 'open' && !/[\p{L}\p{N}]/u.test(reason))) {
-        throw new Error('원본과 수정본을 대조한 판단 이유를 적으세요.');
+        const error = new Error('원본과 수정본을 대조한 판단 이유를 적으세요.');
+        error.before = before;
+        throw error;
       }
       return {before, after, status, reason};
     });
@@ -79,41 +82,18 @@
     return checkedNotes(record, notes);
   }
 
-  // The caller has resolved these inputs. Recheck the binding at save time as a record can outlive a file selection.
-  function originalReviewId(items, record) {
-    const keys = items.map(item => item.data).filter(data => data.format === keyFormat);
-    if (keys.length !== 2) throw new Error('각 편집자의 대응표가 하나씩 필요합니다.');
-    const used = new Set();
-    const reviews = keys.map(key => {
-      if (key.demo !== record.demo) throw new Error('대조 기록의 연습·실제 기사 구분이 다릅니다.');
-      const review = {key};
-      for (const role of ['before', 'after']) {
-        const side = key.mapping?.[role];
-        const work = items.find(({data}) => data.format === workspace.schema && data.blindReview?.pairId === key.pairId &&
-          data.blindReview.slot === side?.slot)?.data;
-        if (!work || !workspace.blindTag(work.blindReview) || used.has(work) ||
-            side.articleSha256 !== record[role].articleSha256 || side.sourcesSha256 !== record[role].sourcesSha256 ||
-            digest(work.article) !== side.articleSha256 || !Array.isArray(work.sources) ||
-            digest(workspace.sourceIdentities(work.sources)) !== side.sourcesSha256) {
-          throw new Error('대조 중인 원본·수정본과 짝이 맞는 작업 파일과 대응표를 선택하세요.');
-        }
-        used.add(work);
-        review[role] = work;
-      }
-      return review;
-    });
-    return series.reviewId(series.makeRecord(agreement.compare(...reviews), keys[0]));
-  }
-
   function noteChecksum(reviewId, evidenceDigest, notes) {
     return digest([format, 1, reviewId, evidenceDigest, notes.map(n => [n.before, n.after, n.status, n.reason])]);
   }
 
-  function create(record, items, notes) {
+  async function create(record, items, notes) {
     const reviewId = series.reviewId(record, 3);
     const embedded = copyItems(items, false);
-    if (originalReviewId(embedded, record) !== reviewId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
     const saved = checkedNotes(record, notes);
+    const reviews = await blind.resolveBundle(embedded);
+    if (reviews[0].key.demo !== record.demo) throw new Error('대조 기록의 연습·실제 기사 구분이 다릅니다.');
+    const rebuilt = series.makeRecord(agreement.compare(...reviews), reviews[0].key);
+    if (series.reviewId(rebuilt) !== reviewId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
     const evidenceDigest = evidenceId(embedded);
     return {format, version:1, reviewId, evidenceDigest, items:embedded, notes:saved,
       checksum:noteChecksum(reviewId, evidenceDigest, saved)};

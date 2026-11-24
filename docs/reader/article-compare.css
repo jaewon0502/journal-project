@@ -25,3 +25,9 @@ footer{padding-block:1rem;border-top:1px solid var(--line)}.skip{position:absolu
 @media(max-width:630px){.pair{grid-template-columns:minmax(0,1fr)}header nav{gap:8px}th,td{padding:.38rem .2rem}.metric{padding:.6rem}.metrics{gap:6px}}
 @media(max-width:340px){.metrics{grid-template-columns:minmax(0,1fr)}}
 .joint-levels{display:block;font-weight:400;margin-left:1rem}
+.retention-note-summary{margin:1rem 0;padding:.75rem;border-left:3px solid #9eb2a4;background:var(--aqua)}
+.retention-note-form{min-width:0;margin:.75rem 0;padding:.7rem;border:1px solid var(--line);border-radius:5px}
+.retention-note-form legend,.retention-note-form label{font-weight:650}
+.retention-note-form label{display:block;margin:.45rem 0}
+.retention-note-form :is(input,select,textarea){max-width:100%;padding:.4rem;font:inherit;color:var(--ink)}
+.retention-note-form textarea{width:100%;resize:vertical}

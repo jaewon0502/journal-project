@@ -8,6 +8,7 @@
   const returns = ['first', 'second', 'key'];
   const returnInput = id => byId('blind-return-' + id);
   let bundleFiles = [];
+  const bundleReads = new WeakMap();
   let reviewTarget = null;
   let generation = 0, recovery = 0;
   let kit = null, preparing = false, resolving = false;
@@ -59,7 +60,7 @@
     byId('ack').checked = false;
     message('');
     if (reviewTarget?.id && !reviewTarget.example) {
-      blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표를 선택하세요.');
+      blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표 또는 저장한 진행자용 대조 기록을 선택하세요.');
     }
   }
   function updateInputs() {
@@ -452,6 +453,7 @@
       if (after !== null && joint.facts.after[after].outcome === 'supported') continue;
       const originalRow = editors[0].snapshots[0].rows[before], text = originalRow.text;
       const item = detail('원본 ' + (before + 1) + '번 · ' + text);
+      item.dataset.retentionBefore = before;
       const candidate = after === null ? wording.get(text) : null;
       for (const [edition, index] of [before, after ?? candidate].entries()) {
         if (index == null) {
@@ -481,7 +483,7 @@
       panel.append(fullText);
     }
   }
-  function jointFactPanel(joint, editors) {
+  function jointFactPanel(joint, editors, record, notes = []) {
     const panel = section('편향 평가와 함께 본 사실 판정');
     panel.id = 'joint-facts';
     const before = window.JournalRevisionFacts.summarize(joint.facts.before);
@@ -490,6 +492,14 @@
       '두 사람이 개선으로 본 편향 항목 ' + joint.improved.numerator + '개 · 수정본에서 한 명 이상 원자료와 충돌한다고 표시한 구절 ' +
         after.flagged + '개', 'warn'));
     jointRetention(panel, joint, editors);
+    if (record && panel.querySelector('.fact-retention')) {
+      window.JournalRetentionNotesUI.mount({container:panel, record, editors, notes, decisionEvidence,
+        async onSave(entries) {
+          const items = editors.flatMap(editor => [editor.keyFile, ...editor.ordered]);
+          const saved = await window.JournalRetentionCase.create(record, items, entries);
+          downloadJson(saved, '진행자용-대조기록-' + record.before.articleSha256.slice(0, 12) + '.json');
+        }});
+    }
     panel.append(window.JournalRevisionFactsView(before, after));
     for (const role of ['after', 'before']) {
       const isAfter = role === 'after';
@@ -526,7 +536,7 @@
     }
     return panel;
   }
-  function jointPanel(current, priorReview) {
+  function jointPanel(current, priorReview, reopened) {
     const panel = section('두 편집자가 함께 확인한 변화');
     panel.id = 'revision-agreement';
     if (!priorReview) {
@@ -544,7 +554,7 @@
       return panel;
     }
     let joint;
-    try { joint = window.JournalRevisionAgreement.compare(priorReview, current); }
+    try { joint = reopened?.joint ?? window.JournalRevisionAgreement.compare(priorReview, current); }
     catch (error) {
       panel.append(element('p', error.message, 'warn'), note('아래 수치는 방금 연 편집자 한 사람의 결과입니다.'));
       return panel;
@@ -564,6 +574,7 @@
     series.target = '_blank';
     series.rel = 'noopener';
     const actions = element('div', null, 'actions');
+    let record;
     if (joint.missingReturns.length) {
       const warning = element('div', null, 'warn');
       warning.id = 'missing-returns';
@@ -582,7 +593,7 @@
       warning.append(list, note('현재 들어온 판정은 아래에서 확인할 수 있습니다. 해당 편집자가 판정을 기록한 결과 파일로 교체하면 기사별 요약을 저장할 수 있습니다.'));
       panel.append(warning);
     } else {
-      const record = window.JournalRevisionSeries.makeRecord(joint, current.key);
+      record = reopened?.record ?? window.JournalRevisionSeries.makeRecord(joint, current.key);
       const save = element('button', '기사별 평가 요약 저장');
       save.type = 'button';
       save.id = 'agreement-export';
@@ -611,10 +622,10 @@
       item.append(pair);
       panel.append(item);
     }
-    panel.append(jointFactPanel(joint, editors), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
+    panel.append(jointFactPanel(joint, editors, record, reopened?.notes), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
     return panel;
   }
-  function show(snapshots, synthetic, restored, priorReview = firstReview) {
+  function show(snapshots, synthetic, restored, priorReview = firstReview, reopened) {
     try {
       const c = window.JournalArticleCompare.compare(...snapshots, mode());
       const output = byId('output');
@@ -654,7 +665,7 @@
         }
       }
       if (restored) {
-        const joint = jointPanel(restored, priorReview);
+        const joint = jointPanel(restored, priorReview, reopened);
         if (joint) output.append(joint);
       }
       output.append(biasPanel(c, snapshots), accuracyPanel(c, snapshots), mode() === 'revision' ? revisionFacts(c, snapshots) : reviewerFacts(c, snapshots));
@@ -662,8 +673,12 @@
       showingExample = synthetic;
       byId('example').textContent = synthetic ? '가상 예시 닫기' : '가상 예시 보기';
       message(sample ? '가상 비교 결과를 열었습니다.' : '작업 파일 비교를 마쳤습니다.');
-      byId('result-title').focus();
-      byId('result').scrollIntoView?.({block: 'start'});
+      if (reopened && byId('joint-facts')?.querySelector('.fact-retention')) {
+        focusReviewGroup(byId('joint-facts').querySelector('.fact-retention'), true);
+      } else {
+        byId('result-title').focus();
+        byId('result').scrollIntoView?.({block: 'start'});
+      }
     } catch (error) {
       clearResults(); updateInputs();
       message(error.message, true);
@@ -732,8 +747,23 @@
       list.append(item);
     });
   }
-  function showTargetEvidence(reviews) {
-    const joint = window.JournalRevisionAgreement.compare(...reviews);
+  function focusReviewGroup(group, resume) {
+    const pending = resume && group.querySelector('[data-retention-pending="true"]');
+    const finished = resume && !pending && group.parentNode.querySelector('[data-retention-summary]');
+    if (finished) {
+      finished.tabIndex = -1;
+      finished.focus();
+      finished.scrollIntoView?.({block:'start'});
+      return;
+    }
+    const row = pending || group.querySelector('details');
+    group.open = true;
+    row.open = true;
+    row.firstElementChild.focus();
+    row.firstElementChild.scrollIntoView?.({block:'start'});
+  }
+  function showTargetEvidence(reviews, reopened) {
+    const joint = reopened?.joint ?? window.JournalRevisionAgreement.compare(...reviews);
     if (joint.missingReturns.length) {
       const missing = joint.missingReturns.map(({editor, role}) => {
         const file = reviews[editor].ordered[role === 'before' ? 0 : 1];
@@ -741,13 +771,13 @@
       });
       throw new Error('저장된 판정을 확인할 수 없는 파일이 있습니다. ' + missing.join(', ') + ' 파일을 교체하세요.');
     }
-    const record = window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
+    const record = reopened?.record ?? window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
     const series = window.JournalRevisionSeries;
     if (series.reviewId(record) !== reviewTarget.id &&
         (reviewTarget.retention || series.reviewId(record, 2) !== reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
-    const panel = jointFactPanel(joint, reviews);
+    const panel = jointFactPanel(joint, reviews, record, reopened?.notes);
     const group = panel.querySelector(reviewTarget.retention ? '.fact-retention' : '.fact-alerts[data-edition="after"]');
     const first = group?.querySelector('details');
     if (!first) throw new Error(reviewTarget.retention ? '선택한 요약에는 다시 대조할 원본 사실이 없습니다.'
@@ -756,26 +786,32 @@
       (reviewTarget.retention ? '원본 사실과 수정본 대조' : '수정본의 충돌 구절과 근거');
     byId('output').replaceChildren(panel);
     byId('result').hidden = false;
-    const notice = reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
+    const notice = reopened ? '저장한 진행자용 대조 기록을 복원했습니다.'
+      : reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
     blindStatus('review-target-status', notice + ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.');
-    group.open = first.open = true;
-    const summary = first.querySelector('summary');
-    summary.focus();
-    summary.scrollIntoView?.({block:'start'});
+    focusReviewGroup(group, reviewTarget.retention && !!reopened);
   }
-  async function openReviewFiles(items, current) {
+  async function openReviewFiles(items, current, archive) {
     if (current !== recovery) return;
     const reviews = await window.JournalBlindRevision.resolveBundle(items);
     if (current !== recovery) return;
     for (const review of reviews) {
       review.snapshots = [review.before, review.after].map(work => window.JournalWorkspaceSnapshot.read(work));
+      review.keyFile = items.find(item => item.data === review.key);
+    }
+    let reopened;
+    if (archive) {
+      const joint = window.JournalRevisionAgreement.compare(...reviews);
+      const record = window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
+      reopened = {joint, record, notes:window.JournalRetentionCase.verify(archive, record)};
     }
     if (reviewTarget) {
-      showTargetEvidence(reviews);
+      showTargetEvidence(reviews, reopened);
       blindStatus('blind-bundle-status', '');
     } else {
-      blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 수정 전후 판본이 일치합니다.');
-      show(reviews[1].snapshots, false, reviews[1], reviews[0]);
+      blindStatus('blind-bundle-status', reopened ? '진행자용 기록에서 기사 두 판본과 사후 대조 기록을 복원했습니다.' :
+        '파일 6개의 배정 번호와 수정 전후 판본이 일치합니다.');
+      show(reviews[1].snapshots, false, reviews[1], reviews[0], reopened);
     }
   }
   async function compareBundleSelection() {
@@ -789,11 +825,30 @@
       const message = count > 6 ? '개를 선택했습니다. 작업 파일 4개와 대응표 2개만 남겨 주세요.'
         : '/6개를 선택했습니다.';
       blindStatus('blind-bundle-status', '파일 ' + count + message, count > 6);
-      return;
+      if (!count || count > 6) return;
+    } else {
+      blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 기사 판본을 확인하고 있습니다.');
     }
-    blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 기사 판본을 확인하고 있습니다.');
     try {
-      const items = await Promise.all(bundleFiles.map((file, index) => readReturnFile(file, index + 1)));
+      const items = await Promise.all(bundleFiles.map(async (file, index) => {
+        if (!bundleReads.has(file)) bundleReads.set(file, readJson(file));
+        try { return {...await bundleReads.get(file), position:index + 1}; }
+        catch (error) { throw new Error((index + 1) + '번 파일 ' + file.name + ' · ' + error.message); }
+      }));
+      if (current !== recovery) return;
+      const archive = items.find(item => item.data?.format === window.JournalRetentionCase.format);
+      if (archive) {
+        if (count !== 1) throw new Error('진행자용 대조 기록에는 원래 파일이 모두 들어 있습니다. 해당 기록 한 개만 선택하세요.');
+        const restored = window.JournalRetentionCase.read(archive.data).items.map((item, index) => ({
+          ...item, raw:JSON.stringify(item.data), position:index + 1
+        }));
+        await openReviewFiles(restored, current, archive.data);
+        return;
+      }
+      if (items.some(item => item.data?.format === 'journal-revision-series-record')) {
+        throw new Error('선택한 기사별 평가 요약은 여러 기사 집계용입니다. 여기서는 진행자용 대조 기록이나 당시의 작업 파일과 대응표를 여세요.');
+      }
+      if (count < 6) return;
       await openReviewFiles(items, current);
     } catch (error) {
       if (current === recovery) blindStatus('blind-bundle-status', error.message, true);
@@ -815,7 +870,7 @@
       const code = key.data.pairId.slice(0, 8);
       const snapshots = [result.before, result.after].map(work => window.JournalWorkspaceSnapshot.read(work));
       blindStatus('blind-return-status', '묶음 ' + code + '의 수정 전후 순서를 복원했습니다.');
-      show(snapshots, false, {...result, ordered, code, snapshots, key:key.data});
+      show(snapshots, false, {...result, ordered, code, snapshots, key:key.data, keyFile:key});
     } catch (error) {
       if (current === recovery) blindStatus('blind-return-status', error.message, true);
     } finally {
@@ -874,6 +929,12 @@
   });
   byId('blind-resolve').addEventListener('click', restoreKit);
   const picker = byId('blind-bundle-picker');
+  const resumeExample = byId('review-example-resume');
+  resumeExample.addEventListener('click', () => {
+    resumeExample.hidden = true;
+    picker.hidden = false;
+    bundleInput.focus();
+  });
   const originalParent = picker.parentNode;
   const nextField = picker.nextElementSibling;
   async function openCoordinatorLink() {
@@ -885,6 +946,7 @@
       clearReturnFiles();
       byId('inputs').hidden = requested;
       byId('review-target').hidden = !requested;
+      resumeExample.hidden = true;
       document.querySelector('main > .intro').hidden = requested;
       picker.hidden = false;
       blindStatus('review-target-status', '');
@@ -895,6 +957,7 @@
     if (requested) {
       const match = /^#review=([a-f0-9]{64})(&focus=retention)?(&example=library)?$/.exec(location.hash);
       reviewTarget = {id:match?.[1], retention:!!match?.[2], example:!!match?.[3]};
+      resumeExample.hidden = !(reviewTarget.example && reviewTarget.retention);
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;
       if (!match) {
@@ -903,7 +966,7 @@
         return;
       }
       if (!reviewTarget.example) {
-        blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표를 선택하세요.');
+        blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표 또는 저장한 진행자용 대조 기록을 선택하세요.');
         bundleInput.focus();
         return;
       }

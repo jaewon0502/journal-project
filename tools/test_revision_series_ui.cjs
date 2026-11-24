@@ -174,6 +174,7 @@ test('모든 파일을 확인한 뒤에만 집계하고 오류나 빈 선택이 
     {name: '잘린.json', text: async () => '{'},
     {name: '읽기오류.json', text: async () => {throw new Error('io');}},
     file('작업파일.json', {format: 'journal-local-factcheck-v1'}),
+    file('진행자용.json', {format:'journal-retention-case', notes:[{reason:'화면에 공개하지 않을 판단 이유'}]}),
     file('다른종류.json', {...two, demo: false}),
     file('판본중복.json', {...two, before: one.after}),
   ]) {
@@ -187,6 +188,10 @@ test('모든 파일을 확인한 뒤에만 집계하고 오류나 빈 선택이 
     assert.equal(p.get('series-status').classList.contains('error'), true);
     assert.match(p.get('series-status').textContent, /집계할 수 없습니다\./);
     assert.ok(p.get('series-status').textContent.includes(bad.name), bad.name);
+    if (bad.name === '진행자용.json') {
+      assert.match(p.get('series-status').textContent, /기사 평가 비교에서 다시 열고/);
+      assert.doesNotMatch(p.document.body.textContent, /화면에 공개하지 않을 판단 이유/);
+    }
     if (['다른종류.json', '판본중복.json'].includes(bad.name)) {
       assert.ok(p.get('series-status').textContent.includes('원본.json'));
     }

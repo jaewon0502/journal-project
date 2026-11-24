@@ -145,7 +145,7 @@
       retentionPanel(report, sources));
     if (panel.querySelector('.review-evidence')) panel.append(element('p', builtIn
       ? '연습 기사 링크를 누르면 발언록과 조사표를 새 탭에서 볼 수 있습니다.'
-      : '기사 링크를 누른 뒤 그 기사의 작업 파일 4개와 대응표 2개를 열면 두 편집자의 근거를 대조할 수 있습니다.', 'note'));
+      : '기사 링크를 누른 뒤 그 기사의 작업 파일 4개와 대응표 2개를 여세요. 저장한 진행자용 대조 기록이 있으면 그 파일 하나로 이어서 볼 수 있습니다.', 'note'));
     panel.append(window.JournalRevisionFactsView(facts.before, facts.after));
     return panel;
   }
@@ -222,8 +222,13 @@
     } catch {
       throw new Error(fileName(file) + ' 파일을 읽지 못했습니다.');
     }
-    try { return JSON.parse(raw); }
+    let data;
+    try { data = JSON.parse(raw); }
     catch { throw new Error(fileName(file) + ' 파일에서 JSON을 읽지 못했습니다.'); }
+    if (data?.format === 'journal-retention-case') {
+      throw new Error(fileName(file) + ' 파일은 진행자용 대조 기록입니다. 기사 평가 비교에서 다시 열고, 여기에는 ‘기사별 평가 요약 저장’으로 받은 파일을 선택하세요.');
+    }
+    return data;
   }
 
   function reset() {
