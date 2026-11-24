@@ -109,6 +109,34 @@ test('인용 속 충돌을 원기사 오류에서 분리하고 독립 편집자�
   assert.match(output, /담긴 주장 미확인.*인용 속 사실 주장 충돌/);
 });
 
+test('이전 버전이 부인 발언에서 잘라낸 숫자 반증은 저장 파일을 열어도 완료율과 편집자 일치율에 들지 않는다', async t => {
+  const p = page(t);
+  const article = '의원은 “집행액이 20억 원이었다”고 말한 적이 없다고 밝혔다.';
+  const old = workspace(article);
+  old.sources = [{id:'speech', url:'https://assembly.example/today', version:'1', locator:'1절', excerpt:article},
+    {id:'debate', url:'https://studio.example/yesterday', version:'1', locator:'3분', excerpt:'의원은 어제 집행액이 20억 원이었다고 말했다.'}];
+  // Exact receipt issued before the speech-act guard. The sources establish
+  // that he previously made the statement; neither establishes the amount.
+  old.receipts = [{protocol:'journal-review/1', rowId:'unit-0',
+    articleBinding:'c8c023710d1c50e7cdc6cf274c3ab329b569ffbcfe62e91aed6ce383e826184f',
+    binding:'bb899902f41a10add4a198b8972369bda30e097ad85dc26c69ceef3a8f257d64',
+    references:'17a10177599d38ed20c5978bf67613c515e2d6fe98735d1b9acbc36ceba7b647', recordedAt:'2026-11-24T16:01:16.587Z',
+    status:'attribution', sourceIds:['speech'], reason:'오늘 부인 발언을 그대로 옮겼다.', acknowledged:true,
+    contentStatus:'contradicted', contentChecked:true, contentReason:'어제 토론 영상에 해당 발언이 있다.', contentSourceIds:['debate'],
+    contentClaim:'집행액이 20억 원이었다', checksum:'4a81f29c3b94c0084c206f3070489537329a82d77ed53f6539b798e0c8b2a663'}];
+  const restored = engine.report(article, old.sources, old.receipts);
+  assert.equal(restored.complete, false);
+  assert.equal(restored.contentContradictedCount, 0);
+  assert.equal(restored.rows[0].priorDecision, null);
+  const current = {...old, receipts:[engine.decide(restored.rows[0], {...old.receipts[0], contentStatus:'unverified'}, old.sources)]};
+  p.load('left','종전 판정.json',JSON.stringify(old)); p.load('right','귀속 확인.json',JSON.stringify(current));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  assert.match(p.el('output').textContent, /판정 완료율0% \(0\/1\)0% \(0\/1\)/);
+  assert.doesNotMatch(p.el('output').textContent, /인용 속 사실 주장 충돌 1개/);
+  p.reviewers(); p.el('compare').click();
+  assert.match(p.el('output').textContent, /산출 대기 \(0\/0\)/);
+});
+
 test('완료율이 그대로여도 사라진 원본 충돌 구절과 확인한 정정 문구·원문 쪽을 제시한다', async t => {
   const p = page(t);
   const source = {id: 'table', title: '시험 원표', url: 'https://example.org/report.pdf', version: '확정본',

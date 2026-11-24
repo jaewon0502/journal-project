@@ -167,6 +167,29 @@ test('문서 식별 쿼리는 유지하며 전재·추적 주소·같은 발췌�
     {originUrl: transcript.url}, {excerpt: transcript.excerpt}]) assert.throws(() => check({...audit, ...changed}));
 });
 
+test('같은 뷰어의 문서 주소를 구분하고 페이지·서명·추적값이 다른 같은 문서는 독립 근거에서 제외한다', () => {
+  const article = '의원은 “집행액은 20억 원이었다”고 말했다.';
+  const base = 'https://archive.example/reader';
+  function inspect(left, right, state) {
+    const refs = [{...source, url:base + left, excerpt:article}, {...source, id:'audit', url:base + right, excerpt:'결산표에 같은 연도 지출은 10억 원이다.'}];
+    const row = prepare(article, refs).rows[0];
+    return decide(row, {...decision, status:'attribution', contentStatus:state, contentChecked:true,
+      contentReason:'원자료에서 같은 기간의 같은 예산 항목을 대조했다.', contentSourceIds:['audit']}, refs);
+  }
+  for (const state of ['supported','contradicted']) {
+    for (const route of ['#/docs/', '#!/docs/', '#!doc/', '#file=', '#docId=']) {
+      assert.equal(inspect(route + 'A', route + 'B', state).contentStatus, state);
+    }
+    for (const [left, right] of [
+      ['#/docs/A?zoom=90&token=1', '#!/docs/A?utm_source=archive#fig2'],
+      ['#/reader?doc=A&page=1', '#/reader?zoom=120&doc=A'],
+      ['#' + new URLSearchParams({file:'A', zoom:'100', access_token:'fixture'}), '#file=A&page=3'],
+      ['?docId=A&signature=1#heading', '?utm_medium=view&docId=A&signature=2#summary:~:text=word'],
+      ['#page=2', '#section-10'], ['#utm_source=view', '#chapter']
+    ]) assert.throws(() => inspect(left, right, state), /다른 원자료/);
+  }
+});
+
 test('전재 경로를 잇는 중간 자료가 들어오면 기존 내용 확인도 다시 연다', () => {
   const article = '대변인은 “예산이 늘었다”고 밝혔다.';
   const speech = {...source, id: 'speech', url: 'https://press.example/brief', excerpt: '대변인 발언 원문'};
@@ -260,8 +283,23 @@ test('귀속이 정확한 인용 내용에 직접 반증이 있으면 두 결론
   }
   for (const text of ['위원장은 “내년 집행액이 두 배가 될 것”이라고 말했다.', '위원장은 “무책임하다”고 말했다.',
     '위원장은 ‘내년 물가는 5%일 것이다’라고 말했다.', '위원장은 “10억 원을 집행했고 30억 원을 새로 의결했다”고 말했다.',
-    '위원장은 ‘집행액은 20억 원’이며 ‘참여자는 80명’이라고 말했다.', '위원장은 「예산안」을 폐기했다고 밝혔다.']) {
-    assert.throws(() => decide(prepare(text, refs).rows[0], say, refs));
+    '위원장은 ‘집행액은 20억 원’이며 ‘참여자는 80명’이라고 말했다.', '위원장은 「예산안」을 폐기했다고 밝혔다.',
+    '의원은 “집행액이 20억 원이었다”고 말한 적이 없다고 밝혔다.', '의원은 “집행액은 20억 원이었다”라고 말하지 않았다.',
+    '의원은 “집행액은 20억 원이었나요?”라고 물었다.', '의원은 “집행액은 20억 원이었나요”라고 말했다.',
+    '의원은 “내년에 예산을 20억 원으로 편성하겠다”고 말했다.', '의원은 “예산이 20억 원이면 공사를 시작하겠다”고 약속했다.',
+    '의원은 “집행액은 20억 원, 참여자는 100명이었다”고 말했다.', '의원은 “예산은 20억 원에 참여자는 100명이었다”고 말했다.',
+    '의원은 내년에 예산 20억 원을 마련하겠다고 밝혔다.']) {
+    const [r] = prepare(text, refs).rows;
+    assert.throws(() => decide(r, say, refs), undefined, text);
+    assert.equal(decide(r, {...say, contentStatus:'unverified'}, refs).contentStatus, 'unverified', text);
+  }
+  // A negative statement about the amount is itself checkable. Its full scope
+  // keeps the negation; decimal and thousands separators are not claim breaks.
+  const negative = '실제 집행액은 1,230.5억 원이 아니었다';
+  assert.equal(decide(prepare('의원은 “' + negative + '”고 말했다.', refs).rows[0], say, refs).contentClaim, negative);
+  for (const text of ['의원은 “집행액이 20억 원이었다”고 말한 적이 없다고 밝혔다.', '의원은 “집행액은 20억 원이었다”라고 말하지 않았다.',
+    '의원은 “집행액은 20억 원이었나요?”라고 물었다.', '의원은 “내년에 예산을 20억 원으로 편성하겠다”고 말했다.']) {
+    assert.throws(() => decide(prepare(text, refs).rows[0], {...say, contentStatus:'supported'}, refs), /내용 미확인/, text);
   }
 });
 

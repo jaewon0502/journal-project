@@ -61,6 +61,30 @@
 
   const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
     'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
+  function documentParams(query, fragment = false) {
+    const params = new URLSearchParams(query);
+    for (const key of [...params.keys()]) {
+      if (/^(?:utm_.*|gclid|fbclid|page|pageNo|token|access_token|signature|expires)$/iu.test(key)
+          || (fragment && (pdfViewParameters.has(key.toLowerCase()) || /^(?:section|anchor|tab)$/iu.test(key)))) params.delete(key);
+    }
+    params.sort();
+    return params.toString();
+  }
+  // A viewer may select the document in a hash route or parameter. Anchors,
+  // PDF pages, and tracking tokens change the view without changing its source.
+  function documentSelector(hash) {
+    const fragment = hash.slice(1).split('#', 1)[0].split(':~:', 1)[0];
+    if (!fragment) return '';
+    const route = /^(!?[^?=&]*\/[^?=&]*|![^?=&]+)(?:\?(.*))?$/u.exec(fragment);
+    if (route) {
+      const query = documentParams(route[2], true);
+      const path = route[1].replace(/^!/u, '').replace(/\/+$/u, '');
+      return path || query ? '#' + path + (query ? '?' + query : '') : '';
+    }
+    if (!fragment.includes('=')) return '';
+    const selector = documentParams(fragment.replace(/^\?/u, ''), true);
+    return selector ? '#' + selector : '';
+  }
   function sourceTarget(source) {
     const url = new URL(source.url);
     const mock = [url, ...(source.originUrl ? [new URL(source.originUrl)] : [])].some(u =>
@@ -68,10 +92,7 @@
     if (mock) return null;
     const fragment = new URLSearchParams(url.hash.slice(1));
     const values = fragment.getAll('page');
-    // A viewer may use its fragment to select the document, e.g. #/reports/42 or #file=42.
-    // In such a link a PDF page is a manual locator. Replacing the fragment would drop the document.
-    const documentFragment = [...fragment.keys()].some(key =>
-      /[!/?=]/u.test(key) || (url.hash.includes('=') && !pdfViewParameters.has(key)));
+    const documentFragment = documentSelector(url.hash);
     let page = null;
     if (source.pdfPage != null && source.pdfPage !== '') {
       page = physicalPage(source.pdfPage);
@@ -437,12 +458,10 @@
   // Keep document selectors such as ?docId=, discard navigation and tracking variants.
   function originAddress(url) {
     const parsed = new URL(url);
-    for (const key of [...parsed.searchParams.keys()]) {
-      if (/^(?:utm_.*|gclid|fbclid|page|pageNo)$/iu.test(key)) parsed.searchParams.delete(key);
-    }
-    parsed.searchParams.sort();
+    const query = documentParams(parsed.search);
     // A mobile or www copy is the same document as the desktop page.
-    return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '') + parsed.search;
+    return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '')
+      + (query ? '?' + query : '') + documentSelector(parsed.hash);
   }
   // From the editor's recorded provenance only. Reprints may name another reprint
   // as their source, and two differently worded reports can share that chain.
@@ -491,13 +510,41 @@
       || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
     return {hasForecast, allNonfactual: allNonfactual && !frameFact, quotes, frameFact};
   }
+  const reportEnding = /^(?:고|이?라고|하고)\s*(?:말했다|밝혔다|주장했다|설명했다|전했다|발표했다|강조했다|답했다|덧붙였다)[.!。！]?$/u;
+  const multipleClaims = /(?:,(?!\d)|(?<!\d),)|[，、;；]|[.!。！]\s*\S|(?:[았었였했됐이하되]고|지만|으나|이며|으며|면서|는데|은데|반면)\s/u;
+  const secondQuantity = /\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)[^.!?]{0,60}\s+[가-힣]+(?:은|는|이|가)\s+\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)/u;
+  const nonAssertion = /[?？]|겠|내년|내일|다음\s*(?:달|해|분기)|(?:을|할|될|일)\s*(?:것|계획|방침|예정|전망)|약속(?:한|했|드)|(?:라면|다면|이면|경우에는)|해야\s*(?:한|합)/u;
+  function conflictClaim(original, text, scope) {
+    const quote = /[“"]([^“”"]+)[”"]/u.exec(text);
+    const marks = text.match(/[“”"]/gu) || [];
+    const error = '화자가 직접 단정한 하나의 사실 진술만 대조하세요. 부인·질문·약속이거나 범위가 모호하면 발언 내용 미확인으로 남겨 주세요.';
+    if (scope.allNonfactual || scope.frameFact || !attributed.test(original)) throw new Error(error);
+    let assertion;
+    if (marks.length) {
+      if (marks.length !== 2 || !quote) throw new Error(error);
+      const before = text.slice(0, quote.index).trim(), after = text.slice(quote.index + quote[0].length).trim();
+      // The reporting tail must itself affirm this utterance. A final "밝혔다" alone
+      // also matches "말한 적이 없다고 밝혔다", which reverses the inner quotation.
+      if (!reportEnding.test(after) || /[?？]|다면|라면|조건으로|가정해/u.test(before)) throw new Error(error);
+      assertion = quote[1].trim();
+    } else {
+      const reported = /^(.+다)(고\s*[^\s]+[.!。！]?)$/u.exec(text);
+      if (!reported || !reportEnding.test(reported[2]) || /(?:말|주장|밝|전|답|발언)(?:하지|하였|했|한|혔|힌|했다던)|(?:다고|라고)\s/u.test(reported[1])) throw new Error(error);
+      assertion = reported[1];
+    }
+    // Only a complete declarative assertion can be contradicted as a whole.
+    // Ignore commas and periods inside numbers when looking for a second claim.
+    if (!/다[.!。！]?$/u.test(assertion) || nonAssertion.test(assertion) || assessment.test(assertion)
+        || multipleClaims.test(assertion.replace(/(?<=\d)\.(?=\d)/gu, '')) || secondQuantity.test(assertion)) throw new Error(error);
+    return quote ? assertion : original;
+  }
   function contentFields(row, decision, catalog, speechIds) {
     const contentStatus = decision.contentStatus ?? 'unverified';
     if (!['unverified','opinion','supported','contradicted'].includes(contentStatus)) throw new Error('발언 내용의 검토 상태를 확인하세요.');
     if (contentStatus === 'unverified') return {contentStatus};
     if (decision.contentChecked !== true || !nonblank(decision.contentReason)) throw new Error('발언 내용의 범위와 판단 이유를 확인하세요.');
     const checkingConflict = contentStatus === 'contradicted';
-    const scopedText = checkingConflict ? row.text.replace(/[‘「『]/gu, '“').replace(/[’」』]/gu, '”')
+    const scopedText = contentStatus !== 'opinion' ? row.text.replace(/[‘「『]/gu, '“').replace(/[’」』]/gu, '”')
       .replace(/(?<![A-Za-z])'([^'\n]+)'(?![A-Za-z])/gu, '“$1”') : row.text;
     const scope = speechScope(scopedText);
     if (contentStatus === 'opinion') {
@@ -507,25 +554,14 @@
     if (scope.hasForecast || (checkingConflict && /일\s*것|일\s*전망|예측(?:한|했|이)|예상(?:이|하)|전망(?:이|하)/u.test(scopedText))) {
       throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과는 시점을 명시한 별도 주장과 원자료가 필요합니다.');
     }
-    let contentClaim;
-    if (checkingConflict) {
-      const marks = scopedText.match(/[“”"]/gu) || [];
-      if (!attributed.test(row.text) || scope.allNonfactual || scope.frameFact || (marks.length && (marks.length !== 2 || scope.quotes.length !== 1))) {
-        throw new Error('원발언에서 확인한 하나의 사실 주장을 대조하세요. 의견이나 귀속 밖의 사실이 섞여 있으면 내용을 미확인으로 남겨 주세요.');
-      }
-      if (marks.length) {
-        const tail = scopedText.slice(Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"')) + 1);
-        if (!/^[\s.!?。！？]*$/u.test(tail) && !quoteContinues(tail)) {
-          throw new Error('문서명이나 강조 표현을 사실 주장으로 지정할 수 없습니다. 원발언에서 사실 주장을 확인하세요.');
-        }
-      }
-      // Keep the entire quote, including negation and conditions. Indirect speech
-      // has no verbatim boundaries, so preserve the entire attributed passage.
-      contentClaim = (scope.quotes[0] || row.text).trim();
-      if (assessment.test(contentClaim) || /(?:했|됐|였|었|았|이)고\s|(?:지만|으나|이며|으며)\s|[;；]|[.!?]\s+\S/u.test(contentClaim)) {
-        throw new Error('서로 다른 주장이 함께 있는 인용은 한 번에 반박으로 판정할 수 없습니다. 각 주장을 따로 대조하세요.');
-      }
+    const closing = Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"'));
+    const speechAct = closing < 0 ? scopedText : scopedText.slice(closing + 1);
+    const content = scope.quotes.length ? scope.quotes.join(' ') : scopedText;
+    if (/[?？]|겠(?:다|습니)|(?:인가요|일까요|나요|습니까)[.!]?$/u.test(content)
+        || /(?:말한|주장한|발표한|발언한|밝힌)\s*(?:적|사실)(?:이|은)?\s*없|(?:말하|주장하|발표하|발언하|밝히)지\s*않|(?:부인했|물었|되물었|반문했|질문했|약속했)다/u.test(speechAct)) {
+      throw new Error('부인·질문·약속의 원발언을 확인하고, 발언 속 표현을 독립된 사실로 단정하기 어려우면 내용 미확인으로 남겨 주세요.');
     }
+    const contentClaim = checkingConflict ? conflictClaim(row.text, scopedText, scope) : null;
     const ids = decision.contentSourceIds;
     if (!Array.isArray(ids) || !ids.length || ids.some(id => !catalog.items.has(id)) || new Set(ids).size !== ids.length) throw new Error('발언의 내용 자체를 확인한 별도의 원자료를 선택하세요.');
     const speech = speechIds.map(id => catalog.items.get(id));
