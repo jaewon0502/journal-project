@@ -509,17 +509,43 @@ test('가상 예시를 닫거나 비교 방식을 바꾸면 예시 수치가 지
   assert.equal(p.el('result').hidden,true);
 });
 
+function ratedRoutes(article, levels) {
+  const source = {id:'doc', title:'시범 원표', url:'https://example.org/records', locator:'표 1', version:'1판', excerpt:'시범 노선 한 곳의 결과다.'};
+  const file = workspace(article);
+  file.sources = [source];
+  const report = engine.report(article, [source], []), [lead, body] = report.rows;
+  const rating = level => level === 'na' ? {level, reason:'도입을 분리해 평가하지 않았다.'}
+    : {level, rowId:lead.id, quote:lead.text, compareRowId:body.id, compareQuote:body.text,
+      sourceId:'doc', sourceQuote:source.excerpt, reason:'조사 범위를 비교했다.', impact:'전체 노선에서 확인한 결과처럼 읽힌다.'};
+  const ratings = Object.fromEntries(Object.entries(levels).map(([axis, level]) => [axis, rating(level)]));
+  return JSON.stringify({...file, articleAssessment:rubric.save(report, [source], {coreRowIds:[], ratings})});
+}
+
+test('본문이 같은 두 파일은 채점 단계가 달라도 기사 수정에 따른 편향 개선이나 악화로 표시하지 않는다', async t => {
+  const p = page(t);
+  const article = '모든 노선에서 대기 시간이 줄었다.\n시범 노선 하나에서 조사했다.';
+  const revised = '시범 노선에서 대기 시간이 줄었다.\n시범 노선 하나에서 조사했다.';
+  p.load('left', '원본.json', ratedRoutes(article, {wording:2, framing:0}));
+  p.load('right', '재평가.json', ratedRoutes(article, {wording:0, framing:3}));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  const output = p.el('output');
+  assert.match(output.textContent, /두 파일의 기사 본문이 같습니다/);
+  assert.match(output.textContent, /2단계 → 0단계/);
+  assert.match(output.textContent, /0단계 → 3단계/);
+  assert.doesNotMatch(output.textContent, /중요한 왜곡 개선율|중요한 왜곡 악화율|개선 확인/);
+  p.reviewers(); p.el('compare').click();
+  assert.match(output.textContent, /같은 단계로 판정0%0 \/ 2개/);
+  p.w.document.querySelector('[value=revision]').click();
+  p.load('right', '수정본.json', ratedRoutes(revised, {wording:0, framing:3}));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  assert.match(output.textContent, /중요한 왜곡 개선율100%1 \/ 1개/);
+  assert.match(output.textContent, /중요한 왜곡 악화율100%1 \/ 1개/);
+});
+
 test('악화율 0% 옆에 원본에서 미평가 또는 해당 없음이었던 수정본의 중요한 왜곡을 보여 준다', async t => {
   const p = page(t);
-  const source = {id:'doc', title:'시범 원표', url:'https://example.org/records', locator:'표 1', version:'1판', excerpt:'시범 노선 한 곳의 결과다.'};
-  const file = workspace('모든 노선에서 대기 시간이 줄었다.\n시범 노선 하나에서 조사했다.');
-  file.sources = [source];
-  const report = engine.report(file.article, [source], []), [lead, body] = report.rows;
-  const rating = level => ({level, rowId:lead.id, quote:lead.text, compareRowId:body.id, compareQuote:body.text,
-    sourceId:'doc', sourceQuote:source.excerpt, reason:'조사 범위를 비교했다.', impact:'전체 노선에서 확인한 결과처럼 읽힌다.'});
-  const saved = ratings => JSON.stringify({...file, articleAssessment:rubric.save(report, [source], {coreRowIds:[], ratings})});
-  p.load('left','원본.json', saved({wording:rating(0), framing:{level:'na', reason:'도입을 분리해 평가하지 않았다.'}}));
-  p.load('right','수정본.json', saved({wording:rating(0), framing:rating(3), omission:rating(2)}));
+  p.load('left','원본.json', ratedRoutes('모든 노선에서 대기 시간이 줄었다.\n시범 노선 하나에서 조사했다.', {wording:0, framing:'na'}));
+  p.load('right','수정본.json', ratedRoutes('모든 노선에서 대기 시간이 줄었다.\n조사는 시범 노선 한 곳에서 진행했다.', {wording:0, framing:3, omission:2}));
   await p.settled(); p.el('ack').click(); p.el('compare').click();
   const output = p.el('output').textContent;
   assert.match(output, /중요한 왜곡 악화율0%.*0 \/ 1개/);

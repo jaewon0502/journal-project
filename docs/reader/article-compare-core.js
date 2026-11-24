@@ -7,7 +7,7 @@
     return {numerator, denominator, pct: denominator ? 100 * numerator / denominator : null};
   }
 
-  function compareRatings(leftItems, rightItems) {
+  function compareRatings(leftItems, rightItems, hasRevision) {
     const rightById = new Map(rightItems.map(item => [item.id, item]));
     const dimensions = leftItems.map(item => {
       const other = rightById.get(item.id);
@@ -15,14 +15,16 @@
         right: other?.rating?.level ?? null, leftRating: item.rating, rightRating: other?.rating ?? null};
     });
     const pairs = dimensions.filter(d => Number.isInteger(d.left) && Number.isInteger(d.right));
-    const important = pairs.filter(d => d.left >= 2);
-    const pendingImportant = dimensions.filter(d => Number.isInteger(d.left) && d.left >= 2 && !Number.isInteger(d.right));
-    const minor = pairs.filter(d => d.left < 2);
+    const revisionDimensions = hasRevision ? dimensions : [];
+    const revisionPairs = hasRevision ? pairs : [];
+    const important = revisionPairs.filter(d => d.left >= 2);
+    const pendingImportant = revisionDimensions.filter(d => Number.isInteger(d.left) && d.left >= 2 && !Number.isInteger(d.right));
+    const minor = revisionPairs.filter(d => d.left < 2);
     const bias = {
-      total: dimensions.length, paired: pairs.length, unpaired: dimensions.length - pairs.length,
+      hasRevision, total: dimensions.length, paired: pairs.length, unpaired: dimensions.length - pairs.length,
       improved: ratio(important.filter(d => d.right < 2).length, important.length),
       pendingImportant: pendingImportant.map(d => d.title),
-      revisedImportantWithoutPrior: dimensions.filter(d => Number.isInteger(d.right) && d.right >= 2 && !Number.isInteger(d.left))
+      revisedImportantWithoutPrior: revisionDimensions.filter(d => Number.isInteger(d.right) && d.right >= 2 && !Number.isInteger(d.left))
         .map(d => ({title:d.title, prior:d.left})),
       worsened: ratio(minor.filter(d => d.right >= 2).length, minor.length),
       agreement: ratio(pairs.filter(d => d.left === d.right).length, pairs.length),
@@ -227,7 +229,7 @@
     }
     const accuracy = {left: left.assessment.accuracy, right: right.assessment.accuracy};
     const result = {mode, demo: left.demo, sourceChanged, accuracy,
-      ...compareRatings(left.assessment.bias.items, right.assessment.bias.items)};
+      ...compareRatings(left.assessment.bias.items, right.assessment.bias.items, mode === 'revision' && left.article !== right.article)};
     if (mode === 'reviewers') result.facts = reviewFacts(left, right);
     else Object.assign(result, revisionDetails(left, right));
     return result;

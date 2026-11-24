@@ -7,6 +7,7 @@ const rubric = require('../docs/reader/article-rubric.js');
 const sources = [{id: 'doc', title: '시험 회의록', url: 'https://example.invalid/minutes',
   version: '1판', locator: '표 1', excerpt: '시범 구역은 한 곳이다. 전국 시행 실적은 조사하지 않았다.'}];
 const base = '급행 버스를 도입한다.\n표본은 한 곳이다.\n전국 실적은 아직 조사 중이다.\n이 결정은 무책임하다.';
+const revisedBase = base.replace('이 결정은 무책임하다.', '시는 표본을 늘릴 계획이라고 밝혔다.');
 function snapshot({article = base, states = [], levels = {}, core = [], sources: catalog = sources} = {}) {
   const first = engine.prepare(article, catalog);
   const receipts = first.rows.flatMap((row, index) => {
@@ -70,7 +71,7 @@ test('단독 인용문의 문구가 같아도 바뀐 논평 제목·끝 서명�
 
 test('수정 후 해당 없음이나 미평가인 기존 왜곡은 개선율 옆에 남긴다', () => {
   const left = snapshot({levels: {wording: 3, framing: 2, omission: 2, standards: 2}});
-  const right = snapshot({levels: {wording: 0, standards: 'na'}});
+  const right = snapshot({article:revisedBase, levels: {wording: 0, standards: 'na'}});
   const compared = compare(left, right, 'revision');
   assert.deepEqual(compared.bias.improved, ratio(1, 1));
   assert.deepEqual(compared.bias.pendingImportant, compared.dimensions.slice(1).map(d => d.title));
@@ -78,7 +79,7 @@ test('수정 후 해당 없음이나 미평가인 기존 왜곡은 개선율 옆
 
 test('원본 미평가 및 해당 없음에서 수정본 중요 왜곡으로 판정한 항목은 확인한 악화와 구별한다', () => {
   const before = snapshot({levels:{wording:1, framing:'na', standards:2}});
-  const after = snapshot({levels:{wording:0, framing:3, omission:2, standards:2}});
+  const after = snapshot({article:revisedBase, levels:{wording:0, framing:3, omission:2, standards:2}});
   const {bias} = compare(before, after, 'revision');
   assert.deepEqual(bias.worsened, ratio(0,1));
   assert.deepEqual(bias.revisedImportantWithoutPrior, [
@@ -90,7 +91,7 @@ test('원본 미평가 및 해당 없음에서 수정본 중요 왜곡으로 판
 
 test('중요한 왜곡의 개선·악화는 각각 비교 가능한 원본의 심각·경미 항목만 분모로 쓴다', () => {
   const original = snapshot({levels: {wording: 3, framing: 0, omission: 2, standards: 'na'}});
-  const revision = snapshot({levels: {wording: 1, framing: 2, omission: 2, standards: 0}});
+  const revision = snapshot({article:revisedBase, levels: {wording: 1, framing: 2, omission: 2, standards: 0}});
   const result = compare(original, revision, 'revision');
   assert.deepEqual(result.bias.improved, ratio(1, 2));
   assert.deepEqual(result.bias.worsened, ratio(1, 1));
@@ -114,9 +115,24 @@ test('미평가, 양측 해당 없음, 분모 없음은 0% 또는 일치로 바�
     assert.deepEqual(r.bias.improved, ratio(0, 0));
     assert.deepEqual(r.bias.worsened, ratio(0, 0));
   }
-  const zero = compare(snapshot({levels: {wording: 3}}), snapshot({levels: {wording: 2}}), 'revision');
+  const zero = compare(snapshot({levels: {wording: 3}}), snapshot({article:revisedBase, levels: {wording: 2}}), 'revision');
   assert.deepEqual(zero.bias.improved, ratio(0, 1));
   assert.deepEqual(zero.bias.worsened, ratio(0, 0));
+});
+
+test('동일 본문의 재평가는 편향 수정 지표의 분모와 분자에 넣지 않고 개별 단계와 일치도를 보존한다', () => {
+  const left = snapshot({levels:{wording:2, framing:0, omission:3}});
+  const right = snapshot({levels:{wording:0, framing:3, standards:2}});
+  for (const mode of ['revision', 'reviewers']) {
+    const {dimensions, bias} = compare(left, right, mode);
+    assert.equal(bias.hasRevision, false);
+    assert.deepEqual(bias.improved, ratio(0,0));
+    assert.deepEqual(bias.worsened, ratio(0,0));
+    assert.deepEqual(bias.pendingImportant, []);
+    assert.deepEqual(bias.revisedImportantWithoutPrior, []);
+    assert.deepEqual(bias.agreement, ratio(0,2));
+    assert.deepEqual(dimensions.slice(0,2).map(d => [d.left,d.right]), [[2,0],[0,3]]);
+  }
 });
 
 test('같은 판본의 독립 판정은 편향 단계와 사실 구간별로 계산하고 미결·의견·핵심 표시를 드러낸다', () => {

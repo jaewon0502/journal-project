@@ -217,7 +217,8 @@
   }
   function biasPanel(c, snapshots) {
     const revision = c.mode === 'revision';
-    const panel = section(revision ? '편향의 변화' : '편향 판정 일치도');
+    const sameText = revision && !c.bias.hasRevision;
+    const panel = section(sameText ? '같은 기사에 대한 편향 평가' : (revision ? '편향의 변화' : '편향 판정 일치도'));
     const b = c.bias;
     const grid = element('div', null, 'metrics');
     if (revision) {
@@ -240,6 +241,10 @@
         }
         panel.append(group);
       }
+    }
+    if (sameText) {
+      grid.append(element('p', '두 파일의 기사 본문이 같습니다. 아래에서 같은 본문에 매긴 단계를 대조할 수 있습니다. 수정에 따른 편향 개선율과 악화율을 보려면 수정된 본문을 선택하세요.', 'notice'));
+    } else if (revision) {
       if (b.pendingImportant.length) {
         const originalCount = b.improved.denominator + b.pendingImportant.length;
         panel.append(element('p', '원본의 중요한 왜곡 ' + originalCount + '개 중 개선 확인 ' + b.improved.numerator +
