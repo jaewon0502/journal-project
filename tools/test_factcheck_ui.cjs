@@ -1104,7 +1104,7 @@ test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치�
   const {doc, el, set, click} = open(t);
   click('load-demo');
   const before = el('report-rows').textContent;
-  const lines = ['발생년\t사고건수\t사망자수', '2023\t198296\t2551', '2024\t196349\t2521'];
+  const lines = ['발생년\t교통사고건수\t사망자수', '2023\t198296\t2551', '2024\t196349\t2521'];
   set('document-text', lines.join('\n'));
   set('document-query', '2024년 교통사고 사망자는 2,551명이었다는 주장이 통계와 일치하나?');
   click('find-passages');
@@ -1381,4 +1381,91 @@ test('결과와 정확성 평가에서 같은 문구의 서로 다른 문장을 
   assert.match(el('row-heading').textContent, /^문장 4 ·/);
   assert.equal(el('row-text').textContent, repeated);
   assert.equal(el('reason').value, '뒤쪽에 반복된 문장의 근거를 찾는 중이다.');
+});
+
+test('주변 원문에서 검색 후보를 발췌해도 직접 누른 행·열이 보존되고 다른 행에는 그 위치가 붙지 않는다', t => {
+  const {el, set, click, w} = open(t);
+  click('load-demo');
+  const body = ['구분\t2022년\t2023년', '장비 반납(건)\t48\t87', '장비 대여(건)\t29\t31'];
+  set('document-text', body.join('\n'));
+  set('document-query', '2023년 장비 대여는 87건인가?');
+  click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  const details = [...card.querySelectorAll('details')].find(d => d.firstElementChild.textContent === '주변 원문 확인');
+  details.open = true;
+  details.dispatchEvent(new w.Event('toggle'));
+  details.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, body[2]);
+  assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
+  details.querySelector('input[value="2"]').click();
+  details.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, body[1]);
+  assert.equal(el('source-locator').value, '');
+  assert.equal(el('verdict').value, '');
+});
+
+test('당사자가 부인한 발언을 찾으면 질문자와 분리하고 당사자 표지부터 원문을 발췌한다', async t => {
+  const {el, set, click, w, snapshot} = open(t);
+  const article = '김도현 장관은 “청년수당을 전면 중단하겠다”고 말했다.';
+  const lines = ['◯박서윤 위원  김도현 장관님, “청년수당을 전면 중단하겠다”고 말씀하셨습니까?',
+    '◯김도현 장관', '', '그런 뜻이 아닙니다. 소득 기준을 초과한 신청자에 한해 지급을 보류합니다.',
+    '◯위원장 이정수  다음 질의를 받겠습니다.'];
+  set('article', article);
+  el('article-form').requestSubmit(); click('go-find');
+  set('document-text', lines.join('\n')); set('document-query', article); click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  assert.ok(card);
+  assert.match(card.textContent, /회의록 발언자 · 김도현 장관/);
+  assert.equal(card.querySelector('blockquote').textContent, lines[3]);
+  const expected = lines.slice(1,4).join('\n');
+  const preview = [...card.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent.includes('발췌할 발언 원문'));
+  assert.equal(preview.querySelector('blockquote').textContent, expected);
+  card.querySelector(':scope > button').click();
+  assert.equal(el('source-excerpt').value, expected);
+  assert.equal(el('source-locator').value, '');
+  const nearby = card.querySelector('details');
+  nearby.open = true; nearby.dispatchEvent(new w.Event('toggle'));
+  nearby.querySelector('input[value="1"]').click(); nearby.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, lines[0]);
+  nearby.querySelector('input[value="3"]').click(); nearby.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, expected);
+  assert.equal(el('verdict').value, '');
+  click('save-work');
+  const workspace = JSON.parse(await snapshot());
+  assert.deepEqual(workspace.receipts, []);
+  assert.equal(workspace.sourceDraft.fields.excerpt, expected);
+  set('document-query', article.replace('김도현', '최민영')); click('find-passages');
+  assert.equal(el('finder-results').querySelectorAll('.source').length, 0);
+});
+
+test('좁은 대상의 질문에 연간 전체 수치를 답으로 붙이지 않고 원표 행을 열어볼 수 있다', t => {
+  const {el, set, click} = open(t);
+  const records = require('../experiments/evidence-retrieval-transfer/nov25/holdout.json');
+  const cases = ['2024년 서울 교통사고 사망자 수는 몇 명이었나?', '2024년 자전거 교통사고 사망자 수는 몇 명이었나?'];
+  click('load-demo'); set('document-text', records.lines.join('\n'));
+  for (const query of cases) {
+    set('document-query', query); click('find-passages');
+    const area = el('finder-results');
+    assert.match(el('finder-status').textContent, /대상이나 범위/);
+    assert.doesNotMatch(area.textContent, /원문 값 2521/);
+    assert.ok([...area.querySelectorAll('summary')].some(s => s.textContent.includes('2024년 원표 항목')));
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', '2024년 교통사고 사망자 수는 몇 명이었나?'); click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 2521/);
+});
+
+test('당사자의 여러 발언에서 같은 주제와 정확한 수치를 나란히 구분한다', t => {
+  const {el, set, click} = open(t);
+  click('load-demo');
+  const lines = ['◯정다현 장관  교통세율을 15%로 조정하기로 했습니다.',
+    '◯김선미 위원  추가 질의입니다.', '◯정다현 장관  교통세율을 1.5%로 조정하기로 했습니다.'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '정다현 장관은 “교통세율을 1.5%로 조정하기로 했습니다”고 말했다.');
+  click('find-passages');
+  const cards = [...el('finder-results').querySelectorAll('.source')];
+  assert.equal(cards[0].querySelector('blockquote').textContent, lines[2]);
+  const earlier = cards.find(card => card.querySelector('blockquote').textContent === lines[0]);
+  if (earlier) assert.match(earlier.textContent, /일부 단어가 겹칩니다/);
+  assert.equal(el('verdict').value, '');
 });

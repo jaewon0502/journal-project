@@ -150,7 +150,8 @@ test('연도별 교통사고 원표에서 휴일·계절에 해당하는 값은 
   assert.equal(match.scopeIssue, undefined);
   for (const topic of ['돌봄', '설비', '연말정산']) {
     const withTopic = read('연도\t사고건수\n2023\t4\n2024\t8', '2024년 ' + topic + ' 사고건수는 8건인가?');
-    assert.equal(withTopic.scopeIssue, undefined, topic);
+    assert.equal(withTopic.scopeIssue, 'population', topic);
+    assert.equal(withTopic.metric, null, topic);
   }
 });
 
@@ -193,7 +194,84 @@ test('원표에 없는 집단·지역을 물으면 전체를 집단의 수치로
     assert.deepEqual(find(query), [], query);
   }
   assert.equal(find('2024년 어린이 사망자는?')[0].value, '20');
-  assert.equal(find('2024년 교통사고 통계에서 사망자는 몇 명인가?')[0].value, '350');
+  assert.equal(find('공식 통계에서 2024년 사망자는 몇 명인가?')[0].value, '350');
+  assert.deepEqual(find('2024년 교통사고 통계에서 사망자는 몇 명인가?'), []);
+});
+
+test('보관된 연간 전체 수치를 지역·교통수단·표준 분야의 값으로 특정하지 않는다', () => {
+  const road = require('../experiments/evidence-retrieval-transfer/nov25/holdout.json').lines;
+  const standards = require('../experiments/evidence-retrieval-transfer/annual-cells/holdout.json').lines;
+  const read = (lines, q) => {
+    const text = lines.join('\n');
+    const answer = search(text, q).passages.map(p => columns.inspectAnnualRow(text, q, p)).find(Boolean);
+    assert.ok(answer, q);
+    return answer;
+  };
+  for (const q of ['2024년 서울 교통사고 사망자 수는 몇 명이었나?', '2024년 자전거 교통사고 사망자는 2,521명이었다.',
+    '횡단보도 교통사고의 2024년 사망자 수는?', '2024년 교통사고 사망자 수는 서울시 기준 몇 명이었나?',
+    '2024년 사망자는 몇 명인가? 자전거 사고만 따지면?']) {
+    const a = read(road, q);
+    assert.equal(a.scopeIssue, 'population', q);
+    assert.equal(a.metric, null, q);
+    assert.equal(a.cells.find(c => c.heading === '사망자수').value, '2521');
+  }
+  for (const q of ['2023년 환경 분야 폐지된 한국산업표준은 몇 종이었나?',
+    '2023년 환경 부문에서 폐지된 한국산업표준은 몇 종이었나?', '2023년에 폐지된 일본산업표준은 몇 종이었나?']) {
+    const a = read(standards, q);
+    assert.equal(a.scopeIssue, 'population', q);
+    assert.equal(a.metric, null, q);
+  }
+  for (const q of ['사망자는 2024년에 몇 명인가?', '공식 통계에 따르면 2024년 교통사고 사망자 수는 몇 명인가?'])
+    assert.equal(read(road, q).metric.value, '2521', q);
+  const detail = ['연도\t사망자수\t서울 자전거 사망자수', '2024\t51\t7'];
+  assert.equal(read(detail, '2024년 서울 자전거 사망자는 몇 명인가?').metric.value, '7');
+  assert.equal(read(detail, '2024년 서울 자전거 사망자는 강동구에서 몇 명인가?').metric, null);
+  assert.equal(read(['연도\t폐지\t보유도로수', '2023\t17\t95'], '2023년에 폐지된 도로는 몇 곳인가?').metric.value, '17');
+  for (const i of [0,1,3]) {
+    const item = require('../experiments/evidence-retrieval-transfer/annual-cells/holdout.json').cases[i];
+    assert.equal(read(standards, item.query).metric.value, item.expected.value);
+  }
+});
+
+test('연간 기준·조회·기사 서술의 표현이 바뀌어도 대상이 명시된 부분집단과 전체를 구분한다', () => {
+  const road = require('../experiments/evidence-retrieval-transfer/nov25/holdout.json').lines.join('\n');
+  const demand = '연도\t신청건수\t성인 신청건수\n2024\t36\t11';
+  function value(source, q) {
+    const found = search(source, q).passages.map(p => columns.inspectAnnualRow(source, q, p)).find(Boolean);
+    assert.ok(found, q);
+    return found.metric?.value ?? null;
+  }
+  for (const q of ['2024년 기준 교통사고 사망자 수는 몇 명인가?', '2024년 한 해 교통사고 사망자 수는 2521명이다.',
+    '2024년 교통사고로 인한 사망자 수는 몇 명인가?', '2024년에 교통사고 사망자 수가 2,521명으로 집계되었다.',
+    '2024년 교통사고 사망자 수를 확인해줘.']) assert.equal(value(road, q), '2521', q);
+  for (const q of ['2024년 서울 기준 교통사고 사망자 수는 몇 명인가?', '2024년 교통사고로 인한 보행자 사망자 수를 확인해줘.',
+    '2024년 교통사고 사망자 수는 농촌 기준 몇 명인가?']) assert.equal(value(road, q), null, q);
+  for (const q of ['2024년 기준으로 신청건수가 36건으로 기록되었습니다.', '2024년 한 해 성인 신청건수를 조회해 주세요.',
+    '2024년 기준 성인 신청건수가 11건인지 확인해 줘.'])
+    assert.equal(value(demand, q), q.includes('성인') ? '11' : '36', q);
+  assert.equal(value(demand, '2024년 기준 성인 중 주민 신청건수를 확인해 줘.'), null);
+});
+
+test('화재·산재·일반 사망자를 교통사고 사망자로 자동 연결하지 않고 인쇄된 사건 종류를 확인한다', () => {
+  const question = '2024년 교통사고 사망자 수는 몇 명인가?';
+  const check = (header, row, q = question) => {
+    const source = header + '\n' + row;
+    return search(source, q).passages.map(p => columns.inspectAnnualRow(source, q, p)).find(Boolean);
+  };
+  for (const event of ['화재건수', '산업재해건수', '인원', '사고건수']) {
+    const header = '연도\t' + event + '\t사망자수';
+    const result = check(header, '2024\t100\t7');
+    assert.equal(result.metric, null, event);
+    assert.equal(result.scopeIssue, 'population', event);
+    assert.equal(check(header, '2024\t100\t7', '2024년 사망자 수를 확인해줘.').metric.value, '7');
+  }
+  const mixed = '연도\t교통사고건수\t화재건수\t사망자수';
+  assert.equal(check(mixed, '2024\t83\t17\t7').metric, null);
+  for (const heading of ['교통사고건수', '교통사고 발생건수(건)'])
+    assert.equal(check('연도\t' + heading + '\t사망자수', '2024\t100\t7').metric.value, '7');
+  const categories = '연도\t교통사고 사망자수\t화재 사망자수';
+  assert.equal(check(categories, '2024\t3\t7').metric.value, '3');
+  assert.equal(check(categories, '2024\t3\t7', '2024년 화재 사망자 수를 확인해 줘.').metric.value, '7');
 });
 
 test('연도별 비율과 퍼센트포인트 변화량을 같은 셀로 안내하지 않는다', () => {
@@ -271,10 +349,10 @@ test('연도 행은 항목별 원문 값을 제공하고, 명시한 행정 행�
   const passage = {paragraph:3, text:lines[2]};
   function inspect(query, source=table) { return columns.inspectAnnualRow(source, query, passage); }
   for (const [q, value] of [['2020년에 새로 지정한 시설은 몇 곳이었나?', '9'],
-      ['2020년에 취소된 인증이 2건이라는 주장은 맞나?', '3']]) {
+      ['2020년에 취소된 시설이 2건이라는 주장은 맞나?', '3']]) {
     assert.equal(columns.annualMetricCell(table, q, passage).value, value);
   }
-  for (const q of ['2020년에 확인한 결과 인증서는 몇 장이었나?', '2020년에 지정한 시설에서 나온 지출은 몇 건인가?',
+  for (const q of ['2020년에 취소된 인증이 2건이라는 주장은 맞나?', '2020년에 확인한 결과 인증서는 몇 장이었나?', '2020년에 지정한 시설에서 나온 지출은 몇 건인가?',
     '2020년에 중소기업이 새로 지정한 시설은 몇 곳이었나?', '2020년에 지정한 시설 가운데 서울에 있는 것은 몇 곳이었나?', '2020년에 취소하지 않은 인증은 몇 건인가?',
     '2020년에 지정한 시설과 취소된 인증은 몇 건인가?', '2020년에 보유한 국립시설은 몇 곳인가?',
     '2020년 표의 이용 조건은 무엇인가?']) {

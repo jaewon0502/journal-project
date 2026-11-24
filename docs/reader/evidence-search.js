@@ -7,6 +7,7 @@
   const columns = node ? require('./evidence-columns.js') : root.JournalEvidenceColumns;
   const periods = node ? require('./evidence-period.js') : root.JournalEvidencePeriod;
   const fiscal = node ? require('./evidence-fiscal.js') : root.JournalEvidenceFiscal;
+  const transcript = node ? require('./evidence-transcript.js') : root.JournalEvidenceTranscript;
   const fiscalTable = node ? require('./evidence-fiscal-table.js') : root.JournalEvidenceFiscalTable;
 
   const measures = [
@@ -239,8 +240,14 @@
   }
 
   function search(documentText, query, {articleContext = ''} = {}) {
-    const table = trend.find(documentText, query, {articleContext});
     const context = articleContext.trim();
+    const attributed = transcript.lookup(documentText, query);
+    if (attributed) {
+      const notice = context && context !== query.trim()
+        ? attributed.notice + ' 추가한 기사 문맥의 시점과 조건도 원문에서 대조하세요.' : attributed.notice;
+      return {...attributed, notice, state:'ordinary', transcript:true, usedArticleContext:false, needsPublicationDate:false};
+    }
+    const table = trend.find(documentText, query, {articleContext});
     if (table.state === 'ordinary') {
       const separate = context && context !== query.trim();
       const statedYear = separate && /^((?:19|20)\d{2})\s*(?:회계\s*연도|년도|년)$/u.exec(context);

@@ -604,19 +604,22 @@
   function useExcerpt(entry, tableLocation = '') {
     const excerpt = byId('source-excerpt'), locator = byId('source-locator');
     const maySetLocation = !locator.value.trim() || (suggestedLocator && locator.value === suggestedLocator);
-    if (excerpt.value && (excerpt.value !== entry.text || (tableLocation && locator.value !== tableLocation))) {
+    const replacingLocation = (maySetLocation || tableLocation) && locator.value !== tableLocation;
+    if (excerpt.value && (excerpt.value !== entry.text || replacingLocation)) {
       const next = maySetLocation
         ? (tableLocation ? '표 위치도 ' + tableLocation + '로 바뀝니다.' : '이전 표의 자동 위치는 비웁니다.')
         : '직접 적은 위치는 유지됩니다. 이 구간과 일치하는지 확인하세요.';
       if (!confirm('선택한 원문으로 발췌문을 바꿀까요? ' + next)) return;
     }
-    if (maySetLocation && (tableLocation || excerpt.value !== entry.text)) {
+    if (maySetLocation) {
       locator.value = tableLocation;
       suggestedLocator = tableLocation;
     }
     excerpt.value = entry.text;
     updateSourceDraftNote();
-    message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. ' +
+    const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
+      ? entry.startParagraph + '~' + entry.paragraph : entry.paragraph;
+    message('source-status', '붙여넣은 글의 ' + span + '번째 문단을 옮겼습니다. ' +
       (tableLocation ? '원본에서 쪽번호와 표 제목·단위를 대조하고 아래 위치를 확인하세요.' :
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
@@ -688,7 +691,7 @@
     }
     return rows;
   }
-  function addNearbyRows(details, list, passage, rows, tableLocation) {
+  function addNearbyRows(details, list, passage, rows, tableLocation, excerpt) {
     const center = rows[passage.paragraph - 1];
     if (!center || center.text !== passage.text) return;
     const nearby = rows.slice(Math.max(0, passage.paragraph - 13), passage.paragraph + 12)
@@ -711,8 +714,13 @@
       item.append(label);
       list.append(item);
     }
-    details.insertBefore(node('p', '후보 앞뒤 최대 12문단과 표 머리글입니다. 발췌할 행을 선택하세요.'), list);
-    details.append(button('선택한 행을 발췌문으로 사용', () => useExcerpt(selected, selected === center ? tableLocation : '')));
+    details.insertBefore(node('p', passage.speaker
+      ? '다른 화자의 질문과 대답도 함께 표시합니다. 검색 후보를 선택하면 발언자 표지부터 해당 문단까지 옮깁니다.'
+      : '후보 앞뒤 최대 12문단과 표 머리글입니다. 발췌할 행을 선택하세요.'), list);
+    details.append(button('선택한 행을 발췌문으로 사용', () => {
+      if (selected === center) useExcerpt(excerpt, tableLocation);
+      else useExcerpt(selected);
+    }));
   }
   function clearSearchContext() {
     byId('search-context').value = '';
@@ -735,7 +743,7 @@
   }
   byId('use-article-context').addEventListener('click', () => searchWithContext(currentRow()?.context));
   byId('use-article-title').addEventListener('click', () => searchWithContext(firstArticleLine()));
-  function addColumnHints(block, text, query, passage, separateContext) {
+  function addColumnHints(block, text, query, passage, separateContext, annual) {
     if (passage.datedCell) {
       const cell = passage.datedCell;
       block.append(node('p', '자료 행의 ' + cell.column + '열 · ' + cell.heading + ' · 원문 표기 ' + cell.value));
@@ -760,7 +768,6 @@
         ' (머리글 ' + matrix.headerParagraph + '문단 · 자료 ' + matrix.rowParagraph +
         '문단 · 왼쪽에서 ' + matrix.column + '번째 열)'));
     }
-    const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
     const metric = !separateContext && annual?.metric;
     if (annual?.scopeIssue === 'period') {
       block.append(node('p', '질문은 한 해의 특정 기간을 묻습니다. 연간 합계와 구별해 그 기간을 따로 집계한 원표를 확인하세요.', 'callout'));
@@ -806,7 +813,13 @@
     const passages = lookup.passages;
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
+    const annualRows = new Map();
+    if (!lookup.fiscalTable && !lookup.transcript) {
+      for (const p of passages) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
+    }
     const notices = [];
+    if ([...annualRows.values()].some(row => row?.scopeIssue === 'population'))
+      notices.push('질문의 대상이나 범위를 이 표의 열에서 확인하기 어렵습니다. 해당 지역·집단·분야를 따로 집계한 자료인지 확인하세요.');
     if (lookup.notice) notices.push(lookup.notice);
     if (lookup.gap) notices.push(lookup.gap);
     if (lookup.state === 'needs-context') {
@@ -817,7 +830,7 @@
     } else if (lookup.state === 'candidates') {
       notices.push('비교할 기간과 지표가 나타난 표의 행 ' + passages.length + '개를 찾았습니다.' +
         (lookup.usedArticleContext ? ' 입력한 기사 문맥을 함께 사용했습니다.' : ''));
-    } else if (!lookup.gap) {
+    } else if (!lookup.gap && !lookup.transcript) {
       notices.push(passages.length ? '확인할 원문 후보 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
     }
     if (lookup.needsPublicationDate) notices.push('‘올해’처럼 상대적인 시점은 기사 발행일과 원표의 연도를 대조하세요.');
@@ -844,6 +857,16 @@
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
       if (!lookup.fiscalTable && passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
+      const speaker = passage.speaker;
+      const excerpt = speaker ? {text:speaker.excerpt, paragraph:passage.paragraph, startParagraph:speaker.paragraph} : passage;
+      const includeSpeaker = speaker && speaker.paragraph !== passage.paragraph;
+      if (speaker) {
+        block.append(node('p', '회의록 발언자 · ' + speaker.label + ' (' + speaker.paragraph + '문단)'));
+        if (speaker.match === 'adjacent-reply')
+          block.append(node('p', '앞사람이 한 발언을 단서로 찾은 답변입니다. ‘주변 원문 확인’에서 누구의 표현인지 대조하세요.', 'callout'));
+        else if (speaker.exactQuote === false)
+          block.append(node('p', '인용문과 일부 단어가 겹칩니다. 발언의 실제 표현과 수치를 대조하세요.', 'callout'));
+      }
       const fiscal = passage.fiscalCell;
       let tableLocation = '';
       if (fiscal) {
@@ -866,8 +889,8 @@
         } else {
           block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
         }
-      } else if (!lookup.fiscalTable) {
-        addColumnHints(block, text, query, passage, separateContext);
+      } else if (!lookup.fiscalTable && !speaker) {
+        addColumnHints(block, text, query, passage, separateContext, annualRows.get(passage));
         if (passage.matrixCell)
           tableLocation = matrixLocation(passage.matrixCell.rowLabel, passage.matrixCell.heading, lookup.yearMatrix?.caption);
       }
@@ -888,9 +911,15 @@
           if (!details.open) return;
           details.removeEventListener('toggle', expand);
           rows ??= documentRows(text);
-          addNearbyRows(details, list, passage, rows, lookup.fiscalTable ? tableLocation : '');
+          addNearbyRows(details, list, passage, rows, tableLocation, excerpt);
         });
         block.append(details);
+      }
+      if (includeSpeaker) {
+        const preview = node('details');
+        preview.append(node('summary', '발췌할 발언 원문 (' + speaker.paragraph + '~' + passage.paragraph + '문단)'),
+          node('blockquote', speaker.excerpt, 'verbatim'));
+        block.append(preview);
       }
       if (tableLocation) {
         const label = passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
@@ -901,7 +930,8 @@
           const label = '‘' + navigation.rowLabel + '’ 행의 ' + navigation.year + '년 열 직접 대조';
           block.append(button(label, () => browser.openAt(navigation.rowParagraph, navigation.year)));
         }
-        block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
+        block.append(button(includeSpeaker ? '발언자 표지부터 이 문단까지 발췌' : '이 문단을 발췌문으로 사용',
+          () => useExcerpt(excerpt)));
       }
       (passage.fiscalNavigation ? area : results).append(block);
     }

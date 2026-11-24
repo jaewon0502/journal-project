@@ -109,16 +109,6 @@
   // Dates expressed as holidays or seasons may restrict an otherwise annual
   // question. Require a complete time expression, so 돌봄 and 연말정산 stay intact.
   const partOfYear = /(?<![\p{L}\p{N}])(?:설(?:날|\s*(?:연휴|명절|당일))|추석(?:\s*연휴)?|한가위|명절|연휴|공휴일|휴일|평일|주말|(?:봄|여름|가을|겨울)(?:철|휴가철)?|연초|연말|(?:19|20)\d{2}년(?:도)?\s*(?:초반|중반|후반|초|말))(?=(?:에는|에도|동안|기간|당일|에|의|은|는|을|를|만|간|께|쯤)?(?:$|[^\p{L}\p{N}]))/u;
-  // A total in the selected column cannot establish a subgroup count. Look
-  // outside the printed heading, so a named subgroup column can still be used.
-  function asksForSubset(text) {
-    const outside = text.replace(/(?:통계(?:표)?|원표|표|자료|보고서|집계|기록|문서|기사|조사)에서/gu, ' ');
-    const subset = /[가-힣]에서|(?:^|\s)중(?:에서|에|\s)|한정|해당하는|가운데|지역|거주|출신|수도권|전국/u;
-    const demographic = /\d+\s*(?:세|살)|(?:10|20|30|40|50|60|70|80|90)대(?:\s|[의는가이]|$)|연령|성별|남성|여성|남자|여자|어린이|청소년|고령|노인|아동|외국인|내국인/u;
-    const circumstance = /주간|야간|평일|휴일|주말|음주운전|무면허/u;
-    return subset.test(outside) || demographic.test(outside) || circumstance.test(outside);
-  }
-
   function inspectAnnualRow(documentText, query, passage) {
     if (typeof documentText !== 'string' || typeof query !== 'string' ||
         !Number.isInteger(passage?.paragraph) || passage.paragraph < 2 || typeof passage.text !== 'string') return null;
@@ -167,8 +157,55 @@
   // Only an administrative action that modifies the object being counted is
   // eligible. A report that someone "확인한 결과" does not ask for an 확인 count.
   const countedAction = /^(?:제정|개정|폐지|지정|승인|허가|취소|발급|등록|접수|채택|공포|시행|인증|설립|신설|폐쇄)$/u;
-  const qualifiedActor = /[\p{L}\p{N}]+(?:이|가|만|에서)\s+(?:(?:새로|다시|직접)\s+)?$/u;
-  const countedObject = /^\s+(?!결과|자료|사실|내용)[\p{L}\p{N}]+(?:\([\p{L}\p{N}]+\))?(?:\s+수)?(?:은|는|이|가)\s*(?:(?:모두|총|약|정확히)\s*)?(?:몇|\d[\d,.]*)\s*(?:종|건|곳|개|명|회|장)/u;
+
+  // The text around a matched heading must describe a lookup of that column.
+  // Unknown nouns on either side may narrow the population or ask for a different entity.
+  const annualYear = /(?<![\p{L}\p{N}])(?:19|20)\d{2}년(?:도)?(?:에는|에도|의|에|은|는)?(?:\s+(?:기준(?:으로(?:는)?)?|한\s*해(?:\s*동안)?))?(?=$|[^\p{L}\p{N}])/gu;
+  const lookupFrame = /^(?:(?:이|위|아래|공식)\s+)?(?:통계(?:표)?|원표|자료|기사|보고서)(?:에는|에서(?:는)?|에\s*따르면|에선)\s*/u;
+  const reportFrame = /^(?:앞서\s+)?(?:신고|접수|기록|보고)한\s+[\d,]+(?:건|명)을\s+(?:확인|검토|대조)한\s+결과\s*/u;
+
+  // An unqualified death or injury count appears in fire and workplace reports too.
+  // Carry the road-traffic topic only on a coherent table with a named event count
+  // or the road authority's complete injury-severity schema.
+  const roadInjuries = ['사망자수', '중상자수', '경상자수', '부상신고자수'];
+  function roadAccidentTable(labels) {
+    const fields = labels.map(h => h.replace(unitSuffix, ''));
+    const event = /^(?:교통사고(?:발생)?건수|사고건수)$/u;
+    if (!fields.every(h => event.test(h) || roadInjuries.includes(h) || h === '부상자수')) return false;
+    const events = fields.filter(h => event.test(h));
+    return events.length === 1 && (events[0].startsWith('교통사고') || roadInjuries.every(h => fields.includes(h)));
+  }
+
+  function directAnnualLookup(query, mention, labels) {
+    // The year may appear before or after the metric. Preserve every other qualifier.
+    let before = query.slice(0, mention.start).replace(annualYear, ' ').replace(sourceFrame, ' ').trim();
+    before = before.replace(lookupFrame, '').replace(reportFrame, '').trim();
+    if (before.startsWith('교통사고') && roadAccidentTable(labels))
+      before = before.replace(/^교통사고(?:\s*통계(?:표)?에서(?:는)?|로(?:\s+인한)?|의)?(?=\s|$)/u, '').trim();
+    if (mention.action) before = before.replace(/^(?:새로|다시|직접)$/u, '');
+    if (before) return false;
+
+    let after = query.slice(mention.end).replace(annualYear, ' ').trim();
+    if (mention.action) {
+      // A bare action heading does not identify a different named object.
+      // A stock column such as 보유시설수 supplies the object used in '지정한 시설'.
+      const object = /^([\p{L}\p{N}]+(?:\([\p{L}\p{N}]+\))?)(?:\s*수)?(?:은|는|이|가)\s*/u.exec(after);
+      if (!object) return false;
+      const name = /^(?:한국산업표준(?:\(KS\))?|KS)$/u.test(object[1]) ? '표준' : object[1];
+      if (!labels.some(h => h.replace(unitSuffix, '').replace(/^(?:보유|유효|전체|총)/u, '').replace(/수$/u, '') === name))
+        return false;
+      after = after.slice(object[0].length);
+    }
+    after = after.replace(/^(?:모두|총|약|정확히)\s*/u, '').replace(/[?!.。]+$/u, '').trim();
+    // A later, separately reported figure does not qualify this completed question.
+    after = after.replace(/\?\s*별도\s+자료(?:는|에는)\s+[\d,.]+(?:건|명|개)(?:이었다|였다|이다)$/u, '');
+    const amount = askedValue.exec(after);
+    const ending = (amount ? after.slice(amount[0].length) : after).trim();
+    const request = /^(?:인지\s*)?(?:확인|조회)해\s*(?:줘|주세요|주십시오)$/u;
+    const reported = /^(?:에\s*달했다|으?로\s*(?:나타났다|(?:집계|기록|확인)(?:됐|되었)(?:다|습니다)))$/u;
+    return directEnding.test(ending) || request.test(ending) || Boolean(amount && (claimEnding.test(ending) || reported.test(ending) ||
+      /^(?:이?라고|이?라)\s*(?:썼는데|했는데),?\s*실제로는\s*몇\s*(?:종|건|곳|개|명|회|장)(?:이었|였)나(?:요)?$/u.test(ending)));
+  }
 
   function requestedMetric(normalized, labels, cells, location) {
     const mentions = [];
@@ -184,8 +221,7 @@
         '(?:' + action + '(?:은|는|이|가|을|를|와|과|의|도|만)?)(?![\\p{L}\\p{N}])', 'giu');
       for (const match of normalized.matchAll(term))
         mentions.push({col:col + 1, start:match.index, end:match.index + match[0].length,
-          counted:!match[1] || (countedObject.test(normalized.slice(match.index + match[0].length)) &&
-            !qualifiedActor.test(normalized.slice(0, match.index)))});
+          action:Boolean(match[1])});
     });
     // A qualified heading may contain another column's entire name. Two
     // independently mentioned columns cannot be reduced to one requested cell.
@@ -193,8 +229,8 @@
       n.start <= m.start && n.end >= m.end && (n.start < m.start || n.end > m.end))).map(m => m.col));
     if (columns.size !== 1) return null;
     const [col] = columns, label = labels[col - 1];
-    if (!mentions.some(m => m.col === col && m.counted)) return null;
-    const remaining = mentions.filter(m => m.col === col).reduceRight((text, m) =>
+    const chosen = mentions.filter(m => m.col === col);
+    const remaining = chosen.reduceRight((text, m) =>
       text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
     // A stage or a comparison must be part of the printed heading to license
     // that column. A final report may still contain several different counts.
@@ -208,11 +244,12 @@
     }
     if (new Set(units.filter(Boolean).map(normalizedMatrixUnit)).size > 1)
       return {metric:null, scopeIssue:'unit'};
-    if (asksForSubset(remaining) || stageQualifier.test(remaining) || derivedMeasure.test(remaining)) return null;
+    if (stageQualifier.test(remaining) || derivedMeasure.test(remaining)) return null;
     if (pointUnit.test(label) !== pointUnit.test(normalized)) return null;
     if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
         (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
     if (/%|퍼센트/u.test(cell.value) && (!ratioMeasure.test(label) || pointUnit.test(cell.value) !== pointUnit.test(label))) return null;
+    if (!chosen.some(m => directAnnualLookup(normalized, m, labels))) return {metric:null, scopeIssue:'population'};
     return printed ? {metric:{...location, ...cell}} : null;
   }
 
