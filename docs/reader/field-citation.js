@@ -32,8 +32,9 @@
     return fromSource({url,locator:rows.join('\n')});
   }
   function registered(work) {
-    if (work?.format !== 'journal-local-factcheck-v1' || work.demo !== false ||
-        typeof work.article !== 'string' || !work.article.trim() || work.articleDraft !== work.article || !Array.isArray(work.sources) || work.sources.some(engine.isMock))
+    if (work?.format !== 'journal-local-factcheck-v1' || work.demo !== false || Object.hasOwn(work, 'blindReview') ||
+        typeof work.article !== 'string' || !work.article.trim() || work.articleDraft !== work.article ||
+        !Array.isArray(work.sources) || work.sources.some(engine.isMock))
       throw Error('실제 기사를 검토하면서 저장한 자신의 팩트체크 작업 파일을 선택하세요.');
     const result = [];
     for (const source of work.sources) {

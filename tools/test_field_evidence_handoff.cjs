@@ -99,6 +99,7 @@ test('잘못된 파일·모의 검토·기사 수정 초안·등록되지 않은
   const p = await field(t), good = savedWork();
   const incomplete = {...good.sources[0]}; delete incomplete.version; delete incomplete.excerpt;
   const bad = ['broken{', {format:'journal-field-trial-v1'}, {...good,demo:true}, {...good,article:'',articleDraft:''},
+    {...good,blindReview:{pairId:'b'.repeat(32),slot:'A'}},
     {...good,articleDraft:'수정 중'}, {...good,sources:[]}, {...good,sources:[incomplete]},
     {...good,sources:[{...good.sources[0],url:'https://mock.invalid/test.pdf'}]},
     {...good,sources:[good.sources[0],{...good.sources[1],originUrl:'https://mock.invalid/archive'}]},
