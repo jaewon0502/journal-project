@@ -234,6 +234,31 @@ test('다시 열린 과제는 휴식 시점의 단계만 복원하고 중단 중
   assert.ok(r.workspace().records[0].trials[0].elapsedMs>=300);
 });
 
+test('쉰 시간을 알 수 없어도 남은 답을 제출하고 닫힌 시간은 전체 비교와 측정 구간 양쪽에서 제외한다', t => {
+  const p = page(t, '#participate'); p.enroll(1); p.el('begin-trial').click();
+  p.advance(700); p.w.dispatchEvent(new p.w.Event('pagehide'));
+  const saved = p.workspace();
+  saved.session.segmentAt = Date.now() - 60000;
+  const q = page(t, '#participate', undefined, saved);
+  // First recovery is attested. An independent, later break leaves the total unknown.
+  q.el('resume-unbroken').click(); q.advance(300); q.w.dispatchEvent(new q.w.Event('pagehide'));
+  const again = q.workspace();
+  again.session.segmentAt = Date.now() + 60000;
+  const r = page(t, '#participate', undefined, again);
+  r.el('resume-partial').click(); r.advance(200); r.w.dispatchEvent(new r.w.Event('pagehide'));
+  const last = page(t, '#participate', undefined, r.workspace());
+  assert.equal(last.el('resume-unbroken').hidden, true);
+  last.el('resume-partial').click(); last.advance(100); last.answer();
+  const record = last.workspace().records[0];
+  assert.equal(record.trials[0].elapsedMs, null);
+  assert.equal(record.trials[0].observedMs, 1300);
+  assert.equal(record.trials[0].phaseMs, null);
+  assert.equal(record.trials[0].verdict, 'supported');
+  assert.equal(last.workspace().session.state, 'ready');
+  last.el('begin-trial').click();
+  assert.equal(last.workspace().session.partialTime, false);
+});
+
 test('배포본은 코드 입력 후에만 본인 기록을 복원하고 연구자·다른 편집자의 상태를 섞지 않는다', t => {
   const key = n => 'journal-editor-study-participant-v1/J1-' + n + '-E0000000000000001';
   const pilot = page(t, '', undefined, undefined, true);

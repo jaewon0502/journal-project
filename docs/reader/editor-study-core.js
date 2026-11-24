@@ -75,7 +75,12 @@
   function checkedTrial(expected, observation, fromFile) {
     checkAssignment(expected, observation, fromFile);
     const {elapsedMs, verdict, sourceIds, reason} = observation;
-    if (!Number.isSafeInteger(elapsedMs) || elapsedMs <= 0) throw new Error('측정 시간은 양의 밀리초 값이어야 합니다.');
+    if (elapsedMs === null) {
+      if (!Number.isSafeInteger(observation.observedMs) || observation.observedMs < 0 || observation.phaseMs != null)
+        throw new Error('시간이 일부만 남은 과제는 확인된 밀리초와 단계 미측정으로 기록하세요.');
+    } else if (!Number.isSafeInteger(elapsedMs) || elapsedMs <= 0 || Object.hasOwn(observation, 'observedMs')) {
+      throw new Error('전체 측정 시간은 양의 밀리초 값이어야 합니다.');
+    }
     if (!verdicts.includes(verdict)) throw new Error('판정 범주를 확인하세요.');
     if (typeof reason !== 'string' || !reason.trim() || reason.length > 4000) {
       throw new Error('판단 이유를 1~4,000자 이내로 입력하세요.');
@@ -88,6 +93,7 @@
       throw new Error('제공된 자료 중 대표 근거 하나 또는 근거 없음을 선택하세요.');
     }
     const trial = {...expected, elapsedMs, verdict, reason: reason.trim(), sourceIds: [...sourceIds], journalUsed};
+    if (elapsedMs === null) trial.observedMs = observation.observedMs;
     if (Object.hasOwn(observation, 'phaseMs')) trial.phaseMs = checkedPhases(observation.phaseMs, elapsedMs);
     return trial;
   }
@@ -327,6 +333,9 @@
     const blocks = blockRoster(records);
     const eligible = new Set(blocks.filter(b => b.included).map(b => b.block));
     const sample = records.filter(r => eligible.has(Math.floor((r.ordinal - 1) / slots) + 1));
+    const partialTrials = sample.flatMap(r => r.trials.filter(t => t.elapsedMs === null));
+    const partialBlocks = new Set(sample.filter(r => r.trials.some(t => t.elapsedMs === null)).map(r => Math.ceil(r.ordinal / slots)));
+    const timedSample = sample.filter(r => !partialBlocks.has(Math.ceil(r.ordinal / slots)));
     const completed = records.filter(r => r.trials.length === slots).length;
     const withdrawn = records.filter(r => r.withdrawn);
     const withdrawalWork = {betweenTasks:0, unknown:0, byMethod:Object.fromEntries(methods.map(m => [m, {tasks:0, elapsedMs:0, partial:0}]))};
@@ -345,9 +354,11 @@
       included: sample.length, excluded: records.length - sample.length,
       completeBlocks: eligible.size, pendingBlocks: blocks.length - eligible.size, blocks, trialCount: sample.length * slots,
       recordedTrials: records.reduce((total, record) => total + record.trials.length, 0)};
-    counts.phases = phaseStats(sample);
+    counts.timing = {included:timedSample.length, trialCount:timedSample.length * slots, partialTrials:partialTrials.length,
+      observedMs:partialTrials.reduce((sum, t) => sum + t.observedMs, 0)};
+    counts.phases = phaseStats(timedSample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
-    return {...counts, time: timeStats(sample), ...verdictStats(sample)};
+    return {...counts, time: timedSample.length ? timeStats(timedSample) : null, ...verdictStats(sample)};
   }
 
   function demoRecords() {

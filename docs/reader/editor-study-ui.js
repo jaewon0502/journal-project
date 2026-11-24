@@ -174,6 +174,9 @@
       (b.reductionPp > 0 ? '감소' : b.reductionPp < 0 ? '증가' : '변화 없음');
     const timeCard = metric(timeTitle, t && fmt(Math.abs(t.reductionPct)) + '%', t && [t.manualSeconds, t.journalSeconds], '초',
       t ? '사례당 평균 ' + fmt(Math.abs(t.savedSeconds)) + '초 ' + (t.savedSeconds >= 0 ? '단축' : '증가') : '사례 1건의 평균 검토 시간');
+    if (a.timing.partialTrials) timeCard.append(node('small', '시간 비교 ' + a.timing.included + '명 · ' +
+      a.timing.trialCount + '건. 전체 시간이 불명확한 ' + a.timing.partialTrials + '건에서 확인한 시간은 합계 ' +
+      fmt(a.timing.observedMs / 1000) + '초입니다. 해당 4인 묶음은 판정 비교에만 포함했습니다.'));
     if (t) {
       const median = t.medianSavedSeconds;
       const change = median === 0 ? '차이 없음' : fmt(Math.abs(median)) + '초 ' + (median > 0 ? '단축' : '증가');
@@ -193,7 +196,7 @@
     }
     el('metrics').replaceChildren(timeCard, biasCard);
     const phases = a.phases;
-    el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
+    el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.timing.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
       '건. 단계별 비교에는 전원이 세 단계를 기록한 ' + phases.completeBlocks + '묶음 · ' + phases.included + '명 · ' + phases.trialCount + '건을 사용합니다.';
     const stageRows = [], pairRows = [];
     if (phases.byStage) {
@@ -331,7 +334,7 @@
     } catch (err) { message('enroll-status', err.message, true); }
   }
   function clearTaskState(next) {
-    Object.assign(session, {state:next, activeMs:0, segmentAt:null, stage:null, phaseMs:null, phaseOmitted:false, used:false, verdict:'', source:'', reason:''});
+    Object.assign(session, {state:next, activeMs:0, segmentAt:null, recoveredMs:null, partialTime:false, stage:null, phaseMs:null, phaseOmitted:false, used:false, verdict:'', source:'', reason:''});
     liveStart = null; dropFrame();
   }
   function elapsed() {
@@ -347,7 +350,7 @@
     el('phase-omit').disabled = !session.phaseMs;
     el('phase-note').textContent = enabled && !session.phaseOmitted
       ? '자료 선택은 문서를 고르는 시간, 근거 위치 확인은 그 안의 표·문구를 찾고 읽는 시간입니다. 결론과 이유를 정리할 때 판정 기록을 누르세요. 세 단계를 모두 표시해야 단계별 비교에 포함됩니다.'
-      : '이 과제는 전체 검토 시간만 분석합니다.';
+      : session.partialTime ? '시계는 확인한 구간만 표시합니다. 답과 근거는 제출할 수 있습니다.' : '이 과제는 전체 검토 시간만 분석합니다.';
   }
   function bankTime() {
     const now = clock();
@@ -375,21 +378,29 @@
     const sec = Math.floor(elapsed() / 1000);
     el('timer').textContent = String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
   }
-  function start() {
+  function start(observedOnly = false) {
     if (!session || !['ready','paused','interrupted'].includes(session.state)) return;
     if (session.state === 'ready') {
       session.stage = 'select'; session.phaseMs = {select:0}; session.phaseOmitted = false;
       session.recoveredMs = null;
     }
     if (session.state === 'interrupted') {
-      const delta = Date.now() - session.segmentAt;
-      if (!Number.isSafeInteger(session.segmentAt) || delta < 0) {
-        message('session-status', '시계가 바뀌어 경과 시간을 복원할 수 없습니다. 중단 기록으로 종료하세요.', true); return;
+      if (observedOnly || session.partialTime) {
+        // Discard earlier wall-clock reconstructions as well. Retain only measured intervals.
+        session.activeMs -= session.recoveredMs ?? 0;
+        session.recoveredMs = 0;
+        session.partialTime = true;
+      } else {
+        const delta = Date.now() - session.segmentAt;
+        if (!Number.isSafeInteger(session.segmentAt) || delta < 0) {
+          message('session-status', '시계가 바뀌어 전체 시간을 복원할 수 없습니다. 시간 제외 후 계속하거나 참여를 중단하세요.', true); return;
+        }
+        session.activeMs += delta;
+        session.recoveredMs = (session.recoveredMs ?? 0) + delta;
       }
-      session.activeMs += delta;
-      session.recoveredMs = (session.recoveredMs ?? 0) + delta;
       // No phase boundaries can be verified while the task page was closed.
       session.phaseMs = null; session.stage = null;
+      message('session-status', '');
     }
     liveStart = clock(); session.segmentAt = Date.now(); session.state = 'running';
     persist(); renderParticipant(); el('trial-heading').focus();
@@ -452,8 +463,10 @@
       const a = assignment();
       if (a.method === 'journal' && !session.used) throw new Error('위 저널 화면에서 자료를 대조한 뒤 문장 판단을 먼저 기록하세요.');
       if (!el('verdict').value || !el('source').value) throw new Error('최종 판정과 대표 근거 선택을 확인하세요.');
-      const elapsedMs = Math.max(1, Math.round(elapsed()));
-      const r = core.addTrial(currentRecord(), {elapsedMs, phaseMs:phaseResult(elapsedMs), verdict:el('verdict').value, reason:el('reason').value,
+      const observedMs = Math.round(elapsed());
+      const elapsedMs = Math.max(1, observedMs);
+      const timing = session.partialTime ? {elapsedMs:null, observedMs, phaseMs:null} : {elapsedMs, phaseMs:phaseResult(elapsedMs)};
+      const r = core.addTrial(currentRecord(), {...timing, verdict:el('verdict').value, reason:el('reason').value,
         sourceIds:el('source').value === 'none' ? [] : [el('source').value], journalUsed:a.method === 'journal' && session.used});
       records = core.mergeRecords(records, [r]);
       clearTaskState(r.trials.length === 4 ? 'done' : 'ready'); persist();
@@ -473,7 +486,9 @@
       const summary = el('personal-time');
       summary.hidden = session.state !== 'done';
       summary.replaceChildren();
-      if (!summary.hidden) {
+      if (!summary.hidden && r.trials.some(t => t.elapsedMs === null)) {
+        summary.append(node('p', '전체 시간을 확인할 수 없는 과제가 있어 개인 평균은 계산하지 않았습니다. 제출한 네 답은 기록에 포함됐습니다.'));
+      } else if (!summary.hidden) {
         const means = ['manual','journal'].map(method =>
           r.trials.filter(t => t.method === method).reduce((sum, t) => sum + t.elapsedMs, 0) / 2000);
         const diff = means[0] - means[1];
@@ -488,6 +503,7 @@
     el('trial-info').textContent = '배정 ' + r.ordinal + '번 · 제출 완료 ' + r.trials.length + '건';
     el('start-pane').hidden = s !== 'ready'; el('task-pane').hidden = s !== 'running';
     el('pause-pane').hidden = s !== 'paused'; el('recovery').hidden = s !== 'interrupted';
+    el('resume-unbroken').hidden = !!session.partialTime;
     updateTime();
     if (s !== 'running') return;
     updateStages();
@@ -518,7 +534,8 @@
     if (participant) renderParticipant(); else showDashboard();
   }
   el('enroll').onsubmit = enroll;
-  el('begin-trial').onclick = el('resume-unbroken').onclick = el('resume-trial').onclick = start;
+  el('begin-trial').onclick = el('resume-unbroken').onclick = el('resume-trial').onclick = () => start();
+  el('resume-partial').onclick = () => start(true);
   for (const button of stageButtons) button.onclick = () => switchStage(button.dataset.phase);
   el('phase-omit').onchange = () => {
     if (session?.state !== 'running') return;

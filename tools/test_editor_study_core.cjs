@@ -106,6 +106,24 @@ test('시간 절감률은 참가자별 두 방식의 평균 시간 차이에 같
   assert.deepEqual(r.time.editorPairs.map(row => row.savedSeconds), [-20,10,10,10]);
 });
 
+test('시간이 일부만 남은 답은 품질과 정당 비교에 쓰고 전체 시간은 온전한 4인 묶음으로 비교한다', () => {
+  const partial = {elapsedMs:null, observedMs:1500, phaseMs:null};
+  const records = Array.from({length:8}, (_, i) => observations(i + 1, t =>
+    i === 0 && t.position === 1 ? partial : {elapsedMs:i < 4 ? 5000 : (t.method === 'manual' ? 1000 : 500)}));
+  for (const n of [4, 8]) {
+    const result = study.analyze(records.slice(0, n));
+    assert.deepEqual(result.timing, {included:n-4, trialCount:(n-4)*4, partialTrials:1, observedMs:1500});
+    assert.equal(result.trialCount, n * 4);
+    assert.equal(result.quality.manual.qualityCorrect, n * 2);
+    assert.equal(result.bias.cases[0].manual.A.total, n / 4);
+    assert.equal(result.time?.reductionPct ?? null, n === 4 ? null : 50);
+  }
+  assert.deepEqual(study.mergeRecords(records, JSON.parse(JSON.stringify(records))), records);
+  for (const bad of [{observedMs:-1}, {observedMs:undefined}, {phaseMs:{select:0,locate:0,decide:0}}, {elapsedMs:1500}]) {
+    assert.throws(() => observations(1, () => ({...partial, ...bad})), /시간/);
+  }
+});
+
 test('사실 채택률이 같아도 근거 부족과 반박을 정당 표기에 따라 다르게 썼다면 네 판정 분포에 나타난다', () => {
   const records = Array.from({length:8}, (_, i) => observations(i + 1, (task, item) => {
     const swap = task.caseId === 'permits' && task.method === 'manual' && task.variant === 'B' && i < 4;
