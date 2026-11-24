@@ -162,6 +162,17 @@
       '건 · 기사·과제 불일치 ' + n.wrongTask + '건 · 반복·배정 충돌 ' + n.excluded +
       '건 · 연결된 현업 기록 없음 ' + n.missing + '건';
   }
+  function qualityLines({submitted=0, locationHits=0, locationGraded=0, verdictHits=0, verdictGraded=0,
+    unsafe=0, unsafeTotal=0, referencePending=0} = {}) {
+    return [
+      node('p', '원자료 위치 재확인 성공률 ' + pct(locationHits, locationGraded) +
+        ' · 채점 대기 ' + (submitted - locationGraded) + '건'),
+      node('p', '판정 일치율 ' + pct(verdictHits, verdictGraded) +
+        ' · 채점 대기 ' + (submitted - verdictGraded) + '건'),
+      node('p', '근거 없는 사실 채택률 ' + pct(unsafe, unsafeTotal) +
+        ' (반박·근거 부족으로 판정한 과제) · 기준 판정 미확인 ' + referencePending + '건')
+    ];
+  }
   function showAllocations(report) {
     el('allocation-counts').textContent = assignmentCounts(report.all) +
       '. 명부 밖 코드의 현업 기록 ' + report.outsideRoster + '건 · 등록한 기사를 찾을 수 없는 현업 기록 ' +
@@ -172,7 +183,8 @@
         node('p', arm.prompt), node('p', assignmentCounts(arm)),
         node('p', '같은 과제의 완료·중도 종료 ' + (arm.completed + arm.withdrawn) + '건 중 기록상 방식이 원래 배정과 다른 경우 ' +
           arm.crossover + '건'), node('p', '완료 응답 ' + arm.completed + '건 중 실제 사용이 원래 배정과 일치 ' +
-          arm.selfSame + '건 · 불일치 ' + arm.selfDifferent + '건 · 미확인 ' + arm.selfUnknown + '건'));
+          arm.selfSame + '건 · 불일치 ' + arm.selfDifferent + '건 · 미확인 ' + arm.selfUnknown + '건'),
+        ...qualityLines(arm.outcomes));
       el('allocation-arms').append(card);
     }
     showComparisons(report.groups, el('allocation-comparisons'));
@@ -230,26 +242,7 @@
             g.unknownUse +
             '건'
         ),
-        node(
-          'p',
-          '원자료 위치 재확인 성공률 ' +
-            pct(g.locationHits, g.locationGraded) +
-            ' · 채점 대기 ' +
-            (g.submitted - g.locationGraded) +
-            '건'
-        ),
-        node(
-          'p',
-          '판정 일치율 ' +
-            pct(g.verdictHits, g.verdictGraded) +
-            ' · 채점 대기 ' +
-            (g.submitted - g.verdictGraded) +
-            '건'
-        ),
-        node(
-          'p',
-          '근거 없는 사실 채택률 ' + pct(g.unsafe, g.unsafeTotal) + ' · 기준 판정이 반박·근거 부족인 과제 중'
-        ),
+        ...qualityLines(g),
         node(
           'p',
           '평균 총 활동 시간 ' +

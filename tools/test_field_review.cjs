@@ -695,6 +695,58 @@ function assignment(participant, changes = {}) {
   return {participant, caseId, articleUrl, taskId, prompt, method:'manual', ...changes};
 }
 
+test('기사 쿼리 공백 부호와 추적 변수 차이를 배정 중복과 반복 노출 양쪽에 똑같이 적용한다', async t => {
+  const base = 'https://paper.example/story';
+  const articleUrl = base + '?article=employment%20report&year=2025#/view/1';
+  const tracked = base + '?year=2025&article=employment+report&utm_source=x#/view/1#table';
+  const a = assignment('A', {articleUrl});
+  const b = {...a, caseId:'tracked', articleUrl:tracked};
+  const pack = assignments => ({format:c.assignmentFormat, assignments});
+  assert.equal(c.articleIdentity(base + '?article=employment%20report'),
+    c.articleIdentity(base + '?article=employment%20report&utm_source=x'));
+  assert.equal(c.articleIdentity(articleUrl), c.articleIdentity(tracked));
+  assert.throws(() => c.mergeAssignments([], [pack([a,b])]), /서로 다른 배정/);
+  for (const different of [articleUrl.replace('employment','income'), articleUrl.replace('%20','%2B'),
+    articleUrl.replace('view/1','view/2')]) {
+    const other = {...b, articleUrl:different};
+    assert.deepEqual(c.mergeAssignments([], [pack([a,other])]), [a,other]);
+  }
+  const p = page(t, 'field-summary');
+  await p.upload('roster-file', pack([a]));
+  await p.upload('imports', trial({...a, id:'untagged', kind:'editor'}), trial({...b, id:'tagged', kind:'editor'}));
+  assert.match(p.el('count').textContent, /불러온 2건.*제외 2건/);
+  assert.match(p.report('allocation-counts'), /배정 1건 · 완료 0건.*반복·배정 충돌 1건/);
+});
+
+test('중단 복원·다른 방식으로 완료한 응답의 품질은 원래 배정에 남고 미회수 응답은 채점 분모에 들지 않는다', async t => {
+  const p = page(t,'field-summary');
+  const task = gradingKey.tasks.find(t => t.verdict === 'contradicted');
+  const a = assignment('A', {taskId:task.id, prompt:task.prompt});
+  const b = {...a, participant:'B', method:'journal'};
+  const absent = {...a, participant:'C'};
+  await p.upload('roster-file', {format:c.assignmentFormat, assignments:[a,b,absent]});
+  const crossed = trial({...a, id:'crossed', kind:'editor', method:'journal', recovered:true, verdict:task.verdict});
+  await p.upload('imports', crossed);
+  const arm = index => p.report('allocation-arms', 'article:nth-child(' + index + ')');
+  const beforeKey = arm(1);
+  assert.match(beforeKey, /판정 일치율 산출 대기 \(0\/0\) · 채점 대기 1건/);
+  assert.match(beforeKey, /근거 없는 사실 채택률 산출 대기 \(0\/0\).*기준 판정 미확인 1건/);
+  await p.upload('key-file', gradingKey);
+  p.gradeLocation(crossed.locator, 'no');
+  const original = arm(1);
+  assert.match(original, /배정 2건 · 완료 1건.*연결된 현업 기록 없음 1건/);
+  assert.match(original, /원자료 위치 재확인 성공률 0\.0% \(0\/1\) · 채점 대기 0건/);
+  assert.match(original, /판정 일치율 100\.0% \(1\/1\) · 채점 대기 0건/);
+  assert.match(original, /근거 없는 사실 채택률 0\.0% \(0\/1\).*기준 판정 미확인 0건/);
+  const empty = arm(2);
+  assert.match(empty, /판정 일치율 산출 대기 \(0\/0\) · 채점 대기 0건/);
+  assert.doesNotMatch(empty, /%/);
+  assert.match(p.report('allocation-comparisons'), /평소 검증 도구 · 비교 가능한 완료 기록 0건/);
+  await p.upload('imports', trial({...b, id:'unsupported', kind:'editor', method:'manual', verdict:'supported'}));
+  assert.match(arm(2), /판정 일치율 0\.0% \(0\/1\).*근거 없는 사실 채택률 100\.0% \(1\/1\)/);
+  assert.equal(arm(1), original);
+});
+
 test('사전 배정과 과제가 일치한 현업 기록을 원래 방식으로 비교하고 모든 배정을 분모에 남긴다', async t => {
   const roster = rows => ({format:c.assignmentFormat, assignments:rows});
   const as = ['A','B','C','D','E','F','G','H'].map((id,i) => assignment(id, {method:i%2 ? 'journal' : 'manual'}));

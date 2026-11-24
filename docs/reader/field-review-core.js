@@ -114,7 +114,8 @@
           verdictHits: 0,
           verdictGraded: 0,
           unsafe: 0,
-          unsafeTotal: 0
+          unsafeTotal: 0,
+          referencePending: 0
         });
       const g = groups.get(key);
       const elapsedMs = phases.reduce((sum, p) => sum + t.phaseMs[p], 0);
@@ -149,7 +150,7 @@
       if (['contradicted', 'insufficient'].includes(expected)) {
         g.unsafeTotal++;
         if (t.verdict === 'supported') g.unsafe++;
-      }
+      } else if (expected !== 'supported') g.referencePending++;
       if (['yes', 'no'].includes(loc)) {
         g.locationGraded++;
         if (loc === 'yes') g.locationHits++;
@@ -198,6 +199,8 @@
     for (const name of [...article.searchParams.keys()]) {
       if (/^(?:utm_.+|fbclid|gclid)$/iu.test(name)) article.searchParams.delete(name);
     }
+    // Serialize every query identically, including untracked links (%20 and + encode a space).
+    article.searchParams.sort();
     return article.href;
   }
 
@@ -229,6 +232,7 @@
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
   function allocationReport(assignments, records, repeated) {
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
+    const armKey = a => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
     const byParticipant = new Map(), arms = new Map(), matched = [];
     let outsideRoster = 0, unlinked = 0;
     for (const a of assignments) {
@@ -258,7 +262,7 @@
     const all = totals();
     for (const slots of byParticipant.values()) for (const slot of slots) {
       const {a, related} = slot;
-      const key = JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
+      const key = armKey(a);
       if (!arms.has(key)) arms.set(key, {caseId:a.caseId, articleUrl:a.articleUrl, taskId:a.taskId,
         prompt:a.prompt, method:a.method, ...totals(), selfSame:0, selfDifferent:0, selfUnknown:0});
       const arm = arms.get(key);
@@ -282,7 +286,9 @@
       }
       arm[status]++; all[status]++;
     }
-    return {all, arms:[...arms.values()], groups:group(matched), outsideRoster, unlinked};
+    const groups = group(matched);
+    for (const g of groups) arms.get(armKey(g)).outcomes = g;
+    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked};
   }
 
   const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url,
