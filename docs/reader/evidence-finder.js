@@ -86,7 +86,7 @@
 
   // A table unit line is an explicit boundary in layout-preserving PDF text.
   // Keep its source rows so column names can be inspected even far down a table.
-  const dateHeader = /^(?:[가-힣 ]{0,12}(?:연도|년도|연월|년월|기간|일자|일시|기준일|날짜)|시점|date|period)$/iu;
+  const dateHeader = /^(?:[가-힣 ]{0,12}(?:연도|년도|연월|년월|기간|일자|일시|기준일|날짜)|(?:발생|신고|등록|조사|관측)\s*년|시점|date|period)$/iu;
 
   const splitColumns = text => text.trim().replace(/^\|\s*|\s*\|$/gu, '')
     .split(/\s*\|\s*|\t+| {2,}/u).map(cell => cell.trim());
@@ -115,7 +115,8 @@
         if (!table || table.started) table = {headings: [], started: false};
         table.headings.push(row);
         row.columnNames = columns;
-        table.metricTerms = new Set(terms(columns.slice(1).join(' ')).keys());
+        const headerWords = terms(columns.slice(1).join(' '));
+        table.metricTerms = new Set([...headerWords.values()].flatMap(forms => [...forms]));
         continue;
       }
       if (!table) continue;

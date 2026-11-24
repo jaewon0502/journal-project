@@ -310,3 +310,15 @@ test('명시한 단위가 없는 단독 표는 보류하고 주석과 다른 표
   const second = '정비 지출\n(단위: 원)\n2019\t2020\n정비 금액의 합계\t930\t1400';
   assert.equal(find(chart + '\n' + second, q)[0].text, '정비 금액의 합계\t930\t1400');
 });
+
+test('사건의 연도를 첫 열에 둔 표에서는 주장한 수가 다른 해에 있어도 요청한 연도·지표 행을 먼저 보여 준다', () => {
+  const lines = ['신고년\t신고건수\t부상자수', '2018\t3800\t126', '2019\t4100\t132'];
+  const doc = lines.join('\n');
+  const hits = find(doc, '2018년 부상자는 132명이었나?', {includeContext: true});
+  assert.equal(hits[0].paragraph, 2);
+  assert.equal(hits[0].text, lines[1]);
+  assert.ok(hits[0].context.some(row => row.text === lines[0]));
+  const unrelated = ['번호\t부상자수', '2018\t126', '2019\t132'].join('\n');
+  const [first] = find(unrelated, '2018년 부상자는 132명이었나?');
+  assert.notEqual(first.paragraph, 2, '문서 번호에는 연도 표의 우선순위를 주지 않는다.');
+});
