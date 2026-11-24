@@ -30,11 +30,11 @@ class FacilitatorPack(unittest.TestCase):
         with ZipFile(BytesIO(packet_bytes())) as archive:
             self.assertIsNone(archive.testzip())
             files = set(archive.namelist())
-            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-review.html', 'factcheck.html'):
+            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'factcheck.html'):
                 links = Dependencies()
                 links.feed(archive.read(page).decode())
                 self.assertLessEqual(links.local, files, page)
-            for page in ('editor-study.html', 'field-summary.html', 'field-review.html'):
+            for page in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html'):
                 self.assertEqual(archive.read(page), (READER / page).read_bytes())
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())

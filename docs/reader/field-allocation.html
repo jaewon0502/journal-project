@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>현장 기사 과제 배정 · Journal</title><link rel="stylesheet" href="editor-study.css">
+<script defer src="field-review-core.js"></script><script defer src="field-invite.js"></script><script defer src="field-allocation.js"></script></head>
+<body><header><strong>Journal</strong><a href="field-summary.html">현장 집계</a></header>
+<main><section class="headline"><div><h1>현장 기사 과제 배정</h1>
+<p>검토를 시작하기 전에 각 편집자에게 기사 한 건의 과제와 검증 방식을 배정하세요.</p></div></section>
+<section class="box"><form id="allocation-form">
+<label for="case-file">참여자용 과제 파일</label><input required id="case-file" type="file" accept=".json,application/json">
+<p id="case-note">참여자 ZIP의 blind-tasks.json 또는 진행자 폴더의 ‘참여 과제’에서 고르세요.</p>
+<label for="participant-codes">참여 순서대로 익명 코드 입력 · 한 줄에 한 명</label>
+<textarea required id="participant-codes" rows="5" spellcheck="false" placeholder="예: E01"></textarea>
+<p>이름과 소속은 입력하지 마세요. 같은 사람에게는 연습과 현업 참여에서 같은 코드를 사용하세요.</p>
+<button id="generate" class="primary" type="submit" disabled>과제와 방식 배정</button>
+</form><details id="reopen"><summary>저장한 배정표 다시 보기</summary>
+<label for="roster-file">진행자 배정표 JSON</label><input id="roster-file" type="file" accept=".json,application/json">
+</details><p id="status" role="status"></p></section>
+<section id="allocation" class="box" hidden><h2>진행자 배정표</h2><p id="block-count"></p>
+<div class="scroll"><table><thead><tr><th scope="col">익명 코드</th><th scope="col">기사 사례</th><th scope="col">과제 번호</th><th scope="col">전달할 파일</th><th scope="col">배정 코드</th></tr></thead><tbody id="allocations"></tbody></table></div>
+<p>배정표는 진행자가 보관하고 각 참여자에게는 자기 배정 코드와 해당 ZIP만 전달하세요.</p>
+<button type="button" id="download" class="primary">배정표 JSON 저장</button>
+</section><noscript>배정표를 만들려면 JavaScript가 필요합니다.</noscript></main></body></html>

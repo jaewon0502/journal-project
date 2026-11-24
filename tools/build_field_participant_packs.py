@@ -71,7 +71,7 @@ def packet_bytes(method, case=DEFAULT_CASE):
         for asset in scanner.names:
             assert Path(asset).name == asset
             packet[asset] = (READER / asset).read_bytes()
-    packet['시작 안내.txt'] = ('압축을 푼 뒤 field-review.html을 여세요. 진행자가 준 과제 번호를 선택하고 익명 코드를 입력하세요. '
+    packet['시작 안내.txt'] = ('압축을 푼 뒤 field-review.html을 여세요. 진행자가 준 배정 코드를 확인하세요. 익명 코드와 과제 번호를 따로 받았다면 직접 입력하세요. '
         '과제 목록이 보이지 않으면 “과제 파일 직접 불러오기”에서 같은 폴더의 blind-tasks.json을 여세요. '
         '“시간 측정 시작”을 누르면 과제 문장과 기사 링크가 나타납니다. '
         '외부 기사와 원자료를 열려면 인터넷 연결이 필요합니다. 기록 파일은 완료 또는 중도 종료 후 직접 저장합니다.\n').encode()
