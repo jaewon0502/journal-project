@@ -94,6 +94,34 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   assert.equal(json.demo, true);
 });
 
+test('참석자 수를 확인해도 기자가 덧붙인 사업비 주장은 결과 파일에서 미결로 남는다', async t => {
+  const p = open(t);
+  p.set('article', '사업비가 2배 증가한 가운데 위원장은 “참여자는 50명”이라고 말했다.');
+  p.el('article-form').requestSubmit();
+  for (const [title, url, excerpt] of [['속기록', 'https://council.example/remarks', '위원장은 “참여자는 50명”이라고 말했다.'],
+    ['참석자 명부', 'https://audit.example/count', '당일 확인된 참석자는 총 50명이다.']]) {
+    for (const [field, value] of Object.entries({title, url, locator:'1쪽', version:'확정본', excerpt})) p.set('source-' + field, value);
+    p.el('source-form').requestSubmit();
+  }
+  p.el('row-list').querySelectorAll('button')[1].click();
+  p.el('row-sources').querySelector('input[value="source-1"]').click();
+  p.set('verdict','attribution');
+  p.set('reason','속기록에서 화자와 인용을 대조했다.');
+  p.set('content-status','supported');
+  p.el('content-sources').querySelector('input[value="source-2"]').click();
+  p.set('content-reason','당일 명부의 실제 인원과 일치한다.');
+  p.click('content-checked'); p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  assert.match(p.el('row-text').textContent,/사업비가 2배/);
+  assert.equal(p.el('result-tag').textContent, '추가 확인 필요');
+  p.click('export-report');
+  const exported = await p.snapshot();
+  assert.match(exported, /근거 일치율 100% \(1\/1\)/);
+  assert.match(exported, /검증 범위 50% \(1\/2\)/);
+  assert.match(exported, /1\. 미검토\n사업비가 2배 증가한 가운데/);
+  assert.match(exported, /내용 근거 · 참석자 명부/);
+});
+
 test('당시 결산표가 인용 내용과 충돌하면 편집 화면·TXT·재개 파일에 귀속과 반증을 함께 남긴다', async t => {
   const p = open(t);
   const article = '위원장은 “지난해 집행액은 20억 원이었다”고 말했다.';
