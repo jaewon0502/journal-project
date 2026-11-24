@@ -8,6 +8,7 @@
 <label>배정받은 과제 <select id="task"></select></label><label>익명 참여 코드 <input id="participant" maxlength="64" autocomplete="off" placeholder="진행자가 배정한 코드"></label>
 <label>배정 방식 <select id="method"><option value="manual">평소 검증 도구</option><option value="journal">평소 검증 도구와 저널</option></select></label>
 <label>참여 구분 <select id="kind"><option value="practice">연습</option><option value="editor">현업 편집자·팩트체커 본인 참여</option></select></label>
+<p id="kit-note" class="note" role="status" hidden>이 화면에는 배포본 ID가 없어, 여기서 저장한 시간은 두 방식의 절감률 계산에서 빠집니다. 시간 비교에 참여하려면 진행자가 배정한 참여자 ZIP의 field-review.html을 열어 주세요.</p>
 <button id="start" class="primary" disabled>시간 측정 시작</button></section>
 <section class="panel" id="work" hidden><h2 id="question"></h2><p id="article-link"></p><p id="tool-link"></p>
 <fieldset><legend>현재 작업 단계</legend><div class="actions" id="phases"><button data-phase="search">원자료 찾기</button><button data-phase="locate">표·발언 위치 찾기</button><button data-phase="decide">판정 기록</button></div></fieldset>

@@ -42,7 +42,8 @@
     roster = {format:core.assignmentFormat, assignments};
     for (const row of assignments) {
       const tr = el('allocations').insertRow();
-      for (const value of [row.participant, row.caseId, row.taskId, 'participant-' + row.method + '.zip'])
+      const kit = row.method === 'manual' ? '평소 도구' : '저널 병행';
+      for (const value of [row.participant, row.caseId, row.taskId, kit + ' · participant-' + row.method + '.zip'])
         tr.insertCell().textContent = value;
       const cell = tr.insertCell();
       const copy = document.createElement('button'), field = document.createElement('input');

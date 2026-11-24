@@ -372,6 +372,15 @@ test('참여 기록은 시간을 시작할 때의 배포본을 보관하고 이�
     });
   }
   const p = kit(first);
+  const standalone = page(t, 'field-review');
+  assert.equal(standalone.el('kit-note').hidden, true);
+  standalone.select('#kind','editor');
+  assert.equal(standalone.el('kit-note').hidden, false);
+  assert.match(standalone.el('kit-note').textContent, /절감률 계산에서 빠집니다/);
+  standalone.select('#kind','practice');
+  assert.equal(standalone.el('kit-note').hidden, true);
+  p.select('#kind','editor');
+  assert.equal(p.el('kit-note').hidden, true);
   await p.upload('case-file', fixture);
   p.el('participant').value = 'E01';
   p.select('#task', fixture.tasks[0].id);

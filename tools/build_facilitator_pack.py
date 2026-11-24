@@ -5,7 +5,8 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
-from build_field_participant_packs import Assets, CASES, READER, ROOT, html
+from build_editor_study_pack import packet_bytes as editor_participant_zip
+from build_field_participant_packs import Assets, CASES, READER, ROOT, html, packet_pair
 
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
@@ -19,13 +20,14 @@ START = """<!doctype html>
 <section class="box"><h2>편집 시간과 정당 표기 효과</h2>
 <ol><li><a href="editor-study.html">편집자 집계 화면 열기</a> → ‘실제 편집자 기록’ → ‘참여 기록 가져오기’에서 별도로 보관한 초대명부를 먼저 여세요.
 첫 묶음의 기존 파일 이름은 <code>첫-4인-초대명부.json</code>입니다. 첫 명부가 없거나 기존 명부에 다음 네 명을 추가할 때는 ‘배정 묶음 발급’을 누르고 ‘모은 기록 내려받기’로 명부를 보관하세요.</li>
-<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 <code>participant-editor-study.zip</code>과 화면 순서대로 코드 하나씩을 네 명에게 전달하세요. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다.</li>
+<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>과 화면 순서대로 코드 하나씩을 네 명에게 전달하세요. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다.</li>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다.</li></ol></section>
 <section class="box"><h2>실제 기사에서 원자료 찾기</h2>
 <ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>을 열고 이 압축 안의 <code>참여 과제/예비비/blind-tasks.json</code> 또는 <code>참여 과제/고용/blind-tasks.json</code>을 고르세요.
 참여 순서대로 익명 코드를 입력해 배정표를 만들고 배부 전에 JSON을 보관하세요.
-예비비는 기본 배포 폴더, 고용은 <code>labour-field-review</code> 폴더에 참여자 ZIP이 있습니다.
-각 행의 ‘코드 복사’를 눌러 참여자에게 본인의 배정 코드와 해당 ZIP을 전달합니다.</li>
+각 행의 ‘코드 복사’를 누르고, 아래에서 배정한 기사와 방식에 맞는 ZIP을 골라 코드와 함께 전달하세요. 같은 기사에 참여하는 두 방식의 ZIP은 이 화면에서 함께 받으세요.
+<ul><li>예비비 기사 · <a href="참여 과제/예비비/예비비-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/예비비/예비비-저널.zip" download>저널 병행 ZIP</a></li>
+<li>고용 기사 · <a href="참여 과제/고용/고용-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/고용/고용-저널.zip" download>저널 병행 ZIP</a></li></ul></li>
 <li>참여자는 압축을 풀어 <code>field-review.html</code>을 열고 본인의 배정 코드를 확인합니다. 익명 코드와 과제 번호를 따로 받았다면 직접 입력합니다.
 현업 편집자·팩트체커는 본인이 ‘현업 참여’를 선택합니다. ‘시간 측정 시작’을 누르면 검토할 문장과 기사 링크가 나타납니다. 완료하거나 중단하면 참여 기록을 내려받아 진행자에게 전달합니다.
 진행자가 이 압축의 참여 화면을 확인할 때는 <code>참여 과제</code> 폴더에서 해당 기사의 <code>blind-tasks.json</code>을 불러오세요.</li>
@@ -72,7 +74,8 @@ def packet_bytes():
     standalone = html('factcheck.html', 'journal', '')
     reviewer = {}
     add_page(reviewer, 'factcheck.html', standalone)
-    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': START.encode()}
+    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': START.encode(),
+             'participant-editor-study.zip': editor_participant_zip()}
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()
@@ -85,6 +88,9 @@ def packet_bytes():
     for case, folder in CASE_FOLDERS.items():
         files[f'채점표/{folder}/coordinator-key.json'] = (CASES / case / 'coordinator-key.json').read_bytes()
         files[f'참여 과제/{folder}/blind-tasks.json'] = (CASES / case / 'blind-tasks.json').read_bytes()
+        for method, data in packet_pair(case).items():
+            label = '평소도구' if method == 'manual' else '저널'
+            files[f'참여 과제/{folder}/{folder}-{label}.zip'] = data
     return zip_bytes(files)
 
 

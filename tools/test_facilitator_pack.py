@@ -10,6 +10,8 @@ from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_facilitator_pack import CASES, CASE_FOLDERS, READER, packet_bytes
+from build_editor_study_pack import packet_bytes as editor_participant_zip
+from build_field_participant_packs import packet_pair
 
 
 class Dependencies(HTMLParser):
@@ -26,6 +28,21 @@ class Dependencies(HTMLParser):
 
 
 class FacilitatorPack(unittest.TestCase):
+    def test_linked_participant_kits_match_the_standalone_distributions(self):
+        with ZipFile(BytesIO(packet_bytes())) as coordinator:
+            links = Dependencies()
+            links.feed(coordinator.read('시작.html').decode())
+            expected = {'participant-editor-study.zip': editor_participant_zip()}
+            for case, folder in CASE_FOLDERS.items():
+                pair = packet_pair(case)
+                expected[f'참여 과제/{folder}/{folder}-평소도구.zip'] = pair['manual']
+                expected[f'참여 과제/{folder}/{folder}-저널.zip'] = pair['journal']
+            self.assertEqual(len(expected), 5)
+            for name, contents in expected.items():
+                with self.subTest(name=name):
+                    self.assertIn(name, links.local)
+                    self.assertEqual(coordinator.read(name), contents)
+
     def test_both_dashboards_and_their_offline_paths_resolve(self):
         with ZipFile(BytesIO(packet_bytes())) as archive:
             self.assertIsNone(archive.testzip())

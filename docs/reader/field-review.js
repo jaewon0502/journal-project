@@ -4,6 +4,7 @@
     el = (id) => document.getElementById(id);
   const assignedCase = el('case-file').dataset.caseId;
   const fixedMethod = el('method').disabled;
+  const kitVersion = c.kitVersion(document.querySelector('meta[name="journal-field-kit"]')?.content);
   const key = assignedCase
     ? 'journal-natural-trial-v1:' + JSON.stringify([assignedCase, el('method').value])
     : 'journal-natural-trial-v1';
@@ -50,6 +51,7 @@
     el('work').hidden = !session || !!session.result;
     el('ended').hidden = !session?.result;
     if (!session) {
+      el('kit-note').hidden = !!kitVersion || el('kind').value !== 'editor';
       el('participant').disabled = el('task').disabled = inviteActive;
       el('method').disabled = fixedMethod || inviteActive;
       el('manual-entry').hidden = !inviteActive;
@@ -168,6 +170,7 @@
     }
   };
   el('task').onchange = render;
+  el('kind').onchange = render;
   el('participant').oninput = render;
   el('start').onclick = () => {
     if (session || !pack || (inviteActive && !assignment) || !el('participant').value.trim()) return;
@@ -182,7 +185,7 @@
       id: crypto.randomUUID(),
       kind: el('kind').value,
       ...selected,
-      kitVersion: c.kitVersion(document.querySelector('meta[name="journal-field-kit"]')?.content)
+      kitVersion
     };
     session = {
       base,
