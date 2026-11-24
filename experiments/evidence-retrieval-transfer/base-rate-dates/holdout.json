@@ -1,0 +1,45 @@
+{
+  "title": "한국은행 기준금리 추이",
+  "sourceUrl": "https://www.bok.or.kr/portal/singl/baseRate/list.do?dataSecd=00001&menuNo=200643",
+  "lines": [
+    "변경일자 | 기준금리(%)",
+    "2023년 01월 13일 | 3.50",
+    "2022년 11월 24일 | 3.25",
+    "2022년 10월 12일 | 3.00",
+    "2022년 08월 25일 | 2.50",
+    "2022년 07월 13일 | 2.25",
+    "2022년 05월 26일 | 1.75",
+    "2022년 04월 14일 | 1.50",
+    "2022년 01월 14일 | 1.25",
+    "2021년 11월 25일 | 1.00",
+    "2021년 08월 26일 | 0.75",
+    "2020년 05월 28일 | 0.50"
+  ],
+  "cases": [
+    {
+      "id": "bok-january-decision",
+      "query": "2022년 1월 14일에 정한 기준금리는 몇 퍼센트였나요?",
+      "expectedLine": 9
+    },
+    {
+      "id": "bok-april-correction",
+      "query": "원고에 2022년 4월 14일 기준금리를 1.25%로 썼는데, 그날 수치가 맞나요?",
+      "expectedLine": 8
+    },
+    {
+      "id": "bok-reverse-lookup",
+      "query": "기준금리가 2.25%로 바뀐 날짜를 표에서 찾아주세요.",
+      "expectedLine": 6
+    },
+    {
+      "id": "bok-november-date",
+      "query": "2021년 11월에 한국은행이 금리를 바꾼 날은 며칠인가요?",
+      "expectedLine": 10
+    },
+    {
+      "id": "bok-outside-excerpt",
+      "query": "2020년 3월 17일 변경된 기준금리는 얼마였나요?",
+      "expectedLine": null
+    }
+  ]
+}
