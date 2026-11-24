@@ -56,6 +56,15 @@
 </section>
 <section aria-labelledby="blind-restore-title">
 <h3 id="blind-restore-title">돌아온 평가 비교</h3>
+<label for="blind-bundle-files">두 편집자의 결과 한꺼번에 열기</label>
+<p id="blind-bundle-help" class="note">같은 기사의 작업 파일 4개와 진행자 대응표 2개를 선택하세요. 폴더가 다르면 나눠서 추가하세요. 6개가 모이면 파일 안의 배정 번호로 짝을 찾아 비교합니다.</p>
+<input type="file" id="blind-bundle-files" accept=".json,application/json" multiple aria-describedby="blind-bundle-help">
+<p id="blind-bundle-status" class="status" role="status"></p>
+<div id="blind-bundle-selection" hidden>
+<ol id="blind-bundle-list"></ol>
+<button id="blind-bundle-clear" type="button">선택한 파일 모두 지우기</button>
+</div>
+<h4>편집자 한 명의 결과 열기</h4>
 <p class="note">한 검토자가 평가한 작업 파일 두 개를 어느 쪽에 넣어도 됩니다. 같은 묶음의 대응표를 선택하세요.</p>
 <div id="agreement-held" hidden><p id="agreement-status" class="status" role="status"></p><button id="agreement-reset" type="button">첫 편집자 선택 해제</button></div>
 <div class="pair">

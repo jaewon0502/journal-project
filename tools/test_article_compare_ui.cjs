@@ -19,19 +19,73 @@ function page(t, hash = '') {
   Object.defineProperty(w, 'crypto', {value:require('node:crypto').webcrypto});
   for (const script of w.document.querySelectorAll('script[src]')) w.eval(fs.readFileSync(path.join(dir,script.getAttribute('src')), 'utf8'));
   const el = id => w.document.getElementById(id);
-  function select(id, name, content) {
+  function selectFiles(id, files) {
     const field = el(id);
-    Object.defineProperty(field,'files',{configurable:true, value:[{name, text:()=>Promise.resolve(content)}]});
+    Object.defineProperty(field,'files',{configurable:true, value:files});
     field.dispatchEvent(new w.Event('change'));
   }
+  const select = (id, name, content) => selectFiles(id, [{name, text:()=>Promise.resolve(content)}]);
   const load = (side, name, content) => select('file-' + side, name, content);
   function reviewers() {
     const radio = w.document.querySelector('[value=reviewers]');
     radio.click();
   }
   const settled = () => new Promise(resolve => setImmediate(resolve));
-  return {w, el, load, select, reviewers, settled};
+  return {w, el, load, select, selectFiles, reviewers, settled};
 }
+
+test('다른 폴더의 같은 이름 파일도 모아서 비교하고 잘못 고른 한 개만 교체한다', async t => {
+  const p = page(t, '#blind-revision');
+  const before = require('../experiments/article-review-pilot/a-original.json');
+  const after = require('../experiments/article-review-pilot/b-revised.json');
+  async function assigned(editor) {
+    const {key, packets} = await p.w.JournalBlindRevision.prepare(before, after);
+    for (const role of ['before', 'after']) {
+      const work = packets[key.mapping[role].slot];
+      const row = engine.prepare(work.article, work.sources).rows[0];
+      work.receipts.push(engine.decide(row, {status:role === 'before' ? 'contradicted' : 'fact',
+        acknowledged:true, sourceIds:[work.sources[0].id], reason:editor + '의 원자료 판정'}, work.sources));
+    }
+    return [key, packets.B, packets.A].map(data => ({name:'같은 이름.json', text:async () => JSON.stringify(data)}));
+  }
+  const upload = files => p.selectFiles('blind-bundle-files', files);
+  const first = await assigned('가'), second = await assigned('나');
+  upload(first);
+  assert.match(p.el('blind-bundle-status').textContent, /3\/6/);
+  assert.equal(p.el('result').hidden, true);
+  upload([second[0], second[1], {name:'깨짐.json', text:async () => '{'}]);
+  await t.waitFor(() => assert.match(p.el('blind-bundle-status').textContent, /6번 파일 깨짐.json.*JSON/));
+  assert.equal(p.el('agreement-export'), null);
+  p.el('blind-bundle-list').querySelectorAll('button')[5].click();
+  assert.match(p.el('blind-bundle-status').textContent, /5\/6/);
+  upload([second[2]]);
+  await t.waitFor(() => assert.ok(p.el('agreement-export')));
+  assert.match(p.el('joint-facts').querySelector('[data-fact-row="support"]').textContent, /0% \(0\/1\)100% \(1\/1\)/);
+  assert.equal(p.el('joint-facts').querySelectorAll('.fact-alerts[data-edition="before"] .pair > div').length, 2);
+  assert.equal(p.el('agreement-held').hidden, true);
+  p.el('blind-bundle-clear').click();
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.el('blind-bundle-list').children.length, 0);
+  const blank = JSON.parse(await second[2].text());
+  blank.receipts = [];
+  upload([...first, second[0], second[1], {name:'같은 이름.json', text:async () => JSON.stringify(blank)}]);
+  await t.waitFor(() => assert.ok(p.el('missing-returns')));
+  assert.match(p.el('missing-returns').textContent, /집계 전에 확인할 파일 1개.*선택 6번 · 같은 이름.json.*저장된 판정이 없습니다/);
+  assert.equal(p.el('agreement-export'), null);
+  assert.ok(p.el('joint-facts'));
+  p.el('blind-bundle-list').querySelectorAll('button')[5].click();
+  upload([second[2]]);
+  await t.waitFor(() => assert.ok(p.el('agreement-export')));
+  p.el('blind-bundle-clear').click();
+  let finish;
+  upload([...first, ...second.slice(0,2), {name:'늦게 연 파일.json', text:() => new Promise(resolve => { finish = resolve; })}]);
+  p.reviewers();
+  finish(await second[2].text());
+  await p.settled();
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.el('agreement-export'), null);
+  assert.equal(p.el('blind-bundle-status').textContent, '');
+});
 
 test('판본 확인 이후에만 비교하고 파일을 바꾸거나 잘못 열면 이전 승인과 수치를 걷는다', async t => {
   const p=page(t);

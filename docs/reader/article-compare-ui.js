@@ -7,6 +7,7 @@
   const reads = {left: 0, right: 0};
   const returns = ['first', 'second', 'key'];
   const returnInput = id => byId('blind-return-' + id);
+  let bundleFiles = [];
   let generation = 0, recovery = 0;
   let kit = null, preparing = false, resolving = false;
   let firstReview = null;
@@ -37,13 +38,19 @@
     resolving = false;
     byId('blind-return-status').textContent = '';
   }
-  function clearResults() {
+  function clearBundleSelection() {
+    bundleFiles = [];
+    renderBundleSelection();
+    blindStatus('blind-bundle-status', '');
+  }
+  function clearResults(keepBundle = false) {
     generation++;
     kit = null;
     preparing = false;
     byId('blind-downloads').hidden = true;
     byId('blind-prep-status').textContent = '';
     cancelRecovery();
+    if (!keepBundle) clearBundleSelection();
     showingExample = false;
     byId('example').textContent = '가상 예시 보기';
     byId('result').hidden = true;
@@ -419,10 +426,10 @@
     }
     return panel;
   }
-  function jointPanel(current) {
+  function jointPanel(current, priorReview) {
     const panel = section('두 편집자가 함께 확인한 변화');
     panel.id = 'revision-agreement';
-    if (!firstReview) {
+    if (!priorReview) {
       if (current.sourceChanged) return null;
       const keep = element('button', '첫 편집자 결과로 선택');
       keep.type = 'button';
@@ -437,7 +444,7 @@
       return panel;
     }
     let joint;
-    try { joint = window.JournalRevisionAgreement.compare(firstReview, current); }
+    try { joint = window.JournalRevisionAgreement.compare(priorReview, current); }
     catch (error) {
       panel.append(element('p', error.message, 'warn'), note('아래 수치는 방금 연 편집자 한 사람의 결과입니다.'));
       return panel;
@@ -445,25 +452,45 @@
     const grid = element('div', null, 'metrics');
     grid.append(card('두 사람 모두 개선으로 판정', joint.improved, '두 사람 모두 원본을 2~3단계로 평가하고 수정본도 채점한 항목 중'),
       card('두 사람 모두 악화로 판정', joint.worsened, '두 사람 모두 원본을 0~1단계로 평가하고 수정본도 채점한 항목 중'));
-    const editors = [firstReview, current];
+    const editors = [priorReview, current];
     const editorNames = ['첫 편집자', '둘째 편집자'];
     panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid,
       note('네 판정이 모두 있는 항목 ' + joint.paired + '/' + joint.total + '개 · 비교할 단계가 부족한 항목 ' + joint.unpaired +
         '개 · 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'));
     if (joint.stableSeverityDifferences) panel.append(note('두 사람 모두 유지로 보았지만 중요한 왜곡이 있는지에 대한 판단이 다른 항목 ' +
       joint.stableSeverityDifferences + '개'));
-    const record = window.JournalRevisionSeries.makeRecord(joint, current.key);
-    const save = element('button', '기사별 평가 요약 저장');
-    save.type = 'button';
-    save.id = 'agreement-export';
-    save.addEventListener('click', () => downloadJson(record, '기사평가-' + record.before.articleSha256.slice(0, 12) +
-      '-' + record.after.articleSha256.slice(0, 12) + '.json'));
     const series = element('a', '여러 기사 집계 새 탭에서 열기');
     series.href = 'revision-series.html';
     series.target = '_blank';
     series.rel = 'noopener';
     const actions = element('div', null, 'actions');
-    actions.append(save, series);
+    if (joint.missingReturns.length) {
+      const warning = element('div', null, 'warn');
+      warning.id = 'missing-returns';
+      warning.append(element('strong', '집계 전에 확인할 파일 ' + joint.missingReturns.length + '개'));
+      const problems = {empty:'저장된 판정이 없습니다.', draft:'작성 중인 판정만 있습니다.',
+        invalid:'현재 판본에 사용할 수 있는 저장 판정이 없습니다.'};
+      const list = element('ul');
+      for (const missing of joint.missingReturns) {
+        const editor = editors[missing.editor];
+        const before = missing.role === 'before';
+        const file = editor.ordered[before ? 0 : 1];
+        const selected = file.position ? ' · 선택 ' + file.position + '번' : '';
+        list.append(element('li', editorNames[missing.editor] + ' · ' + (before ? '수정 전' : '수정 후') +
+          ' · 묶음 ' + editor.code + selected + ' · ' + file.name + ' — ' + problems[missing.state]));
+      }
+      warning.append(list, note('현재 들어온 판정은 아래에서 확인할 수 있습니다. 해당 편집자가 판정을 기록한 결과 파일로 교체하면 기사별 요약을 저장할 수 있습니다.'));
+      panel.append(warning);
+    } else {
+      const record = window.JournalRevisionSeries.makeRecord(joint, current.key);
+      const save = element('button', '기사별 평가 요약 저장');
+      save.type = 'button';
+      save.id = 'agreement-export';
+      save.addEventListener('click', () => downloadJson(record, '기사평가-' + record.before.articleSha256.slice(0, 12) +
+        '-' + record.after.articleSha256.slice(0, 12) + '.json'));
+      actions.append(save);
+    }
+    actions.append(series);
     panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정 종류와 충돌 표시, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     for (const dimension of joint.dimensions) {
@@ -487,7 +514,7 @@
     panel.append(jointFactPanel(joint, editors), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
     return panel;
   }
-  function show(snapshots, synthetic, restored) {
+  function show(snapshots, synthetic, restored, priorReview = firstReview) {
     try {
       const c = window.JournalArticleCompare.compare(...snapshots, mode());
       const output = byId('output');
@@ -527,7 +554,7 @@
         }
       }
       if (restored) {
-        const joint = jointPanel(restored);
+        const joint = jointPanel(restored, priorReview);
         if (joint) output.append(joint);
       }
       output.append(biasPanel(c, snapshots), accuracyPanel(c, snapshots), mode() === 'revision' ? revisionFacts(c, snapshots) : reviewerFacts(c, snapshots));
@@ -583,6 +610,56 @@
     const code = kit.key.pairId.slice(0, 8);
     downloadJson(key ? kit.key : kit.packets[part], (key ? '진행자전용-대응표-' + code : '검토-' + code + '-' + part) + '.json');
   }
+  async function readReturnFile(file, position) {
+    try { return {...await readJson(file), position}; }
+    catch (error) { throw new Error((position ? position + '번 파일 ' : '') + file.name + ' · ' + error.message); }
+  }
+  function renderBundleSelection() {
+    const list = byId('blind-bundle-list');
+    list.replaceChildren();
+    byId('blind-bundle-selection').hidden = !bundleFiles.length;
+    bundleFiles.forEach((file, index) => {
+      const item = element('li');
+      const remove = element('button', '빼기');
+      remove.type = 'button';
+      remove.setAttribute('aria-label', (index + 1) + '번째 파일 ' + file.name + ' 빼기');
+      remove.addEventListener('click', () => {
+        bundleFiles.splice(index, 1);
+        compareBundleSelection();
+        byId('blind-bundle-files').focus();
+      });
+      item.append(document.createTextNode(file.name + ' '), remove);
+      list.append(item);
+    });
+  }
+  async function compareBundleSelection() {
+    selectFirstReview(null);
+    clearResults(true);
+    updateInputs();
+    renderBundleSelection();
+    const current = recovery;
+    const count = bundleFiles.length;
+    if (count !== 6) {
+      const message = count > 6 ? '개를 선택했습니다. 작업 파일 4개와 대응표 2개만 남겨 주세요.'
+        : '/6개를 선택했습니다.';
+      blindStatus('blind-bundle-status', '파일 ' + count + message, count > 6);
+      return;
+    }
+    blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 기사 판본을 확인하고 있습니다.');
+    try {
+      const items = await Promise.all(bundleFiles.map((file, index) => readReturnFile(file, index + 1)));
+      if (current !== recovery) return;
+      const reviews = await window.JournalBlindRevision.resolveBundle(items);
+      if (current !== recovery) return;
+      for (const review of reviews) {
+        review.snapshots = [review.before, review.after].map(work => window.JournalWorkspaceSnapshot.read(work));
+      }
+      blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 수정 전후 판본이 일치합니다.');
+      show(reviews[1].snapshots, false, reviews[1], reviews[0]);
+    } catch (error) {
+      if (current === recovery) blindStatus('blind-bundle-status', error.message, true);
+    }
+  }
   async function restoreKit() {
     if (byId('blind-resolve').disabled) return;
     clearResults();
@@ -591,11 +668,7 @@
     updateInputs();
     blindStatus('blind-return-status', '파일과 대응표를 확인하고 있습니다.');
     try {
-      const [first, second, key] = await Promise.all(returns.map(async id => {
-        const file = returnInput(id).files[0];
-        try { return await readJson(file); }
-        catch (error) { throw new Error(file.name + ' · ' + error.message); }
-      }));
+      const [first, second, key] = await Promise.all(returns.map(id => readReturnFile(returnInput(id).files[0])));
       if (current !== recovery) return;
       const result = await window.JournalBlindRevision.resolve(key.data, first.data, second.data);
       if (current !== recovery) return;
@@ -630,6 +703,7 @@
   byId('compare').addEventListener('click', () => {
     if (byId('compare').disabled) return;
     cancelRecovery();
+    clearBundleSelection();
     updateInputs();
     show([files.left.snapshot, files.right.snapshot], false);
   });
@@ -646,6 +720,18 @@
   }
   for (const id of returns) returnInput(id).addEventListener('change', () => {
     clearResults(); updateInputs();
+  });
+  const bundleInput = byId('blind-bundle-files');
+  bundleInput.addEventListener('change', () => {
+    if (!bundleInput.files.length) return;
+    bundleFiles = bundleFiles.concat(Array.from(bundleInput.files));
+    bundleInput.value = '';
+    compareBundleSelection();
+  });
+  byId('blind-bundle-clear').addEventListener('click', () => {
+    bundleFiles = [];
+    compareBundleSelection();
+    bundleInput.focus();
   });
   byId('blind-resolve').addEventListener('click', restoreKit);
   function openCoordinatorLink() {

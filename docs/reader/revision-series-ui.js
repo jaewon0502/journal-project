@@ -68,7 +68,7 @@
     panel.id = 'series-facts';
     panel.append(element('h3', '편향 개선과 사실 확인'));
     const facts = report.facts;
-    panel.append(element('p', '사실 판정이 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
+    panel.append(element('p', '구절별 검토 상태가 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
     if (facts.missingArticles) panel.append(element('p', '이전 형식 요약 ' + facts.missingArticles +
       '건에는 구절별 사실 판정이 없습니다. 두 편집자의 작업 파일과 대응표를 다시 열어 기사별 요약을 저장하면 함께 집계할 수 있습니다.', 'note'));
     if (!facts.articleCount) return panel;
