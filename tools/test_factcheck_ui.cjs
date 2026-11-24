@@ -822,3 +822,61 @@ test('대상 연도의 항목을 펼쳐도 표 전체의 값을 질문의 답으
   set('document-query', '2017년 보유 시설은 얼마인가?'); click('find-passages');
   assert.doesNotMatch(lookup.textContent,/원표 항목/);
 });
+
+test('직접 고른 표의 좌표는 작업을 다시 열어도 발췌문과 함께 바뀌며 취소하면 둘 다 보존된다', async t => {
+  const first = open(t);
+  first.set('article', '시설 이용 기록을 확인한다.');
+  first.el('article-form').requestSubmit();
+  const lines = ['구분\t2023년\t2024년', '평일 이용\t120\t133', '휴일 이용\t59\t72  '];
+  function browse(page) {
+    page.set('document-text', lines.join('\n'));
+    page.set('document-query', '2024년 휴일 이용자 중 어린이는 몇 명인가요?');
+    page.click('find-passages');
+    const results = page.el('finder-results');
+    assert.doesNotMatch(results.textContent, /원문 값/);
+    const chooser = [...results.querySelectorAll('details')].find(d =>
+      d.querySelector('summary')?.textContent === '원표의 행과 연도 직접 선택');
+    chooser.open = true;
+    chooser.dispatchEvent(new page.w.Event('toggle'));
+    const selects = chooser.querySelectorAll('select');
+    const use = chooser.querySelector('button');
+    assert.ok(use.disabled);
+    const choose = (index, item) => {
+      selects[index].selectedIndex = item;
+      selects[index].dispatchEvent(new page.w.Event('change'));
+    };
+    return {choose, use, preview:chooser.querySelector('[aria-live]')};
+  }
+  let selection = browse(first);
+  selection.choose(0, 1);
+  assert.ok(selection.use.disabled);
+  selection.choose(1, 2);
+  assert.match(selection.preview.textContent, /평일 이용.*2024년.*133.*3번째 열/);
+  assert.equal(first.el('source-excerpt').value, '');
+  selection.use.click();
+  first.click('save-work');
+  const saved = JSON.parse(await first.snapshot());
+  const page = open(t);
+  await loadWorkspace(page, saved);
+  selection = browse(page);
+  selection.choose(0, 2); selection.choose(1, 1);
+  page.w.confirm = () => false;
+  selection.use.click();
+  assert.equal(page.el('source-excerpt').value, lines[1]);
+  assert.equal(page.el('source-locator').value, '‘평일 이용’ 행 · ‘2024년’ 열');
+  page.w.confirm = () => true;
+  selection.use.click();
+  assert.equal(page.el('source-excerpt').value, lines[2]);
+  assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2023년’ 열');
+  selection.choose(1, 2); selection.use.click();
+  assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2024년’ 열');
+  page.set('document-text', '별도 회의 자료에서 참석자 수를 확인했다.');
+  page.set('document-query', '회의 자료'); page.click('find-passages');
+  page.el('finder-results').querySelector('.source > button').click();
+  assert.equal(page.el('source-locator').value, '');
+  assert.equal(page.el('source-excerpt').value, '별도 회의 자료에서 참석자 수를 확인했다.');
+  page.click('save-work');
+  const changed = JSON.parse(await page.snapshot());
+  assert.deepEqual(changed.sources, []); assert.deepEqual(changed.receipts, []);
+  assert.equal(page.el('verdict').value, '');
+});

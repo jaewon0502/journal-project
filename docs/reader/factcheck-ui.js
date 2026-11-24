@@ -127,6 +127,7 @@
       part.append(button('자료 수정', () => {
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
         clearSourceTarget();
+        suggestedLocator = '';
         editingId = source.id;
         for (const field of sourceFields) byId('source-' + field).value = source[field] || '';
         byId('source-form-title').textContent = '원자료 수정';
@@ -137,7 +138,7 @@
       catalog.append(part);
     }
   }
-  let sourceBaseline = {}, prefillId = null;
+  let sourceBaseline = {}, prefillId = null, suggestedLocator = '';
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
     return sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
@@ -148,6 +149,7 @@
   }
   function clearSourceForm(reuse = {}) {
     clearSourceTarget();
+    suggestedLocator = '';
     editingId = null;
     prefillId = reuse.id || null;
     sourceBaseline = workspace.sourceDefaults(reuse);
@@ -537,14 +539,67 @@
   byId('go-add-source').addEventListener('click', () => openSourceTools(false));
   byId('go-find').addEventListener('click', () => openSourceTools(true));
   function useExcerpt(entry, tableLocation = '') {
-    if (byId('source-excerpt').value && !confirm('입력한 발췌문을 선택한 문단으로 바꿀까요? 기존 위치가 이 구간과 일치하는지도 확인하세요.')) return;
-    byId('source-excerpt').value = entry.text;
-    if (tableLocation && !byId('source-locator').value.trim()) byId('source-locator').value = tableLocation;
+    const excerpt = byId('source-excerpt'), locator = byId('source-locator');
+    const maySetLocation = !locator.value.trim() || (suggestedLocator && locator.value === suggestedLocator);
+    if (excerpt.value && (excerpt.value !== entry.text || (tableLocation && locator.value !== tableLocation))) {
+      const next = maySetLocation
+        ? (tableLocation ? '표 위치도 ' + tableLocation + '로 바뀝니다.' : '이전 표의 자동 위치는 비웁니다.')
+        : '직접 적은 위치는 유지됩니다. 이 구간과 일치하는지 확인하세요.';
+      if (!confirm('선택한 원문으로 발췌문을 바꿀까요? ' + next)) return;
+    }
+    if (maySetLocation && (tableLocation || excerpt.value !== entry.text)) {
+      locator.value = tableLocation;
+      suggestedLocator = tableLocation;
+    }
+    excerpt.value = entry.text;
     message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. ' +
       (tableLocation ? '원표의 제목·단위와 아래 위치가 이 행·열에 맞는지 확인하세요.' :
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
     byId('source-locator').focus();
+  }
+  function matrixLocation(label, heading) {
+    return '‘' + label + '’ 행 · ‘' + heading + '’ 열';
+  }
+  function matrixBrowser(matrix) {
+    const details = node('details');
+    details.append(node('summary', '원표의 행과 연도 직접 선택'));
+    details.addEventListener('toggle', function setup() {
+      if (!details.open) return;
+      details.removeEventListener('toggle', setup);
+      const rowSelect = node('select'), yearSelect = node('select');
+      const rowLabel = node('label', '원표 행 · ' + matrix.headers[0]), yearLabel = node('label', '연도 열');
+      rowLabel.append(rowSelect);
+      yearLabel.append(yearSelect);
+      for (const [select, options] of [[rowSelect, matrix.rows.map(row => row.label)], [yearSelect, matrix.headers.slice(1)]]) {
+        select.append(node('option', '선택하세요'));
+        for (const option of options) select.append(node('option', option));
+      }
+      const preview = node('p');
+      preview.setAttribute('aria-live', 'polite');
+      const use = button('직접 선택한 행을 발췌문으로 사용', () => {
+        const row = matrix.rows[rowSelect.selectedIndex - 1];
+        if (row && yearSelect.selectedIndex > 0)
+          useExcerpt(row, matrixLocation(row.label, matrix.headers[yearSelect.selectedIndex]));
+      });
+      use.disabled = true;
+      function showSelection() {
+        const row = matrix.rows[rowSelect.selectedIndex - 1];
+        const column = yearSelect.selectedIndex;
+        use.disabled = !row || column < 1;
+        if (use.disabled) { preview.textContent = ''; return; }
+        const value = row.values[column - 1];
+        preview.textContent = '직접 선택한 위치 · ' + matrixLocation(row.label, matrix.headers[column]) +
+          ' · ' + (value ? '원문 표기 ' + value : '빈 셀') +
+          ' (머리글 ' + matrix.headerParagraph + '문단 · 자료 ' + row.paragraph + '문단 · 왼쪽에서 ' + (column + 1) + '번째 열)';
+      }
+      rowSelect.addEventListener('change', showSelection);
+      yearSelect.addEventListener('change', showSelection);
+      details.append(node('p', '원표의 항목과 기간을 골라 인쇄된 값을 확인하세요. 단위와 대상 범위는 원본에서 대조하세요.'));
+      if (matrix.legend) details.append(node('p', matrix.legend.text, 'verbatim'));
+      details.append(rowLabel, yearLabel, preview, use);
+    });
+    return details;
   }
   function documentRows(text) {
     const rows = [];
@@ -652,7 +707,9 @@
         block.append(node('p', '질문에 적힌 시점은 ' + period.requested + ', 이 행 첫 칸은 ' + period.source
           + '입니다. 원표에서 기준 시점을 확인하세요.', 'callout'));
       }
-      const columns = window.JournalEvidenceColumns.forRow(text, query, passage);
+      if (passage.matrixNavigation) block.append(node('p', '질문에 적힌 ‘' + passage.matrixNavigation.rowLabel +
+        '’ 행입니다. 질문의 세부 조건과 단위는 원표에서 확인하세요.'));
+      const columns = !passage.matrixNavigation && window.JournalEvidenceColumns.forRow(text, query, passage);
       if (columns) {
         const values = columns.cells.map(c => c.year + '년 · ' + c.column + '번째 수치 열 ' + c.value);
         block.append(node('p', '연도 머리글(' + columns.headerParagraph + '문단) 기준 · ' + values.join(' / ')));
@@ -713,13 +770,14 @@
         block.append(details);
       }
       if (matrix) {
-        const location = '‘' + matrix.rowLabel + '’ 행 · ‘' + matrix.heading + '’ 열';
+        const location = matrixLocation(matrix.rowLabel, matrix.heading);
         block.append(button('이 행을 발췌하고 표 위치 확인', () => useExcerpt(passage, location)));
       } else {
         block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
       }
       results.append(block);
     }
+    if (lookup.yearMatrix) area.append(matrixBrowser(lookup.yearMatrix));
   });
   for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
     if (id === 'document-query') clearSearchContext();
@@ -728,6 +786,7 @@
   });
   byId('source-form').addEventListener('input', event => {
     dirty = true;
+    if (event.target.id === 'source-locator') suggestedLocator = '';
     if (event.target.id === 'source-url' && byId('source-pdfPage').value) {
       byId('source-pdfPage').value = '';
       message('source-status', '문서 주소를 바꿨습니다. 새 주소에서 확인한 PDF 쪽번호를 입력하세요.');
@@ -777,7 +836,8 @@
     const rowDrafts = [...drafts].map(([rowId, data]) => ({rowId, data: {...data, acknowledged: false, correctionChecked: false, contentChecked: false}}));
     const workspace = {
       format: schema, article, sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: byId('article').value,
-      rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData()}
+      rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
+        ...(suggestedLocator ? {suggestedLocator} : {})}
     };
     try {
       download(JSON.stringify(workspace, null, 2), 'journal-factcheck-work.json', 'application/json');
@@ -825,6 +885,8 @@
         byId('source-save').textContent = '수정 적용';
       }
       for (const field of sourceFields) byId('source-' + field).value = w.sourceDraft.fields[field] || '';
+      if (w.sourceDraft.suggestedLocator === byId('source-locator').value)
+        suggestedLocator = byId('source-locator').value;
       refresh();
       byId('article').value = w.articleDraft;
       if (w.articleDraft !== article) {
