@@ -2,6 +2,7 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const factcheck = require('../docs/reader/factcheck-engine.js');
 const rubric = require('../docs/reader/article-rubric.js');
+const workspace = require('../docs/reader/workspace-snapshot.js');
 
 const sources = [
   {id: 'minute', url: 'https://council.example/agenda', locator: '의결표', version: '확정', excerpt: '시의회는 사업비 3억 원을 의결했다. 가 정당은 찬성했다. 이미 사업을 도입한 시행 범위는 시범 구역 한 곳이다.'},
@@ -167,4 +168,69 @@ test('이전 형식으로 저장한 평가도 현재 판단과 같으면 그대�
   assert.equal(rubric.evaluate(r, sources, old).stale, false);
   assert.equal(rubric.evaluate(r, sources, old).bias.assessed, 1);
   assert.equal(rubric.evaluate(state(article, [['held']]), sources, old).stale, true);
+});
+
+test('같은 판본에서 한 항목의 근거가 손상돼도 독립적으로 확인되는 평가와 핵심 표시는 복원한다', () => {
+  const r = state();
+  const {id} = r.rows[0];
+  const saved = form(r, {wording: entry(r.rows[0], 3), omission: entry(r.rows[1], 1)}, [id]);
+  saved.ratings.omission.sourceQuote = '원자료 어디에도 없다.';
+  saved.coreRowIds.push('존재하지 않는 구간');
+  const file = {format: workspace.schema, article, articleDraft: article, demo: false, sources, receipts: [],
+    rowDrafts: [], sourceDraft: {fields: Object.fromEntries(workspace.sourceFields.map(k => [k, '']))}, articleAssessment: saved};
+  const restored = workspace.read(file);
+  assert.equal(restored.stale, true);
+  assert.deepEqual(restored.assessment.accuracy.coreRowIds, [id]);
+  assert.equal(restored.assessment.bias.maxLevel, 3);
+  assert.equal(restored.assessment.bias.assessed, 1);
+  assert.deepEqual(Object.keys(restored.assessment.saved.ratings), ['wording']);
+  const roundTrip = workspace.read({...file, articleAssessment: restored.assessment.saved});
+  assert.equal(roundTrip.stale, false);
+  assert.equal(roundTrip.assessment.bias.maxLevel, 3);
+  assert.equal(workspace.read({...file, sources: [{...sources[0], version: '다음 판'}, sources[1]]}).assessment.bias.maxLevel, null);
+});
+
+test('근거 지지율이 100%여도 분모에서 빠지거나 일부 범위만 지지된 핵심 구절을 요약한다', () => {
+  const fact = '시의회가 3억 원을 의결한 것은';
+  const article = ['이 결정은 무책임하다.', fact + ' 무책임한 결정이다.', '의원은 “참담하다”고 말했다.', '회의가 열렸다.'].join('\n');
+  const report = state(article, [['opinion', []], ['mixed', ['minute'], {factSpan: fact, opinionSpan: '무책임한 결정이다.'}],
+    ['attribution', ['speech'], {contentStatus: 'opinion', contentChecked: true, contentReason: '의원의 평가다.'}], ['fact']]);
+  const result = rubric.evaluate(report, sources, form(report, {}, report.rows.map(r => r.id))).accuracy;
+  assert.equal(result.accuracyPct, 100);
+  assert.equal(result.coveragePct, 100);
+  assert.deepEqual(result.coreExcluded, [report.rows[0].id]);
+  assert.deepEqual(result.coreLimited, [report.rows[1].id, report.rows[2].id]);
+  assert.match(result.summary, /핵심 항목 1개는 의견.*분모/);
+  assert.match(result.summary, /핵심 항목 2개는 사실 구절 또는 발언 사실만/);
+});
+
+test('충돌 판정을 다시 작성하는 동안에는 미확인 시절 편향 평가가 되살아나지 않는다', () => {
+  const unreviewed = state(), id = unreviewed.rows[0].id;
+  const earlier = form(unreviewed, {wording: entry(unreviewed.rows[0], 0)});
+  const conflict = decision(unreviewed.rows[0], 'contradicted');
+  const draft = {...conflict, reason: '표의 기간을 다시 적는다.'};
+  const live = (receipts, edits) => workspace.activeReport(article, sources, receipts, new Map(edits));
+  const editing = live([conflict], [[id, draft]]);
+  assert.equal(editing.confirmedCount, 0);
+  assert.equal(editing.contradictedCount, 0);
+  assert.equal(editing.rows[0].receipt, null);
+  assert.equal(rubric.evaluate(editing, sources, earlier).bias.assessed, 0);
+  assert.equal(rubric.restoreDraft(editing, sources, {binding: earlier.binding, activeId: 'wording', entries: {wording: {level: '0'}}}), null);
+  const underReview = form(editing, {wording: entry(editing.rows[0], 1)});
+  assert.equal(rubric.evaluate(editing, sources, underReview).bias.assessed, 1);
+  const other = decision(unreviewed.rows[0], 'fact');
+  assert.equal(rubric.evaluate(live([other], [[id, draft]]), sources, underReview).bias.assessed, 0);
+  const duplicate = live([other, conflict], [[id, other]]);
+  assert.equal(duplicate.confirmedCount, 0);
+  assert.equal(duplicate.rows[0].receipt, null);
+  assert.equal(duplicate.rows[0].draftRecord, null);
+  const ambiguousLegacy = {...earlier, binding: JSON.stringify([rubric.version, editing.rows.map(row => [
+    row.id, row.binding, row.status, row.receipt?.checksum ?? null, !!row.draftPending
+  ])])};
+  assert.equal(rubric.evaluate(editing, sources, ambiguousLegacy).bias.assessed, 0);
+  assert.equal(rubric.evaluate(live([], [[id, draft]]), sources, earlier).bias.assessed, 1);
+  const recorded = live([conflict], []);
+  const confirmed = form(recorded, {wording: entry(recorded.rows[0], 2)});
+  assert.equal(rubric.evaluate(editing, sources, confirmed).bias.assessed, 0);
+  assert.equal(rubric.evaluate(live([conflict], []), sources, confirmed).bias.maxLevel, 2);
 });

@@ -73,7 +73,7 @@
     }
     // Ratings excluded as stale still sit in the saved assessment. They come back if the
     // reviewer cancels the sentence edit, so a rubric change must not erase them silently.
-    const staleRatings = review.stale && saved && typeof saved.ratings === 'object' && saved.ratings ? Object.keys(saved.ratings).length : 0;
+    const staleRatings = review.stale && saved?.ratings ? Object.keys(saved.ratings).filter(id => !Object.hasOwn(assessment?.ratings || {}, id)).length : 0;
     let discardConfirmed = false;
     function commit(coreRowIds, ratings) {
       if (staleRatings && !discardConfirmed) {
@@ -102,7 +102,7 @@
       cards.append(metric('판정한 구간 중 근거가 지지한 비율', a.supported, a.adjudicated, a.accuracyPct),
         metric('판정 대상 중 지지·반증을 가린 비율', a.adjudicated, a.total, a.coveragePct));
       const counts = text('p', '근거 지지 ' + a.supported + ' · 원문과 근거 충돌 ' + a.contradicted + ' · 미결 ' + a.unresolved + ' · 분모 제외 ' + a.excluded, 'rub-counts');
-      const centralConcern = a.coreContradicted.length || a.coreUnresolved.length;
+      const centralConcern = a.coreContradicted.length || a.coreUnresolved.length || a.coreExcluded.length || a.coreLimited.length;
       summaryBox.replaceChildren(text('h3', '사실 정확성'), cards, counts, text('p', a.summary, centralConcern ? 'callout' : 'rub-note'));
       const listTitle = container.querySelector('[data-section="accuracy"] > summary');
       if (listTitle) listTitle.textContent = '구간별 집계와 핵심 주장 · ' + (a.coreRowIds.length ? a.coreRowIds.length + '개 지정' : '핵심 구절 미지정');
@@ -140,12 +140,13 @@
     }
     function stage(id, value) {
       const previous = assessment?.ratings?.[id] || draft.entries[id]?.previous;
+      if (assessment?.ratings?.[id] && !replaceRating(id, null)) return false;
       draft.entries[id] = {...copyFields(value), ...(previous ? {previous} : {})};
       draft.activeId = id;
-      if (assessment?.ratings?.[id]) replaceRating(id, null);
       writeDraft();
       updateDimension(id);
       biasSummary();
+      return true;
     }
     function updateDimension(id) {
       const state = editors.get(id);
@@ -195,7 +196,8 @@
           const citation = sourceLink(sourceById.get(savedRating.sourceId));
           if (citation) body.append(citation);
           body.append(btn('이 판단 수정', () => {
-            stage(dim.id, savedRating); feedback.textContent = ''; show();
+            if (!stage(dim.id, savedRating)) return;
+            feedback.textContent = ''; show();
             body.querySelector('select')?.focus();
           }), btn('미평가로 되돌리기', () => {
             if (!root.confirm('이 항목의 판단을 지우고 미평가로 되돌릴까요?')) return;
@@ -304,7 +306,7 @@
     }
 
     container.replaceChildren(text('h2','기사 정확성과 편향 평가'));
-    if (review.stale) container.append(text('p','기사·근거·문장 판단이 바뀌어 이전 기사 평가를 현재 결과에서 제외했습니다.', 'callout'));
+    if (review.stale) container.append(text('p','현재 기사·근거·문장 판단과 대조할 수 없는 이전 평가를 집계에서 제외했습니다.', 'callout'));
     summaryBox = text('section'); container.append(summaryBox); accuracySummary();
     const nCore = review.accuracy.coreRowIds.length;
     const list = disclosure('구간별 집계와 핵심 주장 · ' + (nCore ? nCore + '개 지정' : '핵심 구절 미지정'), 'accuracy');

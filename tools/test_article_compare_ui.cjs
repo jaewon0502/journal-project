@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
+const engine = require('../docs/reader/factcheck-engine.js');
 const dir = path.join(__dirname, '../docs/reader');
 
 function workspace(article) {
@@ -82,4 +83,32 @@ test('가상 예시를 닫거나 비교 방식을 바꾸면 예시 수치가 지
   assert.match(p.el('output').textContent,/사실 판정 일치도/);
   p.el('example').click();
   assert.equal(p.el('result').hidden,true);
+});
+
+test('완료율이 그대로여도 사라진 원본 충돌 구절과 확인한 정정 문구·원문 쪽을 제시한다', async t => {
+  const p = page(t);
+  const source = {id: 'table', title: '시험 원표', url: 'https://example.org/report.pdf', version: '확정본',
+    locator: '지출표', pdfPage: '4', excerpt: '예산안은 10억 원이다. 회의는 열렸다.'};
+  function saved(article, states) {
+    const file = workspace(article);
+    file.sources = [source];
+    file.receipts = engine.prepare(article, file.sources).rows.map((row, i) => engine.decide(row, {
+      status: states[i], sourceIds: ['table'], acknowledged: true, reason: '확정본의 수치와 대조했다.',
+      ...(states[i] === 'contradicted' ? {correction: '예산안은 10억 원이다.', correctionChecked: true} : {})
+    }, file.sources));
+    return JSON.stringify(file);
+  }
+  const oldClaim = '예산안은 20억 원이다.';
+  p.load('left', '원본.json', saved(oldClaim + '\n회의는 열렸다.', ['contradicted', 'fact']));
+  p.load('right', '수정본.json', saved('예산안은 10억 원이다.\n회의는 열렸다.', ['fact', 'fact']));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  const details = [...p.el('output').querySelectorAll('details')];
+  const original = details.find(item => item.querySelector('summary').textContent.includes(oldClaim));
+  assert.ok(original);
+  assert.match(original.textContent, /대응 구절 미확인/);
+  assert.match(original.textContent, /근거와 대조한 정정 문구예산안은 10억 원이다/);
+  assert.match(original.textContent, /정정 문구와 일치하는 수정본 구절 · 원자료 지지/);
+  assert.match(original.textContent, /이 구절이 원래 주장을 바로잡았는지 대조하세요/);
+  assert.equal(original.querySelector('a').href, 'https://example.org/report.pdf#page=4');
+  assert.match(p.el('output').textContent, /수정 전 충돌 구절 1개/);
 });

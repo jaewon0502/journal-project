@@ -59,6 +59,8 @@
     return value;
   }
 
+  const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
+    'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
   function sourceTarget(source) {
     const url = new URL(source.url);
     const mock = [url, ...(source.originUrl ? [new URL(source.originUrl)] : [])].some(u =>
@@ -66,18 +68,24 @@
     if (mock) return null;
     const fragment = new URLSearchParams(url.hash.slice(1));
     const values = fragment.getAll('page');
+    // A viewer may use its fragment to select the document, e.g. #/reports/42 or #file=42.
+    // In such a link a PDF page is a manual locator. Replacing the fragment would drop the document.
+    const documentFragment = [...fragment.keys()].some(key =>
+      /[!/?=]/u.test(key) || (url.hash.includes('=') && !pdfViewParameters.has(key)));
     let page = null;
     if (source.pdfPage != null && source.pdfPage !== '') {
       page = physicalPage(source.pdfPage);
-      if (/\.(?:html?|xlsx?|csv|docx?|hwpx?|pptx?|txt|png|jpe?g|zip)$/iu.test(url.pathname)) {
+      if (/\.(?:xlsx?|csv|docx?|hwpx?|pptx?|txt|png|jpe?g|zip)$/iu.test(url.pathname) ||
+          (!documentFragment && /\.html?$/iu.test(url.pathname))) {
         throw new Error('쪽번호를 연결하려면 확인한 문서 주소에 PDF 파일을 여는 주소를 입력하세요.');
       }
+      if (documentFragment) return {href:url.href, page:null, localPage:page};
       // Direct PDF download endpoints may have no .pdf suffix. An explicit viewer
       // page is the editor's assertion about that file, never about its landing page.
       const view = new URLSearchParams({page});
       for (const key of ['zoom','view']) if (fragment.has(key)) view.set(key, fragment.get(key));
       url.hash = view.toString();
-    } else if (/\.pdf$/iu.test(url.pathname) && values.length === 1 && /^[1-9]\d*$/u.test(values[0])
+    } else if (!documentFragment && /\.pdf$/iu.test(url.pathname) && values.length === 1 && /^[1-9]\d*$/u.test(values[0])
         && Number.isSafeInteger(Number(values[0])) && !fragment.has('nameddest')) {
       page = values[0];
     }
@@ -436,6 +444,24 @@
     // A mobile or www copy is the same document as the desktop page.
     return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '') + parsed.search;
   }
+  // From the editor's recorded provenance only. Reprints may name another reprint
+  // as their source, and two differently worded reports can share that chain.
+  function relatedDocuments(catalog, selected) {
+    const links = new Map();
+    for (const source of catalog.items.values()) {
+      if (!source.originUrl) continue;
+      const copy = originAddress(source.url), original = originAddress(source.originUrl);
+      if (!links.has(copy)) links.set(copy, []);
+      if (!links.has(original)) links.set(original, []);
+      links.get(copy).push(original);
+      links.get(original).push(copy);
+    }
+    const related = new Set(selected.map(s => originAddress(s.url)));
+    for (const address of related) {
+      for (const linked of links.get(address) || []) related.add(linked);
+    }
+    return related;
+  }
   function excerptIdentity(source) {
     return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
   }
@@ -479,11 +505,12 @@
     const ids = decision.contentSourceIds;
     if (!Array.isArray(ids) || !ids.length || ids.some(id => !catalog.items.has(id)) || new Set(ids).size !== ids.length) throw new Error('발언의 내용 자체를 확인한 별도의 원자료를 선택하세요.');
     const speech = speechIds.map(id => catalog.items.get(id));
+    const speechDocuments = relatedDocuments(catalog, speech);
+    const speechExcerpts = new Set(speech.map(excerptIdentity));
     for (const id of ids) {
-      const source = catalog.items.get(id), excerpt = excerptIdentity(source);
-      const addresses = [source.url, source.originUrl].filter(Boolean).map(originAddress);
-      if (speech.some(original => [original.url, original.originUrl].filter(Boolean).some(url => addresses.includes(originAddress(url))) || excerptIdentity(original) === excerpt)) {
-        throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서 또는 같은 발췌문으로 내용을 확인할 수 없습니다.');
+      const source = catalog.items.get(id);
+      if (speechDocuments.has(originAddress(source.url)) || speechExcerpts.has(excerptIdentity(source))) {
+        throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서, 그 문서를 재인용한 자료, 같은 발췌문은 발언 내용의 독립 근거가 될 수 없습니다.');
       }
     }
     return {contentStatus, contentChecked: true, contentReason: decision.contentReason, contentSourceIds: [...ids].sort()};

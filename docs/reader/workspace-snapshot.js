@@ -13,6 +13,15 @@
       try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
     });
   }
+  function sourceDefaults(source = {}) {
+    let url = source.url || '';
+    if (url && engine.sourceTarget(source)?.page) {
+      const document = new URL(url);
+      document.hash = '';
+      url = document.href;
+    }
+    return {title: source.title || '', url, version: source.version || '', originUrl: source.originUrl || ''};
+  }
   function decisionKey(d = {}) {
     const content = [d.status || '', d.reason || '', [...(d.sourceIds || [])].sort()];
     if (['partial','mixed'].includes(d.status)) content.push(d.factSpan || '');
@@ -43,12 +52,22 @@
   }
 
   function activeReport(article, sources, receipts, drafts) {
-    const prior = new Map(receipts.map(r => [r.rowId, r]));
-    const active = receipts.filter(r => !draftChangesRecord(drafts.get(r.rowId), r));
-    const report = engine.report(article, sources, active);
+    let report = engine.report(article, sources, receipts);
+    const pending = new Map();
     for (const row of report.rows) {
-      row.draftPending = draftChangesRecord(drafts.get(row.id), prior.get(row.id));
-      if (row.draftPending) row.reviewNote = '판단을 작성하고 있습니다. 기록하기 전까지 확인한 결과에서 제외합니다.';
+      if (draftChangesRecord(drafts.get(row.id), row.receipt ?? undefined)) pending.set(row.id, row.receipt);
+    }
+    // Only a receipt validated against this article and catalogue can become the
+    // prior judgment for an edit. Keep the engine's counts based on visible decisions.
+    if ([...pending.values()].some(Boolean)) {
+      report = engine.report(article, sources, receipts.filter(r => r && !pending.has(r.rowId)));
+    }
+    for (const row of report.rows) {
+      row.draftPending = pending.has(row.id);
+      if (row.draftPending) {
+        row.draftRecord = pending.get(row.id);
+        row.reviewNote = '판단을 작성하고 있습니다. 기록하기 전까지 확인한 결과에서 제외합니다.';
+      }
     }
     return report;
   }
@@ -85,12 +104,14 @@
         s.locator, s.excerpt, target?.page || s.pdfPage || '']);
     }).sort());
     const editing = w.sources.find(s => s.id === w.sourceDraft.id);
-    const sourceDraftPending = sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (editing?.[k] || ''));
+    const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
+    const baseline = editing || sourceDefaults(prefill);
+    const sourceDraftPending = sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
     return {article: report.article, rows: report.rows, sources: w.sources, sourceKey,
       demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending};
   }
 
-  const api = Object.freeze({schema, sourceFields, isMock, validateWork, activeReport, draftChangesRecord, review, read});
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, isMock, validateWork, activeReport, draftChangesRecord, review, read});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;
 })(globalThis);

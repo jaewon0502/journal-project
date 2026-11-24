@@ -96,9 +96,18 @@
     d.append(element('summary', title));
     return d;
   }
-  function sourceNote(s, id) {
+  function sourceReference(s, id, label) {
     const source = s.sources?.find(src => src.id === id);
-    return source ? [source.title || id, source.version, source.locator].filter(Boolean).join(' · ') : id;
+    const reference = note(label + ' · ' + (source ? [source.title || id, source.version, source.locator].filter(Boolean).join(' · ') : id));
+    const target = source && window.JournalFactcheck.sourceTarget(source);
+    if (target) {
+      const link = element('a', target.page ? '원자료 ' + target.page + '쪽 열기' : '원자료 열기');
+      link.href = target.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      reference.append(' · ', link);
+    }
+    return reference;
   }
   function ratingEvidence(s, r, name) {
     const div = element('div');
@@ -106,7 +115,7 @@
     if (!r) { div.append(note('저장된 단계가 없습니다.')); return div; }
     if (r.quote) div.append(note('기사 구절'), element('blockquote', r.quote));
     if (r.compareQuote) div.append(note('기사의 비교 구절'), element('blockquote', r.compareQuote));
-    if (r.sourceQuote) div.append(note('원자료 · ' + sourceNote(s, r.sourceId)), element('blockquote', r.sourceQuote));
+    if (r.sourceQuote) div.append(sourceReference(s, r.sourceId, '원자료'), element('blockquote', r.sourceQuote));
     div.append(element('p', '판단 이유 · ' + r.reason));
     if (r.impact) div.append(element('p', '독자 판단에 미치는 영향 · ' + r.impact));
     if (r.direction) div.append(note('기록한 영향 방향 · ' + r.direction));
@@ -173,8 +182,9 @@
     const div = element('div');
     if (!r) return div;
     if (r.reason) div.append(element('p', '판단 이유 · ' + r.reason));
+    if (r.correction) div.append(note('근거와 대조한 정정 문구'), element('blockquote', r.correction));
     function appendSource(id, label) {
-      div.append(note(label + ' · ' + sourceNote(snapshot, id)));
+      div.append(sourceReference(snapshot, id, label));
       const source = snapshot.sources?.find(s => s.id === id);
       if (source?.excerpt) div.append(element('blockquote', source.excerpt));
     }
@@ -184,7 +194,34 @@
     return div;
   }
   function revisionFacts(c, snapshots) {
-    const panel = section('수정 후 원자료와 충돌한 구절');
+    const panel = section('원자료와 충돌한 구절 대조');
+    if (c.originalConflicts.length) {
+      panel.append(element('h4', '수정 전 충돌 구절 ' + c.originalConflicts.length + '개'),
+        note('수정 후의 확인 범위와 근거를 대조하세요. 표현이나 주변 문장이 달라진 구절은 직접 확인해야 합니다.'));
+      for (const row of c.originalConflicts) {
+        const {revised} = row;
+        const item = detail((revised ? revised.label : '대응 구절 미확인') + ' · ' + row.text);
+        const pair = element('div', null, 'pair');
+        const before = receiptEvidence(snapshots[0], row.rowId);
+        before.prepend(element('h4', '수정 전 · 근거 충돌'));
+        const after = element('div');
+        after.append(element('h4', '수정 후 · ' + (revised?.label ?? '대응 구절 미확인')));
+        if (revised) {
+          if (revised.scope !== row.text) after.append(note('확인 범위'), element('blockquote', revised.scope));
+          after.append(receiptEvidence(snapshots[1], revised.rowId));
+        } else if (row.candidate) {
+          after.append(note('저장한 정정 문구와 일치하는 수정본 구절 · ' + row.candidate.label), element('blockquote', row.candidate.text));
+          if (row.candidate.scope !== row.candidate.text) {
+            after.append(note('확인 범위'), element('blockquote', row.candidate.scope));
+          }
+          after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
+        } else after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
+        pair.append(before, after);
+        item.append(pair);
+        panel.append(item);
+      }
+    }
+    panel.append(element('h4', '수정 후 원자료와 충돌한 구절'));
     const groups = [
       ['새로 충돌로 판정된 기존 구절', c.conflicts.newlyObserved],
       ['원본과 짝을 확인할 수 없는 충돌 구절', c.conflicts.unmatched],

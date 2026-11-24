@@ -6,9 +6,9 @@
   const files = new Map();
   const pending = new Map();
 
-  function fileKey(source) {
+  function fileKey(source, target) {
     const doc = new URL(source.url);
-    doc.hash = '';
+    if (target.page) doc.hash = '';
     return JSON.stringify([doc.href, source.version]);
   }
   function anchor(href, label) {
@@ -33,14 +33,17 @@
     const target = engine.sourceTarget(source);
     if (!target) return null;
     const a = anchor(target.href, target.page ? '원문 PDF · ' + target.page + '쪽 ↗' : '원자료 열기 ↗');
-    if (!target.page) return a;
+    const page = target.page || target.localPage;
+    if (!page) return a;
     const wrap = document.createElement('span');
     wrap.className = 'source-page-links';
     const slot = document.createElement('span');
-    slot.dataset.pdfKey = fileKey(source);
-    slot.dataset.pdfPage = target.page;
+    slot.dataset.pdfKey = fileKey(source, target);
+    slot.dataset.pdfPage = page;
     updateLocal(slot);
-    wrap.append(a, slot);
+    wrap.append(a);
+    if (target.localPage) wrap.append(document.createTextNode('파일에서 ' + page + '쪽 확인'));
+    wrap.append(slot);
     return wrap;
   }
 
@@ -54,8 +57,8 @@
   }
   function localControl(source) {
     const target = engine.sourceTarget(source);
-    if (!target?.page) return null;
-    const key = fileKey(source);
+    if (!target || !(target.page || target.localPage)) return null;
+    const key = fileKey(source, target);
     const details = document.createElement('details');
     const summary = document.createElement('summary');
     summary.textContent = '원문이 다운로드되면';

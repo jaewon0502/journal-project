@@ -167,6 +167,28 @@ test('문서 식별 쿼리는 유지하며 전재·추적 주소·같은 발췌�
     {originUrl: transcript.url}, {excerpt: transcript.excerpt}]) assert.throws(() => check({...audit, ...changed}));
 });
 
+test('전재 경로를 잇는 중간 자료가 들어오면 기존 내용 확인도 다시 연다', () => {
+  const article = '대변인은 “예산이 늘었다”고 밝혔다.';
+  const speech = {...source, id: 'speech', url: 'https://press.example/brief', excerpt: '대변인 발언 원문'};
+  const copy = {...source, id: 'copy', url: 'https://news.example/story',
+    originUrl: 'https://wire.example/dispatch?id=10', excerpt: '인상된 예산을 브리핑했다고 전했다.'};
+  const wire = {...source, id: 'wire', url: 'https://wire.example/dispatch?id=10&utm_source=news',
+    originUrl: speech.url + '#quote', excerpt: '보도 자료를 재인용한 통신 기사.'};
+  const independent = {...source, id: 'audit', url: 'https://wire.example/dispatch?id=11', excerpt: '결산서의 연도별 예산표'};
+  const judgment = {...decision, status: 'attribution', sourceIds: ['speech'], contentStatus: 'supported',
+    contentSourceIds: ['copy'], contentReason: '실적과 대조했다.', contentChecked: true};
+  const before = [speech, copy];
+  const saved = decide(prepare(article, before).rows[0], judgment, before);
+  for (const sources of [[wire, independent, ...before], [...before, independent, wire]]) {
+    const [row] = report(article, sources, [saved]).rows;
+    assert.equal(row.receipt, null);
+    assert.equal(row.priorDecision, null, '같은 발언을 돌려 인용한 근거는 재승인 후보로도 쓰지 않는다');
+    assert.throws(() => decide(row, judgment, sources), /다른 원자료/);
+    assert.throws(() => decide(row, {...judgment, contentSourceIds: ['copy', 'audit']}, sources), /다른 원자료/);
+    assert.equal(decide(row, {...judgment, contentSourceIds: ['audit']}, sources).contentStatus, 'supported');
+  }
+});
+
 test('근거 목록만 확대하면 다시 확인할 초안을 유지하고 정정·문맥·참조 변경에는 자동 승인하지 않는다', () => {
   const [row] = prepare(article, sources).rows;
   const receipt = decide(row, decision, sources);

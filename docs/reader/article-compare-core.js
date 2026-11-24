@@ -65,10 +65,10 @@
   function rowFingerprint(row) {
     return JSON.stringify([row.text, row.context, row.positions.length]);
   }
-  function uniqueRows(rows) {
+  function uniqueRows(rows, keyFor = rowFingerprint) {
     const index = new Map();
     for (const row of rows) {
-      const key = rowFingerprint(row);
+      const key = keyFor(row);
       index.set(key, index.has(key) ? null : row.id);
     }
     return index;
@@ -77,9 +77,14 @@
   function revisionDetails(left, right) {
     const sameArticle = left.article === right.article;
     const leftById = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r.category]));
+    const revisedDecisions = new Map(right.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const rightById = new Map(right.rows.map(r => [r.id, r]));
     const oldRows = sameArticle ? null : uniqueRows(left.rows);
     const newRows = sameArticle ? null : uniqueRows(right.rows);
+    const revisedWording = sameArticle ? null : uniqueRows(right.rows, row => row.text);
+    const proposedCorrections = sameArticle ? null : uniqueRows(
+      left.rows.filter(row => row.receipt?.correction), row => row.receipt.correction.trim()
+    );
     function matchingId(row, from, to) {
       if (sameArticle) return row.id;
       // An offset alone may now point at a rewritten claim. Each version must
@@ -98,9 +103,26 @@
       else conflicts.newlyObserved.push(entry);
     }
     const core = new Set(left.assessment.accuracy.coreRowIds);
-    const untracedCore = left.rows.filter(row => core.has(row.id) && !matchingId(row, oldRows, newRows))
-      .map(row => ({rowId: row.id, text: row.text}));
-    return {conflicts, untracedCore};
+    const untracedCore = [], originalConflicts = [];
+    for (const row of left.rows) {
+      const originalConflict = leftById.get(row.id) === 'contradicted';
+      if (!originalConflict && !core.has(row.id)) continue;
+      const revised = revisedDecisions.get(matchingId(row, oldRows, newRows)) ?? null;
+      const entry = {rowId: row.id, text: row.text};
+      if (!revised && core.has(row.id)) untracedCore.push(entry);
+      if (originalConflict) {
+        const conflict = {...entry, revised};
+        const correction = row.receipt?.correction?.trim();
+        if (!revised && correction && proposedCorrections?.get(correction) === row.id && row.positions.length === 1
+            && !left.article.includes(correction) && !right.article.includes(row.text)) {
+          const candidate = rightById.get(revisedWording.get(correction));
+          // Consecutive repetitions share a row, but still have more than one location.
+          if (candidate?.positions.length === 1) conflict.candidate = {...revisedDecisions.get(candidate.id), text: candidate.text};
+        }
+        originalConflicts.push(conflict);
+      }
+    }
+    return {conflicts, untracedCore, originalConflicts};
   }
 
   function compare(left, right, mode) {

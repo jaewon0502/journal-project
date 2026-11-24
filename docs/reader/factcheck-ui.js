@@ -40,7 +40,8 @@
     {id: 'briefing', title: '들길당 브리핑 속기록 (모의 자료)', url: 'https://example.invalid/journal/briefing', version: '연습 판본 1', locator: '대변인 발언 02분 10초', excerpt: '들길당 대변인: 운영비가 두 배가 될 것이라고 봅니다. 이는 우리 당의 전망이며 시가 발표한 확정액은 아닙니다.'}
   ];
   let article = '', sources = [], receipts = [], demo = false, result = null;
-  let currentId = null, editingId = null, dirty = false;
+  let currentId = null, editingId = null, sourceForRow = null, dirty = false;
+  let latestImport = 0;
   let drafts = new Map();
   let articleAssessment = null, articleAssessmentDraft = null;
   const rubric = window.JournalArticleRubric, rubricUI = window.JournalArticleRubricUI;
@@ -102,6 +103,7 @@
   }
   function citationAddress(source) {
     const target = engine.sourceTarget(source);
+    if (target?.localPage) return 'PDF 파일 ' + target.localPage + '쪽 직접 확인 · ' + target.href;
     if (!target?.page) return source.url;
     return 'PDF 뷰어 ' + target.page + '쪽 · ' + target.href;
   }
@@ -124,6 +126,7 @@
       part.append(node('summary', source.title || source.id), sourceDetails(source));
       part.append(button('자료 수정', () => {
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
+        clearSourceTarget();
         editingId = source.id;
         for (const field of sourceFields) byId('source-' + field).value = source[field] || '';
         byId('source-form-title').textContent = '원자료 수정';
@@ -134,20 +137,20 @@
       catalog.append(part);
     }
   }
-  let sourceBaseline = {};
+  let sourceBaseline = {}, prefillId = null;
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
     return sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
   }
+  function clearSourceTarget() {
+    sourceForRow = null;
+    byId('source-save-link').hidden = true;
+  }
   function clearSourceForm(reuse = {}) {
+    clearSourceTarget();
     editingId = null;
-    let documentUrl = reuse.url || '';
-    if (documentUrl && engine.sourceTarget(reuse)?.page) {
-      const url = new URL(documentUrl);
-      url.hash = '';
-      documentUrl = url.href;
-    }
-    sourceBaseline = {title: reuse.title || '', url: documentUrl, version: reuse.version || '', originUrl: reuse.originUrl || ''};
+    prefillId = reuse.id || null;
+    sourceBaseline = workspace.sourceDefaults(reuse);
     byId('source-form').reset();
     for (const [field, value] of Object.entries(sourceBaseline)) byId('source-' + field).value = value;
     byId('source-form-title').textContent = '원자료 추가';
@@ -216,6 +219,7 @@
   }
   function showCase() {
     const row = currentRow();
+    if (sourceForRow !== row?.articleBinding) clearSourceTarget();
     byId('case').hidden = !row;
     if (!row) return;
     const index = result.rows.indexOf(row);
@@ -363,6 +367,13 @@
       clearSourceForm();
       message('source-status', '새 원자료를 추가합니다.');
     }
+    const row = currentRow();
+    if (row) {
+      sourceForRow = row.articleBinding;
+      const link = byId('source-save-link');
+      link.textContent = (result.rows.indexOf(row) + 1) + '번 문장의 대조 자료로 추가';
+      link.hidden = false;
+    }
     if (find) {
       byId('finder').open = true;
       byId('document-query').value = currentRow()?.text || '';
@@ -455,6 +466,7 @@
         currentId = null;
         if (recovered.size || unmapped) recoveryMessage = '이전 입력 ' + recovered.size + '개를 확인 전 초안으로 옮겼습니다. 문맥이 달라 옮기지 않은 입력은 ' + unmapped + '개입니다.';
       }
+      latestImport++;
       article = text;
       dirty = true;
       refresh();
@@ -473,6 +485,7 @@
   });
   byId('load-demo').addEventListener('click', () => {
     if (!canReplace()) return;
+    latestImport++;
     resetWork(mockArticle, mockSources.map(s => ({...s})), [], true);
     dirty = true;
     byId('row-heading').focus();
@@ -488,6 +501,8 @@
     while (sources.some(s => s.id === 'source-' + n)) n++;
     source.id = editingId || 'source-' + n;
     if (!source.pdfPage) delete source.pdfPage;
+    const linkToRow = event.submitter === byId('source-save-link') && !editingId && sourceForRow && currentRow()?.articleBinding === sourceForRow;
+    const rowDraft = linkToRow ? {...drafts.get(currentId), ...decisionDraft()} : null;
     const next = editingId ? sources.map(s => s.id === editingId ? source : s) : [...sources, source];
     try {
       // Editing a cited source invalidates the receipts that cite it. Keep the reviewer's
@@ -497,10 +512,19 @@
       sources = next;
       for (const row of moved) drafts.set(row.id, {...draftFrom(drafts.get(row.id) || row.receipt || row.priorDecision), sourceEdit: true});
       receipts = receipts.filter(r => !moved.some(row => row.id === r.rowId));
+      if (rowDraft) {
+        rowDraft.sourceIds.push(source.id);
+        drafts.set(currentId, rowDraft);
+      }
       for (const draft of drafts.values()) { draft.acknowledged = false; draft.correctionChecked = false; draft.contentChecked = false; }
       dirty = true;
       clearSourceForm(source);
       refresh();
+      if (rowDraft) {
+        byId('sources-panel').open = false;
+        byId('verdict').focus();
+        message('review-status', '새 자료를 이 문장의 대조 자료로 선택했습니다. 발췌문과 판단 범위를 확인한 뒤 기록하세요.');
+      }
       message('source-status', moved.length ? '원자료를 저장했습니다. 이 자료를 인용한 판단 ' + moved.length + '개를 다시 확인할 초안으로 옮겼습니다.'
         : '원자료를 저장했습니다. 문장 검토에서 연결할 수 있습니다.');
     } catch (err) { message('source-status', err.message, true); }
@@ -714,19 +738,37 @@
     const rowDrafts = [...drafts].map(([rowId, data]) => ({rowId, data: {...data, acknowledged: false, correctionChecked: false, contentChecked: false}}));
     const workspace = {
       format: schema, article, sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: byId('article').value,
-      rowDrafts, currentId, sourceDraft: {id: editingId, fields: sourceFormData()}
+      rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData()}
     };
     try {
       download(JSON.stringify(workspace, null, 2), 'journal-factcheck-work.json', 'application/json');
       message('file-status', '작업 파일 내려받기를 요청했습니다. 닫기 전에 파일이 저장됐는지 확인하세요.');
     } catch (err) { message('file-status', '작업 파일을 만들 수 없습니다. ' + err.message, true); }
   }
+  function exportReviewInput() {
+    if (!result?.rows.length || byId('article').value !== article) {
+      return message('file-status', '현재 기사로 검토 목록을 만든 뒤 독립 평가용 파일을 저장하세요.', true);
+    }
+    // Only the article and committed evidence are shared. Imported files can carry
+    // additional user metadata; select the fields the source form actually uses.
+    const packet = {
+      format: schema, article, articleDraft: article, demo,
+      sources: sources.map(source => Object.fromEntries(['id', ...sourceFields]
+        .filter(key => source[key] != null).map(key => [key, source[key]]))),
+      receipts: [], rowDrafts: [], articleAssessment: null, articleAssessmentDraft: null,
+      currentId: null, sourceDraft: {id: null, fields: Object.fromEntries(sourceFields.map(key => [key, '']))}
+    };
+    try {
+      download(JSON.stringify(packet, null, 2), 'journal-independent-review.json', 'application/json');
+      message('file-status', '독립 평가용 파일 내려받기를 요청했습니다. 두 편집자는 이 파일을 각자 열고 평가한 뒤 작업 파일을 저장하세요.');
+    } catch (err) { message('file-status', '독립 평가용 파일을 만들 수 없습니다. ' + err.message, true); }
+  }
   function restoreWork(w) {
     workspace.validateWork(w);
     // Ask explicitly before applying any receipt from a file. A structurally valid record does not identify its author.
     if (!canReplace()) return;
-    const hasJudgments = w.receipts.length > 0 || w.articleAssessment != null || w.articleAssessmentDraft != null;
-    const trust = !hasJudgments || confirm('이 파일의 이전 판단을 본인 또는 신뢰하는 검토자가 기록했습니까? 확인을 누르면 이전 판단을 복원합니다. 취소를 누르면 기사와 원자료만 열어 새로 검토합니다.');
+    const hasJudgments = w.receipts.length > 0 || w.rowDrafts.length > 0 || w.articleAssessment != null || w.articleAssessmentDraft != null;
+    const trust = !hasJudgments || confirm('이 파일의 판단과 작성 중인 초안을 본인 또는 신뢰하는 검토자가 기록했습니까? 확인을 누르면 해당 기록을 복원합니다. 취소를 누르면 기사와 원자료만 열어 새로 검토합니다.');
     const keep = trust ? w.receipts.filter(r => r && typeof r.rowId === 'string') : [];
     engine.prepare(w.article || w.articleDraft, w.sources, keep);
     resetWork(w.article || w.articleDraft, w.sources, keep, w.demo || w.sources.some(isMock));
@@ -734,6 +776,8 @@
       const validIds = new Set(result.rows.map(r => r.id));
       drafts = new Map(w.rowDrafts.filter(d => validIds.has(d.rowId)).map(d => [d.rowId, {...d.data, acknowledged: false, correctionChecked: false, contentChecked: false}]));
       currentId = validIds.has(w.currentId) ? w.currentId : null;
+      const prefill = sources.find(s => s.id === w.sourceDraft.prefillId);
+      clearSourceForm(prefill);
       const edit = sources.find(s => s.id === w.sourceDraft.id);
       if (edit) {
         editingId = edit.id;
@@ -754,6 +798,17 @@
     articleAssessment = reviewed.assessment.saved;
     articleAssessmentDraft = reviewed.draft;
     const dropped = reviewed.dropped;
+    // A sentence edit can temporarily hide its saved judgment. Restore only rubric
+    // records validated against the underlying committed sentences; the active
+    // report continues to exclude them until the corresponding edit is reverted.
+    if (trust && dropped && drafts.size && (w.articleAssessment || w.articleAssessmentDraft)) {
+      const committed = workspace.review(engine.report(article, sources, keep), sources,
+        w.articleAssessment, w.articleAssessmentDraft);
+      if (reviewed.assessment.stale && Object.keys(committed.assessment.saved?.ratings || {}).length) {
+        articleAssessment = committed.assessment.saved;
+      }
+      articleAssessmentDraft ??= committed.draft;
+    }
     renderArticleAssessment();
     dirty = false;
     if (trust && dropped) {
@@ -762,12 +817,14 @@
     }
     message('file-status', trust ? '작업 파일을 열었습니다. 원문과 자료 범위가 일치하는 판단을 복원했습니다.' : '기사와 원자료를 열었습니다. 각 문장을 새로 검토하세요.');
   }
+  byId('save-review-input').addEventListener('click', exportReviewInput);
   byId('save-work').addEventListener('click', exportWork);
   byId('load-work').addEventListener('click', () => byId('import-file').click());
   byId('import-file').addEventListener('change', async event => {
     const file = event.target.files[0];
     event.target.value = '';
     if (!file) return;
+    const request = ++latestImport;
     try {
       const raw = typeof file.text === 'function' ? await file.text() : await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -775,8 +832,10 @@
         reader.onerror = () => reject(new Error('선택한 파일을 읽을 수 없습니다.'));
         reader.readAsText(file);
       });
-      restoreWork(JSON.parse(raw));
-    } catch (err) { message('file-status', '파일을 열지 못했습니다. ' + err.message, true); }
+      if (request === latestImport) restoreWork(JSON.parse(raw));
+    } catch (err) {
+      if (request === latestImport) message('file-status', '파일을 열지 못했습니다. ' + err.message, true);
+    }
   });
   function rubricReportLines() {
     const {accuracy: a, bias: b, stale} = rubric.evaluate(result, sources, articleAssessment);

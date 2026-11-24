@@ -54,8 +54,9 @@
   // no verdict. A draft only counts while it hides a recorded decision.
   function bind(report) {
     return JSON.stringify([version, report.rows.map(row => {
-      const {recordedAt, checksum, ...judgment} = row.receipt ?? {};
-      return [row.id, row.binding, row.status, row.receipt ? judgment : null, !!(row.draftPending && row.receipt)];
+      const record = row.receipt ?? row.draftRecord;
+      const {recordedAt, checksum, ...judgment} = record ?? {};
+      return [row.id, row.binding, row.status, record ? judgment : null, !!(row.draftPending && record)];
     })]);
   }
 
@@ -67,7 +68,7 @@
     ])]);
   }
   function matches(binding, report) {
-    return binding === bind(report) || binding === legacyBind(report);
+    return binding === bind(report) || (!report.rows.some(row => row.draftRecord) && binding === legacyBind(report));
   }
 
   function bindCore(report) {
@@ -163,10 +164,14 @@
     const adjudicated = supported + contradicted, total = adjudicated + unresolved;
     const core = new Set(coreRows);
     const selected = key => rows.filter(row => core.has(row.rowId) && row.category === key).map(row => row.rowId);
-    const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved');
+    const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved'), coreExcluded = selected('excluded');
+    const coreLimited = report.rows.filter((row, index) => core.has(row.id) && rows[index].category === 'supported'
+      && (row.status === 'mixed' || (row.status === 'attribution' && row.receipt.contentStatus === 'opinion'))).map(row => row.id);
     const summary = [];
     if (coreContradicted.length) summary.push('지정한 핵심 항목 ' + coreContradicted.length + '개가 원자료와 충돌합니다.');
     if (coreUnresolved.length) summary.push('지정한 핵심 항목 ' + coreUnresolved.length + '개는 판단이 남아 있습니다.');
+    if (coreExcluded.length) summary.push('지정한 핵심 항목 ' + coreExcluded.length + '개는 의견·평가로 두 비율의 분모에서 제외했습니다.');
+    if (coreLimited.length) summary.push('지정한 핵심 항목 ' + coreLimited.length + '개는 사실 구절 또는 발언 사실만 근거로 확인했습니다.');
     if (!total) summary.push('지금 집계할 사실 확인 항목이 없습니다.');
     else if (!adjudicated) summary.push('지지·충돌을 판정한 항목이 없어 정확도를 계산할 수 없습니다.');
     else if (unresolved) summary.push('미확인 ' + unresolved + '개가 남아 있습니다. 지지율은 판정을 마친 ' + adjudicated + '개에만 적용됩니다.');
@@ -177,7 +182,7 @@
       coveragePct: total ? 100 * adjudicated / total : null,
       partialCount: report.rows.filter(r => !r.draftPending && r.receipt?.status === 'partial').length,
       attributionOnlyCount: report.rows.filter(r => !r.draftPending && r.receipt?.contentStatus === 'unverified').length,
-      coreRowIds: [...coreRows], coreContradicted, coreUnresolved, rows, summary: summary.join(' ')};
+      coreRowIds: [...coreRows], coreContradicted, coreUnresolved, coreExcluded, coreLimited, rows, summary: summary.join(' ')};
   }
 
   function biasFor(ratings) {
@@ -197,18 +202,23 @@
 
   function evaluate(report, sources, stored = null) {
     let saved = null, stale = stored != null;
-    if (stored && stored.version === version && stored.coreBinding === bindCore(report)) {
-      try {
-        // A headline or central assertion belongs to the article text, even when a
-        // new fact decision invalidates framing judgments made against older evidence.
-        saved = save(report, sources, {coreRowIds: stored.coreRowIds, ratings: {}});
+    if (stored && report.rows.length && stored.version === version && stored.coreBinding === bindCore(report)) {
+      // Core selections bind to the article alone. An obsolete ID or a damaged
+      // citation in one dimension does not invalidate the other selections.
+      const knownIds = new Set(report.rows.map(row => row.id));
+      const core = Array.isArray(stored.coreRowIds) ? [...new Set(stored.coreRowIds.filter(id => knownIds.has(id)))] : [];
+      saved = save(report, sources, {coreRowIds: core, ratings: {}});
+      stale = !Array.isArray(stored.coreRowIds) || core.length !== stored.coreRowIds.length || !object(stored.ratings);
+      if (object(stored.ratings) && Object.keys(stored.ratings).length) {
         if (matches(stored.binding, report)) {
-          saved = save(report, sources, stored);
-          stale = false;
-        } else if (object(stored.ratings) && !Object.keys(stored.ratings).length) {
-          stale = false;
-        }
-      } catch (_) { /* Invalid ratings cannot enter the results; keep only independently valid core IDs. */ }
+          for (const [id, raw] of Object.entries(stored.ratings)) {
+            const dimension = dimensions.find(d => d.id === id);
+            if (!dimension) { stale = true; continue; }
+            try { saved.ratings[id] = ratingFor(dimension, raw, report, sources); }
+            catch (_) { stale = true; }
+          }
+        } else stale = true;
+      }
     }
     return {accuracy: accuracyFor(report, saved?.coreRowIds ?? []), bias: biasFor(saved?.ratings ?? {}), saved, stale};
   }

@@ -560,3 +560,137 @@ test('결과를 뒷받침할 자료가 부족하면 후보를 닫아 두고 편�
   assert.ok(details.textContent.includes(sources.find(s => s.id === details.parentElement.querySelector('input').value).excerpt));
   assert.equal(p.el('verdict').value, '');
 });
+
+test('근거를 찾던 문장에만 새 자료를 연결하고 기존 이유는 보관하되 판정은 직접 기록한다', async t => {
+  const page = open(t);
+  const {el, click, set, doc, snapshot} = page;
+  set('article', '시의회는 예산을 확정했다.\n예산은 3억 원이다.');
+  el('article-form').requestSubmit();
+  assert.equal(el('source-save-link').hidden, true);
+  set('verdict', 'fact');
+  set('reason', '의결된 예산만 확인한다.');
+  click('go-find');
+  assert.match(el('source-save-link').textContent, /1번/);
+  set('document-text', '시의회는 예산을 확정했다.');
+  click('find-passages');
+  el('finder-results').querySelector('button:last-child').click();
+  const fields = {title:'공개 회의록', url:'https://council.example/record.pdf#page=2', version:'확정본', locator:'의결란'};
+  for (const [id, value] of Object.entries(fields)) set('source-' + id, value);
+  click('source-save-link');
+  assert.equal(el('source-count').textContent, '· 1개');
+  assert.equal(el('sources-panel').open, false);
+  assert.equal(el('verdict'), doc.activeElement);
+  assert.equal(doc.querySelector('#row-sources input:checked')?.value, 'source-1');
+  assert.equal(el('reason').value, '의결된 예산만 확인한다.');
+  assert.equal(el('acknowledged').checked, false);
+  click('save-work');
+  const work = JSON.parse(await snapshot());
+  assert.equal(work.receipts.length, 0);
+  const parsed = page.w.JournalWorkspaceSnapshot.read(work);
+  assert.equal(parsed.sourceDraftPending, false, '다음 발췌를 위해 남긴 문서 정보는 작성 중인 자료가 아니다');
+  assert.equal(parsed.assessment.accuracy.adjudicated, 0);
+  const restored = open(t);
+  await loadWorkspace(restored, work);
+  assert.equal(restored.el('source-url').value, 'https://council.example/record.pdf');
+  restored.set('source-excerpt', '추가로 확인 중인 대목');
+  restored.click('save-work');
+  assert.equal(restored.w.JournalWorkspaceSnapshot.read(JSON.parse(await restored.snapshot())).sourceDraftPending, true);
+  click('go-add-source');
+  el('row-list').children[1].querySelector('button').click();
+  assert.equal(el('source-save-link').hidden, true, '근거 입력 중 다른 문장을 고르면 연결 대상을 해제한다');
+  assert.equal(doc.querySelector('#row-sources input:checked'), null);
+  el('row-list').children[0].querySelector('button').click();
+  click('acknowledged');
+  el('decision-form').requestSubmit();
+  click('save-work');
+  assert.equal(JSON.parse(await snapshot()).receipts[0].status, 'fact');
+});
+
+test('먼저 연 큰 파일이 늦게 읽혀도 마지막으로 고른 기사를 덮지 않는다', async t => {
+  const page = open(t);
+  page.click('load-demo');
+  page.click('save-work');
+  const initial = JSON.parse(await page.snapshot());
+  let finishRead;
+  const early = {text: () => new Promise(resolve => { finishRead = resolve; })};
+  const input = page.el('import-file');
+  Object.defineProperty(input, 'files', {value: [early], configurable: true});
+  input.dispatchEvent(new page.w.Event('change'));
+  const chosen = {...initial, article:'두 번째로 고른 기사입니다.', articleDraft:'두 번째로 고른 기사입니다.'};
+  await loadWorkspace(page, chosen);
+  finishRead(JSON.stringify(initial));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.el('article').value, chosen.article);
+});
+
+test('아직 제출하지 않은 다른 편집자의 문장 판단도 독립 검토를 선택하면 복원하지 않는다', async t => {
+  const author = open(t);
+  author.click('load-demo');
+  author.set('reason', '이전 편집자가 정리한 예비 결론');
+  author.click('save-work');
+  const work = JSON.parse(await author.snapshot());
+  assert.equal(work.receipts.length, 0);
+  assert.equal(work.rowDrafts.length, 1);
+  const reviewer = open(t);
+  await loadWorkspace(reviewer, work, false);
+  assert.equal(reviewer.el('article').value, work.article);
+  assert.equal(reviewer.el('reason').value, '');
+});
+
+test('독립 평가 파일에는 확정한 기사와 원자료만 남고 판정·초안·추가 입력은 전달되지 않는다', async t => {
+  const a = open(t);
+  recordFirstFact(a);
+  a.click('save-work');
+  const seed = JSON.parse(await a.snapshot());
+  seed.sources[0].internalNote = '먼저 본 사람의 비공개 메모';
+  const owner = open(t);
+  await loadWorkspace(owner, seed);
+  owner.set('reason', '미완성 판정의 메모');
+  owner.set('source-excerpt', '등록하지 않은 발췌');
+  owner.click('save-review-input');
+  const packed = JSON.parse(await owner.snapshot());
+  assert.equal(packed.article, seed.article);
+  assert.equal(packed.demo, true);
+  assert.deepEqual(packed.sources.map(s => s.excerpt), seed.sources.map(s => s.excerpt));
+  for (const value of ['먼저 본 사람의 비공개 메모', '미완성 판정의 메모', '등록하지 않은 발췌', seed.receipts[0].reason]) {
+    assert.ok(!JSON.stringify(packed).includes(value));
+  }
+  assert.deepEqual(packed.receipts, []);
+  assert.deepEqual(packed.rowDrafts, []);
+  const b = open(t);
+  await loadWorkspace(b, packed, false);
+  assert.equal(b.el('verdict').value, '');
+  assert.equal(b.el('row-list').children.length, 5);
+  assert.equal(b.w.JournalWorkspaceSnapshot.read(packed).assessment.accuracy.adjudicated, 0);
+  owner.set('article', '수정 중인 기사');
+  owner.click('save-review-input');
+  assert.match(owner.el('file-status').textContent, /검토 목록을 만든 뒤/);
+});
+
+test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가는 근거가 일치할 때만 복원한다', async t => {
+  const a = open(t);
+  recordFirstFact(a); a.click('save-work');
+  const work = JSON.parse(await a.snapshot());
+  const report = a.w.JournalFactcheck.report(work.article, work.sources, work.receipts);
+  const row = report.rows[0], vote = work.sources[0];
+  work.articleAssessment = a.w.JournalArticleRubric.save(report, work.sources, {coreRowIds: [row.id], ratings: {
+    wording: {level: 0, rowId: row.id, quote: row.text, sourceId: vote.id, sourceQuote: vote.excerpt, reason: '원표와 대조함'}
+  }});
+  const editor = open(t);
+  await loadWorkspace(editor, work);
+  editor.el('row-filter').value = 'all';
+  editor.el('row-filter').dispatchEvent(new editor.w.Event('change'));
+  editor.el('row-list').querySelector('button').click();
+  editor.set('reason', '근거를 다시 읽는 중');
+  editor.click('save-work');
+  const paused = JSON.parse(await editor.snapshot());
+  const resumed = open(t);
+  await loadWorkspace(resumed, paused);
+  assert.match(resumed.el('article-rubric').textContent, /근거로 채점 0\/4/);
+  resumed.click('export-report');
+  assert.ok(!(await resumed.snapshot()).includes('원표와 대조함'));
+  resumed.set('reason', work.receipts[0].reason);
+  assert.match(resumed.el('article-rubric').textContent, /근거로 채점 1\/4/);
+  resumed.click('export-report');
+  assert.ok((await resumed.snapshot()).includes('원표와 대조함'));
+});

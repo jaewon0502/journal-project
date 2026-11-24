@@ -168,3 +168,46 @@ test('각자 다른 절을 부분 확인하거나 보류한 경우에는 미결 
   }
   assert.equal(compare(partial, snapshot({article}), 'reviewers').facts.disagreements.length, 0);
 });
+
+test('수정 전 충돌 구절은 다른 사실로 대체해 판정 수가 같아도 추적 대상에 남는다', () => {
+  const left = snapshot({article: '이 지역에서 세 건이 발생했다.\n회의를 열었다.', states: ['contradicted', 'fact']});
+  const right = snapshot({article: '지난해 회의를 세 번 열었다.\n회의를 열었다.', states: ['fact', 'fact']});
+  const r = compare(left, right, 'revision');
+  assert.equal(r.accuracy.left.adjudicated, r.accuracy.right.adjudicated);
+  assert.equal(r.accuracy.right.accuracyPct, 100);
+  assert.equal(r.untracedCore.length, 0);
+  assert.deepEqual(r.originalConflicts, [{rowId: left.rows[0].id, text: left.rows[0].text, revised: null}]);
+});
+
+test('원본 충돌의 후속 판정을 미결·의견·부분 범위까지 현재 구간의 실제 판정에서 읽는다', () => {
+  const article = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
+  const left = snapshot({article, states: ['contradicted']});
+  for (const next of [null, 'held', 'opinion', 'fact', 'contradicted',
+    {status: 'mixed', factSpan: '시청은 시범 운영을 마쳤고', opinionSpan: '사업은 기대 이상이다.'}]) {
+    const right = snapshot({article, states: [next]});
+    const [entry] = compare(left, right, 'revision').originalConflicts;
+    assert.deepEqual(entry.revised, right.assessment.accuracy.rows[0]);
+  }
+  assert.deepEqual(compare(snapshot(), left, 'revision').originalConflicts, []);
+});
+
+test('새로 등장한 정정 문구가 수정본 한 구간과 정확히 일치할 때만 대조 후보를 보여 준다', () => {
+  const sourceText = '사업비는 20억 원이다.', correction = '사업비는 10억 원이다.';
+  const conflict = {status: 'contradicted', correction, correctionChecked: true};
+  const source = snapshot({article: sourceText, states: [conflict]});
+  const revision = snapshot({article: correction});
+  const [row] = compare(source, revision, 'revision').originalConflicts;
+  assert.equal(row.revised, null);
+  assert.equal(row.candidate.text, correction);
+  assert.equal(row.candidate.label, '미확인');
+  // Even if offsets happen to match, a nearby old value, repeated replacement or existing quote is ambiguous.
+  for (const article of [sourceText + '\n' + correction, correction + '\n' + correction, correction + '\n\n' + correction,
+    '그는 “' + correction + '”라고 말했다.']) {
+    const [entry] = compare(source, snapshot({article}), 'revision').originalConflicts;
+    assert.equal(entry.candidate, undefined);
+  }
+  const beforeWithCorrection = snapshot({article: sourceText + '\n' + correction, states: [conflict]});
+  assert.equal(compare(beforeWithCorrection, revision, 'revision').originalConflicts[0].candidate, undefined);
+  const twoProposals = snapshot({article: sourceText + '\n다른 예산은 15억 원이다.', states: [conflict, conflict]});
+  assert.ok(compare(twoProposals, revision, 'revision').originalConflicts.every(entry => !entry.candidate));
+});

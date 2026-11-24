@@ -49,7 +49,7 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <p><strong>편향 판정 예시</strong> · 원자료와 본문에는 시범 노선의 대기 시간만 절반으로 줄었다고 했는데 제목이 도시 전체의 성과로 소개했다면, 제목이 범위를 넓힌 정도는 <strong>2단계</strong>로 평가할 수 있습니다. 도시 전체 수치의 사실 여부는 해당 자료를 구할 때까지 미결입니다.</p>
 <a href="../article-rubric.md">세부 판정표와 계산 예시</a></details>
 <noscript><p class="callout">이 화면을 사용하려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
-<details class="filebar" id="file-panel"><summary>작업 파일 저장 · 이어 열기</summary><p class="hint">기사와 원자료 발췌, 입력한 판단이 JSON에 함께 담깁니다. 직접 저장한 파일이나 작성자를 신뢰하는 파일을 선택하세요.</p><div class="actions"><button type="button" id="save-work">작업 파일 내려받기</button><button type="button" id="load-work">파일 이어 열기</button><input type="file" id="import-file" hidden accept=".json,application/json"></div><p class="message" id="file-status" role="status"></p></details>
+<details class="filebar" id="file-panel"><summary>작업 파일 저장 · 이어 열기</summary><p class="hint">작업 파일에는 입력한 판단과 메모가 함께 담깁니다. 다른 편집자에게 같은 자료로 독립 평가를 요청할 때는 기사와 등록된 원자료만 담은 파일을 사용하세요.</p><div class="actions"><button type="button" id="save-work">작업 파일 내려받기</button><button type="button" id="save-review-input">독립 평가용 기사·자료 내려받기</button><button type="button" id="load-work">파일 이어 열기</button><input type="file" id="import-file" hidden accept=".json,application/json"></div><p class="message" id="file-status" role="status"></p></details>
 <p class="callout" id="demo-notice" hidden>가상 기사 또는 모의 원자료가 포함되어 있습니다. 결과를 내보낼 때도 연습 기록으로 표시합니다.</p>
 <details class="panel" id="article-panel" open><summary>검토할 기사</summary>
 <form id="article-form"><label for="article" class="field">제목과 본문</label><textarea id="article" rows="7" placeholder="검토할 글을 원문 그대로 붙여 넣으세요."></textarea>
@@ -70,7 +70,7 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="통계표 12, 서울특별시 행, 2023년 열, 인쇄 41쪽">
 <label class="field" for="source-pdfPage">PDF 뷰어에서 확인한 쪽번호 (선택)</label><input id="source-pdfPage" type="text" inputmode="numeric" pattern="[1-9][0-9]*" aria-describedby="pdf-page-hint" placeholder="예: 44"><p id="pdf-page-hint" class="hint">확인한 문서 주소가 PDF를 직접 열거나 내려받는 주소일 때 입력하세요. 표지부터 1쪽으로 세는 PDF 파일 순서입니다. 표·행·연도와 인쇄 쪽수는 위 확인 위치에 적으세요.</p>
 <label class="field" for="source-excerpt">해당 구간 원문</label><textarea id="source-excerpt" rows="2" required></textarea>
-<div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
+<div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="submit" id="source-save-link" hidden>이 문장의 근거로 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
 <section class="panel" id="review-panel"><div class="mast"><h2>문장 검토</h2><p class="count" id="counts"></p></div>
 <div class="review-grid"><nav class="queue" aria-label="검토할 문장"><label for="row-filter">검토 목록</label>
 <select id="row-filter"><option value="open">확인이 필요한 문장</option><option value="all">모든 문장</option></select><ol id="row-list"></ol><p class="hint" id="queue-empty" hidden>이 목록에 남은 문장이 없습니다.</p></nav>
