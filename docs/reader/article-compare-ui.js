@@ -900,8 +900,12 @@
       }
       return false;
     };
-    if (matches(record)) return 'current';
-    return matches(series.makeLegacyMatchRecord(joint, key)) ? 'legacy' : null;
+    if (matches(record)) return record;
+    for (const version of [6, 5]) {
+      const historical = series.makeLegacyMatchRecord(joint, key, version);
+      if (matches(historical)) return historical;
+    }
+    return null;
   }
   function showTargetEvidence(reviews, reopened) {
     const joint = reopened?.joint ?? window.JournalRevisionAgreement.compare(...reviews);
@@ -919,13 +923,14 @@
     }
     let panel, group, row, title, quoteResult;
     if (reviewTarget.quoteCheck) {
-      const prior = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key);
       const currentLinks = new Map(record.factContext.matches);
-      const removed = prior.factContext.matches.filter(([before, after]) =>
-        prior.factContext.beforeCore[before] === 2 && currentLinks.get(before) !== after);
-      title = '이전에 연결한 핵심 구절의 인용 대응';
+      const removed = match.factContext.matches.filter(([before, after]) =>
+        (match.factContext.beforeCore[before] === 2 || match.facts.before[before].outcome === 'supported') && currentLinks.get(before) !== after);
+      const coreCount = removed.filter(([before]) => match.factContext.beforeCore[before] === 2).length;
+      title = '이전에 연결한 구절의 인용 대응';
       panel = jointFactPanel(joint, reviews, record, reopened);
-      quoteResult = element('p', '발언자 확인을 위해 자동 대응에서 뺀 원본 핵심 구절 ' + removed.length + '개');
+      quoteResult = element('p', '발언자 확인을 위해 자동 대응에서 뺀 원본 핵심 구절 ' + coreCount + '개' +
+        (removed.length > coreCount ? ' · 그 밖의 공동 지지 구절 ' + (removed.length - coreCount) + '개' : ''));
       quoteResult.tabIndex = -1;
       quoteResult.dataset.quoteCheckCount = '';
       const save = element('button', '현재 기준의 기사별 평가 요약 저장');
@@ -960,7 +965,7 @@
     byId('result').hidden = false;
     const notice = reopened ? '저장한 진행자용 대조 기록을 복원했습니다.'
       : reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
-    blindStatus('review-target-status', notice + (match === 'legacy'
+    blindStatus('review-target-status', notice + (match !== record
       ? ' 이전 요약의 판본과 판정을 확인했습니다. 발언자가 본문 밖에 표시된 인용의 대응은 현재 기준으로 다시 계산했습니다.'
       : ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.'));
     if (row) openReviewRow(row);
@@ -982,11 +987,14 @@
       recoveryFiles.append(save);
     }
     byId('output').prepend(recoveryFiles);
-    if (archive.notes.length) {
-      const previous = detail('이전 기준으로 기록한 사후 판단 ' + archive.notes.length + '개 보기');
-      for (const entry of archive.notes) {
-        const state = {retained:'유지 확인', changed:'내용 변경', notFound:'대응 구절을 찾지 못함', open:'검토 중'}[entry.status];
-        previous.append(element('p', '원본 ' + (entry.before + 1) + '번 · ' + state + ' · ' + entry.reason));
+    for (const [heading, notes] of [['사후 판단', archive.notes], ['핵심 맥락 대조', archive.contextNotes ?? []]]) {
+      if (!notes.length) continue;
+      const previous = detail('이전 기준으로 기록한 ' + heading + ' ' + notes.length + '개 보기');
+      for (const entry of notes) {
+        const state = {retained:'유지 확인', changed:'내용 변경', notFound:'대응 구절을 찾지 못함', absent:'대응 구절을 찾지 못함',
+          open:'검토 중', pending:'검토 중'}[entry.status];
+        previous.append(element('p', '원본 ' + (entry.before + 1) + '번' + (entry.after === null ? '' : ' · 수정본 ' + (entry.after + 1) + '번') +
+          ' · ' + state + ' · ' + entry.reason));
       }
       byId('output').prepend(previous);
     }
@@ -1012,8 +1020,8 @@
       try { reopened = {joint, record, ...window.JournalRetentionCase.verifyAll(archive, record)}; }
       catch (error) {
         if (error.code !== 'legacy-review-changed') throw error;
-        if (archive.version === 3) {
-          const historical = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key);
+        if (archive.version >= 3) {
+          const historical = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, archive.version + 2);
           window.JournalRetentionCase.verifyLegacyMatchNotes(archive, historical);
         }
         showRecoveredArchive(archive, items, reviews, joint, record);

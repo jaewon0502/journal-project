@@ -56,6 +56,16 @@ test('단독 인용문의 문구가 같아도 바뀐 논평 제목·끝 서명�
   const named = '야당 대변인은 “이번 예산안은 무책임하다”고 말했다.';
   const full = prefix + named + '\n논평 끝.';
   assert.equal(paired(full, full.replace('초안','정정'), named),true);
+  for (const line of ['“청년수당 예산은 10억 원이다”라고 강조했다.', '"청년수당 예산은 10억 원이다"며 설명했다.',
+    '「청년수당 예산은 10억 원이다」라면서 지적했다.']) {
+    const statement = ['민주당 김지수 의원의 서면 답변', '다음은 답변 전문이다.', line, '답변 끝.'].join('\n');
+    assert.equal(paired(statement, statement.replace('민주당 김지수', '국민의힘 김지민'), line), false);
+    const signed = marker.replace(quote, line);
+    assert.equal(paired(signed, signed.replace('초안', '정정'), line), true);
+  }
+  const namedAfter = '“청년수당 예산은 10억 원이다”라고 김지수 의원은 강조했다.';
+  const selfContained = heading.replace(quote, namedAfter);
+  assert.equal(paired(selfContained, selfContained.replace('야당','여당'), namedAfter), true);
 });
 
 test('수정 후 해당 없음이나 미평가인 기존 왜곡은 개선율 옆에 남긴다', () => {

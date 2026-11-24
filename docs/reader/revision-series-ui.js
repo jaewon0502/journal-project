@@ -377,14 +377,14 @@
         d.id === 'standards' && [d.first, d.second].some(r => Number.isInteger(r.before) || Number.isInteger(r.after)))));
     if (historical.length) summary.append(element('p', '이전 기준으로 저장한 기사 ' + historical.length +
       '건의 검증 기준 점수 또는 구절 대응이 포함됐습니다. 양쪽 당사자의 근거와 “해당 사업”이 가리키는 대상을 현행 기준으로 대조하려면 원래 작업 파일을 다시 열어 요약을 저장하세요.', 'note'));
-    const earlierCore = [...sources.values()].filter(({record}) => record.version < 6 &&
-      record.factContext?.matches.some(([before]) => record.factContext.beforeCore[before] === 2));
+    const earlierCore = [...sources.values()].filter(({record}) => record.version < 7 &&
+      record.factContext?.matches.some(([before]) => record.factContext.beforeCore[before] === 2 || record.facts.before[before].outcome === 'supported'));
     if (earlierCore.length) {
       const details = element('details', null, 'case');
       details.id = 'legacy-quote-check';
-      details.append(element('summary', '이전 방식으로 원본 핵심 구절을 연결한 기사 ' + earlierCore.length + '건'),
-        element('p', '이전 요약에는 제목이나 서명으로 발언자를 표시한 인용문이 같은 문구로 연결됐을 수 있습니다. 기사 파일을 열면 다시 대조할 구절을 찾습니다.'));
-      for (const entry of earlierCore) details.append(evidenceLink(entry, '핵심 구절의 인용 대응 다시 확인', '&focus=quote-check'));
+      details.append(element('summary', '이전 방식으로 원본 구절을 연결한 기사 ' + earlierCore.length + '건'),
+        element('p', '이전 요약에서는 인용문에 발언자가 없어도 같은 문구를 연결했을 수 있습니다. 기사 파일을 열어 발언자가 유지됐는지 확인하세요.'));
+      for (const entry of earlierCore) details.append(evidenceLink(entry, '인용 대응 다시 확인', '&focus=quote-check'));
       summary.append(details);
     }
     summary.append(element('p', '원본과 수정본에 등록된 원자료 묶음이 달라진 기사 ' + report.changedSources + '건', report.changedSources ? 'warn' : 'note'));

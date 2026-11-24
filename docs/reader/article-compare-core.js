@@ -112,6 +112,8 @@
   const referencePronoun = /(?<![\p{L}\p{N}])(?:그녀|그|이|이들|그들|이곳|그곳|이것|그것)(?:은|는|이|가|의|을|를|도|에서|에게)(?!\p{L})/u;
   // A standalone quotation can belong to a heading above it or a signature below it.
   const detachedQuotation = /^(?:“[\s\S]+”|"[\s\S]+"|‘[\s\S]+’|'[\s\S]+'|「[\s\S]+」|『[\s\S]+』|«[\s\S]+»)(?:\s*(?:이?라고|고)\s*(?:말했다|밝혔다|주장했다|답했다|덧붙였다))?[.!?…。！？]*$/u;
+  // A reporting particle and a single predicate still leave the speaker outside the row.
+  const reportedQuotation = /^(?:“[^”]+”|"[^"]+"|‘[^’]+’|'[^']+'|「[^」]+」|『[^』]+』|«[^»]+»)\s*(?:이?라고|고|이?라며|며|이?라면서|면서)\s*[가-힣]+다[.!?…。！？]*$/u;
   // Require an explicit name field; an ordinary '발언자: 해당 의원' label can still refer back to the heading.
   const namedSpeaker = /^(?:발언자|화자)\s+실명\s*[:：]\s*[가-힣]{2,5}\s+(?:의원|시장|장관|위원장|대변인|대표|기자)$/u;
   function uniqueRows(rows, keyFor = rowFingerprint) {
@@ -125,7 +127,7 @@
 
   // Row IDs encode offsets. Across different editions, link only a single location
   // whose wording and immediate context identify one row in each edition.
-  function matchRevisionRows(before, after, withheldFromLegacy) {
+  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6) {
     if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
     let commonPrefix = 0;
     while (before.article[commonPrefix] === after.article[commonPrefix]) commonPrefix++;
@@ -142,13 +144,15 @@
       // A matching window cannot establish the referent after an earlier edit or a move.
       const priorTextChanged = row.positions[0].start > commonPrefix || row.id !== target;
       if (priorTextChanged && (referenceModifier.test(row.text) || referencePronoun.test(row.text))) continue;
-      if (detachedQuotation.test(row.text)) {
+      const detached = detachedQuotation.test(row.text);
+      if (detached || reportedQuotation.test(row.text)) {
         const previous = before.rows[index - 1];
         const anchored = previous?.positions.length === 1 && namedSpeaker.test(previous.text) &&
           previous.positions[0].start >= before.article.length - commonSuffix;
         if (!anchored) {
           // For reading existing coordinator archives only. The current comparison always withholds this pair.
-          withheldFromLegacy?.set(row.id, target);
+          withheldFromV5?.set(row.id, target);
+          if (!detached) withheldFromV6?.set(row.id, target);
           continue;
         }
       }

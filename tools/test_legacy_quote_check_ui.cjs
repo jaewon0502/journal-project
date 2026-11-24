@@ -16,19 +16,22 @@ const dir = path.join(__dirname, '../docs/reader');
 const quote = '“이번 예산안은 무책임하다.”';
 const privateReason = '비공개 진행 메모. 위원회 표결 자료로 사업비 문장을 다시 대조했다.';
 
-function manuscript(budget, speaker) {
-  const article = [budget, speaker, '다음은 논평 전문이다.', quote, '논평 끝.'].join('\n');
+function manuscript(budget, speaker, statement) {
+  const article = [budget, speaker, '다음은 논평 전문이다.', statement, '논평 끝.'].join('\n');
   return {format:workspace.schema, article, articleDraft:article, demo:true, receipts:[], rowDrafts:[],
     sources:[
       {id:'budget',title:'비공개 예산 표결표',url:'https://desk.invalid/budget',version:'초판',locator:'1쪽',excerpt:'의회는 10억 원을 배정했다.'},
-      {id:'minutes',title:'비공개 논평 사본',url:'https://desk.invalid/minutes',version:'초판',locator:'논평',excerpt:'이번 예산안은 무책임하다.'}
+      {id:'minutes',title:'비공개 논평 사본',url:'https://desk.invalid/minutes',version:'초판',locator:'논평',
+        excerpt: speaker + '\n' + statement}
     ],
     sourceDraft:{id:null, fields:Object.fromEntries(workspace.sourceFields.map(field => [field,'']))}};
 }
 
-async function reviewedEditions() {
-  const original = manuscript('의회는 10억 원을 배정했다.', '야당 대변인의 서면 논평');
-  const revised = manuscript('시의회는 이 사업에 10억 원을 배정했다.', '여당 대변인의 서면 논평');
+async function reviewedEditions(legacyVersion = 5) {
+  const supported = legacyVersion === 6;
+  const statement = supported ? '“사업비는 10억 원이다”라고 강조했다.' : quote;
+  const original = manuscript('의회는 10억 원을 배정했다.', '야당 대변인의 서면 논평', statement);
+  const revised = manuscript('시의회는 이 사업에 10억 원을 배정했다.', '여당 대변인의 서면 논평', statement);
   const items = [];
   for (const editor of [1, 2]) {
     const {key, packets} = await blind.prepare(original, revised);
@@ -39,28 +42,36 @@ async function reviewedEditions() {
         engine.decide(rows[0], {status:'fact',sourceIds:[copy.sources[0].id],acknowledged:true,
           reason:'편집자 ' + editor + '의 예산 원표 대조'}, copy.sources),
         engine.decide(rows[3], {status:'attribution',sourceIds:[copy.sources[1].id],acknowledged:true,
-          reason:'편집자 ' + editor + '의 논평 확인',contentChecked:true,contentStatus:'opinion',
-          contentReason:'정치적 평가를 담은 논평이다.'}, copy.sources)
+          reason:'편집자 ' + editor + '의 논평 확인',contentChecked:true,
+          ...(supported ? {contentStatus:'supported',contentReason:'사업비 10억 원을 원표에서 확인했다.',contentSourceIds:[copy.sources[0].id]} :
+            {contentStatus:'opinion',contentReason:'정치적 평가를 담은 논평이다.'})}, copy.sources)
       ];
       copy.articleAssessment = rubric.save(engine.report(copy.article, copy.sources, copy.receipts),
-        copy.sources, {coreRowIds:[rows[3].id],ratings:{}});
+        copy.sources, {coreRowIds:supported ? [rows[1].id] : [rows[3].id],ratings:{}});
       items.push({name:'편집자-' + editor + '-' + slot + '.json',data:copy});
     }
   }
   const reviews = await blind.resolveBundle(items);
   const joint = agreement.compare(...reviews);
-  const legacy = series.makeLegacyMatchRecord(joint, reviews[0].key);
+  const legacy = series.makeLegacyMatchRecord(joint, reviews[0].key, legacyVersion);
   const current = series.makeRecord(joint, reviews[0].key);
-  assert.equal(legacy.version, 5);
-  assert.deepEqual(legacy.factMatches, [[0,null]]);
+  assert.equal(legacy.version, legacyVersion);
+  assert.deepEqual(legacy.factMatches, supported ? [[0,null],[3,3]] : [[0,null]]);
+  assert.deepEqual(current.factMatches, supported ? [[0,null],[3,null]] : [[0,null]]);
   assert.equal(new Map(legacy.factContext.matches).get(3), 3);
   assert.equal(new Map(current.factContext.matches).has(3), false);
   const {format, evidenceDigest} = await cases.create(current, items, []);
   const note = {before:0, after:0, status:'retained', reason:privateReason};
   const reviewId = series.reviewId(legacy);
-  // The released v3 archive signed private fact notes against the v5 public summary.
-  const checksum = engine.digestValue([format, 3, reviewId, evidenceDigest, [[0,0,'retained',privateReason]]]);
-  const archive = {format, version:3, reviewId, evidenceDigest, items, notes:[note], checksum};
+  const version = legacyVersion - 2;
+  const payload = [format, version, reviewId, evidenceDigest, [[0,0,'retained',privateReason]]];
+  const archive = {format, version, reviewId, evidenceDigest, items, notes:[note]};
+  if (version === 4) {
+    const reason = '이전 메모에서 논평 작성 정당의 변경을 확인했다.';
+    archive.contextNotes = [{before:1, after:1, status:'changed', reason}];
+    payload.push([[1,1,'changed',reason]]);
+  }
+  archive.checksum = engine.digestValue(payload);
   assert.deepEqual(cases.verifyLegacyMatchNotes(archive, legacy), [note]);
   return {items, current, legacy, archive};
 }
@@ -107,7 +118,37 @@ async function seriesLink(t, legacy) {
   return link().hash;
 }
 
-test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모두 바뀐 화자의 핵심 인용 하나만 열고 익명 v6 요약을 저장한다', async t => {
+test('v6에서 유지로 집계한 비핵심 직접 인용의 발언자가 달라지면 두 판본의 공동 지지와 구별해 재검토한다', async t => {
+  const {items, current, legacy, archive} = await reviewedEditions(6);
+  // Independently produced from these six inputs by the released v6 writer.
+  assert.equal(series.reviewId(legacy),'93db89441b1fb077f47a914bdd3190fea869b873dda9cdb149dce5e165762532');
+  for (const record of [legacy,current]) {
+    assert.equal(record.facts.before[3].outcome,'supported');
+    assert.equal(record.facts.after[3].outcome,'supported');
+  }
+  assert.equal(series.summarize([legacy]).articles[0].factTrace.retained,1);
+  assert.equal(series.summarize([current]).articles[0].factTrace.retained,0);
+  assert.throws(() => cases.verifyAll(archive,current), error => error.code === 'legacy-review-changed');
+  const target = await seriesLink(t,legacy);
+  for (const input of [items,[{name:'이전 진행자 기록.json',data:archive}]]) {
+    const p = page(t,'article-compare.html',target);
+    p.select('blind-bundle-files',input);
+    const counter = () => p.document.querySelector('[data-quote-check-count]');
+    await t.waitFor(() => assert.ok(counter()));
+    assert.match(counter().textContent,/그 밖의 공동 지지 구절 1개/);
+    const row = p.document.querySelector('[data-retention-before="3"]');
+    assert.ok(row.open && row.parentElement.open);
+    assert.equal(row.querySelector('[data-retention-state]').value,'');
+    assert.deepEqual(await p.downloadSummary(),current);
+    if (input.length === 1) {
+      const history = [...p.document.querySelectorAll('#output details')].find(d => d.firstElementChild.textContent.includes('이전 기준으로 기록한 핵심 맥락'));
+      assert.ok(history?.textContent.includes(archive.contextNotes[0].reason));
+      assert.ok(!p.document.querySelector('#joint-facts').contains(history));
+    }
+  }
+});
+
+test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모두 바뀐 화자의 핵심 인용 하나만 열고 익명 v7 요약을 저장한다', async t => {
   const {items, current, legacy, archive} = await reviewedEditions();
   const target = await seriesLink(t, legacy);
   const archiveFile = {name:'이전 진행자 기록.json',data:archive};
@@ -132,7 +173,7 @@ test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모�
     }
     const downloaded = await p.downloadSummary();
     assert.deepEqual(downloaded, current);
-    assert.equal(downloaded.version, 6);
+    assert.equal(downloaded.version, 7);
     assert.equal(new Map(downloaded.factContext.matches).has(3), false);
     for (const text of [privateReason, quote, '비공개 논평 사본', '편집자 1의 논평 확인']) {
       assert.equal(JSON.stringify(downloaded).includes(text), false);
@@ -162,6 +203,6 @@ test('예전 연결이 여전히 유효한 연습 기사도 같은 링크에서 
   assert.match(count().textContent, /핵심 구절 0개$/);
   assert.equal(p.document.activeElement, count());
   const downloaded = await p.downloadSummary();
-  assert.equal(downloaded.version, 6);
+  assert.equal(downloaded.version, 7);
   assert.deepEqual(downloaded.factContext.matches, legacy.factContext.matches);
 });

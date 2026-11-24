@@ -117,7 +117,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   assert.deepEqual(saved, makeRecord(joint, two.key));
   const wire = JSON.stringify(saved);
   const expected = withMatches(withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]), []);
-  expected.version = 6;
+  expected.version = 7;
   expected.factContext = {beforeCore:[0], afterCore:[0], matches:[]};
   for (const role of ['before', 'after']) {
     expected[role] = {articleSha256: one.key.mapping[role].articleSha256, sourcesSha256: one.key.mapping[role].sourcesSha256};
@@ -471,7 +471,7 @@ test('발언자가 바뀐 단독 인용문의 현재 대응과 이전 요약 식
   }
   const joint = agreement.compare(...reviews);
   const modern = makeRecord(joint,reviews[0].key), legacy = makeLegacyMatchRecord(joint,reviews[1].key);
-  assert.equal(modern.version,6);
+  assert.equal(modern.version,7);
   assert.equal(legacy.version,5);
   assert.deepEqual(legacy.factMatches,[[3,3]]);
   assert.deepEqual(modern.factMatches,[[3,null]]);

@@ -100,13 +100,13 @@
   function noteChecksum(version, reviewId, evidenceDigest, notes, contextNotes) {
     const fields = n => [n.before, n.after, n.status, n.reason];
     const payload = [format, version, reviewId, evidenceDigest, notes.map(fields)];
-    if (version === 4) payload.push(contextNotes.map(fields));
+    if (version >= 4) payload.push(contextNotes.map(fields));
     return digest(payload);
   }
 
   async function create(record, items, notes, contextNotes = []) {
     const inputVersion = record?.version;
-    if (![3, 4, 5, 6].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
+    if (![3, 4, 5, 6, 7].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
     const inputId = series.reviewId(record, inputVersion);
     const embedded = copyItems(items, false);
     const reviews = await blind.resolveBundle(embedded);
@@ -117,8 +117,8 @@
     const saved = checkedNotes(rebuilt, notes);
     const context = checkedContextNotes(rebuilt, contextNotes);
     if (context.length && inputVersion < 4) throw new Error('핵심 구절 대응을 포함한 기사 요약에서 대조 기록을 저장하세요.');
-    const version = 4;
-    const reviewId = series.reviewId(rebuilt, 6);
+    const version = 5;
+    const reviewId = series.reviewId(rebuilt);
     const evidenceDigest = evidenceId(embedded);
     return {format, version, reviewId, evidenceDigest, items:embedded, notes:saved, contextNotes:context,
       checksum:noteChecksum(version, reviewId, evidenceDigest, saved, context)};
@@ -126,13 +126,13 @@
 
   function read(data) {
     const keys = ['format', 'version', 'reviewId', 'evidenceDigest', 'items', 'notes', 'checksum'];
-    if (data?.version === 4) keys.push('contextNotes');
-    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4].includes(data.version) ||
+    if (data?.version >= 4) keys.push('contextNotes');
+    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4, 5].includes(data.version) ||
         ![data.reviewId, data.evidenceDigest, data.checksum].every(s => typeof s === 'string' && /^[0-9a-f]{64}$/u.test(s))) {
       throw new Error('진행자가 저장한 구절 대조 기록 파일을 선택하세요.');
     }
     const items = copyItems(data.items, true), notes = cleanNotes(data.notes);
-    const contextNotes = data.version === 4 ? cleanNotes(data.contextNotes, 'pending', 'absent') : [];
+    const contextNotes = data.version >= 4 ? cleanNotes(data.contextNotes, 'pending', 'absent') : [];
     if (evidenceId(items) !== data.evidenceDigest) throw new Error('저장한 대조 기록의 작업 파일이나 대응표 내용이 달라졌습니다.');
     if (noteChecksum(data.version, data.reviewId, data.evidenceDigest, notes, contextNotes) !== data.checksum) throw new Error('저장한 대조 기록의 판단이나 식별값이 달라졌습니다.');
     return {items, notes, contextNotes, reviewId:data.reviewId};
@@ -141,12 +141,12 @@
   // Pass the summary rebuilt by the normal blind assignment resolver when reopening.
   function verifyAll(data, record) {
     const saved = read(data);
-    if (record?.version !== 6) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
-    // Archives v1–v4 bind the six inputs and a public summary v3–v6 respectively.
+    if (record?.version !== 7) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
+    // A private archive binds its original inputs and the public summary two versions ahead.
     const summaryVersion = data.version + 2;
     if (series.reviewId(record, summaryVersion) !== saved.reviewId) {
       const error = new Error('대조 기록과 다시 계산한 기사 요약이 일치하지 않습니다.');
-      if (data.version < 4) error.code = 'legacy-review-changed';
+      if (data.version < 5) error.code = 'legacy-review-changed';
       throw error;
     }
     return {notes:checkedNotes(record, saved.notes), contextNotes:checkedContextNotes(record, saved.contextNotes)};
@@ -160,8 +160,9 @@
   // Historical judgments belong in their original version, outside the current review tally.
   function verifyLegacyMatchNotes(data, historical) {
     const saved = read(data);
-    if (data.version !== 3 || historical?.version !== 5 || series.reviewId(historical, 5) !== saved.reviewId)
+    if (![3, 4].includes(data.version) || historical?.version !== data.version + 2 || series.reviewId(historical) !== saved.reviewId)
       throw new Error('이전 구절 대응으로 복원한 기사 요약과 대조 기록이 일치하지 않습니다.');
+    checkedContextNotes(historical, saved.contextNotes);
     return checkedNotes(historical, saved.notes);
   }
 

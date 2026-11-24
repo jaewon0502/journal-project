@@ -1008,7 +1008,7 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
-  assert.equal(record.version, 6);
+  assert.equal(record.version, 7);
   assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
   assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
   assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});
