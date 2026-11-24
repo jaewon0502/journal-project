@@ -4,7 +4,7 @@
   'use strict';
 
   const yearCell = /^((?:19|20)\d{2})(?:\s*년(?:도)?)?$/u;
-  const numericCell = /^(?:[-—–…]|[+−△▲▼-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:%p?|퍼센트포인트|원|명|건|개|톤)?)$/iu;
+  const numericCell = /^(?:[-—–…]|[+−△▲▼-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:\s*(?:(?:%|퍼센트)\s*(?:포인트|p)?|원|명|건|개|톤))?)$/iu;
   const boundary = /^(?:[\[<〈【]\s*(?:표|그림|단위)|(?:표|그림)\s*\d|(?:주(?:석)?\s*\d*|자료|출처|단위)\s*[:：])/u;
   const lineBreak = /\r\n|[\n\r\u2028\u2029]/u;
 
@@ -100,8 +100,10 @@
   // Only read a complete, regular excerpt. A title, merged header or second
   // table may add a unit or population, so leave those excerpts for inspection.
   const annualHeader = /^(?:(?:발생|신고|등록|조사|관측|기준|회계)?\s*(?:연도|년도|년)|year)$/iu;
-  const derivedMeasure = /전년|대비|증감|증가|감소|격차|배수|평균|누계|누적|제외|빼고|분자|분모|비교|환산|합산|추정|나누|얼마나\s*늘/u;
+  const derivedMeasure = /전년|대비|증감|증가|감소|격차|차이|변화|변동|상승|하락|오르|오른|올라|올랐|내렸|내려|내린|떨어[지졌진]|늘[었어난]|줄[었어인]|높아[지졌진]|낮아[지졌진]|얼마나\s*늘|보다(?:는|도|\s|$)|배수|평균|누계|누적|제외|빼고|분자|분모|비교|환산|합산|추정|나누/u;
   const ratioMeasure = /%|퍼센트|비중|구성비|[률율]/u;
+  const pointUnit = /(?:%|퍼센트)\s*(?:포인트|p)/iu;
+  const stageQualifier = /최종|잠정|확정|예비(?!비)|중간|예상|전망|(?:\d+|일|이|삼)차(?:\s|전형|집계|발표|시험|심사)/u;
   const perUnit = /(?:[명인건대구세원회]|\d[만천백]?)\s*(?:당|마다)/u;
   const countAsked = /(?:몇|\d[\d,.]*)\s*(?:명|건|개|회)(?!당|마다)/u;
   // A total in the selected column cannot establish a subgroup count. Look
@@ -120,7 +122,9 @@
     const normalized = query.normalize('NFKC');
     if (documentText.includes('\f')) return null;
     const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
-    const asked = period.requestedPeriod(normalized);
+    // A printed change column still belongs to a dated row. Keep relative
+    // dates and ranges intact and check the original wording before cueing a cell.
+    const asked = period.requestedPeriod(normalized.replace(/증가|감소|증감|상승|하락|늘었|줄었/gu, ' '));
     if (!asked || asked.month || asked.day ||
         yearCell.exec(cellsOf(passage.text)?.cells[0])?.[1] !== asked.year) return null;
 
@@ -164,13 +168,12 @@
   const countedObject = /^\s+(?!결과|자료|사실|내용)[\p{L}\p{N}]+(?:\([\p{L}\p{N}]+\))?(?:\s+수)?(?:은|는|이|가)\s*(?:(?:모두|총|약|정확히)\s*)?(?:몇|\d[\d,.]*)\s*(?:종|건|곳|개|명|회|장)/u;
 
   function requestedMetric(normalized, labels, cells) {
-    if (derivedMeasure.test(normalized)) return null;
     const mentions = [];
     labels.forEach((label, col) => {
       // Only remove an explicit count unit or the final 수 in an agent noun
       // (사망자수 → 사망자). Keep qualifiers part of the printed metric.
-      const base = label.replace(/\((?:명|건|개|회|%p?)\)$/iu, '');
-      if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || derivedMeasure.test(base)) return;
+      const base = label.replace(/\((?:명|건|개|회|(?:%|퍼센트)(?:포인트|p)?)\)$/iu, '');
+      if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || (derivedMeasure.test(base) && !pointUnit.test(label))) return;
       const count = /[자원]수$/u.test(base);
       const tokens = [...(count ? base.slice(0,-1) : base)].join('\\s*') + (count ? '(?:\\s*수)?' : '');
       const action = countedAction.test(base) ? '(한|된)|' : '';
@@ -184,17 +187,21 @@
     // A qualified heading may contain another column's entire name. Two
     // independently mentioned columns cannot be reduced to one requested cell.
     const columns = new Set(mentions.filter(m => !mentions.some(n =>
-      n.start < m.start && n.end >= m.end)).map(m => m.col));
+      n.start <= m.start && n.end >= m.end && (n.start < m.start || n.end > m.end))).map(m => m.col));
     if (columns.size !== 1) return null;
     const [col] = columns, label = labels[col - 1];
     if (!mentions.some(m => m.col === col && m.counted)) return null;
     const remaining = mentions.filter(m => m.col === col).reduceRight((text, m) =>
       text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
-    if (asksForSubset(remaining)) return null;
+    // A stage or a comparison must be part of the printed heading to license
+    // that column. A final report may still contain several different counts.
+    if (asksForSubset(remaining) || stageQualifier.test(remaining) || derivedMeasure.test(remaining)) return null;
+    if (pointUnit.test(label) !== pointUnit.test(normalized)) return null;
     if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
         (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
     const cell = cells[col - 1];
-    return /\d/u.test(cell.value) && (!cell.value.includes('%') || ratioMeasure.test(label)) ? cell : null;
+    if (/%|퍼센트/u.test(cell.value) && (!ratioMeasure.test(label) || pointUnit.test(cell.value) !== pointUnit.test(label))) return null;
+    return /\d/u.test(cell.value) ? cell : null;
   }
 
   function annualMetricCell(documentText, query, passage) {

@@ -171,6 +171,41 @@ test('원표에 없는 집단·지역을 물으면 전체를 집단의 수치로
   assert.equal(find('2024년 교통사고 통계에서 사망자는 몇 명인가?')[0].value, '350');
 });
 
+test('연도별 비율과 퍼센트포인트 변화량을 같은 셀로 안내하지 않는다', () => {
+  const rates = '연도\t영업이익률(%)\n2023\t13.5%\n2024\t17.1%';
+  const reported = '연도\t영업이익률(%)\t영업이익률 증감폭(%p)\n2023\t13.5%\t+1.2%p\n2024\t17.1%\t+3.6%p';
+  const row = (source, query) => {
+    const passage = search(source, query).passages.find(p => p.text.startsWith('2024'));
+    assert.ok(passage, query);
+    return columns.inspectAnnualRow(source, query, passage);
+  };
+  for (const q of ['몇 %p 올랐나?', '몇 퍼센트 포인트 올랐나?', '3.6%포인트 높아졌나?',
+    '몇 퍼센트 상승했나?', '얼마나 떨어졌나?', '얼마나 늘어났나?']) {
+    const checked = row(rates, '2024년 영업이익률은 ' + q);
+    assert.equal(checked.metric, null, q);
+    assert.deepEqual(checked.cells.map(c => c.value), ['17.1%']);
+  }
+  assert.equal(row(reported, '2024년 영업이익률은 몇 퍼센트였나?').metric.value, '17.1%');
+  const q = '2024년 영업이익률 증감폭은 몇 퍼센트포인트인가?';
+  assert.equal(row(reported, q).metric.value, '+3.6%p');
+  assert.equal(row(reported.replace('+3.6%p', '+3.6%'), q).metric, null);
+  assert.equal(row(reported, '2024년 영업이익률 증감폭은 몇 퍼센트인가?').metric, null);
+  assert.equal(row(reported, '2024년 영업이익률과 영업이익률 증감폭은 각각 몇 퍼센트포인트인가?').metric, null);
+});
+
+test('집계 단계를 표제에 연결할 수 없으면 전체나 일부 합격자 수를 단정하지 않는다', () => {
+  const table = '연도\t합격자수(명)\t최종 합격자수(명)\n2023\t124\t72\n2024\t143\t87';
+  const row = q => columns.inspectAnnualRow(table, '2024년 ' + q, {paragraph:3, text:table.split('\n')[2]});
+  for (const q of ['합격자 수는 최종 발표 기준 몇 명이었나?', '예비 합격자 수는 몇 명이었나?',
+    '잠정 집계로 합격자 수는 몇 명인가?', '최종 합격자 수와 예비 합격자 수는?', '2차 심사에서 합격자 수는?']) {
+    const checked = row(q);
+    assert.equal(checked.metric, null, q);
+    assert.deepEqual(checked.cells.map(c => [c.heading,c.value]), [['합격자수(명)','143'], ['최종 합격자수(명)','87']]);
+  }
+  assert.equal(row('최종 합격자 수는 몇 명이었나?').metric.value, '87');
+  assert.equal(row('합격자 수는 몇 명이었나?').metric.value, '143');
+});
+
 test('연도 행은 항목별 원문 값을 제공하고, 명시한 행정 행위 건수만 활용형으로 연결한다', () => {
   const lines = ['연도\t지정\t취소\t확인\t보유시설수','2019\t8\t2\t51\t103','2020\t9\t3\t49\t108'];
   const table = lines.join('\n');
