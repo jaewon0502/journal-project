@@ -73,12 +73,13 @@ const gradingKey = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../experiments/cross-party-review/coordinator-key.json'))
 );
 const reader = (name) => fs.readFileSync(path.resolve(__dirname, '../docs/reader', name), 'utf8');
-function page(t, name) {
+function page(t, name, initialize) {
   const { window } = new JSDOM(reader(name + '.html'), {
     runScripts: 'outside-only',
     url: 'https://local.test/' + name + '.html'
   });
   t.after(() => window.close());
+  initialize?.(window);
   window.confirm = () => true;
   window.eval(reader('field-review-core.js'));
   window.eval(reader(name + '.js'));
@@ -109,6 +110,44 @@ function page(t, name) {
   }
   return { window, el, upload, download, select };
 }
+test('진행자가 새로고침해도 구분·채점기준·수동 채점을 복원하고 각 구분의 저장 여부를 구별한다', async t => {
+  const p = page(t, 'field-summary');
+  await p.upload('key-file', gradingKey);
+  await p.upload('imports', trial({id:'real',kind:'editor'}), trial({id:'practice'}));
+  p.select('#entries select', 'yes');
+  p.select('#kind', 'practice');
+  p.select('#entries select', 'no');
+  const first = await p.download('save');
+  assert.deepEqual(first.entries.map(row => row.trial.id), ['practice']);
+  assert.match(p.el('draft-status').textContent, /파일 저장 전 · 현업 참여$/);
+  const store = p.window.sessionStorage;
+  const restored = page(t, 'field-summary', w => {
+    for (const key of Object.keys(store)) w.sessionStorage.setItem(key, store.getItem(key));
+  });
+  assert.equal(restored.el('kind').value, 'practice');
+  assert.equal(restored.el('entries').querySelector('select').value, 'no');
+  assert.match(restored.el('key-name').textContent, /기준 2개/);
+  assert.match(restored.el('draft-status').textContent, /파일 저장 전 · 현업 참여$/);
+  restored.select('#kind', 'editor');
+  assert.equal(restored.el('entries').querySelector('select').value, 'yes');
+  assert.equal(restored.window.dispatchEvent(new restored.window.Event('beforeunload', {cancelable:true})), false);
+  assert.equal((await restored.download('save')).entries[0].locationGrade, 'yes');
+  assert.equal(restored.window.dispatchEvent(new restored.window.Event('beforeunload', {cancelable:true})), true);
+  await restored.upload('imports', trial({id:'new', participant:'new', kind:'editor',
+    taskId:fixture.tasks[1].id, prompt:fixture.tasks[1].prompt}));
+  assert.match(restored.el('entries').lastElementChild.textContent, /기준 판정/);
+});
+
+test('임시 저장이 막혀도 채점은 유지하고 파일 저장과 페이지 이탈 경고를 제공한다', async t => {
+  const p = page(t, 'field-summary', w => {
+    Object.defineProperty(w, 'sessionStorage', {get() { throw Error('blocked'); }});
+  });
+  await p.upload('imports', trial({kind:'editor'}));
+  p.select('#entries select', 'yes');
+  assert.match(p.el('draft-status').textContent, /임시 저장할 수 없습니다/);
+  assert.equal(p.window.dispatchEvent(new p.window.Event('beforeunload', {cancelable:true})), false);
+  assert.equal((await p.download('save')).entries[0].locationGrade, 'yes');
+});
 test('수동·저널 배정을 유지하고 실제 도구 사용 응답과 다음 참여자를 분리한다', async (t) => {
   for (const arm of ['manual', 'journal']) {
     const p = page(t, 'field-review');

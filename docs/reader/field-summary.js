@@ -251,6 +251,8 @@
     sel.disabled = disabled;
     sel.onchange = () => {
       entry[field] = sel.value;
+      unexported.add(entry.trial.kind);
+      persistDraft();
       stats();
     };
     wrap.append(sel);
@@ -355,6 +357,134 @@
       t.journalUse || ''
     ]);
   }
+  function loadKey(v) {
+    if (!v || typeof v.caseId !== 'string' || !Array.isArray(v.tasks) || !v.tasks.length)
+      throw Error('과제별 기준 파일이 필요합니다.');
+    const incoming = new Map();
+    for (const task of v.tasks) {
+      const normalized = basis(v.caseId, v.articleUrl, task);
+      const k = target(v.caseId, v.articleUrl, task.id, task.prompt);
+      if (incoming.has(k)) throw Error('기준 파일에 같은 기사·과제의 기준이 중복됐습니다.');
+      incoming.set(k, normalized);
+    }
+    anchors.set(v.caseId, incoming);
+  }
+  function showKeys() {
+    const count = [...anchors.values()].reduce((n, tasks) => n + tasks.size, 0);
+    el('key-name').textContent = count ? '불러온 기준 ' + count + '개' : '';
+  }
+  function mergeFiles(values) {
+    const next = new Map(records);
+    for (const v of values) {
+      const list = v.format === format ? v.entries : [{ trial: v, locationGrade: '', verdictGrade: '' }];
+      if (!Array.isArray(list)) throw Error('집계 파일 형식을 확인하세요.');
+      for (const item of list) {
+        const trial = c.validate(item.trial);
+        if (item.repeatExposure !== undefined && typeof item.repeatExposure !== 'boolean')
+          throw Error('반복 노출 표시를 확인하세요.');
+        let row = {
+          trial,
+          repeatExposure: item.repeatExposure === true,
+          locationGrade: grade(item.locationGrade),
+          verdictGrade: grade(item.verdictGrade),
+          basis: item.basis ? basis(item.basis.caseId, item.basis.articleUrl, item.basis) : null
+        };
+        if (row.basis) {
+          if (
+            trialTarget(trial) !==
+              target(row.basis.caseId, row.basis.articleUrl, row.basis.id, row.basis.prompt) ||
+            (item.expected && item.expected !== row.basis.verdict)
+          ) {
+            throw Error('저장된 기준의 기사·과제 또는 기준 판정이 제출 기록과 다릅니다.');
+          }
+          row = bind(row, row.basis);
+        } else if (item.expected) {
+          // Old keyed grades contain no article/reference binding; reconstruct from the current key.
+          row.verdictGrade = '';
+          row.locationGrade = '';
+        }
+        row = applyActiveKey(row);
+        const prev = next.get(trial.id);
+        if (prev && canonical(prev.trial) !== canonical(trial)) {
+          throw Error('같은 과제 기록 ID에 내용이 다른 파일이 있습니다.');
+        }
+        if (prev?.repeatExposure) row.repeatExposure = true;
+        if (prev && !sameBasis(row.basis, prev.basis)) {
+          if (row.basis && prev.basis)
+            throw Error('같은 기록을 다른 원자료 기준으로 채점했습니다. 사용할 집계본을 선택하세요.');
+          if (prev.basis) {
+            next.set(trial.id, { ...prev, repeatExposure: row.repeatExposure });
+            continue;
+          }
+        } else if (prev) {
+          for (const k of ['locationGrade', 'verdictGrade']) {
+            if (row[k] && prev[k] && row[k] !== prev[k])
+              throw Error('같은 기록의 채점 결과가 다릅니다. 사용할 집계본을 확인하세요.');
+            row[k] = row[k] || prev[k];
+          }
+        }
+        next.set(trial.id, row);
+      }
+    }
+    const versions = new Map();
+    for (const entry of next.values()) {
+      if (!entry.basis) continue;
+      const k = trialTarget(entry.trial);
+      if (versions.has(k) && !sameBasis(versions.get(k), entry.basis))
+        throw Error('같은 과제에 다른 기준이 섞였습니다. 사용할 진행자 기준 파일을 먼저 선택하세요.');
+      versions.set(k, entry.basis);
+    }
+    for (const [id, entry] of next) {
+      // A saved key establishes the same verdict for every response to this exact prompt.
+      // An unkeyed location needs a fresh human check against that reference.
+      const anchor = versions.get(trialTarget(entry.trial));
+      records.set(id, !entry.basis && anchor ? bind(entry, anchor) : entry);
+    }
+  }
+  // Scoped to this tab and checkout path. No participant draft is read by this page.
+  const draftKey = 'journal-field-grading-v1/' + location.pathname;
+  const unexported = new Set();
+  function persistDraft() {
+    const notice = el('draft-status');
+    try {
+      const keys = [...anchors.values()].map(tasks => {
+        const entries = [...tasks.values()];
+        return {caseId:entries[0].caseId, articleUrl:entries[0].articleUrl, tasks:entries};
+      });
+      const draft = {kind:el('kind').value, keys, entries:[...records.values()], unexported:[...unexported]};
+      sessionStorage.setItem(draftKey, JSON.stringify(draft));
+      notice.textContent = '이 탭을 새로고침하면 채점을 복원합니다. 탭을 닫기 전 보관할 구분의 JSON을 저장하세요.';
+    } catch {
+      notice.textContent = '이 탭에 임시 저장할 수 없습니다. 페이지를 떠나기 전에 판정과 집계 기록을 JSON으로 저장하세요.';
+    }
+    if (unexported.size) notice.textContent += ' 파일 저장 전 · ' + [...unexported].map(k => k === 'editor' ? '현업 참여' : '연습').join(', ');
+  }
+  function restoreDraft() {
+    try {
+      const value = sessionStorage.getItem(draftKey);
+      if (!value) return;
+      const draft = JSON.parse(value);
+      const kinds = ['editor', 'practice'];
+      if (!kinds.includes(draft.kind) || !Array.isArray(draft.keys) || !Array.isArray(draft.entries) ||
+          !Array.isArray(draft.unexported) || !draft.unexported.every(k => kinds.includes(k))) throw Error();
+      for (const key of draft.keys) loadKey(key);
+      mergeFiles([{format, entries:draft.entries}]);
+      for (const kind of draft.unexported) unexported.add(kind);
+      el('kind').value = draft.kind;
+      showKeys();
+      el('status').textContent = '이 탭에서 작업하던 집계를 복원했습니다.';
+      persistDraft();
+    } catch {
+      anchors.clear();
+      records.clear();
+      el('draft-status').textContent = '이 탭의 임시 집계를 열 수 없습니다. 저장한 집계 JSON을 불러오세요.';
+    }
+  }
+  window.addEventListener('beforeunload', event => {
+    if (!unexported.size) return;
+    event.preventDefault();
+    event.returnValue = '';
+  });
   let loading = false;
   function loadingState(on) {
     loading = on;
@@ -370,24 +500,16 @@
     loadingState(true);
     try {
       const v = JSON.parse(await f.text());
-      if (!v || typeof v.caseId !== 'string' || !Array.isArray(v.tasks) || !v.tasks.length)
-        throw Error('과제별 기준 파일이 필요합니다.');
-      const incoming = new Map();
-      for (const task of v.tasks) {
-        const normalized = basis(v.caseId, v.articleUrl, task);
-        const k = target(v.caseId, v.articleUrl, task.id, task.prompt);
-        if (incoming.has(k)) throw Error('기준 파일에 같은 기사·과제의 기준이 중복됐습니다.');
-        incoming.set(k, normalized);
-      }
-      anchors.set(v.caseId, incoming);
+      loadKey(v);
       let reset = 0;
       for (const [id, entry] of records) {
         const next = applyActiveKey(entry);
         if (entry.locationGrade && !next.locationGrade) reset++;
+        if (!sameBasis(entry.basis, next.basis)) unexported.add(entry.trial.kind);
         records.set(id, next);
       }
-      const keyCount = [...anchors.values()].reduce((n, tasks) => n + tasks.size, 0);
-      el('key-name').textContent = '불러온 기준 ' + keyCount + '개';
+      showKeys();
+      persistDraft();
       el('status').textContent =
         '일치하는 과제에 기준을 적용했습니다.' +
         (reset ? ' 근거 위치 ' + reset + '건을 다시 확인하세요.' : '');
@@ -406,73 +528,10 @@
     if (!files.length) return;
     loadingState(true);
     try {
-      const next = new Map(records);
-      for (const f of files) {
-        const v = JSON.parse(await f.text());
-        const list = v.format === format ? v.entries : [{ trial: v, locationGrade: '', verdictGrade: '' }];
-        if (!Array.isArray(list)) throw Error('집계 파일 형식을 확인하세요.');
-        for (const item of list) {
-          const trial = c.validate(item.trial);
-          if (item.repeatExposure !== undefined && typeof item.repeatExposure !== 'boolean')
-            throw Error('반복 노출 표시를 확인하세요.');
-          let row = {
-            trial,
-            repeatExposure: item.repeatExposure === true,
-            locationGrade: grade(item.locationGrade),
-            verdictGrade: grade(item.verdictGrade),
-            basis: item.basis ? basis(item.basis.caseId, item.basis.articleUrl, item.basis) : null
-          };
-          if (row.basis) {
-            if (
-              trialTarget(trial) !==
-                target(row.basis.caseId, row.basis.articleUrl, row.basis.id, row.basis.prompt) ||
-              (item.expected && item.expected !== row.basis.verdict)
-            ) {
-              throw Error('저장된 기준의 기사·과제 또는 기준 판정이 제출 기록과 다릅니다.');
-            }
-            row = bind(row, row.basis);
-          } else if (item.expected) {
-            // Old keyed grades contain no article/reference binding; reconstruct from the current key.
-            row.verdictGrade = '';
-            row.locationGrade = '';
-          }
-          row = applyActiveKey(row);
-          const prev = next.get(trial.id);
-          if (prev && canonical(prev.trial) !== canonical(trial)) {
-            throw Error('같은 과제 기록 ID에 내용이 다른 파일이 있습니다.');
-          }
-          if (prev?.repeatExposure) row.repeatExposure = true;
-          if (prev && !sameBasis(row.basis, prev.basis)) {
-            if (row.basis && prev.basis)
-              throw Error('같은 기록을 다른 원자료 기준으로 채점했습니다. 사용할 집계본을 선택하세요.');
-            if (prev.basis) {
-              next.set(trial.id, { ...prev, repeatExposure: row.repeatExposure });
-              continue;
-            }
-          } else if (prev) {
-            for (const k of ['locationGrade', 'verdictGrade']) {
-              if (row[k] && prev[k] && row[k] !== prev[k])
-                throw Error('같은 기록의 채점 결과가 다릅니다. 사용할 집계본을 확인하세요.');
-              row[k] = row[k] || prev[k];
-            }
-          }
-          next.set(trial.id, row);
-        }
-      }
-      const versions = new Map();
-      for (const entry of next.values()) {
-        if (!entry.basis) continue;
-        const k = trialTarget(entry.trial);
-        if (versions.has(k) && !sameBasis(versions.get(k), entry.basis))
-          throw Error('같은 과제에 다른 기준이 섞였습니다. 사용할 진행자 기준 파일을 먼저 선택하세요.');
-        versions.set(k, entry.basis);
-      }
-      for (const [id, entry] of next) {
-        // A saved key establishes the same verdict for every response to this exact prompt.
-        // An unkeyed location needs a fresh human check against that reference.
-        const anchor = versions.get(trialTarget(entry.trial));
-        records.set(id, !entry.basis && anchor ? bind(entry, anchor) : entry);
-      }
+      const values = [];
+      for (const f of files) values.push(JSON.parse(await f.text()));
+      mergeFiles(values);
+      persistDraft();
       el('status').textContent = '파일을 불러왔습니다.';
       render();
     } catch (err) {
@@ -502,8 +561,11 @@
     a.href = url;
     a.download = 'field-grades-' + el('kind').value + '.json';
     a.click();
+    unexported.delete(el('kind').value);
+    persistDraft();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
-  el('kind').onchange = render;
+  el('kind').onchange = () => { render(); persistDraft(); };
+  restoreDraft();
   render();
 })();

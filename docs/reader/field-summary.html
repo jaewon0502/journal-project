@@ -3,7 +3,7 @@
 <main><h1>현장 검증 결과</h1><p>진행자가 미리 정한 원표와 판정 기준으로 제출 기록을 대조합니다. 자료를 찾지 못한 완료 과제는 위치 확인 실패로 집계합니다.</p>
 <section class="panel"><label>진행자 기준 파일(coordinator-key.json) <input id="key-file" type="file" accept=".json,application/json"></label><p id="key-name"></p><label>참여 JSON 또는 이전 집계 JSON 불러오기 <input id="imports" type="file" multiple accept=".json,application/json"></label><p id="status" role="status"></p>
 <label>표시할 기록 <select id="kind"><option value="editor">현업 참여</option><option value="practice">연습</option></select></label>
-<p id="count"></p><button id="save" disabled>판정과 집계 기록 저장</button></section>
+<p id="count"></p><button id="save" disabled>판정과 집계 기록 저장</button><p id="draft-status" role="status"></p></section>
 <section class="panel"><h2>같은 과제의 검증 시간</h2><p>완료한 참여자의 평균 활동 시간과 검증 성공 1건당 투입 시간을 비교합니다. 성공 1건당 시간은 오답과 중도 종료에 쓴 시간까지 합산해 근거 위치와 판정이 모두 맞은 건수로 나눕니다. 중단 후 복원한 기록은 두 시간 지표에서 제외합니다.</p><div id="comparisons" aria-live="polite"></div></section>
 <section class="panel"><h2>과제·방식별 결과</h2><div id="groups" aria-live="polite"></div></section>
 <section class="panel"><h2>근거 위치와 판정 확인</h2><p>답안의 주소와 표·행·열·기준연도가 같은 원자료 위치를 가리키는지 대조하세요. 두 가지를 따로 채점합니다. 저장 파일에는 불러온 구분의 원기록과 진행자 판정이 함께 들어갑니다.</p><div id="entries"></div></section></main></body></html>
