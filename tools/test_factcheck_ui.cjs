@@ -1187,7 +1187,7 @@ test('연도가 가로인 표에서 선택한 행을 원문 그대로 옮기고 
   const selectRow = cards[0].querySelector(':scope > button');
   assert.equal(selectRow.textContent, '이 행을 발췌하고 표 위치 확인');
   selectRow.click();
-  assert.equal(el('source-excerpt').value, lines[2]);
+  assert.equal(el('source-excerpt').value, [lines[0], '[…]', lines[2]].join('\n'));
   assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
   assert.equal(el('source-locator').readOnly, false);
   assert.equal(el('source-locator').disabled, false);
@@ -1197,7 +1197,7 @@ test('연도가 가로인 표에서 선택한 행을 원문 그대로 옮기고 
   set('document-query', '2023년 장비 반납은 31건인가?');
   click('find-passages');
   el('finder-results').querySelector('.source > button').click();
-  assert.equal(el('source-excerpt').value, lines[1]);
+  assert.equal(el('source-excerpt').value, lines.slice(0, 2).join('\n'));
   assert.equal(el('source-locator').value, editorLocation);
   assert.equal(el('verdict').value, '');
   click('save-work');
@@ -1271,11 +1271,11 @@ test('직접 고른 표의 좌표는 작업을 다시 열어도 발췌문과 함
   selection.choose(0, 2); selection.choose(1, 1);
   page.w.confirm = () => false;
   selection.use.click();
-  assert.equal(page.el('source-excerpt').value, lines[1]);
+  assert.equal(page.el('source-excerpt').value, lines.slice(0, 2).join('\n'));
   assert.equal(page.el('source-locator').value, '‘평일 이용’ 행 · ‘2024년’ 열');
   page.w.confirm = () => true;
   selection.use.click();
-  assert.equal(page.el('source-excerpt').value, lines[2]);
+  assert.equal(page.el('source-excerpt').value, [lines[0], '[…]', lines[2]].join('\n'));
   assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2023년’ 열');
   selection.choose(1, 2); selection.use.click();
   assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2024년’ 열');
@@ -1310,7 +1310,7 @@ test('조건이 붙은 통계는 원표 좌표를 직접 연 뒤에만 숫자를
   assert.ok(picker.textContent.includes(title)); assert.ok(picker.textContent.includes('(단위: 명)'));
   assert.equal(el('source-excerpt').value, ''); assert.equal(el('verdict').value, '');
   picker.querySelector('button').click();
-  assert.equal(el('source-excerpt').value, line);
+  assert.equal(el('source-excerpt').value, [title, '(단위: 명)', '구분\t2022년\t2023년', line].join('\n'));
   assert.equal(el('source-locator').value, title + ' · ‘남부’ 행 · ‘2022년’ 열');
 });
 
@@ -1395,7 +1395,7 @@ test('주변 원문에서 검색 후보를 발췌해도 직접 누른 행·열�
   details.open = true;
   details.dispatchEvent(new w.Event('toggle'));
   details.querySelector('button').click();
-  assert.equal(el('source-excerpt').value, body[2]);
+  assert.equal(el('source-excerpt').value, [body[0], '[…]', body[2]].join('\n'));
   assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
   details.querySelector('input[value="2"]').click();
   details.querySelector('button').click();

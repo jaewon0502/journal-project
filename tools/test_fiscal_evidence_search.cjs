@@ -102,3 +102,21 @@ test('단계가 모호한 예산, 일반 절차 질문, 추가 문맥과 표는 
     assert.deepEqual(result.passages,finder.find(text,query,{includeContext:true}));
   }
 });
+
+test('결산서의 예산현액·이월액·불용액과 실제로 지출한 금액을 구별한다', () => {
+  const leading = '2024년 달빛돌봄 사업의 ';
+  const query = leading + '실제 집행액은 120억 원인가?';
+  for (const label of ['예산현액', '다음 해 이월액', '불용액', '미집행액', '집행잔액', '세입 결산액']) {
+    const result = search(leading + '결산서에서 ' + label + '은 120억 원이었다.', query);
+    assert.match(result.gap, /실제 집행액/);
+    assert.ok(result.passages.every(p => !p.fiscalStage), label);
+  }
+  for (const data of ['결산자료에서 예산현액은 120억 원이며 지출액은 90억 원이었다.',
+    '예산현액 120억 원 중 90억 원을 집행했다.']) {
+    const result = search(leading + data, query);
+    assert.equal(result.gap, null, data);
+    assert.equal(result.passages[0].fiscalStage, 'spent');
+    assert.ok(!result.passages[0].matched.includes('120억'), data);
+    assert.ok(result.passages[0].text.includes('90억 원'), data);
+  }
+});

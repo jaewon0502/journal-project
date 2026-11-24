@@ -1,4 +1,4 @@
-// Identify one printed fiscal amount only when its row, year, stage and unit are explicit.
+// Locate a printed fiscal table cell using the named row, year, measure and original unit.
 (function (root) {
   'use strict';
   const node = typeof module === 'object' && module.exports;
@@ -9,6 +9,10 @@
   const currency = /^(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?원$/u;
   const stub = /^(?:구분|항목|사업|사업명|세목|회계구분)$/u;
   const nonAmount = /(?:집행률|집행율|비중|비율|증감률|증감율|구성비|%|퍼센트)/u;
+  const percent = /^(?:%|퍼센트)$/u;
+  const rateBasis = '본예산|당초예산|예산현액|예산액|최종예산|추경예산';
+  const rateTerms = new RegExp('(?:(' + rateBasis + ')(?:대비|기준|(?:을|를)?기준으로(?:한)?))?(?:예산)?집행[률율]', 'u');
+  const rateSuffix = new RegExp('^(?:예산)?집행[률율]\\((' + rateBasis + ')(?:대비|기준)\\)$', 'u');
   const number = /^([+−△▲▼-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)(.*)$/u;
   const gaps = {
     layout:'표의 행과 열을 맞출 수 없습니다. 표 하나의 연도·단계 머리글과 금액 행을 함께 확인하세요.',
@@ -22,7 +26,10 @@
     stage:'질문의 회계연도에 해당 예산 단계의 열을 찾지 못했습니다. 그 단계의 금액이 표시된 원표를 확인하세요.',
     duplicateColumn:'같은 연도와 단계로 읽힐 수 있는 열이 여러 개입니다. 각 열의 상위 제목을 확인하세요.',
     duplicateRow:'같은 연도와 항목 이름을 가진 행이 여러 개입니다. 사업 코드나 회계 구분을 확인하세요.',
-    blank:'해당 행과 열에 금액이 인쇄되지 않았습니다. 원표에서 빈칸이나 기호의 뜻을 확인하세요.',
+    blank:'해당 행과 열에 수치가 인쇄되지 않았습니다. 원표에서 빈칸이나 기호의 뜻을 확인하세요.',
+    rateColumn:'요청한 연도와 기준의 집행률 열을 특정할 수 없습니다. 원표에 인쇄된 분모와 집행률 머리글을 확인하세요.',
+    rateMeasure:'집행률 한 개를 확인하려면 연도, 항목과 기준을 지정하세요. 집행률 변화나 퍼센트포인트 차이는 비교할 두 값을 확인하세요.',
+    rateUnits:'집행률 행과 열을 찾았지만 퍼센트 단위를 확인할 수 없습니다. 원표의 단위와 주석을 확인하세요.',
     nonCurrency:'해당 셀에는 금액 이외의 단위가 붙어 있습니다. 원표에서 금액 열을 확인하세요.'
   };
   const unresolved = kind => ({passages:[],gap:gaps[kind]});
@@ -35,9 +42,26 @@
     difference:/^예산대비(?:증감액?|차액)?$/u
   };
 
+  function rateHeading(raw, groupYear) {
+    let s = compact(raw);
+    const y = yearPrefix.exec(s);
+    if (groupYear && y && y[1] !== groupYear) return null;
+    if (y) s = s.slice(y[0].length);
+    const year = y?.[1] || groupYear;
+    if (/증감|변화|차이|%p|퍼센트포인트/iu.test(s)) return {year, stage:'other'};
+    const unit = /\((%|퍼센트)\)$/u.exec(s)?.[1];
+    if (unit) s = s.slice(0, -(unit.length + 2));
+    // Publish only a printed rate. A formula or unknown qualifier could name another denominator.
+    const suffix = rateSuffix.exec(s);
+    const match = rateTerms.exec(s);
+    return {year, stage:'executionRate', unit, basis:suffix?.[1] || match?.[1] || null,
+      unclearRate:!suffix && match?.[0] !== s};
+  }
+
   // Only formatting parentheses and the usual A/B/C column references are transparent.
   // A pending settlement, a percentage or a change since last year is a separate measure.
   function heading(raw, groupYear) {
+    if (/집행[률율]/u.test(compact(raw))) return rateHeading(raw, groupYear);
     let s = raw.normalize('NFKC').trim();
     const parens = [...s.matchAll(/\(([^()]*)\)/gu)];
     let unit = null, formula = false;
@@ -54,6 +78,7 @@
     const y = yearPrefix.exec(s);
     if (groupYear && y && y[1] !== groupYear) return null;
     if (y) s = s.slice(y[0].length);
+    if (/^(?:예산현액|당초예산|최종예산|추경예산|이월액|불용액)$/u.test(s)) return {stage:'other'};
     if (nonAmount.test(s) || /^(?:증감)?(?:전년(?:도)?대비|국회증감)(?:증감액?|차액|액)?$/u.test(s)) return {stage:'other'};
     const stage = Object.keys(headings).find(key => headings[key].test(s));
     return stage && (!formula || stage === 'difference') ? {year:y?.[1] || groupYear, stage, unit} : null;
@@ -74,17 +99,19 @@
     approved:/(?:(?:국회|의회)(?:본회의)?|본회의)?(?:에서|가|는)?(?:최종)?(?:확정(?:예산|액|된|한)|의결(?:예산|액|한|된)|통과(?:한|된)|승인(?:한|된|액)|본예산)/u,
     spent:/(?:결산(?:기준|에서|액)?|실제로?(?:집행|지출|지급)(?:액|한)?|실제(?:집행|지출|지급)(?:액|한)?|(?:집행|지출)(?:실적|액|한))/u,
     budget:/예산(?:액)?/u,
-    difference:/예산대비(?:증감액?|차액)/u
+    difference:/예산대비(?:증감액?|차액)/u,
+    executionRate:rateTerms
   };
   const questionYear = /(?<!\d)((?:19|20)\d{2})\s*(?:회계\s*연도|년도|년)/gu;
   // Consume complete tokens once so a long failed match cannot backtrack across particles.
-  const filler = /(?:예산서에서|결산서에서|원표에서|자료에서|기사에서|표에서|원표의|기사의|표의|얼마|였다는|이었다는|이었나|이었다|인가요|인가|인지|이었|이에요|입니다|입니까|이라고|라고|이라는|라는|보도한|제시한|기재한|기록한|적은|쓴|였나|였던|맞는가|맞나요|맞습니까|맞나|(?:수치|금액|규모|주장|보도)(?:으로|[은는이가의를를에로])?|해당|이다|[?!.])/uy;
+  const filler = /(?:예산서에서|결산서에서|원표에서|자료에서|기사에서|표에서|원표의|기사의|표의|얼마|였다는|이었다는|이었나|이었다|였다|인가요|인가|인지|이었|이에요|입니다|입니까|이라고|라고|이라는|라는|보도한|제시한|기재한|기록한|적은|쓴|였나|였던|맞는가|맞나요|맞습니까|맞나|(?:수치|금액|규모|주장|보도)(?:으로|[은는이가의를를에로])?|해당|이다|[?!.])/uy;
   function onlyFiller(value) {
     filler.lastIndex = 0;
     while (filler.lastIndex < value.length) if (!filler.exec(value)) return false;
     return true;
   }
   const claimedAmount = /[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?\s*원/gu;
+  const claimedRate = /[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:%|퍼센트)/gu;
   function question(text) {
     const q = text.normalize('NFKC');
     if (q.includes('\u0000')) return null;
@@ -104,13 +131,18 @@
         stage !== 'budget' && stage !== sourceStage && words.test(targetWords));
     });
     let stage = fiscal.request(q + ' 예산');
-    if (stageWording.difference.test(terms)) stage = 'difference';
+    const rate = rateTerms.exec(terms);
+    if (rate) stage = 'executionRate';
+    else if (stageWording.difference.test(terms)) stage = 'difference';
     else if (!stage && !fiscal.stages(q + ' 예산').size && /예산(?:액)?(?:[은는이가의을?]|$)/u.test(terms)) stage = 'budget';
     const years = [...q.matchAll(questionYear)];
     const amounts = [...q.matchAll(claimedAmount)];
+    const rateSupported = amounts.length === 0 && [...q.matchAll(claimedRate)].length <= 1 &&
+      !/%\s*p|퍼센트\s*포인트|%\s*포인트|증감|증가|감소|상승|하락|차이|변화/iu.test(q);
     function remainder(value) {
       let rest = compact(value.replace(questionYear,'\u0000').replace(claimedAmount,'\u0000')
         .replace(/몇\s*(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?\s*원/gu,'얼마'));
+      if (rate) rest = rest.replace(claimedRate, '\u0000').replace(/몇(?:%|퍼센트)/gu,'얼마');
       if (stage) rest = rest.replace(new RegExp(stageWording[stage].source,'gu'), '\u0000');
       // An approval may name the object explicitly ('국회가 의결한 … 예산').
       if (stage === 'approved' && !stageConflict) rest = rest.replace(/예산(?:액)?/gu,'\u0000');
@@ -118,13 +150,15 @@
       // Free-standing words made of the same syllables can be place names.
       return rest.replace(/\u0000(?:(?:에서는|에서도|에는|에도|에서|으로|[은는가의를를에로]|이(?!었|라|다|에)))?/gu,'');
     }
-    return {q, terms, stage, stageConflict, year:years.length === 1 && years[0][1],
-      supported:amounts.length <= 1 && !nonAmount.test(q), rest:remainder(q), remainder};
+    return {q, terms, stage, stageConflict, basis:rate?.[1], year:years.length === 1 && years[0][1],
+      supported:rate ? rateSupported : amounts.length <= 1 && !nonAmount.test(q), rest:remainder(q), remainder};
   }
 
   function rowQuestion(query) {
     if (typeof query !== 'string' || query.length > 1000) return null;
-    return scoped(question(query));
+    const ask = question(query);
+    // The flat-text fallback only identifies monetary rows, without a verified cell.
+    return ask?.stage === 'executionRate' ? null : scoped(ask);
   }
 
   function scoped(ask) {
@@ -152,7 +186,7 @@
     const s = line.normalize('NFKC').trim().replace(/^\((.*)\)$/u,'$1').replace(/^\[(.*)\]$/u,'$1');
     const value = /^단\s*위\s*:\s*(.+)$/u.exec(s)?.[1]?.trim();
     if (!value) return null;
-    if (currency.test(compact(value))) return {unit:value};
+    if (currency.test(compact(value)) || percent.test(compact(value))) return {unit:value};
     const units = value.split(/[,·/]/u).map(compact);
     // A mixed legend alone does not assign its money unit to any one column.
     const mixed = units.every(u => currency.test(u) || /^(?:%p?|퍼센트(?:포인트)?)$/iu.test(u));
@@ -168,7 +202,7 @@
     let title = marked ? marked[1] : enclosed?.slice(1).find(Boolean);
     if (title === undefined) return false;
     title = compact(title).replace(/^표\d+(?:[-.]\d+)*/u,'');
-    const token = /(?:(?:19|20)\d{2}(?:회계연도|년도|년)|총지출|총수입|재정총량|재정수지|회계연도|본예산|예산안|예산|결산|집행액|집행|의결|확정|국회|정부안|부처|요구액|단계별|연도별|회계별|사업별|항목별|사업|회계|금액|심의|결과|편성|현황|내역|총괄|규모|비교|및|의|[·ㆍ,])/uy;
+    const token = /(?:(?:19|20)\d{2}(?:회계연도|년도|년)|총지출|총수입|재정총량|재정수지|회계연도|본예산|예산안|예산|결산|집행액|집행[률율]|집행|의결|확정|국회|정부안|부처|요구액|단계별|연도별|회계별|사업별|항목별|사업|회계|금액|심의|결과|편성|현황|내역|총괄|규모|비교|및|의|[·ㆍ,])/uy;
     while (token.lastIndex < title.length) if (!token.exec(title)) return false;
     return true;
   }
@@ -232,12 +266,13 @@
     const lower = hints[1] && split(hints[1].text);
     const possibleHeaders = lower && (!lower.cells[0] || stub.test(compact(lower.cells[0]))) ?
       [...top.cells.slice(1),...lower.cells.slice(1)] : top.cells.slice(1);
-    if (!possibleHeaders.some(s => /예산|결산|정부\s*안|확정액|요구액|집행액|지출액/u.test(s))) return null;
+    if (!possibleHeaders.some(s => /예산|결산|정부\s*안|확정액|요구액|집행액|집행[률율]|지출액/u.test(s))) return null;
     if (text.includes('\f')) return unresolved('layout');
     if (ask.stageConflict) return unresolved('stageContext');
     if (!ask.stage) return unresolved('queryStage');
     if (!ask.year) return unresolved('queryYear');
-    if (!ask.supported) return unresolved('queryMeasure');
+    const isRate = ask.stage === 'executionRate';
+    if (!ask.supported) return unresolved(isRate ? 'rateMeasure' : 'queryMeasure');
     const target = scoped(ask);
     if (!target) return unresolved('scope');
     let start = Number(isCaption(rows[0].text));
@@ -248,9 +283,11 @@
     if (!header || rows.length <= header.last + 1) return unresolved('layout');
     const columns = header.columns;
     if (!header.vertical && !columns.some(c => c.year === ask.year)) return unresolved('year');
-    const candidates = columns.filter(c => c.stage === ask.stage && (header.vertical || !c.year || c.year === ask.year));
-    if (candidates.length > 1) return unresolved('duplicateColumn');
-    if (!candidates.length || (!header.vertical && candidates[0].year !== ask.year)) return unresolved('stage');
+    const matchingStage = columns.filter(c => c.stage === ask.stage && (header.vertical || !c.year || c.year === ask.year));
+    if (isRate && matchingStage.some(c => c.unclearRate)) return unresolved('rateColumn');
+    const candidates = ask.basis ? matchingStage.filter(c => c.basis === ask.basis) : matchingStage;
+    if (candidates.length > 1) return unresolved(isRate ? 'rateColumn' : 'duplicateColumn');
+    if (!candidates.length || (!header.vertical && candidates[0].year !== ask.year)) return unresolved(isRate ? 'rateColumn' : 'stage');
     const [column] = candidates;
     let selected = null, yearPresent = !header.vertical;
     const footer = rows.at(-1);
@@ -271,21 +308,66 @@
       const value = data.cells[column.index];
       const parsed = values[column.index - header.offset];
       if (parsed.missing) return unresolved('blank');
-      if (parsed.unit && !currency.test(compact(parsed.unit))) return unresolved('nonCurrency');
+      const unitType = isRate ? percent : currency;
+      if (parsed.unit && !unitType.test(compact(parsed.unit))) return unresolved(isRate ? 'rateUnits' : 'nonCurrency');
       const units = [unitLine?.unit,column.unit,parsed.unit].filter(Boolean);
-      const hasUnit = units.length && units.every(u => compact(u) === compact(units[0])) &&
-        (!unitLine?.options || unitLine.options.includes(compact(units[0])));
+      const unitKey = u => isRate && percent.test(compact(u)) ? '%' : compact(u);
+      const hasUnit = units.length && units.every(u => unitType.test(compact(u)) && unitKey(u) === unitKey(units[0])) &&
+        (!unitLine?.options || unitLine.options.some(u => unitKey(u) === unitKey(units[0])));
       const position = {heading:column.raw, value, column:column.index + 1, rowLabel,
-        headerParagraph:rows[header.last].paragraph, year:ask.year, stage:ask.stage};
+        headerParagraph:rows[header.last].paragraph, year:ask.year, stage:ask.stage, ...(column.basis ? {basis:column.basis} : {})};
       selected = {...row, matched:[], context:rows.slice(0,header.last + 1),
         ...(hasUnit ? {fiscalCell:{...position,unit:units[0]}} : {fiscalNavigation:position})};
     }
     if (!selected) return unresolved(yearPresent ? 'scope' : 'year');
-    return {gap:selected.fiscalNavigation ? '해당 행과 열은 찾았지만 금액 단위를 특정할 수 없습니다. 원표의 단위와 주석을 확인하세요.' : null,
+    const unitGap = isRate ? gaps.rateUnits : '해당 행과 열은 찾았지만 금액 단위를 특정할 수 없습니다. 원표의 단위와 주석을 확인하세요.';
+    return {gap:selected.fiscalNavigation ? unitGap : null,
       passages:[selected]};
   }
 
-  const api = {lookup,rowQuestion};
+  // The editor stores the raw headers and row separately from this specific, editable locator.
+  // Re-read the cited column before using it. Titles and arbitrary page references do not bind a number.
+  const rateLocator = /^(?:PDF [1-9]\d*쪽 · )?(?:((?:19|20)\d{2})년 · )?‘([^‘’\r\n]+)’ 행 · ‘([^‘’\r\n]+)’ 열 \(왼쪽에서 ([1-9]\d*)번째 열\) · 단위 (%|퍼센트)$/u;
+  function archivedTable(excerpt) {
+    const rows = excerpt.split(/\r\n|[\n\r\u2028\u2029]/u);
+    // citationRows marks the gap between the complete headers and the selected row.
+    if (rows.at(-2) === '[…]') rows.splice(-2,1);
+    return rows.join('\n');
+  }
+  function registeredRateCell(source) {
+    if (typeof source?.locator !== 'string' || typeof source.excerpt !== 'string') return null;
+    const position = rateLocator.exec(source.locator);
+    if (!position) return null;
+    const [, prefixYear, rowLabel, printed, column, unit] = position;
+    const rate = rateHeading(printed, prefixYear);
+    if (!rate?.year || rate.stage !== 'executionRate' || rate.unclearRate) return null;
+    const measure = (rate.basis ? rate.basis + ' 대비 ' : '') + '집행률';
+    const query = rate.year + '년 ' + rowLabel + '의 ' + measure + '은 얼마인가?';
+    const cell = lookup(archivedTable(source.excerpt),query)?.passages[0]?.fiscalCell;
+    if (!cell || cell.rowLabel !== rowLabel || cell.heading !== printed ||
+        cell.column !== Number(column) || cell.unit !== unit) return null;
+    return {rowLabel, heading:printed, column:cell.column, year:cell.year, value:cell.value,
+      unit, ...(cell.basis && {basis:cell.basis})};
+  }
+
+  function registeredRateQuestion(text) {
+    if (typeof text !== 'string' || !/집행\s*[률율]/u.test(text)) return null;
+    const ask = text.length <= 1000 && question(text);
+    const target = scoped(ask);
+    return source => {
+      if (!target || ask.stage !== 'executionRate') return {status:'unknown'};
+      const cell = registeredRateCell(source);
+      if (!cell) return {status:'unknown'};
+      if (cell.year !== ask.year || (ask.basis && cell.basis && cell.basis !== ask.basis))
+        return {status:'incompatible'};
+      // Reuse the full query so qualifiers or multiple eligible denominators stay unresolved.
+      const requested = lookup(archivedTable(source.excerpt),text)?.passages[0]?.fiscalCell;
+      if (!requested) return {status:'unknown'};
+      if (cell.rowLabel !== requested.rowLabel || cell.column !== requested.column) return {status:'incompatible'};
+      return {status:'compatible', value:cell.value, unit:cell.unit, ...(cell.basis && {basis:cell.basis})};
+    };
+  }
+  const api = {lookup,rowQuestion,registeredRateCell,registeredRateQuestion};
   if (node) module.exports = api;
   else root.JournalEvidenceFiscalTable = api;
 })(globalThis);

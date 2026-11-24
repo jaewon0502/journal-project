@@ -9,7 +9,9 @@
   const proposal = /정부\s*안|정부\s*(?:제출|편성)안|국회\s*제출안|제출안/u;
   const requested = /(?:요구|요청)(?:액|서|안|하[였는]|했|한|해|받은)|부처\s*요구/u;
   const approval = /확정\s*(?:액|예산)|본예산(?!안)|(?:국회|본회의|의회).{0,45}?(?:의결|가결|통과|승인|확정)|(?:의결|가결|통과|확정)(?:된|한|했|됐|되었|하였|액)|예산(?:안|액)?(?:을|를|이|가)?\s*확정/u;
-  const spending = /집행액|지출액|결산|실(?:제|제로)\s*(?:집행|지출|지급)|(?:집행|지출|지급)(?:한|했|됐|되었|하였)|집행\s*실적/u;
+  // A settlement document can report the available budget, expenditure, and unused balance together.
+  const otherExecutionMeasure = /예산\s*현액|(?:미집행|미지출|불용|이월|반납|환수|배정|징수|수납|세입)\s*(?:금?액|금|예산)|(?:집행|불용|이월)[률율]|잔액|잔여액|세계잉여금|(?:세입|수입|세수)\s*결산|결산\s*(?:세입|총수입)/u;
+  const spending = /집행액|지출액|지급액|결산액|(?:총지출|세출)\s*(?:[은는의]\s*)?결산\s*(?:기준|결과|액|은)|결산\s*(?:기준\s*)?(?:총지출|세출)(?!\s*(?:자료|보고서|분석))|실(?:제|제로)\s*(?:집행|지출|지급)|(?:집행|지출|지급)(?:한|했|됐|되었|하였)|집행\s*실적/u;
   const uncertain = /(?:할|될)\s*(?:예정|계획|전망|가능|것)|(?:[하지되]\s*)?지\s*(?:않|못)|하지\s*못|되지\s*못|여부|예정|전망|목표|예측|보류|부결|무산|계획|기대|전(?:에|이다|$)|아직|예상|미공개|미발표/u;
   const stageWords = {
     request: /요구|요청/u,
@@ -17,7 +19,7 @@
     approved: /의결|가결|통과|확정|승인|본예산/u,
     spent: /집행|지출|지급|결산/u
   };
-  const labels = {request:'부처·기관 요구액', proposal:'정부 제출안', approved:'의회 의결·확정 예산', spent:'결산·실제 집행액', budget:'예산', difference:'예산 대비 증감액'};
+  const labels = {request:'부처·기관 요구액', proposal:'정부 제출안', approved:'의회 의결·확정 예산', spent:'결산·실제 집행액', budget:'예산', difference:'예산 대비 증감액', executionRate:'집행률'};
 
   // Strip forward-looking and negated mentions before testing the clause. A
   // nearby real budget submission may still be usable in that same clause.
@@ -55,7 +57,7 @@
       if (adopted) result.add('approved');
       if ((governmental || (/예산안/u.test(clause) && !asks && !adoptionMention && !intermediate && !/수정안|의원안|표결|부결/u.test(clause))) &&
           stated(clause, 'proposal')) result.add('proposal');
-      if (spending.test(clause) && stated(clause, 'spent')) result.add('spent');
+      if (!otherExecutionMeasure.test(clause) && spending.test(clause) && stated(clause, 'spent')) result.add('spent');
     }
     return result;
   }
@@ -95,7 +97,7 @@
     const result = [];
     for (const sentence of text.normalize('NFKC').split(/[!?。\n\r]|\.(?!\d)/u)) {
       let name = null, period = new Set(), stage = null;
-      for (const part of sentence.split(/[,，](?!\d)|[;；]|(?<=이고|이며|[었였했]으며|[었였했]고|지만)\s+|\s+반면(?:에)?\s+/u)) {
+      for (const part of sentence.split(/[,，](?!\d)|[;；]|(?<=이고|이며|[었였했]으며|[었였했]고|지만)\s+|\s+반면(?:에)?\s+|\s+(?:중(?:에서)?|가운데)\s+(?=[^,;]{0,40}(?:집행액|지출액|지급액|집행했|지출했|지급했))/u)) {
         const clause = part.trim();
         if (!clause) continue;
         const named = project(clause), dated = years(clause), explicit = stages(clause);
@@ -113,7 +115,7 @@
     return '질문의 사업·기간에 해당하는 ' + labels[stage] + ' 근거를 특정하기 어렵습니다. 그 단계의 원문과 금액을 확인하세요.';
   }
 
-  const api = {stages, request, years, project, clauses, gap, label: stage => labels[stage]};
+  const api = {otherExecutionMeasure: text => otherExecutionMeasure.test(text), stages, request, years, project, clauses, gap, label: stage => labels[stage]};
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalEvidenceFiscal = api;
 })(globalThis);

@@ -126,3 +126,75 @@ test('한 문장에 전년도 의결액과 올해 요구액이 함께 나올 때
   const current = {...mixed, excerpt:'2024년 청년 주거 지원 사업의 정부안은 130억 원이었으며 국회 확정액은 110억 원이었다.'};
   assert.equal(row(query, [current]).sourceCaution, null);
 });
+
+test('결산서 제목과 위치가 다른 금액에 집행액이라는 근거를 붙이지 않는다', () => {
+  const q = '2024년 달빛돌봄 사업의 실제 집행액은 120억 원인가?';
+  const prefix = '2024년 달빛돌봄 사업의 ';
+  const correct = record('spent', '세출 결산서', '지출액 행', prefix + '집행액은 90억 원이었다.');
+  for (const [title, locator, excerpt] of [
+    ['세출 결산서', '집행액 행', prefix + '예산현액은 120억 원이다.'],
+    ['세출 결산서', '지출액 행', prefix + '결산서에는 이월액 120억 원이 기재됐다.'],
+    ['집행액 분석', '결산서의 불용액', prefix + '120억 원.'],
+    ['세입 결산서', '세입 결산액', prefix + '120억 원.'],
+    ['세출 결산서', '붙임 표 3', prefix + '120억 원.']
+  ]) {
+    const wrong = record('other', title, locator, excerpt);
+    assert.equal(row(q, [wrong]).sourceCaution, fiscal.gap('spent'));
+    const ranked = row(q, [wrong, correct]);
+    assert.equal(ranked.sourceIds[0], 'spent');
+    assert.equal(ranked.status, 'pending');
+  }
+});
+
+test('결산서의 집행액 추천 이유에는 같은 집행 구절의 금액만 표시한다', () => {
+  const report = record('report', '세출 결산서', '별빛돌봄 집행 내역',
+    '2024년 별빛돌봄 사업 결산서 예산현액 120억 원 중 90억 원을 집행했다.');
+  for (const amount of [90, 120]) {
+    const result = row('별빛돌봄 사업의 실제 집행액은 ' + amount + '억 원이다.', [report]);
+    assert.deepEqual(result.sourceIds, ['report']);
+    assert.equal(result.sourceCaution, null);
+    assert.equal(result.status, 'pending');
+    const reason = result.sourceMatches[0].reason;
+    assert.match(reason, /예산 단계 · 결산·실제 집행액/u);
+    assert.doesNotMatch(reason, /120억/u);
+    if (amount === 90) assert.match(reason, /90억/u);
+  }
+});
+
+test('동일 사업·단계에서도 다른 연도의 수치는 추천 이유로 쓰지 않는다', () => {
+  const report = record('report', '별빛돌봄 사업 결산서', '연도별 집행 내역',
+    '2023년 실제 집행액은 120억 원이었다. 2024년 실제 집행액은 90억 원이었다.');
+  for (const [year, amount, matches] of [[2023,120,true], [2024,120,false], [2024,90,true]]) {
+    const result = row(amount + '억 원이 ' + year + '년 별빛돌봄 사업의 실제 집행액이었다.', [report]);
+    assert.deepEqual(result.sourceIds, ['report']);
+    assert.equal(result.sourceCaution, null);
+    assert.equal(result.sourceMatches[0].reason.includes(amount + '억'), matches);
+  }
+});
+
+test('서로 다른 표의 집행률도 분모를 구분하고 같은 분모에 실린 상반된 수치는 모두 대조한다', () => {
+  function archived(id, basis, value) {
+    const heading = '2024년 ' + (basis ? basis + ' 대비 ' : '') + '집행률(%)';
+    const locator = '‘별빛돌봄’ 행 · ‘' + heading + '’ 열 (왼쪽에서 2번째 열) · 단위 %';
+    return record(id, '결산 공시', locator, '구분\t' + heading + '\n별빛돌봄\t' + value);
+  }
+  const original = archived('original', '본예산', '90.0');
+  const current = archived('current', '예산현액', '75.0');
+  const other = archived('other', '예산현액', '73.2');
+  const missing = archived('unknown', '', '75.0');
+  const unspecified = '2024년 별빛돌봄 집행률은 90.0%였다.';
+  for (const refs of [[original, current], [current, original], [current, missing]]) {
+    const r = row(unspecified, refs);
+    assert.deepEqual(r.sourceMatches, []);
+    assert.match(r.sourceCaution, /분모/);
+  }
+  const alone = row(unspecified, [missing]);
+  assert.deepEqual(alone.sourceIds, ['unknown']);
+  assert.match(alone.sourceCaution, /분모.*주석/);
+  const named = row('2024년 별빛돌봄 예산현액 대비 집행률은 90.0%였다.', [original, current, other, missing]);
+  assert.deepEqual(new Set(named.sourceIds), new Set(['current', 'other']));
+  assert.match(named.sourceMatches.find(m => m.id === 'current').reason, /75\.0/);
+  assert.match(named.sourceMatches.find(m => m.id === 'other').reason, /73\.2/);
+  assert.equal(named.sourceCaution, null);
+  assert.equal(named.status, 'pending');
+});

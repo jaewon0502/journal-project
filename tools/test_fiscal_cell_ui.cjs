@@ -204,3 +204,103 @@ test('원자료를 문장에 연결하고 작업 파일을 다시 열어도 행 
   assert.equal(reader.doc.querySelector('#row-sources input:checked').value, saved.sources[0].id);
   assert.equal(reader.el('verdict').value, '');
 });
+
+test('두 해의 고용률과 공표 증감을 따로 읽고 연령대에 맞는 원문만 다음 편집자에게 넘긴다', t => {
+  const {el, find, w} = openFinder(t);
+  const years = '          ’23년    ’24년';
+  const age64 = ' 15～64세  고용률(%)     69.2    69.5';
+  const age15 = ' 15세이상  고용률(%)    62.6    62.7';
+  const change64 = ' (전년대비 증감, %p)    ( 0.7) ( 0.3)';
+  const change15 = ' (전년대비 증감, %p)    ( 0.5) ( 0.1)';
+  const source = ['2024년 연간 고용동향', years, age64, change64, age15, change15].join('\n');
+  const ask = '2024년 15세 이상 고용률은 2023년보다 5%p 올랐나?';
+  const card = find(source, ask).querySelector('.annual-rate');
+  assert.ok(card);
+  assert.match(card.textContent, /2023년 62\.6% → 2024년 62\.7%/);
+  assert.match(card.textContent, /원표 표기 0\.1%p/);
+  assert.equal(card.querySelector('details').open, false);
+  assert.match(card.querySelector('details').textContent, /약 0\.16%/);
+  const raw = [years, '[…]', age15, change15].join('\n');
+  assert.equal(card.querySelector('blockquote').textContent, raw);
+  card.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, raw);
+  assert.match(el('source-locator').value, /15세 이상 고용률 행.*2023년·2024년 열.*증감\(%p\) 행/);
+  assert.equal(el('verdict').value, '');
+
+  const relative = '2024년 15~64세 고용률의 상대 변화율은 전년 대비 얼마인가?';
+  const second = find(source, relative).querySelector('.annual-rate');
+  assert.ok(second.querySelector('details').open);
+  assert.match(second.textContent, /약 0\.43%/);
+  assert.match(second.textContent, /원표 표기 0\.3%p/);
+  w.confirm = () => true;
+  second.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, [years, age64, change64].join('\n'));
+  assert.equal(find(source, ask.replace('15세 이상', '서울 15세 이상')).querySelector('.annual-rate'), null);
+  assert.equal(el('source-excerpt').value, [years, age64, change64].join('\n'));
+  const zero = find(source.replace('69.2', '0.0'), relative).querySelector('.annual-rate');
+  assert.match(zero.querySelector('details').textContent, /0%여서 상대 변화율을 계산할 수 없습니다/);
+  assert.doesNotMatch(zero.textContent, /Infinity|NaN/);
+});
+
+test('한 사업의 집행률 두 개를 원표 분모로 구분하고 발췌문에 열 이름을 함께 저장한다', t => {
+  const {el, find, w} = openFinder(t);
+  const titles = '회계연도\t사업명\t본예산(억원)\t예산현액(억원)\t집행액(억원)\t본예산 대비 집행률(%)\t집행률(예산현액 기준)(%)';
+  const line = '2024\t별빛 돌봄\t100\t120\t90\t90.0\t75.0';
+  const source = [titles, line, '2025\t별빛 돌봄\t120\t160\t120\t100.0\t75.0'].join('\n');
+  for (const [basis, value] of [['본예산','90.0'], ['예산현액','75.0']]) {
+    const result = find(source, '2024년 별빛 돌봄 사업의 ' + basis + ' 대비 집행률은 100%인가?');
+    const card = result.querySelector(':scope > .source');
+    assert.ok(card);
+    assert.ok(card.textContent.includes('원문 표기 ' + value + ' · 단위 %'));
+    assert.ok(card.textContent.includes('원표에 적힌 집행률의 분모 · ' + basis));
+    w.confirm = () => true;
+    card.querySelector(':scope > button').click();
+    assert.equal(el('source-excerpt').value, [titles, line].join('\n'));
+    assert.ok(el('source-locator').value.includes(basis));
+  }
+  const ambiguous = find(source, '2024년 별빛 돌봄 사업의 집행률은 얼마인가?');
+  assert.match(el('finder-status').textContent, /분모/);
+  assert.doesNotMatch(ambiguous.textContent, /원표에 적힌 집행률의 분모|원문 표기/);
+  const simple = '구분\t2024년 집행률(%)\n총지출\t97.2';
+  const unstated = find(simple, '2024년 총지출의 집행률은 얼마인가?');
+  assert.match(unstated.textContent, /분모가 적혀 있지 않습니다/);
+  assert.equal(el('verdict').value, '');
+});
+
+test('저장한 집행률의 분모와 값을 보고서에서도 함께 읽고 다른 분모의 자료는 직접 선택한다', t => {
+  const {w, doc, el, set, find} = openFinder(t);
+  const titles = '구분\t2024년 본예산 대비 집행률(%)\t2024년 예산현액 대비 집행률(%)\t2023년 예산현액 대비 집행률(%)';
+  const source = titles + '\n별빛돌봄\t90.0\t75.0\t90.0';
+  const claim = '2024년 별빛돌봄 예산현액 대비 집행률은 75.0%였다.';
+  w.confirm = () => true;
+  set('article', claim);
+  el('article-form').requestSubmit();
+  function register(basis) {
+    el('go-find').click();
+    const result = find(source, '2024년 별빛돌봄 ' + basis + ' 대비 집행률은 얼마인가?');
+    result.querySelector('.source > button').click();
+    set('source-title', basis + ' 자료');
+    set('source-url', 'https://report.example/settlement');
+    set('source-version', '확정본');
+    el('source-save-link').click();
+  }
+  register('본예산');
+  assert.match(el('row-sources').textContent, /등록 자료에서.*분모를 확인/);
+  assert.equal(el('row-sources').querySelectorAll('.badge').length, 0);
+  assert.match(el('source-list').querySelector('.registered-rate').textContent, /2024년 별빛돌봄 · 본예산 기준 집행률 90\.0%/);
+  register('예산현액');
+  assert.equal(el('row-sources').querySelectorAll('.badge').length, 1);
+  assert.match(el('row-sources').querySelector('.badge').parentElement.textContent, /예산현액 자료/);
+  assert.doesNotMatch(el('row-sources').textContent, /등록 자료에서.*분모를 확인/);
+  const statement = '2024년 별빛돌봄 · 예산현액 기준 집행률 75.0%';
+  const refs = [...el('row-sources').querySelectorAll('input[type=checkbox]')];
+  for (const ref of refs) if (ref.checked && ref.parentElement.textContent.includes('본예산')) ref.click();
+  assert.equal(el('verdict').value, '');
+  set('verdict', 'fact');
+  el('verdict').dispatchEvent(new w.Event('change'));
+  set('reason', '예산현액 기준 집행률 열에서 75.0%를 확인했다.');
+  el('acknowledged').click();
+  el('decision-form').requestSubmit();
+  assert.equal(doc.querySelector('#report-rows .registered-rate')?.textContent, statement);
+  assert.equal(doc.querySelector('#report-rows blockquote')?.textContent, source);
+});

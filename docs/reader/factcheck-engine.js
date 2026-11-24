@@ -4,6 +4,7 @@
 
   const protocol = 'journal-review/1';
   const fiscal = typeof module === 'object' && module.exports ? require('./evidence-fiscal.js') : root.JournalEvidenceFiscal;
+  const fiscalTable = typeof module === 'object' && module.exports ? require('./evidence-fiscal-table.js') : root.JournalEvidenceFiscalTable;
   const states = ['fact', 'attribution', 'opinion', 'mixed', 'partial', 'held', 'contradicted'];
   const withEvidence = new Set(['fact', 'attribution', 'mixed', 'partial', 'contradicted']);
   const unresolved = new Set(['pending', 'partial', 'held', 'contradicted']);
@@ -399,6 +400,7 @@
       // A cover title alone also appears on forecasts and withheld figures.
       for (const passage of passages) {
         if (passage.hasAmount &&
+            !(headerStage === 'spent' && (fiscal.otherExecutionMeasure(passage.text) || fiscal.otherExecutionMeasure(source.locator))) &&
             !/예정|계획|전망|미정|미공개|아직|보류|부결|예상|요구|요청|제출안|정부안|본예산|의결|승인|확정|가결|집행|지출|지급|결산|공개되지|않|못했|아니|아닌|취소|무산/u.test(passage.text)) {
           passage.stage = headerStage;
         }
@@ -422,23 +424,48 @@
       const compact = (heading + ' ' + passage.text + ' ' + (passage.project || '')).replace(/[\s·ㆍ・]/gu, '');
       return parts.every(part => compact.includes(part));
     });
-    if (!passages.length) return false;
+    if (!passages.length) return [];
     const span = passages.map(passage => passage.text).join(' ');
     const actual = fiscalScope(span), location = fiscalScope(candidate.source.locator), title = fiscalScope(candidate.source.title);
     actual[0] = new Set(passages.flatMap(passage => [...passage.years]));
-    return wanted.every((set, i) => {
+    const coversPeriod = wanted.every((set, i) => {
       const available = actual[i].size ? actual[i] : location[i].size ? location[i] : title[i];
       return [...set].every(value => available.has(value));
     });
+    if (!coversPeriod) return [];
+    // A multi-year source can answer the question while its other figures are irrelevant.
+    return passages.filter(passage => {
+      const period = fiscalScope(passage.text);
+      period[0] = passage.years;
+      return wanted.every((set, i) => !set.size || !actual[i].size ||
+        [...set].some(value => period[i].has(value)));
+    });
   }
   function suggest(text, indexed) {
+    const attributedClaim = attributed.test(text.replace(nameQuote, asTitle));
+    const rateQuestion = !attributedClaim && fiscalTable.registeredRateQuestion(text);
+    if (rateQuestion) {
+      const candidates = [], bases = new Set();
+      for (const {source} of indexed) {
+        const cell = rateQuestion(source);
+        if (cell.status !== 'compatible') continue;
+        bases.add(cell.basis || '');
+        candidates.push({id:source.id,
+          reason:'원표의 집행률 · ' + cell.value + ' (단위 ' + cell.unit + ') · ' + source.locator});
+      }
+      if (bases.size > 1) return {candidates:[], caution:'등록 자료들의 집행률 분모가 서로 다르거나 일부 표에 빠져 있습니다. 기사에서 어느 예산을 기준으로 삼았는지 확인하세요.'};
+      if (!candidates.length) return {candidates:[], caution:indexed.length
+        ? '등록 자료에서 이 사업의 회계연도와 집행률 기준이 일치하는 셀을 특정하지 못했습니다. 원자료의 행과 분모를 확인하세요.' : null};
+      return {candidates:candidates.slice(0, 4), caution:bases.has('')
+        ? '선택한 집행률 열에 분모가 적혀 있지 않습니다. 원표 주석에서 기준 예산을 확인하세요.' : null};
+    }
     const claim = terms(text), matches = [], askedSlots = new Map();
     const stage = claimStage(text), revision = revisionStage(text), scope = sourceScope(text), basis = budgetBasis(text);
-    const financial = !attributed.test(text.replace(nameQuote, asTitle)) && fiscal.request(text);
+    const financial = !attributedClaim && fiscal.request(text);
     const wanted = financial && fiscalScope(text);
     const project = financial && fiscal.project(text);
     const subject = financial && !project && fiscalSubject(claim);
-    const quotes = attributed.test(text.replace(nameQuote, asTitle))
+    const quotes = attributedClaim
       ? Array.from(text.matchAll(/“([^”]+)”|"([^"]+)"/gu), m => m[1] || m[2]).filter(q => q.length >= 6) : [];
     for (const candidate of indexed) {
       const {source, words, heading} = candidate;
@@ -466,8 +493,13 @@
       let fiscalRank = 0;
       if (financial && !scopeConflict && (project ? project.split(' ').every(part => candidate.compact.replace(/[·ㆍ・]/gu, '').includes(part)) :
         subject.every(word => words.has(word)))) {
-        fiscalRank = fiscalFit(candidate, financial, wanted, project, subject) ? 2 : 1;
-        if (fiscalRank === 2) reason = `예산 단계 · ${fiscal.label(financial)} / ${reason}`;
+        const passages = fiscalFit(candidate, financial, wanted, project, subject);
+        fiscalRank = passages.length ? 2 : 1;
+        if (passages.length) {
+          const termsInPassage = common.filter(word => passages.some(passage => passage.words.has(word)));
+          reason = `예산 단계 · ${fiscal.label(financial)}`;
+          if (termsInPassage.length) reason += ` / 해당 구절과 겹친 표현 · ${termsInPassage.slice(0, 4).join(', ')}`;
+        }
       }
       matches.push({id: source.id, score, scopeConflict, fiscalRank, reason});
     }
@@ -801,7 +833,7 @@
       const row = {id: `unit-${start}`, text, positions, context: article.slice(before.start, after.end),
         articleBinding: digest([articleKey, positions]), priorDecision: null,
         binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text), sourceMatches,
-        sourceCaution: sourceMatches.length ? sourceCaution(text, indexed) || caution : null,
+        sourceCaution: (sourceMatches.length && sourceCaution(text, indexed)) || caution,
         sourceIds: sourceMatches.map(match => match.id), status: 'pending', receipt: null, reviewNote: ''};
       restore(row, decisions.get(row.id) ?? [], catalog);
       row.needsReview = unresolved.has(row.status) || row.receipt?.contentStatus === 'unverified';

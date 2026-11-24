@@ -229,3 +229,58 @@ test('a separate place name cannot be consumed as a sequence of Korean particles
   assert.equal(cell(horizontal,'2024년 총지출의 결산액은 얼마인가요?').fiscalCell.value,'638.0');
   assert.equal(cell(horizontal,'특별회계에서 2024년 결산액은 78.6조 원이었다.').fiscalCell.value,'53');
 });
+
+test('집행률은 원고 수치와 다른 행에 같은 값이 있어도 해당 연도·항목의 원문 퍼센트 셀을 고른다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  const lines = ['단위: 조원, %, %p','구분\t2024년 결산(조 원)\t2024년 집행률(%)\t2023년 집행률(%)',
+    '일반회계\t500.0\t94.8\t97.2','총지출\t638.0\t97.2\t94.8'];
+  for (const q of ['2024년 총지출의 집행률은 94.8%인가?', '2024년 총지출의 예산 집행률은 94.8퍼센트였다.',
+    '2024년 총지출의 집행율은 몇 퍼센트인가?']) {
+    const result = search(asText(lines), q);
+    assert.equal(result.gap, null, q);
+    assert.equal(result.passages.length, 1);
+    const [hit] = result.passages;
+    assert.equal(hit.text, lines[3]);
+    assert.deepEqual(hit.context.map(r => r.text), lines.slice(0,2));
+    assert.deepEqual(hit.fiscalCell, {heading:'2024년 집행률(%)', value:'97.2', column:3, rowLabel:'총지출',
+      headerParagraph:2, year:'2024', stage:'executionRate', unit:'%'});
+    assert.deepEqual(hit.matched, []);
+  }
+  assert.equal(cell(lines,'2024년 총지출의 결산액은 얼마인가?').fiscalCell.value,'638.0');
+  for (const q of ['2024년 일반회계와 총지출의 집행률은 얼마인가?', '2024년 총지출의 전년 대비 집행률은 얼마인가?',
+    '2024년 총지출의 집행률은 2.4%p 하락했나?', '2024년 총지출의 집행률이 94.8%에서 97.2%로 올랐나?',
+    '2024년 청년 대상 총지출의 집행률은 얼마인가?', '2024년 총지출의 예산현액 대비 집행률은 얼마인가?'])
+    unresolved(lines, q);
+});
+
+test('인쇄된 분모가 다르면 같은 금액·연도에서도 별도 집행률을 찾고 분모 없는 질문은 보류한다', () => {
+  const lines = ['회계연도\t사업명\t본예산(억원)\t예산현액(억원)\t집행액(억원)\t본예산 대비 집행률(%)\t집행률(예산현액 기준)(%)',
+    '2024\t별빛 돌봄\t100\t120\t90\t90.0\t75.0',
+    '2025\t별빛 돌봄\t120\t160\t120\t100.0\t75.0'];
+  for (const [phrase, basis, value, column] of [['본예산 대비','본예산','90.0',6],['예산현액을 기준으로 한','예산현액','75.0',7]]) {
+    const hit = cell(lines,'2024년 별빛 돌봄 사업의 '+phrase+' 집행률은 100%인가?');
+    assert.deepEqual([hit.paragraph,hit.fiscalCell.basis,hit.fiscalCell.value,hit.fiscalCell.column],[2,basis,value,column]);
+  }
+  const ask = '2024년 별빛 돌봄 사업의 집행률은 얼마인가?';
+  for (const sheet of [lines,[lines[0].replace('본예산 대비 집행률','잠정 집행률'),...lines.slice(1)]])
+    assert.match(lookup(asText(sheet),ask).gap, /분모/u);
+  unresolved(lines, '2024년 별빛 돌봄 사업의 최종예산 대비 집행률은 얼마인가?');
+  unresolved([...lines,lines[1]], '2024년 별빛 돌봄 사업의 본예산 대비 집행률은 얼마인가?');
+});
+
+test('집행률의 단위는 원표에서 확인하고 금액·퍼센트포인트·혼합 단위·산식으로 추정하지 않는다', () => {
+  const q = '2024년 총지출의 집행률은 얼마인가?';
+  const plain = ['구분\t2024년 집행률','총지출\t91.5'];
+  assert.equal(cell(['단위: %',...plain],q).fiscalCell.unit,'%');
+  assert.equal(cell([plain[0],'총지출\t91.5퍼센트'],q).fiscalCell.unit,'퍼센트');
+  for (const lines of [plain,['단위: 조원, %',...plain],['단위: 억원',...plain],
+    [plain[0], '총지출\t91.5%p'],[plain[0],'총지출\t91.5억원'],
+    [plain[0].replace('집행률','집행률(%p)'),plain[1]], [plain[0].replace('집행률','집행률(A/B)(%)'),plain[1]],
+    [plain[0],'총지출\t—'],[plain[0].replace('집행률','예산(억원)\t2024년 결산(억원)'),'총지출\t100\t91.5']]) {
+    const result = lookup(asText(lines),q);
+    assert.ok(result?.gap);
+    assert.ok(result.passages.every(p => !p.fiscalCell));
+  }
+  const grouped = ['항목\t2023년\t\t2024년\t','\t결산(조원)\t집행률(%)\t결산(조원)\t집행률(%)','총지출\t19\t95\t18\t90'];
+  assert.equal(cell(grouped,q).fiscalCell.value,'90');
+});

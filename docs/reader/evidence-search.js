@@ -137,6 +137,7 @@
         const index = (split ? 2 : 1) + column.i;
         selected.push({paragraph:i + 1, text:lines[i], matched:reverse ? [raw[index]] : raw.slice(0,split ? 2 : 1),
           datedCell:{heading:headings[column.i], column:index + 1, value:raw[index]},
+          datedRowLabel:raw.slice(0, split ? 2 : 1).join(' '),
           context:[{paragraph:1, text:lines[0]}]});
       }
     }

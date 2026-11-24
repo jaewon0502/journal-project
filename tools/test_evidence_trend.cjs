@@ -98,3 +98,61 @@ test('다른 탭의 기사나 날짜 없이 이 해의 절대 연도 또는 판�
   assert.equal(row.needsPublicationDate,true);
   assert.ok(!('verdict' in row));
 });
+
+const labourTable = [
+  '2024년 연간 고용동향', '2. 취업자 동향', '가. 취업자 및 고용률',
+  '          ’20년    ’21년    ’22년    ’23년    ’24년',
+  '취 업 자(천명)  26,904  27,273  28,089  28,416  28,576',
+  '(전년대비 증감, 천명)  (-218)  (369)  (816)  (327)  (159)',
+  ' 15～64세  고용률(%)     65.9    66.5    68.5    69.2    69.5',
+  ' (전년대비 증감, %p)    (-0.9) ( 0.6) ( 2.0) ( 0.7) ( 0.3)',
+  ' 15세이상  고용률(%)    60.1    60.5    62.1    62.6    62.7',
+  ' (전년대비 증감, %p)    (-0.8) ( 0.4) ( 1.6) ( 0.5) ( 0.1)'
+];
+const rateQuery = '2024년 연간 15세 이상 고용률은 2023년보다 몇 퍼센트포인트 올랐나?';
+const annualHit = (source, question = rateQuery, articleContext = '') =>
+  find(source.join('\n'), question, {articleContext}).hits[0]?.annualRate;
+
+test('같은 연령대의 이전·현재 비율과 다음 줄에 인쇄된 퍼센트포인트를 근거 행에 연결한다', () => {
+  const [hit] = find(labourTable.join('\n'), rateQuery).hits;
+  assert.deepEqual([hit.paragraph, hit.text], [9, labourTable[8]]);
+  assert.deepEqual(hit.context.map(r => r.text), [labourTable[3], labourTable[9]]);
+  assert.deepEqual(hit.annualRate, {population:'15세이상', measure:'고용률', requestedUnit:'%p',
+    headerParagraph:4, changeParagraph:10, previous:{year:2023, value:'62.6'}, current:{year:2024,value:'62.7'},
+    change:{year:2024,value:'0.1',unit:'%p'}});
+  assert.equal(annualHit(labourTable, '2024년 연간 15~64세 고용률은 전년보다 몇 %p 올랐나?').change.value, '0.3');
+  assert.equal(annualHit(labourTable, '15세 이상 고용률은 99.9%로 전년보다 5%p 올랐습니다.', '2024년').current.value, '62.7');
+  assert.equal(annualHit(labourTable, '2023년보다 2024년 15세 이상 고용률의 상대 변화율은 몇 퍼센트인가?').requestedUnit, '%');
+  assert.equal(annualHit(labourTable, '2024년 연간 15세 이상 고용률은 전년 대비 상대 증가율이 얼마인가?').change.unit, '%p');
+  assert.equal(annualHit(labourTable.slice(0,-1).concat(labourTable.at(-1).replace('( 0.1)', '( −0.2)'))).change.value, '−0.2');
+});
+
+test('인접하지 않은 연도, 다른 분모와 월·지역·성별 한정 또는 모호한 퍼센트에는 두 셀을 특정하지 않는다', () => {
+  for (const query of [
+    rateQuery.replace('2023년', '2022년'), rateQuery.replace('2024년', '2021년'),
+    rateQuery.replace('연간', '12월'), rateQuery.replace('연간', '분기별'), rateQuery.replace('연간', '서울'),
+    rateQuery.replace('연간', '여성'), rateQuery.replace('15세 이상', '15세 이하'),
+    rateQuery.replace('고용률', '실업률'), rateQuery.replace('퍼센트포인트', '퍼센트'),
+    rateQuery.replace('고용률은', '고용률과 실업률은'), rateQuery.replace('올랐나', '올랐고 0.2% 상승했나'),
+    rateQuery.replace('퍼센트포인트', '퍼센트포인트 상대 변화율'), rateQuery.replace('2024년', '2024년보다')
+  ]) assert.equal(annualHit(labourTable, query), undefined, query);
+  assert.equal(annualHit(labourTable, rateQuery, '여성 자료'), undefined);
+  assert.equal(annualHit(labourTable, rateQuery, '2022년'), undefined);
+});
+
+test('연간 표제·명시된 연도·정확한 행 개수·원문 단위를 확인하고 다른 표의 행은 연결하지 않는다', () => {
+  const source = labourTable.join('\n'), ask = text => find(text, rateQuery).hits;
+  for (const altered of [
+    source.replace('연간', '12월'), source.replace('연간', '2분기'), source.replace('2024년 연간', '2018년 연간'),
+    source.replace('가. 취업자 및 고용률', '가. 서울시 여성 조사'),
+    source.replace('취 업 자(천명)', '서울 총계(천명)'),
+    source.replace('’23년', '’22년'), source.replace('62.6    62.7', '62.6    -'),
+    source.replace('( 0.5)', '( 0.5) (0.2)'), source.replace('( 0.1)', '(0.1%)'),
+    source.replace('15세이상  고용률(%)', '15세이상  고용률(%p)'),
+    source.replace('15세이상  고용률(%)', '남성 15세이상 고용률(%)'),
+    source.slice(0,source.lastIndexOf('\n')), source.replaceAll('전년대비 증감, %p', '전년동월대비 증감, %p'),
+    source.replaceAll('전년대비 증감, %p', '전년대비 증감, %'),
+    source.replace('(-0.8)', '(.)'), source.replace(' (전년대비 증감, %p)    (-0.8)', '\f (전년대비 증감, %p)    (-0.8)'),
+    source + '\n' + source, source + '\n' + labourTable[8]
+  ]) assert.deepEqual(ask(altered), [], altered);
+});

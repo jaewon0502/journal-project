@@ -121,6 +121,12 @@
     const section = node('div', undefined, 'source');
     section.append(node('p', sourceSummary(source), 'meta'));
     if (showLink) section.append(sourceLink(source));
+    const cell = window.JournalEvidenceFiscalTable.registeredRateCell(source);
+    if (cell) {
+      const value = /(?:%|퍼센트)$/u.test(cell.value.normalize('NFKC').trim()) ? cell.value : cell.value + cell.unit;
+      const basis = cell.basis ? cell.basis + ' 기준 집행률' : '집행률 (분모는 원표 주석 확인)';
+      section.append(node('p', cell.year + '년 ' + cell.rowLabel + ' · ' + basis + ' ' + value, 'registered-rate'));
+    }
     section.append(node('blockquote', source.excerpt));
     const local = window.JournalSourceReader.localControl(source);
     if (local) section.append(local);
@@ -619,11 +625,24 @@
     updateSourceDraftNote();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
       ? entry.startParagraph + '~' + entry.paragraph : entry.paragraph;
-    message('source-status', '붙여넣은 글의 ' + span + '번째 문단을 옮겼습니다. ' +
+    message('source-status', '붙여넣은 글의 ' + span + '번째 문단' +
+      (entry.omitted ? ' 중 선택한 행을 옮겼습니다. […]는 생략한 행입니다. ' : '을 옮겼습니다. ') +
       (tableLocation ? '원본에서 쪽번호와 표 제목·단위를 대조하고 아래 위치를 확인하세요.' :
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
     byId('source-locator').focus();
+  }
+  function citationRows(entries) {
+    const ordered = [...new Map(entries.filter(Boolean).map(row => [row.paragraph, row])).values()]
+      .sort((a, b) => a.paragraph - b.paragraph);
+    let previous = ordered[0].paragraph - 1, omitted = false;
+    const lines = [];
+    for (const row of ordered) {
+      if (row.paragraph > previous + 1) { lines.push('[…]'); omitted = true; }
+      lines.push(row.text);
+      previous = row.paragraph;
+    }
+    return {text:lines.join('\n'), startParagraph:ordered[0].paragraph, paragraph:previous, omitted};
   }
   function matrixLocation(label, heading, caption) {
     const coordinate = '‘' + label + '’ 행 · ‘' + heading + '’ 열';
@@ -633,7 +652,7 @@
     const year = cell.heading.includes(cell.year) ? '' : cell.year + '년 · ';
     return year + matrixLocation(cell.rowLabel, cell.heading) + ' (왼쪽에서 ' + cell.column + '번째 열)';
   }
-  function matrixBrowser(matrix) {
+  function matrixBrowser(matrix, header) {
     const details = node('details');
     details.append(node('summary', '원표의 행과 연도 직접 선택'));
     const rowSelect = node('select'), yearSelect = node('select');
@@ -651,7 +670,8 @@
       const use = button('직접 선택한 행을 발췌문으로 사용', () => {
         const row = matrix.rows[rowSelect.selectedIndex - 1];
         if (row && yearSelect.selectedIndex > 0)
-          useExcerpt(row, matrixLocation(row.label, matrix.headers[yearSelect.selectedIndex], matrix.caption));
+          useExcerpt(citationRows([matrix.caption, matrix.legend, header, row]),
+            matrixLocation(row.label, matrix.headers[yearSelect.selectedIndex], matrix.caption));
       });
       use.disabled = true;
       function showSelection() {
@@ -801,6 +821,32 @@
         diff.current.value + '입니다. 두 표시값과 괄호 증감이 어긋납니다. 원보고서나 통계표에서 확인하세요.', 'callout'));
     }
   }
+  function annualRateCard(passage) {
+    const {population, measure, previous, current, change} = passage.annualRate;
+    const label = population.replace(/세(이상|이하)/u, '세 $1') + ' ' + measure;
+    const location = label + ' 행 · ' + previous.year + '년·' + current.year + '년 열 · 전년대비 증감(%p) 행';
+    const card = node('div', undefined, 'source annual-rate');
+    card.append(node('strong', label),
+      node('p', previous.year + '년 ' + previous.value + '% → ' + current.year + '년 ' + current.value + '%'),
+      node('p', current.year + '년 전년 대비 증감 · 원표 표기 ' + change.value + '%p'));
+    const calculation = node('details');
+    calculation.open = passage.annualRate.requestedUnit === '%';
+    calculation.append(node('summary', '두 표시값으로 계산한 상대 변화율'));
+    const base = Number(previous.value), end = Number(current.value);
+    if (base > 0) {
+      const pct = 100 * (end - base) / base;
+      const value = Math.abs(pct) > 0 && Math.abs(pct) < 0.005
+        ? (pct > 0 ? '0.005% 미만 증가' : '0.005% 미만 감소')
+        : '약 ' + pct.toLocaleString('ko-KR', {maximumFractionDigits:2}) + '%';
+      calculation.append(node('p', '(' + current.value + ' − ' + previous.value + ') ÷ ' + previous.value +
+        ' × 100 = ' + value + '. 원표에 표시된 자릿수로 계산했습니다.'));
+    } else calculation.append(node('p', '이전 해의 비율이 0%여서 상대 변화율을 계산할 수 없습니다.'));
+    const entries = [...passage.context, passage];
+    const snippet = citationRows(entries);
+    card.append(calculation, node('p', '붙여넣은 본문에서 발췌할 연도 머리글과 두 행'), node('blockquote', snippet.text, 'verbatim'),
+      button('연도 머리글과 두 행을 근거로 사용', () => useExcerpt(snippet, location)));
+    return card;
+  }
   function findPassages() {
     const text = byId('document-text').value;
     const query = byId('document-query').value.trim();
@@ -815,7 +861,7 @@
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
     if (!lookup.fiscalTable && !lookup.transcript) {
-      for (const p of passages) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
+      for (const p of passages) if (!p.annualRate) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
     if ([...annualRows.values()].some(row => row?.scopeIssue === 'population'))
@@ -847,18 +893,25 @@
       area.append(block);
     }
     let results = area;
-    const browser = !lookup.fiscalTable && lookup.yearMatrix && matrixBrowser(lookup.yearMatrix);
+    const sourceRows = () => rows ??= documentRows(text);
+    const matrixTable = !lookup.fiscalTable && lookup.yearMatrix;
+    const matrixHeader = matrixTable && sourceRows()[matrixTable.headerParagraph - 1];
+    const browser = matrixTable && matrixBrowser(matrixTable, matrixHeader);
     const fallbackCount = passages.filter(passage => !passage.fiscalNavigation).length;
     if (fallbackCount && (lookup.gap || lookup.state === 'needs-context')) {
       results = node('details');
       results.append(node('summary', '표현이 겹친 위치 ' + fallbackCount + '개 보기'));
     }
     for (const passage of passages) {
+      if (passage.annualRate) {
+        results.append(annualRateCard(passage));
+        continue;
+      }
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
       if (!lookup.fiscalTable && passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
       const speaker = passage.speaker;
-      const excerpt = speaker ? {text:speaker.excerpt, paragraph:passage.paragraph, startParagraph:speaker.paragraph} : passage;
+      let excerpt = speaker ? {text:speaker.excerpt, paragraph:passage.paragraph, startParagraph:speaker.paragraph} : passage;
       const includeSpeaker = speaker && speaker.paragraph !== passage.paragraph;
       if (speaker) {
         block.append(node('p', '회의록 발언자 · ' + speaker.label + ' (' + speaker.paragraph + '문단)'));
@@ -875,6 +928,11 @@
         block.append(node('p', window.JournalEvidenceFiscal.label(fiscal.stage) + ' · ' + coordinate),
           node('p', '원문 표기 ' + fiscal.value + ' · 단위 ' + fiscal.unit + ' · 머리글 ' + fiscal.headerParagraph + '문단', 'verbatim'),
           node('p', '원본에서 이 표가 실린 쪽과 머리글·단위를 대조하세요.'));
+        if (fiscal.stage === 'executionRate') {
+          block.append(node('p', fiscal.basis ? '원표에 적힌 집행률의 분모 · ' + fiscal.basis :
+            '이 열에는 집행률의 분모가 적혀 있지 않습니다. 어떤 예산액을 기준으로 했는지 원표 주석을 확인하세요.'));
+          excerpt = citationRows([...passage.context, passage]);
+        }
       } else if (passage.fiscalNavigation) {
         const guide = passage.fiscalNavigation;
         const coordinate = guide.column ? fiscalLocation(guide) : '‘' + guide.rowLabel + '’ 행';
@@ -890,9 +948,20 @@
           block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
         }
       } else if (!lookup.fiscalTable && !speaker) {
-        addColumnHints(block, text, query, passage, separateContext, annualRows.get(passage));
-        if (passage.matrixCell)
-          tableLocation = matrixLocation(passage.matrixCell.rowLabel, passage.matrixCell.heading, lookup.yearMatrix?.caption);
+        const annual = annualRows.get(passage);
+        addColumnHints(block, text, query, passage, separateContext, annual);
+        const metric = !separateContext && annual?.metric;
+        if (passage.matrixCell) {
+          tableLocation = matrixLocation(passage.matrixCell.rowLabel, passage.matrixCell.heading, matrixTable.caption);
+          excerpt = citationRows([matrixTable.caption, matrixTable.legend, matrixHeader, passage]);
+        } else if (passage.datedCell) {
+          tableLocation = matrixLocation(passage.datedRowLabel, passage.datedCell.heading) +
+            ' (붙여넣은 본문 ' + passage.paragraph + '문단 · 자료 행 ' + passage.datedCell.column + '열)';
+          excerpt = citationRows([passage.context[0], passage]);
+        } else if (metric) {
+          tableLocation = matrixLocation(metric.year + '년', metric.heading);
+          excerpt = citationRows([sourceRows()[metric.headerParagraph - 1], passage]);
+        }
       }
       if (passage.context.length) {
         const details = node('details');
@@ -910,8 +979,7 @@
         details.addEventListener('toggle', function expand() {
           if (!details.open) return;
           details.removeEventListener('toggle', expand);
-          rows ??= documentRows(text);
-          addNearbyRows(details, list, passage, rows, tableLocation, excerpt);
+          addNearbyRows(details, list, passage, sourceRows(), tableLocation, excerpt);
         });
         block.append(details);
       }
@@ -923,7 +991,7 @@
       }
       if (tableLocation) {
         const label = passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
-        block.append(button(label, () => useExcerpt(passage, tableLocation)));
+        block.append(button(label, () => useExcerpt(excerpt, tableLocation)));
       } else {
         const navigation = passage.matrixNavigation;
         if (browser && navigation) {
