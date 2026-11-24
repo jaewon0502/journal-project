@@ -14,6 +14,7 @@
     session = null,
     generation = 0;
   let inviteActive = false, assignment = null, inviteRevision = 0;
+  let storageVersion = null, storageLocked = false, lastCheckpointAt = null;
   function message(s) {
     el('status').textContent = s;
   }
@@ -25,10 +26,34 @@
     a.rel = 'noopener noreferrer';
     parent.replaceChildren(a);
   }
+  function lockStorage() {
+    storageLocked = true;
+    el('storage-status').textContent = '다른 탭에서 임시 기록이 바뀌었습니다. 이 탭은 임시 저장을 멈췄습니다. 같은 과제는 한 탭에서만 마치고 참여 기록 파일을 저장하세요.';
+    el('storage-status').hidden = false;
+  }
+  function showResumeStatus() {
+    message(session.recovered
+      ? '활동 중 중단된 과제를 복원했습니다. 마지막 저장까지 확인한 시간만 남아 전체 소요 시간 비교에서 제외합니다. 측정을 재개할 수 있습니다.'
+      : '휴식 중이던 과제를 복원했습니다. 휴식 전까지의 활동 시간은 저장됐습니다. 작업을 계속하려면 측정 재개를 누르세요.');
+  }
   function persist() {
+    if (storageLocked) return;
     try {
-      if (session) localStorage.setItem(key, JSON.stringify(session));
+      if (localStorage.getItem(key) !== storageVersion) {
+        lockStorage();
+        return;
+      }
+      let snapshot = session;
+      if (session && !session.result && session.timer.start !== null) {
+        const t = session.timer, now = performance.now();
+        // Only the persisted copy needs a checkpoint. Keep the live segment intact across saves.
+        snapshot = {...session, timer:c.tick(t, now, t.phase, true)};
+        lastCheckpointAt = now;
+      }
+      const json = snapshot ? JSON.stringify(snapshot) : null;
+      if (json !== null) localStorage.setItem(key, json);
       else localStorage.removeItem(key);
+      storageVersion = json;
       el('storage-status').hidden = true;
     } catch {
       el('storage-status').textContent = '이 브라우저에 임시 기록을 저장하지 못했습니다. 창을 열어 둔 채 완료하거나 중도 종료한 뒤 참여 기록 파일을 저장하세요.';
@@ -69,7 +94,7 @@
         ' · 기록된 활동 시간 ' +
         sec.toFixed(1) +
         '초' +
-        (r.recovered ? ' · 새로고침으로 시간 비교 제외' : '') +
+        (r.recovered ? ' · 활동 중 중단되어 전체 소요 시간 비교 제외' : '') +
         (!r.split ? ' · 단계별 시간 비교 제외' : '');
       return;
     }
@@ -210,6 +235,7 @@
   el('pause').onclick = () => {
     const t = session.timer;
     session.timer = c.tick(t, performance.now(), t.phase, t.start === null);
+    if (t.start === null) message(session.recovered ? '측정을 재개했습니다. 앞서 중단된 기록은 전체 소요 시간 비교에서 제외합니다.' : '');
     persist();
     render();
   };
@@ -280,7 +306,17 @@
     session.recovered = true;
     persist();
   });
-  window.addEventListener('pageshow', render);
+  window.addEventListener('pageshow', event => {
+    if (event.persisted && session && !session.result && session.timer.start === null) showResumeStatus();
+    render();
+  });
+  window.addEventListener('storage', event => {
+    if (event.storageArea !== localStorage) return;
+    if ((event.key === key || event.key === null) && localStorage.getItem(key) !== storageVersion) lockStorage();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && session && !session.result && session.timer.start !== null) persist();
+  });
   const assignedTasks = el('assigned-tasks');
   if (assignedTasks) {
     try {
@@ -291,7 +327,8 @@
     }
   }
   try {
-    const raw = JSON.parse(localStorage.getItem(key));
+    storageVersion = localStorage.getItem(key);
+    const raw = JSON.parse(storageVersion);
     if (
       raw &&
       raw.base?.format === c.format &&
@@ -303,16 +340,18 @@
       if (raw.result) c.validate(raw.result);
       session = raw;
       if (!session.result) {
-        session.recovered = true;
+        session.recovered = raw.recovered !== false || raw.timer.start !== null;
         session.timer.start = null;
-        message(
-          '중단한 과제를 복원했습니다. 측정을 재개할 수 있습니다. 이 기록은 소요 시간 비교에서 제외합니다.'
-        );
+        showResumeStatus();
       }
     }
   } catch {
     message('이전 임시 기록을 열 수 없습니다. 새로 시작할 수 있습니다.');
   }
   render();
-  setInterval(showClock, 1000);
+  setInterval(() => {
+    showClock();
+    if (session && !session.result && session.timer.start !== null &&
+        performance.now() - (lastCheckpointAt ?? session.timer.start) >= 15000) persist();
+  }, 1000);
 })();

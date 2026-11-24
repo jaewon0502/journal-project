@@ -55,7 +55,7 @@ def participant_page():
     page = head + '<section id="participant">' + tail
     page = page.replace('<html lang="ko">', '<html lang="ko" data-participant-kit>')
     page = re.sub(r'<header>.*?</header>', '<header><strong>Journal</strong><span>편집자 검토 과제</span></header>', page, count=1)
-    page, count = re.subn(r'(<section id="enroll-box"[^>]*><h2>.*?</h2>)<p>.*?</p>', r'\1<p>진행자에게 받은 초대 코드를 입력하세요. 이어서 참여할 때도 같은 코드를 씁니다. 이 브라우저에 기록을 저장하며, 마지막에 내려받은 JSON을 직접 전달합니다.</p>', page, count=1)
+    page, count = re.subn(r'(<section id="enroll-box"[^>]*><h2>.*?</h2>)<p>.*?</p>', r'\1<p>진행자에게 받은 초대 코드를 입력하세요. 이어서 참여할 때도 같은 코드를 씁니다. 다른 기기로 옮길 때는 같은 코드로 등록한 뒤 과제를 시작하기 전에 본인의 이어하기 파일을 여세요.</p>', page, count=1)
     if count != 1:
         raise ValueError('참여용 등록 안내를 확인하세요.')
     return page.replace(' (공용 기기는 비움)', '').replace('id="invite-code" type="text"', 'id="invite-code" required type="text"')
@@ -79,6 +79,7 @@ def packet_bytes():
     packet['시작 안내.txt'] = (
         '압축을 모두 푼 뒤 editor-study.html을 여세요. 진행자에게 받은 본인의 초대 코드로 등록합니다. '
         '중간에 창을 닫았다면 같은 폴더와 브라우저에서 같은 코드를 입력하세요. '
+        '다른 기기로 옮기려면 잠시 멈추기를 누르고 내 이어하기 파일을 저장하세요. 새 기기에서 본인 코드로 등록한 뒤 과제를 시작하기 전에 파일을 여세요. '
         '네 과제를 마치거나 중단한 뒤 내 참여 기록을 내려받아 진행자에게 전달하세요.\n').encode()
     result = BytesIO()
     with ZipFile(result, 'w') as archive:

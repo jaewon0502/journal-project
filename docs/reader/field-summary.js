@@ -134,6 +134,7 @@
     details.append(node('summary', '시간 집계에 포함된 배포본 ID와 건수'));
     for (const group of groups) {
       for (const [version, counts] of group.timedKits) {
+        if (!counts.totalTimed && !counts.timedWithdrawn) continue;
         details.append(node('p', labels[group.method] + ' · ' + (version || '버전 미확인') +
           ' · 완료 ' + counts.totalTimed + '건 (단계별 측정 ' + counts.timed + '건) · 중도 종료 ' + counts.timedWithdrawn + '건'));
       }
@@ -171,9 +172,45 @@
       if (!task.byVersion.length)
         card.append(node('p', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
       for (const comparison of task.byVersion) card.append(versionComparison(comparison));
-      if (arms.some(g => g.timedKits.size)) card.append(kitDetails(arms));
+      if (arms.some(g => g.totalTimed + g.timedWithdrawn)) card.append(kitDetails(arms));
       area.append(card);
     }
+  }
+  function minimumSeconds(ms) {
+    // Round down so a displayed lower bound never exceeds the observed duration.
+    return (Math.floor(ms) / 1000).toLocaleString('ko-KR', {maximumFractionDigits:3}) + '초';
+  }
+  function partialTimePanel(comparison) {
+    const part = document.createDocumentFragment();
+    if (![comparison.manual, comparison.journal].some(g => g?.partialCompleted || g?.partialWithdrawn)) return part;
+    const section = node('section', '');
+    section.className = 'partial-times';
+    section.append(node('h5', '중단 후 복원한 기록까지 포함한 활동 시간'));
+    for (const method of ['manual', 'journal']) {
+      const group = comparison[method];
+      if (!group) continue;
+      const mean = comparison.completedMeans[method];
+      if (mean) section.append(node('p', labels[method] + ' · 제출한 ' + mean.count + '건 전체의 평균 ' +
+        (mean.exact ? seconds(group.totalMs, mean.count) : '최소 ' + minimumSeconds(mean.minMs)) +
+        ' · 시간이 일부만 남은 답안 ' + group.partialCompleted + '건'));
+      const stopped = group.timedWithdrawn + group.partialWithdrawn;
+      if (stopped) section.append(node('p', labels[method] + ' · 중도 종료 ' + stopped + '건의 활동 시간 합계 ' +
+        (group.partialWithdrawn ? '최소 ' : '') + minimumSeconds(group.withdrawnMs + group.partialWithdrawnMs) +
+        ' · 시간이 일부만 남은 기록 ' + group.partialWithdrawn + '건'));
+    }
+    const {manual, journal} = comparison.completedMeans;
+    if (comparison.version && manual && journal && (!manual.exact || !journal.exact)) {
+      const gap = Math.abs(manual.minMs - journal.minMs);
+      const duration = gap >= 1 ? minimumSeconds(gap) + ' 이상 ' : '';
+      if (manual.exact && journal.minMs > manual.minMs) {
+        section.append(node('p', '회수한 완료 답안 전체에서는 저널 방식이 평균 ' + duration + '더 걸렸습니다.'));
+      } else if (journal.exact && manual.minMs > journal.minMs) {
+        section.append(node('p', '회수한 완료 답안 전체에서는 저널 방식이 평균 ' + duration + '빨랐습니다.'));
+      } else section.append(node('p', '남아 있는 구간만으로는 완료 답안 전체의 평균 시간 차이를 확정할 수 없습니다.'));
+    }
+    section.append(node('p', '활동 구간이 빠진 답안의 실제 시간에는 상한을 정할 수 없습니다. 중도 종료 시간은 별도 합계에만 들어갑니다.'));
+    part.append(section);
+    return part;
   }
   function versionComparison(comparison) {
     const card = node('section', '');
@@ -183,7 +220,7 @@
     if (!comparison.version)
       card.append(node('p', '같은 배포본인지 확인할 수 없어 절감률 계산을 보류합니다. 아래에서 방식별 시간과 채점 결과를 볼 수 있습니다.'));
     else if (comparison.savedMs === null)
-      card.append(node('p', '완료 시간 차이 산출 대기 · 같은 배포본에서 두 방식 모두 시간 기록이 필요합니다.'));
+      card.append(node('p', '완료 시간 차이 산출 대기 · 두 방식 모두 시간 기록이 필요합니다. 온전한 완료 기록끼리 같은 배포본에서 비교합니다.'));
     else
       card.append(node('strong', '완료 시간 ' + timeChangeText(comparison)));
     for (const method of ['manual', 'journal']) {
@@ -196,6 +233,7 @@
         ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.totalTimed - group.timedOutcomePending) +
         ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
     }
+    card.append(partialTimePanel(comparison));
     const medianDifference = comparison.median.savedMs;
     if ((comparison.savedMs > 0 && medianDifference < 0) || (comparison.savedMs < 0 && medianDifference > 0)) {
       const difference = Math.abs(medianDifference);
@@ -301,7 +339,7 @@
       return;
     }
     area.append(node('p', '같은 기사와 과제에 같은 목표 시간을 배정받은 서로 다른 참여자 집단을 비교합니다. 진행자 기준과 근거 위치·판정이 모두 일치하고 참여자 기기에 기록된 활동 시간이 목표 이하면 성공입니다. 목표 시간을 지나도 과제는 계속할 수 있습니다. 명부에는 배포본 ID가 없어 같은 과제와 목표의 여러 판본이 함께 집계될 수 있습니다.'),
-      node('p', '각 방식에 원래 배정한 건수가 분모입니다. 최솟값은 확인된 성공만, 최댓값은 결과 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 중단 후 복원 등으로 성공 여부를 판단할 수 없는 건이 여기에 포함됩니다.'));
+      node('p', '각 방식에 원래 배정한 건수가 분모입니다. 최솟값은 확인된 성공만, 최댓값은 결과 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 시간 일부 누락 등으로 성공 여부를 판단할 수 없는 건이 여기에 포함됩니다. 시간이 일부 빠졌어도 기록된 구간만으로 목표를 넘겼다면 시간 초과로 셉니다.'));
     for (const task of report.deadlineComparisons) {
       const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId + ' · 목표 ' + task.targetSeconds + '초');
       for (const method of ['manual', 'journal']) {

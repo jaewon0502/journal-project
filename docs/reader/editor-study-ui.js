@@ -49,7 +49,7 @@
       const prior = localStorage.getItem(storeKey);
       if (prior !== storageVersion) {
         storageLocked = true;
-        message('global-status', '다른 탭에서 기록이 바뀌었습니다. 현재 기록을 JSON으로 내려받은 뒤 이 탭을 다시 여세요.', true);
+        message('global-status', '다른 탭에서 기록이 바뀌었습니다. 이 탭의 진행 상황은 ‘내 이어하기 파일 저장’으로 보관하세요.', true);
         return;
       }
       if (session?.state === 'running' && liveStart !== null) bankTime();
@@ -57,7 +57,9 @@
       localStorage.setItem(storeKey, json);
       storageVersion = json;
     } catch (_) {
-      message('global-status', '브라우저 저장이 제한되어 있습니다. 창을 닫기 전에 기록을 JSON으로 내려받으세요.', true);
+      message('global-status', session
+        ? '브라우저 저장이 제한되어 있습니다. 진행 중에는 ‘내 이어하기 파일 저장’을, 완료·중단 후에는 ‘내 참여 기록 내려받기’를 누르세요.'
+        : '브라우저 저장이 제한되어 있습니다. 창을 닫기 전에 모은 기록을 파일로 내려받으세요.', true);
     }
   }
   function restoreWorkspace() {
@@ -98,7 +100,7 @@
   window.addEventListener('storage', event => {
     if (event.key === storeKey && event.newValue !== storageVersion) {
       storageLocked = true;
-      message('global-status', '다른 탭의 기록이 있습니다. 현재 탭은 파일로만 보관합니다. 중복 참여가 없도록 한 탭에서 진행하세요.', true);
+      message('global-status', '다른 탭에서 저장한 기록이 있습니다. 이 탭에서 작성한 내용은 파일로 보관하고 한 탭에서만 계속하세요.', true);
     }
   });
   function download(data, name) {
@@ -109,6 +111,54 @@
   function exportSelf() {
     const r = currentRecord();
     if (r) download(r, 'journal-editor-' + r.participantId + '.json');
+  }
+  function recoveryNote(timer) {
+    if (timer.partialTime || !(timer.recoveredMs > 0)) return '';
+    const seconds = (timer.recoveredMs / 1000).toLocaleString('ko-KR', {maximumFractionDigits:3});
+    return ' 전체 시간에는 타이머로 직접 측정했는지 확인할 수 없는 이전 구간 ' + seconds + '초가 포함됩니다.';
+  }
+  function exportResume() {
+    try {
+      const r = currentRecord();
+      if (!r || r.withdrawn || r.trials.length === 4) return;
+      if (session.state === 'running') bankTime();
+      const data = window.JournalEditorResume.create(r, session);
+      download(data, 'journal-resume-' + r.participantId + '.json');
+      persist();
+      message('transfer-status', '새 기기에서 초대 코드 J1-' + r.ordinal + '-' + r.participantId +
+        '로 등록한 뒤 파일을 여세요.' + (session.state === 'running' ? ' 이번 과제는 측정한 시간만 이어집니다.' : recoveryNote(data.session)));
+    } catch (err) { message('transfer-status', err.message, true); }
+  }
+  function canOpenResume() {
+    return participantOnly && session?.state === 'ready';
+  }
+  async function openResume(event) {
+    const [file] = event.target.files;
+    event.target.value = '';
+    if (!file || !canOpenResume()) return;
+    const current = currentRecord();
+    try {
+      const data = JSON.parse(await file.text());
+      if (!canOpenResume() || currentRecord() !== current) throw new Error('과제 상태가 바뀌었습니다. 현재 기록을 확인하세요.');
+      const {record, session:next} = window.JournalEditorResume.read(data, current);
+      if (record.trials.length < current.trials.length) throw new Error('이 기기에 더 많은 응답이 있습니다. 최근 파일을 선택하세요.');
+      if (session.partialTime && record.trials.length === current.trials.length && !next.partialTime) {
+        throw new Error('이 기기에서 이미 일부 측정으로 기록한 과제입니다. 현재 기록에서 계속하세요.');
+      }
+      const nextRecords = core.mergeRecords(records, [record]);
+      // Recheck the version after the asynchronous file read before replacing anything shown here.
+      if (!storageLocked) {
+        try { storageLocked = localStorage.getItem(storeKey) !== storageVersion; }
+        catch (_) { /* Browser storage may be disabled. Files can still be used in this tab. */ }
+      }
+      if (storageLocked) throw new Error('다른 탭의 기록이 있거나 기기 기록을 읽을 수 없습니다. 기존 기록을 확인하세요.');
+      records = nextRecords; session = next;
+      liveStart = null; dropFrame(); persist(); renderParticipant();
+      const ended = next.state === 'done' || next.state === 'withdrawn';
+      message('transfer-status', '제출한 응답 ' + record.trials.length + '건을 열었습니다.' +
+        (next.partialTime ? ' 현재 과제는 시간 일부만 확인할 수 있어 전체 시간 비교에서 제외합니다.' : ''));
+      el(ended ? 'ended-heading' : next.state === 'paused' ? 'resume-trial' : 'trial-heading').focus();
+    } catch (err) { message('transfer-status', '열지 못했습니다. ' + err.message, true); }
   }
   function fmt(n) { return Number(n.toFixed(1)).toLocaleString('ko-KR'); }
   const percent = (a, b) => b ? fmt(100 * a / b) + '%' : '—';
@@ -548,7 +598,8 @@
   function start(observedOnly = false) {
     if (!session || !['ready','paused','interrupted'].includes(session.state)) return;
     if (session.state === 'ready') {
-      session.stage = 'select'; session.phaseMs = {select:0}; session.phaseOmitted = false;
+      session.stage = session.partialTime ? null : 'select';
+      session.phaseMs = session.partialTime ? null : {select:0}; session.phaseOmitted = false;
       session.recoveredMs = null;
     }
     if (session.state === 'interrupted') {
@@ -581,9 +632,12 @@
     if (!session || !['ready','running','paused','interrupted'].includes(session.state)) return;
     const task = session.state === 'ready' ? null : {...assignment(),
       elapsedMs:Math.round(elapsed() - (session.recoveredMs ?? 0)),
-      partial:session.state === 'interrupted' || session.recoveredMs != null};
+      partial:!!session.partialTime || session.state === 'interrupted' || session.recoveredMs != null};
     if (!confirm('제출한 과제와 현재 과제에서 측정한 시간을 보관합니다. 이번 참여를 중단할까요?')) return;
-    records = core.mergeRecords(records, [{...currentRecord(), withdrawn:true, withdrawalTask:task}]);
+    const result = {...currentRecord(), withdrawn:true};
+    // An old submission-only file cannot show whether this unsubmitted task had already begun.
+    if (session.state !== 'ready' || !session.partialTime) result.withdrawalTask = task;
+    records = core.mergeRecords(records, [result]);
     clearTaskState('withdrawn'); persist(); renderParticipant(); el('ended-heading').focus();
   }
   function mountJournal() {
@@ -646,7 +700,9 @@
     el('enroll-box').hidden = !!r;
     const ended = r && ['done','withdrawn'].includes(session.state);
     el('run').hidden = !r || ended; el('session-actions').hidden = !r || ended; el('ended').hidden = !ended;
-    if (!r) return;
+    el('transfer-pane').hidden = !r || ended;
+    el('open-resume').hidden = !canOpenResume();
+    if (!r) { message('transfer-status', ''); return; }
     if (ended) {
       el('ended-heading').textContent = session.state === 'done' ? '네 과제를 마쳤습니다' : '참여를 중단했습니다';
       el('ended-text').textContent = '배정 ' + r.ordinal + '번 · 제출한 과제 ' + r.trials.length + '건. 참여 기록을 내려받아 연구자에게 전달하세요.';
@@ -669,7 +725,11 @@
     el('trial-heading').textContent = '과제 ' + (r.trials.length + 1) + ' / 4 · ' + method;
     el('trial-info').textContent = '배정 ' + r.ordinal + '번 · 제출 완료 ' + r.trials.length + '건';
     el('start-pane').hidden = s !== 'ready'; el('task-pane').hidden = s !== 'running';
+    el('partial-start').hidden = s !== 'ready' || !session.partialTime;
     el('pause-pane').hidden = s !== 'paused'; el('recovery').hidden = s !== 'interrupted';
+    el('pause-note').textContent = session.partialTime
+      ? '이 과제는 일부 시간만 확인할 수 있습니다. 계속하면 지금부터 검토한 시간을 더합니다.'
+      : '휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.' + recoveryNote(session);
     el('resume-unbroken').hidden = !!session.partialTime;
     updateTime();
     if (s !== 'running') return;
@@ -711,6 +771,8 @@
   el('pause-trial').onclick = pause; el('withdraw').onclick = el('stop-interrupted').onclick = withdraw;
   el('answer').onsubmit = submitTrial;
   el('answer').addEventListener('input',cacheAnswer);
+  el('export-resume').onclick = exportResume;
+  el('resume-file').onchange = openResume;
   el('export-one').onclick = el('export-finished').onclick = exportSelf;
   // F4: the next person on a shared device returns to an empty enrollment form, not to the aggregate view.
   el('leave-session').onclick = () => {

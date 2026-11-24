@@ -42,6 +42,8 @@
       timer &&
       phases.includes(timer.phase) &&
       phases.every((p) => Number.isSafeInteger(timer.ms?.[p]) && timer.ms[p] >= 0) &&
+      (timer.remainderMs === undefined || (Number.isFinite(timer.remainderMs) &&
+        timer.remainderMs >= -0.5 && timer.remainderMs < 0.5)) &&
       (timer.start === null || Number.isFinite(timer.start))
     );
   }
@@ -52,11 +54,17 @@
     if (!validTimer(state) || !Number.isFinite(now) || !phases.includes(next))
       throw Error('측정 단계가 올바르지 않습니다.');
     const ms = { ...state.ms };
+    let remainderMs = state.remainderMs ?? 0;
     if (state.start !== null) {
       if (now < state.start) throw Error('시간 측정이 중단됐습니다. 현재 기록을 확인하세요.');
-      ms[state.phase] += Math.round(now - state.start);
+      // Carry fractional milliseconds across phase changes and pauses. Rounding each
+      // segment separately can turn an on-time submission into a missed deadline.
+      const elapsed = (now - state.start) + remainderMs;
+      const recorded = Math.round(elapsed);
+      ms[state.phase] += recorded;
+      remainderMs = elapsed - recorded;
     }
-    return { phase: next, start: running ? now : null, ms };
+    return { phase: next, start: running ? now : null, ms, remainderMs };
   }
   function validate(v) {
     if (
@@ -128,14 +136,22 @@
       const loc = t.found === 'missing' ? 'no' : locationGrade;
       const verified = loc === 'yes' && verdictGrade === 'yes';
       const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
-      if (!t.recovered) {
-        const version = kitVersion(t.kitVersion);
-        if (!g.timedKits.has(version)) {
-          const kit = newTimeTotals();
-          g.timedKits.set(version, kit);
-          completedTimes.set(kit, []);
+      const version = kitVersion(t.kitVersion);
+      if (!g.timedKits.has(version)) {
+        const totals = {...newTimeTotals(), partialCompleted:0, partialCompletedMs:0, partialWithdrawn:0, partialWithdrawnMs:0};
+        g.timedKits.set(version, totals);
+        completedTimes.set(totals, []);
+      }
+      const kit = g.timedKits.get(version);
+      if (t.recovered) {
+        if (t.status === 'withdrawn') {
+          kit.partialWithdrawn++;
+          kit.partialWithdrawnMs += elapsedMs;
+        } else {
+          kit.partialCompleted++;
+          kit.partialCompletedMs += elapsedMs;
         }
-        const kit = g.timedKits.get(version);
+      } else {
         if (t.status === 'completed') completedTimes.get(kit).push(elapsedMs);
         for (const totals of [g, kit]) {
           if (t.status === 'withdrawn') {
@@ -194,6 +210,11 @@
       if (!g?.timedVerified || g.timedOutcomePending) return null;
       return (g.totalMs + g.withdrawnMs) / g.timedVerified;
     }
+    function completedMean(kit) {
+      const count = kit ? kit.totalTimed + kit.partialCompleted : 0;
+      if (!count) return null;
+      return {count, minMs:(kit.totalMs + kit.partialCompletedMs) / count, exact:kit.partialCompleted === 0};
+    }
     const tasks = new Map();
     for (const g of groups) {
       const key = JSON.stringify([g.kind, g.caseId, g.articleUrl, g.taskId, g.prompt]);
@@ -207,7 +228,8 @@
         const journal = task.journal?.timedKits.get(version);
         const manualMs = manual?.totalTimed ? manual.totalMs / manual.totalTimed : null;
         const journalMs = journal?.totalTimed ? journal.totalMs / journal.totalTimed : null;
-        return { version, manual, journal, ...change(version, manualMs, journalMs),
+        return { version, manual, journal, completedMeans:{manual:completedMean(manual), journal:completedMean(journal)},
+          ...change(version, manualMs, journalMs),
           median: change(version, manual?.medianMs ?? null, journal?.medianMs ?? null),
           perVerified: change(version, msPerVerified(manual), msPerVerified(journal)) };
       });
@@ -289,9 +311,9 @@
       text(basis.reference?.document) && text(basis.reference?.locator) &&
       ['supported', 'contradicted', 'insufficient'].includes(basis.verdict);
     if (keyed && (locationGrade === 'no' || trial.verdict !== basis.verdict)) return 'failedQuality';
-    if (trial.recovered) return 'unknown';
     const elapsedMs = phases.reduce((sum, phase) => sum + trial.phaseMs[phase], 0);
     if (elapsedMs > targetSeconds * 1000) return 'overTime';
+    if (trial.recovered) return 'unknown';
     return keyed && locationGrade === 'yes' ? 'verified' : 'unknown';
   }
 

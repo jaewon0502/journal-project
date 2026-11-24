@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="editor-study.css">
 <script defer src="editor-study-cases.js"></script>
 <script defer src="editor-study-core.js"></script>
+<script defer src="editor-study-resume.js"></script>
 <script defer src="editor-study-ui.js"></script>
 </head>
 <body>
@@ -48,12 +49,12 @@
 <div class="headline"><div><h1>편집자 검토 과제</h1><p>가상 기사 4건을 검토합니다. 각 기사의 판단과 대표 근거 하나를 기록하세요.</p></div></div>
 <section id="enroll-box" class="box"><h2>참여 등록</h2><p>공용 기기에서는 등록하면 자동 배정됩니다. 다른 기기로 참여하는 경우 연구자에게 받은 초대 코드를 입력하세요. 이름과 연락처는 수집하지 않습니다. 결과는 이 브라우저에 저장되며 JSON으로 내려받아 직접 전달할 수 있습니다.</p><form id="enroll">
 <label>연구자에게 받은 초대 코드 (공용 기기는 비움)<input id="invite-code" type="text" maxlength="60" autocomplete="off" autocapitalize="characters" placeholder="연구자에게 받은 코드"></label>
-<label class="check"><input type="checkbox" id="qualified" required>기사의 편집·사실 검증을 실제로 수행하는 편집자로서, 이 실험 사례와 기준 답을 사전에 보지 않았고 기록에 동의합니다.</label>
+<label class="check"><input type="checkbox" id="qualified" required>기사의 편집·사실 검증을 실제로 수행하는 편집자로서, 처음 참여하기 전에 이 실험 사례와 기준 답을 보지 않았고 기록에 동의합니다.</label>
 <div class="actions"><button class="primary" type="submit">참여 등록</button></div><p id="enroll-status" class="status" role="status"></p></form></section>
 <section id="run" class="box" hidden><div class="runbar"><h2 id="trial-heading" tabindex="-1"></h2><div id="timer" aria-label="경과 시간">00:00</div></div><p id="trial-info" class="subtle"></p>
-<div id="start-pane"><p>시작하면 기사와 원자료가 열리고 자료 선택 시간을 잽니다. 문서 안에서 근거를 찾거나 판단을 작성할 때는 해당 단계 버튼을 누르세요. 앞 단계로 돌아갈 수 있습니다.</p><button id="begin-trial" class="primary">과제 시작</button></div>
+<div id="start-pane"><p>시작하면 기사와 원자료가 열리고 자료 선택 시간을 잽니다. 문서 안에서 근거를 찾거나 판단을 작성할 때는 해당 단계 버튼을 누르세요. 앞 단계로 돌아갈 수 있습니다.</p><p id="partial-start" class="notice" hidden>이전 참여 기록에 이 과제를 시작한 시각이 없습니다. 지금부터 잰 시간만 보관하며 이 과제의 전체 시간은 산출하지 않습니다.</p><button id="begin-trial" class="primary">과제 시작</button></div>
 <div id="recovery" class="notice" hidden><strong>진행 중이던 과제가 다시 열렸습니다.</strong><p>창을 닫은 사이에 쉬었거나 얼마나 검토했는지 기억나지 않으면 시간을 제외하고 계속하세요. 답과 근거는 제출할 수 있습니다. 쉬지 않고 검토했다면 그 구간을 전체 시간에 포함할 수 있습니다.</p><div class="actions"><button id="resume-partial">시간 제외 후 계속</button><button id="resume-unbroken">쉬지 않고 검토를 이어갔습니다</button><button id="stop-interrupted">중단 기록하고 종료</button></div></div>
-<div id="pause-pane" class="notice" hidden><p>휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.</p><button id="resume-trial" class="primary">검토 계속하기</button></div>
+<div id="pause-pane" class="notice" hidden><p id="pause-note">휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.</p><button id="resume-trial" class="primary">검토 계속하기</button></div>
 <div id="task-pane" hidden><div id="phase-clock"><div class="phase-controls" role="group" aria-label="지금 하는 작업">
 <strong>지금 하는 작업</strong><button type="button" data-phase="select" aria-pressed="false">자료 선택</button><button type="button" data-phase="locate" aria-pressed="false">근거 위치 확인</button><button type="button" data-phase="decide" aria-pressed="false">판정 기록</button><button id="pause-trial" type="button">잠시 멈추기</button></div></div>
 <p id="phase-note" class="subtle"></p>
@@ -63,6 +64,11 @@
 <label>판단에 사용한 대표 근거<select id="source" required></select></label>
 <label>판단 이유<textarea id="reason" rows="2" required maxlength="4000" placeholder="어떤 근거로 판단했는지 간략히 적으세요."></textarea></label><label class="check"><input type="checkbox" id="phase-omit">단계 전환을 놓쳐 이 과제의 총시간만 사용합니다.</label><div class="actions"><button class="primary" type="submit">이 과제 제출</button></div><p id="answer-status" class="status" role="status"></p></form></div>
 </section>
+<section id="transfer-pane" class="box" hidden><h2>다른 기기에서 이어하기</h2>
+<p>이어하기 파일에는 제출한 응답과 현재 과제의 최종 답안 초안이 담깁니다. 저널 안에서 작성 중인 판단은 먼저 기록하세요. 전체 시간을 이어서 재려면 ‘잠시 멈추기’를 누른 뒤 저장하세요.</p>
+<button type="button" id="export-resume">내 이어하기 파일 저장</button>
+<div id="open-resume" hidden><label for="resume-file">본인의 이어하기 파일 또는 이전 참여 기록 열기</label><input id="resume-file" type="file" accept=".json,application/json" aria-describedby="transfer-status"></div>
+<p id="transfer-status" role="status" class="status"></p></section>
 <section id="session-actions" class="actions" hidden><button id="export-one">내 참여 기록 내려받기</button><button id="withdraw">참여 중단</button></section>
 <section id="ended" class="box" hidden><h2 id="ended-heading" tabindex="-1"></h2><p id="ended-text"></p><div id="personal-time" hidden></div><div class="actions"><button id="export-finished" class="primary">내 참여 기록 내려받기</button><button id="leave-session">다음 참여자 등록 화면으로</button></div></section>
 <p id="session-status" class="status" role="status"></p>

@@ -312,6 +312,123 @@ test('수동·저널 배정을 유지하고 실제 도구 사용 응답과 다�
     );
   }
 });
+const draftKey = 'journal-natural-trial-v1';
+function timedPage(t, saved) {
+  let now = 0, pulse;
+  const p = page(t, 'field-review', w => {
+    Object.defineProperty(w.performance, 'now', {value:() => now});
+    w.setInterval = fn => { pulse = fn; };
+    if (saved) w.localStorage.setItem(draftKey, saved);
+  });
+  return {...p, time(value) { now = value; }, pulse, saved:() => p.window.localStorage.getItem(draftKey)};
+}
+async function startTimedPage(t) {
+  const p = timedPage(t);
+  await p.upload('case-file', fixture);
+  p.el('participant').value = 'E01';
+  p.el('kind').value = 'editor';
+  p.el('participant').oninput();
+  p.el('start').click();
+  return p;
+}
+test('명시 휴식 중 두 번 새로 열어도 쉬었던 시간을 빼고 완료·채점할 수 있다', async t => {
+  const a = await startTimedPage(t);
+  a.time(5000);
+  a.el('pause').click();
+  a.window.dispatchEvent(new a.window.Event('pagehide'));
+  const b = timedPage(t, a.saved());
+  assert.match(b.el('status').textContent, /휴식 중이던 과제/);
+  assert.ok(b.el('answer').disabled);
+  b.time(100000); b.el('pause').click();
+  b.el('phases').querySelector('[data-phase="locate"]').click();
+  b.time(101000); b.el('pause').click();
+  const d = timedPage(t, b.saved());
+  d.time(200000); d.el('pause').click();
+  d.el('phases').querySelector('[data-phase="decide"]').click();
+  d.time(202000);
+  for (const [name,value] of Object.entries({found:'found',documentUrl:'https://example.test/table',locator:'표 1',
+    verdict:'supported',reason:'해당 행과 값을 대조했다.',journalUse:'no'})) d.el(name).value = value;
+  d.el('submit').click();
+  const trial = await d.download('download');
+  assert.deepEqual(trial.phaseMs, {search:5000,locate:1000,decide:2000});
+  assert.equal(trial.recovered, false);
+  assert.equal(trial.split, true);
+  const [group] = c.group([{trial, locationGrade:'yes', verdictGrade:'yes'}]);
+  assert.deepEqual([group.totalTimed, group.totalMs, group.timedVerified], [1,8000,1]);
+  assert.deepEqual(await timedPage(t, d.saved()).download('download'), trial);
+});
+test('활동 중 강제 종료하면 타이머와 다른 탭을 보던 시간이 저장된 지점만 복원되고 중단 이력은 보존된다', async t => {
+  const a = await startTimedPage(t);
+  a.time(14999); a.pulse();
+  assert.equal(JSON.parse(a.saved()).timer.ms.search, 0);
+  a.time(15000); a.pulse();
+  assert.equal(JSON.parse(a.saved()).timer.ms.search, 15000);
+  a.time(17300);
+  Object.defineProperty(a.window.document, 'hidden', {value:true});
+  a.window.document.dispatchEvent(new a.window.Event('visibilitychange'));
+  const checkpoint = JSON.parse(a.saved());
+  assert.equal(checkpoint.timer.ms.search, 17300);
+  assert.notEqual(checkpoint.timer.start, null);
+  assert.equal(a.el('pause').textContent, '휴식');
+  a.time(19500); // Abrupt termination: nothing after the visibility checkpoint reached storage.
+  const b = timedPage(t, a.saved());
+  assert.match(b.el('status').textContent, /활동 중 중단/);
+  assert.equal(b.el('answer').disabled, true);
+  b.time(99000); b.el('pause').click();
+  b.time(101000); b.el('pause').click();
+  const d = timedPage(t, b.saved());
+  assert.match(d.el('status').textContent, /전체 소요 시간 비교에서 제외/);
+  d.el('withdraw').click();
+  const result = await d.download('download');
+  assert.equal(result.status, 'withdrawn');
+  assert.equal(result.recovered, true);
+  assert.deepEqual(result.phaseMs, {search:19300,locate:0,decide:0});
+  assert.match(d.el('end-summary').textContent, /19.3초.*전체 소요 시간 비교 제외/);
+});
+test('타이핑과 자동 저장 횟수는 한 단계의 최종 활동 시간을 바꾸지 않는다', async t => {
+  const a = await startTimedPage(t);
+  for (let i = 1; i <= 20; i++) {
+    a.time(0.4 * i);
+    a.el('reason').value = '확인'.repeat(i);
+    a.el('reason').dispatchEvent(new a.window.Event('input', {bubbles:true}));
+  }
+  a.time(15010.3); a.pulse();
+  a.time(15010.9); a.el('withdraw').click();
+  const result = await a.download('download');
+  assert.equal(result.phaseMs.search, 15011);
+  assert.equal(result.recovered, false);
+});
+test('앞선 탭이 저장 후에도 열려 있으면 오래된 초안의 타이머가 새 기록을 덮어쓰지 않는다', async t => {
+  const a = await startTimedPage(t);
+  a.time(5000); a.el('pause').click();
+  const b = timedPage(t, a.saved());
+  b.time(20000); b.el('pause').click();
+  b.time(20200); b.el('reason').value = '이어 연 탭의 메모';
+  b.el('reason').dispatchEvent(new b.window.Event('input', {bubbles:true}));
+  const newer = b.saved();
+  // A writer must check the shared value even before an asynchronous storage event arrives.
+  a.window.localStorage.setItem(draftKey, newer);
+  a.el('pause').click();
+  a.time(30000); a.pulse();
+  a.window.dispatchEvent(new a.window.Event('pagehide'));
+  assert.equal(a.saved(), newer);
+  assert.match(a.el('storage-status').textContent, /다른 탭에서 임시 기록이 바뀌/);
+  const restored = timedPage(t, newer);
+  assert.equal(restored.el('reason').value, '이어 연 탭의 메모');
+});
+test('실행 중 페이지를 떠났다가 뒤로 가면 경과 시간이 늘지 않고 이전 중단을 알린다', async t => {
+  const a = await startTimedPage(t);
+  a.time(7500); a.window.dispatchEvent(new a.window.Event('pagehide'));
+  const stopped = JSON.parse(a.saved());
+  assert.equal(stopped.timer.start, null);
+  assert.equal(stopped.recovered, true);
+  a.time(120000); a.window.dispatchEvent(new a.window.PageTransitionEvent('pageshow',{persisted:true}));
+  assert.match(a.el('status').textContent, /활동 중 중단/);
+  a.el('withdraw').click();
+  const result = await a.download('download');
+  assert.deepEqual(result.phaseMs, {search:7500,locate:0,decide:0});
+  assert.equal(result.recovered, true);
+});
 test('배부본은 번호 선택과 시작을 기다리고 수동으로 다시 불러와도 같은 문장을 연다', async (t) => {
   for (const arm of ['manual', 'journal']) {
     const p = page(t, 'field-review', ({ document }) => {
@@ -1133,10 +1250,15 @@ test('배포본 수는 시간 지표별로 원래 배정에 연결된 표본과 
   assert.match(assigned, /완료 시간 평균 · 기록에 적힌 배포본 1종 · 버전 미확인 0건/);
   assert.match(assigned, /완료·중도 종료 시간 · 기록에 적힌 배포본 2종 · 버전 미확인 0건. 여러 버전/);
   assert.ok(assigned.includes('평소 검증 도구 · ' + second + ' · 완료 0건 (단계별 측정 0건) · 중도 종료 1건'));
-  assert.ok(!assigned.includes(excluded) && !assigned.includes(outside));
+  assert.ok(!assigned.includes(outside));
+  p.el('toggle-results').click();
+  const partial = [...p.el('allocation-comparisons').querySelectorAll('section')].find(e => e.querySelector('h4')?.textContent.includes(excluded));
+  assert.match(partial.querySelector('.partial-times').textContent, /시간이 일부만 남은 답안 1건/);
+  assert.doesNotMatch(p.el('allocation-comparisons').querySelector('details').textContent, new RegExp(excluded));
+  p.el('toggle-results').click();
   const recorded = p.report('comparisons', 'article');
   assert.ok(recorded.includes('평소 검증 도구와 저널 · ' + second + ' · 완료 0건'));
-  assert.ok(recorded.includes(outside) && !recorded.includes(excluded));
+  assert.ok(recorded.includes(outside) && recorded.includes(excluded));
   await p.upload('imports', record('D', {kitVersion:undefined}), record('malformed', {kitVersion:[first]}));
   assigned = p.report('allocation-comparisons');
   assert.match(assigned, /완료 시간 평균 · 기록에 적힌 배포본 1종 · 버전 미확인 1건/);

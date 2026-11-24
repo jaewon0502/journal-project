@@ -165,3 +165,24 @@ test('미확인 배정의 성공률 범위가 0%와 100%에 가까워도 두 끝
   for (const id of ['allocation-yield', 'allocation-deadlines'])
     assert.match(p.el(id).textContent, /0\.048% ~ 99\.952% \(배정 2100건\)/);
 });
+
+test('복원 후 확인된 시간만으로도 목표를 넘기면 실패이고, 완료 평균의 하한과 중도 종료 합계는 따로 보인다', async t => {
+  const p = summary(t);
+  const rows = ['M','J','중단','원본중단'].map((name, i) => assignment(name, [0,3].includes(i) ? 'manual' : 'journal', 120));
+  const version = {kitVersion:'9'.repeat(64)};
+  await p.upload('roster-file', roster(rows));
+  await p.upload('key-file', key);
+  await p.upload('imports', submission(rows[0], 120000, version), submission(rows[1], 180000, {...version, recovered:true}),
+    submission(rows[2], 6500, {...version, status:'withdrawn', recovered:true}), submission(rows[3], 7000, {...version, status:'withdrawn'}));
+  p.grade('M');
+  p.grade('J');
+  p.toggle();
+  const panel = p.el('allocation-comparisons').querySelector('.partial-times');
+  assert.match(panel.textContent, /제출한 1건 전체의 평균 120.0초.*중도 종료 1건의 활동 시간 합계 7초/);
+  assert.match(panel.textContent, /제출한 1건 전체의 평균 최소 180초.*중도 종료 1건의 활동 시간 합계 최소 6.5초/);
+  assert.match(panel.textContent, /저널 방식이 평균 60초 이상 더 걸렸습니다/);
+  assert.match(p.el('allocation-deadlines').textContent, /시간 초과 1건 · 중도 종료 1건 · 결과 미확인 0건/);
+  assert.match(p.el('allocation-comparisons').textContent, /검증 성공 1건당 투입 시간.*저널 · 비교할 시간 기록 0건/s);
+  p.toggle();
+  assert.equal(p.el('allocation-comparisons').textContent, '');
+});

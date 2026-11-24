@@ -23,6 +23,9 @@ class EditorStudyPack(unittest.TestCase):
             page = archive.read('editor-study.html').decode()
             self.assertIn('data-participant-kit', page)
             self.assertIn('id="invite-code" required', page)
+            self.assertIn('id="resume-file"', page)
+            self.assertIn('editor-study-resume.js', expected)
+            self.assertIn('이어하기 파일', archive.read('시작 안내.txt').decode())
             for marker in ['id="dashboard"', 'id="demo-view"', 'id="demo-example"', 'id="timing-coverage"', 'id="case-quality"', 'id="issue-codes"', 'id="import-files"']:
                 self.assertNotIn(marker, page)
             self.assertNotIn('editor-study.html', archive.read('factcheck.html').decode())
@@ -40,7 +43,7 @@ class EditorStudyPack(unittest.TestCase):
 const fs = require('node:fs'), vm = require('node:vm'), path = require('node:path'), assert = require('node:assert/strict');
 const [kit, source] = process.argv.slice(1);
 const box = vm.createContext({});
-for (const file of ['editor-study-cases.js','editor-study-core.js']) vm.runInContext(fs.readFileSync(path.join(kit,file),'utf8'),box);
+for (const file of ['editor-study-cases.js','editor-study-core.js','editor-study-resume.js']) vm.runInContext(fs.readFileSync(path.join(kit,file),'utf8'),box);
 const actual = box.JournalStudyCases, original = require(path.join(source,'editor-study-cases.js'));
 const copy = obj => JSON.parse(JSON.stringify(obj));
 assert.deepEqual(copy(actual.ids), original.ids);
@@ -54,5 +57,7 @@ assert.equal(box.JournalEditorStudy.demoRecords,undefined);
 assert.equal(box.JournalEditorStudy.partialTimeDemoRecords,undefined);
 assert.equal(box.JournalEditorStudy.cueAgreementDemoRecords,undefined);
 assert.equal(box.JournalEditorStudy.analyze,undefined);
+const editor = box.JournalEditorStudy.createRecord('E0000000000000001',1,'editor',true);
+assert.equal(box.JournalEditorResume.read(editor, editor).session.partialTime, true);
 """
             subprocess.run(['node', '-e', script, directory, str(READER)], check=True)

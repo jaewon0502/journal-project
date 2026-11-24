@@ -70,9 +70,9 @@ test('원래 배정과 밀리초 경계를 지키고 복원·미채점·누락�
   ];
   const {deadlineComparisons:[result], all} = core.allocationReport([...manual, ...journal], returns, new Set());
   assert.equal(all.crossover, 1);
-  assert.deepEqual(result.manual, {assigned:4, verified:1, failedQuality:0, overTime:1, withdrawn:1, unknown:1});
+  assert.deepEqual(result.manual, {assigned:4, verified:1, failedQuality:0, overTime:2, withdrawn:1, unknown:0});
   assert.deepEqual(result.journal, {assigned:4, verified:1, failedQuality:1, overTime:0, withdrawn:0, unknown:2});
-  assert.deepEqual(result.difference, {low:-25, high:50});
+  assert.deepEqual(result.difference, {low:0, high:50});
 });
 
 test('독립 기준 없이 내린 수동 채점, 다른 과제의 기준과 반복·연습·잘못된 응답으로 성공을 만들지 않는다', () => {
@@ -113,4 +113,32 @@ test('기사·사례·과제·문장·시간 기준별로 분모를 나누고 �
   assert.equal(report.deadlineComparisons.length, 6);
   assert.ok(report.deadlineComparisons.every(r => r.manual.unknown + r.journal.unknown === 1 && r.difference === null));
   assert.deepEqual(core.allocationReport([legacy], [], new Set()).deadlineComparisons, []);
+});
+
+test('부분 시간은 목표와 같아도 성공을 확정하지 않고 1ms 넘은 경우에만 시간 초과로 센다', () => {
+  const durations = [0,119999,120000,120001];
+  const rows = durations.map(n => slot(String(n)));
+  const entries = rows.map((row, i) => response(row, durations[i], {recovered:true}));
+  const report = core.allocationReport(rows, entries, new Set());
+  assert.deepEqual(report.deadlineComparisons[0].manual, {assigned:4, verified:0, failedQuality:0, overTime:1, withdrawn:0, unknown:3});
+  const [comp] = core.compareTimes(report.groups)[0].byVersion;
+  assert.deepEqual(comp.completedMeans.manual, {count:4, minMs:90000, exact:false});
+  assert.equal(comp.manualMs, null);
+  assert.equal(comp.manual.partialCompleted, 4);
+});
+
+test('단계 전환과 휴식에서 밀리초를 반올림해도 정확히 120초의 활동을 초과로 분류하지 않는다', () => {
+  let timer = core.timer(0);
+  timer = core.tick(timer, 40000.5, 'locate', true);
+  timer = core.tick(timer, 80001, 'decide', false);
+  // An explicit pause can be stored and reopened in a new clock origin.
+  const resumed = core.tick(JSON.parse(JSON.stringify(timer)), 400, 'decide', true);
+  const row = slot('on-time');
+  function status(extra) {
+    const stopped = core.tick(resumed, 400 + 39999 + extra, 'decide', false);
+    return core.allocationReport([row], [response(row, 0, {phaseMs:stopped.ms})], new Set()).deadlineComparisons[0].manual;
+  }
+  assert.equal(status(0).verified, 1);
+  assert.equal(status(1).overTime, 1);
+  assert.equal(core.validTimer({...timer, remainderMs:3}), false);
 });

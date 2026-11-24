@@ -868,3 +868,135 @@ test('대표 근거가 모두 빠졌어도 한쪽 표기에만 늘어난 판정 
   assert.equal(p.el('quality-warning').hidden, false);
   assert.match(p.el('quality-warning').textContent, /진보 성향 표기에서 기준 판정 일치율 100%p 하락/);
 });
+
+async function restoreParticipant(p, data) {
+  const input = p.el('resume-file');
+  Object.defineProperty(input, 'files', {value:[{text:async () => JSON.stringify(data)}], configurable:true});
+  await input.onchange({target:input});
+}
+
+const participantWorkspace = (p, ordinal = 1) => JSON.parse(
+  p.w.localStorage.getItem('journal-editor-study-participant-v1/J1-' + ordinal + '-E0000000000000001'));
+
+test('다른 기기의 같은 참여 코드는 휴식 전 초안과 단계 시간을 이어가며 기존 응답을 다시 풀지 않는다', async t => {
+  const original = page(t, '', undefined, undefined, true);
+  original.enroll(1);
+  original.el('begin-trial').click(); original.advance(25000); original.answer();
+  original.el('begin-trial').click();
+  original.advance(20000); original.w.document.querySelector('[data-phase="locate"]').click();
+  original.advance(25000); original.el('reason').value='모집단의 분모를 다시 확인 중';
+  original.el('reason').dispatchEvent(new original.w.Event('input',{bubbles:true}));
+  original.el('pause-trial').click();
+  const files=captureDownloads(original);
+  original.el('export-resume').click();
+  const checkpoint=JSON.parse(await files.at(-1).text());
+  original.el('export-one').click();
+  const response=JSON.parse(await files.at(-1).text());
+  assert.ok(!Object.hasOwn(response,'session'));
+  assert.equal(response.trials.length,1);
+  assert.match(original.el('transfer-status').textContent,/J1-1-E0000000000000001/);
+  const recovered=page(t, '', undefined, undefined, true);
+  recovered.enroll(1);
+  await restoreParticipant(recovered,checkpoint);
+  assert.match(recovered.el('trial-heading').textContent,/과제 2 \/ 4/);
+  assert.equal(recovered.el('pause-pane').hidden,false);
+  assert.equal(recovered.el('timer').textContent,'00:45');
+  assert.equal(recovered.w.document.activeElement,recovered.el('resume-trial'));
+  recovered.advance(900000);recovered.el('resume-trial').click();
+  assert.equal(recovered.el('reason').value,'모집단의 분모를 다시 확인 중');
+  assert.equal(recovered.w.document.querySelector('[data-phase="locate"]').getAttribute('aria-pressed'),'true');
+  recovered.advance(1000);
+  const frame=recovered.w.document.querySelector('iframe'), origin=recovered.w.location.origin;
+  let packet;frame.contentWindow.postMessage=m=>{packet=m;};
+  const send=data=>recovered.w.dispatchEvent(new recovered.w.MessageEvent('message',{data,source:frame.contentWindow,origin}));
+  send({type:'journal-study-ready'});send({type:'journal-study-used',nonce:packet.nonce,status:'held',sourceIds:['doc-2'],reason:'자료의 모집단 범위를 확인했다.'});
+  recovered.w.document.querySelector('[data-phase="decide"]').click();recovered.advance(500);
+  recovered.el('answer').requestSubmit();
+  const records=participantWorkspace(recovered).records[0].trials;
+  assert.deepEqual(records[0],response.trials[0]);assert.equal(records[1].elapsedMs,46500);
+  assert.deepEqual(records[1].phaseMs,{select:20000,locate:26000,decide:500});
+  const before=participantWorkspace(recovered);
+  await restoreParticipant(recovered,checkpoint);
+  assert.match(recovered.el('transfer-status').textContent,/더 많은 응답/);
+  assert.deepEqual(participantWorkspace(recovered),before);
+});
+
+test('실행 중 이어하기와 구형 참여 기록을 옮겨도 누락 구간을 온전한 과제 시간으로 계산하지 않는다', async t => {
+  const p=page(t,'',undefined,undefined,true);p.enroll(1);p.el('begin-trial').click();p.advance(7000);
+  const files=captureDownloads(p);p.el('export-resume').click();
+  const running=JSON.parse(await files.at(-1).text());p.el('export-one').click();
+  const legacy=JSON.parse(await files.at(-1).text());
+  for(const [data,expected] of [[running,10000],[legacy,3000]]) {
+    const other=page(t,'',undefined,undefined,true);other.enroll(1);
+    await restoreParticipant(other,data);other.advance(3600000);
+    if (expected===3000) assert.equal(other.el('partial-start').hidden,false);
+    else assert.match(other.el('pause-note').textContent,/일부 시간/);
+    other.el(expected===3000?'begin-trial':'resume-trial').click();other.advance(3000);other.answer();
+    const trial=participantWorkspace(other).records[0].trials[0];
+    assert.deepEqual([trial.elapsedMs,trial.observedMs,trial.phaseMs],[null,expected,null]);
+    assert.equal(other.el('partial-start').hidden,true);
+  }
+  const wrong=page(t,'',undefined,undefined,true);wrong.enroll(2);
+  const prior=participantWorkspace(wrong,2);
+  await restoreParticipant(wrong,running);assert.match(wrong.el('transfer-status').textContent,/초대 코드/);
+  await restoreParticipant(wrong,{type:'journal-editor-study-collection-v1',records:[legacy]});
+  assert.match(wrong.el('transfer-status').textContent,/열지 못했습니다/);
+  assert.deepEqual(participantWorkspace(wrong,2),prior);
+});
+
+test('파일을 읽는 도중 다른 과제를 시작하거나 다른 탭에서 기록하면 현재 작업을 덮어쓰지 않는다', async t => {
+  for (const simultaneous of ['start','tab']) {
+    const p=page(t,'',undefined,undefined,true);p.enroll(1);
+    const record=participantWorkspace(p).records[0], input=p.el('resume-file');
+    let resolve;
+    Object.defineProperty(input,'files',{value:[{text:()=>new Promise(done=>{resolve=done;})}],configurable:true});
+    const load=input.onchange({target:input});
+    const key=p.w.localStorage.key(0);
+    if(simultaneous==='start') p.el('begin-trial').click();
+    else p.w.localStorage.setItem(key,'다른 탭이 저장한 기록');
+    const prior=p.w.localStorage.getItem(key);
+    resolve(JSON.stringify(record));await load;
+    assert.equal(p.w.localStorage.getItem(key),prior);
+    assert.match(p.el('transfer-status').textContent,/열지 못했습니다/);
+  }
+});
+
+test('옛 참여 기록을 옮기고 새 측정을 시작하기 전에 중단하면 이전 과제의 시작 여부를 미확인으로 남긴다', async t => {
+  const p=page(t,'',undefined,undefined,true);p.enroll(1);
+  const response=participantWorkspace(p).records[0];
+  await restoreParticipant(p,response);p.w.confirm=()=>true;p.el('withdraw').click();
+  const record=participantWorkspace(p).records[0];
+  assert.equal(record.withdrawn,true);
+  assert.equal(Object.hasOwn(record,'withdrawalTask'),false);
+  const counts=require('../docs/reader/editor-study-core.js').analyze([record]).withdrawalWork;
+  assert.deepEqual([counts.unknown,counts.betweenTasks],[1,0]);
+});
+
+test('복구한 시간을 포함한 채 휴식 후 이관하면 새 기기에 직접 측정 여부를 확인할 수 없는 초가 표시된다', async t => {
+  const key='journal-editor-study-participant-v1/J1-1-E0000000000000001';
+  const origin=page(t,'',undefined,undefined,true);
+  origin.w.Date.now=()=>2000000;
+  origin.enroll(1);origin.el('begin-trial').click();origin.advance(1000);
+  origin.w.dispatchEvent(new origin.w.Event('pagehide'));
+  const reopened=page(t,'',undefined,undefined,true);
+  reopened.w.Date.now=()=>2009750;
+  reopened.w.localStorage.setItem(key,origin.w.localStorage.getItem(key));
+  reopened.enroll(1);reopened.el('resume-unbroken').click();reopened.advance(2000);
+  reopened.el('pause-trial').click();
+  const notice=/직접 측정했는지 확인할 수 없는 이전 구간 9\.75초가 포함/;
+  assert.match(reopened.el('pause-note').textContent,notice);
+  const files=captureDownloads(reopened);reopened.el('export-resume').click();
+  assert.match(reopened.el('transfer-status').textContent,notice);
+  const migrated=page(t,'',undefined,undefined,true);migrated.enroll(1);
+  await restoreParticipant(migrated,JSON.parse(await files.at(-1).text()));
+  assert.match(migrated.el('pause-note').textContent,notice);
+  assert.equal(migrated.el('pause-pane').hidden,false);
+  migrated.el('resume-trial').click();migrated.advance(500);migrated.answer();
+  assert.equal(participantWorkspace(migrated).records[0].trials[0].elapsedMs,13250);
+  reopened.el('resume-trial').click();reopened.el('export-resume').click();
+  const partial=page(t,'',undefined,undefined,true);partial.enroll(1);
+  await restoreParticipant(partial,JSON.parse(await files.at(-1).text()));
+  assert.match(partial.el('pause-note').textContent,/일부 시간만 확인/);
+  assert.doesNotMatch(partial.el('pause-note').textContent,/이전 구간|9\.75/);
+  assert.equal(participantWorkspace(partial).session.activeMs,3000);
+});
