@@ -470,6 +470,7 @@ test('시간 단축과 성공당 시간 증가를 서로 다른 분모로 표시
   assert.match(p.el('timed-quality-table').textContent, /검증 성공 1건당 시간120초240초/);
   assert.match(p.el('timed-quality-change').textContent, /120초\(100%\) 늘었습니다/);
   assert.match(p.el('timed-quality-editors').textContent, /줄어든 사람은 3명, 같은 사람은 1명/);
+  assert.match(p.el('timed-quality-editors').textContent, /빨라진 4명 중.*0건 3명, 1건 0명, 2건 1명/);
 });
 
 test('다른 묶음의 개인 기록 네 개는 지표에 들어가지 않고 발급 명부의 16건만 집계한다', async t => {

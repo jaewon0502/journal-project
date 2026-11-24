@@ -217,6 +217,16 @@
   const assignmentFormat = 'journal-field-assignment-v1';
   const assignmentFields = ['participant', 'caseId', 'articleUrl', 'taskId', 'prompt', 'method'];
 
+  function validTargetSeconds(value) {
+    return Number.isSafeInteger(value) && value > 0 && Number.isSafeInteger(value * 1000);
+  }
+
+  function assignmentTarget(row) {
+    if (!Object.hasOwn(row, 'targetSeconds')) return undefined;
+    if (!validTargetSeconds(row.targetSeconds)) throw Error('배정표의 목표 시간을 양의 정수(초)로 확인하세요.');
+    return row.targetSeconds;
+  }
+
   function articleIdentity(value) {
     const article = new URL(value);
     // Keep the SPA article route; drop an ordinary in-document anchor and tracking parameters.
@@ -231,27 +241,66 @@
 
   function mergeAssignments(existing, files) {
     const byCase = new Map(), byArticle = new Map();
-    function insert(row) {
+    function insert(row, taskTargets) {
       if (!row || !assignmentFields.every(k => typeof row[k] === 'string' && text(row[k])) ||
           row.participant !== row.participant.trim() || row.participant.length > 64 ||
           !url(row.articleUrl) || !['manual','journal'].includes(row.method))
         throw Error('배정표의 참여 코드, 기사, 과제와 방식을 확인하세요.');
       const assignment = Object.fromEntries(assignmentFields.map(k => [k, row[k]]));
+      const targetSeconds = assignmentTarget(row);
+      if (targetSeconds !== undefined) assignment.targetSeconds = targetSeconds;
+      const article = articleIdentity(row.articleUrl);
+      if (taskTargets) {
+        const task = JSON.stringify([row.caseId, article, row.taskId, row.prompt]);
+        if (taskTargets.has(task) && taskTargets.get(task) !== targetSeconds)
+          throw Error('한 번에 만든 배정표에는 같은 과제의 목표 시간이 모두 같아야 합니다. 원래 명부를 확인하세요.');
+        taskTargets.set(task, targetSeconds);
+      }
       const caseKey = JSON.stringify([row.participant, row.caseId]);
-      const articleKey = JSON.stringify([row.participant, articleIdentity(row.articleUrl)]);
+      const articleKey = JSON.stringify([row.participant, article]);
       const prior = byCase.get(caseKey) || byArticle.get(articleKey);
-      if (prior && !assignmentFields.every(k => prior[k] === assignment[k]))
+      if (prior && (prior.targetSeconds !== targetSeconds || !assignmentFields.every(k => prior[k] === assignment[k])))
         throw Error('같은 참여 코드에 같은 사례나 기사의 서로 다른 배정이 있습니다. 원래 명부를 확인하세요.');
       byCase.set(caseKey, assignment);
       byArticle.set(articleKey, assignment);
     }
-    existing.forEach(insert);
+    for (const row of existing) insert(row);
     for (const file of files) {
       if (file?.format !== assignmentFormat || !Array.isArray(file.assignments) || !file.assignments.length)
         throw Error('진행자가 별도로 보관한 현장 사전 배정표 JSON을 선택하세요.');
-      file.assignments.forEach(insert);
+      const singleAllocation = file.scope === 'single-allocation';
+      if (Object.hasOwn(file, 'scope') && !singleAllocation)
+        throw Error('지원하지 않는 배정표 종류입니다. 원래 명부를 확인하세요.');
+      const taskTargets = singleAllocation ? new Map() : null;
+      for (const row of file.assignments) insert(row, taskTargets);
     }
     return [...byCase.values()];
+  }
+
+  function deadlineOutcome(status, entry, targetSeconds) {
+    if (status === 'withdrawn') return 'withdrawn';
+    if (status !== 'completed') return 'unknown';
+    const {trial, basis, locationGrade} = entry;
+    if (trial.found === 'missing') return 'failedQuality';
+    // The grading importer binds location grades to this exact reference and clears them
+    // when the source changes. Manual verdict grades without a bound reference cannot verify an answer.
+    const keyed = basis && basis.caseId === trial.caseId && basis.articleUrl === trial.articleUrl &&
+      basis.id === trial.taskId && basis.prompt === trial.prompt &&
+      text(basis.reference?.document) && text(basis.reference?.locator) &&
+      ['supported', 'contradicted', 'insufficient'].includes(basis.verdict);
+    if (keyed && (locationGrade === 'no' || trial.verdict !== basis.verdict)) return 'failedQuality';
+    if (trial.recovered) return 'unknown';
+    const elapsedMs = phases.reduce((sum, phase) => sum + trial.phaseMs[phase], 0);
+    if (elapsedMs > targetSeconds * 1000) return 'overTime';
+    return keyed && locationGrade === 'yes' ? 'verified' : 'unknown';
+  }
+
+  function yieldDifference(manual, journal, manualYield = manual, journalYield = journal) {
+    if (!manual?.assigned || !journal?.assigned) return null;
+    return {
+      low:100 * (journalYield.verified / journal.assigned - (manualYield.verified + manualYield.unknown) / manual.assigned),
+      high:100 * ((journalYield.verified + journalYield.unknown) / journal.assigned - manualYield.verified / manual.assigned)
+    };
   }
 
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
@@ -259,7 +308,9 @@
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
     const armKey = a => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
     const byParticipant = new Map(), arms = new Map(), matched = [];
-    let outsideRoster = 0, unlinked = 0;
+    const deadlines = new Map();
+    const deadlineArm = () => ({assigned:0, verified:0, failedQuality:0, overTime:0, withdrawn:0, unknown:0});
+    let outsideRoster = 0, unlinked = 0, deadlineAssigned = 0;
     for (const a of assignments) {
       if (!byParticipant.has(a.participant)) byParticipant.set(a.participant, []);
       byParticipant.get(a.participant).push({a, article:articleIdentity(a.articleUrl), related:[], ambiguous:false});
@@ -310,6 +361,17 @@
         }
       }
       arm[status]++; all[status]++;
+      const targetSeconds = assignmentTarget(a);
+      if (targetSeconds !== undefined) {
+        const {caseId, articleUrl, taskId, prompt} = a;
+        const deadlineKey = JSON.stringify([caseId, articleUrl, taskId, prompt, targetSeconds]);
+        if (!deadlines.has(deadlineKey))
+          deadlines.set(deadlineKey, {caseId, articleUrl, taskId, prompt, targetSeconds, manual:deadlineArm(), journal:deadlineArm()});
+        const counts = deadlines.get(deadlineKey)[a.method];
+        counts.assigned++;
+        counts[deadlineOutcome(status, related[0], targetSeconds)]++;
+        deadlineAssigned++;
+      }
     }
     const groups = group(matched);
     for (const g of groups) arms.get(armKey(g)).outcomes = g;
@@ -328,18 +390,16 @@
     }
     for (const comparison of byTask.values()) {
       const {manual, journal} = comparison;
-      if (!manual || !journal) continue;
-      const m = manual.yieldBounds, j = journal.yieldBounds;
-      comparison.difference = {
-        low:100 * (j.verified / journal.assigned - (m.verified + m.unknown) / manual.assigned),
-        high:100 * ((j.verified + j.unknown) / journal.assigned - m.verified / manual.assigned)
-      };
+      comparison.difference = yieldDifference(manual, journal, manual?.yieldBounds, journal?.yieldBounds);
     }
-    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()]};
+    for (const comparison of deadlines.values())
+      comparison.difference = yieldDifference(comparison.manual, comparison.journal);
+    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()],
+      deadlineAssigned, deadlineComparisons:[...deadlines.values()]};
   }
 
   const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url, kitVersion,
-    assignmentFormat, articleIdentity, mergeAssignments, allocationReport };
+    assignmentFormat, articleIdentity, validTargetSeconds, mergeAssignments, allocationReport };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFieldReview = api;
 })(globalThis);

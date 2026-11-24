@@ -238,14 +238,29 @@
         ' (반박·근거 부족으로 판정한 과제) · 기준 판정 미확인 ' + referencePending + '건')
     ];
   }
-  function assignmentYieldCard(task) {
+  function yieldCardHeader(task, heading) {
     const card = node('article', '');
     card.className = 'case';
     const article = node('a', '과제의 기사 열기 ↗');
     article.href = task.articleUrl;
     article.target = '_blank';
     article.rel = 'noopener noreferrer';
-    card.append(node('h4', task.caseId + ' · ' + task.taskId), node('p', task.prompt), article);
+    card.append(node('h4', heading), node('p', task.prompt), article);
+    return card;
+  }
+  function yieldNumber(value) {
+    const magnitude = Math.abs(value);
+    const distance = Math.min(magnitude, 100 - magnitude);
+    // Keep two significant digits of the gap when one decimal would imply zero or a full 100.
+    const digits = distance > 0 && distance < 0.05 ? 1 - Math.floor(Math.log10(distance)) : 1;
+    return value.toFixed(digits);
+  }
+  function yieldRange(verified, unknown, assigned) {
+    const percent = count => yieldNumber(100 * count / assigned) + '%';
+    return unknown ? percent(verified) + ' ~ ' + percent(verified + unknown) : percent(verified);
+  }
+  function assignmentYieldCard(task) {
+    const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId);
     for (const method of ['manual', 'journal']) {
       const arm = task[method];
       if (!arm) {
@@ -253,25 +268,58 @@
         continue;
       }
       const { verified, failed, withdrawn, unknown } = arm.yieldBounds;
-      const percent = count => (100 * count / arm.assigned).toFixed(1) + '%';
-      const range = unknown ? percent(verified) + ' ~ ' + percent(verified + unknown) : percent(verified);
+      const range = yieldRange(verified, unknown, arm.assigned);
       card.append(node('p', labels[method] + ' · 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
         node('p', '성공 ' + verified + '건 · 위치 또는 판정 불일치 ' + failed + '건 · 중도 종료 ' + withdrawn +
           '건 · 결과 미확인 ' + unknown + '건'));
     }
-    if (!task.difference) {
-      card.append(node('p', '같은 과제를 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.'));
-      return card;
+    appendYieldDifference(card, task.difference, '같은 과제를 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
+    return card;
+  }
+  function appendYieldDifference(card, difference, unavailable) {
+    if (!difference) {
+      card.append(node('p', unavailable));
+      return;
     }
-    const points = n => (n > 0 ? '+' : '') + n.toFixed(1) + '%p';
-    const { low, high } = task.difference;
+    const points = n => (n > 0 ? '+' : '') + yieldNumber(n) + '%p';
+    const { low, high } = difference;
     const range = low === high ? points(low) : points(low) + ' ~ ' + points(high);
     card.append(node('strong', '성공률 차이 (저널 사용 배정 − 평소 도구 배정) ' + range));
     if (low < 0 && high > 0)
       card.append(node('p', '미확인 결과에 따라 어느 쪽의 성공률이 더 높은지 달라질 수 있습니다.'));
     else if (low !== high && (low === 0 || high === 0))
       card.append(node('p', '미확인 결과에 따라 두 방식의 성공률이 같을 수도 있습니다.'));
-    return card;
+  }
+  function showDeadlineComparisons(report) {
+    const {assigned} = report.all;
+    const count = report.deadlineAssigned;
+    el('deadline-coverage').textContent = '전체 배정 ' + assigned + '건 중 목표 시간을 미리 정한 배정 ' +
+      count + '건 · 목표 시간 미지정 ' + (assigned - count) + '건.';
+    const area = el('allocation-deadlines');
+    if (!count) {
+      area.append(node('p', '사전 배정표에 목표 시간이 없어 이 비율을 계산할 수 없습니다.'));
+      return;
+    }
+    area.append(node('p', '같은 기사와 과제에 같은 목표 시간을 배정받은 서로 다른 참여자 집단을 비교합니다. 진행자 기준과 근거 위치·판정이 모두 일치하고 참여자 기기에 기록된 활동 시간이 목표 이하면 성공입니다. 목표 시간을 지나도 과제는 계속할 수 있습니다. 명부에는 배포본 ID가 없어 같은 과제와 목표의 여러 판본이 함께 집계될 수 있습니다.'),
+      node('p', '각 방식에 원래 배정한 건수가 분모입니다. 최솟값은 확인된 성공만, 최댓값은 결과 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 중단 후 복원 등으로 성공 여부를 판단할 수 없는 건이 여기에 포함됩니다.'));
+    for (const task of report.deadlineComparisons) {
+      const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId + ' · 목표 ' + task.targetSeconds + '초');
+      for (const method of ['manual', 'journal']) {
+        const arm = task[method];
+        if (!arm?.assigned) {
+          card.append(node('p', labels[method] + ' · 이 목표로 배정한 과제 0건'));
+          continue;
+        }
+        const range = yieldRange(arm.verified, arm.unknown, arm.assigned);
+        card.append(node('p', labels[method] + ' · 시간 내 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
+          node('p', '시간 내 성공 ' + arm.verified + '건 · 위치 또는 판정 불일치 ' + arm.failedQuality +
+            '건 · 시간 초과 ' + arm.overTime + '건 · 중도 종료 ' + arm.withdrawn + '건 · 결과 미확인 ' + arm.unknown + '건'));
+      }
+      appendYieldDifference(card, task.difference, '같은 과제와 목표 시간을 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
+      if (task.difference && (task.difference.high < 0 || task.difference.low > 0))
+        card.append(node('p', '목표 시간 내 성공률은 저널을 배정받은 집단에서 더 ' + (task.difference.high < 0 ? '낮습니다.' : '높습니다.')));
+      area.append(card);
+    }
   }
   function showAllocations(report) {
     el('allocation-counts').textContent = assignmentCounts(report.all) +
@@ -295,6 +343,7 @@
       yieldTargets.set(trialTarget(comparison), card.id);
       el('allocation-yield').append(card);
     }
+    showDeadlineComparisons(report);
     showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
   function stats() {
@@ -324,6 +373,8 @@
     el('allocation-counts').textContent = '';
     el('allocation-arms').replaceChildren();
     el('allocation-yield').replaceChildren();
+    el('deadline-coverage').textContent = '';
+    el('allocation-deadlines').replaceChildren();
     el('allocation-comparisons').replaceChildren();
     if (!showingResults) {
       el('comparisons').replaceChildren();

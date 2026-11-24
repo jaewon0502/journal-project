@@ -206,21 +206,22 @@
   }
 
   function timeStats(records, stage) {
-    let manualSeconds = 0, journalSeconds = 0;
-    const editorPairs = [];
+    const totals = {manual:0n, journal:0n}, editorPairs = [];
+    // The counterbalanced plan has two cases per method for every eligible editor.
+    const msPerAverageSecond = 1000 * slots / methods.length;
     for (const record of records) {
-      const seconds = {};
-      for (const method of methods) {
-        const trials = record.trials.filter(t => t.method === method);
-        const totalMs = trials.reduce((sum, t) => sum + (stage ? t.phaseMs[stage] : t.elapsedMs), 0);
-        seconds[method] = totalMs / (1000 * trials.length);
+      const ms = {manual:0n, journal:0n};
+      for (const trial of record.trials) {
+        ms[trial.method] += BigInt(stage ? trial.phaseMs[stage] : trial.elapsedMs);
       }
-      manualSeconds += seconds.manual / records.length;
-      journalSeconds += seconds.journal / records.length;
-      editorPairs.push({participantId: record.participantId, manualSeconds: seconds.manual, journalSeconds: seconds.journal,
-        savedSeconds: seconds.manual - seconds.journal});
+      totals.manual += ms.manual;
+      totals.journal += ms.journal;
+      editorPairs.push({participantId:record.participantId, manualSeconds:Number(ms.manual) / msPerAverageSecond,
+        journalSeconds:Number(ms.journal) / msPerAverageSecond, savedSeconds:Number(ms.manual - ms.journal) / msPerAverageSecond});
     }
-    const savedSeconds = manualSeconds - journalSeconds;
+    const divisor = msPerAverageSecond * records.length;
+    const manualSeconds = Number(totals.manual) / divisor, journalSeconds = Number(totals.journal) / divisor;
+    const savedSeconds = Number(totals.manual - totals.journal) / divisor;
     const savings = editorPairs.map(pair => pair.savedSeconds).sort((a, b) => a - b);
     const medianSavedSeconds = (savings[Math.floor((savings.length - 1) / 2)] + savings[Math.floor(savings.length / 2)]) / 2;
     const fasterEditors = savings.filter(seconds => seconds > 0).length;
@@ -337,13 +338,14 @@
     const arms = Object.fromEntries(methods.map(method => [method,
       {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
     const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
+    const fasterJournalSuccessCounts = [0, 0, 0];
+    const totalMs = {manual:0n, journal:0n};
     for (const record of records) {
-      const elapsedMs = {manual:0, journal:0}, verified = {manual:0, journal:0};
+      const elapsedMs = {manual:0n, journal:0n}, verified = {manual:0, journal:0};
       for (const trial of record.trials) {
         const method = trial.method, arm = arms[method], grade = gradeTrial(trial);
         arm.total++;
-        arm.elapsedMs += trial.elapsedMs;
-        elapsedMs[method] += trial.elapsedMs;
+        elapsedMs[method] += BigInt(trial.elapsedMs);
         if (grade.correct) arm.correct++;
         if (grade.sourceCorrect) arm.citationCorrect++;
         if (grade.verified) {
@@ -353,24 +355,29 @@
         if (grade.unsafeEligible) arm.unsafeTotal++;
         if (grade.unsafe) arm.unsafe++;
       }
+      for (const method of methods) totalMs[method] += elapsedMs[method];
       // Each editor completed two tasks per method. Compare unrounded durations.
       if (elapsedMs.journal < elapsedMs.manual) {
         faster.total++;
+        fasterJournalSuccessCounts[verified.journal]++;
         if (verified.journal < verified.manual) faster.fewerVerified++;
         else if (verified.journal > verified.manual) faster.moreVerified++;
         else faster.sameVerified++;
       }
     }
     const {manual, journal} = arms;
-    for (const arm of [manual, journal]) {
+    for (const method of methods) {
+      const arm = arms[method];
+      arm.elapsedMs = Number(totalMs[method]);
       if (arm.verified) arm.secondsPerVerified = arm.elapsedMs / 1000 / arm.verified;
     }
     const perVerified = {savedSeconds:null, reductionPct:null};
     if (manual.verified && journal.verified) {
-      perVerified.savedSeconds = manual.secondsPerVerified - journal.secondsPerVerified;
+      const difference = totalMs.manual * BigInt(journal.verified) - totalMs.journal * BigInt(manual.verified);
+      perVerified.savedSeconds = Number(difference) / (1000 * manual.verified * journal.verified);
       perVerified.reductionPct = 100 * perVerified.savedSeconds / manual.secondsPerVerified;
     }
-    return {manual, journal, perVerified, faster};
+    return {manual, journal, perVerified, faster, fasterJournalSuccessCounts};
   }
 
   function verdictStats(records) {

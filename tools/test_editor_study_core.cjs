@@ -267,7 +267,7 @@ test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토
     manual:{total:8, correct:8, citationCorrect:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000, secondsPerVerified:10},
     journal:{total:8, correct:5, citationCorrect:5, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000, secondsPerVerified:20},
     perVerified:{savedSeconds:-10, reductionPct:-100},
-    faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}
+    faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}, fasterJournalSuccessCounts:[3,0,1]
   });
   assert.equal(study.analyze(records.slice(4)).timedQuality, null);
   assert.deepEqual(study.analyze([...records, ...records, observations(9), ...study.demoRecords()]).timedQuality,
@@ -298,6 +298,36 @@ test('빠른 편집자는 두 검토의 합이 1밀리초라도 작은 사람만
     });
     assert.deepEqual(study.analyze(records).timedQuality.faster, {total:3, fewerVerified:1, sameVerified:1, moreVerified:1});
   }
+});
+
+test('성공 건수의 전후 변화가 같아도 빨라진 사람들이 실제로 검증한 과제 수를 구분한다', () => {
+  const groups = [true,false].map(fasterCorrect => study.analyze([1,2,3,4].map(i => observations(i, (t, item) => ({
+    elapsedMs:t.method === 'manual' ? 120000 : i <= 2 ? 90000 : 150000,
+    sourceIds:(i <= 2) === fasterCorrect ? [item.expectedSourceIds[0]] : []
+  })))).timedQuality);
+  for (const group of groups) {
+    assert.deepEqual(group.faster, {total:2, fewerVerified:0, sameVerified:2, moreVerified:0});
+    assert.deepEqual([group.manual.verified, group.journal.verified], [4,4]);
+  }
+  assert.deepEqual(groups.map(q => q.fasterJournalSuccessCounts), [[0,0,2], [2,0,0]]);
+  const mixed = study.analyze([1,2,3,4].map(i => {
+    let journalTrials = 0;
+    return observations(i, t => t.method === 'journal' && journalTrials++ === 0 ? {sourceIds:[]} : {});
+  }));
+  assert.deepEqual(mixed.timedQuality.fasterJournalSuccessCounts, [0,4,0]);
+});
+
+test('두 과제의 시간 합이 안전한 정수 범위를 넘어도 1밀리초 차이를 같은 방향으로 계산한다', () => {
+  const records = [1,2,3,4].map(i => {
+    let journalTrials = 0;
+    return observations(i, t => ({elapsedMs:Number.MAX_SAFE_INTEGER - 1 -
+      (t.method === 'journal' && journalTrials++ === 0 ? 1 : 0)}));
+  });
+  const result = study.analyze(records);
+  assert.equal(result.time.savedSeconds, 0.0005);
+  assert.equal(result.time.fasterEditors, 4);
+  assert.equal(result.timedQuality.perVerified.savedSeconds, 0.0005);
+  assert.deepEqual(result.timedQuality.fasterJournalSuccessCounts, [0,0,4]);
 });
 
 test('같은 파일 재수입, 진행본과 완료본의 병합, 충돌·번호 재사용 거절이 일관된다', () => {

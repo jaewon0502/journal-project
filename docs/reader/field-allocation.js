@@ -21,9 +21,12 @@
   }
 
   el('case-file').onchange = async () => {
+    if (roster) return;
     const file = el('case-file').files[0];
     selectedCase = null;
     el('generate').disabled = true;
+    el('targets').hidden = true;
+    el('target-inputs').replaceChildren();
     el('status').textContent = '';
     el('case-note').textContent = '';
     if (!file) return;
@@ -32,14 +35,25 @@
       if (roster || el('case-file').files[0] !== file) return;
       selectedCase = data;
       el('case-note').textContent = data.title + ' · 과제 ' + data.tasks.length + '개';
+      for (const task of data.tasks) {
+        const label = document.createElement('label'), input = document.createElement('input');
+        label.textContent = task.id + ' · ' + task.prompt;
+        input.inputMode = 'numeric';
+        input.dataset.taskId = task.id;
+        input.setAttribute('aria-describedby', 'target-note');
+        label.append(input);
+        el('target-inputs').append(label);
+      }
+      el('targets').hidden = false;
       el('generate').disabled = false;
     } catch {
       if (el('case-file').files[0] === file) el('status').textContent = '참여자용 blind-tasks.json 파일을 확인하세요.';
     }
   };
 
-  function showAssignments(assignments, note) {
+  function showAssignments(assignments, note, scope) {
     roster = {format:core.assignmentFormat, assignments};
+    if (scope !== undefined) roster.scope = scope;
     for (const row of assignments) {
       const tr = el('allocations').insertRow();
       const kit = row.method === 'manual' ? '평소 도구' : '저널 병행';
@@ -69,6 +83,7 @@
         }
       };
       cell.append(copy, field);
+      tr.insertCell().textContent = row.targetSeconds === undefined ? '미설정' : row.targetSeconds + '초';
     }
     el('block-count').textContent = note;
     el('allocation-form').hidden = true;
@@ -80,15 +95,18 @@
     const file = el('roster-file').files[0];
     if (!file || roster) return;
     try {
-      const assignments = core.mergeAssignments([], [JSON.parse(await file.text())]);
+      const original = JSON.parse(await file.text());
+      const assignments = core.mergeAssignments([], [original]);
       if (roster || el('roster-file').files[0] !== file) return;
-      showAssignments(assignments, '저장된 배정 ' + assignments.length + '건');
+      showAssignments(assignments, '저장된 배정 ' + assignments.length + '건', original.scope);
       saved = true;
       filename = file.name;
       el('status').textContent = '저장한 배정표를 열었습니다.';
       el('download').focus();
-    } catch {
-      if (!roster && el('roster-file').files[0] === file) el('status').textContent = '현장 기사 배정표 JSON을 확인하세요.';
+    } catch (error) {
+      if (!roster && el('roster-file').files[0] === file) {
+        el('status').textContent = '현장 기사 배정표 JSON을 확인하세요.' + (error instanceof SyntaxError ? '' : ' ' + error.message);
+      }
     }
   };
 
@@ -101,17 +119,34 @@
       return;
     }
     const {caseId, articleUrl, tasks} = selectedCase;
+    const targets = new Map();
+    for (const input of el('target-inputs').querySelectorAll('input')) {
+      input.removeAttribute('aria-invalid');
+      const value = input.value.trim();
+      if (!value) continue;
+      const seconds = Number(value);
+      if (!/^\d+$/u.test(value) || !core.validTargetSeconds(seconds)) {
+        el('targets').open = true;
+        input.setAttribute('aria-invalid', 'true');
+        el('status').textContent = input.dataset.taskId + '의 목표 시간을 확인하세요. 초 단위의 양의 정수로 입력하거나 비워 두세요.';
+        input.focus();
+        return;
+      }
+      targets.set(input.dataset.taskId, seconds);
+    }
     const blockSize = tasks.length * 2;
     let block;
     const assignments = codes.map((participant, index) => {
       if (index % blockSize === 0) block = shuffledBlock(tasks);
       const {task, method} = block[index % blockSize];
-      return {participant, caseId, articleUrl, taskId:task.id, prompt:task.prompt, method};
+      const assignment = {participant, caseId, articleUrl, taskId:task.id, prompt:task.prompt, method};
+      if (targets.has(task.id)) assignment.targetSeconds = targets.get(task.id);
+      return assignment;
     });
     const full = Math.floor(assignments.length / blockSize), remainder = assignments.length % blockSize;
     const note = '배정 ' + assignments.length + '명. 과제와 방식 조합을 모두 배정한 ' + blockSize + '인 묶음 ' +
       full + '개' + (remainder ? ', 남은 묶음 ' + remainder + '/' + blockSize + '명' : '') + '.';
-    showAssignments(assignments, note);
+    showAssignments(assignments, note, 'single-allocation');
     filename = 'field-assignments-' + selectedCase.caseId.replace(/[^a-zA-Z0-9_-]/gu, '_') +
       '-' + new Date().toISOString().replace(/[:.]/gu, '-') + '.json';
     el('status').textContent = '배정표를 저장한 뒤 배부하세요. 결과를 집계할 때 이 파일을 다시 불러옵니다.';

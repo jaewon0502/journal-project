@@ -269,6 +269,11 @@
       const f = q.faster;
       editors = f.total ? '더 빨라진 편집자 ' + f.total + '명 중 검증 성공 건수가 줄어든 사람은 ' + f.fewerVerified +
         '명, 같은 사람은 ' + f.sameVerified + '명, 늘어난 사람은 ' + f.moreVerified + '명입니다.' : '두 과제의 평균 검토 시간이 줄어든 편집자는 없습니다.';
+      if (f.total) {
+        const [none, one, both] = q.fasterJournalSuccessCounts;
+        editors += ' 빨라진 ' + f.total + '명 중 저널 과제에서 판정과 대표 근거를 모두 맞힌 횟수는 0건 ' +
+          none + '명, 1건 ' + one + '명, 2건 ' + both + '명입니다.';
+      }
     }
     const warning = el('timed-quality-warning');
     warning.hidden = !warnings.length;
