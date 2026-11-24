@@ -880,3 +880,27 @@ test('직접 고른 표의 좌표는 작업을 다시 열어도 발췌문과 함
   assert.deepEqual(changed.sources, []); assert.deepEqual(changed.receipts, []);
   assert.equal(page.el('verdict').value, '');
 });
+
+test('조건이 붙은 통계는 원표 좌표를 직접 연 뒤에만 숫자를 보여 주고 제목까지 발췌 위치에 보존한다', t => {
+  const {set, el, click, doc} = open(t);
+  set('article', '1곳당 이용 인원을 검토한다.'); el('article-form').requestSubmit();
+  const title = '<표 8> 평일 체육관 한 곳당 이용자 수';
+  const line = '남부\t1,125\t1,503';
+  set('document-text', [title, '(단위: 명)', '구분\t2022년\t2023년', line, '북부\t1,367\t1,617'].join('\n'));
+  set('document-query', '2022년 남부에서 청소년은 한 곳에 몇 명 방문했나요?');
+  click('find-passages');
+  const area = el('finder-results');
+  assert.ok(!area.textContent.includes('원문 값'));
+  const openAt = [...area.querySelectorAll('button')].find(b => b.textContent === '‘남부’ 행의 2022년 열 직접 대조');
+  const picker = [...area.querySelectorAll('details')].find(d => d.firstElementChild?.textContent === '원표의 행과 연도 직접 선택');
+  assert.ok(!picker.open);
+  openAt.click();
+  assert.ok(picker.open);
+  assert.equal(doc.activeElement, picker.querySelectorAll('select')[1]);
+  assert.match(picker.querySelector('[aria-live]').textContent, /남부.*2022년.*1,125.*머리글 3문단.*자료 4문단/);
+  assert.ok(picker.textContent.includes(title)); assert.ok(picker.textContent.includes('(단위: 명)'));
+  assert.equal(el('source-excerpt').value, ''); assert.equal(el('verdict').value, '');
+  picker.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, line);
+  assert.equal(el('source-locator').value, title + ' · ‘남부’ 행 · ‘2022년’ 열');
+});

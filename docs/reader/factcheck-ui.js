@@ -558,16 +558,16 @@
     dirty = true;
     byId('source-locator').focus();
   }
-  function matrixLocation(label, heading) {
-    return '‘' + label + '’ 행 · ‘' + heading + '’ 열';
+  function matrixLocation(label, heading, caption) {
+    const coordinate = '‘' + label + '’ 행 · ‘' + heading + '’ 열';
+    return caption ? caption.text.trim() + ' · ' + coordinate : coordinate;
   }
   function matrixBrowser(matrix) {
     const details = node('details');
     details.append(node('summary', '원표의 행과 연도 직접 선택'));
-    details.addEventListener('toggle', function setup() {
-      if (!details.open) return;
-      details.removeEventListener('toggle', setup);
-      const rowSelect = node('select'), yearSelect = node('select');
+    const rowSelect = node('select'), yearSelect = node('select');
+    function setup() {
+      if (!details.open || rowSelect.length) return;
       const rowLabel = node('label', '원표 행 · ' + matrix.headers[0]), yearLabel = node('label', '연도 열');
       rowLabel.append(rowSelect);
       yearLabel.append(yearSelect);
@@ -580,7 +580,7 @@
       const use = button('직접 선택한 행을 발췌문으로 사용', () => {
         const row = matrix.rows[rowSelect.selectedIndex - 1];
         if (row && yearSelect.selectedIndex > 0)
-          useExcerpt(row, matrixLocation(row.label, matrix.headers[yearSelect.selectedIndex]));
+          useExcerpt(row, matrixLocation(row.label, matrix.headers[yearSelect.selectedIndex], matrix.caption));
       });
       use.disabled = true;
       function showSelection() {
@@ -596,10 +596,20 @@
       rowSelect.addEventListener('change', showSelection);
       yearSelect.addEventListener('change', showSelection);
       details.append(node('p', '원표의 항목과 기간을 골라 인쇄된 값을 확인하세요. 단위와 대상 범위는 원본에서 대조하세요.'));
+      if (matrix.caption) details.append(node('p', matrix.caption.text, 'verbatim'));
       if (matrix.legend) details.append(node('p', matrix.legend.text, 'verbatim'));
       details.append(rowLabel, yearLabel, preview, use);
-    });
-    return details;
+    }
+    details.addEventListener('toggle', setup);
+    function openAt(rowParagraph, year) {
+      details.open = true;
+      setup();
+      rowSelect.selectedIndex = 1 + matrix.rows.findIndex(row => row.paragraph === rowParagraph);
+      yearSelect.selectedIndex = 1 + matrix.years.indexOf(year);
+      yearSelect.dispatchEvent(new Event('change'));
+      yearSelect.focus();
+    }
+    return {details, openAt};
   }
   function documentRows(text) {
     const rows = [];
@@ -694,6 +704,7 @@
       area.append(block);
     }
     let results = area;
+    const browser = lookup.yearMatrix && matrixBrowser(lookup.yearMatrix);
     if (passages.length && (lookup.gap || lookup.state === 'needs-context')) {
       results = node('details');
       results.append(node('summary', '표현이 겹친 위치 ' + passages.length + '개 보기'));
@@ -770,14 +781,19 @@
         block.append(details);
       }
       if (matrix) {
-        const location = matrixLocation(matrix.rowLabel, matrix.heading);
+        const location = matrixLocation(matrix.rowLabel, matrix.heading, lookup.yearMatrix?.caption);
         block.append(button('이 행을 발췌하고 표 위치 확인', () => useExcerpt(passage, location)));
       } else {
+        const navigation = passage.matrixNavigation;
+        if (browser && navigation) {
+          const label = '‘' + navigation.rowLabel + '’ 행의 ' + navigation.year + '년 열 직접 대조';
+          block.append(button(label, () => browser.openAt(navigation.rowParagraph, navigation.year)));
+        }
         block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
       }
       results.append(block);
     }
-    if (lookup.yearMatrix) area.append(matrixBrowser(lookup.yearMatrix));
+    if (browser) area.append(browser.details);
   });
   for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
     if (id === 'document-query') clearSearchContext();

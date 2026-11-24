@@ -185,9 +185,10 @@ function manual(page, area, expected, ref) {
   const enabled = !use.disabled;
   if (enabled) use.click();
   const excerpt = page.el('source-excerpt').value, locator = page.el('source-locator').value;
-  const picked = /^‘(.+)’ 행 · ‘(.+)’ 열$/u.exec(locator);
+  const picked = /^(?:(.+) · )?‘(.+)’ 행 · ‘(.+)’ 열$/u.exec(locator);
+  const captionMatches = !picked?.[1] || ref.rows.slice(0, ref.header - 1).some(line => line.trim() === picked[1]);
   const exact = Boolean(enabled && previewExact && excerpt === ref.rows[row - 1] &&
-    picked && label(picked[1]) === label(wanted[0]) && label(picked[2]) === label(wanted[1]));
+    picked && captionMatches && label(picked[2]) === label(wanted[0]) && label(picked[3]) === label(wanted[1]));
   return {available:true, attempted:true, exact, preview:text, excerpt, locator};
 }
 
