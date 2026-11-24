@@ -392,7 +392,7 @@
     return matches.length === 1 ? matches[0] : {};
   }
 
-  function find(documentText, query, {includeContext = false, matrixCell = null} = {}) {
+  function find(documentText, query, {includeContext = false, matrixCell = null, matrixNavigation = null} = {}) {
     const periods = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
     const wanted = [...terms(query)];
     if (!wanted.length) return [];
@@ -404,14 +404,18 @@
     const asksRatio = /분모|분자|산식|계산식/u.test(query);
     const namedMetrics = wanted.map(([key]) => key).filter(key => /[\p{L}]{2}/u.test(key) &&
       !/^(?:기준|단위|자료|연도|기간|항목|구분)$/u.test(key));
-    // Rank the identified row before trimming hits, even if only a different
-    // row contains the quoted number. Keep the original unit and year headers.
-    let target = matrixCell
-      ? {row: rows[matrixCell.rowParagraph - 1], headings: rows.slice(0, matrixCell.headerParagraph)}
-      : annualTarget(annualExcerpt(rows), query, asked, asksUnits, namedMetrics);
-    if (!target.row && !target.unavailable) target = groupedGridTarget(rows, query, namedMetrics);
-    if (!target.row && !target.unavailable) target = measureGridTarget(rows, query, namedMetrics);
-    if (target.unavailable) return [];
+    let target;
+    if (!matrixCell) {
+      target = annualTarget(annualExcerpt(rows), query, asked, asksUnits, namedMetrics);
+      if (!target.row && !target.unavailable) target = groupedGridTarget(rows, query, namedMetrics);
+      if (!target.row && !target.unavailable) target = measureGridTarget(rows, query, namedMetrics);
+      if (target.unavailable) return [];
+    }
+    // A printed row and header can guide inspection even when the query adds
+    // a condition the table does not resolve. Only matrixCell supplies a value.
+    const matrixRow = matrixCell || matrixNavigation;
+    if (matrixRow)
+      target = {row: rows[matrixRow.rowParagraph - 1], headings: rows.slice(0, matrixRow.headerParagraph)};
     const frequencies = new Map();
     for (const row of rows) {
       const forms = new Set([...terms(row.text).values()].flatMap(set => [...set]));
@@ -482,6 +486,7 @@
       const {paragraph, text, matched} = row;
       const hit = {paragraph, text, matched};
       if (matrixCell?.rowParagraph === paragraph) hit.matrixCell = matrixCell;
+      else if (matrixNavigation?.rowParagraph === paragraph) hit.matrixNavigation = matrixNavigation;
       if (includeContext) {
         const adjacent = rows.slice(Math.max(0, paragraph - 3), paragraph + 2);
         const headings = row === target.row && target.headings ? target.headings : row.table?.headings || [];

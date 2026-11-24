@@ -43,13 +43,19 @@
   function search(documentText, query, {articleContext = ''} = {}) {
     const table = trend.find(documentText, query, {articleContext});
     const gap = coverageNotice(documentText, query);
+    const yearMatrix = table.state === 'ordinary' ? columns.parseYearMatrix(documentText) : null;
     let passages = table.hits;
     if (table.state !== 'candidates') {
-      const matrixCell = table.state === 'ordinary' ? columns.findYearMatrixCell(documentText, query) : null;
-      passages = finder.find(documentText, query, {includeContext: true, matrixCell});
+      // The cell resolver checks only the query. Additional article context
+      // may restrict the population or period beyond what this row describes.
+      const context = articleContext.trim();
+      const checkCell = yearMatrix && (!context || context === query.trim());
+      const matrixCell = checkCell ? columns.findYearMatrixCell(yearMatrix, query) : null;
+      const matrixNavigation = yearMatrix && !matrixCell ? columns.findYearMatrixRow(yearMatrix, query) : null;
+      passages = finder.find(documentText, query, {includeContext: true, matrixCell, matrixNavigation});
     }
     return {passages, gap, state: table.state, usedArticleContext: table.usedArticleContext,
-      needsPublicationDate: table.needsPublicationDate, reason: table.reason};
+      needsPublicationDate: table.needsPublicationDate, reason: table.reason, ...(yearMatrix && {yearMatrix})};
   }
 
   const api = {coverageNotice, search};
