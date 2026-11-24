@@ -410,7 +410,8 @@ test('시간이 절반으로 줄어도 같은 편집자들의 성공률 하락�
   assert.match(p.el('timed-quality-sample').textContent, /8명 중.*4명/);
   assert.deepEqual(rows().map(row => row.slice(1)), [
     ['960초','480초'], ['100% (8/8)','50% (4/8)'], ['100% (8/8)','0% (0/8)'],
-    ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)']
+    ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)'],
+    ['120초 (8건)','산출 불가 (0건)'], ['산출 불가 (0건)','60초 (8건)']
   ]);
   assert.equal(p.el('timed-quality-warning').hidden, false);
   assert.match(p.el('timed-quality-warning').textContent, /판정·근거 동시 일치율 100%p 하락.*근거 없는 사실 채택률 100%p 상승/);
@@ -467,10 +468,37 @@ test('시간 단축과 성공당 시간 증가를 서로 다른 분모로 표시
   });
   await importFiles(p, records.map(r => JSON.stringify(r)));
   assert.match(p.el('metrics').textContent, /시간 절감률50%/);
-  assert.match(p.el('timed-quality-table').textContent, /검증 성공 1건당 시간120초240초/);
+  assert.match(p.el('timed-quality-table').textContent, /검증 성공 1건당 총투입 시간120초240초/);
   assert.match(p.el('timed-quality-change').textContent, /120초\(100%\) 늘었습니다/);
   assert.match(p.el('timed-quality-editors').textContent, /줄어든 사람은 3명, 같은 사람은 1명/);
   assert.match(p.el('timed-quality-editors').textContent, /빨라진 4명 중.*0건 3명, 1건 0명, 2건 1명/);
+});
+
+test('진행자 표에서 성공당 총투입 시간이 같은 두 모집의 성공 과제와 실패 과제 시간을 구분한다', async t => {
+  for (const [journalSuccessSeconds, journalFailedSeconds] of [[95,5], [5,95]]) {
+    const p = page(t);
+    p.el('issue-codes').click();
+    const records = p.workspace().invitations.map(inv => {
+      const r = completedRecord(inv.ordinal, inv.id);
+      for (const trial of r.trials) {
+        const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+        const verified = ['transit','filing'].includes(trial.caseId);
+        const seconds = trial.method === 'manual' ? (verified ? 80 : 120) : (verified ? journalSuccessSeconds : journalFailedSeconds);
+        trial.elapsedMs = seconds * 1000;
+        trial.verdict = gold.expectedVerdict;
+        trial.sourceIds = verified ? [gold.expectedSourceIds[0]] : [];
+      }
+      return r;
+    });
+    await importFiles(p, records.map(r => JSON.stringify(r)));
+    const rows = [...p.el('timed-quality-table').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
+    assert.deepEqual(rows.slice(-3), [
+      ['검증 성공 1건당 총투입 시간','200초','100초'],
+      ['성공한 과제의 평균 시간','80초 (4건)', journalSuccessSeconds + '초 (4건)'],
+      ['실패한 과제의 평균 시간','120초 (4건)', journalFailedSeconds + '초 (4건)']
+    ]);
+    assert.match(p.el('timed-quality-editors').textContent, /같은 사람은 4명/);
+  }
 });
 
 test('다른 묶음의 개인 기록 네 개는 지표에 들어가지 않고 발급 명부의 16건만 집계한다', async t => {

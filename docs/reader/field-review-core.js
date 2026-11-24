@@ -102,7 +102,7 @@
   function group(records) {
     const groups = new Map();
     const completedTimes = new Map();
-    for (const { trial: t, locationGrade, verdictGrade, expected } of records) {
+    for (const { trial: t, locationGrade, verdictGrade, reasonGrade:submittedReasonGrade, expected, basis } of records) {
       const key = JSON.stringify([t.caseId, t.taskId, t.prompt, t.articleUrl, t.method, t.kind]);
       if (!groups.has(key))
         groups.set(key, {
@@ -127,6 +127,10 @@
           verdictGraded: 0,
           verified: 0,
           verificationKnown: 0,
+          verifiedWithReason: 0,
+          reasonOutcomeKnown: 0,
+          verifiedReasonFailed: 0,
+          verifiedReasonPending: 0,
           unsafe: 0,
           unsafeTotal: 0,
           referencePending: 0
@@ -136,13 +140,25 @@
       const loc = t.found === 'missing' ? 'no' : locationGrade;
       const verified = loc === 'yes' && verdictGrade === 'yes';
       const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
+      const reasonGrade = ['yes', 'no'].includes(submittedReasonGrade) && t.status === 'completed' && t.found === 'found' &&
+        basis?.caseId === t.caseId && basis.articleUrl === t.articleUrl && basis.id === t.taskId && basis.prompt === t.prompt &&
+        basis.verdict === t.verdict && text(basis.explanation) && text(basis.reference?.document) && text(basis.reference?.locator)
+        ? submittedReasonGrade : '';
+      const verifiedWithReason = verified && reasonGrade === 'yes';
+      const reasonOutcomeKnown = (verificationKnown && !verified) || reasonGrade === 'no' || verifiedWithReason;
       const version = kitVersion(t.kitVersion);
       if (!g.timedKits.has(version)) {
-        const totals = {...newTimeTotals(), partialCompleted:0, partialCompletedMs:0, partialWithdrawn:0, partialWithdrawnMs:0};
+        const totals = {...newTimeTotals(), partialCompleted:0, partialCompletedMs:0, partialWithdrawn:0, partialWithdrawnMs:0,
+          partialVerified:0, partialOutcomePending:0, reasonGraded:0, verifiedWithReason:0, reasonOutcomePending:0};
         g.timedKits.set(version, totals);
         completedTimes.set(totals, []);
       }
       const kit = g.timedKits.get(version);
+      if (t.status === 'completed') {
+        if (verified && reasonGrade) kit.reasonGraded++;
+        if (verifiedWithReason) kit.verifiedWithReason++;
+        if (!reasonOutcomeKnown) kit.reasonOutcomePending++;
+      }
       if (t.recovered) {
         if (t.status === 'withdrawn') {
           kit.partialWithdrawn++;
@@ -150,6 +166,8 @@
         } else {
           kit.partialCompleted++;
           kit.partialCompletedMs += elapsedMs;
+          if (verified) kit.partialVerified++;
+          if (!verificationKnown) kit.partialOutcomePending++;
         }
       } else {
         if (t.status === 'completed') completedTimes.get(kit).push(elapsedMs);
@@ -176,6 +194,10 @@
       g.submitted++;
       if (verified) g.verified++;
       if (verificationKnown) g.verificationKnown++;
+      if (verifiedWithReason) g.verifiedWithReason++;
+      if (reasonOutcomeKnown) g.reasonOutcomeKnown++;
+      if (verified && reasonGrade === 'no') g.verifiedReasonFailed++;
+      if (verified && !['yes', 'no'].includes(reasonGrade)) g.verifiedReasonPending++;
       if (t.journalUse === undefined) g.unknownUse++;
       else if ((t.journalUse === 'yes') === (t.method === 'journal')) g.asAssigned++;
       else g.differentMethod++;
@@ -215,6 +237,32 @@
       if (!count) return null;
       return {count, minMs:(kit.totalMs + kit.partialCompletedMs) / count, exact:kit.partialCompleted === 0};
     }
+    function returnedCost(kit, withReason) {
+      if (!kit) return null;
+      const verified = withReason ? kit.verifiedWithReason : kit.timedVerified + kit.partialVerified;
+      const pending = withReason ? kit.reasonOutcomePending : kit.timedOutcomePending + kit.partialOutcomePending;
+      const partial = kit.partialCompleted + kit.partialWithdrawn;
+      const observedMs = kit.totalMs + kit.withdrawnMs + kit.partialCompletedMs + kit.partialWithdrawnMs;
+      // Bounds are conditional on a positive integer number of successes. When
+      // none is confirmed, a zero denominator remains possible as a separate outcome.
+      const possible = verified + pending;
+      return {completed:kit.totalTimed + kit.partialCompleted, withdrawn:kit.timedWithdrawn + kit.partialWithdrawn,
+        observedMs, verified, pending, partial,
+        minMs:possible ? observedMs / possible : null,
+        maxMs:possible && !partial ? observedMs / Math.max(1, verified) : null};
+    }
+    function compareReturnedCost(version, manualKit, journalKit, withReason = false) {
+      const manual = returnedCost(manualKit, withReason), journal = returnedCost(journalKit, withReason);
+      let difference = null;
+      if (version && manual?.verified && journal?.verified) {
+        // Positive values mean that Journal required more time per success.
+        difference = {
+          low:manual.maxMs === null ? null : journal.minMs - manual.maxMs,
+          high:journal.maxMs === null ? null : journal.maxMs - manual.minMs
+        };
+      }
+      return {manual, journal, difference};
+    }
     const tasks = new Map();
     for (const g of groups) {
       const key = JSON.stringify([g.kind, g.caseId, g.articleUrl, g.taskId, g.prompt]);
@@ -231,7 +279,10 @@
         return { version, manual, journal, completedMeans:{manual:completedMean(manual), journal:completedMean(journal)},
           ...change(version, manualMs, journalMs),
           median: change(version, manual?.medianMs ?? null, journal?.medianMs ?? null),
-          perVerified: change(version, msPerVerified(manual), msPerVerified(journal)) };
+          perVerified: change(version, msPerVerified(manual), msPerVerified(journal)),
+          returnedCost: compareReturnedCost(version, manual, journal),
+          returnedCostWithReason: manual?.reasonGraded || journal?.reasonGraded
+            ? compareReturnedCost(version, manual, journal, true) : null };
       });
       return { ...task, byVersion };
     });

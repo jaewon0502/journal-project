@@ -304,8 +304,10 @@ test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토
   assert.deepEqual([result.quality.manual.qualityCorrect, result.quality.journal.qualityCorrect], [10,10]);
   assert.equal(result.time.reductionPct, 50);
   assert.deepEqual(result.timedQuality, {
-    manual:{total:8, correct:8, citationCorrect:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000, secondsPerVerified:10},
-    journal:{total:8, correct:5, citationCorrect:5, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000, secondsPerVerified:20},
+    manual:{total:8, correct:8, citationCorrect:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000,
+      secondsPerVerified:10, meanVerifiedSeconds:10, meanFailedSeconds:null},
+    journal:{total:8, correct:5, citationCorrect:5, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000,
+      secondsPerVerified:20, meanVerifiedSeconds:5, meanFailedSeconds:5},
     perVerified:{savedSeconds:-10, reductionPct:-100},
     faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}, fasterJournalSuccessCounts:[3,0,1]
   });
@@ -316,6 +318,22 @@ test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토
   assert.equal(study.analyze(study.demoRecords(), 'demo').timedQuality.manual.verified, 12);
 });
 
+test('방식별 성공 수와 총시간이 같아도 성공과 실패에 쓴 시간을 구분한다', () => {
+  for (const journalSuccessSeconds of [95,5]) {
+    const records = [1,2,3,4].map(i => observations(i, (task, item) => {
+      const verified = ['transit','filing'].includes(task.caseId);
+      const seconds = task.method === 'manual' ? (verified ? 80 : 120) :
+        (verified ? journalSuccessSeconds : 100 - journalSuccessSeconds);
+      return {elapsedMs:seconds * 1000, sourceIds:verified ? [item.expectedSourceIds[0]] : []};
+    }));
+    const {time, timedQuality:{manual, journal, faster}} = study.analyze(records);
+    assert.deepEqual([time.manualSeconds, time.journalSeconds, faster.sameVerified], [100,50,4]);
+    assert.deepEqual([manual.verified, journal.verified, manual.secondsPerVerified, journal.secondsPerVerified], [4,4,200,100]);
+    assert.deepEqual([manual.meanVerifiedSeconds, manual.meanFailedSeconds], [80,120]);
+    assert.deepEqual([journal.meanVerifiedSeconds, journal.meanFailedSeconds], [journalSuccessSeconds,100-journalSuccessSeconds]);
+  }
+});
+
 test('검증 성공이 0건이면 해당 방식의 성공당 시간과 절감률의 분모가 없음을 표시한다', () => {
   for (const zeroMethods of [['manual'], ['journal'], ['manual','journal']]) {
     const records = [1,2,3,4].map(i => observations(i, t => zeroMethods.includes(t.method) ? {sourceIds:[]} : {}));
@@ -323,8 +341,26 @@ test('검증 성공이 0건이면 해당 방식의 성공당 시간과 절감률
     assert.deepEqual([manual.secondsPerVerified, journal.secondsPerVerified],
       [zeroMethods.includes('manual') ? null : 120, zeroMethods.includes('journal') ? null : 90]);
     assert.deepEqual([manual.elapsedMs, journal.elapsedMs], [960000,720000]);
+    for (const [method, arm, seconds] of [['manual', manual, 120], ['journal', journal, 90]]) {
+      assert.deepEqual([arm.meanVerifiedSeconds, arm.meanFailedSeconds], zeroMethods.includes(method) ? [null, seconds] : [seconds, null]);
+    }
     assert.deepEqual(perVerified, {savedSeconds:null, reductionPct:null});
   }
+});
+
+test('결과별 평균은 편집자가 그 결과로 제출한 과제마다 한 건씩 센다', () => {
+  const records = [1,2,3,4].map(i => {
+    let journalCount = 0;
+    return observations(i, (task, item) => {
+      if (task.method === 'manual') return {};
+      journalCount++;
+      const verified = i === 1 || (i === 2 && journalCount === 1);
+      return {elapsedMs:i * 10000, sourceIds:verified ? [item.expectedSourceIds[0]] : []};
+    });
+  });
+  const {journal} = study.analyze(records).timedQuality;
+  assert.deepEqual([journal.verified, journal.meanVerifiedSeconds], [3,40/3]);
+  assert.deepEqual([journal.total - journal.verified, journal.meanFailedSeconds], [5,32]);
 });
 
 test('빠른 편집자는 두 검토의 합이 1밀리초라도 작은 사람만 포함하고 검증 성공 건수 변화를 센다', () => {

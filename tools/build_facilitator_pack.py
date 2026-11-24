@@ -1,6 +1,9 @@
 """Build the offline coordinator kit for the controlled study and the field pilot."""
 import argparse
+from base64 import b64encode
+from hashlib import sha256
 from io import BytesIO
+import json
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
@@ -10,6 +13,7 @@ from build_field_participant_packs import Assets, CASES, READER, ROOT, html, pac
 
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
+PRACTICE_SAMPLE = '연습 예시/고용률-판단이유-가상응답.json'
 
 START = """<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +40,11 @@ START = """<!doctype html>
 사전에 보관한 현장 배정표와 돌아온 참여 JSON을 각각 불러오고 ‘현업 참여’를 고르세요.</li>
 <li>가능하면 두 방식의 답안을 한꺼번에 불러오세요. 참여 코드와 배정이 가려진 상태에서 제출한 표·행·열을 원자료와 대조해 채점합니다.
 ‘배정과 결과 보기’를 누르면 시간과 판정 품질이 나타납니다. 사전에 목표를 정했다면 ‘목표 시간 내 검증 성공률’에서 시간 안에 근거 위치와 판정을 모두 맞힌 건수도 보세요. 작업 중 끊긴 회신은 ‘중단 후 복원한 기록까지 포함한 활동 시간’에서 남아 있는 시간과 중도 종료 시간이 얼마인지 확인하세요. 답안을 덜 회수한 쪽이 빠르게 보이면 해당 과제의 ‘배정 전체의 검증 성공률’에서 미회수 결과가 비교를 얼마나 바꿀 수 있는지 확인하세요. 수정하려면 ‘배정 가리고 채점하기’를 누르세요.
-‘판정과 집계 기록 저장’으로 보관한 <code>field-grades-….json</code>은 다음에 같은 화면에서 다시 열 수 있습니다.</li></ol></section>
+위치와 판정이 맞은 답안은 ‘다음 판단 이유 대조’에서 수치와 풀이까지 확인할 수 있습니다.
+‘판정과 집계 기록 저장’으로 보관한 <code>field-grades-….json</code>은 다음에 같은 화면에서 다시 열 수 있습니다.</li></ol>
+<p><a href="data:application/json;base64,{{PRACTICE_DATA}}" download="고용률-판단이유-가상응답.json">가상 답안 4건 내려받기</a> ·
+<a href="field-summary.html" target="_blank" rel="noopener">새 집계 화면</a>에서 ‘참여 JSON 또는 이전 집계 JSON 불러오기’로 예시 파일을 여세요.
+‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 확인했을 때 성공 1건에 든 시간이 어떻게 달라지는지 볼 수 있습니다.</p></section>
 <section class="box"><h2>기사의 정확성과 정치적 편향 비교</h2>
 <ol><li><a href="factcheck.html">기사 팩트체크</a>에서 기사 입력을 확정하고 원자료를 등록하세요. ‘작업 파일 저장 · 이어 열기’에서 ‘독립 평가용 기사·자료 내려받기’를 누릅니다.</li>
 <li>두 편집자에게 같은 기사·자료 JSON과 <a href="독립 기사 검토.zip" download>독립 기사 검토.zip</a>을 전달하세요. 각자 압축을 풀고 <code>factcheck.html</code>의 ‘파일 이어 열기’로 JSON을 연 뒤 문장 판정과 편향 평가를 기록합니다. 각자 저장한 작업 JSON은 따로 보관하세요.</li>
@@ -72,12 +80,42 @@ def zip_bytes(files):
     return buffer.getvalue()
 
 
+def field_practice_sample():
+    key = json.loads((CASES / 'labour-field-review' / 'coordinator-key.json').read_text())
+    task = next(item for item in key['tasks'] if item['id'] == 'labour-rate')
+    basis = {**task, 'caseId': key['caseId'], 'articleUrl': key['articleUrl']}
+    # A separate version keeps this worked example out of other practice cohorts.
+    version = sha256(b'journal-practice-only/labour-rate/reason-comparison-v1').hexdigest()
+    correct = '분모는 15세 이상 인구다. 2023년 62.6%에서 2024년 62.7%로 0.1%포인트 올랐다.'
+    wrong = '15~64세 인구에서 69.2%가 69.5%가 됐으므로 15세 이상 고용률이 0.1%포인트 올랐다.'
+    entries = []
+    for i, (method, reason) in enumerate([
+        ('manual', correct), ('manual', correct), ('journal', correct), ('journal', wrong)
+    ], start=1):
+        trial = {
+            'format': 'journal-field-trial-v1', 'id': f'practice-labour-reason-{i}',
+            'participant': f'가상-{i}', 'kind': 'practice', 'method': method,
+            'caseId': key['caseId'], 'articleUrl': key['articleUrl'], 'taskId': task['id'],
+            'prompt': task['prompt'], 'kitVersion': version, 'status': 'completed',
+            'journalUse': 'yes' if method == 'journal' else 'no', 'recovered': False, 'split': True,
+            'phaseMs': {'search': 30000 if method == 'manual' else 10000, 'locate': 20000, 'decide': 10000},
+            'found': 'found', 'documentUrl': task['reference']['documentUrl'], 'locator': task['reference']['locator'],
+            'verdict': 'supported', 'reason': reason
+        }
+        entries.append({'trial': trial, 'basis': basis, 'expected': task['verdict'], 'locationGrade': 'yes',
+                        'verdictGrade': 'yes', 'reasonGrade': 'no' if reason == wrong else 'yes'})
+    return json.dumps({'format': 'journal-field-grades-v1', 'entries': entries}, ensure_ascii=False, indent=2).encode()
+
+
 def packet_bytes():
     standalone = html('factcheck.html', 'journal', '')
     reviewer = {}
     add_page(reviewer, 'factcheck.html', standalone)
-    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': START.encode(),
-             'participant-editor-study.zip': editor_participant_zip()}
+    practice = field_practice_sample()
+    # A data URL also downloads from a local file:// launch page in Chrome.
+    start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii'))
+    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': start.encode(),
+             'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice}
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()

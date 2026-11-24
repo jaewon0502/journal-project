@@ -142,3 +142,95 @@ test('단계 전환과 휴식에서 밀리초를 반올림해도 정확히 120�
   assert.equal(status(1).overTime, 1);
   assert.equal(core.validTimer({...timer, remainderMs:3}), false);
 });
+
+test('같은 과제·배포본에서 복원된 오답과 중도 종료를 더하면 성공당 투입 시간 차이의 방향이 뒤집힌다', () => {
+  const manual = ['ms', 'mw', 'mq'].map(id => slot(id));
+  const journal = ['js', 'jw', 'jq'].map(id => slot(id, 'journal'));
+  const records = [
+    response(manual[0], 30000), response(manual[1], 10000, {found:'missing'}),
+    response(manual[2], 20000, {status:'withdrawn'}), response(journal[0], 10000),
+    response(journal[1], 100000, {found:'missing', recovered:true}),
+    response(journal[2], 150000, {status:'withdrawn', recovered:true})
+  ];
+  const report = core.allocationReport([...manual, ...journal], records, new Set());
+  const [comparison] = core.compareTimes(report.groups)[0].byVersion;
+  assert.deepEqual(report.assignmentComparisons[0].difference, {low:0, high:0});
+  assert.equal(comparison.perVerified.savedMs, 50000);
+  assert.deepEqual(comparison.returnedCost.journal, {completed:2, withdrawn:1, observedMs:260000,
+    verified:1, pending:0, partial:2, minMs:260000, maxMs:null});
+  assert.deepEqual(comparison.returnedCost.difference, {low:200000, high:null});
+  const swapped = records.map(entry => ({...entry, trial:{...entry.trial,
+    method:entry.trial.method === 'manual' ? 'journal' : 'manual'}}));
+  const [reverse] = core.compareTimes(core.group(swapped))[0].byVersion;
+  assert.deepEqual(reverse.returnedCost.difference, {low:null, high:-200000});
+});
+
+test('대기 답안은 정수 성공 수로 범위를 계산하고 성공 0건과 복원 후 성공을 구별한다', () => {
+  const pending = {locationGrade:''};
+  const a = slot('one'), b = slot('two');
+  function cost(...entries) { return core.compareTimes(core.group(entries))[0].byVersion[0].returnedCost; }
+  const possible = cost(response(a, 1000, {}, pending), response(b, 4000, {}, pending));
+  assert.deepEqual(possible.manual, {completed:2, withdrawn:0, observedMs:5000, verified:0, pending:2,
+    partial:0, minMs:2500, maxMs:5000});
+  assert.equal(possible.difference, null);
+  const zero = cost(response(a, 8000, {found:'missing'}), response(b, 2000, {status:'withdrawn'}));
+  assert.deepEqual([zero.manual.observedMs, zero.manual.minMs, zero.manual.maxMs], [10000, null, null]);
+  assert.equal(zero.journal, null);
+  const restored = cost(response(a, 0, {recovered:true}), response(b, 2000, {recovered:true}, pending));
+  assert.deepEqual([restored.manual.verified, restored.manual.pending, restored.manual.minMs, restored.manual.maxMs],
+    [1, 1, 1000, null]);
+  const exact = cost(response(a, 0), response(b, 0, {}, pending));
+  assert.deepEqual([exact.manual.minMs, exact.manual.maxMs], [0, 0]);
+  const bothUncertain = cost(response(a, 1000, {recovered:true}), response(slot('j', 'journal'), 4000, {recovered:true}));
+  assert.deepEqual(bothUncertain.difference, {low:null, high:null});
+});
+
+test('회수한 기록의 성공 비용은 배포본을 넘나들지 않고 버전 미확인·성공 미확정이면 방향을 정하지 않는다', () => {
+  const versions = ['a'.repeat(64), 'b'.repeat(64), undefined];
+  const records = versions.flatMap((kitVersion, i) => [
+    response(slot('m' + i), i ? 10000 : 1000, {kitVersion}),
+    response(slot('j' + i, 'journal'), i ? 1000 : 10000, {kitVersion})
+  ]);
+  for (const [index, comparison] of core.compareTimes(core.group(records))[0].byVersion.entries()) {
+    assert.equal(comparison.version, versions[index] ?? null);
+    const expected = [9000,-9000][index];
+    assert.deepEqual(comparison.returnedCost.difference, index < 2 ? {low:expected, high:expected} : null);
+    assert.equal(comparison.returnedCost.journal.completed, 1);
+  }
+  const [unsettled] = core.compareTimes(core.group([records[0], {...records[1], locationGrade:''}]))[0].byVersion;
+  assert.equal(unsettled.returnedCost.difference, null);
+});
+
+test('판단 이유까지 확인한 성공 비용은 두 항목의 성공과 마감 결과를 보존하고 대기·복원·실패를 반영한다', () => {
+  const slots = ['m1','m2','j1','j2'].map((id,i) => slot(id, i < 2 ? 'manual' : 'journal'));
+  const returns = slots.map((row,i) => response(row, i < 2 ? 60000 : 40000, {}, {reasonGrade:i === 3 ? 'no' : 'yes'}));
+  const compare = entries => core.compareTimes(core.allocationReport(slots, entries, new Set()).groups)[0].byVersion[0];
+  const comparison = compare(returns);
+  assert.equal(comparison.returnedCost.journal.verified, 2);
+  const cost = comparison.returnedCostWithReason;
+  assert.equal(cost.journal.verified, 1);
+  assert.deepEqual([cost.manual.minMs, cost.journal.minMs, cost.difference], [60000,80000,{low:20000, high:20000}]);
+  assert.equal(core.allocationReport(slots, returns, new Set()).deadlineComparisons[0].journal.verified, 2);
+  const changed = (i, changes) => returns.map((r,k) => k === i ? {...r,...changes} : r);
+  const pending = compare(changed(3, {reasonGrade:''})).returnedCostWithReason;
+  assert.deepEqual([pending.journal.verified, pending.journal.pending, pending.difference], [1,1,{low:-20000,high:20000}]);
+  const partial = compare(changed(2, {trial:{...returns[2].trial, recovered:true}})).returnedCostWithReason;
+  assert.deepEqual([partial.journal.minMs, partial.journal.maxMs, partial.difference], [80000,null,{low:20000,high:null}]);
+  const zero = compare(changed(2, {reasonGrade:'no'})).returnedCostWithReason;
+  assert.equal(zero.journal.minMs, null);
+  assert.equal(zero.journal.pending, 0);
+  assert.equal(zero.difference, null);
+  for (const invalid of [null, {...basis,prompt:'other prompt'}, {...basis,id:'other-task'}, {...basis,explanation:''}, {...basis, reference:{}}]) {
+    const invalidOnly = compare(returns.map(row => ({...row,basis:invalid})));
+    assert.equal(invalidOnly.returnedCostWithReason, null);
+    const mixedEntries = changed(2, {basis:invalid});
+    const mixed = compare(mixedEntries).returnedCostWithReason;
+    assert.deepEqual([mixed.journal.verified, mixed.journal.pending], [0,1]);
+    const group = core.group(mixedEntries).find(g => g.method === 'journal');
+    assert.deepEqual([group.verifiedWithReason, group.reasonOutcomeKnown, group.verifiedReasonFailed, group.verifiedReasonPending],
+      [0,1,1,1]);
+  }
+  const perKit = core.compareTimes(core.group(returns.map((r,i) =>
+    i < 2 ? {...r, reasonGrade:'', trial:{...r.trial,kitVersion:'b'.repeat(64)}} : r)))[0].byVersion;
+  assert.deepEqual(perKit.map(r => !!r.returnedCostWithReason), [false,true]);
+});

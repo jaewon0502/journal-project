@@ -248,12 +248,12 @@
     saveAnswer();
     persist();
   };
-  function finish(status) {
+  function finish(status, stoppedAt = performance.now()) {
     if (!session || session.result) return;
     try {
       saveAnswer();
       const t = session.timer,
-        stopped = c.tick(t, performance.now(), t.phase, false);
+        stopped = c.tick(t, stoppedAt, t.phase, false);
       const result = {
         ...session.base,
         status,
@@ -277,7 +277,16 @@
   }
   el('submit').onclick = () => finish('completed');
   el('withdraw').onclick = () => {
-    if (confirm('중도 종료 시 지금까지의 기록을 저장할 수 있습니다. 종료할까요?')) finish('withdrawn');
+    if (!session || session.result) return;
+    const t = session.timer, stoppedAt = performance.now();
+    persist();
+    if (confirm('중도 종료 시 지금까지의 기록을 저장할 수 있습니다. 종료할까요?')) {
+      finish('withdrawn', stoppedAt);
+    } else if (t.start !== null) {
+      const stopped = c.tick(t, stoppedAt, t.phase, false);
+      session.timer = c.tick(stopped, performance.now(), t.phase, true);
+      persist();
+    }
   };
   el('download').onclick = () => {
     const r = session.result,

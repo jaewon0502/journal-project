@@ -315,17 +315,20 @@
   function showTimedQuality(a) {
     const q = a.timedQuality;
     el('timed-quality-sample').textContent = '판정 비교에 포함된 ' + a.included + '명 중 시간까지 기록된 4인 묶음의 ' +
-      a.timing.included + '명을 비교합니다. 각 방식에서 오답에 쓴 시간까지 더해 판정과 대표 근거가 모두 맞은 건수로 나눕니다.';
+      a.timing.included + '명을 비교합니다. 판정과 대표 근거가 모두 맞으면 성공입니다. 성공 1건당 총투입 시간은 실패에 쓴 시간까지 더해 성공 건수로 나눈 값입니다.';
     const warnings = [], rows = [];
     let change = '', editors = '';
     if (q) {
       const arms = [q.manual, q.journal];
+      const outcomeMean = (seconds, count) => count ? seconds.toLocaleString('ko-KR', {maximumFractionDigits:3}) + '초 (' + count + '건)' : '산출 불가 (0건)';
       rows.push(['검토 시간 합계', ...arms.map(v => fmt(v.elapsedMs / 1000) + '초')],
         ['기준 판정 일치', ...arms.map(v => ratio(v.correct, v.total))],
         ['대표 근거 일치', ...arms.map(v => ratio(v.citationCorrect, v.total))],
         ['판정과 근거 모두 일치', ...arms.map(v => ratio(v.verified, v.total))],
         ['근거 없는 사실 채택¹', ...arms.map(v => ratio(v.unsafe, v.unsafeTotal))],
-        ['검증 성공 1건당 시간', ...arms.map(v => v.verified ? fmt(v.secondsPerVerified) + '초' : '산출 불가 (성공 0건)')]);
+        ['검증 성공 1건당 총투입 시간', ...arms.map(v => v.verified ? fmt(v.secondsPerVerified) + '초' : '산출 불가 (성공 0건)')],
+        ['성공한 과제의 평균 시간', ...arms.map(v => outcomeMean(v.meanVerifiedSeconds, v.verified))],
+        ['실패한 과제의 평균 시간', ...arms.map(v => outcomeMean(v.meanFailedSeconds, v.total - v.verified))]);
       for (const [key, label] of [['correct', '기준 판정 일치율'], ['citationCorrect', '대표 근거 일치율'], ['verified', '판정·근거 동시 일치율']]) {
         const drop = 100 * (q.manual[key] / q.manual.total - q.journal[key] / q.journal.total);
         if (drop > 0) warnings.push(label + ' ' + fmt(drop) + '%p 하락');
@@ -335,9 +338,9 @@
         if (rise > 0) warnings.push('근거 없는 사실 채택률 ' + fmt(rise) + '%p 상승');
       }
       const d = q.perVerified;
-      if (d.savedSeconds === null) change = '한쪽 이상에서 검증 성공이 0건이어서 성공 1건당 시간 차이를 계산할 수 없습니다.';
-      else if (d.savedSeconds === 0) change = '두 방식의 검증 성공 1건당 시간이 같습니다.';
-      else change = '저널을 썼을 때 검증 성공 1건당 시간이 ' + fmt(Math.abs(d.savedSeconds)) + '초(' +
+      if (d.savedSeconds === null) change = '한쪽 이상에서 검증 성공이 0건이어서 성공 1건당 총투입 시간 차이를 계산할 수 없습니다.';
+      else if (d.savedSeconds === 0) change = '두 방식의 검증 성공 1건당 총투입 시간이 같습니다.';
+      else change = '저널을 썼을 때 검증 성공 1건당 총투입 시간이 ' + fmt(Math.abs(d.savedSeconds)) + '초(' +
         fmt(Math.abs(d.reductionPct)) + '%) ' + (d.savedSeconds > 0 ? '줄었습니다.' : '늘었습니다.');
       const f = q.faster;
       editors = f.total ? '더 빨라진 편집자 ' + f.total + '명 중 검증 성공 건수가 줄어든 사람은 ' + f.fewerVerified +

@@ -40,11 +40,12 @@ function summary(t, previous) {
       await input.onchange({target:input});
     },
     toggle() { el('toggle-results').click(); },
-    grade(participant) {
+    grade(participant, label = '근거 위치', value = 'yes') {
       const line = [...el('entries').querySelectorAll('p')].find(p => p.textContent === '제출한 위치 · 제출한 표 ' + participant);
-      const select = line.closest('article').querySelector('select');
+      const control = [...line.closest('article').querySelectorAll('label')].find(n => n.textContent.startsWith(label + ' '));
+      const select = control.querySelector('select');
       assert.equal(select.disabled, false);
-      select.value = 'yes';
+      select.value = value;
       select.dispatchEvent(new window.Event('change', {bubbles:true}));
     },
     async download(id) {
@@ -185,4 +186,78 @@ test('복원 후 확인된 시간만으로도 목표를 넘기면 실패이고, 
   assert.match(p.el('allocation-comparisons').textContent, /검증 성공 1건당 투입 시간.*저널 · 비교할 시간 기록 0건/s);
   p.toggle();
   assert.equal(p.el('allocation-comparisons').textContent, '');
+});
+
+test('진행자 화면에서 온전한 기록의 절감과 회수 전체의 최소 비용 증가를 구분하고 재채점하면 범위를 갱신한다', async t => {
+  const p = summary(t);
+  const rows = ['M-OK','M-WRONG','M-STOP','J-OK','J-WRONG','J-STOP']
+    .map((name, i) => assignment(name, i < 3 ? 'manual' : 'journal', 120));
+  const version = {kitVersion:'c'.repeat(64)};
+  await p.upload('roster-file', roster(rows));
+  await p.upload('key-file', key);
+  await p.upload('imports', submission(rows[0],30000,version), submission(rows[1],10000,{...version,found:'missing'}),
+    submission(rows[2],20000,{...version,status:'withdrawn'}), submission(rows[3],10000,version),
+    submission(rows[4],100000,{...version,found:'missing',recovered:true}),
+    submission(rows[5],150000,{...version,status:'withdrawn',recovered:true}));
+  p.grade('M-OK');
+  p.toggle();
+  for (const id of ['allocation-comparisons','comparisons']) {
+    const panel = p.el(id).querySelector('.returned-cost').textContent;
+    assert.match(panel, /성공이 1건 이상이면 성공 1건당 260초 이상.*모두 실패하면/);
+    assert.match(panel, /더 짧은지 확정할 수 없습니다/);
+  }
+  p.toggle();
+  assert.equal(p.el('comparisons').textContent, '');
+  p.grade('J-OK');
+  p.toggle();
+  for (const id of ['allocation-comparisons','comparisons']) {
+    const view = p.el(id);
+    assert.match(view.textContent, /시간이 온전히 남은 기록에서 검증 성공 1건당 50.0초 절감/);
+    assert.match(view.querySelector('.returned-cost').textContent, /회수한 기록 전체에서 저널은 검증 성공 1건당 200초 이상 더 걸렸습니다/);
+  }
+  const zero = summary(t);
+  await zero.upload('imports', submission(rows[1],10000,{...version,found:'missing'}));
+  zero.toggle();
+  assert.match(zero.el('comparisons').querySelector('.returned-cost').textContent,
+    /총 활동 시간 10초.*검증 성공이 0건이어서 성공 1건당 시간을 계산할 수 없습니다/);
+});
+
+test('성공당 시간이 1밀리초보다 작을 때 0초로 반올림하지 않는다', async t => {
+  const p = summary(t);
+  const rows = ['fast1','fast2','fast3'].map(name => assignment(name, 'journal', 1));
+  await p.upload('key-file', key);
+  await p.upload('imports', ...rows.map((row, i) => submission(row, i === 0 ? 1 : 0, {kitVersion:'d'.repeat(64)})));
+  for (const row of rows) p.grade(row.participant);
+  p.toggle();
+  assert.match(p.el('comparisons').querySelector('.returned-cost').textContent, /성공 1건당 1밀리초 미만/);
+});
+
+test('판단 이유를 실제 대조한 뒤 세 항목이 모두 맞은 답안 1건당 비용과 대기를 표시한다', async t => {
+  const p = summary(t);
+  const rows = ['M1','M2','J1','J2'].map((id,i) => assignment(id, i < 2 ? 'manual' : 'journal', 120));
+  await p.upload('roster-file', roster(rows));
+  await p.upload('key-file', key);
+  await p.upload('imports', ...rows.map((r,i) => submission(r, i < 2 ? 60000 : 40000, {kitVersion:'e'.repeat(64)})));
+  for (const row of rows) p.grade(row.participant);
+  p.toggle();
+  assert.equal(p.el('comparisons').querySelector('.returned-reason-cost'), null);
+  p.toggle();
+  for (const id of ['M1','M2','J1']) p.grade(id, '판단 이유');
+  p.toggle();
+  let panel = p.el('comparisons').querySelector('.returned-reason-cost');
+  assert.match(panel.textContent, /확인된 성공 1건, 성공 여부 확인 대기 1건.*성공 1건당 40초 ~ 80초/);
+  assert.match(panel.textContent, /확정할 수 없습니다/);
+  p.toggle();
+  p.grade('J2', '판단 이유', 'no');
+  p.toggle();
+  for (const area of ['comparisons', 'allocation-comparisons']) {
+    assert.match(p.el(area).querySelector('.returned-cost').textContent, /성공 1건당 20초 빨랐습니다/);
+    panel = p.el(area).querySelector('.returned-reason-cost');
+    assert.match(panel.textContent, /세 항목이 모두 맞은 1건당 20초 더 걸렸습니다/);
+  }
+  p.toggle();
+  p.grade('J1', '판단 이유', 'no');
+  p.toggle();
+  assert.match(p.el('comparisons').querySelector('.returned-reason-cost').textContent,
+    /확인된 성공 0건, 성공 여부 확인 대기 0건.*검증 성공이 0건/);
 });

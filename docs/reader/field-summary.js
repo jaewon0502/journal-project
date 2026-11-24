@@ -87,12 +87,14 @@
   }
   function bind(entry, anchor) {
     if (!anchor) return entry;
+    const same = sameBasis(anchor, entry.basis);
     return {
       ...entry,
       basis: anchor,
       verdictGrade:
         entry.trial.status === 'completed' ? (entry.trial.verdict === anchor.verdict ? 'yes' : 'no') : '',
-      locationGrade: sameBasis(anchor, entry.basis) ? entry.locationGrade : ''
+      locationGrade: same ? entry.locationGrade : '',
+      reasonGrade: same ? entry.reasonGrade : ''
     };
   }
   function applyActiveKey(entry) {
@@ -100,7 +102,7 @@
     if (!tasks) return entry;
     const match = tasks.get(trialTarget(entry.trial));
     if (match) return bind(entry, match);
-    return entry.basis ? { ...entry, basis: null, verdictGrade: '', locationGrade: '' } : entry;
+    return entry.basis ? { ...entry, basis: null, verdictGrade: '', locationGrade: '', reasonGrade: '' } : entry;
   }
   function applied(entry) {
     return { ...entry, expected: entry.basis?.verdict || '', anchor: entry.basis };
@@ -208,9 +210,58 @@
         section.append(node('p', '회수한 완료 답안 전체에서는 저널 방식이 평균 ' + duration + '빨랐습니다.'));
       } else section.append(node('p', '남아 있는 구간만으로는 완료 답안 전체의 평균 시간 차이를 확정할 수 없습니다.'));
     }
-    section.append(node('p', '활동 구간이 빠진 답안의 실제 시간에는 상한을 정할 수 없습니다. 중도 종료 시간은 별도 합계에만 들어갑니다.'));
+    section.append(node('p', '활동 구간이 빠진 답안의 실제 시간에는 상한을 정할 수 없습니다. 완료 평균에서는 중도 종료 시간을 제외합니다.'));
     part.append(section);
     return part;
+  }
+  function returnedCostPanel(version, cost, withReason = false) {
+    const {manual, journal, difference} = cost;
+    const section = node('section', '');
+    section.className = withReason ? 'returned-reason-cost' : 'returned-cost';
+    section.append(node('h5', withReason ? '근거 위치·판정·판단 이유가 모두 맞은 1건당 투입 시간' :
+      '회수한 기록 전체의 검증 성공 1건당 투입 시간 · 근거 위치와 판정'));
+    for (const method of ['manual', 'journal']) {
+      const arm = cost[method];
+      if (!arm) {
+        section.append(node('p', labels[method] + ' · 회수한 기록 0건'));
+        continue;
+      }
+      section.append(node('p', labels[method] + ' · 완료 ' + arm.completed + '건, 중도 종료 ' + arm.withdrawn +
+        '건 · 총 활동 시간 ' + (arm.partial ? '최소 ' : '') + minimumSeconds(arm.observedMs) +
+        ' · 확인된 성공 ' + arm.verified + '건, 성공 여부 확인 대기 ' + arm.pending + '건'));
+      if (arm.minMs === null) {
+        section.append(node('p', '검증 성공이 0건이어서 성공 1건당 시간을 계산할 수 없습니다.'));
+        continue;
+      }
+      // Round endpoints outward, including when the quotient is less than one millisecond.
+      let range;
+      if (arm.minMs === arm.maxMs) {
+        range = arm.minMs > 0 && arm.minMs < 1 ? '1밀리초 미만' :
+          (Number.isInteger(arm.minMs) ? '' : '약 ') +
+          (arm.minMs / 1000).toLocaleString('ko-KR', {maximumFractionDigits:3}) + '초';
+      } else if (arm.maxMs === null) {
+        range = minimumSeconds(arm.minMs) + ' 이상 (빠진 활동 시간이 있어 상한 미확인)';
+      } else {
+        range = minimumSeconds(arm.minMs) + ' ~ ' + minimumSeconds(Math.ceil(arm.maxMs));
+      }
+      const condition = arm.verified ? '' : '채점 후 성공이 1건 이상이면 ';
+      section.append(node('p', condition + '성공 1건당 ' + range +
+        (arm.verified ? '' : '. 모두 실패하면 성공당 시간을 계산할 수 없습니다.')));
+    }
+    if (difference && (difference.low > 0 || difference.high < 0)) {
+      const longer = difference.low > 0;
+      const gap = longer ? difference.low : -difference.high;
+      const exact = difference.low === difference.high;
+      const amount = gap >= 1 ? minimumSeconds(gap) + (exact && Number.isInteger(gap) ? ' ' : ' 이상 ') : '';
+      section.append(node('strong', (withReason ? '회수한 기록 전체에서 저널은 세 항목이 모두 맞은 1건당 ' :
+        '회수한 기록 전체에서 저널은 검증 성공 1건당 ') + amount +
+        (longer ? '더 걸렸습니다.' : '빨랐습니다.')));
+    } else if (difference?.low === 0 && difference.high === 0) {
+      section.append(node('p', '두 방식의 성공 1건당 투입 시간이 같습니다.'));
+    } else if (manual && journal && version) {
+      section.append(node('p', '어느 방식의 성공당 투입 시간이 더 짧은지 확정할 수 없습니다.'));
+    }
+    return section;
   }
   function versionComparison(comparison) {
     const card = node('section', '');
@@ -241,7 +292,7 @@
       card.append(node('p', '평균과 중앙값이 반대 방향입니다. 저널 집단의 완료 시간 중앙값은 평소 검증 도구 집단보다 ' +
         gap + (medianDifference > 0 ? ' 짧습니다.' : ' 깁니다.')));
     }
-    card.append(node('h5', '검증 성공 1건당 투입 시간'));
+    card.append(node('h5', '검증 성공 1건당 투입 시간 · 활동 시간이 온전히 남은 기록'));
     for (const method of ['manual', 'journal']) {
       const group = comparison[method];
       if (!group || !(group.totalTimed + group.timedWithdrawn)) {
@@ -255,7 +306,10 @@
         '건 · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
     }
     if (comparison.perVerified.savedMs !== null)
-      card.append(node('strong', '검증 성공 1건당 ' + timeChangeText(comparison.perVerified)));
+      card.append(node('strong', '시간이 온전히 남은 기록에서 검증 성공 1건당 ' + timeChangeText(comparison.perVerified)));
+    card.append(returnedCostPanel(comparison.version, comparison.returnedCost));
+    if (comparison.returnedCostWithReason)
+      card.append(returnedCostPanel(comparison.version, comparison.returnedCostWithReason, true));
     return card;
   }
   function assignmentCounts(n) {
@@ -264,7 +318,8 @@
       '건 · 연결된 현업 기록 없음 ' + n.missing + '건';
   }
   function qualityLines({submitted=0, locationHits=0, locationGraded=0, verdictHits=0, verdictGraded=0,
-    verified=0, verificationKnown=0, unsafe=0, unsafeTotal=0, referencePending=0} = {}) {
+    verified=0, verificationKnown=0, verifiedWithReason=0, reasonOutcomeKnown=0,
+    verifiedReasonFailed=0, verifiedReasonPending=0, unsafe=0, unsafeTotal=0, referencePending=0} = {}) {
     return [
       node('p', '원자료 위치 재확인 성공률 ' + pct(locationHits, locationGraded) +
         ' · 채점 대기 ' + (submitted - locationGraded) + '건'),
@@ -272,6 +327,10 @@
         ' · 채점 대기 ' + (submitted - verdictGraded) + '건'),
       node('p', '근거 위치와 판정 모두 일치 ' + pct(verified, verificationKnown) +
         ' · 성공 여부 확인 대기 ' + (submitted - verificationKnown) + '건'),
+      node('p', '근거 위치·판정·판단 이유 모두 일치 ' + pct(verifiedWithReason, reasonOutcomeKnown) +
+        ' · 세 항목의 결과 확인 대기 ' + (submitted - reasonOutcomeKnown) + '건'),
+      node('p', '위치와 판정이 맞은 ' + verified + '건 중 판단 이유 불일치 ' + verifiedReasonFailed +
+        '건 · 이유 대조 전 ' + verifiedReasonPending + '건'),
       node('p', '근거 없는 사실 채택률 ' + pct(unsafe, unsafeTotal) +
         ' (반박·근거 부족으로 판정한 과제) · 기준 판정 미확인 ' + referencePending + '건')
     ];
@@ -384,6 +443,9 @@
     showDeadlineComparisons(report);
     showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
+  const reasonControls = new Map();
+  const needsReason = e => e.trial.status === 'completed' && e.trial.found === 'found' &&
+    e.locationGrade === 'yes' && e.verdictGrade === 'yes' && e.basis?.explanation.trim() && !e.reasonGrade;
   function stats() {
     const rows = selected(),
       dupe = repeatIds(),
@@ -395,7 +457,12 @@
       rows.length +
       '건 · 같은 참여 코드로 같은 사례나 기사를 다시 열어 요약에서 제외 ' +
       (rows.length - eligible.length) +
-      '건 · 채점 대기 ' + pending + '건';
+      '건 · 위치·판정 채점 대기 ' + pending + '건';
+    const awaitingReason = eligible.filter(needsReason).length;
+    const nextReason = el('next-reason');
+    nextReason.hidden = showingResults || !awaitingReason;
+    nextReason.disabled = loading;
+    nextReason.textContent = '다음 판단 이유 대조 (' + awaitingReason + '건 남음)';
     el('save').disabled = loading || !rows.length;
     const hasAssignments = el('kind').value === 'editor' && assignments.length > 0;
     const toggle = el('toggle-results');
@@ -493,6 +560,7 @@
     const rows = selected(),
       dupe = repeatIds();
     el('entries').replaceChildren();
+    reasonControls.clear();
     stats();
     if (!showingResults) rows.sort((a, b) => blindRanks.get(a.trial.id) - blindRanks.get(b.trial.id));
     for (const [index, entry] of rows.entries()) {
@@ -571,6 +639,20 @@
           )
         );
       else d.append(chooser('판정', entry, 'verdictGrade'));
+      if (t.found === 'found' && view.verdictGrade === 'yes' && view.anchor?.explanation.trim()) {
+        const details = node('details', '');
+        details.append(node('summary', '판단 이유 대조 · ' + ({yes:'일치', no:'불일치'}[view.reasonGrade] || '채점 대기')),
+          node('p', '참여자가 적은 이유 · ' + t.reason),
+          node('p', '기준 설명 · ' + view.anchor.explanation),
+          node('p', '과제에서 요구한 수치·대상·시점·계산을 확인하세요. 다른 풀이도 같은 결론을 근거로 뒷받침하면 일치로 기록하세요.'));
+        const control = chooser('판단 이유', entry, 'reasonGrade');
+        control.addEventListener('change', () => {
+          details.firstChild.textContent = '판단 이유 대조 · ' + ({yes:'일치', no:'불일치'}[entry.reasonGrade] || '채점 대기');
+        });
+        reasonControls.set(entry, details);
+        details.append(control);
+        d.append(details);
+      }
       el('entries').append(d);
     }
   }
@@ -627,8 +709,10 @@
           repeatExposure: item.repeatExposure === true,
           locationGrade: grade(item.locationGrade),
           verdictGrade: grade(item.verdictGrade),
+          reasonGrade: grade(item.reasonGrade === undefined ? '' : item.reasonGrade),
           basis: item.basis ? basis(item.basis.caseId, item.basis.articleUrl, item.basis) : null
         };
+        if (trial.status !== 'completed' || trial.found !== 'found' || !row.basis?.explanation.trim()) row.reasonGrade = '';
         if (row.basis) {
           if (
             trialTarget(trial) !==
@@ -657,7 +741,7 @@
             continue;
           }
         } else if (prev) {
-          for (const k of ['locationGrade', 'verdictGrade']) {
+          for (const k of ['locationGrade', 'verdictGrade', 'reasonGrade']) {
             if (row[k] && prev[k] && row[k] !== prev[k]) {
               if (!conflicts.has(trial.id)) conflicts.set(trial.id, {trial, fields:new Set()});
               conflicts.get(trial.id).fields.add(k);
@@ -743,6 +827,7 @@
   let loading = false;
   function loadingState(on) {
     loading = on;
+    el('next-reason').disabled = on;
     el('roster-file').disabled = on;
     el('choose-roster').disabled = on;
     el('imports').disabled = on;
@@ -760,6 +845,15 @@
   }
   el('choose-imports').onclick = () => el('imports').click();
   el('choose-key').onclick = () => el('key-file').click();
+  el('next-reason').onclick = () => {
+    if (loading || showingResults) return;
+    for (const [entry, details] of reasonControls) {
+      if (!needsReason(entry)) continue;
+      details.open = true;
+      details.querySelector('select').focus();
+      break;
+    }
+  };
   el('toggle-results').onclick = () => {
     if (el('toggle-results').disabled) return;
     showingResults = !showingResults;
@@ -808,10 +902,11 @@
     try {
       const v = JSON.parse(await f.text());
       loadKey(v);
-      let reset = 0;
+      let reset = 0, resetReasons = 0;
       for (const [id, entry] of records) {
         const next = applyActiveKey(entry);
         if (entry.locationGrade && !next.locationGrade) reset++;
+        if (entry.reasonGrade && !next.reasonGrade) resetReasons++;
         if (!sameBasis(entry.basis, next.basis)) unexported.add(entry.trial.kind);
         records.set(id, next);
       }
@@ -819,7 +914,8 @@
       persistDraft();
       el('status').textContent =
         '일치하는 과제에 기준을 적용했습니다.' +
-        (reset ? ' 근거 위치 ' + reset + '건을 다시 확인하세요.' : '');
+        (reset ? ' 근거 위치 ' + reset + '건을 다시 확인하세요.' : '') +
+        (resetReasons ? ' 판단 이유 ' + resetReasons + '건을 새 기준 설명과 다시 대조하세요.' : '');
       render();
     } catch (err) {
       el('status').textContent = err instanceof SyntaxError ? '진행자 기준 파일의 JSON 형식을 확인하세요.' : err.message;
@@ -852,8 +948,10 @@
           const differing = [];
           if (fields.has('locationGrade')) differing.push('근거 위치');
           if (fields.has('verdictGrade')) differing.push('판정');
+          if (fields.has('reasonGrade')) differing.push('판단 이유');
           const detail = trial.found === 'found' ? '제출한 위치 · ' + trial.locator : '제출한 이유 · ' + trial.reason;
           li.append(node('p', trial.prompt), node('p', detail), node('p', '채점 차이 · ' + differing.join(', ')));
+          if (fields.has('reasonGrade') && trial.found === 'found') li.append(node('p', '제출한 이유 · ' + trial.reason));
           return li;
         });
         rows.sort((a, b) => a.textContent.localeCompare(b.textContent, 'ko'));
@@ -875,6 +973,7 @@
           ...(dupe.has(v.trial.id) ? { repeatExposure: true } : {}),
           locationGrade: v.locationGrade,
           verdictGrade: v.verdictGrade,
+          ...(v.reasonGrade ? { reasonGrade: v.reasonGrade } : {}),
           expected: v.expected,
           basis: v.anchor || null
         };

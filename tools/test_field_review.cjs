@@ -331,6 +331,48 @@ async function startTimedPage(t) {
   p.el('start').click();
   return p;
 }
+test('중도 종료 확인창에서 기다린 시간은 취소하거나 종료해도 활동 시간에서 뺀다', async t => {
+  const p = await startTimedPage(t);
+  p.time(2000); p.el('phases').querySelector('[data-phase="locate"]').click();
+  let pending;
+  p.time(5000); p.window.confirm = () => { pending = p.saved(); p.time(35000); return false; };
+  p.el('withdraw').click();
+  const afterCancel = JSON.parse(p.saved());
+  assert.equal(afterCancel.result, null);
+  assert.equal(afterCancel.timer.phase, 'locate');
+  assert.deepEqual(afterCancel.timer.ms, {search:2000, locate:3000, decide:0});
+  assert.equal(afterCancel.timer.start, 35000);
+  p.time(36000); p.window.confirm = () => { p.time(50000); return false; };
+  p.el('withdraw').click();
+  p.time(51000); p.el('phases').querySelector('[data-phase="decide"]').click();
+  p.time(52000); p.window.confirm = () => { p.time(75000); return true; };
+  p.el('withdraw').click();
+  const trial = await p.download('download');
+  assert.equal(trial.status, 'withdrawn');
+  assert.equal(trial.recovered, false);
+  assert.deepEqual(trial.phaseMs, {search:2000, locate:5000, decide:1000});
+  assert.equal(c.group([{trial}])[0].withdrawnMs, 8000);
+  const interrupted = timedPage(t, pending);
+  assert.match(interrupted.el('status').textContent, /활동 중 중단/);
+  interrupted.el('withdraw').click();
+  const partial = await interrupted.download('download');
+  assert.equal(partial.recovered, true);
+  assert.deepEqual(partial.phaseMs, {search:2000, locate:3000, decide:0});
+});
+test('휴식 중 중도 종료를 취소하고 다시 열어도 재개 전까지 시간이 늘지 않는다', async t => {
+  const p = await startTimedPage(t);
+  p.time(4000); p.el('pause').click();
+  p.time(14000); p.window.confirm = () => { p.time(44000); return false; };
+  p.el('withdraw').click();
+  assert.equal(p.el('answer').disabled, true);
+  const restored = timedPage(t, p.saved());
+  assert.match(restored.el('status').textContent, /휴식 중이던 과제/);
+  restored.time(90000); restored.el('pause').click();
+  restored.time(91000); restored.el('withdraw').click();
+  const trial = await restored.download('download');
+  assert.equal(trial.recovered, false);
+  assert.deepEqual(trial.phaseMs, {search:5000, locate:0, decide:0});
+});
 test('명시 휴식 중 두 번 새로 열어도 쉬었던 시간을 빼고 완료·채점할 수 있다', async t => {
   const a = await startTimedPage(t);
   a.time(5000);
@@ -1271,4 +1313,79 @@ test('배포본 수는 시간 지표별로 원래 배정에 연결된 표본과 
   p.select('#kind', 'practice');
   const practice = p.report('comparisons');
   assert.ok(practice.includes(excluded) && !practice.includes(first));
+});
+
+test('정답·원표 위치가 같아도 연령대가 다른 판단 이유를 따로 채점하고 익명 상태에서 다음 답안을 연다', async t => {
+  const key = require('../experiments/labour-field-review/coordinator-key.json');
+  const task = key.tasks.find(q => q.id === 'labour-rate');
+  const correct = '15세 이상은 62.6%에서 62.7%로 0.1%p 올랐다.';
+  const wrong = '15~64세 고용률 69.2%와 69.5%를 비교해 15세 이상이 0.1%p 올랐다고 본다.';
+  const record = (id, reason) => trial({id,participant:id,kind:'editor',caseId:key.caseId,articleUrl:key.articleUrl,
+    prompt:task.prompt,taskId:task.id, locator:task.reference.locator,documentUrl:task.reference.documentUrl,verdict:task.verdict,reason});
+  const a = record('editor-alpha', correct), b = record('editor-beta', wrong);
+  const p = page(t, 'field-summary');
+  await p.upload('key-file',key); await p.upload('imports',a,b);
+  assert.equal(p.el('next-reason').hidden, true);
+  const cards = [...p.el('entries').children];
+  for (const card of cards) {
+    const location = card.querySelector('select');
+    location.value = 'yes';
+    location.dispatchEvent(new p.window.Event('change',{bubbles:true}));
+  }
+  assert.match(p.el('next-reason').textContent,/2건 남음/);
+  for (const remaining of [2,1]) {
+    p.el('next-reason').click();
+    const control = p.window.document.activeElement;
+    assert.equal(control.tagName,'SELECT');
+    const panel = control.closest('details');
+    assert.ok(panel.open);
+    assert.match(panel.textContent,/기준 설명.*15세 이상/);
+    assert.doesNotMatch(panel.textContent,/editor-alpha|editor-beta|평소 검증 도구/);
+    control.value = panel.textContent.includes(wrong) ? 'no' : 'yes';
+    control.dispatchEvent(new p.window.Event('change',{bubbles:true}));
+    assert.ok(panel.querySelector('summary').textContent.includes(control.value === 'yes' ? '일치' : '불일치'));
+    if (remaining === 2) assert.match(p.el('next-reason').textContent,/1건 남음/);
+  }
+  assert.equal(p.el('next-reason').hidden,true);
+  const groups = p.report('groups');
+  assert.match(groups,/근거 위치와 판정 모두 일치 100.0% \(2\/2\)/);
+  assert.match(groups,/근거 위치·판정·판단 이유 모두 일치 50.0% \(1\/2\)/);
+  assert.match(groups,/위치와 판정이 맞은 2건 중 판단 이유 불일치 1건 · 이유 대조 전 0건/);
+  const saved = await p.download('save');
+  assert.equal(saved.entries.find(e=>e.trial.reason===wrong).reasonGrade,'no');
+  const fresh = page(t,'field-summary');
+  await fresh.upload('imports',saved);
+  assert.match(fresh.report('groups'),/근거 위치·판정·판단 이유 모두 일치 50.0% \(1\/2\)/);
+  const conflict = structuredClone(saved);
+  conflict.entries.find(e=>e.trial.reason===wrong).reasonGrade='yes';
+  await fresh.upload('imports',conflict);
+  assert.match(fresh.el('status').textContent,/채점 차이 · 판단 이유/);
+  assert.ok(fresh.el('status').textContent.includes(wrong));
+  assert.doesNotMatch(fresh.el('status').textContent,/editor-beta/);
+  const revised=structuredClone(key);
+  revised.tasks.find(q=>q.id===task.id).explanation += ' 연간 기준으로 대조한다.';
+  await fresh.upload('key-file',revised);
+  assert.match(fresh.el('status').textContent,/판단 이유 2건을 새 기준/);
+  const rechecked = await fresh.download('save');
+  assert.ok(rechecked.entries.every(e=>!e.reasonGrade && !e.locationGrade && e.verdictGrade==='yes'));
+});
+
+test('판단 이유를 검토하지 않은 예전 성공은 세 항목 일치로 집계하지 않고, 오답·중도 종료의 분모를 구분한다', async t => {
+  const key = require('../experiments/labour-field-review/coordinator-key.json');
+  const target = key.tasks.find(q=>q.id==='labour-rate');
+  const base = {kind:'editor',caseId:key.caseId,articleUrl:key.articleUrl,taskId:target.id,prompt:target.prompt};
+  const source = (id, extra) => trial({...base,id,participant:id,...extra});
+  const inputs=[source('a'),source('b',{verdict:'contradicted'}),source('c',{found:'missing'}),source('d',{status:'withdrawn'})];
+  const p=page(t,'field-summary');
+  await p.upload('imports',...inputs); await p.upload('key-file',key);
+  const cards = [...p.el('entries').children];
+  const expected = cards.find(card=>card.querySelector('details select'));
+  const select = expected.querySelector('select'); select.value='yes';select.onchange();
+  assert.match(p.report('groups'),/근거 위치·판정·판단 이유 모두 일치 0.0% \(0\/2\) · 세 항목의 결과 확인 대기 1건/);
+  const saved=await p.download('save');
+  saved.entries.forEach(e=>delete e.reasonGrade);
+  const fromOld=page(t,'field-summary'); await fromOld.upload('imports',saved);
+  assert.match(fromOld.report('groups'),/위치와 판정이 맞은 1건 중 판단 이유 불일치 0건 · 이유 대조 전 1건/);
+  const zero=page(t,'field-summary');await zero.upload('imports',inputs[3]);
+  assert.match(zero.report('groups'),/근거 위치·판정·판단 이유 모두 일치 산출 대기 \(0\/0\)/);
 });

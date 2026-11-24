@@ -347,18 +347,20 @@
       {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
     const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
     const fasterJournalSuccessCounts = [0, 0, 0];
-    const totalMs = {manual:0n, journal:0n};
+    const totalMs = {manual:0n, journal:0n}, verifiedMs = {manual:0n, journal:0n};
     for (const record of records) {
       const elapsedMs = {manual:0n, journal:0n}, verified = {manual:0, journal:0};
       for (const trial of record.trials) {
         const method = trial.method, arm = arms[method], grade = gradeTrial(trial);
         arm.total++;
-        elapsedMs[method] += BigInt(trial.elapsedMs);
+        const duration = BigInt(trial.elapsedMs);
+        elapsedMs[method] += duration;
         if (grade.correct) arm.correct++;
         if (grade.sourceCorrect) arm.citationCorrect++;
         if (grade.verified) {
           arm.verified++;
           verified[method]++;
+          verifiedMs[method] += duration;
         }
         if (grade.unsafeEligible) arm.unsafeTotal++;
         if (grade.unsafe) arm.unsafe++;
@@ -378,6 +380,9 @@
       const arm = arms[method];
       arm.elapsedMs = Number(totalMs[method]);
       if (arm.verified) arm.secondsPerVerified = arm.elapsedMs / 1000 / arm.verified;
+      const failed = arm.total - arm.verified;
+      arm.meanVerifiedSeconds = arm.verified ? Number(verifiedMs[method]) / 1000 / arm.verified : null;
+      arm.meanFailedSeconds = failed ? Number(totalMs[method] - verifiedMs[method]) / 1000 / failed : null;
     }
     const perVerified = {savedSeconds:null, reductionPct:null};
     if (manual.verified && journal.verified) {

@@ -1,5 +1,7 @@
+from base64 import b64decode
 from html.parser import HTMLParser
 from io import BytesIO
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -9,7 +11,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, READER, packet_bytes
+from build_facilitator_pack import CASES, CASE_FOLDERS, PRACTICE_SAMPLE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -18,9 +20,12 @@ class Dependencies(HTMLParser):
     def __init__(self):
         super().__init__()
         self.local = set()
+        self.downloads = {}
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == 'a' and attrs.get('download'):
+            self.downloads[attrs['download']] = attrs['href']
         for key in ('href', 'src'):
             url = urlsplit(attrs.get(key, ''))
             if url.path and not url.scheme and not url.netloc:
@@ -58,13 +63,44 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = set()
+            expected_json = {PRACTICE_SAMPLE}
             for case, label in CASE_FOLDERS.items():
                 for subdir, name in [('채점표', 'coordinator-key.json'), ('참여 과제', 'blind-tasks.json')]:
                     packed = f'{subdir}/{label}/{name}'
                     self.assertEqual(archive.read(packed), (CASES / case / name).read_bytes())
                     expected_json.add(packed)
             self.assertEqual({n for n in files if n.endswith('.json')}, expected_json)
+
+    def test_synthetic_rationales_are_only_in_the_coordinator_kit(self):
+        with ZipFile(BytesIO(packet_bytes())) as coordinator:
+            links = Dependencies()
+            links.feed(coordinator.read('시작.html').decode())
+            data_url = links.downloads[Path(PRACTICE_SAMPLE).name]
+            header, data = data_url.split(',', 1)
+            self.assertEqual(header, 'data:application/json;base64')
+            self.assertEqual(b64decode(data, validate=True), coordinator.read(PRACTICE_SAMPLE))
+            sample = json.loads(coordinator.read(PRACTICE_SAMPLE))
+            self.assertEqual(sample['format'], 'journal-field-grades-v1')
+            rows = sample['entries']
+            self.assertEqual(len(rows), 4)
+            key = json.loads(coordinator.read('채점표/고용/coordinator-key.json'))
+            target = next(task for task in key['tasks'] if task['id'] == 'labour-rate')
+            for row in rows:
+                self.assertEqual(row['trial']['kind'], 'practice')
+                self.assertEqual(row['trial']['verdict'], target['verdict'])
+                self.assertEqual(row['basis'], {**target, 'caseId': key['caseId'], 'articleUrl': key['articleUrl']})
+            self.assertEqual(len({r['trial']['participant'] for r in rows}), 4)
+            self.assertEqual(len({r['trial']['id'] for r in rows}), 4)
+            for method, expected in [('manual', (60000, 60000)), ('journal', (40000, 80000))]:
+                arm = [r for r in rows if r['trial']['method'] == method]
+                self.assertEqual(len(arm), 2)
+                self.assertTrue(all(r['locationGrade'] == r['verdictGrade'] == 'yes' for r in arm))
+                total = sum(sum(r['trial']['phaseMs'].values()) for r in arm)
+                self.assertEqual((total / len(arm), total / sum(r['reasonGrade'] == 'yes' for r in arm)), expected)
+            for name in coordinator.namelist():
+                if name.endswith('.zip'):
+                    with ZipFile(BytesIO(coordinator.read(name))) as participant:
+                        self.assertNotIn(PRACTICE_SAMPLE, participant.namelist())
 
     def test_two_reviewers_receive_the_editor_without_scoring_keys_or_each_others_work(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:
