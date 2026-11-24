@@ -113,7 +113,30 @@
       demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending};
   }
 
-  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, isMock, validateWork, activeReport, draftChangesRecord, review, read});
+  function sourceInput(source) {
+    return Object.fromEntries(['id', ...sourceFields].filter(key => source[key] != null).map(key => [key, source[key]]));
+  }
+
+  function independentInput(work) {
+    const {article, sources, demo} = read(work);
+    return {
+      format: schema, article, articleDraft: article, demo,
+      sources: sources.map(sourceInput),
+      receipts: [], rowDrafts: [], articleAssessment: null, articleAssessmentDraft: null,
+      currentId: null, sourceDraft: {id: null, fields: Object.fromEntries(sourceFields.map(key => [key, '']))}
+    };
+  }
+
+  function blindTag(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value) ||
+        Object.keys(value).length !== 2 || !Object.hasOwn(value, 'pairId') || !Object.hasOwn(value, 'slot') ||
+        typeof value.pairId !== 'string' || !/^[a-f0-9]{32}$/u.test(value.pairId) ||
+        !['A', 'B'].includes(value.slot)) return null;
+    return {pairId: value.pairId, slot: value.slot};
+  }
+
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceInput, isMock, validateWork, activeReport,
+    draftChangesRecord, review, read, independentInput, blindTag});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;
 })(globalThis);
