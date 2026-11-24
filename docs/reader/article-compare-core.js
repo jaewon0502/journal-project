@@ -34,7 +34,7 @@
     const rightById = new Map(rightAccuracy.rows.map(row => [row.rowId, row]));
     const leftRows = new Map(left.rows.map(row => [row.id, row]));
     const rightRows = new Map(right.rows.map(row => [row.id, row]));
-    const isDecided = category => category === 'supported' || category === 'contradicted';
+    const isDecided = category => category === 'supported' || category === 'contradicted' || category === 'quotedConflict';
     const rows = leftAccuracy.rows.map(a => {
       const b = rightById.get(a.rowId);
       if (!b) throw new Error('두 편집자가 같은 구간을 검토했는지 확인하고 작업 파일을 다시 여세요.');

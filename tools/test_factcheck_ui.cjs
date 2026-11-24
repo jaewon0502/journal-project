@@ -91,6 +91,49 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   assert.equal(json.demo, true);
 });
 
+test('당시 결산표가 인용 내용과 충돌하면 편집 화면·TXT·재개 파일에 귀속과 반증을 함께 남긴다', async t => {
+  const p = open(t);
+  const article = '위원장은 “지난해 집행액은 20억 원이었다”고 말했다.';
+  p.set('article', article);
+  p.el('article-form').requestSubmit();
+  for (const [title, url, excerpt] of [['속기록', 'https://speaker.example/transcript', article],
+    ['결산표', 'https://audit.example/report', '지난해 해당 사업의 실제 집행액 10억 원']]) {
+    for (const [field, value] of Object.entries({title, url, locator:'표 1', version:'당시 확정본', excerpt})) p.set('source-' + field, value);
+    p.el('source-form').requestSubmit();
+  }
+  const source = (group, title) => [...p.el(group).querySelectorAll('label')].find(label => label.textContent.includes(title)).querySelector('input');
+  source('row-sources', '속기록').click();
+  p.set('verdict', 'attribution');
+  p.set('reason', '속기록에서 발언자와 정확한 인용을 확인했다.');
+  p.set('content-status', 'contradicted');
+  assert.equal(p.el('content-sources-part').hidden, false);
+  source('content-sources', '결산표').click();
+  p.set('content-reason', '같은 사업과 기간의 결산표에는 실제 집행액 10억 원이 기록돼 있다.');
+  p.click('content-checked'); p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  p.el('article-rubric').querySelector('[data-core-row]').click();
+  assert.match(p.el('result-counts').textContent, /내용 충돌 1개/);
+  assert.match(p.el('article-rubric').textContent, /핵심 항목 중 1개에서 발언 귀속을 확인/);
+  p.click('export-report');
+  const report = await p.snapshot();
+  for (const marker of ['근거 일치율 산출 대기 (0/0)', '검증 범위 100% (1/1)', '내용을 대조한 인용 구간 · 지난해 집행액은 20억 원이었다',
+    '원발언 · 속기록', '내용 근거 · 결산표']) assert.ok(report.includes(marker), marker);
+  p.click('save-work');
+  const file = JSON.parse(await p.snapshot());
+  const next = open(t);
+  await loadWorkspace(next, file);
+  assert.match(next.el('report-rows').textContent, /발언 내용 · 독립 원자료와 충돌/);
+  const result = next.w.JournalWorkspaceSnapshot.read(file).assessment.accuracy;
+  assert.deepEqual([result.adjudicated, result.reviewed, result.quotedConflict, result.coreQuotedConflict.length], [0, 1, 1, 1]);
+  next.el('row-filter').value = 'all'; next.el('row-filter').dispatchEvent(new next.w.Event('change'));
+  next.el('row-list').querySelector('button').click();
+  next.set('content-reason', '다시 대조 중');
+  next.click('save-work');
+  const draft = JSON.parse(await next.snapshot());
+  assert.equal(draft.rowDrafts[0].data.contentStatus, 'contradicted');
+  assert.equal(next.w.JournalWorkspaceSnapshot.read(draft).assessment.accuracy.quotedConflict, 0);
+});
+
 test('자료 찾기에서 원문 전체와 임시 줄 번호가 검증 근거로 자동 등록되지 않는다', async t => {
   const {el, click, set, snapshot} = open(t);
   set('article', '의회는 교육 예산을 편성했다.');

@@ -85,6 +85,30 @@ test('가상 예시를 닫거나 비교 방식을 바꾸면 예시 수치가 지
   assert.equal(p.el('result').hidden,true);
 });
 
+test('인용 속 충돌을 원기사 오류에서 분리하고 독립 편집자의 내용 판단 차이를 비교한다', async t => {
+  const p = page(t);
+  const article = '의원은 “예산은 20억 원이었다”고 말했다.';
+  const old = workspace(article);
+  old.sources = [{id: 'speech', url: 'https://assembly.example/minutes', title: '발언록', locator: '2절', version: '1판', excerpt: article},
+    {id: 'budget', url: 'https://budget.example/table', title: '확정 예산표', locator: '표 1', version: '1판', excerpt: '같은 사업의 확정 예산은 10억 원이었다.'}];
+  const row = engine.prepare(article, old.sources).rows[0];
+  const record = {status: 'attribution', sourceIds: ['speech'], acknowledged: true, reason: '속기록과 기사의 인용이 일치한다.'};
+  old.receipts = [engine.decide(row, record, old.sources)];
+  const other = {...old, receipts: [engine.decide(row, {...record, contentStatus: 'contradicted', contentSourceIds: ['budget'],
+    contentReason: '같은 기간에 의결된 예산은 10억 원이었다.', contentChecked: true}, old.sources)]};
+  p.load('left', '귀속.json', JSON.stringify(old));
+  p.load('right', '내용.json', JSON.stringify(other));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  let output = p.el('output').textContent;
+  assert.match(output, /지지율산출 대기 \(0\/0\)산출 대기 \(0\/0\)/);
+  assert.match(output, /판정 완료율0% \(0\/1\)100% \(1\/1\)/);
+  assert.match(output, /인용 속 사실 주장 충돌 1개.*원발언 · 발언록.*내용 근거 · 확정 예산표/);
+  assert.match(output, /새로 충돌로 판정된 기존 구절 · 0개/);
+  p.reviewers(); p.el('compare').click(); output = p.el('output').textContent;
+  assert.match(output, /판정 또는 확인 범위가 다른 구절 · 1개/);
+  assert.match(output, /담긴 주장 미확인.*인용 속 사실 주장 충돌/);
+});
+
 test('완료율이 그대로여도 사라진 원본 충돌 구절과 확인한 정정 문구·원문 쪽을 제시한다', async t => {
   const p = page(t);
   const source = {id: 'table', title: '시험 원표', url: 'https://example.org/report.pdf', version: '확정본',

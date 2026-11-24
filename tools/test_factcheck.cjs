@@ -233,6 +233,38 @@ const transcript = [{id: 'minutes', title: '가상 회의록', url: 'https://cou
 const said = (row, extra = {}) => decide(row, {status: 'attribution', sourceIds: ['minutes'], acknowledged: true,
   reason: '회의록의 발언자와 발언을 대조했다.', contentStatus: 'opinion', contentChecked: true, contentReason: '발언자의 평가다.', ...extra}, transcript);
 
+test('귀속이 정확한 인용 내용에 직접 반증이 있으면 두 결론과 각 근거를 보존한다', () => {
+  const quote = '지난해 실제 집행액은 20억 원이었다';
+  const reportLine = '위원장은 “' + quote + '”고 말했다.';
+  const speech = {...source, id:'speech', url:'https://assembly.example/transcript', excerpt: reportLine};
+  const audit = {...source, id:'audit', url:'https://audit.example/accounts', excerpt:'전년도 결산표, 실제 집행액 10억 원.'};
+  const refs = [speech, audit];
+  const say = {status:'attribution', sourceIds:['speech'], acknowledged:true, reason:'원발언의 화자와 인용을 대조했다.',
+    contentStatus:'contradicted', contentReason:'같은 기간 결산표의 실제 집행액 10억 원은 발언의 20억 원과 양립할 수 없다.',
+    contentChecked:true, contentSourceIds:['audit']};
+  for (const line of [reportLine, '위원장은 ‘' + quote + '’라고 말했다.', "위원장은 '" + quote + "'라고 말했다.",
+    '위원장은 지난해 실제 집행액이 20억 원이었다고 말했다.']) {
+    const [row] = prepare(line, refs).rows, receipt = decide(row, say, refs);
+    const restored = report(line, refs, [JSON.parse(JSON.stringify(receipt))]);
+    assert.equal(receipt.contentClaim, line.includes(quote) ? quote : line);
+    assert.deepEqual(restored.rows[0].receipt, receipt);
+    assert.deepEqual([restored.attributedCount, restored.contentContradictedCount, restored.contradictedCount,
+      restored.confirmedCount, restored.contentSupportedCount, restored.pendingCount], [1, 1, 0, 0, 0, 0]);
+    for (const edit of [{acknowledged:false}, {contentChecked:false}, {contentSourceIds:['speech']},
+      {sourceIds:[]}, {contentReason:''}, {contentSourceIds:[]}]) {
+      assert.throws(() => decide(row, {...say, ...edit}, refs));
+    }
+    const connected = [...refs, {...audit, id:'bridge', url:speech.url, originUrl:audit.url}];
+    assert.equal(report(line, connected, [receipt]).contentContradictedCount, 0);
+    assert.throws(() => decide(prepare(line, connected).rows[0], say, connected), /다른 원자료/);
+  }
+  for (const text of ['위원장은 “내년 집행액이 두 배가 될 것”이라고 말했다.', '위원장은 “무책임하다”고 말했다.',
+    '위원장은 ‘내년 물가는 5%일 것이다’라고 말했다.', '위원장은 “10억 원을 집행했고 30억 원을 새로 의결했다”고 말했다.',
+    '위원장은 ‘집행액은 20억 원’이며 ‘참여자는 80명’이라고 말했다.', '위원장은 「예산안」을 폐기했다고 밝혔다.']) {
+    assert.throws(() => decide(prepare(text, refs).rows[0], say, refs));
+  }
+});
+
 test('간접 인용 속 두 절은 나누지 않아 화자의 주장을 발언 기록만으로 사실 처리할 수 없다', () => {
   for (const text of ['김 의원은 시장이 예산을 은폐했고 의회가 이를 묵인했다고 주장했다.',
     "김 의원은 '시장이 예산을 은폐했고 의회가 이를 묵인했다'고 주장했다.",

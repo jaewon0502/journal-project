@@ -10,7 +10,7 @@
   const percent = value => Number.isFinite(value) ? Number(value.toFixed(1)) + '%' : '산출 대기';
   const ratio = (n, d, value) => percent(value) + ' (' + n + '/' + d + ')';
   const level = v => v === 'na' ? '해당 없음' : Number.isInteger(v) ? v + '단계' : '미평가';
-  const categories = {supported: '근거 지지', contradicted: '근거 충돌', unresolved: '미결', excluded: '분모 제외'};
+  const categories = {supported: '근거 지지', contradicted: '근거 충돌', quotedConflict: '발언 귀속 확인 · 인용 속 사실 주장 충돌', unresolved: '미결', excluded: '분모 제외'};
   let showingExample = false;
   function element(tag, content, cls) {
     const node = document.createElement(tag);
@@ -154,7 +154,7 @@
     }
     return panel;
   }
-  function accuracyPanel(c) {
+  function accuracyPanel(c, snapshots) {
     const panel = section('사실 정확성과 확인 범위');
     const table = element('table');
     const header = table.createTHead().insertRow();
@@ -164,9 +164,10 @@
     const body = table.createTBody();
     const indicators = [
       ['근거 지지율', a => ratio(a.supported, a.adjudicated, a.accuracyPct)],
-      ['판정 완료율', a => ratio(a.adjudicated, a.total, a.coveragePct)],
+      ['판정 완료율', a => ratio(a.reviewed, a.total, a.coveragePct)],
       ['근거 충돌 / 미결', a => a.contradicted + '개 / ' + a.unresolved + '개'],
-      ['분모 제외', a => a.excluded + '개'],
+      ['인용 속 사실 주장 충돌 (핵심 중)', a => a.quotedConflict + '개 (핵심 ' + a.coreQuotedConflict.length + '개)'],
+      ['의견·평가로 분모 제외', a => a.excluded + '개'],
       ['핵심 주장 충돌 / 미결', a => a.coreRowIds.length ? a.coreContradicted.length + '개 / ' + a.coreUnresolved.length + '개' : '핵심 미지정']
     ];
     for (const [title, format] of indicators) {
@@ -175,6 +176,21 @@
       row.append(heading, element('td', format(c.accuracy.left)), element('td', format(c.accuracy.right)));
     }
     panel.append(table);
+    if (c.accuracy.left.quotedConflict || c.accuracy.right.quotedConflict) {
+      panel.append(note('발언 귀속을 확인하고 그 내용의 반증까지 기록한 구간은 판정 완료율에 포함하고, 기사 서술의 근거 지지율에서는 제외합니다.'));
+      for (const [index, side] of ['left', 'right'].entries()) {
+        const a = c.accuracy[side];
+        const list = detail(names()[index] + ' · 인용 속 사실 주장 충돌 ' + a.quotedConflict + '개');
+        for (const row of a.rows.filter(item => item.category === 'quotedConflict')) {
+          const record = snapshots[index].rows.find(item => item.id === row.rowId);
+          const item = element('div', null, 'item');
+          if (a.coreQuotedConflict.includes(row.rowId)) item.append(element('strong', '핵심 주장'));
+          item.append(element('blockquote', record.text), receiptEvidence(snapshots[index], row.rowId));
+          list.append(item);
+        }
+        if (a.quotedConflict) panel.append(list);
+      }
+    }
     return panel;
   }
   function receiptEvidence(snapshot, rowId) {
@@ -188,7 +204,8 @@
       const source = snapshot.sources?.find(s => s.id === id);
       if (source?.excerpt) div.append(element('blockquote', source.excerpt));
     }
-    for (const sourceId of r.sourceIds || []) appendSource(sourceId, '원자료');
+    for (const sourceId of r.sourceIds || []) appendSource(sourceId, r.status === 'attribution' ? '원발언' : '원자료');
+    if (r.contentClaim) div.append(note('내용을 대조한 인용 구간'), element('blockquote', r.contentClaim));
     if (r.contentReason) div.append(element('p', '발언 내용 판단 · ' + r.contentReason));
     for (const id of r.contentSourceIds || []) appendSource(id, '내용 근거');
     return div;
@@ -245,7 +262,7 @@
   function reviewerFacts(c, snapshots) {
     const f = c.facts;
     const panel = section('사실 판정 일치도');
-    panel.append(card('같은 범위와 판정으로 확인', f.agreement, '두 사람 모두 지지·충돌을 판정한 구간'),
+    panel.append(card('같은 범위와 판정으로 확인', f.agreement, '두 사람 모두 지지·충돌을 판정한 구간 (인용 속 사실 주장 포함)'),
       note('전체 ' + f.total + '개 · 한쪽 이상 미결 ' + f.unresolved + '개 · 한쪽 이상 분모 제외 ' + f.excluded + '개 (두 집계는 겹칠 수 있습니다.)'));
     const disputed = detail('판정 또는 확인 범위가 다른 구절 · ' + f.disagreements.length + '개');
     if (!f.disagreements.length) disputed.append(note(f.agreement.denominator
@@ -293,10 +310,11 @@
       if (c.sourceChanged) output.append(element('p', '두 판본의 원자료 묶음이 다릅니다. 수치의 변화에는 근거가 바뀐 영향도 포함됩니다.', 'warn'));
       if (mode() === 'revision') {
         const {left, right} = c.accuracy;
-        if (right.total < left.total || right.adjudicated < left.adjudicated ||
+        if (right.total < left.total || right.reviewed < left.reviewed || right.adjudicated < left.adjudicated ||
             (left.coveragePct != null && right.coveragePct != null && right.coveragePct < left.coveragePct)) {
           output.append(element('p', '사실 확인 대상 또는 판정 범위가 줄었습니다. 확인 대상 ' + left.total + ' → ' + right.total
-            + '개, 판정을 마친 구간 ' + left.adjudicated + ' → ' + right.adjudicated + '개, 완료율 '
+            + '개, 지지율 분모 ' + left.adjudicated + ' → ' + right.adjudicated
+            + '개, 판정을 마친 구간 ' + left.reviewed + ' → ' + right.reviewed + '개, 완료율 '
             + percent(left.coveragePct) + ' → ' + percent(right.coveragePct) + '입니다.', 'warn'));
         }
         if (c.untracedCore?.length) {
@@ -307,7 +325,7 @@
           output.append(check);
         }
       }
-      output.append(biasPanel(c, snapshots), accuracyPanel(c), mode() === 'revision' ? revisionFacts(c, snapshots) : reviewerFacts(c, snapshots));
+      output.append(biasPanel(c, snapshots), accuracyPanel(c, snapshots), mode() === 'revision' ? revisionFacts(c, snapshots) : reviewerFacts(c, snapshots));
       byId('result').hidden = false;
       showingExample = synthetic;
       byId('example').textContent = synthetic ? '가상 예시 닫기' : '가상 예시 보기';

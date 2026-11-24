@@ -204,6 +204,24 @@ test('근거 지지율이 100%여도 분모에서 빠지거나 일부 범위만 
   assert.match(result.summary, /핵심 항목 2개는 사실 구절 또는 발언 사실만/);
 });
 
+test('정확히 인용한 발언의 내용 충돌은 기사 지지율에서 따로 떼고 완료율에는 포함한다', () => {
+  const quote = '사업비는 30억 원이었다';
+  const statement = '의원은 “' + quote + '”고 말했다.';
+  const dual = ['attribution', ['speech'], {contentStatus:'contradicted', contentChecked:true,
+    contentReason:'당시 확정 의결표에는 같은 사업비가 3억 원으로 기록됐다.', contentSourceIds:['minute']}];
+  for (const debunked of [false, true]) {
+    const article = debunked ? statement + '\n의결표의 사업비는 3억 원이다.' : statement;
+    const report = state(article, debunked ? [dual, ['fact']] : [dual]);
+    const a = rubric.evaluate(report, sources, form(report, {}, [report.rows[0].id])).accuracy;
+    assert.deepEqual(a.coreQuotedConflict, [report.rows[0].id]);
+    assert.deepEqual(a.coreContradicted, []);
+    assert.deepEqual([a.contradicted, a.unresolved, a.quotedConflict, a.coveragePct], [0, 0, 1, 100]);
+    assert.deepEqual([a.supported, a.adjudicated, a.accuracyPct], debunked ? [1, 1, 100] : [0, 0, null]);
+    assert.deepEqual([a.reviewed, a.total], debunked ? [2, 2] : [1, 1]);
+    assert.equal(a.rows[0].scope, quote);
+  }
+});
+
 test('충돌 판정을 다시 작성하는 동안에는 미확인 시절 편향 평가가 되살아나지 않는다', () => {
   const unreviewed = state(), id = unreviewed.rows[0].id;
   const earlier = form(unreviewed, {wording: entry(unreviewed.rows[0], 0)});

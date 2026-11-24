@@ -150,6 +150,7 @@
       case 'mixed': return result('supported', '사실 구절만 지지', r.factSpan);
       case 'partial': return result('unresolved', '부분 확인 · 나머지 미확인', r.factSpan);
       case 'attribution':
+        if (r.contentStatus === 'contradicted') return result('quotedConflict', '발언 귀속 확인 · 인용 속 사실 주장 충돌', r.contentClaim);
         if (r.contentStatus === 'supported') return result('supported', '발언과 내용의 근거 확인', row.text);
         if (r.contentStatus === 'opinion') return result('supported', '발언 사실 확인 · 내용은 의견이나 전망', row.text);
         return result('unresolved', '발언 사실 확인 · 담긴 주장 미확인', row.text);
@@ -161,28 +162,32 @@
     const rows = report.rows.map(classify);
     const count = key => rows.filter(row => row.category === key).length;
     const supported = count('supported'), contradicted = count('contradicted'), unresolved = count('unresolved');
-    const adjudicated = supported + contradicted, total = adjudicated + unresolved;
+    const quotedConflict = count('quotedConflict');
+    const adjudicated = supported + contradicted, reviewed = adjudicated + quotedConflict, total = reviewed + unresolved;
     const core = new Set(coreRows);
     const selected = key => rows.filter(row => core.has(row.rowId) && row.category === key).map(row => row.rowId);
     const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved'), coreExcluded = selected('excluded');
+    const coreQuotedConflict = selected('quotedConflict');
     const coreLimited = report.rows.filter((row, index) => core.has(row.id) && rows[index].category === 'supported'
       && (row.status === 'mixed' || (row.status === 'attribution' && row.receipt.contentStatus === 'opinion'))).map(row => row.id);
     const summary = [];
     if (coreContradicted.length) summary.push('지정한 핵심 항목 ' + coreContradicted.length + '개가 원자료와 충돌합니다.');
+    if (coreQuotedConflict.length) summary.push('지정한 핵심 항목 중 ' + coreQuotedConflict.length + '개에서 발언 귀속을 확인했고, 인용 속 사실 주장은 독립 원자료와 충돌했습니다.');
     if (coreUnresolved.length) summary.push('지정한 핵심 항목 ' + coreUnresolved.length + '개는 판단이 남아 있습니다.');
     if (coreExcluded.length) summary.push('지정한 핵심 항목 ' + coreExcluded.length + '개는 의견·평가로 두 비율의 분모에서 제외했습니다.');
     if (coreLimited.length) summary.push('지정한 핵심 항목 ' + coreLimited.length + '개는 사실 구절 또는 발언 사실만 근거로 확인했습니다.');
     if (!total) summary.push('지금 집계할 사실 확인 항목이 없습니다.');
-    else if (!adjudicated) summary.push('지지·충돌을 판정한 항목이 없어 정확도를 계산할 수 없습니다.');
+    else if (!adjudicated) summary.push('기사 서술에 대해 지지·충돌 판정을 마친 항목이 없어 근거 지지율을 계산할 수 없습니다.');
     else if (unresolved) summary.push('미확인 ' + unresolved + '개가 남아 있습니다. 지지율은 판정을 마친 ' + adjudicated + '개에만 적용됩니다.');
     else summary.push('판정을 마친 ' + adjudicated + '개 중 원자료가 지지한 항목은 ' + supported + '개입니다.');
+    if (quotedConflict) summary.push('인용 속 사실 주장 충돌 ' + quotedConflict + '건은 근거 지지율의 분모에서 제외하고 판정 완료율에 포함했습니다.');
     if (total && !core.size) summary.push('제목·핵심 결론으로 지정한 항목은 없습니다.');
-    return {supported, contradicted, unresolved, excluded: count('excluded'), adjudicated, total,
+    return {supported, contradicted, quotedConflict, unresolved, excluded: count('excluded'), adjudicated, reviewed, total,
       accuracyPct: adjudicated ? 100 * supported / adjudicated : null,
-      coveragePct: total ? 100 * adjudicated / total : null,
+      coveragePct: total ? 100 * reviewed / total : null,
       partialCount: report.rows.filter(r => !r.draftPending && r.receipt?.status === 'partial').length,
       attributionOnlyCount: report.rows.filter(r => !r.draftPending && r.receipt?.contentStatus === 'unverified').length,
-      coreRowIds: [...coreRows], coreContradicted, coreUnresolved, coreExcluded, coreLimited, rows, summary: summary.join(' ')};
+      coreRowIds: [...coreRows], coreContradicted, coreQuotedConflict, coreUnresolved, coreExcluded, coreLimited, rows, summary: summary.join(' ')};
   }
 
   function biasFor(ratings) {

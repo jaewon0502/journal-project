@@ -100,9 +100,9 @@
       const a = review.accuracy;
       const cards = text('div', undefined, 'rub-metrics');
       cards.append(metric('판정한 구간 중 근거가 지지한 비율', a.supported, a.adjudicated, a.accuracyPct),
-        metric('판정 대상 중 지지·반증을 가린 비율', a.adjudicated, a.total, a.coveragePct));
-      const counts = text('p', '근거 지지 ' + a.supported + ' · 원문과 근거 충돌 ' + a.contradicted + ' · 미결 ' + a.unresolved + ' · 분모 제외 ' + a.excluded, 'rub-counts');
-      const centralConcern = a.coreContradicted.length || a.coreUnresolved.length || a.coreExcluded.length || a.coreLimited.length;
+        metric('판정 대상 중 확인을 마친 비율', a.reviewed, a.total, a.coveragePct));
+      const counts = text('p', '근거 지지 ' + a.supported + ' · 원문과 근거 충돌 ' + a.contradicted + ' · 인용 속 사실 주장 충돌 ' + a.quotedConflict + ' · 미결 ' + a.unresolved + ' · 의견 제외 ' + a.excluded, 'rub-counts');
+      const centralConcern = a.coreContradicted.length || a.coreQuotedConflict.length || a.coreUnresolved.length || a.coreExcluded.length || a.coreLimited.length;
       summaryBox.replaceChildren(text('h3', '사실 정확성'), cards, counts, text('p', a.summary, centralConcern ? 'callout' : 'rub-note'));
       const listTitle = container.querySelector('[data-section="accuracy"] > summary');
       if (listTitle) listTitle.textContent = '구간별 집계와 핵심 주장 · ' + (a.coreRowIds.length ? a.coreRowIds.length + '개 지정' : '핵심 구절 미지정');
@@ -129,7 +129,7 @@
         mark.append(check, document.createTextNode(' 핵심 주장'));
         bar.append(text('strong', '구간 ' + record.n + ' · ' + a.label), mark);
         li.append(bar, text('p', record.row.text, 'verbatim'));
-        if (a.scope && a.scope !== record.row.text) li.append(text('small', '원자료로 확인한 사실 구절 · ' + a.scope, 'rub-note'));
+        if (a.scope && a.scope !== record.row.text) li.append(text('small', (a.category === 'quotedConflict' ? '원자료와 충돌한 인용 구절 · ' : '원자료로 확인한 사실 구절 · ') + a.scope, 'rub-note'));
         caseList.append(li);
       }
     }

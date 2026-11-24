@@ -9,7 +9,7 @@
     opinion: '의견·가치판단', mixed: '사실과 평가 분리', held: '판단 보류', contradicted: '원자료와 충돌'
   };
   const coverageLimit = '기사에서 빠진 관점과 취재 대상 선정은 별도 검토가 필요합니다. 정당·인물을 바꿔도 같은 기준을 적용하고, 제목·통계의 기간과 분모·전재 기사의 최초 출처를 확인하세요.';
-  const contentLabels = {unverified: '내용 미확인', opinion: '의견·전망', supported: '별도 원자료로 사실 확인'};
+  const contentLabels = {unverified: '내용 미확인', opinion: '의견·전망', supported: '별도 원자료로 사실 확인', contradicted: '독립 원자료와 충돌'};
   const guidance = {
     partial: '확인한 사실 구절을 표시하고, 남은 주장을 판단하려면 어떤 자료가 필요한지 적으세요.',
     fact: '문장에 담긴 주체, 수치, 시점, 조건과 비교 기준을 모두 확인하세요.',
@@ -92,7 +92,7 @@
     const counts = new Map(Object.keys(labels).map(key => [key, 0]));
     for (const row of result.rows) counts.set(row.status, counts.get(row.status) + 1);
     const summary = [...counts].filter(([, count]) => count).map(([key, count]) => labels[key] + ' ' + count + '개');
-    if (result.attributedCount) summary.push('발언 내용 중 미확인 ' + result.contentUnverifiedCount + '개 · 의견/전망 ' + result.contentOpinionCount + '개 · 별도 근거 확인 ' + result.contentSupportedCount + '개');
+    if (result.attributedCount) summary.push('발언 내용 중 미확인 ' + result.contentUnverifiedCount + '개 · 의견/전망 ' + result.contentOpinionCount + '개 · 별도 근거 지지 ' + result.contentSupportedCount + '개 · 내용 충돌 ' + result.contentContradictedCount + '개');
     return summary;
   }
   function sourceSummary(s) {
@@ -177,8 +177,12 @@
     const content = byId('content-status').value;
     byId('attribution-part').hidden = status !== 'attribution';
     byId('content-details').hidden = content === 'unverified';
-    byId('content-sources-part').hidden = content !== 'supported';
-    byId('content-ack').textContent = content === 'opinion' ? '발언에 추가로 확인해야 할 사실 주장이 없는 의견·전망임을 확인했습니다.' : '원발언과 독립된 원자료를 직접 대조해 발언 안의 사실 주장을 확인했습니다.';
+    byId('content-conflict-note').hidden = content !== 'contradicted';
+    byId('content-sources-part').hidden = !['supported','contradicted'].includes(content);
+    const contentAttestations = {opinion: '발언에 추가로 확인해야 할 사실 주장이 없는 의견·전망임을 확인했습니다.',
+      supported: '원발언과 독립된 원자료를 직접 대조해 발언 안의 사실 주장을 확인했습니다.',
+      contradicted: '발언 당시의 같은 대상·기간·단위를 다룬 독립 원자료에서 이 사실 주장 전체와 양립할 수 없는 내용을 확인하고, 판단 이유에 그 차이를 적었습니다.'};
+    byId('content-ack').textContent = contentAttestations[content] || '';
     byId('mixed-parts').hidden = !['partial', 'mixed'].includes(status);
     byId('opinion-part').hidden = status !== 'mixed';
     byId('verdict-help').textContent = guidance[status] || '정치적 표현을 만났다면 사실 주장, 발언의 귀속, 글쓴이의 평가를 구분하세요.';
@@ -321,6 +325,7 @@
         if (r.status === 'mixed') part.append(node('p', '사실 구절 · ' + r.factSpan), node('p', '평가 구절 · ' + r.opinionSpan));
         if (r.status === 'attribution') {
           part.append(node('p', '발언 내용 · ' + contentLabels[r.contentStatus]));
+          if (r.contentClaim) part.append(node('p', '내용을 대조한 인용 구간 · ' + r.contentClaim));
           if (r.contentReason) part.append(node('p', r.contentReason, 'hint'));
         }
         if (r.correction) part.append(node('p', '근거와 대조한 수정 문구 · ' + r.correction));
@@ -850,8 +855,8 @@
     };
     const lines = ['기사 평가 · ' + rubric.version, '사실 정확성',
       '판정한 구간 중 근거 일치율 ' + percent(a.accuracyPct) + ' (' + a.supported + '/' + a.adjudicated + ')',
-      '검증 범위 ' + percent(a.coveragePct) + ' (' + a.adjudicated + '/' + a.total + ')',
-      '근거 지지 ' + a.supported + ' · 반박 ' + a.contradicted + ' · 미결 ' + a.unresolved + ' · 분모 제외 ' + a.excluded,
+      '검증 범위 ' + percent(a.coveragePct) + ' (' + a.reviewed + '/' + a.total + ')',
+      '근거 지지 ' + a.supported + ' · 반박 ' + a.contradicted + ' · 인용 속 사실 주장 충돌 ' + a.quotedConflict + ' · 미결 ' + a.unresolved + ' · 의견 제외 ' + a.excluded,
       a.summary];
     if (!a.coreRowIds.length) lines.push('핵심 구절 미지정');
     for (const id of a.coreRowIds) {
@@ -890,6 +895,7 @@
         if (r.status === 'partial') lines.push('남은 구절 · ' + r.remainingSpans.join(' / '));
         if (r.status === 'attribution') {
           lines.push('발언 내용 · ' + contentLabels[r.contentStatus]);
+          if (r.contentClaim) lines.push('내용을 대조한 인용 구간 · ' + r.contentClaim);
           if (r.contentReason) lines.push('내용 판단 이유 · ' + r.contentReason);
         }
         if (r.correction) lines.push('근거와 대조한 수정 문구 · ' + r.correction);

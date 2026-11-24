@@ -5,7 +5,7 @@
   const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const rubric = useNode ? require('./article-rubric.js') : root.JournalArticleRubric;
   const statuses = ['partial','pending','fact','attribution','opinion','mixed','held','contradicted'];
-  const contentStatuses = ['unverified','opinion','supported'];
+  const contentStatuses = ['unverified','opinion','supported','contradicted'];
   const schema = 'journal-local-factcheck-v1';
   const sourceFields = ['title', 'url', 'locator', 'excerpt', 'version', 'originUrl', 'pdfPage'];
   function isMock(source) {

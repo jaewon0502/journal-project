@@ -489,19 +489,43 @@
     const frame = quotes.length ? framed.replace(/[“"][^“”"]+[”"]/gu, ' ') : '';
     const frameFact = allegation.test(frame) || eventFact.test(frame)
       || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
-    return {hasForecast, allNonfactual: allNonfactual && !frameFact};
+    return {hasForecast, allNonfactual: allNonfactual && !frameFact, quotes, frameFact};
   }
   function contentFields(row, decision, catalog, speechIds) {
     const contentStatus = decision.contentStatus ?? 'unverified';
-    if (!['unverified','opinion','supported'].includes(contentStatus)) throw new Error('발언 내용의 검토 상태를 확인하세요.');
+    if (!['unverified','opinion','supported','contradicted'].includes(contentStatus)) throw new Error('발언 내용의 검토 상태를 확인하세요.');
     if (contentStatus === 'unverified') return {contentStatus};
     if (decision.contentChecked !== true || !nonblank(decision.contentReason)) throw new Error('발언 내용의 범위와 판단 이유를 확인하세요.');
-    const scope = speechScope(row.text);
+    const checkingConflict = contentStatus === 'contradicted';
+    const scopedText = checkingConflict ? row.text.replace(/[‘「『]/gu, '“').replace(/[’」』]/gu, '”')
+      .replace(/(?<![A-Za-z])'([^'\n]+)'(?![A-Za-z])/gu, '“$1”') : row.text;
+    const scope = speechScope(scopedText);
     if (contentStatus === 'opinion') {
       if (!scope.allNonfactual) throw new Error('발언에 남은 사실·의혹을 별도 근거로 확인하거나 내용 미확인으로 남겨 주세요.');
       return {contentStatus, contentChecked: true, contentReason: decision.contentReason};
     }
-    if (scope.hasForecast) throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과는 시점을 명시한 별도 주장과 원자료가 필요합니다.');
+    if (scope.hasForecast || (checkingConflict && /일\s*것|일\s*전망|예측(?:한|했|이)|예상(?:이|하)|전망(?:이|하)/u.test(scopedText))) {
+      throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과는 시점을 명시한 별도 주장과 원자료가 필요합니다.');
+    }
+    let contentClaim;
+    if (checkingConflict) {
+      const marks = scopedText.match(/[“”"]/gu) || [];
+      if (!attributed.test(row.text) || scope.allNonfactual || scope.frameFact || (marks.length && (marks.length !== 2 || scope.quotes.length !== 1))) {
+        throw new Error('원발언에서 확인한 하나의 사실 주장을 대조하세요. 의견이나 귀속 밖의 사실이 섞여 있으면 내용을 미확인으로 남겨 주세요.');
+      }
+      if (marks.length) {
+        const tail = scopedText.slice(Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"')) + 1);
+        if (!/^[\s.!?。！？]*$/u.test(tail) && !quoteContinues(tail)) {
+          throw new Error('문서명이나 강조 표현을 사실 주장으로 지정할 수 없습니다. 원발언에서 사실 주장을 확인하세요.');
+        }
+      }
+      // Keep the entire quote, including negation and conditions. Indirect speech
+      // has no verbatim boundaries, so preserve the entire attributed passage.
+      contentClaim = (scope.quotes[0] || row.text).trim();
+      if (assessment.test(contentClaim) || /(?:했|됐|였|었|았|이)고\s|(?:지만|으나|이며|으며)\s|[;；]|[.!?]\s+\S/u.test(contentClaim)) {
+        throw new Error('서로 다른 주장이 함께 있는 인용은 한 번에 반박으로 판정할 수 없습니다. 각 주장을 따로 대조하세요.');
+      }
+    }
     const ids = decision.contentSourceIds;
     if (!Array.isArray(ids) || !ids.length || ids.some(id => !catalog.items.has(id)) || new Set(ids).size !== ids.length) throw new Error('발언의 내용 자체를 확인한 별도의 원자료를 선택하세요.');
     const speech = speechIds.map(id => catalog.items.get(id));
@@ -513,7 +537,8 @@
         throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서, 그 문서를 재인용한 자료, 같은 발췌문은 발언 내용의 독립 근거가 될 수 없습니다.');
       }
     }
-    return {contentStatus, contentChecked: true, contentReason: decision.contentReason, contentSourceIds: [...ids].sort()};
+    return {contentStatus, contentChecked: true, contentReason: decision.contentReason, contentSourceIds: [...ids].sort(),
+      ...(contentClaim ? {contentClaim} : {})};
   }
   function decisionFields(row, decision, catalog) {
     if (!decision || decision.acknowledged !== true) throw new Error('원문과 판단 범위를 직접 확인했다는 표시가 필요합니다.');
@@ -628,6 +653,7 @@
     const contentCount = state => rows.filter(row => row.receipt?.contentStatus === state).length;
     return {article, rows, pendingCount, complete: rows.length > 0 && pendingCount === 0,
       contentSupportedCount: contentCount('supported'), contentOpinionCount: contentCount('opinion'), contentUnverifiedCount: contentCount('unverified'),
+      contentContradictedCount: contentCount('contradicted'),
       confirmedCount: count('fact'), attributedCount: count('attribution'), opinionCount: count('opinion'),
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
