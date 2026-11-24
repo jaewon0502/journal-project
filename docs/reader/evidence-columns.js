@@ -114,11 +114,11 @@
     return subset.test(outside) || demographic.test(outside) || circumstance.test(outside);
   }
 
-  function annualMetricCell(documentText, query, passage) {
+  function inspectAnnualRow(documentText, query, passage) {
     if (typeof documentText !== 'string' || typeof query !== 'string' ||
         !Number.isInteger(passage?.paragraph) || passage.paragraph < 2 || typeof passage.text !== 'string') return null;
     const normalized = query.normalize('NFKC');
-    if (derivedMeasure.test(normalized) || documentText.includes('\f')) return null;
+    if (documentText.includes('\f')) return null;
     const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
     const asked = period.requestedPeriod(normalized);
     if (!asked || asked.month || asked.day ||
@@ -134,33 +134,11 @@
     if (!header || !annualHeader.test(header.cells[0])) return null;
     const headings = header.cells.slice(1);
     const labels = headings.map(heading => heading.normalize('NFKC').replace(/\s+/gu, ''));
-    if (labels.some(label => !label) || new Set(labels).size !== labels.length) return null;
+    if (labels.some(label => !/\p{L}/u.test(label) || yearCell.test(label)) ||
+        new Set(labels).size !== labels.length) return null;
 
-    const mentions = [];
-    labels.forEach((label, col) => {
-      // Only remove an explicit count unit or the final 수 in an agent noun
-      // (사망자수 → 사망자). Keep qualifiers part of the printed metric.
-      const base = label.replace(/\((?:명|건|개|회|%p?)\)$/iu, '');
-      if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || derivedMeasure.test(base)) return;
-      const count = /[자원]수$/u.test(base);
-      const tokens = [...(count ? base.slice(0,-1) : base)].join('\\s*') + (count ? '(?:\\s*수)?' : '');
-      const term = new RegExp('(?<![\\p{L}\\p{N}])' + tokens +
-        '(?:은|는|이|가|을|를|와|과|의|도|만)?(?![\\p{L}\\p{N}])', 'giu');
-      for (const match of normalized.matchAll(term))
-        mentions.push({col:col + 1, start:match.index, end:match.index + match[0].length});
-    });
-    // A qualified heading may contain another column's entire name. Two
-    // independently mentioned columns cannot be reduced to one requested cell.
-    const columns = new Set(mentions.filter(m => !mentions.some(n =>
-      n.start < m.start && n.end >= m.end)).map(m => m.col));
-    if (columns.size !== 1) return null;
-    const [col] = columns, label = labels[col - 1], years = new Set();
-    const remaining = mentions.filter(m => m.col === col).reduceRight((text, m) =>
-      text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
-    if (asksForSubset(remaining)) return null;
-    if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
-        (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
-    let value;
+    const years = new Set();
+    let selected;
     for (const [i, line] of block.entries()) {
       if (/^ *\t|^\s*\|\s*\|/u.test(line)) return null; // cellsOf permits a blank stub in other layouts.
       if (!i) continue;
@@ -170,11 +148,57 @@
       const year = yearCell.exec(row.cells[0])?.[1];
       if (!year || years.has(year)) return null;
       years.add(year);
-      if (i === passage.paragraph - 1 && year === asked.year) value = row.cells[col];
+      if (i === passage.paragraph - 1 && year === asked.year) selected = row.cells;
     }
-    if (!value || !/\d/u.test(value) || (value.includes('%') && !ratioMeasure.test(header.cells[col]))) return null;
-    return {headerParagraph:1, rowParagraph:passage.paragraph, year:asked.year, heading:header.cells[col],
-      column:col + 1, value};
+    if (!selected) return null;
+    const cells = headings.map((heading, i) => ({heading, column:i + 2, value:selected[i + 1]}));
+    const location = {headerParagraph:1, rowParagraph:passage.paragraph, year:asked.year};
+    const cell = requestedMetric(normalized, labels, cells);
+    return {...location, cells, metric:cell && {...location, ...cell}};
+  }
+
+  // Only an administrative action that modifies the object being counted is
+  // eligible. A report that someone "확인한 결과" does not ask for an 확인 count.
+  const countedAction = /^(?:제정|개정|폐지|지정|승인|허가|취소|발급|등록|접수|채택|공포|시행|인증|설립|신설|폐쇄)$/u;
+  const qualifiedActor = /[\p{L}\p{N}]+(?:이|가|만|에서)\s+(?:(?:새로|다시|직접)\s+)?$/u;
+  const countedObject = /^\s+(?!결과|자료|사실|내용)[\p{L}\p{N}]+(?:\([\p{L}\p{N}]+\))?(?:\s+수)?(?:은|는|이|가)\s*(?:(?:모두|총|약|정확히)\s*)?(?:몇|\d[\d,.]*)\s*(?:종|건|곳|개|명|회|장)/u;
+
+  function requestedMetric(normalized, labels, cells) {
+    if (derivedMeasure.test(normalized)) return null;
+    const mentions = [];
+    labels.forEach((label, col) => {
+      // Only remove an explicit count unit or the final 수 in an agent noun
+      // (사망자수 → 사망자). Keep qualifiers part of the printed metric.
+      const base = label.replace(/\((?:명|건|개|회|%p?)\)$/iu, '');
+      if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || derivedMeasure.test(base)) return;
+      const count = /[자원]수$/u.test(base);
+      const tokens = [...(count ? base.slice(0,-1) : base)].join('\\s*') + (count ? '(?:\\s*수)?' : '');
+      const action = countedAction.test(base) ? '(한|된)|' : '';
+      const term = new RegExp('(?<![\\p{L}\\p{N}])' + tokens +
+        '(?:' + action + '(?:은|는|이|가|을|를|와|과|의|도|만)?)(?![\\p{L}\\p{N}])', 'giu');
+      for (const match of normalized.matchAll(term))
+        mentions.push({col:col + 1, start:match.index, end:match.index + match[0].length,
+          counted:!match[1] || (countedObject.test(normalized.slice(match.index + match[0].length)) &&
+            !qualifiedActor.test(normalized.slice(0, match.index)))});
+    });
+    // A qualified heading may contain another column's entire name. Two
+    // independently mentioned columns cannot be reduced to one requested cell.
+    const columns = new Set(mentions.filter(m => !mentions.some(n =>
+      n.start < m.start && n.end >= m.end)).map(m => m.col));
+    if (columns.size !== 1) return null;
+    const [col] = columns, label = labels[col - 1];
+    if (!mentions.some(m => m.col === col && m.counted)) return null;
+    const remaining = mentions.filter(m => m.col === col).reduceRight((text, m) =>
+      text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
+    if (asksForSubset(remaining)) return null;
+    if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
+        (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
+    const cell = cells[col - 1];
+    return /\d/u.test(cell.value) && (!cell.value.includes('%') || ratioMeasure.test(label)) ? cell : null;
+  }
+
+  function annualMetricCell(documentText, query, passage) {
+    return inspectAnnualRow(documentText, query, passage)?.metric || null;
   }
 
   const levelCell = /^(\d+(?:\.\d+)?)(?:\(\s*([+−-]?\d+(?:\.\d+)?)\s*\))?$/u;
@@ -277,7 +301,7 @@
       legendParagraph:headerParagraph - (hasStub ? 3 : 2), comparisons} : null;
   }
 
-  const api = {forRow, annualMetricCell, changeNote};
+  const api = {forRow, inspectAnnualRow, annualMetricCell, changeNote};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceColumns = api;
 })(globalThis);

@@ -170,3 +170,29 @@ test('원표에 없는 집단·지역을 물으면 전체를 집단의 수치로
   assert.equal(find('2024년 어린이 사망자는?')[0].value, '20');
   assert.equal(find('2024년 교통사고 통계에서 사망자는 몇 명인가?')[0].value, '350');
 });
+
+test('연도 행은 항목별 원문 값을 제공하고, 명시한 행정 행위 건수만 활용형으로 연결한다', () => {
+  const lines = ['연도\t지정\t취소\t확인\t보유시설수','2019\t8\t2\t51\t103','2020\t9\t3\t49\t108'];
+  const table = lines.join('\n');
+  const passage = {paragraph:3, text:lines[2]};
+  function inspect(query, source=table) { return columns.inspectAnnualRow(source, query, passage); }
+  for (const [q, value] of [['2020년에 새로 지정한 시설은 몇 곳이었나?', '9'],
+      ['2020년에 취소된 인증이 2건이라는 주장은 맞나?', '3']]) {
+    assert.equal(columns.annualMetricCell(table, q, passage).value, value);
+  }
+  for (const q of ['2020년에 확인한 결과 인증서는 몇 장이었나?', '2020년에 지정한 시설에서 나온 지출은 몇 건인가?',
+    '2020년에 중소기업이 새로 지정한 시설은 몇 곳이었나?', '2020년에 지정한 시설 가운데 서울에 있는 것은 몇 곳이었나?', '2020년에 취소하지 않은 인증은 몇 건인가?',
+    '2020년에 지정한 시설과 취소된 인증은 몇 건인가?', '2020년에 보유한 국립시설은 몇 곳인가?',
+    '2020년 표의 이용 조건은 무엇인가?']) {
+    const row = inspect(q);
+    assert.equal(row.metric, null, q);
+    assert.deepEqual(row.cells.map(c => [c.column, c.heading, c.value]),
+      [[2,'지정','9'],[3,'취소','3'],[4,'확인','49'],[5,'보유시설수','108']],q);
+    assert.equal(row.headerParagraph,1);
+    assert.equal(row.rowParagraph,3);
+  }
+  assert.equal(inspect('2019년과 2020년 시설은 몇 곳인가?'),null);
+  assert.equal(inspect('2018년 지정한 시설은 몇 곳이었나?'),null);
+  assert.equal(inspect('2020년 표의 항목은?', table.replace('확인', '2021년')),null);
+  assert.equal(inspect('2020년에 지정한 시설은?', table + '\n2021\t10\t4'),null);
+});

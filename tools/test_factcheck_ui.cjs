@@ -756,3 +756,29 @@ test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치�
   set('document-query', '2024년 인구 10만 명당 사망자는?'); click('find-passages');
   assert.doesNotMatch(el('finder-results').textContent, /원문 값/);
 });
+
+test('대상 연도의 항목을 펼쳐도 표 전체의 값을 질문의 답으로 제시하거나 판정을 기록하지 않는다', t => {
+  const {el, set, click, w} = open(t);
+  click('load-demo');
+  const lines = ['연도\t지정\t확인\t보유시설수', '2019\t8\t51\t103', '2020\t9\t49\t108'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2020년 승인 현황을 확인한 결과 시설이 몇 곳이었나?');
+  click('find-passages');
+  const lookup = el('finder-results');
+  const inspect = [...lookup.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent === '2020년 원표 항목 3개 보기');
+  assert.ok(inspect);
+  assert.equal(inspect.open,false);
+  assert.doesNotMatch(lookup.textContent,/원문 값/);
+  const report = el('report-rows').textContent;
+  const excerpt = el('source-excerpt').value;
+  inspect.open = true;
+  inspect.dispatchEvent(new w.Event('toggle'));
+  assert.match(inspect.textContent, /머리글 1문단 · 자료 3문단/);
+  assert.deepEqual([...inspect.querySelectorAll('li')].map(li => li.textContent),
+    ['2열 · 지정 · 9','3열 · 확인 · 49','4열 · 보유시설수 · 108']);
+  assert.equal(el('source-excerpt').value,excerpt);
+  assert.equal(el('report-rows').textContent,report);
+  assert.equal(el('verdict').value,'');
+  set('document-query', '2017년 보유 시설은 얼마인가?'); click('find-passages');
+  assert.doesNotMatch(lookup.textContent,/원표 항목/);
+});

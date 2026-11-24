@@ -656,11 +656,25 @@
         if (columns.ambiguousYears.length)
           block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
       }
-      const metric = window.JournalEvidenceColumns.annualMetricCell(text, query, passage);
+      const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
+      const metric = annual?.metric;
       if (metric) {
         block.append(node('p', metric.year + '년 · ' + metric.heading + ' · 원문 값 ' + metric.value +
           ' (머리글 ' + metric.headerParagraph + '문단 · 자료 ' + metric.rowParagraph +
           '문단 · 왼쪽에서 ' + metric.column + '번째 열)'));
+      }
+      if (annual) {
+        const details = node('details');
+        details.append(node('summary', annual.year + '년 원표 항목 ' + annual.cells.length + '개 보기'));
+        details.addEventListener('toggle', function showCells() {
+          if (!details.open) return;
+          details.removeEventListener('toggle', showCells);
+          const list = node('ul');
+          for (const cell of annual.cells)
+            list.append(node('li', cell.column + '열 · ' + cell.heading + ' · ' + cell.value));
+          details.append(node('p', '머리글 ' + annual.headerParagraph + '문단 · 자료 ' + annual.rowParagraph + '문단'), list);
+        });
+        block.append(details);
       }
       const changes = window.JournalEvidenceColumns.changeNote(text, query, passage);
       for (const diff of changes?.comparisons || []) {
