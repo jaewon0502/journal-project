@@ -10,7 +10,9 @@
     const doc = container.ownerDocument;
     const core = root.JournalRetentionCase;
     const revised = editors[0].snapshots[1].rows;
-    const listId = 'retention-passages-' + ++mounted;
+    const instance = 'retention-notes-' + ++mounted;
+    const normalize = value => value.normalize('NFKC').toLowerCase().replace(/(\d),(?=\d{3}(?:\D|$))/gu, '$1');
+    const searchText = revised.map(row => normalize(row.text).replace(/\s+/gu, ''));
     const savedByRow = new Map(notes.map(note => [note.before, note]));
     const forms = [];
     let changes = 0;
@@ -32,7 +34,7 @@
       return item;
     }
     function targetIndex(input) {
-      const raw = input.value.trim();
+      const raw = input.value.normalize('NFKC').trim();
       if (!/^[1-9]\d*$/.test(raw)) return null;
       const index = Number(raw) - 1;
       return index < revised.length ? index : null;
@@ -46,17 +48,11 @@
     save.dataset.retentionSave = '';
     const feedback = el('p', '', 'status');
     feedback.dataset.retentionFeedback = '';
-    feedback.id = listId + '-status';
+    feedback.id = instance + '-status';
     feedback.setAttribute('role', 'status');
-    const passageList = el('datalist');
-    passageList.id = listId;
-    revised.forEach((row, index) => {
-      const pick = option(String(index + 1), row.text.slice(0, 45));
-      passageList.append(pick);
-    });
     box.append(el('h4', '진행자의 원본 사실 대조'), summary, save,
-      el('p', '개인 보관용 파일에 기사·원자료와 미적용 초안을 포함한 두 편집자의 작업 파일 4개, 진행자 대응표 2개, 사후 판단을 담습니다. 이 화면은 파일을 외부로 보내지 않습니다.', 'note'),
-      feedback, passageList);
+      el('p', '개인 보관용 파일에 기사·원자료와 미적용 초안을 포함한 두 편집자의 작업 파일 4개, 진행자 대응표 2개, 사후 판단을 담습니다. 이 화면은 파일을 외부로 보내지 않습니다. 다운로드한 파일을 가진 사람은 기사와 초안을 읽을 수 있습니다.', 'note'),
+      feedback);
     const group = container.querySelector('.fact-retention');
     if (group) group.before(box);
     else container.append(box);
@@ -74,11 +70,62 @@
       form.detail.dataset.retentionPending = String(!status || status === 'open' || draft);
       form.mark.textContent = (status || draft) ? '진행자 ' + (states[status] || '판단 미선택') + (draft ? ' · 작성 중' : '') : '';
     }
+    function termPosition(line, term) {
+      let found = line.indexOf(term);
+      while (found >= 0) {
+        // A search for 300 households should not offer 1300 or 3000 households.
+        const leadingDigits = /^\d/.test(term) && /\d\.?$/.test(line.slice(Math.max(0, found - 2), found));
+        const trailingDigits = /\d$/.test(term) && /^\.?\d/.test(line.slice(found + term.length, found + term.length + 2));
+        if (!leadingDigits && !trailingDigits) return found;
+        found = line.indexOf(term, found + 1);
+      }
+      return -1;
+    }
+    function searchTargets(form) {
+      const words = normalize(form.target.value).trim().split(/\s+/u);
+      let count = 0;
+      const list = el('ul');
+      for (const [index, line] of searchText.entries()) {
+        const positions = words.map(word => termPosition(line, word));
+        if (positions.some(at => at < 0)) continue;
+        count++;
+        if (count > 5) continue;
+        const plain = revised[index].text.replace(/\s+/gu, ' ').trim();
+        const at = positions[0];
+        let offset = 0;
+        for (let consumed = 0; offset < plain.length && consumed < at; offset++) {
+          if (plain[offset] !== ' ') consumed++;
+        }
+        const start = Math.max(0, offset - 24);
+        const excerpt = (start ? '…' : '') + plain.slice(start, start + 90) + (plain.length > start + 90 ? '…' : '');
+        const pick = el('button', (index + 1) + '번 · ' + excerpt);
+        pick.type = 'button';
+        pick.dataset.retentionPick = String(index);
+        pick.addEventListener('click', () => {
+          form.target.value = String(index + 1);
+          edited(form, true);
+          form.preview.focus();
+        });
+        const item = el('li');
+        item.append(pick);
+        list.append(item);
+      }
+      const status = el('p', count ? '검색한 구절 ' + count + '개. ' +
+        (count > 5 ? '처음 5개를 표시합니다. 검색어를 더 넣어 범위를 좁히세요.' : '대조할 구절을 선택하세요.')
+        : '검색한 표현이 있는 구절을 찾지 못했습니다. 다른 표현이나 구절 번호를 입력하세요.', 'note');
+      status.setAttribute('role', 'status');
+      form.preview.append(status);
+      if (count) form.preview.append(list);
+    }
     function previewTarget(form) {
       const {target, preview} = form;
       const index = targetIndex(target);
       preview.replaceChildren();
-      if (target.disabled || index === null) return;
+      if (target.disabled || !target.value.trim()) return;
+      if (index === null) {
+        searchTargets(form);
+        return;
+      }
       preview.append(el('p', '수정본 ' + (index + 1) + '번 · 두 편집자의 판정 ' + outcomes[record.facts.after[index].outcome]),
         el('blockquote', revised[index].text));
       if (!decisionEvidence) return;
@@ -110,7 +157,8 @@
       rowMark(form, true);
       if (showTarget) previewTarget(form);
       feedback.classList.remove('error');
-      feedback.textContent = '입력한 변경 사항은 파일을 저장할 때 사후 집계에 반영됩니다.';
+      const message = '입력한 변경 사항은 파일을 저장할 때 사후 집계에 반영됩니다.';
+      if (feedback.textContent !== message) feedback.textContent = message;
     }
     for (const detail of container.querySelectorAll('details[data-retention-before]')) {
       const before = Number(detail.dataset.retentionBefore);
@@ -124,13 +172,17 @@
       state.value = note?.status || '';
       const target = el('input');
       target.type = 'text';
-      target.inputMode = 'numeric';
-      target.setAttribute('list', listId);
+      target.inputMode = 'text';
       target.setAttribute('autocomplete', 'off');
       target.dataset.retentionTarget = '';
       target.value = note?.after != null ? String(note.after + 1) : '';
       const preview = el('div');
       preview.dataset.retentionPreview = '';
+      preview.id = instance + '-passage-' + before;
+      preview.tabIndex = -1;
+      preview.setAttribute('role', 'region');
+      preview.setAttribute('aria-label', '수정본 구절과 편집자 근거');
+      target.setAttribute('aria-controls', preview.id);
       const reason = el('textarea');
       reason.dataset.retentionReason = '';
       reason.rows = 2;
@@ -139,7 +191,7 @@
       clear.type = 'button';
       clear.dataset.retentionClear = '';
       field(group, '진행자 판단', state);
-      field(group, '대조할 수정본 구절 번호 (1~' + revised.length + ')', target);
+      field(group, '수정본 구절 번호 (1~' + revised.length + ') 또는 찾을 표현', target);
       group.append(preview);
       field(group, '판단 이유 또는 검토 메모', reason);
       group.append(clear);
@@ -152,7 +204,11 @@
       rowMark(form, false);
       previewTarget(form);
       state.addEventListener('change', () => edited(form, true));
-      target.addEventListener('input', () => edited(form, true));
+      target.addEventListener('input', event => {
+        if (event.isComposing) preview.replaceChildren();
+        else edited(form, true);
+      });
+      target.addEventListener('compositionend', () => edited(form, true));
       reason.addEventListener('input', () => edited(form, false));
       clear.addEventListener('click', () => {
         state.value = target.value = reason.value = '';
@@ -180,7 +236,7 @@
           if (reason || form.target.value.trim()) invalid(form, form.state, '사후 판단을 선택하세요. 더 검토하려면 ‘검토 중’을 선택하세요.');
           continue;
         }
-        if (form.target.value.trim() && after === null) invalid(form, form.target, '수정본에 있는 구절 번호를 입력하세요.');
+        if (form.target.value.trim() && after === null) invalid(form, form.target, '검색 결과에서 대조할 구절을 선택하거나 구절 번호를 입력하세요.');
         if (form.target.required && after === null) invalid(form, form.target, '판단에 사용한 수정본 구절을 선택하세요.');
         if (status === 'retained' && record.facts.after[after].outcome !== 'supported') {
           invalid(form, form.target, '유지를 확인하려면 두 편집자가 구절 전체를 지지한 수정본 구절이 필요합니다.');

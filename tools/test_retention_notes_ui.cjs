@@ -6,7 +6,7 @@ const core = require('../docs/reader/retention-case.js');
 const script = fs.readFileSync(require.resolve('../docs/reader/retention-notes-ui.js'), 'utf8');
 const next = () => new Promise(resolve => setImmediate(resolve));
 
-function screen(t, notes = [], onDownload, noOriginal = false) {
+function screen(t, notes = [], onDownload, noOriginal = false, additionalPassages = []) {
   const dom = new JSDOM('<main><section id="panel"><p id="original">공동 편향 개선 1/1</p><details class="fact-retention"><summary>원본 사실 대조</summary></details></section></main>', {runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window, doc = w.document;
@@ -17,12 +17,13 @@ function screen(t, notes = [], onDownload, noOriginal = false) {
     dimensions:['wording', 'framing', 'omission', 'standards'].map(id => ({id, first:{before:2, after:0}, second:{before:2, after:0}})),
     facts:{before:['supported','supported','supported'], after:['supported','supported','pending']}, factMatches:[[0,null],[1,2],[2,1]]};
   for (const role of ['before','after']) record.facts[role] = record.facts[role].map(outcome => ({outcome, flag:'none'}));
+  record.facts.after.push(...additionalPassages.map(() => ({outcome:'supported', flag:'none'})));
   if (noOriginal) {
     record.facts.before.forEach(row => { row.outcome = 'pending'; });
     record.factMatches = [];
   }
   const original = ['지원 대상은 300가구다.', '지원은 다음 달부터다.', '사업비는 100억 원이다.'];
-  const revised = ['300가구에 지원한다. <img src=x>', '사업비는 100억 원이다.', '지원은 다음 달부터다.'];
+  const revised = ['300가구에 지원한다. <img src=x>', '사업비는 100억 원이다.', '지원은 다음 달부터다.', ...additionalPassages];
   const editors = ['가', '나'].map(editor => ({snapshots:[original, revised].map(texts => ({
     rows:texts.map((text, index) => ({id:'unit-' + index, text, receipt:{reason:editor + '의 명부 확인'}})),
     assessment:{accuracy:{rows:texts.map((_, i) => ({rowId:'unit-' + i, label:'대조한 구절'}))}}
@@ -87,6 +88,68 @@ test('원본에 공동 지지 구절이 없으면 사후 유지 확인 비율은
   const p = screen(t, [], undefined, true);
   assert.match(p.get('summary').textContent, /현재까지 유지 확인 0\/0개 \(산출 대기\)/);
   assert.doesNotMatch(p.get('summary').textContent, /0%|NaN/);
+});
+
+test('수량·여러 검색어로 재서술 후보를 찾고, 직접 고른 구절 번호와 두 편집자의 근거만 사용한다', async t => {
+  const p = screen(t, [], undefined, false, ['지원 대상은 1,300 가구다.', '다른 지역은 3000가구에 지원한다.', '평균 300.5가구에 지원한다.']);
+  const row = p.row(0), preview = p.get('preview', row), target = p.get('target', row);
+  const picks = () => [...preview.querySelectorAll('button[data-retention-pick]')];
+  p.edit(0, 'state', 'retained');
+  p.edit(0, 'reason', '수정본에서도 동일한 지역의 300가구다.');
+  for (const query of ['300 가구', '지원 ３００가구', '300']) {
+    p.edit(0, 'target', query);
+    assert.match(preview.textContent, /검색한 구절 1개/);
+    assert.deepEqual(picks().map(button => button.dataset.retentionPick), ['0']);
+    assert.equal(preview.querySelector('img'), null);
+    await p.save();
+    assert.equal(p.downloads.length, 0);
+    assert.match(p.get('feedback').textContent, /검색 결과에서 대조할 구절을 선택/);
+  }
+  p.edit(0, 'target', '1,300가구');
+  assert.deepEqual(picks().map(button => button.dataset.retentionPick), ['3']);
+  p.edit(0, 'target', '300가구');
+  picks()[0].click();
+  assert.equal(target.value, '1');
+  assert.match(preview.textContent, /가의 명부 확인나의 명부 확인/);
+  assert.equal(p.doc.activeElement, preview);
+  await p.save();
+  assert.equal(p.downloads[0][0].after, 0);
+  p.edit(0, 'target', '새 구절');
+  assert.match(preview.textContent, /찾지 못했습니다/);
+  assert.doesNotMatch(preview.textContent, /명부 확인/);
+  await p.save();
+  assert.equal(p.downloads.length, 1);
+  p.edit(0, 'state', 'notFound');
+  assert.equal(target.value, '');
+  assert.equal(preview.textContent, '');
+  p.edit(0, 'reason', '원문을 다시 읽은 결과 대상 지역이 일치하지 않았다.');
+  await p.save();
+  assert.equal(p.downloads[1][0].after, null);
+  p.edit(0, 'state', 'open');
+  p.edit(0, 'target', '지원');
+  p.get('clear', row).click();
+  await p.save();
+  assert.deepEqual(p.downloads[2], []);
+});
+
+test('많은 결과에는 전체 건수·첫 다섯 구절을 표시하고 한글 조합이 끝난 검색어로 좁힌다', t => {
+  const texts = Array.from({length:7}, (_, i) => i === 6 ? '수정된 일정이다. '.repeat(15) + '화요일 회의에서 설명했다.' : '월요일 회의에서 현황을 설명했다.');
+  const p = screen(t, [], undefined, false, texts);
+  const row = p.row(0), preview = p.get('preview', row), target = p.get('target', row);
+  p.edit(0, 'target', '회의');
+  assert.match(preview.textContent, /검색한 구절 7개.*처음 5개/);
+  assert.equal(preview.querySelectorAll('button').length, 5);
+  const w = target.ownerDocument.defaultView;
+  assert.equal(target.inputMode, 'text');
+  target.value = '화요일 회';
+  target.dispatchEvent(new w.InputEvent('input', {isComposing:true}));
+  assert.equal(preview.textContent, '');
+  target.value = '회의 화요일';
+  target.dispatchEvent(new w.CompositionEvent('compositionend'));
+  assert.match(preview.textContent, /검색한 구절 1개.*10번.*화요일 회의/);
+  p.edit(0, 'target', '３');
+  assert.equal(preview.querySelector('button'), null);
+  assert.match(preview.textContent, /수정본 3번.*미결/);
 });
 
 test('다른 구절에 남은 미완성 판단은 저장 전 열어 주며 불완전한 입력과 기존 기록을 함께 보존한다', async t => {
