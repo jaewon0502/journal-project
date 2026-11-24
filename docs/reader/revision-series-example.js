@@ -3,7 +3,8 @@ globalThis.JournalRevisionSeriesExample = [
   {
     name: "출생 통계 연습 기사",
     record: {
-      format: "journal-revision-series-record", version: 2, demo: true,
+      format: "journal-revision-series-record", version: 3, demo: true,
+      factMatches: [],
       before: {
         articleSha256: "f547c62441edde7a41887552eb5f6d6efe02b98ea3ee52fefe0aef7393e98a87",
         sourcesSha256: "1647c730022bcee65e2d0d742c95bfbf34294930f708d249beec09ea5a54f625"
@@ -42,7 +43,8 @@ globalThis.JournalRevisionSeriesExample = [
     name: "도서관 운영 연습 기사",
     evidenceExample: "library",
     record: {
-      format: "journal-revision-series-record", version: 2, demo: true,
+      format: "journal-revision-series-record", version: 3, demo: true,
+      factMatches: [[1, null]],
       before: {
         articleSha256: "c34e8e647282edeb0eb6df2402a07e63e3c37a37c8269924bd4bd592134fe4b6",
         sourcesSha256: "a0b010359825ef61737e7b9f4d4ddda9fd3a4cd138303bdb79aca5933a3dc8b8"

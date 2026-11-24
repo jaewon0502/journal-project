@@ -166,12 +166,38 @@
     if (r.direction) div.append(note('기록한 영향 방향 · ' + r.direction));
     return div;
   }
+  function singleWordingPositions(snapshot) {
+    const positions = new Map();
+    snapshot.rows.forEach((row, index) => {
+      positions.set(row.text, positions.has(row.text) || row.positions.length !== 1 ? null : index);
+    });
+    return positions;
+  }
   function biasPanel(c, snapshots) {
     const revision = c.mode === 'revision';
     const panel = section(revision ? '편향의 변화' : '편향 판정 일치도');
     const b = c.bias;
     const grid = element('div', null, 'metrics');
     if (revision) {
+      const pendingSupport = c.originalSupported.filter(row => !row.revisedFullySupported);
+      if (pendingSupport.length) {
+        const group = detail('수정본에서 다시 대조할 원본 사실 ' + pendingSupport.length + '개');
+        const wording = singleWordingPositions(snapshots[1]);
+        group.append(note('원본에서 구절 전체가 근거로 지지된 ' + c.originalSupported.length +
+          '개 중 같은 구절의 전체 지지를 다시 확인하지 못한 항목입니다. 표현이나 문맥이 바뀐 경우도 포함됩니다.'));
+        for (const row of pendingSupport) {
+          const item = detail(row.text);
+          item.append(decisionEvidence(snapshots[0], row.original, row.text, '원본'),
+            decisionEvidence(snapshots[1], row.revised, row.text, '수정본'));
+          const candidate = wording.get(row.text);
+          if (!row.revised && candidate != null) {
+            item.append(note('수정본 ' + (candidate + 1) + '번에 같은 문구가 있습니다. 주변 문맥을 대조하세요.'),
+              element('blockquote', snapshots[1].rows[candidate].context));
+          }
+          group.append(item);
+        }
+        panel.append(group);
+      }
       if (b.pendingImportant.length) {
         const originalCount = b.improved.denominator + b.pendingImportant.length;
         panel.append(element('p', '원본의 중요한 왜곡 ' + originalCount + '개 중 개선 확인 ' + b.improved.numerator +
@@ -407,6 +433,54 @@
     context.append(document.createTextNode(article.slice(cursor, end)));
     item.append(note('같은 문구가 나온 위치와 앞뒤 원문'), context);
   }
+  function jointRetention(panel, joint, editors) {
+    const trace = window.JournalRevisionFacts.summarizeFactMatches(joint.factMatches, joint.facts.after);
+    if (!trace.total) {
+      panel.append(note('원본에서 두 편집자가 구절 전체를 근거로 확인한 사실이 없어 유지 여부를 계산할 수 없습니다.'));
+      return;
+    }
+    panel.append(element('p', '원본에서 두 편집자가 확인한 사실 중 같은 문구와 문맥으로 연결해 수정본에서도 전체 지지를 확인한 수 ' +
+      trace.retained + '/' + trace.total + '개', trace.retained === trace.total ? 'note' : 'warn'));
+    if (trace.retained === trace.total) return;
+    const group = detail('원본 사실을 다시 대조할 구절 ' + (trace.unmatched + trace.changed) + '개');
+    group.classList.add('fact-retention');
+    group.append(note('수정본에서 대응 구절 미확인 ' + trace.unmatched + '개 · 대응 구절은 찾았으나 두 사람의 전체 지지 미확인 ' +
+      trace.changed + '개. 다시 쓴 표현이나 달라진 문맥은 원문과 대조하세요.'));
+    const revisedText = editors[0].snapshots[1];
+    const wording = singleWordingPositions(revisedText);
+    for (const [before, after] of joint.factMatches) {
+      if (after !== null && joint.facts.after[after].outcome === 'supported') continue;
+      const originalRow = editors[0].snapshots[0].rows[before], text = originalRow.text;
+      const item = detail('원본 ' + (before + 1) + '번 · ' + text);
+      const candidate = after === null ? wording.get(text) : null;
+      for (const [edition, index] of [before, after ?? candidate].entries()) {
+        if (index == null) {
+          item.append(note('수정본 대응 구절 미확인'));
+          continue;
+        }
+        const side = edition ? '수정본 ' : '원본 ';
+        item.append(element('h4', side + (index + 1) + '번 구절'));
+        if (candidate != null) {
+          if (edition) item.append(note('문구는 같지만 대응 여부를 확정하기 어렵습니다. 두 판본의 앞뒤 문맥을 대조하세요.'));
+          item.append(element('blockquote', edition ? revisedText.rows[index].context : originalRow.context));
+        }
+        const pair = element('div', null, 'pair');
+        for (const [person, editor] of editors.entries()) {
+          const snapshot = editor.snapshots[edition];
+          pair.append(decisionEvidence(snapshot, snapshot.assessment.accuracy.rows[index],
+            snapshot.rows[index].text, person ? '둘째 편집자' : '첫 편집자'));
+        }
+        item.append(pair);
+      }
+      group.append(item);
+    }
+    panel.append(group);
+    if (trace.unmatched) {
+      const fullText = detail('대응 구절을 찾기 위해 수정본 전문 보기');
+      fullText.append(element('blockquote', editors[0].snapshots[1].article));
+      panel.append(fullText);
+    }
+  }
   function jointFactPanel(joint, editors) {
     const panel = section('편향 평가와 함께 본 사실 판정');
     panel.id = 'joint-facts';
@@ -415,6 +489,7 @@
     if (joint.improved.numerator && after.flagged) panel.append(element('p',
       '두 사람이 개선으로 본 편향 항목 ' + joint.improved.numerator + '개 · 수정본에서 한 명 이상 원자료와 충돌한다고 표시한 구절 ' +
         after.flagged + '개', 'warn'));
+    jointRetention(panel, joint, editors);
     panel.append(window.JournalRevisionFactsView(before, after));
     for (const role of ['after', 'before']) {
       const isAfter = role === 'after';
@@ -516,7 +591,7 @@
       actions.append(save);
     }
     actions.append(series);
-    panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정 종류와 충돌 표시, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
+    panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정과 충돌 표시, 원본과 수정본의 대응 구절 번호, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     for (const dimension of joint.dimensions) {
       const line = [dimension.first, dimension.second].map((d, i) =>
@@ -667,14 +742,18 @@
       throw new Error('저장된 판정을 확인할 수 없는 파일이 있습니다. ' + missing.join(', ') + ' 파일을 교체하세요.');
     }
     const record = window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
-    if (window.JournalRevisionSeries.reviewId(record) !== reviewTarget.id) {
+    const series = window.JournalRevisionSeries;
+    if (series.reviewId(record) !== reviewTarget.id &&
+        (reviewTarget.retention || series.reviewId(record, 2) !== reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
     const panel = jointFactPanel(joint, reviews);
-    const group = panel.querySelector('.fact-alerts[data-edition="after"]');
+    const group = panel.querySelector(reviewTarget.retention ? '.fact-retention' : '.fact-alerts[data-edition="after"]');
     const first = group?.querySelector('details');
-    if (!first) throw new Error('선택한 요약에는 수정본과 원자료의 충돌 표시가 없습니다.');
-    byId('result-title').textContent = (joint.demo ? '가상 예시 · ' : '') + '수정본의 충돌 구절과 근거';
+    if (!first) throw new Error(reviewTarget.retention ? '선택한 요약에는 다시 대조할 원본 사실이 없습니다.'
+      : '선택한 요약에는 수정본과 원자료의 충돌 표시가 없습니다.');
+    byId('result-title').textContent = (joint.demo ? '가상 예시 · ' : '') +
+      (reviewTarget.retention ? '원본 사실과 수정본 대조' : '수정본의 충돌 구절과 근거');
     byId('output').replaceChildren(panel);
     byId('result').hidden = false;
     const notice = reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
@@ -814,12 +893,12 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(&example=library)?$/.exec(location.hash);
-      reviewTarget = {id:match?.[1], example:!!match?.[2]};
+      const match = /^#review=([a-f0-9]{64})(&focus=retention)?(&example=library)?$/.exec(location.hash);
+      reviewTarget = {id:match?.[1], retention:!!match?.[2], example:!!match?.[3]};
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;
       if (!match) {
-        blindStatus('review-target-status', '기사 요약을 식별할 수 없는 링크입니다. 여러 기사 집계에서 충돌 구절을 다시 선택하세요.', true);
+        blindStatus('review-target-status', '기사 요약을 식별할 수 없는 링크입니다. 여러 기사 집계에서 해당 기사를 다시 선택하세요.', true);
         byId('review-target-title').focus();
         return;
       }

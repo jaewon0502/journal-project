@@ -72,7 +72,7 @@ test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 �
   await t.waitFor(() => assert.match(p.el('blind-bundle-status').textContent, /일치하지 않습니다/));
   assert.equal(p.el('result').hidden, true);
   assert.equal(p.el('output').textContent, '');
-  p.w.location.hash = '#review=' + id + '&example=library';
+  p.w.location.hash = '#review=' + reviewId(record, 2) + '&example=library';
   await t.waitFor(() => assert.equal(p.el('result').hidden, false));
   assert.match(p.el('result-title').textContent, /가상 예시/);
   assert.equal(p.el('blind-bundle-picker').hidden, true);
@@ -85,6 +85,37 @@ test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 �
   assert.equal(p.el('review-target').hidden, true);
   assert.equal(p.el('blind-revision').contains(p.el('blind-bundle-picker')), true);
   assert.equal(p.el('result').hidden, true);
+});
+
+test('원본 사실 대조 링크는 같은 문구라도 문맥이 바뀐 위치와 양쪽 근거를 열고 구형·불일치 요약을 거절한다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const blind = require('../docs/reader/blind-revision.js');
+  const agreement = require('../docs/reader/revision-agreement.js');
+  const series = require('../docs/reader/revision-series.js');
+  const bundles = await blind.resolveBundle(await example.files());
+  const record = series.makeRecord(agreement.compare(...bundles), bundles[0].key);
+  const target = id => '#review=' + id + '&focus=retention&example=library';
+  const p = page(t, target(series.reviewId(record)));
+  await t.waitFor(() => assert.equal(p.el('result').hidden, false));
+  const group = p.el('joint-facts').querySelector('.fact-retention');
+  const row = group.querySelector('details');
+  assert.equal(group.open && row.open, true);
+  assert.equal(p.w.document.activeElement, row.firstElementChild);
+  assert.match(row.textContent, /원본 2번.*20곳.*수정본 2번.*앞뒤 문맥/s);
+  assert.equal(row.querySelectorAll('.pair > div').length, 4);
+  for (const side of row.querySelectorAll('.pair > div')) {
+    assert.match(side.textContent, /원자료 · 가상 도서관 주말 운영 조사표.*표 1/);
+    assert.match(side.querySelector('blockquote').textContent, /100개.*20개/);
+  }
+  assert.match(p.el('joint-facts').textContent, /수정본 전문 보기.*조사 도서관 100곳 중 20곳/);
+  for (const invalid of [series.reviewId(record, 2), series.reviewId({...record, factMatches:[[1,1]]})]) {
+    const changed = new Promise(resolve => p.w.addEventListener('hashchange', resolve, {once:true}));
+    p.w.location.hash = target(invalid);
+    await changed;
+    await t.waitFor(() => assert.match(p.el('review-target-status').textContent, /일치하지 않습니다/));
+    assert.equal(p.el('result').hidden, true);
+    assert.equal(p.el('output').textContent, '');
+  }
 });
 
 test('다른 폴더의 같은 이름 파일도 모아서 비교하고 잘못 고른 한 개만 교체한다', async t => {
@@ -654,7 +685,7 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
-  assert.equal(record.version, 2);
+  assert.equal(record.version, 3);
   assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
   assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
   assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});
