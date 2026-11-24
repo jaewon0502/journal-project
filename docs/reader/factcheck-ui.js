@@ -536,10 +536,13 @@
   });
   byId('go-add-source').addEventListener('click', () => openSourceTools(false));
   byId('go-find').addEventListener('click', () => openSourceTools(true));
-  function useExcerpt(entry) {
+  function useExcerpt(entry, tableLocation = '') {
     if (byId('source-excerpt').value && !confirm('입력한 발췌문을 선택한 문단으로 바꿀까요? 기존 위치가 이 구간과 일치하는지도 확인하세요.')) return;
     byId('source-excerpt').value = entry.text;
-    message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. 원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.');
+    if (tableLocation && !byId('source-locator').value.trim()) byId('source-locator').value = tableLocation;
+    message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. ' +
+      (tableLocation ? '원표의 제목·단위와 아래 위치가 이 행·열에 맞는지 확인하세요.' :
+        '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
     byId('source-locator').focus();
   }
@@ -620,7 +623,7 @@
       notices.push('비교할 기간과 지표가 나타난 표의 행 ' + passages.length + '개를 찾았습니다.' +
         (lookup.usedArticleContext ? ' 입력한 기사 문맥을 함께 사용했습니다.' : ''));
     } else if (!lookup.gap) {
-      notices.push(passages.length ? '겹치는 표현이 있는 문단 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
+      notices.push(passages.length ? '확인할 원문 후보 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
     }
     if (lookup.needsPublicationDate) notices.push('‘올해’처럼 상대적인 시점은 기사 발행일과 원표의 연도를 대조하세요.');
     if (ambiguities.length) notices.push('같은 번호의 표 제목이 여러 개 있습니다.');
@@ -655,6 +658,12 @@
         block.append(node('p', '연도 머리글(' + columns.headerParagraph + '문단) 기준 · ' + values.join(' / ')));
         if (columns.ambiguousYears.length)
           block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
+      }
+      const matrix = passage.matrixCell;
+      if (matrix) {
+        block.append(node('p', matrix.rowLabel + ' 행 · ' + matrix.heading + ' 열 · 원문 값 ' + matrix.value +
+          ' (머리글 ' + matrix.headerParagraph + '문단 · 자료 ' + matrix.rowParagraph +
+          '문단 · 왼쪽에서 ' + matrix.column + '번째 열)'));
       }
       const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
       const metric = annual?.metric;
@@ -703,7 +712,12 @@
         });
         block.append(details);
       }
-      block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
+      if (matrix) {
+        const location = '‘' + matrix.rowLabel + '’ 행 · ‘' + matrix.heading + '’ 열';
+        block.append(button('이 행을 발췌하고 표 위치 확인', () => useExcerpt(passage, location)));
+      } else {
+        block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
+      }
       results.append(block);
     }
   });
