@@ -1,5 +1,5 @@
-// Locate raw values under explicit year headings. No interpretation of merged
-// headers is implied by the single-year lookup. Diagnostics never register evidence or issue a verdict.
+// Locate raw values using explicit year and metric headings. Diagnostics never
+// register evidence or issue a verdict.
 (function (root) {
   'use strict';
 
@@ -94,6 +94,75 @@
       wanted.includes(year) ? [{year, column: col + 1, value: values[col]}] : []);
     return {headerParagraph, rowParagraph, cells,
       ambiguousYears: wanted.filter(year => header.indexOf(year) !== header.lastIndexOf(year))};
+  }
+
+  // A year down the first column and one explicitly named metric across the top.
+  // Only read a complete, regular excerpt. A title, merged header or second
+  // table may add a unit or population, so leave those excerpts for inspection.
+  const annualHeader = /^(?:(?:발생|신고|등록|조사|관측|기준|회계)?\s*(?:연도|년도|년)|year)$/iu;
+  const derivedMeasure = /전년|대비|증감|증가|감소|격차|배수|평균|누계|누적|제외|빼고|분자|분모|비교|환산|합산|추정|나누|얼마나\s*늘/u;
+  const ratioMeasure = /%|퍼센트|비중|구성비|[률율]/u;
+  const perUnit = /(?:[명인건대구세원회]|\d[만천백]?)\s*(?:당|마다)/u;
+  const countAsked = /(?:몇|\d[\d,.]*)\s*(?:명|건|개|회)(?!당|마다)/u;
+
+  function annualMetricCell(documentText, query, passage) {
+    if (typeof documentText !== 'string' || typeof query !== 'string' ||
+        !Number.isInteger(passage?.paragraph) || passage.paragraph < 2 || typeof passage.text !== 'string') return null;
+    const normalized = query.normalize('NFKC');
+    if (derivedMeasure.test(normalized) || documentText.includes('\f')) return null;
+    const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
+    const asked = period.requestedPeriod(normalized);
+    if (!asked || asked.month || asked.day ||
+        yearCell.exec(cellsOf(passage.text)?.cells[0])?.[1] !== asked.year) return null;
+
+    const lines = documentText.split(lineBreak);
+    const start = lines.findIndex(line => line.trim());
+    if (start < 0) return null;
+    const block = lines.slice(start);
+    while (block.length && !block.at(-1).trim()) block.pop();
+    if (block.length < 2 || block[passage.paragraph - 1] !== passage.text) return null;
+    const header = cellsOf(block[0]);
+    if (!header || !annualHeader.test(header.cells[0])) return null;
+    const headings = header.cells.slice(1);
+    const labels = headings.map(heading => heading.normalize('NFKC').replace(/\s+/gu, ''));
+    if (labels.some(label => !label) || new Set(labels).size !== labels.length) return null;
+
+    const mentions = [];
+    labels.forEach((label, col) => {
+      // Only remove an explicit count unit or the final 수 in an agent noun
+      // (사망자수 → 사망자). Keep qualifiers part of the printed metric.
+      const base = label.replace(/\((?:명|건|개|회|%p?)\)$/iu, '');
+      if (!/^[가-힣A-Za-z0-9]{2,60}$/u.test(base) || derivedMeasure.test(base)) return;
+      const count = /[자원]수$/u.test(base);
+      const tokens = [...(count ? base.slice(0,-1) : base)].join('\\s*') + (count ? '(?:\\s*수)?' : '');
+      const term = new RegExp('(?<![\\p{L}\\p{N}])' + tokens +
+        '(?:은|는|이|가|을|를|와|과|의|도|만)?(?![\\p{L}\\p{N}])', 'giu');
+      for (const match of normalized.matchAll(term))
+        mentions.push({col:col + 1, start:match.index, end:match.index + match[0].length});
+    });
+    // A qualified heading may contain another column's entire name. Two
+    // independently mentioned columns cannot be reduced to one requested cell.
+    const columns = new Set(mentions.filter(m => !mentions.some(n =>
+      n.start < m.start && n.end >= m.end)).map(m => m.col));
+    if (columns.size !== 1) return null;
+    const [col] = columns, label = labels[col - 1], years = new Set();
+    if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
+        (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
+    let value;
+    for (const [i, line] of block.entries()) {
+      if (/^ *\t|^\s*\|\s*\|/u.test(line)) return null; // cellsOf permits a blank stub in other layouts.
+      if (!i) continue;
+      const row = cellsOf(line);
+      if (!row || row.kind !== header.kind || row.cells.length !== header.cells.length ||
+          !row.cells.slice(1).every(cell => numericCell.test(cell))) return null;
+      const year = yearCell.exec(row.cells[0])?.[1];
+      if (!year || years.has(year)) return null;
+      years.add(year);
+      if (i === passage.paragraph - 1 && year === asked.year) value = row.cells[col];
+    }
+    if (!value || !/\d/u.test(value) || (value.includes('%') && !ratioMeasure.test(header.cells[col]))) return null;
+    return {headerParagraph:1, rowParagraph:passage.paragraph, year:asked.year, heading:header.cells[col],
+      column:col + 1, value};
   }
 
   const levelCell = /^(\d+(?:\.\d+)?)(?:\(\s*([+−-]?\d+(?:\.\d+)?)\s*\))?$/u;
@@ -196,7 +265,7 @@
       legendParagraph:headerParagraph - (hasStub ? 3 : 2), comparisons} : null;
   }
 
-  const api = {forRow, changeNote};
+  const api = {forRow, annualMetricCell, changeNote};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceColumns = api;
 })(globalThis);

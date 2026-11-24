@@ -111,3 +111,50 @@ test('비수도권이나 비정규직 질문에 수도권·정규직 열의 증�
   assert.equal(notice(grouped, '2024년 특별(가)지역 점검률'), null);
   assert.equal(notice(grouped, '2024년 특별(가) 점검률').comparisons[0].current.column, 2);
 });
+
+const columns = require('../docs/reader/evidence-columns.js');
+const {search} = require('../docs/reader/evidence-search.js');
+
+test('질문의 숫자가 다른 연도에 있어도 실제 검색 후보에는 지정한 연도와 지표의 원문 값을 표시한다', () => {
+  const lines = ['발생년\t신고건수\t사망자수', '2022\t84\t1,261', '2023\t90\t1,402', '2024\t91\t1,263'];
+  const query = '2024년 사망자는 1,402명이었다는 주장이 통계와 일치하나?';
+  for (const format of [cells => cells.join('\t'), cells => '| ' + cells.join(' | ') + ' |', cells => cells.join('   ')]) {
+    const text = lines.map(line => format(line.split('\t'))).join('\n');
+    const {passages} = search(text, query);
+    assert.equal(passages[0].paragraph, 4);
+    assert.deepEqual(columns.annualMetricCell(text, query, passages[0]), {
+      headerParagraph:1, rowParagraph:4, year:'2024', heading:'사망자수', column:3, value:'1,263'
+    });
+    assert.ok(passages.slice(1).every(p => columns.annualMetricCell(text, query, p) === null));
+  }
+});
+
+test('비율·인구당 지표와 절대 건수, 복수 연도·항목, 중복 키·빈 칸·불연속 구간을 분리한다', () => {
+  const lines = ['연도\t사망자수\t부상자수', '2023\t63\t90', '2024\t68\t95'];
+  const cell = (source, question, paragraph=3) => columns.annualMetricCell(source.join('\n'), question,
+    {paragraph, text:source.filter(s => s.trim())[paragraph - 1]});
+  for (const query of ['2024년 인구 10만 명당 사망자 수는?', '2024년 사망자 수는 10%인가?',
+    '2024년 사망자 수의 비율은?', '2024년 사망자와 부상자는 몇 명?', '2023년과 2024년 사망자 수는?',
+    '2024년 3월 사망자 수는?', '2024년 전년 대비 사망자 수는?', '2024년 사망자 중 부상자의 비중은?',
+    '2024년 사망자 대비 부상자 수는?', '2024년 비사망자 수는?', '2024년 사망자 증가분은?']) {
+    assert.equal(cell(lines, query), null, query);
+  }
+  const differentMeasures = ['연도\t사망자수\t인구 10만 명당 사망자수\t치사율(%)', '2023\t63\t1.2\t2.1%', '2024\t68\t1.3\t2.3%'];
+  assert.equal(cell(differentMeasures, '2024년 사망자 수는?').value, '68');
+  assert.equal(cell(differentMeasures, '2024년 인구 10만 명당 사망자는?').value, '1.3');
+  assert.equal(cell(differentMeasures, '2024년 인구 1만 명당 사망자는?'), null);
+  assert.equal(cell(differentMeasures, '2024년 치사율은 몇 퍼센트인가?').value, '2.3%');
+  assert.equal(cell(differentMeasures, '2024년 치사율은 몇 명인가?'), null);
+  assert.equal(cell(differentMeasures, '2024년 치사율과 사망자는?'), null);
+  assert.equal(cell(differentMeasures, '2024년 사망자와 인구 10만 명당 사망자는?'), null);
+  const query = '2024년 사망자 수는?';
+  for (const head of ['순번\t사망자수\t부상자수','연도\t사망자수\t사망자 수','연도\t사망자수(인구 10만명당)\t부상자수']) {
+    assert.equal(cell([head,...lines.slice(1)],query),null,head);
+  }
+  for (const tail of ['2024\t72\t98', '2025\t\t120', '2025\t90', '2025\t70\t90\t100']) {
+    assert.equal(cell([...lines,tail],query), null,tail);
+  }
+  assert.equal(cell([lines[0], lines[1], '', lines[2]], query),null);
+  assert.equal(cell([lines[0], lines[1], '\f' + lines[2]], query),null);
+  assert.equal(cell([lines[0], lines[1], '2024\t-\t95'],query),null);
+});

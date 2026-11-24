@@ -656,6 +656,12 @@
         if (columns.ambiguousYears.length)
           block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
       }
+      const metric = window.JournalEvidenceColumns.annualMetricCell(text, query, passage);
+      if (metric) {
+        block.append(node('p', metric.year + '년 · ' + metric.heading + ' · 원문 값 ' + metric.value +
+          ' (머리글 ' + metric.headerParagraph + '문단 · 자료 ' + metric.rowParagraph +
+          '문단 · 왼쪽에서 ' + metric.column + '번째 열)'));
+      }
       const changes = window.JournalEvidenceColumns.changeNote(text, query, passage);
       for (const diff of changes?.comparisons || []) {
         block.append(node('p', '같은 묶음의 ' + diff.prior.year + '년 ' + diff.prior.column + '번째 열은 ' +

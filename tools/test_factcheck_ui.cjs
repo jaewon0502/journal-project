@@ -737,3 +737,22 @@ test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가�
   resumed.click('export-report');
   assert.ok((await resumed.snapshot()).includes('원표와 대조함'));
 });
+
+test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치를 볼 수 있고 판정은 편집자가 한다', t => {
+  const {doc, el, set, click} = open(t);
+  click('load-demo');
+  const before = el('report-rows').textContent;
+  const lines = ['발생년\t사고건수\t사망자수', '2023\t198296\t2551', '2024\t196349\t2521'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2024년 교통사고 사망자는 2,551명이었다는 주장이 통계와 일치하나?');
+  click('find-passages');
+  const card = doc.querySelector('#finder-results .source');
+  assert.equal(card.querySelector('blockquote').textContent, lines[2]);
+  assert.match(card.textContent, /2024년 · 사망자수 · 원문 값 2521/);
+  assert.match(card.textContent, /머리글 1문단 · 자료 3문단 · 왼쪽에서 3번째 열/);
+  assert.ok(![...doc.querySelectorAll('#finder-results .source')].slice(1).some(c => /원문 값/.test(c.textContent)));
+  assert.equal(el('verdict').value, '');
+  assert.equal(el('report-rows').textContent, before);
+  set('document-query', '2024년 인구 10만 명당 사망자는?'); click('find-passages');
+  assert.doesNotMatch(el('finder-results').textContent, /원문 값/);
+});
