@@ -551,11 +551,18 @@ test('한 항목의 실패가 확정되면 나머지 채점이 끝나지 않아�
     { trial: trial({ status: 'withdrawn' }) }
   ];
   const [task] = c.compareTimes(c.group(entries));
+  assert.equal(task.manual.verified, 1);
+  assert.equal(task.manual.verificationKnown, 3);
   assert.equal(task.manual.timedOutcomePending, 0);
   assert.equal(task.perVerified.manualMs, 4800);
   assert.equal(task.perVerified.savedMs, null);
   const pending = [...entries, { trial: trial(), locationGrade: '', verdictGrade: 'yes' }];
   assert.equal(c.compareTimes(c.group(pending))[0].perVerified.manualMs, null);
+  const [withRecovered] = c.group([...pending, {
+    trial: trial({recovered:true}), locationGrade:'yes', verdictGrade:'yes'
+  }]);
+  assert.deepEqual([withRecovered.verified, withRecovered.verificationKnown, withRecovered.submitted,
+    withRecovered.timedVerified, withRecovered.timedOutcomePending], [2,4,5,1,1]);
 });
 
 test('연습에서 본 같은 기사 기록을 현업 분모에서 제외하고 구분별 내보내기를 거쳐도 보존한다', async t => {
@@ -745,6 +752,33 @@ test('중단 복원·다른 방식으로 완료한 응답의 품질은 원래 �
   await p.upload('imports', trial({...b, id:'unsupported', kind:'editor', method:'manual', verdict:'supported'}));
   assert.match(arm(2), /판정 일치율 0\.0% \(0\/1\).*근거 없는 사실 채택률 100\.0% \(1\/1\)/);
   assert.equal(arm(1), original);
+});
+
+test('근거와 판정을 서로 다른 답안에서 맞히면 두 항목 동시 일치율은 0/2다', async t => {
+  const p = page(t, 'field-summary');
+  const a = assignment('A'), b = assignment('B');
+  await p.upload('roster-file', {format:c.assignmentFormat, assignments:[a,b]});
+  await p.upload('key-file', gradingKey);
+  const first = trial({...a, id:'location', kind:'editor', method:'journal', locator:'첫 번째 행',
+    verdict:'insufficient', recovered:true});
+  const second = trial({...b, id:'verdict', kind:'editor', method:'journal', locator:'두 번째 행',
+    verdict:gradingKey.tasks[0].verdict});
+  await p.upload('imports', first, second);
+  p.gradeLocation(first.locator, 'yes');
+  p.gradeLocation(second.locator, 'no');
+  for (const area of ['allocation-arms', 'groups']) {
+    const result = p.report(area);
+    assert.match(result, /원자료 위치 재확인 성공률 50\.0% \(1\/2\)/);
+    assert.match(result, /판정 일치율 50\.0% \(1\/2\)/);
+    assert.match(result, /근거 위치와 판정 모두 일치 0\.0% \(0\/2\) · 성공 여부 확인 대기 0건/);
+  }
+  assert.match(p.report('allocation-comparisons'), /평소 검증 도구 · 평균 1\.2초 \(1건\)/);
+  p.gradeLocation(second.locator, '');
+  assert.match(p.report('allocation-arms'), /근거 위치와 판정 모두 일치 0\.0% \(0\/1\) · 성공 여부 확인 대기 1건/);
+  p.gradeLocation(first.locator, '');
+  assert.match(p.report('groups'), /근거 위치와 판정 모두 일치 0\.0% \(0\/1\) · 성공 여부 확인 대기 1건/);
+  p.gradeLocation(second.locator, 'yes');
+  assert.match(p.report('allocation-arms'), /근거 위치와 판정 모두 일치 50\.0% \(1\/2\) · 성공 여부 확인 대기 0건/);
 });
 
 test('사전 배정과 과제가 일치한 현업 기록을 원래 방식으로 비교하고 모든 배정을 분모에 남긴다', async t => {

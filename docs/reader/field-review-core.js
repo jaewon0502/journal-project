@@ -113,6 +113,8 @@
           locationGraded: 0,
           verdictHits: 0,
           verdictGraded: 0,
+          verified: 0,
+          verificationKnown: 0,
           unsafe: 0,
           unsafeTotal: 0,
           referencePending: 0
@@ -129,6 +131,10 @@
       }
       g.submitted++;
       const loc = t.found === 'missing' ? 'no' : locationGrade;
+      const verified = loc === 'yes' && verdictGrade === 'yes';
+      const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
+      if (verified) g.verified++;
+      if (verificationKnown) g.verificationKnown++;
       if (t.journalUse === undefined) g.unknownUse++;
       else if ((t.journalUse === 'yes') === (t.method === 'journal')) g.asAssigned++;
       else g.differentMethod++;
@@ -136,12 +142,9 @@
       else {
         g.totalTimed++;
         g.totalMs += elapsedMs;
-        if (['yes', 'no'].includes(loc) && ['yes', 'no'].includes(verdictGrade)) {
-          g.timedGraded++;
-          if (loc === 'yes' && verdictGrade === 'yes') g.timedVerified++;
-        } else if (loc !== 'no' && verdictGrade !== 'no') {
-          g.timedOutcomePending++;
-        }
+        if (['yes', 'no'].includes(loc) && ['yes', 'no'].includes(verdictGrade)) g.timedGraded++;
+        if (verified) g.timedVerified++;
+        if (!verificationKnown) g.timedOutcomePending++;
         if (t.split) {
           g.timed++;
           for (const p of phases) g.ms[p] += t.phaseMs[p];

@@ -136,8 +136,8 @@
           continue;
         }
         card.append(node('p', labels[method] + ' · 평균 ' + seconds(group.totalMs, group.totalTimed) +
-          ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.timedGraded) +
-          ' · 채점 대기 ' + (group.totalTimed - group.timedGraded) + '건'));
+          ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.totalTimed - group.timedOutcomePending) +
+          ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
       }
       card.append(node('h4', '검증 성공 1건당 투입 시간'));
       for (const method of ['manual', 'journal']) {
@@ -163,12 +163,14 @@
       '건 · 연결된 현업 기록 없음 ' + n.missing + '건';
   }
   function qualityLines({submitted=0, locationHits=0, locationGraded=0, verdictHits=0, verdictGraded=0,
-    unsafe=0, unsafeTotal=0, referencePending=0} = {}) {
+    verified=0, verificationKnown=0, unsafe=0, unsafeTotal=0, referencePending=0} = {}) {
     return [
       node('p', '원자료 위치 재확인 성공률 ' + pct(locationHits, locationGraded) +
         ' · 채점 대기 ' + (submitted - locationGraded) + '건'),
       node('p', '판정 일치율 ' + pct(verdictHits, verdictGraded) +
         ' · 채점 대기 ' + (submitted - verdictGraded) + '건'),
+      node('p', '근거 위치와 판정 모두 일치 ' + pct(verified, verificationKnown) +
+        ' · 성공 여부 확인 대기 ' + (submitted - verificationKnown) + '건'),
       node('p', '근거 없는 사실 채택률 ' + pct(unsafe, unsafeTotal) +
         ' (반박·근거 부족으로 판정한 과제) · 기준 판정 미확인 ' + referencePending + '건')
     ];
