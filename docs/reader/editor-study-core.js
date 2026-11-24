@@ -273,8 +273,8 @@
   }
 
   function pooledBias(items, excluded) {
-    const gaps = {manual:0, journal:0};
-    const distributionGaps = {manual:0, journal:0};
+    const endorsementDifferences = {manual:0, journal:0}, verdictDifferences = {manual:0, journal:0};
+    let totalPerLabel = 0;
     const caseRates = [];
     for (const [caseId, item] of items) {
       const row = {caseId};
@@ -286,25 +286,41 @@
           const counts = Object.fromEntries(verdicts.map(v => [v, all.counts[v] - (omit?.counts[v] ?? 0)]));
           cells[variant] = {counts, endorsed:counts.supported, total, endorsedPct:100 * counts.supported / total};
         }
-        cells.signedGapPp = cells.A.endorsedPct - cells.B.endorsedPct;
-        gaps[method] += Math.abs(cells.signedGapPp) / items.size;
+        // Complete blocks give each label the same denominator, also after omitting one block.
+        const endorsedDifference = cells.A.endorsed - cells.B.endorsed;
+        cells.signedGapPp = 100 * endorsedDifference / cells.A.total;
+        endorsementDifferences[method] += Math.abs(endorsedDifference);
         // Half the absolute differences avoids counting a move between two verdicts twice.
-        cells.distributionGapPp = 50 * verdicts.reduce((sum, v) =>
-          sum + Math.abs(cells.A.counts[v] / cells.A.total - cells.B.counts[v] / cells.B.total), 0);
-        distributionGaps[method] += cells.distributionGapPp / items.size;
+        const distributionDifference = verdicts.reduce((sum, v) => sum + Math.abs(cells.A.counts[v] - cells.B.counts[v]), 0);
+        cells.distributionGapPp = 50 * distributionDifference / cells.A.total;
+        verdictDifferences[method] += distributionDifference;
         row[method] = cells;
       }
       caseRates.push(row);
+      totalPerLabel += row.manual.A.total;
     }
-    const reductionPp = gaps.manual - gaps.journal;
-    return {manualGapPp:gaps.manual, journalGapPp:gaps.journal, reductionPp,
-      distribution:{manualGapPp:distributionGaps.manual, journalGapPp:distributionGaps.journal,
-        reductionPp:distributionGaps.manual - distributionGaps.journal},
-      reductionPct:gaps.manual > 0 ? 100 * reductionPp / gaps.manual : null, cases:caseRates};
+    // Every case has the same cell size. Combining counts first preserves an exact tie across cases.
+    const reduction = endorsementDifferences.manual - endorsementDifferences.journal;
+    return {manualGapPp:100 * endorsementDifferences.manual / totalPerLabel,
+      journalGapPp:100 * endorsementDifferences.journal / totalPerLabel, reductionPp:100 * reduction / totalPerLabel,
+      distribution:{manualGapPp:50 * verdictDifferences.manual / totalPerLabel, journalGapPp:50 * verdictDifferences.journal / totalPerLabel,
+        reductionPp:50 * (verdictDifferences.manual - verdictDifferences.journal) / totalPerLabel},
+      reductionPct:endorsementDifferences.manual ? 100 * reduction / endorsementDifferences.manual : null, cases:caseRates};
   }
 
   function emptyQuality() {
     return {correct: 0, total: 0, unsafe: 0, unsafeTotal: 0, citationCorrect: 0, qualityCorrect: 0};
+  }
+
+  function qualityGroups() {
+    const arms = () => ({manual:emptyQuality(), journal:emptyQuality()});
+    return {...arms(), byVariant:{A:arms(), B:arms()}};
+  }
+
+  function caseSourceChoices(caseId) {
+    const {sources} = cases.get(caseId, 'A'); // Both cue labels use the same case documents.
+    const choices = () => ({byId:Object.fromEntries(sources.map(s => [s.id, 0])), none:0, total:0});
+    return {manual:choices(), journal:choices()};
   }
 
   function gradeTrial(trial) {
@@ -359,13 +375,8 @@
 
   function verdictStats(records) {
     const items = caseCells(), blocks = new Map();
-    const quality = {
-      manual: emptyQuality(), journal: emptyQuality(),
-      byVariant: {
-        A: {manual: emptyQuality(), journal: emptyQuality()},
-        B: {manual: emptyQuality(), journal: emptyQuality()}
-      }
-    };
+    const quality = qualityGroups();
+    const caseDetails = new Map(cases.ids.map(id => [id, {quality:qualityGroups(), sourceChoices:caseSourceChoices(id)}]));
     for (const record of records) {
       const block = Math.ceil(record.ordinal / slots);
       if (!blocks.has(block)) blocks.set(block, caseCells());
@@ -377,7 +388,13 @@
           cell.total++;
           cell.counts[t.verdict]++;
         }
-        for (const q of [quality[t.method], quality.byVariant[t.variant][t.method]]) {
+        const detail = caseDetails.get(t.caseId);
+        const choices = detail.sourceChoices[t.method];
+        choices.total++;
+        if (t.sourceIds.length) choices.byId[t.sourceIds[0]]++;
+        else choices.none++;
+        const local = detail.quality;
+        for (const q of [quality[t.method], quality.byVariant[t.variant][t.method], local[t.method], local.byVariant[t.variant][t.method]]) {
           q.total++;
           if (grade.correct) q.correct++;
           if (grade.sourceCorrect) q.citationCorrect++;
@@ -388,6 +405,17 @@
       }
     }
     const bias = pooledBias(items);
+    for (const row of bias.cases) {
+      const detail = caseDetails.get(row.caseId);
+      row.quality = detail.quality;
+      row.sourceChoices = detail.sourceChoices;
+      const manualGap = Math.abs(row.manual.A.endorsed - row.manual.B.endorsed);
+      const journalGap = Math.abs(row.journal.A.endorsed - row.journal.B.endorsed);
+      row.gapReductionPp = 100 * (manualGap - journalGap) / row.manual.A.total;
+      // Each method has the same two answers per complete block in this case.
+      row.qualityDrops = row.gapReductionPp > 0 ? ['correct','citationCorrect','qualityCorrect'].filter(
+        key => row.quality.journal[key] < row.quality.manual[key]) : [];
+    }
     bias.leaveOneBlockOut = null;
     if (blocks.size >= 2) {
       let minReductionPp = Infinity, maxReductionPp = -Infinity;
@@ -474,5 +502,23 @@
     });
   }
 
-  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords, partialTimeDemoRecords});
+  function cueAgreementDemoRecords() {
+    return Array.from({length:slots}, (_, i) => {
+      let record = createRecord('demo-cue-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const gold = cases.get(task.caseId, task.variant);
+        const journal = task.method === 'journal';
+        const endorsesRepair = task.caseId === 'repair' && (journal || task.variant === 'A');
+        const endorsesPermits = task.caseId === 'permits' && !journal && task.variant === 'B';
+        const choseRequest = task.caseId === 'repair' && journal && task.variant === 'B';
+        const sourceIds = choseRequest || endorsesPermits ? ['doc-1'] : gold.expectedSourceIds;
+        record = addTrial(record, {elapsedMs:60000, verdict:endorsesRepair || endorsesPermits ? 'supported' : gold.expectedVerdict,
+          sourceIds, journalUsed:journal, reason:'표기별 격차와 사례별 판정 정확도를 비교하기 위한 모의 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
+  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords,
+    partialTimeDemoRecords, cueAgreementDemoRecords});
 });

@@ -23,7 +23,7 @@ class EditorStudyPack(unittest.TestCase):
             page = archive.read('editor-study.html').decode()
             self.assertIn('data-participant-kit', page)
             self.assertIn('id="invite-code" required', page)
-            for marker in ['id="dashboard"', 'id="demo-view"', 'id="demo-example"', 'id="timing-coverage"', 'id="issue-codes"', 'id="import-files"']:
+            for marker in ['id="dashboard"', 'id="demo-view"', 'id="demo-example"', 'id="timing-coverage"', 'id="case-quality"', 'id="issue-codes"', 'id="import-files"']:
                 self.assertNotIn(marker, page)
             self.assertNotIn('editor-study.html', archive.read('factcheck.html').decode())
             cases = archive.read('editor-study-cases.js')
@@ -52,6 +52,7 @@ const canonical = require(path.join(source,'editor-study-core.js'));
 for (let slot=1; slot<=16; slot++) assert.deepEqual(copy(box.JournalEditorStudy.plan(slot)),canonical.plan(slot));
 assert.equal(box.JournalEditorStudy.demoRecords,undefined);
 assert.equal(box.JournalEditorStudy.partialTimeDemoRecords,undefined);
+assert.equal(box.JournalEditorStudy.cueAgreementDemoRecords,undefined);
 assert.equal(box.JournalEditorStudy.analyze,undefined);
 """
             subprocess.run(['node', '-e', script, directory, str(READER)], check=True)

@@ -99,6 +99,116 @@ test('반대 방향 기사별 격차를 평균에서 상쇄하지 않고 악화�
   assert.deepEqual(r.bias.cases.map(item => item.journal.signedGapPp), [100,-100,100,-100]);
 });
 
+test('성향 표기별 정확도 합계가 같아도 같은 오답에 모인 사례를 구분한다', () => {
+  const records = [1,2,3,4].map(i => observations(i, t => {
+    const wrongBudget = t.caseId === 'repair' && (t.method === 'journal' || t.variant === 'A');
+    const wrongPermits = t.caseId === 'permits' && t.method === 'manual' && t.variant === 'B';
+    return wrongBudget || wrongPermits ? {verdict:'supported'} : {};
+  }));
+  const result = study.analyze([...records, observations(5)]);
+  assert.equal(result.bias.reductionPp, 50);
+  for (const group of [result.quality, ...Object.values(result.quality.byVariant)]) {
+    assert.deepEqual(group.journal, group.manual);
+  }
+  const budget = result.bias.cases.find(row => row.caseId === 'repair');
+  const permits = result.bias.cases.find(row => row.caseId === 'permits');
+  assert.deepEqual([budget.gapReductionPp, permits.gapReductionPp], [100,100]);
+  assert.deepEqual(budget.qualityDrops, ['correct','qualityCorrect']);
+  assert.deepEqual(permits.qualityDrops, []);
+  assert.deepEqual([budget.quality.manual.unsafe, budget.quality.manual.unsafeTotal,
+    budget.quality.journal.unsafe, budget.quality.journal.unsafeTotal], [1,2,2,2]);
+  assert.equal(budget.quality.byVariant.A.manual.qualityCorrect, 0);
+  assert.equal(budget.quality.byVariant.B.manual.qualityCorrect, 1);
+  for (const variant of ['A','B']) {
+    const arm = budget.quality.byVariant[variant].journal;
+    assert.deepEqual([arm.correct, arm.citationCorrect, arm.qualityCorrect, arm.total], [0,1,0,1]);
+  }
+});
+
+test('판정과 근거 각각의 적중 수가 같아도 둘을 함께 맞힌 응답이 줄면 해당 사례를 표시한다', () => {
+  const records = [1,2,3,4].map(i => observations(i, t => {
+    if (t.caseId !== 'repair') return {};
+    if (t.method === 'manual') return t.variant === 'A' ? {verdict:'supported', sourceIds:['doc-1']} : {};
+    return t.variant === 'A' ? {verdict:'insufficient'} : {sourceIds:['doc-1']};
+  }));
+  const row = study.analyze(records).bias.cases.find(c => c.caseId === 'repair');
+  assert.deepEqual(row.qualityDrops, ['qualityCorrect']);
+  assert.equal(row.quality.manual.qualityCorrect, 1);
+  assert.equal(row.quality.journal.qualityCorrect, 0);
+});
+
+test('판정 적중이 그대로인 사례에서 대표 근거와 동시 일치 감소를 따로 집계한다', () => {
+  for (const wrongSourceLabel of ['A','B']) {
+    const records = [1,2,3,4].map(i => observations(i, t => {
+      if (t.caseId !== 'repair') return {};
+      const answer = {};
+      if (t.variant === 'A') answer.verdict = t.method === 'manual' ? 'supported' : 'insufficient';
+      if (t.method === 'journal' && t.variant === wrongSourceLabel) answer.sourceIds = ['doc-1'];
+      return answer;
+    }));
+    // Interrupted clocks still provide valid submitted judgments in a complete block.
+    const partial = records[0].trials[0];
+    partial.elapsedMs = null; partial.observedMs = 1000; partial.phaseMs = null;
+    const result = study.analyze(records);
+    assert.equal(result.time, null);
+    const row = result.bias.cases.find(c => c.caseId === 'repair');
+    assert.equal(row.gapReductionPp, 100);
+    assert.deepEqual([row.quality.manual.correct, row.quality.journal.correct], [1,1]);
+    assert.deepEqual(row.qualityDrops, wrongSourceLabel === 'A' ? ['citationCorrect'] : ['citationCorrect','qualityCorrect']);
+  }
+});
+
+test('같은 문서 번호도 기사와 방식별로 집계하고 대표 근거를 고르지 않은 응답을 분모에 남긴다', () => {
+  const data = [1,2,3,4,5].map(i => observations(i, t => {
+    if (t.caseId === 'repair') {
+      return {sourceIds:t.method === 'manual' || t.variant === 'A' ? ['doc-1'] : []};
+    }
+    if (t.caseId === 'permits') return {sourceIds:t.method === 'manual' ? [] : ['doc-2']};
+    return {};
+  }));
+  const rows = study.analyze(data).bias.cases;
+  const budget = rows.find(r => r.caseId === 'repair').sourceChoices;
+  const permits = rows.find(r => r.caseId === 'permits').sourceChoices;
+  assert.deepEqual(budget.manual, {byId:{'doc-1':2,'doc-2':0,'doc-3':0}, none:0, total:2});
+  assert.deepEqual(budget.journal, {byId:{'doc-1':1,'doc-2':0,'doc-3':0}, none:1, total:2});
+  assert.deepEqual(permits.manual, {byId:{'doc-1':0,'doc-2':0,'doc-3':0}, none:2, total:2});
+  assert.deepEqual(permits.journal, {byId:{'doc-1':0,'doc-2':2,'doc-3':0}, none:0, total:2});
+  for (const row of rows) for (const method of ['manual','journal']) {
+    const arm = row.sourceChoices[method], [anchor] = packets.get(row.caseId, 'A').expectedSourceIds;
+    assert.equal(Object.values(arm.byId).reduce((sum, count) => sum + count, arm.none), arm.total);
+    assert.equal(arm.total, row.quality[method].total);
+    assert.equal(arm.byId[anchor], row.quality[method].citationCorrect);
+  }
+});
+
+test('세 묶음에서 같은 1표 차이는 비율 반올림 때문에 격차 감소로 처리되지 않는다', () => {
+  for (const higherJournalLabel of ['A','B']) {
+    const data = Array.from({length:12}, (_, index) => observations(index + 1, t => {
+      if (t.caseId !== 'repair') return {};
+      const supported = t.method === 'manual' ? t.variant === 'A' && index < 4 : t.variant === higherJournalLabel || index < 8;
+      return supported ? {verdict:'supported'} : {};
+    }));
+    const row = study.analyze(data).bias.cases.find(c => c.caseId === 'repair');
+    assert.deepEqual([row.manual.A.endorsed, row.manual.B.endorsed], [1,0]);
+    assert.equal(row.journal[higherJournalLabel].endorsed, 3);
+    assert.equal(row.gapReductionPp, 0);
+    assert.deepEqual(row.qualityDrops, []);
+  }
+});
+
+test('같은 전체 격차가 여러 사례로 옮겨도 사실 채택과 판정 분포 변화는 정확히 0이다', () => {
+  const votes = {manual:[0,2,3,1], journal:[0,2,2,2]};
+  const data = Array.from({length:12}, (_, index) => observations(index + 1, t => {
+    const groupsEndorsing = votes[t.method][packets.ids.indexOf(t.caseId)];
+    return {verdict:t.variant === 'A' && Math.floor(index / 4) < groupsEndorsing ? 'supported' : 'insufficient'};
+  }));
+  const b = study.analyze(data).bias;
+  assert.deepEqual([b.manualGapPp, b.journalGapPp, b.reductionPp, b.reductionPct], [50,50,0,0]);
+  assert.deepEqual(b.distribution, {manualGapPp:50, journalGapPp:50, reductionPp:0});
+  const deleted = [0,1,2].map(skip => study.analyze(data.filter((_, i) => Math.floor(i / 4) !== skip)).bias.reductionPp);
+  assert.deepEqual(b.leaveOneBlockOut, {blocks:3, minReductionPp:Math.min(...deleted), maxReductionPp:Math.max(...deleted)});
+});
+
 test('시간 절감률은 참가자별 두 방식의 평균 시간 차이에 같은 가중치를 준 뒤 계산한다', () => {
   const manual = [10,30,30,30], journal = [30,20,20,20];
   const records = [1,2,3,4].map(i => observations(i,t => ({elapsedMs: 1000 * (t.method === 'manual' ? manual[i-1] : journal[i-1])})));

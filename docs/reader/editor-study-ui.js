@@ -3,6 +3,8 @@
   const el = id => document.getElementById(id);
   const core = window.JournalEditorStudy, cases = window.JournalStudyCases;
   const stageLabels = {select:'자료 선택', locate:'근거 위치 확인', decide:'판정 기록'};
+  const verdictLabels = {supported:'근거로 지지됨', contradicted:'근거와 충돌', insufficient:'근거 불충분', opinion:'의견·가치판단'};
+  const variantLabels = {A:'보수 성향 표기', B:'진보 성향 표기'};
   const stageButtons = [...document.querySelectorAll('[data-phase]')];
   const participantOnly = document.documentElement.hasAttribute('data-participant-kit');
   let storeKey = participantOnly ? null : 'journal-editor-study-workspace-v1';
@@ -111,8 +113,9 @@
   function fmt(n) { return Number(n.toFixed(1)).toLocaleString('ko-KR'); }
   const percent = (a, b) => b ? fmt(100 * a / b) + '%' : '—';
   const ratio = (a, b) => b ? percent(a, b) + ' (' + a + '/' + b + ')' : '— (0/0)';
-  function table(id, heads, rows, empty) {
-    const wrap = el(id); wrap.replaceChildren();
+  function table(target, heads, rows, empty) {
+    const wrap = typeof target === 'string' ? el(target) : target;
+    wrap.replaceChildren();
     if (!rows.length) { wrap.append(node('p', empty, 'subtle')); return; }
     const tbl = node('table'), head = tbl.createTHead().insertRow(), body = tbl.createTBody();
     for (const s of heads) { const c = node('th', s); c.scope = 'col'; head.append(c); }
@@ -143,6 +146,85 @@
       String(Math.ceil(inv.ordinal / 4)), inv.code,
       records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'
     ]), '발급된 초대 코드가 없습니다.');
+  }
+  function caseSource(source, title) {
+    const part = node('section', undefined, 'source');
+    part.append(node('strong', title), node('small', source.version + ' · ' + source.locator), node('p', source.excerpt, 'excerpt'));
+    return part;
+  }
+  function showAlternativeSources(box, article, choices) {
+    const {manual, journal} = choices;
+    const selected = article.sources.filter(s => !article.expectedSourceIds.includes(s.id) &&
+      (manual.byId[s.id] > 0 || journal.byId[s.id] > 0));
+    if (!selected.length && !manual.none && !journal.none) return;
+    const counts = (m, j) => '원자료 방식 ' + m + '/' + manual.total + ' · 저널 방식 ' + j + '/' + journal.total;
+    const alternatives = node('details', undefined, 'case-alternatives');
+    alternatives.append(node('summary', '대표 근거와 다른 선택 보기'),
+      node('p', '두 정당 표기를 합친 결과입니다. 각 방식의 전체 응답 중 해당 자료를 고른 건수를 표시합니다.', 'subtle'));
+    for (const source of selected) {
+      const part = caseSource(source, source.title);
+      part.append(node('small', counts(manual.byId[source.id], journal.byId[source.id])));
+      alternatives.append(part);
+    }
+    if (manual.none || journal.none) alternatives.append(node('p', '지정한 자료 없음 · ' + counts(manual.none, journal.none)));
+    box.append(alternatives);
+  }
+  function showCaseQuality(bias, biasCard) {
+    const list = el('case-quality-list');
+    list.replaceChildren();
+    el('case-quality').hidden = !bias;
+    if (!bias) return;
+    const criteria = {correct:'기준 판정 일치', citationCorrect:'대표 근거 일치', qualityCorrect:'판정·근거 동시 일치'};
+    const warnings = node('div', undefined, 'case-cautions');
+    for (const row of bias.cases) {
+      const a = cases.get(row.caseId, 'A'), b = cases.get(row.caseId, 'B');
+      const box = node('details', undefined, 'case-evidence');
+      box.id = 'cue-case-' + row.caseId;
+      const summary = node('summary', a.title + ' · 사실 채택률 격차 ' +
+        fmt(Math.abs(row.manual.signedGapPp)) + '%p → ' + fmt(Math.abs(row.journal.signedGapPp)) + '%p');
+      box.append(summary);
+      if (viewKind === 'demo') box.append(node('p', '가상 응답으로 계산한 예시입니다.', 'subtle'));
+      if (row.qualityDrops.length) {
+        const changes = row.qualityDrops.map(key => criteria[key] + ' ' +
+          ratio(row.quality.manual[key], row.quality.manual.total) + ' → ' + ratio(row.quality.journal[key], row.quality.journal.total));
+        const changeNote = node('div', undefined, 'notice sample');
+        const changeList = node('ul', undefined, 'case-changes');
+        changeList.append(...changes.map(text => node('li', text)));
+        changeNote.append(node('strong', '두 표기를 합쳐 보았을 때 낮아진 지표'), changeList);
+        box.append(changeNote);
+        const open = node('button', a.title + ' · 기준과 근거 확인');
+        open.type = 'button';
+        open.setAttribute('aria-controls', box.id);
+        open.addEventListener('click', () => { box.open = true; summary.focus(); });
+        warnings.append(open);
+      }
+      const wrap = node('div', undefined, 'scroll');
+      wrap.tabIndex = 0;
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', a.title + ' 표기·방식별 일치율');
+      const rows = [];
+      for (const [variant, label] of Object.entries(variantLabels)) {
+        for (const [method, methodLabel] of [['manual','원자료'], ['journal','저널']]) {
+          const cell = row.quality.byVariant[variant][method];
+          const responses = row[method][variant];
+          const choices = Object.entries(verdictLabels).filter(([key]) => responses.counts[key] > 0)
+            .map(([key, verdict]) => verdict + ' ' + responses.counts[key] + '/' + responses.total);
+          rows.push([label + ' · ' + methodLabel, ...Object.keys(criteria).map(key => ratio(cell[key], cell.total)), choices.join(' · ')]);
+        }
+      }
+      table(wrap, ['기사 표기 · 방식', ...Object.values(criteria), '제출한 판정'], rows);
+      box.append(wrap, node('h3', '검토한 기사와 근거'), node('p', a.question),
+        node('blockquote', a.article), node('blockquote', b.article), node('strong', '기준 판정 · ' + verdictLabels[a.expectedVerdict]));
+      for (const source of a.sources.filter(s => a.expectedSourceIds.includes(s.id))) {
+        box.append(caseSource(source, '대표 근거 · ' + source.title));
+      }
+      showAlternativeSources(box, a, row.sourceChoices);
+      list.append(box);
+    }
+    if (warnings.childElementCount) {
+      warnings.prepend(node('p', '아래 기사에서는 표기별 사실 채택률 격차가 줄고, 검증 지표 중 하나 이상에서 일치율도 낮아졌습니다.'));
+      biasCard.append(warnings);
+    }
   }
   function showTimingCoverage(a) {
     const c = a.timing.partialTrials ? a.timingCoverage : null;
@@ -202,7 +284,10 @@
     const demo = viewKind === 'demo';
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
     let sample = confirmed;
-    if (demo) sample = el('demo-example').value === 'partial' ? core.partialTimeDemoRecords() : core.demoRecords();
+    if (demo) {
+      const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords, agreement:core.cueAgreementDemoRecords};
+      sample = examples[el('demo-example').value]();
+    }
     const a = core.analyze(sample, viewKind);
     el('demo-options').hidden = !demo;
     el('real-view').setAttribute('aria-pressed', String(!demo));
@@ -252,6 +337,7 @@
     } else {
       biasCard.append(node('small', '완성 ' + a.completeBlocks + '묶음 · 하나씩 제외한 범위는 2묶음부터 계산합니다.'));
     }
+    showCaseQuality(b, biasCard);
     el('metrics').replaceChildren(timeCard, biasCard);
     showTimingCoverage(a);
     showTimedQuality(a);
@@ -273,7 +359,6 @@
     table('phase-pair-table',['참여 코드','단계','원자료 평균(초)','저널 평균(초)','절감(초)'],pairRows,'');
     const q = a.quality;
     const warnings = [];
-    const variantLabels = {A:'보수 성향 표기', B:'진보 성향 표기'};
     const qualityByVariant = [];
     if (q) {
       const pointChange = (group, key, denom) => 100 * (group.journal[key] / group.journal[denom] - group.manual[key] / group.manual[denom]);
@@ -311,7 +396,6 @@
     el('distribution-gap').textContent = dist ? '네 판정의 평균 분포 차이 · 원자료 ' + fmt(dist.manualGapPp) + '%p → 저널 ' +
       fmt(dist.journalGapPp) + '%p · ' + (dist.reductionPp === 0 ? '변화 없음' : fmt(Math.abs(dist.reductionPp)) +
       '%p ' + (dist.reductionPp > 0 ? '감소' : '증가')) : '완성된 4인 묶음에서 네 판정의 분포를 비교합니다.';
-    const verdictLabels = {supported:'근거로 지지됨', contradicted:'근거와 충돌', insufficient:'근거 불충분', opinion:'의견·가치판단'};
     const decisionRows = (b?.cases || []).flatMap(c => Object.entries(verdictLabels).map(([key, label]) =>
       [cases.get(c.caseId, 'A').title, label, ...[c.manual.A, c.manual.B, c.journal.A, c.journal.B].map(cell => cell.counts[key] + '/' + cell.total)]));
     table('cells', ['사례', '판정', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보'], decisionRows,

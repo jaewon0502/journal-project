@@ -33,6 +33,26 @@ function page(t, hash = '', url = 'https://study.example/editor-study.html', pri
   return {w, el, workspace, enroll, answer, advance:ms => {ticks += ms;}};
 }
 
+test('두 표기가 같은 오답에 모이는 가상 사례는 전체 일치율을 그대로 유지하고 실측과 분리된다', t => {
+  const p = page(t);
+  p.el('demo-view').click();
+  p.el('demo-example').value = 'agreement';
+  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('data-notice').textContent, /가상 수치 예시/);
+  assert.match(p.el('counts').textContent, /4과제 완료 4명/);
+  const qualityRow = [...p.el('quality').querySelectorAll('tbody tr')].find(tr => tr.cells[0].textContent === '기준 판정 일치');
+  assert.deepEqual([...qualityRow.cells].slice(1).map(cell => cell.textContent), ['75% (6/8)', '75% (6/8)']);
+  const cases = p.w.JournalEditorStudy.analyze(p.w.JournalEditorStudy.cueAgreementDemoRecords(), 'demo').bias;
+  assert.deepEqual([cases.manualGapPp, cases.journalGapPp], [50, 0]);
+  assert.deepEqual(Array.from(cases.cases.filter(c => c.qualityDrops.length), c => c.caseId), ['repair']);
+  const alternatives = p.el('cue-case-repair').querySelector('.case-alternatives');
+  assert.match(alternatives.textContent, /예산 요구서/);
+  assert.match(alternatives.textContent, /원자료 방식 0\/2 · 저널 방식 1\/2/);
+  p.el('real-view').click();
+  assert.match(p.el('counts').textContent, /등록 0명/);
+  assert.equal(p.el('quality').querySelector('tbody'), null);
+});
+
 test('진행자는 시간 누락 예시에서 4명과 12명의 결과를 대조하고 개인 실측으로 돌아갈 수 있다', t => {
   const p = page(t);
   const options = p.el('demo-options'), selector = p.el('demo-example'), coverage = p.el('timing-coverage');
@@ -707,6 +727,96 @@ test('같은 사실 채택률에서도 근거 불충분과 반박 응답을 구�
   assert.match(p.el('distribution-gap').textContent, /원자료 25%p → 저널 0%p · 25%p 감소/);
   const raw = [...p.el('cells').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
   assert.deepEqual(raw.find(row => row[0] === '인허가 처리 기간' && row[1] === '근거와 충돌').slice(2), ['0/1','1/1','0/1','0/1']);
+});
+
+test('격차가 줄면서 검증 일치율이 하락한 사례는 집계 카드에서 해당 기사와 기준 근거로 바로 연다', async t => {
+  const p = page(t);
+  const area = p.el('case-quality'), list = p.el('case-quality-list');
+  assert.equal(area.hidden, true);
+  assert.equal(list.children.length, 0);
+  p.el('demo-view').click();
+  assert.equal(list.querySelectorAll(':scope > details').length, 4);
+  assert.match(p.el('cue-case-repair').textContent, /근거로 지지됨 1\/2 · 근거와 충돌 1\/2/);
+  p.el('real-view').click();
+  assert.equal(area.hidden, true);
+  assert.equal(list.textContent, '');
+  assert.equal(p.el('metrics').querySelector('button[aria-controls^="cue-case-"]'), null);
+  p.el('issue-codes').click();
+  const returned = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    for (const trial of record.trials) {
+      const item = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+      const wrong = trial.caseId === 'repair' && (trial.method === 'journal' || trial.variant === 'B');
+      trial.verdict = wrong ? 'supported' : item.expectedVerdict;
+      trial.sourceIds = wrong ? [] : item.expectedSourceIds;
+      trial.reason = '화면에 표시하지 않을 개인 메모';
+    }
+    return JSON.stringify(record);
+  });
+  await importFiles(p, returned);
+  const link = p.el('metrics').querySelector('button[aria-controls="cue-case-repair"]');
+  const detail = p.el('cue-case-repair');
+  assert.ok(link);
+  assert.equal(area.hidden, false);
+  assert.equal(list.querySelectorAll(':scope > details').length, 4);
+  assert.equal(detail.open, false);
+  link.click();
+  assert.equal(detail.open, true);
+  assert.equal(p.w.document.activeElement, detail.querySelector('summary'));
+  const article = p.w.JournalStudyCases.get('repair','A');
+  const source = article.sources.find(s => article.expectedSourceIds.includes(s.id));
+  for (const expected of [article.article, p.w.JournalStudyCases.get('repair','B').article, article.question,
+    '기준 판정 · 근거와 충돌', source.title, source.version, source.locator, source.excerpt,
+    '기준 판정 일치', '대표 근거 일치', '판정·근거 동시 일치', '50% (1/2) → 0% (0/2)']) {
+    assert.ok(detail.textContent.includes(expected), expected);
+  }
+  assert.ok(!detail.textContent.includes('화면에 표시하지 않을 개인 메모'));
+  assert.doesNotMatch(detail.textContent, /E[0-9a-f]{16}/i);
+  assert.deepEqual([...detail.querySelectorAll('tbody tr')].map(tr=>[...tr.cells].map(td=>td.textContent)), [
+    ['보수 성향 표기 · 원자료','100% (1/1)','100% (1/1)','100% (1/1)','근거와 충돌 1/1'],
+    ['보수 성향 표기 · 저널','0% (0/1)','0% (0/1)','0% (0/1)','근거로 지지됨 1/1'],
+    ['진보 성향 표기 · 원자료','0% (0/1)','0% (0/1)','0% (0/1)','근거로 지지됨 1/1'],
+    ['진보 성향 표기 · 저널','0% (0/1)','0% (0/1)','0% (0/1)','근거로 지지됨 1/1']
+  ]);
+  p.el('demo-view').click();
+  assert.equal(p.el('metrics').querySelector('[aria-controls="cue-case-repair"]'), null);
+  assert.equal(p.el('cue-case-repair').open, false);
+  p.el('real-view').click();
+  assert.ok(p.el('metrics').querySelector('[aria-controls="cue-case-repair"]'));
+  assert.equal(p.el('cue-case-repair').open, false);
+});
+
+test('판정 일치율이 같고 대표 근거 일치율만 내려간 기사에서 실제 선택한 다른 자료와 미지정을 대조한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const files = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    for (const trial of record.trials) {
+      const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+      trial.verdict = gold.expectedVerdict;
+      trial.sourceIds = gold.expectedSourceIds;
+      if (trial.caseId !== 'repair') continue;
+      if (trial.method === 'manual' && trial.variant === 'A') trial.verdict = 'supported';
+      else if (trial.method === 'journal' && trial.variant === 'B') {
+        trial.verdict = 'insufficient'; trial.sourceIds = [];
+      } else trial.sourceIds = ['doc-1'];
+    }
+    return JSON.stringify(record);
+  });
+  await importFiles(p, files);
+  p.el('metrics').querySelector('[aria-controls="cue-case-repair"]').click();
+  const box = p.el('cue-case-repair'), alternatives = box.querySelector('.case-alternatives');
+  const [chosen, unused, key] = p.w.JournalStudyCases.get('repair','A').sources;
+  assert.match(box.querySelector('.notice').textContent, /대표 근거 일치 50% \(1\/2\) → 0% \(0\/2\)/);
+  assert.doesNotMatch(box.querySelector('.notice').textContent, /기준 판정 일치|동시 일치/);
+  assert.equal(alternatives.open, false);
+  alternatives.querySelector('summary').click();
+  assert.equal(alternatives.open, true);
+  for (const value of [chosen.title, chosen.version, chosen.locator, chosen.excerpt]) assert.ok(alternatives.textContent.includes(value));
+  assert.match(alternatives.textContent, /원자료 방식 1\/2 · 저널 방식 1\/2/);
+  assert.match(alternatives.textContent, /지정한 자료 없음.*원자료 방식 0\/2 · 저널 방식 1\/2/);
+  assert.ok(!alternatives.textContent.includes(unused.title) && !alternatives.textContent.includes(key.title));
+  assert.equal(p.el('cue-case-transit').querySelector('.case-alternatives'), null);
 });
 
 test('전체 품질이 같아도 기사 표기에 따라 엇갈린 근거 선택과 잘못된 사실 채택을 보여 준다', async t => {
