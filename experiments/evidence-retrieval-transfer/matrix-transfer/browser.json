@@ -1,0 +1,137 @@
+{
+  "chrome": "158.0.8127.38",
+  "offline": true,
+  "records": [
+    {
+      "id": "M01",
+      "topCandidate": "태양광",
+      "autoRows": [
+        "태양광"
+      ],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": {
+        "row": 2,
+        "col": 2,
+        "value": "24,717,623"
+      },
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    },
+    {
+      "id": "M02",
+      "topCandidate": "풍력",
+      "autoRows": [
+        "풍력"
+      ],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": {
+        "row": 3,
+        "col": 5,
+        "value": "3,736,569"
+      },
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    },
+    {
+      "id": "M03",
+      "topCandidate": "해양",
+      "autoRows": [
+        "해양"
+      ],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": {
+        "row": 5,
+        "col": 4,
+        "value": "437,567"
+      },
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    },
+    {
+      "id": "M04",
+      "topCandidate": "수력",
+      "autoRows": [
+        "수력"
+      ],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": {
+        "row": 4,
+        "col": 3,
+        "value": "3,544,866"
+      },
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    },
+    {
+      "id": "M05",
+      "topCandidate": "풍력",
+      "autoRows": [
+        "풍력"
+      ],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": null,
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    },
+    {
+      "id": "M06",
+      "topCandidate": "태양광",
+      "autoRows": [],
+      "autoCells": [],
+      "defaultSelections": [
+        0,
+        0
+      ],
+      "human": null,
+      "geometry": {
+        "viewport": 390,
+        "pageWidth": 390
+      }
+    }
+  ],
+  "work": {
+    "sources": 0,
+    "receipts": 0,
+    "reopened": true,
+    "excerpt": "수력\t3,057,210\t3,544,866\t3,718,015\t4,313,488",
+    "locator": "‘수력’ 행 · ‘2022’ 열"
+  },
+  "narrow": {
+    "viewport": 390,
+    "pageWidth": 390,
+    "columns": 17,
+    "longestLine": 227,
+    "contextOpen": true
+  },
+  "errors": []
+}

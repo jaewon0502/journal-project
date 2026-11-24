@@ -1,0 +1,61 @@
+{
+  "stats": {
+    "answerable": 4,
+    "firstRow": 0,
+    "topThreeRow": 4,
+    "exactCell": 0,
+    "incorrectCell": 0,
+    "controls": 2,
+    "controlsShowingCell": 0
+  },
+  "results": [
+    {
+      "id": "M01",
+      "candidateRows": [
+        1,
+        2
+      ],
+      "cues": []
+    },
+    {
+      "id": "M02",
+      "candidateRows": [
+        1,
+        3
+      ],
+      "cues": []
+    },
+    {
+      "id": "M03",
+      "candidateRows": [
+        1,
+        5
+      ],
+      "cues": []
+    },
+    {
+      "id": "M04",
+      "candidateRows": [
+        1,
+        3,
+        4
+      ],
+      "cues": []
+    },
+    {
+      "id": "M05",
+      "candidateRows": [
+        1,
+        3
+      ],
+      "cues": []
+    },
+    {
+      "id": "M06",
+      "candidateRows": [
+        2
+      ],
+      "cues": []
+    }
+  ]
+}
