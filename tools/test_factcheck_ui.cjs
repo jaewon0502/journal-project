@@ -41,7 +41,7 @@ function open(t) {
 
 async function loadWorkspace(page, data, accept = true) {
   const {w, el} = page;
-  w.confirm = () => accept;
+  w.confirm = typeof accept === 'function' ? accept : () => accept;
   const input = el('import-file');
   const file = new w.File([JSON.stringify(data)], 'work.json', {type: 'application/json'});
   Object.defineProperty(input, 'files', {value: [file], configurable: true});
@@ -754,6 +754,71 @@ test('근거를 찾던 문장에만 새 자료를 연결하고 기존 이유는 
   assert.equal(JSON.parse(await snapshot()).receipts[0].status, 'fact');
 });
 
+test('원자료를 작성하다 이어 열면 같은 위치의 문장에 편집자가 직접 연결할 수 있다', async t => {
+  const writer = open(t);
+  const claim = '의회는 돌봄 예산을 의결했다.';
+  const article = [claim, '다음 안건을 논의했다.', claim].join('\n\n');
+  writer.set('article', article);
+  writer.el('article-form').requestSubmit();
+  writer.el('row-list').children[2].querySelector('button').click();
+  writer.set('reason', '세 번째 문장에서 인용할 회의록을 대조한다.');
+  writer.click('go-find');
+  writer.set('document-text', '공개하지 않을 자료 전문');
+  const fields = {title:'예산 회의록', url:'https://council.example/minutes', version:'공개본',
+    locator:'의결사항 3', excerpt:'돌봄 예산 의결'};
+  for (const [key, value] of Object.entries(fields)) writer.set('source-' + key, value);
+  writer.click('save-work');
+  const serialized = await writer.snapshot();
+  assert.ok(!serialized.includes('공개하지 않을 자료 전문'));
+  const work = JSON.parse(serialized);
+  const reader = open(t);
+  await loadWorkspace(reader, work);
+  assert.equal(reader.el('source-save-link').hidden, false);
+  assert.equal(reader.el('source-save-link').textContent, '3번 문장의 대조 자료로 추가');
+  assert.equal(reader.el('sources-panel').open, true);
+  assert.equal(reader.el('source-count').textContent, '· 0개');
+  assert.equal(reader.el('document-text').value, '');
+  reader.click('source-save-link');
+  assert.equal(reader.el('row-sources').querySelectorAll('input:checked').length, 1);
+  assert.equal(reader.el('acknowledged').checked, false);
+  reader.el('row-list').firstElementChild.querySelector('button').click();
+  assert.equal(reader.el('row-sources').querySelectorAll('input:checked').length, 0);
+  reader.click('save-work');
+  const attached = JSON.parse(await reader.snapshot());
+  assert.equal(attached.sources.length, 1);
+  assert.equal(attached.receipts.length, 0);
+
+  writer.el('sources-panel').open = false;
+  writer.click('save-work');
+  const closed = open(t);
+  await loadWorkspace(closed, JSON.parse(await writer.snapshot()));
+  assert.equal(closed.el('sources-panel').open, false);
+  assert.equal(closed.el('source-save-link').hidden, false);
+
+  const legacy = structuredClone(work);
+  delete legacy.sourceDraft.targetBinding;
+  const stale = article + '\n\n뒤에 확인한 내용이 추가됐다.';
+  for (const input of [legacy, {...work, currentId:'unit-0'}, {...work, currentId:null},
+    {...work, article:stale, articleDraft:stale}, {...work, articleDraft:stale},
+    {...work, sourceDraft:{...work.sourceDraft, targetBinding:{}}},
+    {...work, sources:attached.sources, sourceDraft:{...work.sourceDraft, id:attached.sources[0].id}},
+    {...work, sourceDraft:{...work.sourceDraft, id:'missing-source'}}]) {
+    const fresh = open(t);
+    await loadWorkspace(fresh, input);
+    assert.equal(fresh.el('source-save-link').hidden, true);
+    assert.equal(fresh.el('sources-panel').open, false);
+    assert.equal(fresh.el('source-excerpt').value, fields.excerpt);
+  }
+  const untrusted = open(t);
+  await loadWorkspace(untrusted, work, false);
+  assert.equal(untrusted.el('source-save-link').hidden, true);
+  assert.equal(untrusted.el('source-excerpt').value, '');
+  writer.click('save-review-input');
+  const packet = JSON.parse(await writer.snapshot());
+  assert.equal(packet.sourceDraft.targetBinding, undefined);
+  assert.equal(packet.sourceDraft.fields.excerpt, '');
+});
+
 test('같은 원자료로 다음 문장을 찾으면 새 후보만 표시하고 발췌와 판단은 편집자에게 남긴다', async t => {
   const {el, click, set, doc, snapshot} = open(t);
   const first = '시의회는 돌봄 예산을 확정했다.';
@@ -813,6 +878,72 @@ test('아직 제출하지 않은 다른 편집자의 문장 판단도 독립 검
   await loadWorkspace(reviewer, work, false);
   assert.equal(reviewer.el('article').value, work.article);
   assert.equal(reviewer.el('reason').value, '');
+});
+
+test('판정이 없어도 미등록 발췌나 고치는 중인 기사에는 이어서 작업할지 선택할 수 있다', async t => {
+  const author = open(t);
+  author.click('load-demo');
+  author.click('save-work');
+  const original = JSON.parse(await author.snapshot());
+  assert.equal(original.receipts.length + original.rowDrafts.length, 0);
+  const privateText = '편집 중인 사적 논평';
+  const excerptDraft = structuredClone(original);
+  excerptDraft.sourceDraft.fields.excerpt = privateText;
+  const editDraft = structuredClone(original);
+  const source = editDraft.sources[0];
+  editDraft.sourceDraft.id = source.id;
+  for (const field of Object.keys(editDraft.sourceDraft.fields)) {
+    editDraft.sourceDraft.fields[field] = source[field] || '';
+  }
+  const untouchedEdit = structuredClone(editDraft);
+  editDraft.sourceDraft.fields.excerpt = privateText;
+  source.editorComment = privateText;
+  const articleDraft = {...original, articleDraft: original.article + '\n' + privateText};
+  for (const work of [excerptDraft, editDraft, articleDraft]) {
+    const trusted = open(t);
+    let prompts = 0;
+    await loadWorkspace(trusted, work, () => { prompts++; return true; });
+    assert.equal(prompts, 1);
+    assert.match(trusted.el('file-status').textContent, /문장 판단은 0건/);
+    assert.equal(trusted.el('article').value, work.articleDraft);
+    assert.equal(trusted.el('source-excerpt').value, work.sourceDraft.fields.excerpt);
+    const independent = open(t);
+    await loadWorkspace(independent, work, false);
+    assert.equal(independent.el('article').value, original.article);
+    assert.equal(independent.el('source-excerpt').value, '');
+    independent.click('save-work');
+    const clean = JSON.parse(await independent.snapshot());
+    assert.deepEqual(clean.sources, original.sources);
+    assert.ok(!JSON.stringify(clean).includes(privateText));
+  }
+  for (const work of [original, untouchedEdit, {...original, article: ''}]) {
+    const unchanged = open(t);
+    let prompts = 0;
+    await loadWorkspace(unchanged, work, () => { prompts++; return true; });
+    assert.equal(prompts, 0);
+    assert.equal(unchanged.el('article').value, original.article);
+  }
+});
+
+test('목록에서 원자료를 수정하다 이어 열면 편집 중인 발췌를 같은 자료에서 이어 쓴다', async t => {
+  const writer = open(t);
+  writer.click('load-demo');
+  writer.el('sources-panel').open = true;
+  const item = writer.el('source-list').querySelector('details');
+  item.open = true;
+  item.querySelector('button').click();
+  const title = writer.el('source-title').value;
+  writer.set('source-excerpt', '확정 전 발췌 수정안');
+  writer.click('save-work');
+  const work = JSON.parse(await writer.snapshot());
+  const owner = open(t);
+  await loadWorkspace(owner, work);
+  assert.equal(owner.el('sources-panel').open, true);
+  assert.equal(owner.el('source-form-title').textContent, '원자료 수정');
+  assert.equal(owner.el('source-title').value, title);
+  assert.equal(owner.el('source-excerpt').value, '확정 전 발췌 수정안');
+  assert.equal(owner.el('source-save-link').hidden, true);
+  assert.ok(!owner.el('source-list').textContent.includes('확정 전 발췌 수정안'));
 });
 
 test('독립 평가 파일에는 확정한 기사와 원자료만 남고 판정·초안·추가 입력은 전달되지 않는다', async t => {
@@ -1181,6 +1312,47 @@ test('조건이 붙은 통계는 원표 좌표를 직접 연 뒤에만 숫자를
   picker.querySelector('button').click();
   assert.equal(el('source-excerpt').value, line);
   assert.equal(el('source-locator').value, title + ' · ‘남부’ 행 · ‘2022년’ 열');
+});
+
+test('내 작업을 다시 열면 검토를 마친 문장과 선택한 목록을 이어 본다', async t => {
+  const author = open(t);
+  recordFirstFact(author);
+  const rows = author.el('report-rows').children;
+  rows[0].querySelector('button').click();
+  const completed = author.el('row-text').textContent;
+  author.click('save-work');
+  const saved = JSON.parse(await author.snapshot());
+  const legacy = {...saved};
+  delete legacy.rowFilter;
+  const resumed = open(t);
+  for (const work of [saved, legacy]) {
+    await loadWorkspace(resumed, work);
+    assert.equal(resumed.el('row-text').textContent, completed);
+    assert.equal(resumed.el('row-filter').value, 'all');
+    assert.equal(resumed.el('verdict').value, 'fact');
+  }
+  rows[2].querySelector('button').click();
+  author.click('save-work');
+  await loadWorkspace(resumed, JSON.parse(await author.snapshot()));
+  assert.equal(resumed.el('row-filter').value, 'all');
+  assert.match(resumed.el('row-heading').textContent, /^문장 3 ·/);
+  const independent = open(t);
+  await loadWorkspace(independent, saved, false);
+  assert.equal(independent.el('row-filter').value, 'open');
+  assert.equal(independent.el('verdict').value, '');
+  assert.equal(independent.el('row-list').children.length, 5);
+  await loadWorkspace(resumed, {...saved, rowFilter: 'invalid', currentId: 'removed'});
+  assert.equal(resumed.el('row-filter').value, 'open');
+  assert.match(resumed.el('row-heading').textContent, /^문장 2 ·/);
+  await loadWorkspace(resumed, saved);
+  resumed.set('reason', '이전에 기록한 표결 수치를 다시 확인하고 있다.');
+  resumed.click('save-work');
+  const editedLegacy = JSON.parse(await resumed.snapshot());
+  delete editedLegacy.rowFilter;
+  await loadWorkspace(resumed, editedLegacy);
+  assert.equal(resumed.el('row-filter').value, 'open');
+  assert.match(resumed.el('row-heading').textContent, /^문장 1 · 판단 작성 중/);
+  assert.equal(resumed.el('reason').value, '이전에 기록한 표결 수치를 다시 확인하고 있다.');
 });
 
 test('결과와 정확성 평가에서 같은 문구의 서로 다른 문장을 열고 다른 문장의 메모를 보존한다', t => {

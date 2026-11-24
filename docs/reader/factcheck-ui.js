@@ -176,6 +176,12 @@
     sourceForRow = null;
     byId('source-save-link').hidden = true;
   }
+  function targetSourceTo(row) {
+    sourceForRow = row.articleBinding;
+    const link = byId('source-save-link');
+    link.textContent = (result.rows.indexOf(row) + 1) + '번 문장의 대조 자료로 추가';
+    link.hidden = false;
+  }
   function clearSourceForm(reuse = {}) {
     clearSourceTarget();
     suggestedLocator = '';
@@ -418,12 +424,7 @@
       message('source-status', '새 원자료를 추가합니다.');
     }
     const row = currentRow();
-    if (row) {
-      sourceForRow = row.articleBinding;
-      const link = byId('source-save-link');
-      link.textContent = (result.rows.indexOf(row) + 1) + '번 문장의 대조 자료로 추가';
-      link.hidden = false;
-    }
+    if (row) targetSourceTo(row);
     if (find) {
       byId('finder').open = true;
       byId('document-query').value = row?.text || '';
@@ -937,9 +938,11 @@
     const rowDrafts = [...drafts].map(([rowId, data]) => ({rowId, data: {...data, acknowledged: false, correctionChecked: false, contentChecked: false}}));
     return {
       format: schema, article, sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: byId('article').value,
+      rowFilter: byId('row-filter').value,
       ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
-        ...(suggestedLocator ? {suggestedLocator} : {})}
+        ...(suggestedLocator ? {suggestedLocator} : {}),
+        ...(sourceDraftIsDirty() ? {targetBinding: sourceForRow, panelOpen: byId('sources-panel').open} : {})}
     };
   }
   function exportWork() {
@@ -964,8 +967,9 @@
     workspace.validateWork(w);
     // Ask explicitly before applying any receipt from a file. A structurally valid record does not identify its author.
     if (!canReplace()) return;
-    const hasJudgments = w.receipts.length > 0 || w.rowDrafts.length > 0 || w.articleAssessment != null || w.articleAssessmentDraft != null;
-    const trust = !hasJudgments || confirm('이 파일의 판단과 작성 중인 초안을 본인 또는 신뢰하는 검토자가 기록했습니까? 확인을 누르면 해당 기록을 복원합니다. 취소를 누르면 기사와 원자료만 열어 새로 검토합니다.');
+    const hasReviewWork = w.receipts.length > 0 || w.rowDrafts.length > 0 || w.articleAssessment != null ||
+      w.articleAssessmentDraft != null || (w.article.trim() && w.articleDraft !== w.article) || workspace.hasSourceDraft(w);
+    const trust = !hasReviewWork || confirm('본인이나 신뢰하는 편집자가 저장한 작업을 이어갈까요? 확인을 누르면 작성 중인 기사·원자료와 판단 기록을 복원합니다. 독립적으로 검토하려면 취소를 누르세요. 확정한 기사와 등록된 원자료만 엽니다.');
     const text = w.article || w.articleDraft;
     let keep = trust ? w.receipts.filter(r => r && typeof r.rowId === 'string') : [];
     const checked = engine.prepare(text, w.sources, keep);
@@ -973,7 +977,7 @@
     const tag = w.article.trim() ? workspace.blindTag(w.blindReview) : null;
     // A returned blind file may carry extra metadata on evidence, decisions or drafts.
     // Restore only the fields understood by the editor, including for a malformed tag.
-    const catalog = blindFile ? w.sources.map(workspace.sourceInput) : w.sources;
+    const catalog = blindFile || !trust ? w.sources.map(workspace.sourceInput) : w.sources;
     if (blindFile) keep = checked.rows.map(row => row.receipt || row.priorDecision).filter(Boolean);
     resetWork(text, catalog, keep, w.demo || catalog.some(isMock), tag);
     if (trust) {
@@ -984,6 +988,12 @@
         return [rowId, restored];
       }));
       currentId = validIds.has(w.currentId) ? w.currentId : null;
+      const selected = currentRow();
+      // Older work files saved the row but not the filter. A completed row
+      // could only be selected in the full list unless an open draft hid its receipt.
+      const legacyAll = w.rowFilter === undefined && selected && !isOpen(selected) &&
+        !workspace.draftChangesRecord(drafts.get(selected.id), selected.receipt);
+      byId('row-filter').value = w.rowFilter === 'all' || legacyAll ? 'all' : 'open';
       const prefill = sources.find(s => s.id === w.sourceDraft.prefillId);
       clearSourceForm(prefill);
       const edit = sources.find(s => s.id === w.sourceDraft.id);
@@ -997,6 +1007,13 @@
       if (w.sourceDraft.suggestedLocator === byId('source-locator').value)
         suggestedLocator = byId('source-locator').value;
       refresh();
+      const target = currentRow();
+      if (w.article === w.articleDraft && sourceDraftIsDirty()) {
+        const sameTarget = target && target.id === w.currentId && target.articleBinding === w.sourceDraft.targetBinding && w.sourceDraft.id == null;
+        if (sameTarget) targetSourceTo(target);
+        const catalogDraft = w.sourceDraft.targetBinding === null && (w.sourceDraft.id == null || edit);
+        byId('sources-panel').open = w.sourceDraft.panelOpen === true && !!(sameTarget || catalogDraft);
+      }
       byId('article').value = w.articleDraft;
       showBlindNotice();
       if (w.articleDraft !== article) {
@@ -1026,7 +1043,9 @@
       message('file-status', '작업 파일을 열었습니다. 현재 원문·근거·판정과 대조되지 않는 기사 평가 또는 초안은 현재 결과에서 제외했습니다.');
       return;
     }
-    message('file-status', trust ? '작업 파일을 열었습니다. 원문과 자료 범위가 일치하는 판단을 복원했습니다.' : '기사와 원자료를 열었습니다. 각 문장을 새로 검토하세요.');
+    const restoredCount = result.rows.filter(row => row.receipt).length;
+    message('file-status', trust ? '작업 파일을 열었습니다. 확정한 기사와 등록된 원자료에 연결된 문장 판단은 ' + restoredCount + '건입니다.'
+      : '기사와 원자료를 열었습니다. 각 문장을 새로 검토하세요.');
   }
   byId('save-review-input').addEventListener('click', exportReviewInput);
   byId('save-work').addEventListener('click', exportWork);

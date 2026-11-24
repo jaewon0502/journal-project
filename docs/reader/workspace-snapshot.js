@@ -97,6 +97,13 @@
     return [...new Set(sources.map(sourceIdentity))].sort();
   }
 
+  function hasSourceDraft(w) {
+    const editing = w.sources.find(s => s.id === w.sourceDraft.id);
+    const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
+    const baseline = editing || sourceDefaults(prefill);
+    return sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
+  }
+
   function read(w) {
     validateWork(w);
     if (!w.article.trim() || w.articleDraft !== w.article) {
@@ -108,12 +115,8 @@
     if (!report.rows.length) throw new Error('비교할 기사 구간이 없습니다.');
     const checked = review(report, w.sources, w.articleAssessment, w.articleAssessmentDraft);
     const sourceKey = JSON.stringify(sourceIdentities(w.sources));
-    const editing = w.sources.find(s => s.id === w.sourceDraft.id);
-    const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
-    const baseline = editing || sourceDefaults(prefill);
-    const sourceDraftPending = sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
     return {article: report.article, rows: report.rows, sources: w.sources, sourceKey,
-      demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending};
+      demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending: hasSourceDraft(w)};
   }
 
   function sourceInput(source) {
@@ -138,7 +141,7 @@
     return {pairId: value.pairId, slot: value.slot};
   }
 
-  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceIdentities, sourceInput, isMock, validateWork, activeReport,
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceIdentities, sourceInput, isMock, validateWork, hasSourceDraft, activeReport,
     draftChangesRecord, review, read, independentInput, blindTag});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;
