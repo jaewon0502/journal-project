@@ -163,6 +163,7 @@
     const dimensions = rubric.dimensions.map(({id, title}, i) =>
       ({id, title, ...summarizeScores(unique.map(r => r.dimensions[i]))}));
     const unchanged = unique.filter(r => r.before.sourcesSha256 === r.after.sourcesSha256);
+    const unchangedScores = summarizeScores(unchanged.flatMap(r => r.dimensions));
     const withFacts = unique.filter(r => r.facts);
     const improvedArticles = articles.filter(a => a.improved.numerator > 0);
     const facts = {articleCount: withFacts.length, missingArticles: articles.length - withFacts.length,
@@ -181,7 +182,8 @@
       improvementEligibleArticles: articles.filter(a => a.improved.denominator > 0).length,
       worseningEligibleArticles: articles.filter(a => a.worsened.denominator > 0).length,
       changedSources: articles.length - unchanged.length, unchangedSources: unchanged.length,
-      unchangedEvidenceImprovement: summarizeScores(unchanged.flatMap(r => r.dimensions)).improved,
+      unchangedEvidenceImprovement: unchangedScores.improved, unchangedEvidenceSeverity: unchangedScores.severity,
+      unchangedEvidencePaired: unchangedScores.paired,
       ...summarizeScores(unique.flatMap(r => r.dimensions)), dimensions, articles, facts};
   }
 

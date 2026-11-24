@@ -65,12 +65,93 @@
   }
   function evidenceLink(entry, label, focus = '') {
     const link = element('a', entry.name + ' · ' + label, 'review-evidence');
-    link.href = 'article-compare.html#review=' + window.JournalRevisionSeries.reviewId(entry.record) +
+    entry.reviewId ??= window.JournalRevisionSeries.reviewId(entry.record);
+    link.href = 'article-compare.html#review=' + entry.reviewId +
       focus + (entry.libraryExample ? '&example=library' : '');
     link.target = '_blank';
     link.rel = 'noopener';
     link.setAttribute('aria-label', link.textContent + '의 원자료 대조 · 새 탭');
     return link;
+  }
+
+  function severityChange(matrix, paired) {
+    if (!paired) return '함께 채점한 항목이 없어 산출 대기';
+    const before = matrix[2].reduce((sum, count) => sum + count, 0);
+    const after = matrix.reduce((sum, row) => sum + row[2], 0);
+    const rate = count => Number((100 * count / paired).toFixed(1)) + '% (' + count + '/' + paired + ')';
+    const points = Number((100 * Math.abs(after - before) / paired).toFixed(1));
+    const change = after === before ? '변화 없음' :
+      (points ? points + '%p' : '0.1%p 미만') + (after > before ? ' 증가' : ' 감소');
+    return '원본 ' + rate(before) + ' → 수정본 ' + rate(after) + ' · ' + change;
+  }
+
+  function severityPanel(report, sources, rates) {
+    const panel = element('section');
+    panel.id = 'series-severity';
+    panel.append(element('h4', '같은 항목에서 본 중요한 왜곡'),
+      element('p', '두 편집자가 원본과 수정본을 모두 채점한 ' + report.paired + '/' + report.total +
+        '개 기사·항목을 비교했습니다. 중요한 왜곡은 2~3단계입니다.'));
+    if (!report.paired) {
+      panel.append(element('p', '비교할 수 있는 항목이 생기면 변화가 표시됩니다.'), rates);
+      return panel;
+    }
+    const {matrix, oppositeSteps, withinBandOppositeSteps} = report.severity;
+    const result = element('p', '두 사람 모두 중요하다고 본 비율 · ');
+    result.append(element('strong', severityChange(matrix, report.paired)));
+    result.id = 'series-severity-change';
+    panel.append(result, rates);
+    if (report.changedSources) panel.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources +
+      '건만 보면 · ' + severityChange(report.unchangedEvidenceSeverity.matrix, report.unchangedEvidencePaired), 'note'));
+    panel.append(element('p', '원본에서는 한 명만 중요하다고 봤고 수정본에서는 두 사람 모두 중요하다고 본 항목 ' +
+      matrix[1][2] + '개 · 반대로 두 명에서 한 명이 된 항목 ' + matrix[2][1] + '개'),
+      element('p', '한 편집자는 단계를 높이고 다른 편집자는 낮춘 항목 ' + oppositeSteps +
+        '개 · 이 중 두 사람 모두 2단계 경계를 넘지 않은 항목 ' + withinBandOppositeSteps + '개'));
+    const distribution = element('details');
+    distribution.append(element('summary', '중요한 왜곡으로 본 편집자 수의 변화'));
+    const table = element('table');
+    table.append(element('caption', '각 칸은 해당 평가를 받은 기사·항목 수입니다.'));
+    const header = table.createTHead().insertRow();
+    for (const text of ['원본 판정', '수정본 0명', '수정본 1명', '수정본 2명']) {
+      const cell = element('th', text);
+      cell.scope = 'col';
+      header.append(cell);
+    }
+    const body = table.createTBody();
+    matrix.forEach((counts, index) => {
+      const row = body.insertRow(), heading = element('th', '원본 ' + index + '명');
+      heading.scope = 'row';
+      row.append(heading, ...counts.map(n => element('td', n + '개')));
+    });
+    distribution.append(table);
+    panel.append(distribution);
+
+    const items = element('ul');
+    let scoresOnly = 0;
+    for (const article of report.articles) {
+      const entry = sources.get(article.before.articleSha256);
+      for (const {id, title} of report.dimensions) {
+        const d = entry.record.dimensions.find(axis => axis.id === id);
+        const scores = window.JournalRevisionAgreement.summarizeScores([d]);
+        if (!(scores.disagreed || scores.stableSeverityDifferences || scores.severity.oppositeSteps)) continue;
+        const item = element('li');
+        if (entry.record.version >= 2 && !entry.summaryOnlyExample) item.append(evidenceLink(entry, title, '&focus=bias-' + id));
+        else {
+          item.append(element('strong', entry.name + ' · ' + title));
+          scoresOnly++;
+        }
+        item.append(element('p', '첫 편집자 ' + d.first.before + ' → ' + d.first.after +
+          '단계 · 둘째 편집자 ' + d.second.before + ' → ' + d.second.after + '단계'));
+        items.append(item);
+      }
+    }
+    if (items.children.length) {
+      const details = element('details');
+      details.id = 'series-bias-follow-up';
+      details.append(element('summary', '중요도 판단이 갈렸거나 단계가 반대로 움직인 ' + items.children.length + '개 항목 대조'), items);
+      if (scoresOnly) details.append(element('p', '원래 작업 파일로 연결할 수 없는 요약의 ' + scoresOnly + '개 항목은 전후 점수만 표시합니다.', 'note'));
+      panel.append(details);
+    }
+    return panel;
   }
 
   function retentionPanel(report, sources) {
@@ -189,7 +270,8 @@
       const id = record.before.articleSha256;
       const prior = sources.get(id);
       if (!prior || record.version > prior.record.version) sources.set(id, {
-        name:fileName(files[i]), record, libraryExample:builtIn && files[i].evidenceExample === 'library'
+        name:fileName(files[i]), record, libraryExample:builtIn && files[i].evidenceExample === 'library',
+        summaryOnlyExample:builtIn && files[i].evidenceExample !== 'library'
       });
     });
     byId('result-title').textContent = (report.demo ? '가상 예시 · ' : '') + '기사 ' + report.articleCount + '건의 수정 결과';
@@ -199,8 +281,7 @@
       metric('series-worsened', '두 편집자 공통 악화율', report.worsened, report.worseningEligibleArticles, '0~1단계', '2~3단계'));
     summary.append(element('h3', '중요한 왜곡의 변화'),
       element('p', (builtIn ? '예시 파일 ' : '선택한 파일 ') + files.length + '개 · 고유 기사 ' + report.articleCount + '건 · 중복 제외 ' + report.duplicateCount + '개'),
-      element('p', '두 편집자가 원본과 수정본에 모두 숫자 단계를 매긴 항목을 대상으로, 기사별 분자와 분모를 각각 더했습니다.', 'note'),
-      grid);
+      severityPanel(report, sources, grid));
     summary.append(element('p', '원본과 수정본에 등록된 원자료 묶음이 달라진 기사 ' + report.changedSources + '건', report.changedSources ? 'warn' : 'note'));
     if (report.changedSources) {
       summary.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources + '건만 보면 공통 개선율은 ' + rateText(report.unchangedEvidenceImprovement) + '입니다.'));

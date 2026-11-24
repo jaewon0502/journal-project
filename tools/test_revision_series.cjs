@@ -126,7 +126,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
     assert.equal(wire.includes(privateValue), false, privateValue);
   }
   const report = summarize([JSON.parse(wire)]);
-  for (const metric of ['paired', 'total', 'unpaired', 'disagreed', 'stableSeverityDifferences', 'improved', 'worsened']) {
+  for (const metric of ['paired', 'total', 'unpaired', 'disagreed', 'stableSeverityDifferences', 'improved', 'worsened', 'severity']) {
     assert.deepEqual(report[metric], joint[metric]);
   }
   const reversed = makeRecord(agreement.compare(two, one), two.key);
@@ -257,6 +257,39 @@ test('미평가·해당 없음과 수정 후 판단이 빠진 공동 중요 항�
   assert.deepEqual(s.improved, ratio(0, 1));
   assert.deepEqual(s.worsened, ratio(0, 0));
   assert.equal(s.dimensions.find(d => d.id === 'framing').pendingImportant, 1);
+});
+
+test('공통 개선율이 100%여도 두 편집자가 중요하다고 본 항목이 1/8에서 4/8로 늘었음을 보존한다', () => {
+  const a = record('A', [[2,0,2,0],[0,2,2,2],[2,2,0,2],[0,0,0,0]]);
+  const b = record('B', [[2,2,0,2],[0,2,2,2],[0,0,0,0],[0,0,0,0]]);
+  const s = summarize([a,b]);
+  assert.deepEqual(s.improved, ratio(1,1));
+  assert.deepEqual(s.worsened, ratio(0,3));
+  assert.deepEqual(s.severity.matrix, [[3,0,0],[0,0,4],[1,0,0]]);
+  assert.deepEqual(s.articles.map(r => r.severity.matrix), [
+    [[1,0,0],[0,0,2],[1,0,0]], [[2,0,0],[0,0,2],[0,0,0]]
+  ]);
+  assert.deepEqual(s.dimensions.find(r => r.id === 'framing').severity.matrix, [[0,0,0],[0,0,2],[0,0,0]]);
+  assert.deepEqual(summarize([b,a]).severity, s.severity);
+  for (const d of b.dimensions) [d.first, d.second] = [d.second, d.first];
+  assert.deepEqual(summarize([a,b]).severity, s.severity);
+});
+
+test('원자료를 바꾼 기사를 빼면 공동 중요 판정이 증가에서 감소로 바뀌고 비교할 점수가 없으면 빈 행렬을 돌려준다', () => {
+  const same = record('same sources', [[2,0,3,1], [0,0,0,0]]);
+  const changed = record('changed sources', [[1,3,0,3], [0,2,1,3], [2,3,0,2]], true);
+  const combined = summarize([same,changed]);
+  assert.equal(combined.paired, 5);
+  assert.deepEqual(combined.severity.matrix, [[1,0,2],[0,0,1],[1,0,0]]); // Both high: 1 → 3.
+  assert.equal(combined.unchangedEvidencePaired, 2);
+  assert.deepEqual(combined.unchangedEvidenceSeverity, summarize([same]).severity);
+  assert.deepEqual(combined.unchangedEvidenceSeverity.matrix, [[1,0,0],[0,0,0],[1,0,0]]); // Both high: 1 → 0.
+  assert.deepEqual(combined.unchangedEvidenceImprovement, ratio(1,1));
+  for (const records of [[changed], [record('no scores'), changed]]) {
+    const s = summarize(records);
+    assert.equal(s.unchangedEvidencePaired, 0);
+    assert.deepEqual(s.unchangedEvidenceSeverity, {matrix:[[0,0,0],[0,0,0],[0,0,0]], oppositeSteps:0, withinBandOppositeSteps:0});
+  }
 });
 
 test('모든 기준에서 편집자 순서를 함께 바꾸거나 기준을 재정렬한 중복 파일은 한 번만 센다', () => {

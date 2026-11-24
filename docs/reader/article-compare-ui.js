@@ -536,6 +536,45 @@
     }
     return panel;
   }
+  const editorNames = ['첫 편집자', '둘째 편집자'];
+  function jointDimensionDetails(dimension, editors) {
+    const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
+    const line = [dimension.first, dimension.second].map((d, i) =>
+      editorNames[i] + ' ' + level(d.before) + ' → ' + level(d.after) + ' (' + labels[d.change] + ')');
+    const item = detail(dimension.title);
+    item.dataset.biasAxis = dimension.id;
+    item.firstChild.append(element('small', line.join(' / '), 'joint-levels'));
+    const pair = element('div', null, 'pair');
+    editors.forEach((editor, i) => {
+      const column = element('div');
+      column.append(element('h4', editorNames[i]));
+      editor.snapshots.forEach((snapshot, j) => {
+        const rating = snapshot.assessment.bias.items.find(d => d.id === dimension.id).rating;
+        column.append(ratingEvidence(snapshot, rating, j ? '수정 후' : '수정 전'));
+      });
+      pair.append(column);
+    });
+    item.append(pair);
+    return item;
+  }
+
+  function jointSeverity(joint) {
+    const panel = element('div');
+    panel.id = 'joint-severity';
+    panel.append(element('h4', '같은 항목에서 두 편집자가 본 왜곡 단계'));
+    if (!joint.paired) {
+      panel.append(note('비교 대기 · 두 편집자가 원본과 수정본에 모두 단계를 매긴 항목이 없습니다.'));
+      return panel;
+    }
+    const {matrix, oppositeSteps, withinBandOppositeSteps} = joint.severity;
+    const before = matrix[2].reduce((total, n) => total + n, 0);
+    const after = matrix.reduce((total, row) => total + row[2], 0);
+    panel.append(element('p', '두 사람이 모두 중요한 왜곡(2~3단계)으로 본 항목 · 원본 ' +
+      before + '/' + joint.paired + '개 → 수정본 ' + after + '/' + joint.paired + '개'),
+      note('한 편집자는 단계를 낮추고 다른 편집자는 높인 항목 ' + oppositeSteps +
+        '개 · 그중 둘 다 1단계와 2단계 사이의 경계를 넘지 않은 항목 ' + withinBandOppositeSteps + '개'));
+    return panel;
+  }
   function jointPanel(current, priorReview, reopened) {
     const panel = section('두 편집자가 함께 확인한 변화');
     panel.id = 'revision-agreement';
@@ -563,10 +602,9 @@
     grid.append(card('두 사람 모두 개선으로 판정', joint.improved, '두 사람 모두 원본을 2~3단계로 평가하고 수정본도 채점한 항목 중'),
       card('두 사람 모두 악화로 판정', joint.worsened, '두 사람 모두 원본을 0~1단계로 평가하고 수정본도 채점한 항목 중'));
     const editors = [priorReview, current];
-    const editorNames = ['첫 편집자', '둘째 편집자'];
     panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid,
       note('네 판정이 모두 있는 항목 ' + joint.paired + '/' + joint.total + '개 · 비교할 단계가 부족한 항목 ' + joint.unpaired +
-        '개 · 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'));
+        '개 · 중요한 왜곡(2~3단계)의 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'), jointSeverity(joint));
     if (joint.stableSeverityDifferences) panel.append(note('두 사람 모두 유지로 보았지만 중요한 왜곡이 있는지에 대한 판단이 다른 항목 ' +
       joint.stableSeverityDifferences + '개'));
     const series = element('a', '여러 기사 집계 새 탭에서 열기');
@@ -603,25 +641,7 @@
     }
     actions.append(series);
     panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정과 충돌 표시, 원본과 수정본의 대응 구절 번호, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
-    const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
-    for (const dimension of joint.dimensions) {
-      const line = [dimension.first, dimension.second].map((d, i) =>
-        editorNames[i] + ' ' + level(d.before) + ' → ' + level(d.after) + ' (' + labels[d.change] + ')');
-      const item = detail(dimension.title);
-      item.firstChild.append(element('small', line.join(' / '), 'joint-levels'));
-      const pair = element('div', null, 'pair');
-      editors.forEach((editor, i) => {
-        const column = element('div');
-        column.append(element('h4', editorNames[i]));
-        editor.snapshots.forEach((snapshot, j) => {
-          const rating = snapshot.assessment.bias.items.find(d => d.id === dimension.id).rating;
-          column.append(ratingEvidence(snapshot, rating, j ? '수정 후' : '수정 전'));
-        });
-        pair.append(column);
-      });
-      item.append(pair);
-      panel.append(item);
-    }
+    for (const dimension of joint.dimensions) panel.append(jointDimensionDetails(dimension, editors));
     panel.append(jointFactPanel(joint, editors, record, reopened?.notes), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
     return panel;
   }
@@ -758,6 +778,9 @@
     }
     const row = pending || group.querySelector('details');
     group.open = true;
+    openReviewRow(row);
+  }
+  function openReviewRow(row) {
     row.open = true;
     row.firstElementChild.focus();
     row.firstElementChild.scrollIntoView?.({block:'start'});
@@ -777,19 +800,28 @@
         (reviewTarget.retention || series.reviewId(record, 2) !== reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
-    const panel = jointFactPanel(joint, reviews, record, reopened?.notes);
-    const group = panel.querySelector(reviewTarget.retention ? '.fact-retention' : '.fact-alerts[data-edition="after"]');
-    const first = group?.querySelector('details');
-    if (!first) throw new Error(reviewTarget.retention ? '선택한 요약에는 다시 대조할 원본 사실이 없습니다.'
-      : '선택한 요약에는 수정본과 원자료의 충돌 표시가 없습니다.');
-    byId('result-title').textContent = (joint.demo ? '가상 예시 · ' : '') +
-      (reviewTarget.retention ? '원본 사실과 수정본 대조' : '수정본의 충돌 구절과 근거');
+    let panel, group, row, title;
+    if (reviewTarget.axis) {
+      const dimension = joint.dimensions.find(d => d.id === reviewTarget.axis);
+      panel = section('두 편집자가 기록한 구절과 원자료');
+      row = jointDimensionDetails(dimension, reviews);
+      panel.append(note('단계는 집계한 요약과 대조했습니다. 발췌문과 판단 이유는 지금 연 작업 파일에서 읽었습니다.'), row);
+      title = dimension.title + ' · 수정 전후 판정 근거';
+    } else {
+      panel = jointFactPanel(joint, reviews, record, reopened?.notes);
+      group = panel.querySelector(reviewTarget.retention ? '.fact-retention' : '.fact-alerts[data-edition="after"]');
+      if (!group?.querySelector('details')) throw new Error(reviewTarget.retention ? '선택한 요약에는 다시 대조할 원본 사실이 없습니다.'
+        : '선택한 요약에는 수정본과 원자료의 충돌 표시가 없습니다.');
+      title = reviewTarget.retention ? '원본 사실과 수정본 대조' : '수정본의 충돌 구절과 근거';
+    }
+    byId('result-title').textContent = (joint.demo ? '가상 예시 · ' : '') + title;
     byId('output').replaceChildren(panel);
     byId('result').hidden = false;
     const notice = reopened ? '저장한 진행자용 대조 기록을 복원했습니다.'
       : reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
     blindStatus('review-target-status', notice + ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.');
-    focusReviewGroup(group, reviewTarget.retention && !!reopened);
+    if (row) openReviewRow(row);
+    else focusReviewGroup(group, reviewTarget.retention && !!reopened);
   }
   async function openReviewFiles(items, current, archive) {
     if (current !== recovery) return;
@@ -955,8 +987,8 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(&focus=retention)?(&example=library)?$/.exec(location.hash);
-      reviewTarget = {id:match?.[1], retention:!!match?.[2], example:!!match?.[3]};
+      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|bias-(wording|framing|omission|standards)))?(&example=library)?$/.exec(location.hash);
+      reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', axis:match?.[3], example:!!match?.[4]};
       resumeExample.hidden = !(reviewTarget.example && reviewTarget.retention);
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;

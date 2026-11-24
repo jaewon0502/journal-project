@@ -87,6 +87,77 @@ test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 �
   assert.equal(p.el('result').hidden, true);
 });
 
+test('집계에서 지정한 편향 기준은 같은 판본과 익명 판정이 확인된 뒤 네 근거와 키보드 초점을 연다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const blind = require('../docs/reader/blind-revision.js');
+  const agreement = require('../docs/reader/revision-agreement.js');
+  const series = require('../docs/reader/revision-series.js');
+  const items = await example.files();
+  const reviews = await blind.resolveBundle(items);
+  const record = series.makeRecord(agreement.compare(...reviews), reviews[0].key);
+  const link = (id, axis, sample = false) => '#review=' + id + '&focus=bias-' + axis + (sample ? '&example=library' : '');
+  const p = page(t, link(series.reviewId(record), 'omission'));
+  const upload = () => p.selectFiles('blind-bundle-files', items.map(f => ({name:f.name, text:async () => f.raw})));
+  assert.equal(p.el('result').hidden, true);
+  upload();
+  async function checkAxis(axis) {
+    await t.waitFor(() => assert.ok(p.el('output').querySelector('details[data-bias-axis="' + axis + '"][open]')));
+    const [card] = p.el('output').querySelectorAll('details');
+    assert.equal(p.el('output').querySelectorAll('details').length, 1);
+    assert.equal(p.w.document.activeElement, card.firstElementChild);
+    assert.equal(card.querySelectorAll('.pair > div').length, 2);
+    assert.match(card.textContent, /첫 편집자.*수정 전.*수정 후.*둘째 편집자.*수정 전.*수정 후/);
+    return card;
+  }
+  const card = await checkAxis('omission');
+  assert.match(card.textContent, /판단 이유.*원자료/s);
+  assert.ok(card.querySelectorAll('blockquote').length >= 8);
+  p.w.location.hash = link(series.reviewId(record, 2), 'framing', true);
+  await checkAxis('framing');
+  p.w.location.hash = link(series.reviewId(record), 'standards', true);
+  assert.match((await checkAxis('standards')).textContent, /저장된 단계가 없습니다/);
+  const changed = structuredClone(record);
+  changed.dimensions[0].first.before = changed.dimensions[0].first.before === 3 ? 2 : 3;
+  p.w.location.hash = link(series.reviewId(changed),'wording',true);
+  await t.waitFor(() => assert.match(p.el('review-target-status').textContent, /일치하지 않습니다/));
+  assert.equal(p.el('output').textContent, '');
+  p.w.location.hash = link(series.reviewId(record),'unregistered',true);
+  await t.waitFor(() => assert.match(p.el('review-target-status').textContent,/식별할 수 없는/));
+  assert.equal(p.el('result').hidden, true);
+});
+
+test('중요한 왜곡의 전후 개수를 같은 네 점수로 비교하고 경계 안에서 반대로 움직인 항목을 센다', async t => {
+  const items = await require('../docs/reader/revision-evidence-example.js').files();
+  const keys = items.map(item => item.data).filter(data => data.mapping);
+  const profiles = [
+    {before:[3,3,1], after:[2,0,0]},
+    {before:[2,3,0], after:[3,0,1]}
+  ];
+  for (const {data} of items) {
+    if (!data.blindReview) continue;
+    const editor = keys.findIndex(key => key.pairId === data.blindReview.pairId);
+    const role = keys[editor].mapping.before.slot === data.blindReview.slot ? 'before' : 'after';
+    for (const [i, id] of ['wording','framing','omission'].entries()) {
+      const rating = data.articleAssessment.ratings[id];
+      rating.level = profiles[editor][role][i];
+      rating.impact = '원자료가 나타내는 대상과 범위를 비교했다.';
+    }
+  }
+  const p = page(t);
+  const upload = () => p.selectFiles('blind-bundle-files',items.map(item=>({name:item.name,text:async()=>JSON.stringify(item.data)})));
+  upload();
+  await t.waitFor(() => assert.ok(p.el('joint-severity')));
+  assert.match(p.el('joint-severity').textContent, /원본 2\/3개 → 수정본 1\/3개/);
+  assert.match(p.el('joint-severity').textContent, /다른 편집자는 높인 항목 2개.*경계를 넘지 않은 항목 2개/);
+  assert.equal(p.el('revision-agreement').querySelectorAll('details[data-bias-axis]').length, 4);
+  p.el('blind-bundle-clear').click();
+  for (const {data} of items) if (data.articleAssessment) delete data.articleAssessment;
+  upload();
+  await t.waitFor(() => assert.ok(p.el('joint-severity')));
+  assert.match(p.el('joint-severity').textContent, /비교 대기/);
+  assert.doesNotMatch(p.el('joint-severity').textContent, /0개|0%/);
+});
+
 test('원본 사실 대조 링크는 같은 문구라도 문맥이 바뀐 위치와 양쪽 근거를 열고 구형·불일치 요약을 거절한다', async t => {
   const example = require('../docs/reader/revision-evidence-example.js');
   const blind = require('../docs/reader/blind-revision.js');

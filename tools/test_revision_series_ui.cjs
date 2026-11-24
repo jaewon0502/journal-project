@@ -48,6 +48,36 @@ function page(t) {
 const flushed = () => new Promise(resolve => setImmediate(resolve));
 const factCells = (section, key) => [...section.querySelectorAll('[data-fact-row="' + key + '"] td')].map(cell => cell.textContent);
 
+test('조건부 개선 100% 곁에 같은 8개 항목의 12.5%→50%와 판단이 갈린 기준별 근거를 표시한다', async t => {
+  const p = page(t);
+  const a = record('1','2', [[2,0,2,0], [0,2,2,2], [2,2,0,2], [1,0,0,1]]);
+  const b = record('3','4', [[2,2,0,2], [0,2,2,2], [0,0,0,0], [0,0,0,0]], true);
+  const v3 = {...a, version:3, facts:{before:[{outcome:'pending', flag:'none'}],after:[{outcome:'pending', flag:'none'}]}, factMatches:[]};
+  p.select(file('예전 A.json', a), file('같은 자료 A.json', v3), file('새 자료 B.json', b));
+  await flushed();
+  assert.match(p.get('series-improved').textContent, /100%1\/1/);
+  assert.match(p.get('series-worsened').textContent, /0%0\/3/);
+  const area = p.get('series-severity');
+  assert.match(p.get('series-severity-change').textContent, /원본 12\.5% \(1\/8\) → 수정본 50% \(4\/8\) · 37\.5%p 증가/);
+  assert.match(area.textContent, /원자료가 같은 기사 1건만 보면 · 원본 25% \(1\/4\) → 수정본 50% \(2\/4\)/);
+  assert.match(area.textContent, /수정본에서는 두 사람 모두 중요하다고 본 항목 4개/);
+  assert.match(area.textContent, /한 편집자는 단계를 높이고 다른 편집자는 낮춘 항목 1개/);
+  assert.deepEqual([...area.querySelectorAll('tbody tr')].map(r=>[...r.cells].slice(1).map(cell=>cell.textContent)),
+    [['3개','0개','0개'],['0개','0개','4개'],['1개','0개','0개']]);
+  const follow = p.get('series-bias-follow-up');
+  assert.match(follow.querySelector('summary').textContent,/5개 항목/);
+  const digest = require('../docs/reader/revision-series.js').reviewId(v3);
+  assert.deepEqual([...follow.querySelectorAll('a')].map(a => a.hash), ['framing','omission','standards']
+    .map(id => '#review=' + digest + '&focus=bias-' + id));
+  assert.doesNotMatch(follow.textContent, /예전 A/);
+  assert.match(follow.textContent, /새 자료 B/);
+  p.select(file('빈 기록', record('5','6', Array(4).fill([null,null,null,null]))));
+  await flushed();
+  assert.match(p.get('series-severity').textContent,/0\/4개.*비교할 수 있는 항목이 생기면/);
+  assert.equal(p.get('series-severity-change'),null);
+  assert.equal(p.get('series-bias-follow-up'),null);
+});
+
 test('편향이 나아진 기사에 남은 사실 충돌·미결과 이전 요약의 자료 부재를 분리한다', async t => {
   const p = page(t);
   const current = {...one, version:2, facts:{

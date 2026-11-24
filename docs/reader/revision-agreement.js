@@ -74,7 +74,10 @@
   function summarizeScores(dimensions) {
     let paired = 0, disagreed = 0, stableSeverityDifferences = 0;
     let missingScores = 0, naScores = 0, pendingImportant = 0;
-    let high = 0, low = 0, improved = 0, worsened = 0;
+    // Rows and columns count how many of the two editors marked an important
+    // distortion in the original and revised versions of the same item.
+    const matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    let oppositeSteps = 0, withinBandOppositeSteps = 0;
     for (const {first, second} of dimensions) {
       for (const level of [first.before, first.after, second.before, second.after]) {
         if (level === null) missingScores++;
@@ -86,17 +89,22 @@
         continue;
       }
       paired++;
-      if (first.before >= 2 && second.before >= 2) high++;
-      if (first.before < 2 && second.before < 2) low++;
-      if (a === 'improved' && b === 'improved') improved++;
-      if (a === 'worsened' && b === 'worsened') worsened++;
+      const before = Number(first.before >= 2) + Number(second.before >= 2);
+      const after = Number(first.after >= 2) + Number(second.after >= 2);
+      matrix[before][after]++;
+      if ((first.after - first.before) * (second.after - second.before) < 0) {
+        oppositeSteps++;
+        if ([a, b].every(state => state === 'high' || state === 'low')) withinBandOppositeSteps++;
+      }
       if (a !== b) {
         if ((a === 'high' && b === 'low') || (a === 'low' && b === 'high')) stableSeverityDifferences++;
         else disagreed++;
       }
     }
     return {total: dimensions.length, paired, unpaired: dimensions.length - paired, disagreed, stableSeverityDifferences,
-      missingScores, naScores, pendingImportant, improved: ratio(improved, high), worsened: ratio(worsened, low)};
+      missingScores, naScores, pendingImportant, severity: {matrix, oppositeSteps, withinBandOppositeSteps},
+      improved: ratio(matrix[2][0], matrix[2].reduce((sum, n) => sum + n, 0)),
+      worsened: ratio(matrix[0][2], matrix[0].reduce((sum, n) => sum + n, 0))};
   }
 
   function keySignature(key) {

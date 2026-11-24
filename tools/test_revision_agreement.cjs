@@ -8,7 +8,7 @@ const rubric = require('../docs/reader/article-rubric.js');
 const workspace = require('../docs/reader/workspace-snapshot.js');
 const comparison = require('../docs/reader/article-compare-core.js');
 const blind = require('../docs/reader/blind-revision.js');
-const {compare, recordFields} = require('../docs/reader/revision-agreement.js');
+const {compare, recordFields, summarizeScores} = require('../docs/reader/revision-agreement.js');
 
 function work(article, version) {
   const source = {id:'budget', title:'예산표', url:'https://office.example/budget', version,
@@ -192,7 +192,21 @@ test('두 편집자 모두 유지로 보면서 중요도만 다르게 매긴 항
   const result = compare(first, second);
   assert.equal(result.disagreed, 0);
   assert.equal(result.stableSeverityDifferences, 2);
+  assert.deepEqual(result.severity, {matrix:[[0,0,0],[0,2,0],[0,0,0]], oppositeSteps:1, withinBandOppositeSteps:1});
   assert.deepEqual(result.improved, ratio(0, 0));
+});
+
+test('두 편집자의 실제 단계가 반대로 움직였는지 중요도 경계를 넘긴 경우와 경계 안의 경우로 구별한다', () => {
+  const dimensions = [
+    [1,0,0,1], [2,3,3,2], [0,1,3,2],  // Opposite movements within each editor's original band.
+    [0,2,2,0], [2,0,0,1],              // Both cross, or one crosses.
+    [0,0,1,0], [3,null,2,0], [0,3,'na',0]
+  ].map(([a,b,c,d]) => ({first:{before:a,after:b},second:{before:c,after:d}}));
+  const result = summarizeScores(dimensions);
+  assert.equal(result.paired, 6);
+  assert.deepEqual(result.severity, {matrix:[[2,0,0],[1,2,0],[0,0,1]], oppositeSteps:5, withinBandOppositeSteps:3});
+  assert.deepEqual(summarizeScores(dimensions.toReversed().map(d => ({first:d.second,second:d.first}))).severity, result.severity);
+  assert.deepEqual(summarizeScores([]).severity, {matrix:[[0,0,0],[0,0,0],[0,0,0]], oppositeSteps:0, withinBandOppositeSteps:0});
 });
 
 test('해당 없음, 미평가, 작성 중과 사용할 수 없는 평가는 네 점수가 있는 기준에서 제외한다', async () => {
