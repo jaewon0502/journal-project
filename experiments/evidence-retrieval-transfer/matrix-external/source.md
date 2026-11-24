@@ -1,0 +1,7 @@
+# Regional public library visits
+
+The Ministry of Culture, Sports and Tourism released the 2024 national public library survey on August 6, 2024. Table 16 on printed page 11 of the PDF reports visitors per public library by region and year, in persons. The survey overview on page 4 defines the scope as public libraries under the Library Act and excludes small libraries. [Ministry release](https://www.mcst.go.kr/site/s_notice/press/pressView.jsp?pSeq=21279) · [Official PDF](https://www.mcst.go.kr/servlets/eduport/front/upload/UplDownloadFile?pFileName=%280806%29%EB%AC%B8%EC%B2%B4%EB%B6%80%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C-2024%EB%85%84_%EC%A0%84%EA%B5%AD_%EA%B3%B5%EA%B3%B5%EB%8F%84%EC%84%9C%EA%B4%80_%ED%86%B5%EA%B3%84%EC%A1%B0%EC%82%AC_%EA%B2%B0%EA%B3%BC_%EB%B0%9C%ED%91%9C.pdf&pPath=0302000000&pRealName=20240806081107821191004729_PRESS20240806081107547406.pdf#page=11)
+
+The full selection runs from the table caption through the national row. The caption and separate unit line precede a label column and five year columns for 2019–2023. Cell spacing was replaced with tabs, preserving the printed text, row order and thousands separators. One-based row numbers count all nonempty lines. Column 1 is the region. The two unanswered questions ask for an age subgroup and an earlier year. P03 quotes the adjacent region's figure for the same year.
+
+The PDF was retrieved on 2026-11-25. Its SHA-256 is `e2477baa8463b131b3bcec14f0c6c7fbcff45b746b7d4aee3638ec98f64a5d59`.
