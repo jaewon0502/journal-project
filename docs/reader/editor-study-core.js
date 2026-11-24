@@ -285,6 +285,54 @@
     return {correct: 0, total: 0, unsafe: 0, unsafeTotal: 0, citationCorrect: 0, qualityCorrect: 0};
   }
 
+  function gradeTrial(trial) {
+    const gold = cases.get(trial.caseId, trial.variant);
+    const correct = trial.verdict === gold.expectedVerdict;
+    const sourceCorrect = trial.sourceIds.length === 1 && gold.expectedSourceIds.includes(trial.sourceIds[0]);
+    const unsafeEligible = gold.expectedVerdict !== 'supported';
+    return {correct, sourceCorrect, verified:correct && sourceCorrect, unsafeEligible,
+      unsafe:unsafeEligible && trial.verdict === 'supported'};
+  }
+
+  function timedQualityStats(records) {
+    if (!records.length) return null;
+    const arms = Object.fromEntries(methods.map(method => [method,
+      {total:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
+    const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
+    for (const record of records) {
+      const elapsedMs = {manual:0, journal:0}, verified = {manual:0, journal:0};
+      for (const trial of record.trials) {
+        const method = trial.method, arm = arms[method], grade = gradeTrial(trial);
+        arm.total++;
+        arm.elapsedMs += trial.elapsedMs;
+        elapsedMs[method] += trial.elapsedMs;
+        if (grade.verified) {
+          arm.verified++;
+          verified[method]++;
+        }
+        if (grade.unsafeEligible) arm.unsafeTotal++;
+        if (grade.unsafe) arm.unsafe++;
+      }
+      // Each editor completed two tasks per method. Compare unrounded durations.
+      if (elapsedMs.journal < elapsedMs.manual) {
+        faster.total++;
+        if (verified.journal < verified.manual) faster.fewerVerified++;
+        else if (verified.journal > verified.manual) faster.moreVerified++;
+        else faster.sameVerified++;
+      }
+    }
+    const {manual, journal} = arms;
+    for (const arm of [manual, journal]) {
+      if (arm.verified) arm.secondsPerVerified = arm.elapsedMs / 1000 / arm.verified;
+    }
+    const perVerified = {savedSeconds:null, reductionPct:null};
+    if (manual.verified && journal.verified) {
+      perVerified.savedSeconds = manual.secondsPerVerified - journal.secondsPerVerified;
+      perVerified.reductionPct = 100 * perVerified.savedSeconds / manual.secondsPerVerified;
+    }
+    return {manual, journal, perVerified, faster};
+  }
+
   function verdictStats(records) {
     const items = caseCells(), blocks = new Map();
     const quality = {
@@ -299,10 +347,7 @@
       if (!blocks.has(block)) blocks.set(block, caseCells());
       const blockItems = blocks.get(block);
       for (const t of record.trials) {
-        const gold = cases.get(t.caseId, t.variant);
-        const confirms = t.verdict === 'supported';
-        const correct = t.verdict === gold.expectedVerdict;
-        const sourceCorrect = t.sourceIds.length === 1 && gold.expectedSourceIds.includes(t.sourceIds[0]);
+        const grade = gradeTrial(t);
         for (const counts of [items, blockItems]) {
           const cell = counts.get(t.caseId)[t.method][t.variant];
           cell.total++;
@@ -310,13 +355,11 @@
         }
         for (const q of [quality[t.method], quality.byVariant[t.variant][t.method]]) {
           q.total++;
-          if (correct) q.correct++;
-          if (sourceCorrect) q.citationCorrect++;
-          if (correct && sourceCorrect) q.qualityCorrect++;
-          if (gold.expectedVerdict !== 'supported') {
-            q.unsafeTotal++;
-            if (confirms) q.unsafe++;
-          }
+          if (grade.correct) q.correct++;
+          if (grade.sourceCorrect) q.citationCorrect++;
+          if (grade.verified) q.qualityCorrect++;
+          if (grade.unsafeEligible) q.unsafeTotal++;
+          if (grade.unsafe) q.unsafe++;
         }
       }
     }
@@ -364,6 +407,7 @@
     counts.timing = {included:timedSample.length, trialCount:timedSample.length * slots, partialTrials:partialTrials.length,
       observedMs:partialTrials.reduce((sum, t) => sum + t.observedMs, 0)};
     counts.phases = phaseStats(timedSample);
+    counts.timedQuality = timedQualityStats(timedSample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
     return {...counts, time: timedSample.length ? timeStats(timedSample) : null, ...verdictStats(sample)};
   }

@@ -72,6 +72,7 @@ test('예시 여덟 명의 분모, 시간, 편향 지표, 잘못된 사실 확�
 
 test('빈 자료·중도탈락·빠진 배정은 시간 0이나 편향 감소로 해석하지 않는다', () => {
   assert.equal(study.analyze([]).quality, null);
+  assert.equal(study.analyze([]).timedQuality, null);
   const partial = observations(3);
   partial.trials.pop();
   const records = [observations(1), observations(2), partial];
@@ -137,6 +138,56 @@ test('사실 채택률이 같아도 근거 부족과 반박을 정당 표기에 
   assert.deepEqual(task.manual.A.counts, {supported:0, contradicted:0, insufficient:2, opinion:0});
   assert.deepEqual(task.manual.B.counts, {supported:0, contradicted:1, insufficient:1, opinion:0});
   assert.equal(study.analyze(records.slice(0, 3)).bias, null);
+});
+
+test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토까지 합산해 성공 한 건당 시간을 계산한다', () => {
+  const records = Array.from({length:8}, (_, index) => observations(index + 1, (task, item) => {
+    const time = index === 4 && task.position === 1 ? {elapsedMs:null, observedMs:250} :
+      {elapsedMs:task.method === 'manual' ? 10000 : 5000};
+    const failedMethod = index < 4 ? 'journal' : 'manual';
+    if (index % 4 === 0 || task.method !== failedMethod) return time;
+    // Positive cases lack the cited evidence; negative cases have the right citation but the wrong verdict.
+    return item.expectedVerdict === 'supported' ? {...time, sourceIds:[]} : {...time, verdict:'supported'};
+  }));
+  const result = study.analyze(records);
+  assert.equal(result.timing.included, 4);
+  assert.deepEqual([result.quality.manual.qualityCorrect, result.quality.journal.qualityCorrect], [10,10]);
+  assert.equal(result.time.reductionPct, 50);
+  assert.deepEqual(result.timedQuality, {
+    manual:{total:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000, secondsPerVerified:10},
+    journal:{total:8, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000, secondsPerVerified:20},
+    perVerified:{savedSeconds:-10, reductionPct:-100},
+    faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}
+  });
+  assert.equal(study.analyze(records.slice(4)).timedQuality, null);
+  assert.deepEqual(study.analyze([...records, ...records, observations(9), ...study.demoRecords()]).timedQuality,
+    result.timedQuality);
+  assert.equal(study.analyze(study.demoRecords()).timedQuality, null);
+  assert.equal(study.analyze(study.demoRecords(), 'demo').timedQuality.manual.verified, 12);
+});
+
+test('검증 성공이 0건이면 해당 방식의 성공당 시간과 절감률의 분모가 없음을 표시한다', () => {
+  for (const zeroMethods of [['manual'], ['journal'], ['manual','journal']]) {
+    const records = [1,2,3,4].map(i => observations(i, t => zeroMethods.includes(t.method) ? {sourceIds:[]} : {}));
+    const {manual, journal, perVerified} = study.analyze(records).timedQuality;
+    assert.deepEqual([manual.secondsPerVerified, journal.secondsPerVerified],
+      [zeroMethods.includes('manual') ? null : 120, zeroMethods.includes('journal') ? null : 90]);
+    assert.deepEqual([manual.elapsedMs, journal.elapsedMs], [960000,720000]);
+    assert.deepEqual(perVerified, {savedSeconds:null, reductionPct:null});
+  }
+});
+
+test('빠른 편집자는 두 검토의 합이 1밀리초라도 작은 사람만 포함하고 검증 성공 건수 변화를 센다', () => {
+  for (const lastDuration of [1999, 2000]) {
+    const records = [1,2,3,4].map(i => {
+      const journalDurations = i === 4 ? [1,lastDuration] : [1200,799];
+      return observations(i, t => ({
+        elapsedMs:t.method === 'manual' ? 1000 : journalDurations.shift(),
+        ...((i === 1 && t.method === 'journal') || (i === 3 && t.method === 'manual') ? {sourceIds:[]} : {})
+      }));
+    });
+    assert.deepEqual(study.analyze(records).timedQuality.faster, {total:3, fewerVerified:1, sameVerified:1, moreVerified:1});
+  }
 });
 
 test('같은 파일 재수입, 진행본과 완료본의 병합, 충돌·번호 재사용 거절이 일관된다', () => {
