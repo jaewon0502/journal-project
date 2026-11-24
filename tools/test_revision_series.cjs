@@ -49,6 +49,30 @@ function record(name, values = [], sourceChanged = false) {
 const fact = (outcome, flag = 'none') => ({outcome, flag});
 const withFacts = (legacy, before, after) => ({...legacy, version: 2, facts: {before, after}});
 
+test('새로 배포한 네 파일과 일부만 회수한 결과는 열 수 있으나 화면 조작으로 기사 요약을 저장할 수 없다', async () => {
+  const before = work('예산은 20억 원이다.'), after = work('예산은 10억 원이다.');
+  async function fresh() {
+    const {key, packets} = await blind.prepare(before, after);
+    return {key, ...await blind.resolve(key, packets.A, packets.B)};
+  }
+  const first = await fresh(), second = await fresh();
+  const scored = await assignment(before, after, [2,0]);
+  for (const [one, missing] of [[first,4], [scored,2]]) {
+    const joint = agreement.compare(one, second);
+    assert.equal(joint.missingReturns.length, missing);
+    assert.ok(joint.missingReturns.every(item => item.state === 'empty'));
+    assert.deepEqual(agreement.comparedScores(joint, one.key)[0].first,
+      {before:joint.dimensions[0].first.before, after:joint.dimensions[0].first.after});
+    assert.deepEqual(agreement.comparedFacts(joint, second.key), joint.facts);
+    joint.missingReturns.length = 0;
+    for (const key of [one.key,second.key]) assert.throws(() => makeRecord(joint, key), /네 파일/);
+  }
+  const other = await assignment(before, after, [3,1]);
+  const ready = agreement.compare(scored, other);
+  ready.missingReturns.push({editor:0, role:'before', state:'empty'});
+  assert.deepEqual(makeRecord(ready, scored.key).facts, {before:[fact('pending')], after:[fact('pending')]});
+});
+
 test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 집계 수치·출처·검토 내용을 제외한다', async () => {
   const original = work('사업비 20억 원을 책정했다.'), revision = work('사업비 10억 원을 책정했다.');
   const [one, two] = await Promise.all([

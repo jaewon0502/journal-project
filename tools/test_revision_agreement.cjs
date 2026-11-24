@@ -48,6 +48,51 @@ async function assignment(editor, [beforeLevels, afterLevels] = [{}, {}], articl
 const ratio = (numerator, denominator) => ({numerator, denominator, pct:denominator ? 100 * numerator / denominator : null});
 const individual = review => comparison.compare(workspace.read(review.before), workspace.read(review.after), 'revision');
 
+function recordRow(work, decision) {
+  const row = engine.report(work.article, work.sources).rows[0];
+  work.receipts = [engine.decide(row, {acknowledged:true, reason:'구간과 원자료를 대조했다.',
+    sourceIds:[work.sources[0].id], ...decision}, work.sources)];
+}
+
+test('각 편집자·판본의 빈 파일, 작성 중인 구절·편향 평가, 변조된 저장 기록을 구분한다', async () => {
+  const first = await assignment(0), second = await assignment(1);
+  const row = engine.report(first.before.article, first.before.sources).rows[0];
+  first.before.articleAssessment.coreRowIds = [row.id];
+  first.before.articleAssessmentDraft = {binding:first.before.articleAssessment.binding, entries:{wording:{reason:''}}};
+  first.before.rowDrafts = [{rowId:row.id, data:{status:'', reason:'', sourceIds:[], factSpan:'', opinionSpan:''}}];
+  recordRow(first.after, {status:'held'});
+  first.after.receipts[0].checksum = '다른 체크섬';
+  const editing = engine.report(second.before.article, second.before.sources).rows[0];
+  second.before.rowDrafts = [{rowId:editing.id, data:{status:'held', reason:'자료 회신 전', sourceIds:[], factSpan:'', opinionSpan:''}}];
+  second.after.articleAssessmentDraft = {binding:second.after.articleAssessment.binding, entries:{wording:{level:'1'}}};
+  assert.deepEqual(compare(first, second).missingReturns, [
+    {editor:0, role:'before', state:'empty'}, {editor:1, role:'before', state:'draft'},
+    {editor:0, role:'after', state:'invalid'}, {editor:1, role:'after', state:'draft'}
+  ]);
+  second.after.articleAssessmentDraft.binding = '이전 판본';
+  assert.deepEqual(compare(first, second).missingReturns.at(-1), {editor:1, role:'after', state:'invalid'});
+});
+
+test('편집자가 실제 기록한 보류·부분 확인·의견과 해당 없음은 각각 회수한 판정으로 인정한다', async () => {
+  const articles = [work('시범 노선은 승인됐고, 전 노선은 검토 중이다.\n예산안이다.', '초판'),
+    work('이 결정은 무책임하다.\n지출 내역이다.', '수정판')];
+  const first = await assignment(0, [{}, {standards:'na'}], articles);
+  const second = await assignment(1, undefined, articles);
+  recordRow(first.before, {status:'held'});
+  recordRow(second.before, {status:'partial', factSpan:'시범 노선은 승인됐고'});
+  recordRow(second.after, {status:'opinion', sourceIds:[]});
+  const joint = compare(first, second);
+  assert.deepEqual(joint.missingReturns, []);
+  assert.equal(joint.paired, 0);
+  assert.equal(joint.facts.before[0].outcome, 'pending');
+  first.before.rowDrafts.push({rowId:first.before.receipts[0].rowId, data:{status:'held',
+    reason:'근거를 다시 대조하는 중', sourceIds:[], factSpan:'', opinionSpan:''}});
+  first.after.articleAssessment.ratings.standards.reason = '';
+  assert.deepEqual(compare(first, second).missingReturns, [
+    {editor:0, role:'before', state:'draft'}, {editor:0, role:'after', state:'invalid'}
+  ]);
+});
+
 test('편집자별 개선율이 모두 100%여도 개선한 기준이 다르면 공동 개선은 0/0이다', async () => {
   const first = await assignment(0, [{wording:2, omission:0}, {wording:1, omission:0}]);
   const second = await assignment(1, [{wording:0, omission:3}, {wording:0, omission:1}]);

@@ -4,6 +4,7 @@
   const useNode = typeof module === 'object' && !!module.exports;
   const workspace = useNode ? require('./workspace-snapshot.js') : root.JournalWorkspaceSnapshot;
   const comparison = useNode ? require('./article-compare-core.js') : root.JournalArticleCompare;
+  const rubric = useNode ? require('./article-rubric.js') : root.JournalArticleRubric;
   const compared = new WeakMap();
 
   function snapshot(work, demo) {
@@ -12,12 +13,30 @@
     return result;
   }
 
-  function compareRole(first, second, role) {
+  function missingState(view, work) {
+    if (view.rows.some(row => row.receipt) || view.assessment.bias.items.some(item => item.rating)) return null;
+    const draft = rubric.restoreDraft(view, view.sources, work.articleAssessmentDraft);
+    const biasDraft = Object.values(draft?.entries ?? {}).some(entry => entry.previous ||
+      rubric.draftFields.some(field => entry[field].trim()));
+    if (biasDraft || view.rows.some(row => row.draftPending)) return 'draft';
+    if (view.stale || work.receipts.length) return 'invalid';
+    const rowIds = new Set(view.rows.map(row => row.id));
+    const orphan = work.rowDrafts.some(entry => !rowIds.has(entry.rowId) && workspace.draftChangesRecord(entry.data));
+    return orphan ? 'invalid' : 'empty';
+  }
+
+  function compareRole(first, second, role, missingReturns) {
     const a = first.key.mapping[role], b = second.key.mapping[role];
     const label = role === 'before' ? '원본' : '수정본';
     if (a.articleSha256 !== b.articleSha256) throw new Error('두 편집자에게 배포한 ' + label + '의 기사 원문이 다릅니다.');
     if (a.sourcesSha256 !== b.sourcesSha256) throw new Error('두 편집자에게 배포한 ' + label + '의 원자료 묶음이 다릅니다.');
-    return comparison.compare(snapshot(first[role], first.key.demo), snapshot(second[role], second.key.demo), 'reviewers');
+    const views = [first, second].map((review, editor) => {
+      const work = review[role], view = snapshot(work, review.key.demo);
+      const state = missingState(view, work);
+      if (state) missingReturns.push({editor, role, state});
+      return view;
+    });
+    return comparison.compare(views[0], views[1], 'reviewers');
   }
 
   function jointFact(row) {
@@ -98,26 +117,33 @@
   function comparedScores(joint, key) { return JSON.parse(savedComparison(joint, key).scores); }
   function comparedFacts(joint, key) { return JSON.parse(savedComparison(joint, key).facts); }
 
+  function recordFields(joint, key) {
+    const saved = savedComparison(joint, key);
+    if (!saved.completeReturns) throw new Error('각 편집자의 원본과 수정본 네 파일에 구절 판정이나 편향 평가를 하나 이상 기록한 뒤 요약을 저장하세요.');
+    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts)};
+  }
+
   function compare(first, second) {
     if (first.key.pairId === second.key.pairId) throw new Error('같은 배포 묶음을 두 번 선택했습니다. 편집자별로 따로 배포한 두 묶음이 필요합니다.');
     if (first.key.demo !== second.key.demo) throw new Error('연습 기록끼리 또는 실제 기사 기록끼리 선택하세요.');
     if (first.sourceChanged || second.sourceChanged) throw new Error('배포 후 등록된 원자료가 달라진 작업이 있습니다. 배포 당시 자료로 평가한 파일을 선택하세요.');
 
-    const before = compareRole(first, second, 'before');
-    const after = compareRole(first, second, 'after');
+    const missingReturns = [];
+    const before = compareRole(first, second, 'before', missingReturns);
+    const after = compareRole(first, second, 'after', missingReturns);
     const afterById = new Map(after.dimensions.map(d => [d.id, d]));
     const dimensions = before.dimensions.map(d => ({
       id: d.id, title: d.title, first: transition(d.left, afterById.get(d.id).left), second: transition(d.right, afterById.get(d.id).right)
     }));
     const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
-    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts};
+    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, missingReturns};
     const scores = ({before, after}) => ({before, after});
-    compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], facts: JSON.stringify(facts),
+    compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], completeReturns: !missingReturns.length, facts: JSON.stringify(facts),
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }
 
-  const api = Object.freeze({compare, comparedScores, comparedFacts, summarizeScores});
+  const api = Object.freeze({compare, comparedScores, comparedFacts, recordFields, summarizeScores});
   if (useNode) module.exports = api;
   else root.JournalRevisionAgreement = api;
 })(globalThis);

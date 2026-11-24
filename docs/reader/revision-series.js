@@ -18,8 +18,7 @@
   }
 
   function makeRecord(joint, key) {
-    const dimensions = agreement.comparedScores(joint, key);
-    const facts = agreement.comparedFacts(joint, key);
+    const {dimensions, facts} = agreement.recordFields(joint, key);
     return readRecord({format, version: 2, demo: key.demo, before: edition(key.mapping.before), after: edition(key.mapping.after), dimensions, facts});
   }
 
