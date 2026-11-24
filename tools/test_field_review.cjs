@@ -108,12 +108,128 @@ function page(t, name, initialize) {
     input.value = value;
     input.dispatchEvent(new window.Event('change', { bubbles: true }));
   }
-  return { window, el, upload, download, select };
+  function gradeLocation(locator, value) {
+    const card = [...el('entries').children].find(answer =>
+      [...answer.querySelectorAll('p')].some(line => line.textContent === '제출한 위치 · ' + locator));
+    assert.ok(card, '제출한 원자료 위치로 채점할 답안을 찾습니다.');
+    const control = card.querySelector('select');
+    assert.equal(control.disabled, false);
+    control.value = value;
+    control.dispatchEvent(new window.Event('change', { bubbles: true }));
+  }
+  function report(id, selector) {
+    assert.equal(el('results').hidden, true);
+    el('toggle-results').click();
+    assert.equal(el('results').hidden, false);
+    const content = selector ? el(id).querySelector(selector).textContent : el(id).textContent;
+    el('toggle-results').click();
+    assert.equal(el('results').hidden, true);
+    return content;
+  }
+  return { window, el, upload, download, select, gradeLocation, report };
 }
+test('배정을 가린 채 파일 순서를 섞고 채점을 보존하며 진행자가 요청할 때만 시간과 방식을 공개한다', async t => {
+  const p = page(t, 'field-summary', w => {
+    const ranks = [0.8, 0.2, 0.6];
+    w.Math.random = () => ranks.shift() ?? 0.5;
+  });
+  const a = trial({id:'record-a', participant:'MEMBER-AA', kind:'editor', method:'manual',
+    journalUse:'yes', locator:'원표의 첫째 행', phaseMs:{search:60000, locate:0, decide:0}});
+  const b = trial({id:'record-b', participant:'MEMBER-BB', kind:'editor', method:'journal',
+    journalUse:'no', locator:'원표의 둘째 행', phaseMs:{search:30000, locate:0, decide:0}});
+  const training = trial({id:'record-c', participant:'MEMBER-CC', locator:'원표의 셋째 행'});
+  function checkMasked(view) {
+    assert.equal(view.el('results').hidden, true);
+    assert.equal(view.el('toggle-results').getAttribute('aria-expanded'), 'false');
+    assert.equal(view.el('groups').childElementCount, 0);
+    assert.equal(view.el('comparisons').childElementCount, 0);
+    assert.doesNotMatch(view.el('entries').innerHTML, /MEMBER-|record-[abc]|평소 검증 도구|60\.0초|30\.0초/);
+  }
+  function locations(view) {
+    return [...view.el('entries').querySelectorAll('article p')]
+      .map(line => line.textContent).filter(line => line.startsWith('제출한 위치 · '));
+  }
+
+  await p.upload('key-file', gradingKey);
+  const fileInput = p.el('imports');
+  assert.equal(fileInput.hidden, true);
+  let pickerOpened = false;
+  fileInput.click = () => { pickerOpened = true; };
+  p.el('choose-imports').click();
+  assert.equal(pickerOpened, true);
+  Object.defineProperty(fileInput, 'files', {configurable:true, value:[a,b].map(record =>
+    new p.window.File([JSON.stringify(record)], record.participant + '-' + record.method + '.json'))});
+  await fileInput.onchange({target:fileInput});
+  checkMasked(p);
+  assert.doesNotMatch(p.el('status').textContent, /MEMBER-|manual\.json|journal\.json/);
+  assert.deepEqual(locations(p), [b.locator, a.locator].map(value => '제출한 위치 · ' + value));
+  p.gradeLocation(b.locator, 'no');
+  p.gradeLocation(a.locator, 'yes');
+  checkMasked(p);
+  assert.equal(p.el('entries').querySelector('select').value, 'no');
+
+  p.el('toggle-results').click();
+  assert.equal(p.el('results').hidden, false);
+  assert.equal(p.el('toggle-results').getAttribute('aria-expanded'), 'true');
+  assert.match(p.el('comparisons').textContent, /30\.0초 절감 \(50\.0%\)/);
+  assert.match(p.el('entries').textContent, /MEMBER-AA.*평소 검증 도구/);
+  assert.match(p.el('entries').textContent, /MEMBER-BB.*평소 검증 도구와 저널/);
+  assert.equal(p.el('entries').querySelector('select:enabled'), null);
+  const store = p.window.sessionStorage;
+  const restored = page(t, 'field-summary', w => {
+    for (const key of Object.keys(store)) w.sessionStorage.setItem(key, store.getItem(key));
+  });
+  checkMasked(restored);
+  assert.deepEqual(locations(restored), [b.locator, a.locator].map(value => '제출한 위치 · ' + value));
+  const saved = await restored.download('save');
+  assert.deepEqual(saved.entries.map(e => [e.trial.id, e.trial.method, e.locationGrade]),
+    [['record-a','manual','yes'],['record-b','journal','no']]);
+
+  await p.upload('imports', training);
+  checkMasked(p);
+  p.el('toggle-results').click();
+  p.select('#kind', 'practice');
+  checkMasked(p);
+  assert.deepEqual(locations(p), ['제출한 위치 · ' + training.locator]);
+  p.el('toggle-results').click();
+  const revised = structuredClone(gradingKey);
+  revised.tasks[0].reference.acceptedLocators = ['새로 확인한 행'];
+  await p.upload('key-file', revised);
+  checkMasked(p);
+  assert.match(p.el('entries').textContent, /새로 확인한 행/);
+});
+
+test('새 파일을 읽는 동안 배정을 다시 가리고 잘못된 JSON 본문과 파일명을 오류에 노출하지 않는다', async t => {
+  const p = page(t, 'field-summary');
+  await p.upload('imports', trial({kind:'editor', participant:'OLD-MEMBER'}));
+  for (const [id, button] of [['imports','choose-imports'], ['key-file','choose-key']]) {
+    p.el('toggle-results').click();
+    assert.match(p.el('entries').textContent, /OLD-MEMBER/);
+    const input = p.el(id);
+    assert.equal(input.hidden, true);
+    let resume;
+    Object.defineProperty(input, 'files', {configurable:true, value:[{
+      name:'LEAK-MEMBER-journal.json',
+      text:() => new Promise(resolve => { resume = resolve; })
+    }]});
+    const pending = input.onchange({target:input});
+    assert.equal(p.el('results').hidden, true);
+    assert.equal(p.el(button).disabled, true);
+    assert.equal(p.el('toggle-results').disabled, true);
+    assert.doesNotMatch(p.el('entries').textContent, /OLD-MEMBER/);
+    resume('LEAK-MEMBER-journal');
+    await pending;
+    assert.equal(p.el('toggle-results').disabled, false);
+    assert.equal(p.el('results').hidden, true);
+    assert.match(p.el('status').textContent, /JSON/);
+    assert.doesNotMatch(p.el('status').textContent, /LEAK-MEMBER|journal/);
+  }
+});
+
 test('진행자가 새로고침해도 구분·채점기준·수동 채점을 복원하고 각 구분의 저장 여부를 구별한다', async t => {
   const p = page(t, 'field-summary');
   await p.upload('key-file', gradingKey);
-  await p.upload('imports', trial({id:'real',kind:'editor'}), trial({id:'practice'}));
+  await p.upload('imports', trial({id:'real',kind:'editor',participant:'P1'}), trial({id:'practice',participant:'P2'}));
   p.select('#entries select', 'yes');
   p.select('#kind', 'practice');
   p.select('#entries select', 'no');
@@ -135,7 +251,9 @@ test('진행자가 새로고침해도 구분·채점기준·수동 채점을 복
   assert.equal(restored.window.dispatchEvent(new restored.window.Event('beforeunload', {cancelable:true})), true);
   await restored.upload('imports', trial({id:'new', participant:'new', kind:'editor',
     taskId:fixture.tasks[1].id, prompt:fixture.tasks[1].prompt}));
-  assert.match(restored.el('entries').lastElementChild.textContent, /기준 판정/);
+  const imported = [...restored.el('entries').children].find(card =>
+    card.querySelector('h3').textContent.includes(fixture.tasks[1].id));
+  assert.match(imported.textContent, /기준 판정/);
 });
 
 test('임시 저장이 막혀도 채점은 유지하고 파일 저장과 페이지 이탈 경고를 제공한다', async t => {
@@ -262,38 +380,38 @@ test('기사 주소가 다른 과제와 원문 위치 기준이 달라진 집계
   const p = page(t, 'field-summary');
   await p.upload('key-file', gradingKey);
   await p.upload('imports', { ...raw, articleUrl: 'https://other.example/reprint' });
-  assert.match(p.el('groups').textContent, /판정 일치율 산출 대기/);
+  assert.match(p.report('groups'), /판정 일치율 산출 대기/);
   assert.match(p.el('entries').textContent, /수동으로 채점/);
   const q = page(t, 'field-summary');
   await q.upload('imports', raw);
   await q.upload('key-file', gradingKey);
-  assert.match(q.el('groups').textContent, /판정 일치율 100.0% \(1\/1\)/);
+  assert.match(q.report('groups'), /판정 일치율 100.0% \(1\/1\)/);
   q.select('#entries select', 'yes');
   const scored = await q.download('save');
   assert.equal(scored.entries[0].basis.articleUrl, raw.articleUrl);
   assert.equal(scored.entries[0].basis.reference.locator, gradingKey.tasks[0].reference.locator);
   const r = page(t, 'field-summary');
   await r.upload('imports', scored, raw);
-  assert.match(r.el('groups').textContent, /재확인 성공률 100.0% \(1\/1\)/);
-  assert.match(r.el('groups').textContent, /판정 일치율 100.0% \(1\/1\)/);
+  assert.match(r.report('groups'), /재확인 성공률 100.0% \(1\/1\)/);
+  assert.match(r.report('groups'), /판정 일치율 100.0% \(1\/1\)/);
   const differentArticle = { ...gradingKey, articleUrl: 'https://other.example/reprint' };
   const wrong = page(t, 'field-summary');
   await wrong.upload('imports', scored);
   await wrong.upload('key-file', differentArticle);
   await wrong.upload('imports', scored);
-  assert.match(wrong.el('groups').textContent, /재확인 성공률 산출 대기/);
-  assert.match(wrong.el('groups').textContent, /판정 일치율 산출 대기/);
+  assert.match(wrong.report('groups'), /재확인 성공률 산출 대기/);
+  assert.match(wrong.report('groups'), /판정 일치율 산출 대기/);
   assert.equal((await wrong.download('save')).entries[0].basis, null);
   const revised = structuredClone(gradingKey);
   revised.tasks[0].reference.acceptedLocators = ['교체한 기준 위치'];
   revised.tasks[0].verdict = 'contradicted';
   await r.upload('key-file', revised);
-  assert.match(r.el('groups').textContent, /재확인 성공률 산출 대기/);
-  assert.match(r.el('groups').textContent, /판정 일치율 0.0% \(0\/1\)/);
+  assert.match(r.report('groups'), /재확인 성공률 산출 대기/);
+  assert.match(r.report('groups'), /판정 일치율 0.0% \(0\/1\)/);
   const pending = await r.download('save');
   await r.upload('imports', pending, scored);
   assert.match(r.el('status').textContent, /파일을 불러왔습니다/);
-  assert.match(r.el('groups').textContent, /재확인 성공률 산출 대기/);
+  assert.match(r.report('groups'), /재확인 성공률 산출 대기/);
   r.select('#entries select', 'no');
   const final = await r.download('save');
   assert.equal(final.entries[0].locationGrade, 'no');
@@ -308,12 +426,12 @@ test('기사 주소가 다른 과제와 원문 위치 기준이 달라진 집계
   await mixed.upload('key-file', revised);
   await mixed.upload('imports', scored, otherPerson);
   assert.match(mixed.el('status').textContent, /파일을 불러왔습니다/);
-  assert.match(mixed.el('groups').textContent, /판정 일치율 0.0% \(0\/2\)/);
+  assert.match(mixed.report('groups'), /판정 일치율 0.0% \(0\/2\)/);
   const s = page(t, 'field-summary');
   await s.upload('key-file', revised);
   await s.upload('imports', scored);
-  assert.match(s.el('groups').textContent, /재확인 성공률 산출 대기/);
-  assert.match(s.el('groups').textContent, /판정 일치율 0.0% \(0\/1\)/);
+  assert.match(s.report('groups'), /재확인 성공률 산출 대기/);
+  assert.match(s.report('groups'), /판정 일치율 0.0% \(0\/1\)/);
 });
 test('이전 자동 채점의 기준이 없으면 재채점하고 수동 채점 두 항목은 독립적으로 저장한다', async (t) => {
   const p = page(t, 'field-summary');
@@ -322,8 +440,8 @@ test('이전 자동 채점의 기준이 없으면 재채점하고 수동 채점 
     format: 'journal-field-grades-v1',
     entries: [{ trial: raw, locationGrade: 'yes', verdictGrade: 'yes', expected: 'supported' }]
   });
-  assert.match(p.el('groups').textContent, /재확인 성공률 산출 대기/);
-  assert.match(p.el('groups').textContent, /판정 일치율 산출 대기/);
+  assert.match(p.report('groups'), /재확인 성공률 산출 대기/);
+  assert.match(p.report('groups'), /판정 일치율 산출 대기/);
   const controls = p.el('entries').querySelectorAll('select');
   controls[0].value = 'yes';
   controls[0].onchange();
@@ -343,8 +461,8 @@ test('이전 자동 채점의 기준이 없으면 재채점하고 수동 채점 
   await p.upload('imports', mismatched);
   assert.match(p.el('status').textContent, /내용이 다른/);
   await p.upload('key-file', gradingKey);
-  assert.match(p.el('groups').textContent, /재확인 성공률 산출 대기/);
-  assert.match(p.el('groups').textContent, /판정 일치율 100.0%/);
+  assert.match(p.report('groups'), /재확인 성공률 산출 대기/);
+  assert.match(p.report('groups'), /판정 일치율 100.0%/);
 });
 
 test('진행자가 대체 공식 게시물과 발행 시점 설명을 열어 고용 과제의 근거를 재확인한다', async t => {
@@ -371,16 +489,16 @@ test('같은 기사·문장의 시간 절감률과 같은 시간 표본의 판�
   await p.upload('key-file', gradingKey);
   await p.upload('imports', a, { ...b, id: 'v2', participant: 'V', articleUrl: 'https://example.com/revised' },
     { ...b, id: 'practice', participant: 'P', kind: 'practice' }, { ...b, id: 'restored', participant: 'R', recovered: true });
-  assert.doesNotMatch(p.el('comparisons').textContent, /50\.0%/);
+  assert.doesNotMatch(p.report('comparisons'), /50\.0%/);
   await p.upload('imports', b);
-  p.select('#entries select', 'yes');
-  const first = p.el('comparisons').firstElementChild.textContent;
+  p.gradeLocation(a.locator, 'yes');
+  const first = p.report('comparisons', 'article');
   assert.match(first, /10\.0초 절감 \(50\.0%\)/);
   assert.match(first, /평균 20\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
   assert.match(first, /평균 10\.0초 \(1건\) · 근거 위치와 판정 모두 일치 0\.0% \(0\/1\)/);
   // Repeated exposure invalidates both attempts by that participant.
   await p.upload('imports', { ...b, id: 'again' });
-  assert.doesNotMatch(p.el('comparisons').textContent, /50\.0%/);
+  assert.doesNotMatch(p.report('comparisons'), /50\.0%/);
 });
 
 test('시간이 늘거나 기준 시간이 0초인 과제의 차이와 비율을 보존한다', () => {
@@ -398,7 +516,7 @@ test('시간이 늘거나 기준 시간이 0초인 과제의 차이와 비율을
 test('검증 성공 한 건의 투입 시간에 실패와 중도 종료를 포함하고 판정 전에는 수치를 보류한다', async t => {
   const p = page(t, 'field-summary');
   const make = (id, method, seconds, extra = {}) => trial({
-    id, participant: id, kind: 'editor', method,
+    id, participant: id, kind: 'editor', method, locator: '위치 ' + id,
     phaseMs: { search: seconds * 1000, locate: 0, decide: 0 }, ...extra
   });
   const manual = make('manual', 'manual', 60);
@@ -409,22 +527,18 @@ test('검증 성공 한 건의 투입 시간에 실패와 중도 종료를 포�
   await p.upload('imports', manual, journal, missed, stopped,
     make('restored', 'journal', 500, { recovered: true }),
     make('restored-stop', 'journal', 500, { status: 'withdrawn', recovered: true }));
-  const comparison = () => p.el('comparisons').textContent;
+  const comparison = () => p.report('comparisons');
   assert.match(comparison(), /50\.0초 절감 \(83\.3%\)/);
   assert.match(comparison(), /총 90\.0초 \(완료 2건, 중도 종료 1건\) · 검증 성공 0건 · 성공 여부 확인 대기 1건/);
-  const grades = p.el('entries').querySelectorAll('select');
-  grades[0].value = 'yes';
-  grades[0].onchange();
+  p.gradeLocation(manual.locator, 'yes');
   assert.doesNotMatch(comparison(), /검증 성공 1건당 30\.0초/);
-  grades[1].value = 'yes';
-  grades[1].onchange();
+  p.gradeLocation(journal.locator, 'yes');
   assert.match(comparison(), /검증 성공 1건당 30\.0초 더 걸림 \(50\.0%\)/);
   assert.match(comparison(), /평소 검증 도구와 저널 · 90\.0초\/건/);
   const restored = page(t, 'field-summary');
   await restored.upload('imports', await p.download('save'));
-  assert.equal(restored.el('comparisons').textContent, comparison());
-  grades[1].value = 'no';
-  grades[1].onchange();
+  assert.equal(restored.report('comparisons'), comparison());
+  p.gradeLocation(journal.locator, 'no');
   assert.match(comparison(), /총 90\.0초 \(완료 2건, 중도 종료 1건\) · 검증 성공 0건 · 성공 여부 확인 대기 0건/);
   assert.doesNotMatch(comparison(), /검증 성공 1건당 30\.0초/);
 });
@@ -452,13 +566,16 @@ test('연습에서 본 같은 기사 기록을 현업 분모에서 제외하고 
   const p = page(t, 'field-summary');
   await p.upload('key-file', gradingKey);
   await p.upload('imports', baseline, journal, journal);
-  assert.match(p.el('comparisons').textContent, /30\.0초 절감 \(50\.0%\)/);
+  assert.match(p.report('comparisons'), /30\.0초 절감 \(50\.0%\)/);
   assert.match(p.el('count').textContent, /제외 0건/);
   await p.upload('imports', practice);
   assert.match(p.el('count').textContent, /불러온 2건.*제외 1건/);
-  assert.match(p.el('comparisons').textContent, /두 방식 모두 시간 기록이 필요/);
-  assert.doesNotMatch(p.el('groups').textContent, /저널/);
-  assert.match(p.el('entries').textContent, /연습·중도 종료/);
+  assert.match(p.report('comparisons'), /두 방식 모두 시간 기록이 필요/);
+  assert.doesNotMatch(p.report('groups'), /저널/);
+  const repeat = [...p.el('entries').children].find(answer => /연습·중도 종료/.test(answer.textContent));
+  assert.ok(repeat);
+  assert.equal(repeat.querySelector('select'), null);
+  assert.match(p.el('count').textContent, /채점 대기 1건/);
   const saved = await p.download('save');
   assert.deepEqual(saved.entries.map(e => [e.trial.id,e.repeatExposure]), [['manual',undefined],['journal',true]]);
   assert.ok(!JSON.stringify(saved).includes('연습에서만 보이는 응답'));
@@ -466,11 +583,11 @@ test('연습에서 본 같은 기사 기록을 현업 분모에서 제외하고 
     const reopened = page(t, 'field-summary');
     await reopened.upload('imports', ...files);
     assert.match(reopened.el('count').textContent, /불러온 2건.*제외 1건/);
-    assert.match(reopened.el('comparisons').textContent, /두 방식 모두 시간 기록이 필요/);
+    assert.match(reopened.report('comparisons'), /두 방식 모두 시간 기록이 필요/);
   }
   const justRaw = page(t, 'field-summary');
   await justRaw.upload('imports', {...practice, caseId:'other', articleUrl:'https://different.example/story'}, journal, baseline);
-  assert.match(justRaw.el('comparisons').textContent, /50\.0%/);
+  assert.match(justRaw.report('comparisons'), /50\.0%/);
 });
 
 test('해시 경로의 서로 다른 기사는 남기고 같은 경로의 본문 위치는 반복 노출로 센다', async t => {
@@ -504,14 +621,14 @@ test('다른 참가자의 저장 기준을 같은 과제에 적용해 수동 점
   for (const files of [[keyed,manual],[manual,keyed]]) {
     const p = page(t, 'field-summary');
     for (const file of files) await p.upload('imports', file);
-    assert.match(p.el('groups').textContent, /판정 일치율 0\.0% \(0\/2\)/);
-    assert.match(p.el('groups').textContent, /근거 없는 사실 채택률 100\.0% \(2\/2\)/);
-    assert.match(p.el('groups').textContent, /재확인 성공률 100\.0% \(1\/1\) · 채점 대기 1건/);
+    assert.match(p.report('groups'), /판정 일치율 0\.0% \(0\/2\)/);
+    assert.match(p.report('groups'), /근거 없는 사실 채택률 100\.0% \(2\/2\)/);
+    assert.match(p.report('groups'), /재확인 성공률 100\.0% \(1\/1\) · 채점 대기 1건/);
     const saved = await p.download('save');
     assert.ok(saved.entries.every(e => e.basis.verdict === task.verdict));
     const restored = page(t, 'field-summary');
     await restored.upload('imports', saved);
-    assert.equal(restored.el('groups').textContent,p.el('groups').textContent);
+    assert.equal(restored.report('groups'),p.report('groups'));
   }
 });
 
