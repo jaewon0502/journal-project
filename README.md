@@ -12,9 +12,9 @@
 
 [두 작업 파일 비교](docs/reader/article-compare.html)에서 같은 기사의 수정 전후 왜곡 개선·악화 건수와 사실 확인 범위를 볼 수 있습니다. 두 편집자가 같은 판본을 각각 평가했다면 판단이 갈린 구절과 근거도 대조할 수 있습니다. [출생 통계로 작성한 가상 기사의 평가 기록](experiments/article-review-pilot/README.md)
 
-[편집자 효과 측정](docs/reader/editor-study.html)에서는 실제 편집자의 건당 시간, 정당 성향 표기에 따른 사실 채택률 격차, 판정 품질을 비교합니다. [실험 진행과 지표 해석](docs/editor-study-protocol.md)
+[편집자 효과 측정](docs/reader/editor-study.html)에서는 편집자별 시간 차이와 기준 판정 일치율을 함께 볼 수 있습니다. 같은 기사에 정당 표지만 바꿔 붙였을 때 사실을 채택한 비율뿐 아니라 ‘근거와 충돌’, ‘근거 불충분’, ‘의견’으로 판단한 건수도 비교합니다. [실험 진행과 지표 해석](docs/editor-study-protocol.md)
 
-[실제 기사 검증 파일럿](docs/field-review-protocol.md)에서는 2025년도 예비비와 2024년 연간 고용 보도를 사용해 원자료 검색, 표·발언 위치 확인, 판정 기록 시간을 잽니다. [현장 집계 화면](docs/reader/field-summary.html)에서 같은 과제의 시간 절감률과 근거 위치·판정이 모두 맞은 건수를 함께 확인할 수 있습니다.
+[실제 기사 검증 파일럿](docs/field-review-protocol.md)에서는 2025년도 예비비와 2024년 연간 고용 보도를 사용해 원자료 검색, 표·발언 위치 확인, 판정 기록 시간을 잽니다. [현장 집계 화면](docs/reader/field-summary.html)에서는 같은 과제의 완료 시간과 검증 성공 한 건에 쓴 시간을 비교합니다. 후자는 오답·중도 종료에 쓴 시간까지 합산해 근거 위치와 판정이 모두 맞은 건수로 나눕니다.
 
 다른 기기에서 진행할 때는 `python3 tools/build_facilitator_pack.py`로 진행자용 `집계도구.zip`을 만드세요. 압축을 풀고 **시작.html**을 열면 편집자 초대명부 가져오기, 현장 과제별 채점표 선택, 참여 기록 집계 순서를 확인할 수 있습니다. [진행자용 파일 생성기](tools/build_facilitator_pack.py)
 
@@ -22,6 +22,8 @@
 
 | 측정 대상 | 확인한 결과 |
 |---|---|
+| 교통사고 통계 속 잘못 인용한 수치 | 2021~2025년 원표에 대해 최초 측정에서는 첫 후보가 정답 행인 경우가 2/4였습니다. 연도·지표를 구분하도록 보완한 뒤 같은 문항을 재시험해 4/4가 됐습니다. 2024년 사망자 수 질문에서 2023년의 2,551명보다 2024년의 2,521명이 있는 행을 먼저 보여 줍니다. [질문·판본별 결과](experiments/evidence-retrieval-transfer/nov25/README.md) |
+| 새 산업통상부 통계의 원문 수치 열 | 처음 보는 KS 통계에서 첫 후보는 4/4 모두 올바른 연도였습니다. 후보판은 자연스럽게 풀어 쓴 질문에서 정확한 열을 한 건도 자동 안내하지 못했습니다. [최초 결과와 측정 기준](experiments/evidence-retrieval-transfer/annual-cells/README.md) |
 | 처음 보는 표에서 정답 행 찾기 | 교통·선거, 산불, 독서 통계에 처음 적용한 세 버전에서 첫 후보 적중은 기준선 11/20 → 9/20, 상위 세 후보는 12/20 → 12/20이었습니다. 세 자료의 오류를 보고 보완한 뒤에는 같은 20문항 모두 첫 후보에 나왔습니다. [최초 시험](experiments/evidence-retrieval-transfer/README.md) · [공개 후 재시험](experiments/evidence-retrieval-transfer/retest-51467c1e/README.md) |
 | 보완한 한 버전을 새 자료 두 개에 동시에 적용 | 관세청·한국소비자원 자료의 첫 후보 적중은 3/6 → 4/6, 상위 세 후보는 4/6 → 4/6이었습니다. 놓쳤던 관세청 수출액·수입 감소율을 보완한 뒤 같은 6문항을 다시 풀면 6개 모두 첫 후보에 나오고, 자료에 없는 수출 중량·환급 총액은 화면에 미확인으로 표시됩니다. [최초 결과](experiments/evidence-retrieval-transfer/prospective/README.md) · [수정 후 재시험](experiments/evidence-retrieval-transfer/after-prospective/README.md) |
 | 실제 기사에서 지표명이 빠진 문장 | 고용 기사 세 문장만으로 통계청 91쪽 PDF에서 정답 행을 찾은 경우는 1/3이었습니다. 나머지 두 문장에는 편집자가 기사 제목을 함께 검색하면 첫 후보에 해당 표의 원문 행이 나왔습니다. [기사와 재현 방법](experiments/labour-field-review/README.md) |
