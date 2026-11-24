@@ -49,6 +49,7 @@
       throw new Error('이 화면에서 저장한 형식의 작업 파일이 필요합니다.');
     }
     if (!(w.article.trim() || w.articleDraft.trim())) throw new Error('작업 파일에 기사 본문이 없습니다.');
+    engine.validatePdfBinding(w.sourceDraft.pdfSha256, w.sourceDraft.fields.pdfPage);
   }
 
   function activeReport(article, sources, receipts, drafts) {
@@ -91,7 +92,7 @@
     const url = new URL(source.url);
     if (target?.page) url.hash = '';
     return JSON.stringify([target?.page ? url.href : source.url, source.originUrl || '', source.version,
-      source.locator, source.excerpt, target?.page || source.pdfPage || '']);
+      source.locator, source.excerpt, target?.page || source.pdfPage || '', ...(source.pdfSha256 ? [source.pdfSha256] : [])]);
   }
   function sourceIdentities(sources) {
     return [...new Set(sources.map(sourceIdentity))].sort();
@@ -102,7 +103,7 @@
     const editing = w.sources.find(s => s.id === w.sourceDraft.id);
     const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
     const baseline = editing || sourceDefaults(prefill);
-    return sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
+    return w.sourceDraft.pdfSha256 !== baseline.pdfSha256 || sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
   }
 
   function read(w) {
@@ -121,7 +122,7 @@
   }
 
   function sourceInput(source) {
-    return Object.fromEntries(['id', ...sourceFields].filter(key => source[key] != null).map(key => [key, source[key]]));
+    return Object.fromEntries(['id', ...sourceFields, 'pdfSha256'].filter(key => source[key] != null).map(key => [key, source[key]]));
   }
 
   function independentInput(work) {

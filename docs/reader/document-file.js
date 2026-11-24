@@ -10,6 +10,7 @@
   const status = byId('document-file-status');
   let current = null;
   let pdfUrl = '';
+  let verifiedFile = null;
   let sourceRequest = 0;
   let pdfRequest = 0;
 
@@ -69,12 +70,21 @@
     card.append(slot);
   }
 
+  function excerptLocation(entry) {
+    if (!current || !verifiedFile) return null;
+    const first = current.paragraphs[(entry.startParagraph ?? entry.paragraph) - 1];
+    const last = current.paragraphs[entry.paragraph - 1];
+    if (!first || !last || first > last) return null;
+    return {first, last, hash:current.hash, file:verifiedFile};
+  }
+
   function clear() {
     sourceRequest++;
     pdfRequest++;
     current = null;
     if (pdfUrl) URL.revokeObjectURL(pdfUrl);
     pdfUrl = '';
+    verifiedFile = null;
     pdfPanel.hidden = true;
     status.textContent = '';
     for (const slot of document.querySelectorAll('[data-source-physical-page]')) slot.remove();
@@ -129,11 +139,12 @@
       const next = URL.createObjectURL(file.slice(0, file.size, 'application/pdf'));
       if (pdfUrl) URL.revokeObjectURL(pdfUrl);
       pdfUrl = next;
+      verifiedFile = file;
       for (const slot of document.querySelectorAll('[data-source-physical-page]')) updatePage(slot);
       status.textContent = file.name + ' 연결 완료 · 검색 후보에서 해당 PDF 쪽을 열 수 있습니다.';
     } catch (error) {
       if (request === pdfRequest) status.textContent = error.message;
     }
   });
-  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo});
+  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo, excerptLocation});
 })(globalThis);

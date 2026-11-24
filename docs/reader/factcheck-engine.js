@@ -61,6 +61,14 @@
     return value;
   }
 
+  function validatePdfBinding(hash, page) {
+    if (hash === undefined) return;
+    if (typeof hash !== 'string' || !/^[0-9a-f]{64}$/u.test(hash) || !page) {
+      throw new Error('PDF 판본에는 확인한 쪽번호와 올바른 SHA-256 값이 필요합니다.');
+    }
+    physicalPage(page);
+  }
+
   const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
     'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
   const signingParameter = /^(?:x-(?:amz|goog)-(?:algorithm|credential|date|expires|signature|signedheaders)|x-amz-(?:security-token|content-sha256)|AWSAccessKeyId|GoogleAccessId)$/iu;
@@ -132,13 +140,15 @@
         if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('원문의 HTTP 또는 HTTPS 주소를 입력하세요.');
       }
       const hasPage = entry.pdfPage != null && entry.pdfPage !== '';
+      validatePdfBinding(entry.pdfSha256, entry.pdfPage);
       if (hasPage) {
         physicalPage(entry.pdfPage);
         sourceTarget(entry);
       }
       if (items.has(entry.id)) throw new Error('근거 식별자가 중복됐습니다.');
       if (entry.title != null && typeof entry.title !== 'string') throw new Error('근거 제목을 확인하세요.');
-      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version, ...(hasPage ? {pdfPage: entry.pdfPage} : {})});
+      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version,
+        ...(hasPage ? {pdfPage: entry.pdfPage} : {}), ...(entry.pdfSha256 ? {pdfSha256:entry.pdfSha256} : {})});
     }
     const ordered = [...items.keys()].sort().map(id => items.get(id));
     return {items, key: digest(ordered)};
@@ -604,12 +614,17 @@
   function relatedDocuments(catalog, selected) {
     const links = new Map();
     for (const source of catalog.items.values()) {
-      if (!source.originUrl) continue;
-      const copy = originAddress(source.url), original = originAddress(source.originUrl);
+      const aliases = [];
+      if (source.originUrl) aliases.push(originAddress(source.originUrl));
+      if (source.pdfSha256) aliases.push('sha256:' + source.pdfSha256);
+      if (!aliases.length) continue;
+      const copy = originAddress(source.url);
       if (!links.has(copy)) links.set(copy, []);
-      if (!links.has(original)) links.set(original, []);
-      links.get(copy).push(original);
-      links.get(original).push(copy);
+      for (const alias of aliases) {
+        if (!links.has(alias)) links.set(alias, []);
+        links.get(copy).push(alias);
+        links.get(alias).push(copy);
+      }
     }
     const related = new Set(selected.map(s => originAddress(s.url)));
     for (const address of related) {
@@ -852,7 +867,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, sameSourceDocument, digestValue: digest});
+  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, validatePdfBinding, sameSourceDocument, digestValue: digest});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);

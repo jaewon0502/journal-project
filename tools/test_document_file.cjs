@@ -200,3 +200,89 @@ test('본문에 NUL만 있거나 페이지가 모두 비면 현재 검색 본문
     assert.deepEqual(p.revoked, []);
   }
 });
+
+async function downloadText(p, button) {
+  const stopDownload = event => { if (event.target.closest('a[download]')) event.preventDefault(); };
+  p.w.document.addEventListener('click', stopDownload);
+  try {
+    p.el(button).click();
+    return await new Promise((resolve, reject) => {
+      const r = new p.w.FileReader();
+      r.onerror = reject;
+      r.onload = () => resolve(r.result);
+      r.readAsText(p.created.at(-1));
+    });
+  } finally { p.w.document.removeEventListener('click', stopDownload); }
+}
+
+async function savedWork(p) {
+  return JSON.parse(await downloadText(p, 'save-work'));
+}
+
+test('발췌한 PDF 쪽을 주소와 대조해 적용하면 작업 파일과 독립 평가에 판본이 남는다', async t => {
+  const p = editor(t), checksum = JSON.parse(searchFile).pdfSha256;
+  await p.upload('document-file','검색.json',searchFile,/PDF 4쪽/);
+  const useExcerpt = () => [...p.find().querySelectorAll('button')].find(b => b.textContent === '기간 표지와 구절을 함께 발췌').click();
+  useExcerpt();
+  assert.ok(p.el('source-pdf-proposal').hidden);
+  await p.upload('document-pdf','편집자용.pdf',pdfBytes,/연결 완료/);
+  useExcerpt();
+  assert.equal(p.el('source-pdf-proposal').hidden,false);
+  assert.match(p.el('source-pdf-proposal-text').textContent,/PDF 4쪽/);
+  p.el('use-pdf-location').click();
+  assert.equal(p.el('source-pdfPage').value,'');
+  p.type('source-title','연간 고용 요약'); p.type('source-version','2021년 공표본');
+  p.type('source-url','https://agency.example/report.pdf#page=1&zoom=100');
+  p.el('use-pdf-location').click();
+  assert.equal(p.el('source-url').value,'https://agency.example/report.pdf#page=4&zoom=100');
+  assert.equal(p.el('source-locator').value,'PDF 4쪽');
+  assert.equal(p.el('source-pdfPage').value,'4');
+  const draft = await savedWork(p);
+  assert.equal(draft.sourceDraft.pdfSha256,checksum); assert.deepEqual(draft.sources,[]);
+  const current = p.w.JournalWorkspaceSnapshot;
+  p.type('source-locator','연간 고용 요약 · PDF 뷰어 1~2쪽');
+  p.el('source-save-link').click();
+  assert.match(p.el('source-status').textContent,/PDF 쪽이 다릅니다/);
+  assert.deepEqual((await savedWork(p)).sources,[]);
+  p.type('source-locator','인쇄 1쪽 · PDF 4쪽 · 청년층 실업률');
+  p.el('source-save-link').click();
+  const completed = await savedWork(p);
+  assert.equal(completed.sources[0].pdfSha256,checksum);
+  assert.equal(completed.sources[0].pdfPage,'4');
+  assert.equal(completed.receipts.length,0);
+  assert.equal(completed.sourceDraft.pdfSha256,undefined);
+  assert.equal(current.independentInput(completed).sources[0].pdfSha256,checksum);
+  assert.ok(!JSON.stringify(completed).includes('편집자용.pdf'));
+  assert.ok(!JSON.stringify(completed).includes('blob:local'));
+  assert.match(p.el('source-list').querySelector('[data-pdf-key] a').href,/^blob:local-\d+#page=4$/);
+  p.type('verdict','fact'); p.type('reason','문장과 해당 연간 요약을 대조했다.');
+  p.el('acknowledged').click(); p.el('decision-form').requestSubmit();
+  const report = await downloadText(p,'export-report');
+  assert.ok(report.includes('PDF SHA-256 · ' + checksum));
+  assert.ok(report.includes('https://agency.example/report.pdf#page=4&zoom=100'));
+  assert.ok(!report.includes('편집자용.pdf') && !report.includes('blob:local'));
+});
+
+test('확인 쪽 적용 뒤 주소나 발췌를 변경하면 예전 파일 지문으로 새 근거를 등록하지 않는다', async t => {
+  const p = editor(t);
+  await p.upload('document-file','검색.json',searchFile,/PDF 4쪽/);
+  await p.upload('document-pdf','공표.pdf',pdfBytes,/연결 완료/);
+  const doc = p.w.JournalDocumentFile;
+  assert.equal(doc.excerptLocation({startParagraph:1,paragraph:3}).first,1);
+  assert.equal(doc.excerptLocation({startParagraph:1,paragraph:3}).last,4);
+  p.type('source-url','https://agency.example/viewer#/documents/3');
+  [...p.find().querySelectorAll('button')].find(b => b.textContent === '기간 표지와 구절을 함께 발췌').click();
+  p.el('use-pdf-location').click();
+  assert.equal(p.el('source-url').value,'https://agency.example/viewer#/documents/3');
+  p.type('source-url','https://agency.example/viewer#/documents/4');
+  assert.equal(p.el('source-pdfPage').value,''); assert.equal(p.el('source-locator').value,'');
+  assert.equal((await savedWork(p)).sourceDraft.pdfSha256,undefined);
+  p.el('use-pdf-location').click();
+  p.type('source-locator','요약의 청년 행');
+  p.type('source-excerpt','편집자가 새로 옮긴 구절');
+  assert.equal(p.el('source-locator').value,'요약의 청년 행');
+  assert.equal(p.el('source-location-review').hidden,false);
+  assert.equal(p.el('source-location-checked').checked,false);
+  assert.equal(p.el('source-pdf-proposal').hidden,true);
+  assert.equal((await savedWork(p)).sourceDraft.pdfSha256,undefined);
+});

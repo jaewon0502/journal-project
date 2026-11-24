@@ -52,7 +52,7 @@ START = """<!doctype html>
 ‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 맞은 답안 한 건에 참여자와 진행자가 각각 몇 초를 썼는지 볼 수 있습니다. 두 역할의 시간은 모두 가상 값입니다.</p>
 <details><summary>PDF 원문에서 후보가 있는 쪽 열기</summary>
 <p>진행자가 원본 PDF와 같은 폴더에 <a href="prepare_pdf_source.py" download>검색 파일 변환 도구</a>를 저장합니다. Python 3.9 이상과 Poppler의 pdftotext가 있는 컴퓨터에서 <code>python3 prepare_pdf_source.py "원본.pdf"</code>를 실행하세요.</p>
-<p><a href="factcheck.html">기사 팩트체크</a>에서 검토 목록을 만들고 ‘원자료 관리 → 원자료 본문에서 근거 구간 찾기 → 파일에서 원자료 불러오기’를 엽니다. 생성된 <code>.journal-source.json</code>과 원본 PDF를 차례로 고르세요. 검색 결과의 PDF 쪽 링크를 누르면 그 자리에서 원문을 대조할 수 있습니다. 검색 파일에는 자료 전문이 들어갑니다.</p></details>
+<p><a href="factcheck.html">기사 팩트체크</a>에서 검토 목록을 만들고 ‘원자료 관리 → 원자료 본문에서 근거 구간 찾기 → 파일에서 원자료 불러오기’를 엽니다. 생성된 <code>.journal-source.json</code>과 원본 PDF를 차례로 고르세요. 검색 결과의 PDF 쪽 링크를 누르면 그 자리에서 원문을 대조할 수 있습니다. 발췌문을 옮긴 뒤 자료 주소를 확인하고 ‘확인한 PDF 쪽 입력’을 누르면 다음 편집자도 같은 PDF 판본과 쪽에서 근거를 열 수 있습니다. 검색 파일에는 자료 전문이 들어갑니다.</p></details>
 <details id="deadline-example"><summary>목표 120초에서 검증 성공률이 뒤집히는 가상 예시</summary>
 <p>15세 이상 고용률을 검증하는 과제입니다. 평소 도구를 쓴 두 명은 100초와 121초에 위치·판정·이유를 모두 맞혔습니다.
 저널을 쓴 두 명은 각각 60초에 표와 판정을 맞혔지만, 판단 이유에는 15~64세 수치를 썼습니다.</p>

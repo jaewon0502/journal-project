@@ -113,9 +113,10 @@
   }
   function citationAddress(source) {
     const target = engine.sourceTarget(source);
-    if (target?.localPage) return 'PDF 파일 ' + target.localPage + '쪽 직접 확인 · ' + target.href;
-    if (!target?.page) return source.url;
-    return 'PDF 뷰어 ' + target.page + '쪽 · ' + target.href;
+    let address = source.url;
+    if (target?.localPage) address = 'PDF 파일 ' + target.localPage + '쪽 직접 확인 · ' + target.href;
+    else if (target?.page) address = 'PDF 뷰어 ' + target.page + '쪽 · ' + target.href;
+    return source.pdfSha256 ? address + '\nPDF SHA-256 · ' + source.pdfSha256 : address;
   }
   function sourceDetails(source, showLink = true) {
     const section = node('div', undefined, 'source');
@@ -144,6 +145,8 @@
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
         clearSourceTarget();
         suggestedLocator = '';
+        offerPdfLocation(null);
+        sourcePdfHash = source.pdfSha256 || '';
         setLocationReview(false);
         editingId = source.id;
         for (const field of sourceFields) byId('source-' + field).value = source[field] || '';
@@ -157,6 +160,19 @@
     }
   }
   let sourceBaseline = {}, prefillId = null, suggestedLocator = '';
+  let pdfProposal = null, sourcePdfHash = '';
+  function offerPdfLocation(proposal) {
+    pdfProposal = proposal;
+    byId('source-pdf-proposal').hidden = !proposal;
+    if (!proposal) {
+      byId('source-pdf-proposal-text').textContent = '';
+      return;
+    }
+    const pages = proposal.first === proposal.last ? 'PDF ' + proposal.first + '쪽' :
+      '첫 구절 PDF ' + proposal.first + '쪽 · 마지막 구절 ' + proposal.last + '쪽';
+    byId('source-pdf-proposal-text').textContent = proposal.file.name + ' · ' + pages +
+      '. 위 문서 주소에서 받은 PDF가 맞는지 확인하면 쪽번호와 파일 식별값을 함께 기록합니다.';
+  }
   function draftPageLabel() {
     const page = byId('source-pdfPage').value.trim();
     if (page) return 'PDF ' + page + '쪽';
@@ -175,7 +191,8 @@
   }
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
-    return !byId('source-location-review').hidden || sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
+    return sourcePdfHash !== (original.pdfSha256 || '') || !byId('source-location-review').hidden ||
+      sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
   }
   function sourceDraftNote() {
     if (!result || !sourceDraftIsDirty()) return '';
@@ -208,6 +225,8 @@
   function clearSourceForm(reuse = {}) {
     clearSourceTarget();
     suggestedLocator = '';
+    offerPdfLocation(null);
+    sourcePdfHash = '';
     setLocationReview(false);
     editingId = null;
     prefillId = reuse.id || null;
@@ -591,8 +610,17 @@
     byId('row-heading').focus();
   });
   byId('source-cancel').addEventListener('click', () => clearSourceForm());
+  function differentPhysicalPage(locator, page) {
+    const pages = [...locator.normalize('NFKC').matchAll(/PDF\s*(?:뷰어|파일)?\s*(\d+)(?:\s*(?:~|∼|–|-)\s*(\d+))?\s*(?:쪽|페이지)/giu)];
+    return pages.length > 0 && !pages.some(([, first, last]) => Number(first) <= page && page <= Number(last || first));
+  }
   byId('source-form').addEventListener('submit', event => {
     event.preventDefault();
+    if (sourcePdfHash && differentPhysicalPage(byId('source-locator').value, Number(byId('source-pdfPage').value))) {
+      message('source-status', '확인 위치에 적은 PDF 쪽과 발췌한 PDF 쪽이 다릅니다. 원본을 대조해 확인 위치를 고치세요.', true);
+      byId('source-locator').focus();
+      return;
+    }
     if (!byId('source-location-review').hidden && !byId('source-location-checked').checked) {
       message('source-status', '등록하려면 위 확인 위치와 발췌문을 원문에서 대조한 뒤 확인란을 선택하세요.', true);
       byId('source-location-checked').focus();
@@ -606,6 +634,7 @@
     while (sources.some(s => s.id === 'source-' + n)) n++;
     source.id = editingId || 'source-' + n;
     if (!source.pdfPage) delete source.pdfPage;
+    if (sourcePdfHash && source.pdfPage) source.pdfSha256 = sourcePdfHash;
     const linkToRow = event.submitter === byId('source-save-link') && !editingId && sourceForRow && currentRow()?.articleBinding === sourceForRow;
     const rowDraft = linkToRow ? {...drafts.get(currentId), ...decisionDraft()} : null;
     const next = editingId ? sources.map(s => s.id === editingId ? source : s) : [...sources, source];
@@ -654,6 +683,8 @@
       suggestedLocator = tableLocation;
     }
     excerpt.value = entry.text;
+    sourcePdfHash = '';
+    offerPdfLocation(window.JournalDocumentFile?.excerptLocation(entry));
     setLocationReview(inheritsLocation);
     updateSourceDraftNote();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
@@ -666,6 +697,44 @@
     byId('source-locator').focus();
     return true;
   }
+  byId('use-pdf-location').addEventListener('click', () => {
+    if (!pdfProposal) return;
+    const {first, last, hash, file} = pdfProposal;
+    const url = byId('source-url'), locator = byId('source-locator');
+    const page = String(first);
+    let address, target;
+    try {
+      address = new URL(url.value);
+      target = engine.sourceTarget({url:address.href, pdfPage:page});
+      if (!target) throw new Error();
+    } catch {
+      message('source-status', '이 PDF를 내려받은 문서 주소를 먼저 확인해 입력하세요.', true);
+      url.focus();
+      return;
+    }
+    // A direct URL can carry an old page. Keep named document routes intact.
+    const fragment = new URLSearchParams(address.hash.slice(1));
+    if (target.page && fragment.has('page')) {
+      fragment.set('page', page);
+      address.hash = fragment.toString();
+      url.value = address.href;
+    }
+    const location = 'PDF ' + first + (first === last ? '' : '~' + last) + '쪽';
+    if ((!locator.value.trim() || locator.value === suggestedLocator) &&
+        !locator.value.trim().split(' · ').includes(location)) {
+      locator.value = [locator.value.trim(), location].filter(Boolean).join(' · ');
+      suggestedLocator = locator.value;
+    }
+    byId('source-pdfPage').value = page;
+    sourcePdfHash = hash;
+    window.JournalSourceReader.rememberVerifiedPdf(hash, file);
+    if (!byId('source-location-review').hidden) setLocationReview(true);
+    byId('source-pdf-proposal').hidden = true;
+    dirty = true;
+    updateSourceDraftNote();
+    message('source-status', location + '을 입력했습니다. 이 자료를 등록하면 같은 PDF 판본을 다시 대조할 수 있습니다.');
+    locator.focus();
+  });
   function citationRows(entries) {
     const ordered = [...new Map(entries.filter(Boolean).map(row => [row.paragraph, row])).values()]
       .sort((a, b) => a.paragraph - b.paragraph);
@@ -1061,12 +1130,28 @@
   }
   byId('find-passages').addEventListener('click', findPassages);
   for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
+    if (id === 'document-text') offerPdfLocation(null);
     if (id === 'document-query') clearSearchContext();
     byId('finder-results').replaceChildren();
     message('finder-status', '');
   });
   byId('source-form').addEventListener('input', event => {
     dirty = true;
+    if (event.target.id === 'source-excerpt') offerPdfLocation(null);
+    if (['source-excerpt','source-url','source-pdfPage'].includes(event.target.id) && sourcePdfHash) {
+      sourcePdfHash = '';
+      if (pdfProposal) offerPdfLocation(pdfProposal);
+      const locator = byId('source-locator');
+      if (suggestedLocator && locator.value === suggestedLocator) {
+        const parts = suggestedLocator.split(' · ');
+        if (/^PDF \d+(?:~\d+)?쪽$/u.test(parts.at(-1))) {
+          parts.pop();
+          suggestedLocator = locator.value = parts.join(' · ');
+        }
+      }
+      if (event.target.id === 'source-excerpt' && draftPageLabel()) setLocationReview(true);
+      message('source-status', '자료 입력이 바뀌어 PDF 판본 연결을 해제했습니다. 원문에서 발췌문과 쪽을 다시 대조하세요.');
+    }
     if (event.target.id === 'source-locator') suggestedLocator = '';
     if (event.target.id === 'source-url' && byId('source-pdfPage').value) {
       byId('source-pdfPage').value = '';
@@ -1130,6 +1215,7 @@
       rowFilter: byId('row-filter').value,
       ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
+        ...(sourcePdfHash ? {pdfSha256:sourcePdfHash} : {}),
         ...(suggestedLocator ? {suggestedLocator} : {}),
         ...(!byId('source-location-review').hidden ? {locationReview: byId('source-location-checked').checked ? 'confirmed' : 'pending'} : {}),
         ...(sourceDraftIsDirty() ? {targetBinding: sourceForRow, panelOpen: byId('sources-panel').open} : {})}
@@ -1194,6 +1280,7 @@
         byId('source-save').textContent = '수정 적용';
       }
       for (const field of sourceFields) byId('source-' + field).value = w.sourceDraft.fields[field] || '';
+      sourcePdfHash = w.sourceDraft.pdfSha256 || '';
       if (w.sourceDraft.suggestedLocator === byId('source-locator').value)
         suggestedLocator = byId('source-locator').value;
       if (['pending', 'confirmed'].includes(w.sourceDraft.locationReview))
