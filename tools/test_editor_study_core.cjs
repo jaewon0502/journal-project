@@ -77,7 +77,7 @@ test('빈 자료·중도탈락·빠진 배정은 시간 0이나 편향 감소로
   const records = [observations(1), observations(2), partial];
   const r = study.analyze(records);
   assert.deepEqual([r.enrolled,r.completed,r.included,r.excluded,r.recordedTrials,r.trialCount], [3,2,0,3,11,0]);
-  assert.deepEqual(r.blocks, [{block:1,enrolled:3,completed:2,included:false,missingOrdinals:[4],unfinishedOrdinals:[3]}]);
+  assert.deepEqual(r.blocks, [{block:1,enrolled:3,completed:2,included:false,missingOrdinals:[4],unfinishedOrdinals:[3],withdrawnOrdinals:[]}]);
   assert.equal(r.bias, null);
   const onceFull = study.analyze([...records, ...[5,6,7,8].map(i => observations(i))]);
   assert.deepEqual([onceFull.included, onceFull.excluded, onceFull.trialCount], [4,3,16]);
@@ -179,4 +179,65 @@ test('JSON의 단계 시간은 합계를 검증하고 기존 v1 내보내기와 
   }
   const missed=structuredClone(enriched); missed.trials[0].phaseMs=null;
   assert.throws(()=>study.mergeRecords([missed],[enriched]),/서로 다른/);
+});
+
+test('중단 확정 파일은 진행본과 합쳐도 종료 상태를 유지하고 중단 뒤 응답을 거절한다', () => {
+  const full = observations(1), partial = {...full, trials:full.trials.slice(0, 2)};
+  const stopped = {...partial, withdrawn:true};
+  const early = {...partial, trials:partial.trials.slice(0,1)};
+  for (const earlier of [partial, early]) {
+    assert.deepEqual(study.mergeRecords([stopped], [earlier]), [stopped]);
+    assert.deepEqual(study.mergeRecords([earlier], [stopped]), [stopped]);
+  }
+  for (const pair of [[full, stopped], [stopped, full]]) {
+    assert.throws(() => study.mergeRecords([pair[0]], [pair[1]]), /중단/);
+  }
+  assert.throws(() => study.addTrial(stopped, full.trials[2]), /중단/);
+  assert.throws(() => study.validateRecord({...full, withdrawn:true}), /중단/);
+  assert.throws(() => study.validateRecord({...partial, withdrawn:'true'}), /중단/);
+  const result = study.analyze([stopped, observations(2), {...observations(3), trials:[]}]);
+  assert.equal(result.withdrawn, 1);
+  assert.equal(result.completed, 1);
+  assert.equal(result.included, 0);
+  assert.deepEqual(result.blocks[0].withdrawnOrdinals, [1]);
+});
+
+test('한 사람의 큰 절감이 과반 편집자의 증가를 가려도 개인별 중앙값과 인원은 방향을 보존한다', () => {
+  const journal = [10000, 110000, 120000, 130000];
+  const records = [1,2,3,4].map(ordinal => observations(ordinal, task => ({
+    elapsedMs:task.method === 'manual' ? 100000 : journal[ordinal - 1]
+  })));
+  const time = study.analyze(records).time;
+  assert.equal(time.reductionPct,7.5);
+  assert.equal(time.medianSavedSeconds,-15);
+  assert.deepEqual([time.fasterEditors, time.unchangedEditors, time.slowerEditors], [1, 0, 3]);
+
+  // Different pairs whose integer durations have exactly equal totals.
+  const equal = [1,2,3,4].map(ordinal => {
+    const durations = {manual:[1200,1250], journal:[1150,1300]};
+    return observations(ordinal, task => ({elapsedMs:durations[task.method].shift()}));
+  });
+  const ties = study.analyze(equal).time;
+  assert.equal(ties.unchangedEditors,4);
+  assert.equal(ties.medianSavedSeconds,0);
+});
+
+test('한 묶음 제외 범위는 남은 사례별 분모에서 재계산하며 격차 방향이 바뀔 수 있다', () => {
+  // Half of the cases reverse A and B, so pooling across different articles would hide every gap.
+  const contrast = {manual:[1,1,-1], journal:[1,0,-1]};
+  const records = Array.from({length:12}, (_, index) => observations(index + 1, task => {
+    const sign = packets.ids.indexOf(task.caseId) % 2 === 0 ? 1 : -1;
+    const side = contrast[task.method][Math.floor(index / 4)] * sign;
+    return {verdict:(side === 1 && task.variant === 'A') || (side === -1 && task.variant === 'B') ? 'supported' : 'insufficient'};
+  }));
+  const orphan = observations(17);
+  const output = study.analyze([...records, orphan, ...study.demoRecords()]);
+  assert.equal(output.completeBlocks, 3);
+  assert.ok(Math.abs(output.bias.reductionPp - 100/3) < 1e-9);
+  assert.deepEqual(output.bias.leaveOneBlockOut, {blocks:3, minReductionPp:-50, maxReductionPp:50});
+  const reruns = [0,1,2].map(block => study.analyze(records.filter((_, i) => Math.floor(i / 4) !== block)).bias.reductionPp);
+  assert.deepEqual(reruns, [-50,0,50]);
+  assert.equal(study.analyze([orphan]).bias, null);
+  assert.equal(study.analyze(records.slice(0,7)).bias.leaveOneBlockOut, null);
+  assert.deepEqual(study.analyze(study.demoRecords(),'demo').bias.leaveOneBlockOut, {blocks:2, minReductionPp:0, maxReductionPp:50});
 });

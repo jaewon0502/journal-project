@@ -95,11 +95,17 @@
     const result = createRecord(input.participantId, input.ordinal, input.kind, input.editorAttested);
     const assignments = plan(result.ordinal);
     result.trials = Array.from(input.trials, (observation, index) => checkedTrial(assignments[index], observation, true));
+    if (Object.hasOwn(input, 'withdrawn')) {
+      if (typeof input.withdrawn !== 'boolean' || (input.withdrawn && result.trials.length === slots))
+        throw new Error('중단 여부와 제출한 과제 수를 확인하세요.');
+      if (input.withdrawn) result.withdrawn = true;
+    }
     return result;
   }
 
   function addTrial(input, observation) {
     const record = validateRecord(input);
+    if (record.withdrawn) throw new Error('참여 중단이 확인된 기록에는 과제를 추가할 수 없습니다.');
     if (record.trials.length >= slots) throw new Error('네 회차를 모두 마친 참가자입니다.');
     const expected = plan(record.ordinal)[record.trials.length];
     record.trials.push(checkedTrial(expected, observation, false));
@@ -120,6 +126,10 @@
       }
       if (previous) {
         const common = Math.min(previous.trials.length, record.trials.length);
+        if ((previous.withdrawn && record.trials.length > previous.trials.length) ||
+            (record.withdrawn && previous.trials.length > record.trials.length)) {
+          throw new Error('중단 확인 뒤에 제출된 회차가 있습니다. 같은 배정의 원본 파일을 확인하세요.');
+        }
         const longer = record.trials.length > previous.trials.length ? record : previous;
         const trials = [...longer.trials];
         for (let i = 0; i < common; i++) {
@@ -133,7 +143,9 @@
           if (priorPhases !== undefined) trials[i] = previous.trials[i];
           else if (nextPhases !== undefined) trials[i] = record.trials[i];
         }
-        byId.set(id, {...longer, trials});
+        const merged = {...longer, trials};
+        if (previous.withdrawn || record.withdrawn) merged.withdrawn = true;
+        byId.set(id, merged);
       } else {
         byId.set(id, record);
       }
@@ -150,15 +162,18 @@
       grouped.get(block).set(record.ordinal, record);
     }
     return [...grouped].map(([block, members]) => {
-      const missingOrdinals = [], unfinishedOrdinals = [];
+      const missingOrdinals = [], unfinishedOrdinals = [], withdrawnOrdinals = [];
       let completed = 0;
       for (let i = 1; i <= slots; i++) {
         const ordinal = (block - 1) * slots + i;
         if (!members.has(ordinal)) missingOrdinals.push(ordinal);
-        else if (members.get(ordinal).trials.length < slots) unfinishedOrdinals.push(ordinal);
+        else if (members.get(ordinal).trials.length < slots) {
+          unfinishedOrdinals.push(ordinal);
+          if (members.get(ordinal).withdrawn) withdrawnOrdinals.push(ordinal);
+        }
         else completed++;
       }
-      return {block, enrolled: members.size, completed, included: completed === slots, missingOrdinals, unfinishedOrdinals};
+      return {block, enrolled: members.size, completed, included: completed === slots, missingOrdinals, unfinishedOrdinals, withdrawnOrdinals};
     });
   }
 
@@ -169,7 +184,8 @@
       const seconds = {};
       for (const method of methods) {
         const trials = record.trials.filter(t => t.method === method);
-        seconds[method] = trials.reduce((sum, t) => sum + (stage ? t.phaseMs[stage] : t.elapsedMs) / 1000, 0) / trials.length;
+        const totalMs = trials.reduce((sum, t) => sum + (stage ? t.phaseMs[stage] : t.elapsedMs), 0);
+        seconds[method] = totalMs / (1000 * trials.length);
       }
       manualSeconds += seconds.manual / records.length;
       journalSeconds += seconds.journal / records.length;
@@ -177,7 +193,12 @@
         savedSeconds: seconds.manual - seconds.journal});
     }
     const savedSeconds = manualSeconds - journalSeconds;
-    return {manualSeconds, journalSeconds, savedSeconds, reductionPct: manualSeconds ? 100 * savedSeconds / manualSeconds : null, editorPairs};
+    const savings = editorPairs.map(pair => pair.savedSeconds).sort((a, b) => a - b);
+    const medianSavedSeconds = (savings[Math.floor((savings.length - 1) / 2)] + savings[Math.floor(savings.length / 2)]) / 2;
+    const fasterEditors = savings.filter(seconds => seconds > 0).length;
+    const slowerEditors = savings.filter(seconds => seconds < 0).length;
+    return {manualSeconds, journalSeconds, savedSeconds, reductionPct: manualSeconds ? 100 * savedSeconds / manualSeconds : null,
+      editorPairs, medianSavedSeconds, fasterEditors, slowerEditors, unchangedEditors:savings.length - fasterEditors - slowerEditors};
   }
 
   function phaseStats(sample) {
@@ -196,22 +217,54 @@
     return {A: {endorsed: 0, total: 0}, B: {endorsed: 0, total: 0}};
   }
 
+  function caseCells() {
+    return new Map(cases.ids.map(id => [id, {manual:emptyCells(), journal:emptyCells()}]));
+  }
+
+  function pooledBias(items, excluded) {
+    const gaps = {manual:0, journal:0};
+    const caseRates = [];
+    for (const [caseId, item] of items) {
+      const row = {caseId};
+      for (const method of methods) {
+        const cells = {};
+        for (const variant of ['A','B']) {
+          const all = item[method][variant], omit = excluded?.get(caseId)[method][variant];
+          const endorsed = all.endorsed - (omit?.endorsed ?? 0), total = all.total - (omit?.total ?? 0);
+          cells[variant] = {endorsed, total, endorsedPct:100 * endorsed / total};
+        }
+        cells.signedGapPp = cells.A.endorsedPct - cells.B.endorsedPct;
+        gaps[method] += Math.abs(cells.signedGapPp) / items.size;
+        row[method] = cells;
+      }
+      caseRates.push(row);
+    }
+    const reductionPp = gaps.manual - gaps.journal;
+    return {manualGapPp:gaps.manual, journalGapPp:gaps.journal, reductionPp,
+      reductionPct:gaps.manual > 0 ? 100 * reductionPp / gaps.manual : null, cases:caseRates};
+  }
+
   function emptyQuality() {
     return {correct: 0, total: 0, unsafe: 0, unsafeTotal: 0, citationCorrect: 0, qualityCorrect: 0};
   }
 
   function verdictStats(records) {
-    const items = new Map(cases.ids.map(caseId => [caseId, {caseId, manual: emptyCells(), journal: emptyCells()}]));
+    const items = caseCells(), blocks = new Map();
     const quality = {manual: emptyQuality(), journal: emptyQuality()};
     for (const record of records) {
+      const block = Math.ceil(record.ordinal / slots);
+      if (!blocks.has(block)) blocks.set(block, caseCells());
+      const blockItems = blocks.get(block);
       for (const t of record.trials) {
-        const cell = items.get(t.caseId)[t.method][t.variant];
         const gold = cases.get(t.caseId, t.variant);
         const confirms = t.verdict === 'supported';
         const correct = t.verdict === gold.expectedVerdict;
         const sourceCorrect = t.sourceIds.length === 1 && gold.expectedSourceIds.includes(t.sourceIds[0]);
-        cell.total++;
-        if (confirms) cell.endorsed++;
+        for (const counts of [items, blockItems]) {
+          const cell = counts.get(t.caseId)[t.method][t.variant];
+          cell.total++;
+          if (confirms) cell.endorsed++;
+        }
         const q = quality[t.method];
         q.total++;
         if (correct) q.correct++;
@@ -223,18 +276,18 @@
         }
       }
     }
-    const gaps = {manual: 0, journal: 0};
-    for (const item of items.values()) {
-      for (const method of methods) {
-        const cells = item[method];
-        for (const cell of [cells.A, cells.B]) cell.endorsedPct = 100 * cell.endorsed / cell.total;
-        cells.signedGapPp = cells.A.endorsedPct - cells.B.endorsedPct;
-        gaps[method] += Math.abs(cells.signedGapPp) / items.size;
+    const bias = pooledBias(items);
+    bias.leaveOneBlockOut = null;
+    if (blocks.size >= 2) {
+      let minReductionPp = Infinity, maxReductionPp = -Infinity;
+      for (const counts of blocks.values()) {
+        const {reductionPp} = pooledBias(items, counts);
+        minReductionPp = Math.min(minReductionPp, reductionPp);
+        maxReductionPp = Math.max(maxReductionPp, reductionPp);
       }
+      bias.leaveOneBlockOut = {blocks:blocks.size, minReductionPp, maxReductionPp};
     }
-    const reductionPp = gaps.manual - gaps.journal;
-    return {quality, bias: {manualGapPp: gaps.manual, journalGapPp: gaps.journal, reductionPp,
-      reductionPct: gaps.manual > 0 ? 100 * reductionPp / gaps.manual : null, cases: [...items.values()]}};
+    return {quality, bias};
   }
 
   function analyze(input, kind = 'editor') {
@@ -244,7 +297,8 @@
     const eligible = new Set(blocks.filter(b => b.included).map(b => b.block));
     const sample = records.filter(r => eligible.has(Math.floor((r.ordinal - 1) / slots) + 1));
     const completed = records.filter(r => r.trials.length === slots).length;
-    const counts = {kind, enrolled: records.length, completed, included: sample.length, excluded: records.length - sample.length,
+    const counts = {kind, enrolled: records.length, completed, withdrawn: records.filter(r => r.withdrawn).length,
+      included: sample.length, excluded: records.length - sample.length,
       completeBlocks: eligible.size, pendingBlocks: blocks.length - eligible.size, blocks, trialCount: sample.length * slots,
       recordedTrials: records.reduce((total, record) => total + record.trials.length, 0)};
     counts.phases = phaseStats(sample);

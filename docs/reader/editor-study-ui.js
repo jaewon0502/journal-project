@@ -67,6 +67,12 @@
         let roster = mergeInvitations([], saved.invitations ?? []);
         const current = restored.find(r => r.participantId === saved.session?.id);
         if (saved.session && !current) throw new Error();
+        if (current) {
+          // Older workspaces could retain the confirmed withdrawal only in the current local session.
+          if (saved.session.state === 'withdrawn' && current.trials.length < 4) current.withdrawn = true;
+          if (current.withdrawn) saved.session.state = 'withdrawn';
+          if (current.trials.length === 4) saved.session.state = 'done';
+        }
         if (!participantOnly && current && !onRoster(roster, current.ordinal, current.participantId)) {
           // Older shared-device workspaces kept their locally enrolled session but no roster entry.
           roster = mergeInvitations(roster, [registration(current.ordinal, current.participantId, true)]);
@@ -147,17 +153,30 @@
     el('data-notice').classList.toggle('sample', demo);
     el('counts').replaceChildren(...['등록 ' + a.enrolled + '명', '4과제 완료 ' + a.completed + '명',
       '분석 ' + a.included + '명 · ' + a.trialCount + '건', '분석 미포함 ' + a.excluded + '명',
-      '완성 ' + a.completeBlocks + '묶음'].map(s => node('span', s)));
+      '중단 확인 ' + a.withdrawn + '명', '완성 ' + a.completeBlocks + '묶음'].map(s => node('span', s)));
     const t = a.time, b = a.bias;
     const timeTitle = t && t.reductionPct < 0 ? '검토 시간 증가율' : '검토 시간 절감률';
     const biasTitle = b && b.reductionPp < 0 ? '정당 표기별 사실 채택률 격차 증가' : '정당 표기별 사실 채택률 격차 감소';
-    el('metrics').replaceChildren(
-      metric(timeTitle, t && fmt(Math.abs(t.reductionPct)) + '%', t && [t.manualSeconds, t.journalSeconds], '초',
-        t ? '사례당 ' + fmt(Math.abs(t.savedSeconds)) + '초 ' + (t.savedSeconds >= 0 ? '단축' : '증가') : '사례 1건의 평균 검토 시간'),
-      metric(biasTitle, b && fmt(Math.abs(b.reductionPp)) + '%p', b && [b.manualGapPp, b.journalGapPp], '%p',
-        !b ? '성향 표지만 다른 두 조건의 사실 채택률 차이' : b.reductionPct == null ? '원자료 차이 0%p · 상대 감소율 산출 불가'
-          : '원자료 차이 대비 ' + fmt(Math.abs(b.reductionPct)) + '% ' + (b.reductionPct >= 0 ? '감소' : '증가'))
-    );
+    const timeCard = metric(timeTitle, t && fmt(Math.abs(t.reductionPct)) + '%', t && [t.manualSeconds, t.journalSeconds], '초',
+      t ? '사례당 평균 ' + fmt(Math.abs(t.savedSeconds)) + '초 ' + (t.savedSeconds >= 0 ? '단축' : '증가') : '사례 1건의 평균 검토 시간');
+    if (t) {
+      const median = t.medianSavedSeconds;
+      const change = median === 0 ? '차이 없음' : fmt(Math.abs(median)) + '초 ' + (median > 0 ? '단축' : '증가');
+      timeCard.append(node('small', '편집자별 시간 차이의 중앙값 ' + change),
+        node('small', '단축 ' + t.fasterEditors + '명 · 동일 ' + t.unchangedEditors + '명 · 증가 ' + t.slowerEditors + '명'));
+    }
+    const biasCard = metric(biasTitle, b && fmt(Math.abs(b.reductionPp)) + '%p', b && [b.manualGapPp, b.journalGapPp], '%p',
+      !b ? '성향 표지만 다른 두 조건의 사실 채택률 차이' : b.reductionPct == null ? '원자료 차이 0%p · 상대 감소율 산출 불가'
+        : '원자료 차이 대비 ' + fmt(Math.abs(b.reductionPct)) + '% ' + (b.reductionPct >= 0 ? '감소' : '증가'));
+    const range = b?.leaveOneBlockOut;
+    if (range) {
+      biasCard.append(node('small', '완성 ' + range.blocks + '묶음 중 하나씩 제외한 격차 감소폭 ' +
+        fmt(range.minReductionPp) + '%p ~ ' + fmt(range.maxReductionPp) + '%p. 음수는 격차 증가입니다.'),
+        node('small', '참여자 구성에 따른 변동 범위입니다. 통계적 신뢰구간이나 인과 효과를 추정하려면 별도 분석이 필요합니다.'));
+    } else {
+      biasCard.append(node('small', '완성 ' + a.completeBlocks + '묶음 · 하나씩 제외한 범위는 2묶음부터 계산합니다.'));
+    }
+    el('metrics').replaceChildren(timeCard, biasCard);
     const phases = a.phases;
     el('phase-counts').textContent = '전체 시간 분석 대상 ' + a.trialCount + '건 중 세 단계를 기록한 과제 ' + phases.availableTrials +
       '건. 단계별 비교에는 전원이 세 단계를 기록한 ' + phases.completeBlocks + '묶음 · ' + phases.included + '명 · ' + phases.trialCount + '건을 사용합니다.';
@@ -196,8 +215,8 @@
     table('cells', ['사례', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보'],
       b ? b.cases.map(c => [cases.get(c.caseId, 'A').title, count(c.manual.A), count(c.manual.B), count(c.journal.A), count(c.journal.B)]) : [],
       '완성된 묶음에서 각 표기별 분모를 집계합니다.');
-    table('blocks', ['묶음', '등록', '완료', '미등록 번호', '미완료 번호'], a.blocks.map(v => [
-      String(v.block), String(v.enrolled), String(v.completed), v.missingOrdinals.join(', ') || '—', v.unfinishedOrdinals.join(', ') || '—'
+    table('blocks', ['묶음', '등록', '완료', '미등록 번호', '미완료 번호', '그중 중단 확인 번호'], a.blocks.map(v => [
+      String(v.block), String(v.enrolled), String(v.completed), v.missingOrdinals.join(', ') || '—', v.unfinishedOrdinals.join(', ') || '—', v.withdrawnOrdinals.join(', ') || '—'
     ]), '등록된 배정 묶음이 없습니다.');
     el('manage-records').hidden = demo;
     showInvitations();
@@ -360,6 +379,7 @@
   }
   function withdraw() {
     if (!session || !confirm('제출한 과제는 미완료 참여 기록으로 보관됩니다. 이번 참여를 중단할까요?')) return;
+    records = core.mergeRecords(records, [{...currentRecord(), withdrawn:true}]);
     clearTaskState('withdrawn'); persist(); renderParticipant(); el('ended-heading').focus();
   }
   function mountJournal() {

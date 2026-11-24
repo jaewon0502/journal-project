@@ -352,3 +352,95 @@ test('공용 기기의 직접 등록은 백업에서 확인되며 예전 진행 
   await importFiles(moved, [JSON.stringify(direct.records[0])]);
   assert.match(moved.el('import-status').textContent, /현재 등록 1명/);
 });
+
+test('중단한 편집자의 개인 파일과 진행자 백업이 대기 중인 기록과 구분된다', async t => {
+  const coordinator = page(t);
+  coordinator.el('issue-codes').click();
+  const code = issuedCodes(coordinator).find(value => value.startsWith('J1-1-'));
+  const participant = page(t, '#participate', undefined, undefined, true);
+  participant.el('invite-code').value = code;
+  participant.el('qualified').checked = true;
+  participant.el('enroll').requestSubmit();
+  participant.el('begin-trial').click(); participant.advance(1500); participant.answer();
+  participant.w.confirm = () => true;
+  const participantFiles = captureDownloads(participant);
+  participant.el('export-one').click();
+  participant.el('withdraw').click(); participant.el('export-finished').click();
+  const [active, stopped] = await Promise.all(participantFiles.map(file => file.text()));
+  assert.equal(JSON.parse(stopped).withdrawn, true);
+  await importFiles(coordinator, [stopped, active]);
+  assert.match(coordinator.el('counts').textContent, /중단 확인 1명/);
+  assert.match(coordinator.el('counts').textContent, /분석 0명 · 0건/);
+  const backup = captureDownloads(coordinator);
+  coordinator.el('export-all').click();
+  const restored = page(t);
+  await importFiles(restored, [await backup[0].text()]);
+  assert.match(restored.el('counts').textContent, /중단 확인 1명/);
+  const id = JSON.parse(stopped).participantId;
+  const longer = {...completedRecord(1,id), trials:JSON.parse(stopped).trials.concat(completedRecord(1,id).trials.slice(1))};
+  await importFiles(restored, [JSON.stringify(longer)]);
+  assert.match(restored.el('import-status').textContent, /중단/);
+  assert.equal(restored.workspace().records[0].trials.length, 1);
+});
+
+test('이전 버전의 기기 상태에서 확인된 중단만 개인 파일에 복원한다', async t => {
+  const previous = page(t, '#participate');
+  previous.enroll(1);
+  previous.el('begin-trial').click(); previous.advance(1100); previous.answer();
+  const legacy = previous.workspace();
+  for (const state of ['ready', 'withdrawn']) {
+    const saved = structuredClone(legacy);
+    saved.session.state = state;
+    const restored = page(t, '#participate', undefined, saved);
+    const files = captureDownloads(restored);
+    restored.el(state === 'ready' ? 'export-one' : 'export-finished').click();
+    const record = JSON.parse(await files[0].text());
+    assert.equal(record.withdrawn, state === 'withdrawn' ? true : undefined);
+    assert.equal(record.trials.length, 1);
+  }
+});
+
+test('실제 네 명의 집단 평균이 개선되어도 개인별 중앙값 증가와 인원은 같은 카드에 표시한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const journal = [10000, 110000, 120000, 130000];
+  const records = p.workspace().invitations.map(invitation => {
+    const record = completedRecord(invitation.ordinal,invitation.id);
+    for (const trial of record.trials) trial.elapsedMs = trial.method === 'manual' ? 100000 : journal[invitation.ordinal-1];
+    return record;
+  });
+  await importFiles(p, records.map(record => JSON.stringify(record)));
+  const card = () => p.el('metrics').firstElementChild.textContent;
+  assert.match(card(),/시간 절감률7.5%/);
+  assert.match(card(),/중앙값 15초 증가/);
+  assert.match(card(),/단축 1명 · 동일 0명 · 증가 3명/);
+  p.el('demo-view').click();
+  assert.match(card(),/단축 8명 · 동일 0명 · 증가 0명/);
+  p.el('real-view').click();
+  assert.match(card(),/단축 1명 · 동일 0명 · 증가 3명/);
+});
+
+test('집계 화면에서 정당 격차 감소폭의 묶음별 범위를 실제 등록 파일로 계산한다', async t => {
+  const p = page(t);
+  const card = () => p.el('metrics').lastElementChild.textContent;
+  assert.match(card(), /완성 0묶음.*2묶음부터/);
+  for (let i=0; i<3; i++) p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    const block = Math.floor((inv.ordinal - 1) / 4);
+    for (const trial of record.trials) {
+      const side = (trial.method === 'manual' ? [1,1,-1] : [1,0,-1])[block];
+      trial.verdict = (side === 1 && trial.variant === 'A') || (side === -1 && trial.variant === 'B') ? 'supported' : 'insufficient';
+    }
+    return record;
+  }).sort((a,b) => a.ordinal - b.ordinal);
+  await importFiles(p, records.slice(0,7).map(record => JSON.stringify(record)));
+  assert.match(card(), /완성 1묶음.*2묶음부터/);
+  await importFiles(p, records.slice(7).map(record => JSON.stringify(record)));
+  assert.match(card(), /완성 3묶음.*-50%p ~ 50%p/);
+  assert.match(card(), /신뢰구간/);
+  p.el('demo-view').click();
+  assert.match(card(), /완성 2묶음.*0%p ~ 50%p/);
+  p.el('real-view').click();
+  assert.match(card(), /완성 3묶음.*-50%p ~ 50%p/);
+});
