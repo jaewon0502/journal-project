@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
 const engine = require('../docs/reader/factcheck-engine.js');
+const rubric = require('../docs/reader/article-rubric.js');
 const dir = path.join(__dirname, '../docs/reader');
 
 function workspace(article) {
@@ -83,6 +84,24 @@ test('가상 예시를 닫거나 비교 방식을 바꾸면 예시 수치가 지
   assert.match(p.el('output').textContent,/사실 판정 일치도/);
   p.el('example').click();
   assert.equal(p.el('result').hidden,true);
+});
+
+test('악화율 0% 옆에 원본에서 미평가 또는 해당 없음이었던 수정본의 중요한 왜곡을 보여 준다', async t => {
+  const p = page(t);
+  const source = {id:'doc', title:'시범 원표', url:'https://example.org/records', locator:'표 1', version:'1판', excerpt:'시범 노선 한 곳의 결과다.'};
+  const file = workspace('모든 노선에서 대기 시간이 줄었다.\n시범 노선 하나에서 조사했다.');
+  file.sources = [source];
+  const report = engine.report(file.article, [source], []), [lead, body] = report.rows;
+  const rating = level => ({level, rowId:lead.id, quote:lead.text, compareRowId:body.id, compareQuote:body.text,
+    sourceId:'doc', sourceQuote:source.excerpt, reason:'조사 범위를 비교했다.', impact:'전체 노선에서 확인한 결과처럼 읽힌다.'});
+  const saved = ratings => JSON.stringify({...file, articleAssessment:rubric.save(report, [source], {coreRowIds:[], ratings})});
+  p.load('left','원본.json', saved({wording:rating(0), framing:{level:'na', reason:'도입을 분리해 평가하지 않았다.'}}));
+  p.load('right','수정본.json', saved({wording:rating(0), framing:rating(3), omission:rating(2)}));
+  await p.settled(); p.el('ack').click(); p.el('compare').click();
+  const output = p.el('output').textContent;
+  assert.match(output, /중요한 왜곡 악화율0%.*0 \/ 1개/);
+  assert.match(output, /수정본의 중요한 왜곡 2개 중 원본도 2~3단계 0개 · 원본 0~1단계에서 악화 0개 · 원본 단계 비교 불가 2개/);
+  assert.match(output, /제목·도입부와 본문 · 원본 해당 없음, 근거 선택과 맥락 누락 · 원본 미평가/);
 });
 
 test('인용 속 충돌을 원기사 오류에서 분리하고 독립 편집자의 내용 판단 차이를 비교한다', async t => {

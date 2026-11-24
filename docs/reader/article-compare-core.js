@@ -21,6 +21,8 @@
       total: dimensions.length, paired: pairs.length, unpaired: dimensions.length - pairs.length,
       improved: ratio(important.filter(d => d.right < 2).length, important.length),
       pendingImportant: pendingImportant.map(d => d.title),
+      revisedImportantWithoutPrior: dimensions.filter(d => Number.isInteger(d.right) && d.right >= 2 && !Number.isInteger(d.left))
+        .map(d => ({title:d.title, prior:d.left})),
       worsened: ratio(minor.filter(d => d.right >= 2).length, minor.length),
       agreement: ratio(pairs.filter(d => d.left === d.right).length, pairs.length),
       largeDifferences: pairs.filter(d => Math.abs(d.left - d.right) >= 2).length

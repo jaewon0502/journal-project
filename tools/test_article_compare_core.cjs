@@ -41,6 +41,18 @@ test('수정 후 해당 없음이나 미평가인 기존 왜곡은 개선율 옆
   assert.deepEqual(compared.bias.pendingImportant, compared.dimensions.slice(1).map(d => d.title));
 });
 
+test('원본 미평가 및 해당 없음에서 수정본 중요 왜곡으로 판정한 항목은 확인한 악화와 구별한다', () => {
+  const before = snapshot({levels:{wording:1, framing:'na', standards:2}});
+  const after = snapshot({levels:{wording:0, framing:3, omission:2, standards:2}});
+  const {bias} = compare(before, after, 'revision');
+  assert.deepEqual(bias.worsened, ratio(0,1));
+  assert.deepEqual(bias.revisedImportantWithoutPrior, [
+    {title:'제목·도입부와 본문', prior:'na'}, {title:'근거 선택과 맥락 누락', prior:null}
+  ]);
+  assert.deepEqual(compare(after, before, 'revision').bias.pendingImportant,
+    bias.revisedImportantWithoutPrior.map(d => d.title));
+});
+
 test('중요한 왜곡의 개선·악화는 각각 비교 가능한 원본의 심각·경미 항목만 분모로 쓴다', () => {
   const original = snapshot({levels: {wording: 3, framing: 0, omission: 2, standards: 'na'}});
   const revision = snapshot({levels: {wording: 1, framing: 2, omission: 2, standards: 0}});

@@ -132,6 +132,14 @@
           '개 · 여전히 2~3단계 ' + (b.improved.denominator - b.improved.numerator) + '개 · 수정 후 단계 비교 불가 ' +
           b.pendingImportant.length + '개 (' + b.pendingImportant.join(', ') + ').', 'notice'));
       }
+      if (b.revisedImportantWithoutPrior.length) {
+        const continuing = b.improved.denominator - b.improved.numerator;
+        const unmatched = b.revisedImportantWithoutPrior;
+        const total = continuing + b.worsened.numerator + unmatched.length;
+        panel.append(element('p', '수정본의 중요한 왜곡 ' + total + '개 중 원본도 2~3단계 ' + continuing +
+          '개 · 원본 0~1단계에서 악화 ' + b.worsened.numerator + '개 · 원본 단계 비교 불가 ' + unmatched.length +
+          '개 (' + unmatched.map(d => d.title + ' · 원본 ' + level(d.prior)).join(', ') + ').', 'notice'));
+      }
       grid.append(card('중요한 왜곡 개선율', b.improved, '양쪽 채점 · 2~3단계에서 0~1단계로'),
         card('중요한 왜곡 악화율', b.worsened, '0~1단계에서 2~3단계로'));
     } else {
