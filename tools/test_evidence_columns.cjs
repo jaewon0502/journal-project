@@ -295,3 +295,67 @@ test('연도 행렬의 결측·중복·밀린 셀·다른 표를 건너뛰어 �
   assert.equal(columns.findYearMatrixCell(rates, '2023년 달성률은 몇 %p인가?'),null);
   assert.equal(columns.findYearMatrixCell(rates, '2023년 조정폭은 몇 퍼센트인가?'),null);
 });
+
+test('직접 볼 수 있는 행렬에는 원문 표제·단위 줄·빈 셀·줄 전체와 검색기 문단 번호가 남는다', () => {
+  const raw = '  | 정기 작업(건) | 1,005 |   |  ';
+  const source = ['','','  (단위: 건) ', '| 구분 | 2022년 | 2023년도 |', '|:---|---:|---:|', raw,
+    '| 야간 정비 | — | +8 |','',''].join('\r\n');
+  const matrix = columns.parseYearMatrix(source);
+  assert.deepEqual(matrix, {headerParagraph:2, headers:['구분','2022년','2023년도'], years:['2022','2023'],
+    rows:[{paragraph:4,label:'정기 작업(건)',values:['1,005',''],text:raw},
+      {paragraph:5,label:'야간 정비',values:['—','+8'],text:'| 야간 정비 | — | +8 |'}],
+    legend:{paragraph:1,text:'  (단위: 건) '}});
+  const {find} = require('../docs/reader/evidence-finder.js');
+  const passage = find(source,'정기 작업에서 나온 자료', {includeContext:true}).find(p => p.text === raw);
+  assert.equal(passage.paragraph, matrix.rows[0].paragraph);
+  for (const extra of ['\n다른 설명', '\n\n구분\t2022\t2023\n다른 행\t1\t2', '\f']) {
+    assert.equal(columns.parseYearMatrix(source + extra),null);
+  }
+  assert.equal(columns.parseYearMatrix('구분\t2022\t2023'),null);
+  const noLegend = columns.parseYearMatrix('대상\t2022\t2023\n지점별\t+7\t14');
+  assert.equal(noLegend.legend,null);
+  assert.deepEqual(noLegend.headers,['대상','2022','2023']);
+});
+
+test('긴 질문은 이름이 명시된 한 행으로만 이동하고 단위와 하위 집단을 대입하지 않는다', () => {
+  const source = '구분\t2022\t2023\n정기 정비\t7\t9\n정비\t6\t8\n반납\t11\t12\n갑\t3\t4';
+  const matrix = columns.parseYearMatrix(source);
+  const target = {headerParagraph:1, rowParagraph:2, rowLabel:'정기 정비',year:'2023'};
+  for (const q of ['2023년 정기 정비 중 특수 차량에 쓰인 금액은 몇 만 원이었나?',
+    '원문을 보면 2023년 별관에서 시행한 정기 정비에는 몇 명이 참여했나?',
+    '2023년에 정기정비의 전체 건수가 얼마였는지 확인할 수 있을까요?']) {
+    assert.equal(columns.findYearMatrixCell(matrix,q),null,q);
+    assert.deepEqual(columns.findYearMatrixRow(matrix,q),target,q);
+  }
+  for (const q of ['2023년 정기 정비와 정비 기록은?', '2023년 반납과 정기정비의 실적은?',
+    '2023년 미정비는 몇 건인가?', '2023년 정비소에서 작업했나?', '2023년 갑은 왜 많은가?',
+    '정기 정비 내역은?', '2024년 정기 정비 기록을 알려줘', '2022년부터 2023년까지 정기정비는?',
+    '올해 정기 정비는?', '2023년 정기 정비가 전년보다 얼마나 늘었나?', '2023년 정기 정비는 얼마나 늘어났나?',
+    '3월 자료를 보면 2023년에 정비는 얼마나 잦았나?']) {
+    assert.equal(columns.findYearMatrixRow(matrix,q),null,q);
+  }
+  assert.equal(columns.findYearMatrixRow(columns.parseYearMatrix(source+'\n정 비(건)\t0\t1'),'2023년 정비는?'),null);
+  const overlap = columns.parseYearMatrix('구분\t2022\t2023\n기록 센터\t1\t2\n센터 방문\t3\t4');
+  assert.equal(columns.findYearMatrixRow(overlap, '2023년 기록 센터 방문 현황을 알려줘'),null);
+});
+
+test('표의 기준과 네 위치의 인쇄 단위를 지키고 유니코드 공백 TSV 칸을 이동시키지 않는다', () => {
+  const header = '구분\t2023년\t2024년', row = '방문자 수(명)\t+5\t+8';
+  const q = '2024년 방문자 수는 몇 명인가?';
+  for (const stub of ['구분(전년 대비 증감)', '잠정 인원', '항목(유료 회원만)']) {
+    const matrix = columns.parseYearMatrix(header.replace('구분',stub) + '\n' + row);
+    assert.equal(matrix.headers[0],stub);
+    assert.equal(columns.findYearMatrixCell(matrix,q),null);
+    assert.deepEqual(columns.findYearMatrixRow(matrix,q),{headerParagraph:1,rowParagraph:2,rowLabel:'방문자 수(명)',year:'2024'});
+  }
+  for (const whitespace of ['', ' ', '\u00a0', '\u3000']) {
+    assert.equal(columns.parseYearMatrix(header + '\n' + whitespace + '\t' + row),null);
+    assert.equal(columns.parseYearMatrix(whitespace + '\t' + header + '\n' + row),null);
+  }
+  const source = '단위: 명\n구분(명)\t2023년\t2024년\n방문자 수(명)\t+5명\t−8명';
+  assert.equal(columns.findYearMatrixCell(columns.parseYearMatrix(source),q).value,'−8명');
+  for (const changed of [source.replace('단위: 명','단위: 천 명'),source.replace('구분(명)','구분(건)'),
+    source.replace('수(명)','수(천 명)'),source.replace('−8명','−8건')]) {
+    assert.equal(columns.findYearMatrixCell(columns.parseYearMatrix(changed),q),null);
+  }
+});

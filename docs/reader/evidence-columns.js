@@ -228,10 +228,14 @@
       .replace('킬로그램','kg').replace('킬로미터','km');
   }
 
+  function matrixNamePattern(label) {
+    return [...label.replace(/\s+/gu, '')].map(c => c.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')).join('\\s*');
+  }
+
   function matrixQuestion(text, label, unit) {
     // Require all qualifications to be accounted for by the dated row itself.
     // An unprinted district, program, comparison or denominator can be any noun.
-    const name = [...label.replace(/\s+/gu, '')].map(c => c.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')).join('\\s*');
+    const name = matrixNamePattern(label);
     const mention = new RegExp('(?<![\\p{L}\\p{N}])' + name + '(?:\\s*\\(\\s*(' + matrixUnit + ')\\s*\\))?' +
       '(?:에서는|에서|에는|의|은|는|이|가|을|를)?(?![\\p{L}\\p{N}])', 'iu');
     const named = mention.exec(text);
@@ -251,36 +255,36 @@
     return directEnding.test(rest) || Boolean(ask && claimEnding.test(rest));
   }
 
-  function findYearMatrixCell(documentText, query) {
-    if (typeof documentText !== 'string' || typeof query !== 'string' || documentText.includes('\f')) return null;
-    const normalized = query.normalize('NFKC');
-    const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
-    const asked = period?.requestedPeriod(normalized);
-    if (!asked || asked.month || asked.day) return null;
-    const question = normalized.replace(/(?<!\d)(?:19|20)\d{2}년(?:도)?(?:에는|에도|의|에|은|는)?/u, ' ');
-    const compact = question.replace(/\s+/gu, '');
+  function matrixLegend(text) {
+    const first = text.normalize('NFKC').trim();
+    return unitLine.exec(/^\(.*\)$/u.test(first) ? first.slice(1,-1).trim() : first)?.[1];
+  }
+
+  function matrixLine(line) {
+    if (!line) return null;
+    // The legacy grouped layout trims blank stubs. Here column 1 must really
+    // contain a label, even when a blank TSV cell contains Unicode whitespace.
+    const tab = line.indexOf('\t');
+    if ((tab >= 0 && !line.slice(0, tab).trim()) || /^\s*\|\s*\|/u.test(line)) return null;
+    return cellsOf(line);
+  }
+
+  function parseYearMatrix(documentText) {
+    if (typeof documentText !== 'string' || documentText.includes('\f')) return null;
     const lines = documentText.split(lineBreak);
     const start = lines.findIndex(line => line.trim());
     if (start < 0) return null;
     const block = lines.slice(start);
     while (block.length && !block.at(-1).trim()) block.pop();
-    const first = block[0].normalize('NFKC').trim();
-    const legend = unitLine.exec(/^\(.*\)$/u.test(first) ? first.slice(1,-1).trim() : first);
-    const index = legend ? 1 : 0;
-    // cellsOf also supports unlabeled stubs in legacy grouped layouts. Here
-    // a blank first cell would shift every physical column by one.
-    const split = line => line && !/^ *\t|^\s*\|\s*\|/u.test(line) ? cellsOf(line) : null;
-    const header = split(block[index]);
+    const index = matrixLegend(block[0]) ? 1 : 0;
+    const header = matrixLine(block[index]);
     if (!header || header.cells.length < 3 || !/[가-힣]/u.test(header.cells[0]) || yearCell.test(header.cells[0])) return null;
     const years = header.cells.slice(1).map(cell => yearCell.exec(cell)?.[1]);
-    const col = years.indexOf(asked.year) + 1;
-    if (!col || years.some(year => !year) || new Set(years).size !== years.length) return null;
-
-    const headerUnit = unitSuffix.exec(header.cells[0].normalize('NFKC'))?.[1];
+    if (years.some(year => !year) || new Set(years).size !== years.length) return null;
     const labels = new Set();
-    let match = null;
+    const rows = [];
     for (let i = index + 1; i < block.length; i++) {
-      const row = split(block[i]);
+      const row = matrixLine(block[i]);
       if (!row || row.kind !== header.kind || row.cells.length !== header.cells.length) return null;
       if (i === index + 1 && row.kind === 'pipe' && row.cells.every(cell => /^:?-{3,}:?$/u.test(cell))) continue;
       const [rowLabel, ...values] = row.cells;
@@ -289,10 +293,41 @@
       const key = label.replace(/\s+/gu, '');
       if (!/[가-힣]/u.test(label) || yearCell.test(label) || labels.has(key) || values.every(cell => yearCell.test(cell))) return null;
       labels.add(key);
-      const parsed = values.map(value => matrixValue.exec(value.normalize('NFKC')));
-      if (parsed.some((cell, n) => !cell && !/^(?:[-—–…]|)$/u.test(values[n]))) return null;
-      if (!parsed[col - 1] || !compact.includes(key)) continue;
-      const units = new Set([legend?.[1], headerUnit, unitSuffix.exec(printed)?.[1], parsed[col - 1][1]]
+      if (values.some(value => !matrixValue.test(value.normalize('NFKC')) && !/^(?:[-—–…]|)$/u.test(value))) return null;
+      rows.push({paragraph:i + 1, label:rowLabel, values, text:block[i]});
+    }
+    return rows.length ? {headerParagraph:index + 1, headers:header.cells, years, rows,
+      legend:index ? {paragraph:1, text:block[0]} : null} : null;
+  }
+
+  function matrixYear(matrix, query) {
+    if (!Array.isArray(matrix?.years) || !Array.isArray(matrix.headers) || !Array.isArray(matrix.rows) || typeof query !== 'string') return null;
+    const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
+    const asked = period?.requestedPeriod(query);
+    return asked && !asked.month && !asked.day && matrix.years.includes(asked.year) ? asked.year : null;
+  }
+
+  function findYearMatrixCell(source, query) {
+    const matrix = typeof source === 'string' ? parseYearMatrix(source) : source;
+    const year = matrixYear(matrix, query);
+    if (!year) return null;
+    // A named stub can change the meaning of every level in the grid (e.g.
+    // change since last year). Its digits are still available in the raw grid.
+    const stub = matrix.headers[0].normalize('NFKC');
+    if (!/^(?:구분|항목|지표|분류|범주)$/u.test(stub.replace(unitSuffix, '').replace(/\s+/gu, ''))) return null;
+    const col = matrix.years.indexOf(year);
+    const question = query.normalize('NFKC').replace(/(?<!\d)(?:19|20)\d{2}년(?:도)?(?:에는|에도|의|에|은|는)?/u, ' ');
+    const compact = question.replace(/\s+/gu, '');
+    const legendUnit = matrix.legend && matrixLegend(matrix.legend.text);
+    const headerUnit = unitSuffix.exec(stub)?.[1];
+    let match = null;
+    for (const row of matrix.rows) {
+      const printed = row.label.normalize('NFKC'), label = printed.replace(unitSuffix, '').trim();
+      const key = label.replace(/\s+/gu, '');
+      if (!compact.includes(key)) continue;
+      const value = matrixValue.exec(row.values[col].normalize('NFKC'));
+      if (!value) continue;
+      const units = new Set([legendUnit, headerUnit, unitSuffix.exec(printed)?.[1], value[1]]
         .filter(Boolean).map(normalizedMatrixUnit));
       // 건수 and 횟수 name their counting unit. Other measures, particularly
       // rates and money amounts, need an explicit printed unit for a unit query.
@@ -304,10 +339,39 @@
       }
       if (units.size > 1 || !matrixQuestion(question, label, [...units][0])) continue;
       if (match) return null;
-      match = {headerParagraph:index + 1, rowParagraph:i + 1, rowLabel, year:asked.year,
-        heading:header.cells[col], column:col + 1, value:row.cells[col]};
+      match = {headerParagraph:matrix.headerParagraph, rowParagraph:row.paragraph, rowLabel:row.label, year,
+        heading:matrix.headers[col + 1], column:col + 2, value:row.values[col]};
     }
     return match;
+  }
+
+  function findYearMatrixRow(matrix, query) {
+    const year = matrixYear(matrix, query);
+    if (!year) return null;
+    const text = query.normalize('NFKC');
+    if (/\d+\s*(?:월|일)|지난주|이듬해|보다(?:는|도|\s|$)|늘[었어난]|줄[었어인]|높아[지졌진]|낮아[지졌진]|올랐|내렸/u.test(text)) return null;
+    const compact = text.replace(/\s+/gu, '');
+    const mentions = [];
+    for (const row of matrix.rows) {
+      const name = row.label.normalize('NFKC').replace(unitSuffix, '').replace(/\s+/gu, '');
+      if (!compact.includes(name) || (name.match(/[\p{L}\p{N}]/gu) || []).length < 2) continue;
+      const term = new RegExp('(?<![\\p{L}\\p{N}])' + matrixNamePattern(name) +
+        '(?=(?:에서는|에서|으로는|으로|로|에는|에도|에|의|은|는|이|가|을|를|와|과|도|만)?(?![\\p{L}\\p{N}]))', 'gu');
+      for (const m of text.matchAll(term)) mentions.push({start:m.index, end:m.index + m[0].length, row});
+    }
+    // A shorter name inside a longer printed name is not a second request.
+    // A separately mentioned shorter name or a partial overlap is ambiguous.
+    mentions.sort((a,b) => a.start - b.start || b.end - a.end);
+    const rows = new Set();
+    let end = -1;
+    for (const m of mentions) {
+      if (m.end <= end) continue;
+      rows.add(m.row);
+      end = m.end;
+    }
+    if (rows.size !== 1) return null;
+    const [row] = rows;
+    return {headerParagraph:matrix.headerParagraph, rowParagraph:row.paragraph, rowLabel:row.label, year};
   }
 
   const levelCell = /^(\d+(?:\.\d+)?)(?:\(\s*([+−-]?\d+(?:\.\d+)?)\s*\))?$/u;
@@ -410,7 +474,7 @@
       legendParagraph:headerParagraph - (hasStub ? 3 : 2), comparisons} : null;
   }
 
-  const api = {forRow, inspectAnnualRow, annualMetricCell, findYearMatrixCell, changeNote};
+  const api = {forRow, inspectAnnualRow, annualMetricCell, parseYearMatrix, findYearMatrixCell, findYearMatrixRow, changeNote};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceColumns = api;
 })(globalThis);
