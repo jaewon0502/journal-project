@@ -148,3 +148,27 @@ test('오답과 중도 종료의 채점 시간도 합산하고, 하나의 시계
   assert.match(text,/참여자 전체 시간 0\/1건 · 진행자 전체 시간 1\/1건/);
   assert.doesNotMatch(text,/저널의 성공당 인력 시간/);
 });
+
+test('새 기준은 시간을 재확정하도록 하고, 빠진 구간이나 여러 답안에 복사된 시간 기록을 구별한다', async t => {
+  const p = page(t);
+  await p.upload('key-file',key);
+  await p.upload('imports',trial(1,'manual',60000),trial(2,'journal',40000));
+  for (const n of [1,2]) {
+    p.click(n,'측정 시작'); p.wait(2000); p.grade(n,'근거 위치'); p.grade(n,'판단 이유');
+    if (n===2) p.click(n,'빠진 시간 표시');
+    p.click(n,'채점 시간 확정');
+  }
+  const original = await p.save();
+  assert.match(p.person(),/진행자 전체 시간 0\/1건/);
+  const changed = structuredClone(key);
+  changed.tasks.find(row=>row.id===task.id).explanation += ' 연간 통계의 연령 분모를 확인.';
+  await p.upload('key-file',changed);
+  const refreshed = await p.save();
+  assert.ok(refreshed.entries.every(e=>e.gradingTime.status==='paused' && e.gradingTime.ms===2000));
+  const invalid = structuredClone(original);
+  invalid.entries[1].gradingTime.id = invalid.entries[0].gradingTime.id;
+  const fresh = page(t);
+  await fresh.upload('imports',invalid);
+  assert.match(fresh.el('status').textContent,/서로 다른 답안에서 같은 진행자 시간 기록/);
+  assert.equal(fresh.el('entries').children.length,0);
+});
