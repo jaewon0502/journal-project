@@ -3,6 +3,7 @@
   const c = window.JournalFieldReview,
     el = (id) => document.getElementById(id);
   const assignedCase = el('case-file').dataset.caseId;
+  const fixedMethod = el('method').disabled;
   const key = assignedCase
     ? 'journal-natural-trial-v1:' + JSON.stringify([assignedCase, el('method').value])
     : 'journal-natural-trial-v1';
@@ -11,6 +12,7 @@
   let pack = null,
     session = null,
     generation = 0;
+  let inviteActive = false, assignment = null, inviteRevision = 0;
   function message(s) {
     el('status').textContent = s;
   }
@@ -48,7 +50,11 @@
     el('work').hidden = !session || !!session.result;
     el('ended').hidden = !session?.result;
     if (!session) {
-      el('start').disabled = !pack || !el('task').value || !el('participant').value.trim();
+      el('participant').disabled = el('task').disabled = inviteActive;
+      el('method').disabled = fixedMethod || inviteActive;
+      el('manual-entry').hidden = !inviteActive;
+      el('apply-invite').disabled = !pack || !el('invite-code').value.trim() || !!assignment;
+      el('start').disabled = !pack || (inviteActive && !assignment) || !el('task').value || !el('participant').value.trim();
       return;
     }
     if (session.result) {
@@ -95,9 +101,59 @@
     message('');
     render();
   }
+  function resetInvite(keepCode = false) {
+    inviteRevision++;
+    assignment = null;
+    if (inviteActive) {
+      el('participant').value = '';
+      el('task').selectedIndex = el('method').selectedIndex = 0;
+    }
+    if (!keepCode) el('invite-code').value = '';
+    inviteActive = keepCode && inviteActive;
+    el('invite-status').textContent = inviteActive ? '새 과제 파일에서 배정 코드를 다시 확인하세요.' : '';
+  }
+  el('invite-code').oninput = () => {
+    inviteRevision++;
+    inviteActive = true;
+    assignment = null;
+    el('participant').value = '';
+    el('task').value = '';
+    el('invite-status').textContent = pack ? '' : '먼저 진행자가 보낸 배포본을 열거나 과제 파일을 선택하세요.';
+    render();
+  };
+  el('manual-entry').onclick = () => {
+    resetInvite();
+    render();
+    el('task').focus();
+  };
+  el('apply-invite').onclick = async () => {
+    const code = el('invite-code').value.trim();
+    if (!code || !pack || session) return;
+    const revision = ++inviteRevision;
+    inviteActive = true;
+    assignment = null;
+    render();
+    el('apply-invite').disabled = true;
+    el('invite-status').textContent = '배정 코드를 확인하는 중입니다.';
+    try {
+      const methods = [...el('method').options].map(option => option.value);
+      const row = await window.JournalFieldInvite.match(code, pack, methods);
+      if (inviteRevision !== revision) return;
+      assignment = row;
+      el('participant').value = row.participant;
+      el('task').value = row.taskId;
+      el('method').value = row.method;
+      el('invite-status').textContent = '배정한 과제와 방식을 확인했습니다. 참여 구분을 고른 뒤 측정을 시작하세요.';
+    } catch (err) {
+      if (inviteRevision !== revision) return;
+      el('invite-status').textContent = err.message;
+    }
+    render();
+  };
   el('case-file').onchange = async (e) => {
     const gen = ++generation,
       file = e.target.files[0];
+    resetInvite(true);
     pack = null;
     el('task').replaceChildren();
     el('case-name').textContent = '';
@@ -114,19 +170,18 @@
   el('task').onchange = render;
   el('participant').oninput = render;
   el('start').onclick = () => {
-    if (session || !pack || !el('participant').value.trim()) return;
+    if (session || !pack || (inviteActive && !assignment) || !el('participant').value.trim()) return;
     const t = pack.tasks.find((v) => v.id === el('task').value);
     if (!t) return;
+    const selected = assignment || {
+      participant:el('participant').value.trim(), method:el('method').value,
+      caseId:pack.caseId, taskId:t.id, prompt:t.prompt, articleUrl:pack.articleUrl
+    };
     const base = {
       format: c.format,
       id: crypto.randomUUID(),
-      participant: el('participant').value.trim(),
       kind: el('kind').value,
-      method: el('method').value,
-      caseId: pack.caseId,
-      taskId: t.id,
-      prompt: t.prompt,
-      articleUrl: pack.articleUrl
+      ...selected
     };
     session = {
       base,
@@ -206,6 +261,9 @@
   el('next').onclick = () => {
     if (!confirm('현재 기록을 파일로 저장했는지 확인하세요. 새 과제로 이동할까요?')) return;
     session = null;
+    resetInvite();
+    for (const id of ['question','article-link','tool-link','end-summary','clock']) el(id).replaceChildren();
+    for (const field of fields) el(field).value = '';
     el('participant').value = '';
     for (const id of ['task', 'method', 'kind']) el(id).selectedIndex = 0;
     persist();
