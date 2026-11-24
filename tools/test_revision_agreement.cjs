@@ -8,7 +8,7 @@ const rubric = require('../docs/reader/article-rubric.js');
 const workspace = require('../docs/reader/workspace-snapshot.js');
 const comparison = require('../docs/reader/article-compare-core.js');
 const blind = require('../docs/reader/blind-revision.js');
-const {compare} = require('../docs/reader/revision-agreement.js');
+const {compare, recordFields} = require('../docs/reader/revision-agreement.js');
 
 function work(article, version) {
   const source = {id:'budget', title:'예산표', url:'https://office.example/budget', version,
@@ -48,8 +48,8 @@ async function assignment(editor, [beforeLevels, afterLevels] = [{}, {}], articl
 const ratio = (numerator, denominator) => ({numerator, denominator, pct:denominator ? 100 * numerator / denominator : null});
 const individual = review => comparison.compare(workspace.read(review.before), workspace.read(review.after), 'revision');
 
-function recordRow(work, decision) {
-  const row = engine.report(work.article, work.sources).rows[0];
+function recordRow(work, decision, index = 0) {
+  const row = engine.report(work.article, work.sources).rows[index];
   work.receipts = [engine.decide(row, {acknowledged:true, reason:'구간과 원자료를 대조했다.',
     sourceIds:[work.sources[0].id], ...decision}, work.sources)];
 }
@@ -101,6 +101,57 @@ test('편집자별 개선율이 모두 100%여도 개선한 기준이 다르면 
   assert.deepEqual(result.improved, ratio(0, 0));
   assert.deepEqual(result.worsened, ratio(0, 0));
   assert.deepEqual([result.total, result.paired, result.unpaired, result.disagreed], [4, 2, 2, 2]);
+});
+
+test('새 주장으로 판정 수가 유지돼도 공동 지지했던 원본 구절과 수정본 위치를 개별적으로 연결한다', async () => {
+  const mixedText = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
+  const before = ['첫 보도다.', '참석자는 50명이었다.', mixedText, '조사 결과다.', '두 지역이 포함됐다.',
+    '자료는 공개됐다.', '사업비는 10억 원이다.'];
+  const after = [...before.slice(0, -1), '접수처는 두 곳이다.'];
+  const mixed = {status:'mixed', factSpan:'시청은 시범 운영을 마쳤고', opinionSpan:'사업은 기대 이상이다.'};
+  const articles = [work(before.join('\n'), '초판'), work(after.join('\n'), '초판')];
+  const reviews = await Promise.all([0, 1].map(editor => assignment(editor, [{wording:2}, {wording:0}], articles,
+    (original, revised) => {
+      for (const edition of [original, revised]) {
+        const statuses = edition === original ? ['fact', 'fact', 'fact', null, 'fact', 'held', 'fact']
+          : ['fact', 'held', mixed, 'fact', 'fact', 'fact', 'fact'];
+        const rows = engine.prepare(edition.article, edition.sources).rows;
+        edition.receipts = rows.flatMap((row, i) => {
+          const status = statuses[i];
+          if (!status) return [];
+          const decision = typeof status === 'string' ? {status} : status;
+          return [engine.decide(row, {sourceIds:[edition.sources[0].id], acknowledged:true, reason:'기록 ' + editor + '에서 대조했다.',
+            ...decision}, edition.sources)];
+        });
+      }
+    })));
+  // Copy one actual saved verdict between editors. That passage no longer has independent support.
+  reviews[1].before.receipts[3] = structuredClone(reviews[0].before.receipts[3]);
+  rate(reviews[1].before, {wording:2});
+  const result = compare(...reviews);
+  const expected = [[0,0], [1,1], [2,2], [6,null]];
+  assert.deepEqual(result.improved, ratio(1,1));
+  assert.deepEqual(result.factMatches, expected);
+  assert.deepEqual(result.facts.before.map(f => f.outcome), ['supported','supported','supported','pending','shared','pending','supported']);
+  assert.deepEqual(result.factMatches.map(([, after]) => after === null ? null : result.facts.after[after].outcome),
+    ['supported','pending','limited',null]);
+  assert.deepEqual(compare(reviews[1], reviews[0]).factMatches, expected);
+  result.factMatches[0][1] = null;
+  const saved = recordFields(result, reviews[0].key);
+  assert.deepEqual(saved.factMatches, expected);
+  saved.factMatches[1][1] = 0;
+  assert.deepEqual(recordFields(result, reviews[1].key).factMatches, expected);
+});
+
+test('도입부가 추가되면 문맥이 유지된 공동 지지 구절은 수정본에서 옮겨진 순번으로 이어진다', async () => {
+  const original = '도입부다.\n지역 현황이다.\n참석자는 50명이었다.\n공식 집계다.';
+  const articles = [work(original, '초판'), work('편집 안내다.\n' + original, '초판')];
+  const reviews = await Promise.all([0, 1].map(editor => assignment(editor, undefined, articles, (before, after) => {
+    const decision = {status:'fact', reason:'편집자 ' + editor + '가 명부를 확인했다.'};
+    recordRow(before, decision, 2);
+    recordRow(after, decision, 3);
+  })));
+  assert.deepEqual(compare(...reviews).factMatches, [[2,3]]);
 });
 
 test('서로 반대인 A·B 배정, 판본별로 다른 원자료, 로컬 자료 번호와 중복 등록을 처리한다', async () => {

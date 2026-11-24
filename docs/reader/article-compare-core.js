@@ -42,6 +42,12 @@
     return [...selected].filter(([key]) => !other.has(key)).map(([, id]) => id);
   }
 
+  function fullySupported(decision, row) {
+    if (decision?.category !== 'supported') return false;
+    const r = row.receipt;
+    return r.status === 'fact' || (r.status === 'attribution' && r.contentStatus === 'supported');
+  }
+
   function reviewFacts(left, right) {
     const leftAccuracy = left.assessment.accuracy, rightAccuracy = right.assessment.accuracy;
     const leftCore = new Set(leftAccuracy.coreRowIds), rightCore = new Set(rightAccuracy.coreRowIds);
@@ -62,8 +68,7 @@
       const leftRow = leftRows.get(a.rowId), rightRow = rightRows.get(b.rowId);
       const receipt = leftRow.receipt;
       // A matching supported judgment can cover only a factual span or the attribution of an opinion.
-      const limitedAgreement = sameJudgment === true && a.category === 'supported' &&
-        (receipt.status === 'mixed' || (receipt.status === 'attribution' && receipt.contentStatus === 'opinion'));
+      const limitedAgreement = sameJudgment === true && a.category === 'supported' && !fullySupported(a, leftRow);
       // A copied exclusion cannot remove a passage from the independent review denominator.
       // Partial, held and unchecked decisions stay unresolved even if their receipts match.
       const sameReceipt = a.category !== 'unresolved' && b.category !== 'unresolved' &&
@@ -111,31 +116,38 @@
     return index;
   }
 
+  // Row IDs encode offsets. Across different editions, link only a single location
+  // whose wording and immediate context identify one row in each edition.
+  function matchRevisionRows(before, after) {
+    if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
+    const original = uniqueRows(before.rows), revised = uniqueRows(after.rows);
+    const matches = new Map();
+    for (const row of before.rows) {
+      if (row.positions.length !== 1) continue;
+      const key = rowFingerprint(row);
+      const target = revised.get(key);
+      if (original.get(key) === row.id && target != null) matches.set(row.id, target);
+    }
+    return matches;
+  }
+
   function revisionDetails(left, right) {
     const sameArticle = left.article === right.article;
     const originalDecisions = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const revisedDecisions = new Map(right.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const rightById = new Map(right.rows.map(r => [r.id, r]));
-    const oldRows = sameArticle ? null : uniqueRows(left.rows);
-    const newRows = sameArticle ? null : uniqueRows(right.rows);
+    const matched = matchRevisionRows(left, right);
+    const priorIds = new Map(Array.from(matched, ([before, after]) => [after, before]));
     const revisedWording = sameArticle ? null : uniqueRows(right.rows, row => row.text);
     const proposedCorrections = sameArticle ? null : uniqueRows(
       left.rows.filter(row => row.receipt?.correction), row => row.receipt.correction.trim()
     );
-    function matchingId(row, from, to) {
-      if (sameArticle) return row.id;
-      // An offset alone may now point at a rewritten claim. Each version must
-      // have one unambiguous occurrence of the wording in matching context.
-      if (row.positions.length !== 1) return null;
-      const key = rowFingerprint(row);
-      return from.get(key) === row.id ? to.get(key) : null;
-    }
     const groups = () => ({newlyObserved: [], unmatched: [], persisting: [], scopeChanged: []});
     const conflicts = groups(), quotedConflicts = groups();
     for (const decision of right.assessment.accuracy.rows) {
       if (decision.category !== 'contradicted' && decision.category !== 'quotedConflict') continue;
       const row = rightById.get(decision.rowId);
-      const priorDecision = originalDecisions.get(matchingId(row, newRows, oldRows)) ?? null;
+      const priorDecision = originalDecisions.get(priorIds.get(row.id)) ?? null;
       const entry = {rowId: row.id, text: row.text, previous: priorDecision?.category ?? null, priorDecision, revised: decision};
       const inventory = decision.category === 'quotedConflict' ? quotedConflicts : conflicts;
       if (!priorDecision) inventory.unmatched.push(entry);
@@ -144,14 +156,18 @@
       else inventory.newlyObserved.push(entry);
     }
     const core = new Set(left.assessment.accuracy.coreRowIds);
-    const untracedCore = [], originalConflicts = [], originalQuotedConflicts = [];
+    const untracedCore = [], originalConflicts = [], originalQuotedConflicts = [], originalSupported = [];
     for (const row of left.rows) {
       const original = originalDecisions.get(row.id);
       const category = original.category;
       const originalConflict = category === 'contradicted' || category === 'quotedConflict';
-      if (!originalConflict && !core.has(row.id)) continue;
-      const revised = revisedDecisions.get(matchingId(row, oldRows, newRows)) ?? null;
+      const supported = fullySupported(original, row);
+      if (!supported && !originalConflict && !core.has(row.id)) continue;
+      const revisedId = matched.get(row.id);
+      const revised = revisedDecisions.get(revisedId) ?? null;
       const entry = {rowId: row.id, text: row.text};
+      if (supported) originalSupported.push({...entry, original, revised,
+        revisedFullySupported: fullySupported(revised, rightById.get(revisedId))});
       if (!revised && core.has(row.id)) untracedCore.push(entry);
       if (originalConflict) {
         const conflict = {...entry, original, revised};
@@ -166,7 +182,7 @@
         else originalConflicts.push(conflict);
       }
     }
-    return {conflicts, quotedConflicts, untracedCore, originalConflicts, originalQuotedConflicts};
+    return {conflicts, quotedConflicts, untracedCore, originalConflicts, originalQuotedConflicts, originalSupported};
   }
 
   function compare(left, right, mode) {
@@ -187,7 +203,7 @@
     return result;
   }
 
-  const api = Object.freeze({compare});
+  const api = Object.freeze({compare, matchRevisionRows});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalArticleCompare = api;
 })(globalThis);

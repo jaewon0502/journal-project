@@ -227,6 +227,45 @@ test('수정 전 충돌 구절은 다른 사실로 대체해 판정 수가 같�
   assert.deepEqual(r.originalConflicts, [{rowId: left.rows[0].id, text: left.rows[0].text, original:left.assessment.accuracy.rows[0], revised: null}]);
 });
 
+test('평가자가 핵심으로 고르지 않은 지지 구절도 두 판본의 실제 문구와 확인 범위를 대조한다', () => {
+  const mixedText = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
+  const lines = ['첫 보도다.', mixedText, '조사 결과다.', '회의는 어제 열렸다.', '사업비는 10억 원이다.'];
+  const left = snapshot({article:lines.join('\n'), states:['fact', 'fact', null, 'fact', 'fact']});
+  const mixed = {status:'mixed', factSpan:'시청은 시범 운영을 마쳤고', opinionSpan:'사업은 기대 이상이다.'};
+  const revisedLines = [...lines.slice(0, -1), '접수처는 두 곳이다.'];
+  const right = snapshot({article:revisedLines.join('\n'), states:['fact', mixed, null, 'fact', 'fact']});
+  const result = compare(left, right, 'revision');
+  assert.equal(result.accuracy.left.supported, result.accuracy.right.supported);
+  assert.equal(result.untracedCore.length, 0);
+  assert.deepEqual(result.originalSupported.map(e => [e.text, e.revised?.label ?? null, e.revisedFullySupported]), [
+    [lines[0], '원자료 지지', true], [mixedText, '사실 구절만 지지', false],
+    [lines[3], null, false], [lines[4], null, false]
+  ]);
+  assert.deepEqual(result.originalSupported[1].original, left.assessment.accuracy.rows[1]);
+  assert.equal(result.originalSupported[1].revised.scope, mixed.factSpan);
+  assert.ok(!compare(right, left, 'revision').originalSupported.some(e => e.text === mixedText));
+  assert.equal(compare(left, snapshot({article:lines.slice(0, -1).join('\n')}), 'revision')
+    .originalSupported.at(-1).revised, null);
+});
+
+test('반복 구절은 위치가 모호하면 연결하지 않고 인용 속 발언의 의견과 검증된 사실을 구별한다', () => {
+  const repeat = '이 회의는 비공개였다.';
+  const article = ['도입이다.', repeat, repeat, '취재 기록이다.'].join('\n');
+  const first = snapshot({article, states:[null, 'fact']});
+  assert.equal(compare(first, first, 'revision').originalSupported[0].revisedFullySupported, true);
+  const second = snapshot({article:article + '\n기록을 덧붙인다.', states:[null, 'fact']});
+  assert.equal(compare(first, second, 'revision').originalSupported[0].revised, null);
+  const quote = '위원장은 “참석자는 50명”이라고 말했다.';
+  const catalog = [...sources, {id:'roster', title:'명부', url:'https://example.invalid/roster', version:'확정본', locator:'1쪽', excerpt:'50명'}];
+  const speech = {status:'attribution', sourceIds:['doc']};
+  const full = snapshot({article:quote, sources:catalog, states:[{...speech, contentStatus:'supported',
+    contentChecked:true, contentSourceIds:['roster'], contentReason:'명부와 대조했다.'}]});
+  const opinion = snapshot({article:'위원장은 “이 결정은 부당하다”고 말했다.', sources:catalog,
+    states:[{...speech, contentStatus:'opinion', contentChecked:true, contentReason:'정책에 대한 발언자의 평가다.'}]});
+  assert.equal(compare(full, full, 'revision').originalSupported[0].revisedFullySupported, true);
+  assert.deepEqual(compare(opinion, full, 'revision').originalSupported, []);
+});
+
 test('원본 충돌의 후속 판정을 미결·의견·부분 범위까지 현재 구간의 실제 판정에서 읽는다', () => {
   const article = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
   const left = snapshot({article, states: ['contradicted']});

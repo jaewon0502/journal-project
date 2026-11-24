@@ -36,7 +36,8 @@
       if (state) missingReturns.push({editor, role, state});
       return view;
     });
-    return comparison.compare(views[0], views[1], 'reviewers');
+    const {dimensions, facts} = comparison.compare(views[0], views[1], 'reviewers');
+    return {view: views[0], dimensions, facts};
   }
 
   function jointFact(row) {
@@ -120,7 +121,7 @@
   function recordFields(joint, key) {
     const saved = savedComparison(joint, key);
     if (!saved.completeReturns) throw new Error('각 편집자의 원본과 수정본 네 파일에 구절 판정이나 편향 평가를 하나 이상 기록한 뒤 요약을 저장하세요.');
-    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts)};
+    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts), factMatches: JSON.parse(saved.factMatches)};
   }
 
   function compare(first, second) {
@@ -136,9 +137,18 @@
       id: d.id, title: d.title, first: transition(d.left, afterById.get(d.id).left), second: transition(d.right, afterById.get(d.id).right)
     }));
     const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
-    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, missingReturns};
+    const matched = comparison.matchRevisionRows(before.view, after.view);
+    const revisedIndexes = new Map(after.facts.rows.map((row, index) => [row.rowId, index]));
+    const factMatches = [];
+    for (const [index, fact] of facts.before.entries()) {
+      if (fact.outcome !== 'supported') continue;
+      const revisedId = matched.get(before.facts.rows[index].rowId);
+      factMatches.push([index, revisedIndexes.get(revisedId) ?? null]);
+    }
+    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, factMatches, missingReturns};
     const scores = ({before, after}) => ({before, after});
     compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], completeReturns: !missingReturns.length, facts: JSON.stringify(facts),
+      factMatches: JSON.stringify(factMatches),
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }
