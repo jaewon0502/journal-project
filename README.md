@@ -23,7 +23,7 @@
 | 측정 대상 | 확인한 결과 |
 |---|---|
 | 교통사고 통계 속 잘못 인용한 수치 | 2021~2025년 원표에 대해 최초 측정에서는 첫 후보가 정답 행인 경우가 2/4였습니다. 연도·지표를 구분하도록 보완한 뒤 같은 문항을 재시험해 4/4가 됐습니다. 2024년 사망자 수 질문에서 2023년의 2,551명보다 2024년의 2,521명이 있는 행을 먼저 보여 줍니다. [질문·판본별 결과](experiments/evidence-retrieval-transfer/nov25/README.md) |
-| 새 산업통상부 통계의 원문 수치 열 | 처음 보는 KS 통계에서 첫 후보는 4/4 모두 올바른 연도였습니다. 후보판은 자연스럽게 풀어 쓴 질문에서 정확한 열을 한 건도 자동 안내하지 못했습니다. [최초 결과와 측정 기준](experiments/evidence-retrieval-transfer/annual-cells/README.md) |
+| 새 산업통상부 통계의 원문 수치 열 | 처음 보는 KS 통계에서 첫 후보는 4/4 모두 올바른 연도였습니다. 처음에는 정확한 열을 한 건도 자동 안내하지 못했고, 같은 질문으로 재시험한 결과는 3/4였습니다. 나머지 한 문항은 해당 연도의 머리글과 값을 펼쳐 직접 확인할 수 있습니다. [최초 결과와 재시험](experiments/evidence-retrieval-transfer/annual-cells/README.md) |
 | 처음 보는 표에서 정답 행 찾기 | 교통·선거, 산불, 독서 통계에 처음 적용한 세 버전에서 첫 후보 적중은 기준선 11/20 → 9/20, 상위 세 후보는 12/20 → 12/20이었습니다. 세 자료의 오류를 보고 보완한 뒤에는 같은 20문항 모두 첫 후보에 나왔습니다. [최초 시험](experiments/evidence-retrieval-transfer/README.md) · [공개 후 재시험](experiments/evidence-retrieval-transfer/retest-51467c1e/README.md) |
 | 보완한 한 버전을 새 자료 두 개에 동시에 적용 | 관세청·한국소비자원 자료의 첫 후보 적중은 3/6 → 4/6, 상위 세 후보는 4/6 → 4/6이었습니다. 놓쳤던 관세청 수출액·수입 감소율을 보완한 뒤 같은 6문항을 다시 풀면 6개 모두 첫 후보에 나오고, 자료에 없는 수출 중량·환급 총액은 화면에 미확인으로 표시됩니다. [최초 결과](experiments/evidence-retrieval-transfer/prospective/README.md) · [수정 후 재시험](experiments/evidence-retrieval-transfer/after-prospective/README.md) |
 | 실제 기사에서 지표명이 빠진 문장 | 고용 기사 세 문장만으로 통계청 91쪽 PDF에서 정답 행을 찾은 경우는 1/3이었습니다. 나머지 두 문장에는 편집자가 기사 제목을 함께 검색하면 첫 후보에 해당 표의 원문 행이 나왔습니다. [기사와 재현 방법](experiments/labour-field-review/README.md) |
