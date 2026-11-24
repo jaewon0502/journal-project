@@ -262,6 +262,22 @@ test('이전 자동 채점의 기준이 없으면 재채점하고 수동 채점 
   assert.match(p.el('groups').textContent, /판정 일치율 100.0%/);
 });
 
+test('진행자가 대체 공식 게시물과 발행 시점 설명을 열어 고용 과제의 근거를 재확인한다', async t => {
+  const key = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../experiments/labour-field-review/coordinator-key.json')));
+  const task = key.tasks.find(item => item.id === 'labour-period');
+  const boardUrl = task.reference.acceptedDocuments.find(value => value.includes('/board.es?'));
+  const p = page(t, 'field-summary');
+  await p.upload('imports', trial({ kind: 'editor', caseId: key.caseId, articleUrl: key.articleUrl,
+    taskId: task.id, prompt: task.prompt, documentUrl: boardUrl, verdict: task.verdict }));
+  await p.upload('key-file', key);
+  const details = p.el('entries').querySelector('details');
+  assert.equal(details.querySelector('summary').textContent, '채점 근거와 추가 허용 자료');
+  assert.ok(details.textContent.includes(task.explanation));
+  const links = [...details.querySelectorAll('a')];
+  assert.deepEqual(links.map(a => a.href), [boardUrl]);
+  assert.match(links[0].rel, /noopener/);
+});
+
 test('같은 기사·문장의 시간 절감률과 같은 시간 표본의 판정·위치 일치를 함께 표시한다', async (t) => {
   const p = page(t, 'field-summary');
   const a = trial({ kind: 'editor', phaseMs: { search: 9000, locate: 9000, decide: 2000 } });
@@ -294,6 +310,55 @@ test('시간이 늘거나 기준 시간이 0초인 과제의 차이와 비율을
   assert.equal(result(0, 500).savedPct, null);
 });
 
+test('검증 성공 한 건의 투입 시간에 실패와 중도 종료를 포함하고 판정 전에는 수치를 보류한다', async t => {
+  const p = page(t, 'field-summary');
+  const make = (id, method, seconds, extra = {}) => trial({
+    id, participant: id, kind: 'editor', method,
+    phaseMs: { search: seconds * 1000, locate: 0, decide: 0 }, ...extra
+  });
+  const manual = make('manual', 'manual', 60);
+  const journal = make('journal', 'journal', 10);
+  const missed = make('missed', 'journal', 10, { found: 'missing' });
+  const stopped = make('stopped', 'journal', 70, { status: 'withdrawn' });
+  await p.upload('key-file', gradingKey);
+  await p.upload('imports', manual, journal, missed, stopped,
+    make('restored', 'journal', 500, { recovered: true }),
+    make('restored-stop', 'journal', 500, { status: 'withdrawn', recovered: true }));
+  const comparison = () => p.el('comparisons').textContent;
+  assert.match(comparison(), /50\.0초 절감 \(83\.3%\)/);
+  assert.match(comparison(), /총 90\.0초 \(완료 2건, 중도 종료 1건\) · 검증 성공 0건 · 성공 여부 확인 대기 1건/);
+  const grades = p.el('entries').querySelectorAll('select');
+  grades[0].value = 'yes';
+  grades[0].onchange();
+  assert.doesNotMatch(comparison(), /검증 성공 1건당 30\.0초/);
+  grades[1].value = 'yes';
+  grades[1].onchange();
+  assert.match(comparison(), /검증 성공 1건당 30\.0초 더 걸림 \(50\.0%\)/);
+  assert.match(comparison(), /평소 검증 도구와 저널 · 90\.0초\/건/);
+  const restored = page(t, 'field-summary');
+  await restored.upload('imports', await p.download('save'));
+  assert.equal(restored.el('comparisons').textContent, comparison());
+  grades[1].value = 'no';
+  grades[1].onchange();
+  assert.match(comparison(), /총 90\.0초 \(완료 2건, 중도 종료 1건\) · 검증 성공 0건 · 성공 여부 확인 대기 0건/);
+  assert.doesNotMatch(comparison(), /검증 성공 1건당 30\.0초/);
+});
+
+test('한 항목의 실패가 확정되면 나머지 채점이 끝나지 않아도 실패한 시간은 유지한다', () => {
+  const entries = [
+    { trial: trial(), locationGrade: 'yes', verdictGrade: 'yes' },
+    { trial: trial({ found: 'missing' }), locationGrade: '', verdictGrade: '' },
+    { trial: trial(), locationGrade: '', verdictGrade: 'no' },
+    { trial: trial({ status: 'withdrawn' }) }
+  ];
+  const [task] = c.compareTimes(c.group(entries));
+  assert.equal(task.manual.timedOutcomePending, 0);
+  assert.equal(task.perVerified.manualMs, 4800);
+  assert.equal(task.perVerified.savedMs, null);
+  const pending = [...entries, { trial: trial(), locationGrade: '', verdictGrade: 'yes' }];
+  assert.equal(c.compareTimes(c.group(pending))[0].perVerified.manualMs, null);
+});
+
 test('연습에서 본 같은 기사 기록을 현업 분모에서 제외하고 구분별 내보내기를 거쳐도 보존한다', async t => {
   const baseline = trial({id:'manual', participant:'A', kind:'editor', phaseMs:{search:60000, locate:0, decide:0}});
   const journal = {...baseline, id:'journal', participant:'B', method:'journal', phaseMs:{search:30000, locate:0, decide:0}};
@@ -321,6 +386,24 @@ test('연습에서 본 같은 기사 기록을 현업 분모에서 제외하고 
   const justRaw = page(t, 'field-summary');
   await justRaw.upload('imports', {...practice, caseId:'other', articleUrl:'https://different.example/story'}, journal, baseline);
   assert.match(justRaw.el('comparisons').textContent, /50\.0%/);
+});
+
+test('해시 경로의 서로 다른 기사는 남기고 같은 경로의 본문 위치는 반복 노출로 센다', async t => {
+  for (const route of ['#/', '#!/']) {
+    const p = page(t, 'field-summary');
+    const article = 'https://paper.example/news' + route + 'articles/';
+    const seoul = trial({id:'seoul', kind:'editor', caseId:'case-seoul', articleUrl:article+'seoul/11'});
+    const busan = trial({id:'busan', kind:'editor', caseId:'case-busan', articleUrl:article+'busan/35'});
+    await p.upload('imports', seoul, busan);
+    assert.match(p.el('count').textContent, /불러온 2건.*제외 0건/);
+    await p.upload('imports', {...seoul, id:'practice', kind:'practice', caseId:'practice-seoul',
+      articleUrl:seoul.articleUrl+'#fig1'});
+    assert.match(p.el('count').textContent, /불러온 2건.*제외 1건/);
+    const saved = await p.download('save');
+    assert.deepEqual(saved.entries.map(e => [e.trial.id, !!e.repeatExposure]), [['seoul', true], ['busan', false]]);
+    p.select('#kind', 'practice');
+    assert.match(p.el('count').textContent, /불러온 1건.*제외 1건/);
+  }
 });
 
 test('다른 참가자의 저장 기준을 같은 과제에 적용해 수동 점수와 오승인 분모를 일치시킨다', async t => {

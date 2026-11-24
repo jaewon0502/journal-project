@@ -96,11 +96,14 @@
           kind: t.kind,
           submitted: 0,
           withdrawn: 0,
+          timedWithdrawn: 0,
+          withdrawnMs: 0,
           timed: 0,
           totalTimed: 0,
           totalMs: 0,
           timedGraded: 0,
           timedVerified: 0,
+          timedOutcomePending: 0,
           recovered: 0,
           asAssigned: 0,
           differentMethod: 0,
@@ -114,8 +117,13 @@
           unsafeTotal: 0
         });
       const g = groups.get(key);
+      const elapsedMs = phases.reduce((sum, p) => sum + t.phaseMs[p], 0);
       if (t.status === 'withdrawn') {
         g.withdrawn++;
+        if (!t.recovered) {
+          g.timedWithdrawn++;
+          g.withdrawnMs += elapsedMs;
+        }
         continue;
       }
       g.submitted++;
@@ -126,10 +134,12 @@
       if (t.recovered) g.recovered++;
       else {
         g.totalTimed++;
-        g.totalMs += phases.reduce((sum, p) => sum + t.phaseMs[p], 0);
+        g.totalMs += elapsedMs;
         if (['yes', 'no'].includes(loc) && ['yes', 'no'].includes(verdictGrade)) {
           g.timedGraded++;
           if (loc === 'yes' && verdictGrade === 'yes') g.timedVerified++;
+        } else if (loc !== 'no' && verdictGrade !== 'no') {
+          g.timedOutcomePending++;
         }
         if (t.split) {
           g.timed++;
@@ -152,6 +162,15 @@
     return [...groups.values()];
   }
   function compareTimes(groups) {
+    function change(manualMs, journalMs) {
+      const savedMs = manualMs !== null && journalMs !== null ? manualMs - journalMs : null;
+      const savedPct = savedMs !== null && manualMs > 0 ? 100 * savedMs / manualMs : null;
+      return { manualMs, journalMs, savedMs, savedPct };
+    }
+    function msPerVerified(g) {
+      if (!g?.timedVerified || g.timedOutcomePending) return null;
+      return (g.totalMs + g.withdrawnMs) / g.timedVerified;
+    }
     const tasks = new Map();
     for (const g of groups) {
       const key = JSON.stringify([g.kind, g.caseId, g.articleUrl, g.taskId, g.prompt]);
@@ -162,9 +181,11 @@
       const { manual, journal } = task;
       const manualMs = manual?.totalTimed ? manual.totalMs / manual.totalTimed : null;
       const journalMs = journal?.totalTimed ? journal.totalMs / journal.totalTimed : null;
-      const savedMs = manualMs !== null && journalMs !== null ? manualMs - journalMs : null;
-      const savedPct = savedMs !== null && manualMs > 0 ? 100 * savedMs / manualMs : null;
-      return { ...task, manualMs, journalMs, savedMs, savedPct };
+      return {
+        ...task,
+        ...change(manualMs, journalMs),
+        perVerified: change(msPerVerified(manual), msPerVerified(journal))
+      };
     });
   }
   const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url };

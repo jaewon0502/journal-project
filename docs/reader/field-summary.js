@@ -31,7 +31,8 @@
     for (const { trial, repeatExposure } of records.values()) {
       if (repeatExposure) repeated.add(trial.id);
       const article = new URL(trial.articleUrl);
-      article.hash = '';
+      // Hash routers identify the story before an optional second, in-story anchor.
+      article.hash = article.hash.match(/^#!?\/[^#]*/u)?.[0] || '';
       for (const [type, value] of [['case', trial.caseId], ['article', article.href]]) {
         const key = JSON.stringify([trial.participant, type, value]);
         if (first.has(key)) {
@@ -105,6 +106,11 @@
     return { ...entry, expected: entry.basis?.verdict || '', anchor: entry.basis };
   }
   const seconds = (n, count) => (count ? (n / count / 1000).toFixed(1) + '초' : '산출 대기');
+  function timeChangeText({ savedMs, savedPct }) {
+    const change = savedMs < 0 ? '더 걸림' : savedMs > 0 ? '절감' : '차이 없음';
+    const percent = savedPct === null ? '기준 시간 0초로 비율 산출 대기' : Math.abs(savedPct).toFixed(1) + '%';
+    return seconds(Math.abs(savedMs), 1) + ' ' + change + ' (' + percent + ')';
+  }
   function showComparisons(groups) {
     const area = el('comparisons');
     area.replaceChildren();
@@ -122,9 +128,7 @@
       if (task.savedMs === null) {
         card.append(node('strong', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
       } else {
-        const change = task.savedMs < 0 ? '더 걸림' : task.savedMs > 0 ? '절감' : '차이 없음';
-        const percent = task.savedPct === null ? '기준 시간 0초로 비율 산출 대기' : Math.abs(task.savedPct).toFixed(1) + '%';
-        card.append(node('strong', seconds(Math.abs(task.savedMs), 1) + ' ' + change + ' (' + percent + ')'));
+        card.append(node('strong', timeChangeText(task)));
       }
       for (const method of ['manual', 'journal']) {
         const group = task[method];
@@ -136,6 +140,21 @@
           ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.timedGraded) +
           ' · 채점 대기 ' + (group.totalTimed - group.timedGraded) + '건'));
       }
+      card.append(node('h4', '검증 성공 1건당 투입 시간'));
+      for (const method of ['manual', 'journal']) {
+        const group = task[method];
+        if (!group || !(group.totalTimed + group.timedWithdrawn)) {
+          card.append(node('p', labels[method] + ' · 비교할 시간 기록 0건'));
+          continue;
+        }
+        const ms = task.perVerified[method + 'Ms'];
+        card.append(node('p', labels[method] + ' · ' + (ms === null ? '산출 대기' : seconds(ms, 1) + '/건') +
+          ' · 총 ' + seconds(group.totalMs + group.withdrawnMs, 1) + ' (완료 ' + group.totalTimed +
+          '건, 중도 종료 ' + group.timedWithdrawn + '건) · 검증 성공 ' + group.timedVerified +
+          '건 · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
+      }
+      if (task.perVerified.savedMs !== null)
+        card.append(node('strong', '검증 성공 1건당 ' + timeChangeText(task.perVerified)));
       area.append(card);
     }
   }
@@ -276,6 +295,28 @@
         }
         if (view.anchor.reference.acceptedLocators.length)
           d.append(node('p', '허용 위치 · ' + view.anchor.reference.acceptedLocators.join(' / ')));
+        const ref = view.anchor.reference;
+        const otherDocuments = ref.acceptedDocuments.filter(value =>
+          value !== ref.document && value !== ref.documentUrl && value !== ref.documentUrl?.split('#')[0]);
+        if (view.anchor.explanation || otherDocuments.length) {
+          const details = node('details', '');
+          details.append(node('summary', '채점 근거와 추가 허용 자료'));
+          if (view.anchor.explanation) details.append(node('p', view.anchor.explanation));
+          for (const value of otherDocuments) {
+            const sourceLine = node('p', '허용 자료 · ');
+            if (c.url(value)) {
+              const a = node('a', value);
+              a.href = value;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              sourceLine.append(a);
+            } else {
+              sourceLine.append(value);
+            }
+            details.append(sourceLine);
+          }
+          d.append(details);
+        }
       }
       d.append(
         node('p', labels[t.verdict] + ' · ' + t.reason),
