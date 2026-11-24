@@ -104,6 +104,15 @@
   const ratioMeasure = /%|퍼센트|비중|구성비|[률율]/u;
   const perUnit = /(?:[명인건대구세원회]|\d[만천백]?)\s*(?:당|마다)/u;
   const countAsked = /(?:몇|\d[\d,.]*)\s*(?:명|건|개|회)(?!당|마다)/u;
+  // A total in the selected column cannot establish a subgroup count. Look
+  // outside the printed heading, so a named subgroup column can still be used.
+  function asksForSubset(text) {
+    const outside = text.replace(/(?:통계(?:표)?|원표|표|자료|보고서|집계|기록|문서|기사|조사)에서/gu, ' ');
+    const subset = /[가-힣]에서|(?:^|\s)중(?:에서|에|\s)|한정|해당하는|가운데|지역|거주|출신|수도권|전국/u;
+    const demographic = /\d+\s*(?:세|살)|(?:10|20|30|40|50|60|70|80|90)대(?:\s|[의는가이]|$)|연령|성별|남성|여성|남자|여자|어린이|청소년|고령|노인|아동|외국인|내국인/u;
+    const circumstance = /주간|야간|평일|휴일|주말|음주운전|무면허/u;
+    return subset.test(outside) || demographic.test(outside) || circumstance.test(outside);
+  }
 
   function annualMetricCell(documentText, query, passage) {
     if (typeof documentText !== 'string' || typeof query !== 'string' ||
@@ -146,6 +155,9 @@
       n.start < m.start && n.end >= m.end)).map(m => m.col));
     if (columns.size !== 1) return null;
     const [col] = columns, label = labels[col - 1], years = new Set();
+    const remaining = mentions.filter(m => m.col === col).reduceRight((text, m) =>
+      text.slice(0, m.start) + ' ' + text.slice(m.end), normalized);
+    if (asksForSubset(remaining)) return null;
     if (perUnit.test(label) !== perUnit.test(normalized) || ratioMeasure.test(label) !== ratioMeasure.test(normalized) ||
         (ratioMeasure.test(label) && countAsked.test(normalized))) return null;
     let value;

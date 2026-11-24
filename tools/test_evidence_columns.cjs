@@ -158,3 +158,15 @@ test('비율·인구당 지표와 절대 건수, 복수 연도·항목, 중복 �
   assert.equal(cell([lines[0], lines[1], '\f' + lines[2]], query),null);
   assert.equal(cell([lines[0], lines[1], '2024\t-\t95'],query),null);
 });
+
+test('원표에 없는 집단·지역을 물으면 전체를 집단의 수치로 표시하지 않는다', () => {
+  const source = '연도\t사망자수\t어린이 사망자수\n2023\t300\t19\n2024\t350\t20';
+  const find = query => search(source, query).passages.map(p => columns.annualMetricCell(source, query, p)).filter(Boolean);
+  for (const query of ['2024년 여성 사망자 수는?', '2024년 사망자 중 65세 이상은 몇 명인가?',
+      '2024년 부산에서 발생한 사망자는?', '2024년 청소년 사망자는 350명인가?',
+      '2024년 대전 지역 어린이 사망자는?', '2024년 야간 교통사고 사망자 수는?', '2024년 음주운전 사고 사망자 수는?']) {
+    assert.deepEqual(find(query), [], query);
+  }
+  assert.equal(find('2024년 어린이 사망자는?')[0].value, '20');
+  assert.equal(find('2024년 교통사고 통계에서 사망자는 몇 명인가?')[0].value, '350');
+});
