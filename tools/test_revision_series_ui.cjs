@@ -84,6 +84,59 @@ test('편향 개선이 0건이어도 수정본에 충돌 표시가 있는 기사
   assert.match(links[0].hash, /^#review=[a-f0-9]{64}$/);
 });
 
+test('수정본의 새로운 지지 구절이 자리를 채워도 다시 대조할 원본 사실과 해당 기사 링크를 표시한다', async t => {
+  const p = page(t);
+  const supported = {outcome:'supported', flag:'none'};
+  const data = {...one, version:3, facts:{before:[supported, supported], after:[supported, supported]},
+    factMatches:[[0, 1], [1, null]]};
+  const legacy = {...data, version:2};
+  delete legacy.factMatches;
+  p.select(file('이전 형식.json', legacy), file('정정한 기사.json', data));
+  await flushed();
+  const panel = p.get('series-facts');
+  assert.equal(p.get('result').hidden, false);
+  assert.match(p.get('series-improved').textContent, /100%1\/1개 항목/);
+  assert.deepEqual(factCells(panel, 'support'), ['100% (2/2)', '100% (2/2)']);
+  assert.match(panel.textContent, /원본 사실을 대조할 수 있는 기사 1건 중 원본 사실의 전체 지지를 다시 확인해야 하는 기사 1건/);
+  assert.match(panel.textContent, /사실 확인 대상 구절 수가 줄어든 기사 0건/);
+  const links = panel.querySelectorAll('a.review-evidence');
+  assert.equal(links.length, 1);
+  assert.equal(links[0].hash, '#review=' + require('../docs/reader/revision-series').reviewId(data) + '&focus=retention');
+  assert.equal(links[0].textContent, '정정한 기사.json · 원본 사실 1개 다시 대조');
+  assert.match(links[0].getAttribute('aria-label'), /새 탭/);
+  assert.match(p.get('series-articles').textContent, /모두 구절 전체를 지지한 사실 1\/2개.*대응 구절 미확인 1개 · 대응 구절에서 전체 지지 미확인 0개/);
+  assert.doesNotMatch(panel.textContent, /이전 형식\.json/);
+  p.select(file('다시 대조.json', {...data, facts:{before:[supported, supported], after:[supported, {outcome:'limited', flag:'none'}]},
+    factMatches:[[0, 1], [1, 0]]}));
+  await flushed();
+  assert.match(p.get('series-articles').textContent, /대응 구절 미확인 0개 · 대응 구절에서 전체 지지 미확인 1개/);
+});
+
+test('다른 기사의 분모가 늘어도 감소한 편향 개선 기사 이름을 보여 주고 판본 간 대응을 알 수 없는 파일은 구분한다', async t => {
+  const p = page(t);
+  const supported = {outcome:'supported', flag:'none'}, pending = {outcome:'pending', flag:'none'};
+  const shrank = {...one, version:2, facts:{before:[supported, pending], after:[supported]}};
+  const grew = {...two, version:3, facts:{before:[supported], after:[pending, supported]}, factMatches:[[0, 1]]};
+  p.select(file('확인 대상 감소.json', shrank), file('확인 대상 증가.json', grew));
+  await flushed();
+  const panel = p.get('series-facts');
+  assert.deepEqual(factCells(panel, 'coverage'), ['66.7% (2/3)', '66.7% (2/3)']);
+  assert.match(panel.textContent, /사실 판정이 있는 편향 개선 기사 1건 중 사실 확인 대상 구절 수가 줄어든 기사 1건/);
+  assert.match(panel.textContent, /구절 대응 기록이 없는 이전 요약 1건은 원본 사실의 유지 여부를 집계할 수 없습니다/);
+  assert.match(panel.textContent, /확인 대상 감소\.json · 사실 확인 대상 2개 → 1개/);
+  assert.doesNotMatch(panel.textContent, /확인 대상 증가\.json/);
+  assert.equal(panel.querySelector('a.review-evidence'), null);
+  const [a,b] = p.get('series-articles').querySelectorAll('details');
+  assert.match(a.textContent, /사실 확인 대상 2개 → 1개.*이전 요약에 구절 대응 기록이 없어/);
+  assert.match(b.textContent, /사실 확인 대상 1개 → 2개.*모두 구절 전체를 지지한 사실 1\/1개/);
+  p.select(file('아직 원본 미확인.json', {...shrank, version:3, facts:{before:[pending], after:[supported]}, factMatches:[]}));
+  await flushed();
+  assert.match(p.get('series-articles').textContent, /원본에서 두 편집자가 구절 전체를 근거로 확인한 사실이 없습니다/);
+  assert.match(p.get('series-facts').textContent, /원본에서 두 편집자가 구절 전체를 지지한 판정이 없어 유지 여부를 계산할 수 없습니다/);
+  assert.doesNotMatch(p.get('series-articles').textContent, /지지한 사실 0\/0/);
+  assert.equal(p.get('series-facts').querySelector('a.review-evidence'), null);
+});
+
 test('기사별 분모를 합산하고 고유 기사, 중복, 빠진 판정, 자료 변경을 화면에서 구분한다', async t => {
   const p = page(t);
   p.empty();
@@ -214,8 +267,11 @@ test('내장 예시와 직접 고른 기사 사이를 전환해도 한쪽 기록
   assert.deepEqual(factCells(facts, 'articleFlagged'), ['2개', '0개']);
   assert.deepEqual(factCells(facts, 'quoteFlagged'), ['1개', '1개']);
   assert.match(facts.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 1건/);
-  assert.deepEqual([...facts.querySelectorAll('li')].map(item => item.textContent), ['도서관 운영 연습 기사 · 수정본 충돌 표시 1개 구절']);
-  assert.match(facts.querySelector('.review-evidence').hash, /^#review=[a-f0-9]{64}&example=library$/);
+  const links = [...facts.querySelectorAll('.review-evidence')];
+  assert.deepEqual(links.map(link => link.textContent),
+    ['도서관 운영 연습 기사 · 수정본 충돌 표시 1개 구절', '도서관 운영 연습 기사 · 원본 사실 1개 다시 대조']);
+  assert.match(links[0].hash, /^#review=[a-f0-9]{64}&example=library$/);
+  assert.equal(links[1].hash, links[0].hash.replace('&example=library', '&focus=retention&example=library'));
   const articles = [...p.get('series-articles').querySelectorAll('details')].map(item => item.textContent);
   assert.match(articles[0], /출생 통계 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 0% \(0\/1\) → 100% \(1\/1\).*수정본 공동 판정 범위 16.7% \(1\/6\)/);
   assert.match(articles[1], /도서관 운영 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 50% \(1\/2\) → 100% \(2\/2\).*수정본 공동 판정 범위 66.7% \(2\/3\)/);

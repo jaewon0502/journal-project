@@ -63,6 +63,54 @@
     panel.append(table);
     return panel;
   }
+  function evidenceLink(entry, label, focus = '') {
+    const link = element('a', entry.name + ' · ' + label, 'review-evidence');
+    link.href = 'article-compare.html#review=' + window.JournalRevisionSeries.reviewId(entry.record) +
+      focus + (entry.libraryExample ? '&example=library' : '');
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.setAttribute('aria-label', link.textContent + '의 원자료 대조 · 새 탭');
+    return link;
+  }
+
+  function retentionPanel(report, sources) {
+    const {facts} = report;
+    const part = document.createDocumentFragment();
+    if (facts.improvedArticles) {
+      const noOriginal = report.articles.filter(article => article.improved.numerator && article.factTrace?.total === 0).length;
+      const comparable = facts.improvedArticles - facts.improvedWithoutTrace - noOriginal;
+      if (comparable) part.append(element('p', '편향이 개선되고 원본 사실을 대조할 수 있는 기사 ' + comparable +
+        '건 중 원본 사실의 전체 지지를 다시 확인해야 하는 기사 ' + facts.improvedWithUnconfirmedRetention + '건',
+        facts.improvedWithUnconfirmedRetention ? 'warn' : 'note'));
+      if (noOriginal) part.append(element('p', '편향이 개선된 기사 ' + noOriginal +
+        '건은 원본에서 두 편집자가 구절 전체를 지지한 판정이 없어 유지 여부를 계산할 수 없습니다.', 'note'));
+      if (facts.improvedWithoutTrace) part.append(element('p', '편향이 개선된 기사 중 구절 대응 기록이 없는 이전 요약 ' +
+        facts.improvedWithoutTrace + '건은 원본 사실의 유지 여부를 집계할 수 없습니다.', 'note'));
+      if (facts.improvedArticles > facts.improvedMissingFacts) {
+        part.append(element('p', '사실 판정이 있는 편향 개선 기사 ' + (facts.improvedArticles - facts.improvedMissingFacts) +
+          '건 중 사실 확인 대상 구절 수가 줄어든 기사 ' + facts.improvedWithFewerFactRows + '건'));
+      }
+    }
+    const list = element('ul');
+    for (const article of report.articles) {
+      if (!article.facts) continue;
+      const trace = article.factTrace;
+      const before = article.facts.before.coverage.denominator, after = article.facts.after.coverage.denominator;
+      const needsReview = trace && trace.unmatched + trace.changed > 0;
+      if (!needsReview && !(before > after && article.improved.numerator)) continue;
+      const entry = sources.get(article.before.articleSha256);
+      const item = element('li');
+      if (needsReview) {
+        item.append(evidenceLink(entry, '원본 사실 ' + (trace.unmatched + trace.changed) + '개 다시 대조', '&focus=retention'));
+      } else item.append(document.createTextNode(entry.name));
+      if (before > after) item.append(document.createTextNode(' · 사실 확인 대상 ' + before + '개 → ' + after + '개'));
+      list.append(item);
+    }
+    if (list.childElementCount) part.append(list, element('p',
+      '표현을 고치거나 구절을 합쳐도 자동 대응이 어려울 수 있습니다. 원래 사실이 유지됐는지는 두 판본을 대조하세요.', 'note'));
+    if (part.childElementCount) part.prepend(element('h4', '원본에서 확인한 사실이 수정본에도 남았는지 대조'));
+    return part;
+  }
   function factPanel(report, sources, builtIn) {
     const panel = element('section', null, 'panel');
     panel.id = 'series-facts';
@@ -71,7 +119,10 @@
     panel.append(element('p', '구절별 검토 상태가 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
     if (facts.missingArticles) panel.append(element('p', '이전 형식 요약 ' + facts.missingArticles +
       '건에는 구절별 사실 판정이 없습니다. 두 편집자의 작업 파일과 대응표를 다시 열어 기사별 요약을 저장하면 함께 집계할 수 있습니다.', 'note'));
-    if (!facts.articleCount) return panel;
+    if (!facts.articleCount) {
+      if (facts.improvedArticles) panel.append(retentionPanel(report, sources));
+      return panel;
+    }
     panel.append(element('p', '편향이 한 항목 이상 개선된 기사 ' + facts.improvedArticles + '건 중 사실 판정이 없는 이전 요약 ' +
       facts.improvedMissingFacts + '건'));
     const flagged = element('p', '편향 개선과 함께 수정본에 충돌 표시가 있는 기사 ' + facts.improvedWithRevisedFlags + '건');
@@ -83,22 +134,19 @@
       const list = element('ul');
       for (const article of flaggedArticles) {
         const entry = sources.get(article.before.articleSha256);
-        const link = element('a', entry.name + ' · 수정본 충돌 표시 ' + article.facts.after.flagged + '개 구절', 'review-evidence');
-        link.href = 'article-compare.html#review=' + window.JournalRevisionSeries.reviewId(entry.record) +
-          (entry.libraryExample ? '&example=library' : '');
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.setAttribute('aria-label', link.textContent + '의 원자료 대조 · 새 탭');
         const item = element('li');
-        item.append(link);
+        item.append(evidenceLink(entry, '수정본 충돌 표시 ' + article.facts.after.flagged + '개 구절'));
         list.append(item);
       }
-      panel.append(list, element('p', builtIn ? '기사 이름을 누르면 연습용 발언록과 조사표를 새 탭에서 볼 수 있습니다.'
-        : '기사 이름을 누른 뒤 그 기사의 작업 파일 4개와 대응표 2개를 열면 두 편집자의 근거를 대조할 수 있습니다.', 'note'));
+      panel.append(list);
     }
     panel.append(element('p', '편향이 개선된 기사 중 수정본에 미결·판정 불일치·동일 판정 기록이 있는 기사 ' +
       facts.improvedWithOpenFacts + '건. 충돌 표시가 있는 기사와 겹칠 수 있습니다.', 'note'),
-      window.JournalRevisionFactsView(facts.before, facts.after));
+      retentionPanel(report, sources));
+    if (panel.querySelector('.review-evidence')) panel.append(element('p', builtIn
+      ? '연습 기사 링크를 누르면 발언록과 조사표를 새 탭에서 볼 수 있습니다.'
+      : '기사 링크를 누른 뒤 그 기사의 작업 파일 4개와 대응표 2개를 열면 두 편집자의 근거를 대조할 수 있습니다.', 'note'));
+    panel.append(window.JournalRevisionFactsView(facts.before, facts.after));
     return panel;
   }
 
@@ -118,7 +166,16 @@
       if (article.facts) {
         const {before: original, after: revised} = article.facts;
         item.append(element('p', '두 편집자의 구절 전체 지지율 ' + rateText(original.support) + ' → ' + rateText(revised.support)),
-          element('p', '수정본 공동 판정 범위 ' + rateText(revised.coverage) + ' · 한 명 이상 충돌 표시 ' + revised.flagged + '개 구절'));
+          element('p', '수정본 공동 판정 범위 ' + rateText(revised.coverage) + ' · 한 명 이상 충돌 표시 ' + revised.flagged + '개 구절'),
+          element('p', '사실 확인 대상 ' + original.coverage.denominator + '개 → ' + revised.coverage.denominator + '개'));
+        const trace = article.factTrace;
+        if (!trace) item.append(element('p', '이전 요약에 구절 대응 기록이 없어 원본 사실의 유지 여부를 집계할 수 없습니다.', 'note'));
+        else if (!trace.total) item.append(element('p', '원본에서 두 편집자가 구절 전체를 근거로 확인한 사실이 없습니다.', 'note'));
+        else {
+          item.append(element('p', '원본과 수정본에서 두 편집자가 모두 구절 전체를 지지한 사실 ' + trace.retained + '/' + trace.total + '개'));
+          if (trace.unmatched + trace.changed) item.append(element('p', '수정본 대응 구절 미확인 ' + trace.unmatched +
+            '개 · 대응 구절에서 전체 지지 미확인 ' + trace.changed + '개'));
+        }
       } else item.append(element('p', '이전 요약에 사실 판정 자료가 없습니다.', 'note'));
       panel.append(item);
     }
