@@ -427,7 +427,15 @@
         '건 · 미제출 ' + bounds.missing + '건 (참여 중단 뒤 남은 과제 포함)'
       : '계산하려면 같은 배정 묶음 네 명의 등록 기록이 필요합니다.';
     const excludedBlocks = a.blocks.length - (bounds?.registeredBlocks || 0);
-    if (excludedBlocks) el('missing-answer-sample').textContent += ' · 등록 기록이 일부만 있는 ' + excludedBlocks + '묶음 제외';
+    if (excludedBlocks) el('missing-answer-sample').textContent += ' · 등록 기록이 일부만 있는 ' + excludedBlocks +
+      '묶음 제외 (제출 ' + (a.recordedTrials - (bounds?.submitted || 0)) + '건)';
+    if (!demo) {
+      const issued = invitations.filter(inv => !inv.atDevice);
+      const returned = new Set(confirmed.filter(record => record.kind === 'editor').map(record => record.ordinal));
+      const pending = issued.filter(inv => !returned.has(inv.ordinal)).length;
+      if (pending) el('missing-answer-sample').textContent += ' · 발급 코드 ' + issued.length + '개 중 등록 기록 미수신 ' +
+        pending + '개 (참여 여부 미확인)';
+    }
     const amount = el('missing-answer-range');
     amount.textContent = '';
     if (bounds) {
@@ -437,7 +445,8 @@
           (bounds.maxReductionPp < 0 ? '어느 답을 가정해도 격차가 커집니다.' : bounds.minReductionPp > 0 ?
             '어느 답을 가정해도 격차가 줄어듭니다.' : '양수는 격차 감소, 음수는 증가, 0은 변화 없음을 뜻합니다.');
       } else {
-        amount.textContent = '모든 답을 제출했습니다. 관측된 격차 감소폭 ' + fmt(bounds.minReductionPp) + '%p.';
+        amount.textContent = '이 ' + bounds.registeredBlocks + '묶음의 배정 과제 ' + bounds.assigned +
+          '건이 모두 제출됐습니다. 관측된 격차 감소폭 ' + fmt(bounds.minReductionPp) + '%p.';
       }
     }
     showTimingCoverage(a);
@@ -560,7 +569,7 @@
       const id = 'E' + idBytes();
       invitations.push({ordinal, id, code: 'J1-' + ordinal + '-' + id});
     }
-    persist(); showInvitations(); message('import-status', '배정한 초대 코드를 표시 순서대로 전달하세요.');
+    persist(); showDashboard(); message('import-status', '배정한 초대 코드를 표시 순서대로 전달하세요.');
   }
   function enroll(event) {
     event.preventDefault();

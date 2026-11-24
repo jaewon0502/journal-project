@@ -107,6 +107,27 @@ test('미제출 답의 격차 범위를 완료 묶음과 구분하고 명부 미
   assert.match(p.el('metrics').textContent, /측정 대기/);
 });
 
+test('격차 범위에서 발급 후 기록 미수신, 일부 등록 묶음의 회신, 중단한 등록자의 미제출을 구분한다', async t => {
+  const p = page(t), sample = p.el('missing-answer-sample'), range = p.el('missing-answer-range');
+  p.el('issue-codes').click(); p.el('issue-codes').click();
+  assert.match(sample.textContent,/발급 코드 8개 중 등록 기록 미수신 8개/);
+  const invites = [...p.workspace().invitations].sort((a,b) => a.ordinal-b.ordinal);
+  const results = invites.map(inv => completedRecord(inv.ordinal,inv.id));
+  await importFiles(p,results.slice(0,4).map(JSON.stringify));
+  assert.match(sample.textContent,/제출 16\/16건 · 미제출 0건/);
+  assert.match(sample.textContent,/발급 코드 8개 중 등록 기록 미수신 4개/);
+  assert.match(range.textContent,/이 1묶음의 배정 과제 16건이 모두 제출/);
+  const stopped = {...results[4],trials:results[4].trials.slice(0,2),withdrawn:true,withdrawalTask:null};
+  await importFiles(p,[stopped,results[5]].map(JSON.stringify));
+  assert.match(sample.textContent,/1묶음 제외 \(제출 6건\)/);
+  assert.match(sample.textContent,/발급 코드 8개 중 등록 기록 미수신 2개/);
+  assert.match(p.el('counts').textContent,/중단 확인 1명/);
+  await importFiles(p,results.slice(6).map(JSON.stringify));
+  assert.match(sample.textContent,/제출 30\/32건 · 미제출 2건/);
+  assert.doesNotMatch(sample.textContent,/기록 미수신/);
+  p.el('demo-view').click(); assert.doesNotMatch(sample.textContent,/발급 코드/);
+});
+
 test('실측이 비었을 때 예시 수치가 실측으로 남지 않는다', t => {
   const p = page(t);
   assert.match(p.el('counts').textContent, /등록 0명/);
