@@ -416,7 +416,7 @@
     el('key-name').textContent = count ? '불러온 기준 ' + count + '개' : '';
   }
   function mergeFiles(values) {
-    const next = new Map(records);
+    const next = new Map(records), conflicts = new Map();
     for (const v of values) {
       const list = v.format === format ? v.entries : [{ trial: v, locationGrade: '', verdictGrade: '' }];
       if (!Array.isArray(list)) throw Error('집계 파일 형식을 확인하세요.');
@@ -460,13 +460,20 @@
           }
         } else if (prev) {
           for (const k of ['locationGrade', 'verdictGrade']) {
-            if (row[k] && prev[k] && row[k] !== prev[k])
-              throw Error('같은 기록의 채점 결과가 다릅니다. 사용할 집계본을 확인하세요.');
-            row[k] = row[k] || prev[k];
+            if (row[k] && prev[k] && row[k] !== prev[k]) {
+              if (!conflicts.has(trial.id)) conflicts.set(trial.id, {trial, fields:new Set()});
+              conflicts.get(trial.id).fields.add(k);
+            }
+            row[k] = prev[k] || row[k];
           }
         }
         next.set(trial.id, row);
       }
+    }
+    if (conflicts.size) {
+      const error = Error('같은 기록의 채점 결과가 다릅니다. 해당 항목을 원자료와 대조한 뒤 사용할 채점본을 불러오세요.');
+      error.gradeConflicts = [...conflicts.values()];
+      throw error;
     }
     const versions = new Map();
     for (const entry of next.values()) {
@@ -639,6 +646,22 @@
     } catch (err) {
       el('status').textContent = '파일을 불러오지 못했습니다. ' +
         (err instanceof SyntaxError ? 'JSON 형식을 확인하세요.' : err.message);
+      if (err.gradeConflicts) {
+        const list = node('ul', '');
+        // Use only answer text already visible during blind grading. File order can reveal the assignment.
+        const rows = err.gradeConflicts.map(({trial, fields}) => {
+          const li = node('li', '');
+          const differing = [];
+          if (fields.has('locationGrade')) differing.push('근거 위치');
+          if (fields.has('verdictGrade')) differing.push('판정');
+          const detail = trial.found === 'found' ? '제출한 위치 · ' + trial.locator : '제출한 이유 · ' + trial.reason;
+          li.append(node('p', trial.prompt), node('p', detail), node('p', '채점 차이 · ' + differing.join(', ')));
+          return li;
+        });
+        rows.sort((a, b) => a.textContent.localeCompare(b.textContent, 'ko'));
+        for (const row of rows) list.append(row);
+        el('status').append(list);
+      }
     } finally {
       loadingState(false);
     }

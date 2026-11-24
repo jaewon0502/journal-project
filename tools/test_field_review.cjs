@@ -481,6 +481,40 @@ test('진행자가 대체 공식 게시물과 발행 시점 설명을 열어 고
   assert.match(links[0].rel, /noopener/);
 });
 
+test('상충하는 채점본은 전부 반영을 보류하고 두 답안의 근거와 해당 채점 항목만 보여준다', async t => {
+  const p = page(t, 'field-summary');
+  const a = trial({id:'record-private-one', participant:'member-secret', kind:'editor', method:'journal',
+    locator:'부록 3 <img src=x onerror=alert(1)>', phaseMs:{search:63218000, locate:0, decide:0}});
+  const b = trial({id:'record-private-two', participant:'member-hidden', kind:'editor', found:'missing',
+    reason:'검토한 구간에 원표가 없었다.'});
+  const extra = trial({id:'record-extra', participant:'other-secret', kind:'editor', locator:'일괄 가져오기에서 제외할 답안'});
+  const scores = entries => ({format:'journal-field-grades-v1', entries});
+  const prior = scores([{trial:a, locationGrade:'yes', verdictGrade:'no'}]);
+  await p.upload('imports', prior);
+  const saved = await p.download('save');
+  const incoming = scores([{trial:extra, locationGrade:'yes', verdictGrade:'yes'},
+    {trial:b, locationGrade:'', verdictGrade:'no'}, {trial:a, locationGrade:'no', verdictGrade:'yes'}]);
+  const other = scores([{trial:b, locationGrade:'', verdictGrade:'yes'}, {trial:a, locationGrade:'no', verdictGrade:'yes'}]);
+  p.el('toggle-results').click();
+  await p.upload('imports', incoming, other);
+  assert.equal(p.el('results').hidden, true);
+  const status = p.el('status');
+  assert.match(status.textContent, /채점 결과가 다릅니다/);
+  const conflicts = [...status.querySelectorAll('li')];
+  assert.equal(conflicts.length,2);
+  const found = conflicts.find(row => row.textContent.includes(a.locator));
+  assert.ok(found);
+  assert.ok(found.textContent.includes(a.prompt));
+  assert.match(found.textContent, /채점 차이 · 근거 위치, 판정/);
+  const missing = conflicts.find(row => row.textContent.includes(b.reason));
+  assert.match(missing.textContent, /채점 차이 · 판정/);
+  assert.equal(status.querySelector('img'),null);
+  assert.doesNotMatch(status.textContent, /record-private|member-|other-secret|63218|평소 검증 도구|저널|일괄 가져오기에서 제외할 답안/);
+  assert.deepEqual(await p.download('save'),saved);
+  await p.upload('imports', prior);
+  assert.equal(status.querySelectorAll('li').length,0);
+});
+
 test('같은 기사·문장의 시간 절감률과 같은 시간 표본의 판정·위치 일치를 함께 표시한다', async (t) => {
   const p = page(t, 'field-summary');
   const a = trial({ kind: 'editor', phaseMs: { search: 9000, locate: 9000, decide: 2000 } });
