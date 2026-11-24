@@ -287,7 +287,13 @@
 
   function verdictStats(records) {
     const items = caseCells(), blocks = new Map();
-    const quality = {manual: emptyQuality(), journal: emptyQuality()};
+    const quality = {
+      manual: emptyQuality(), journal: emptyQuality(),
+      byVariant: {
+        A: {manual: emptyQuality(), journal: emptyQuality()},
+        B: {manual: emptyQuality(), journal: emptyQuality()}
+      }
+    };
     for (const record of records) {
       const block = Math.ceil(record.ordinal / slots);
       if (!blocks.has(block)) blocks.set(block, caseCells());
@@ -302,14 +308,15 @@
           cell.total++;
           cell.counts[t.verdict]++;
         }
-        const q = quality[t.method];
-        q.total++;
-        if (correct) q.correct++;
-        if (sourceCorrect) q.citationCorrect++;
-        if (correct && sourceCorrect) q.qualityCorrect++;
-        if (gold.expectedVerdict !== 'supported') {
-          q.unsafeTotal++;
-          if (confirms) q.unsafe++;
+        for (const q of [quality[t.method], quality.byVariant[t.variant][t.method]]) {
+          q.total++;
+          if (correct) q.correct++;
+          if (sourceCorrect) q.citationCorrect++;
+          if (correct && sourceCorrect) q.qualityCorrect++;
+          if (gold.expectedVerdict !== 'supported') {
+            q.unsafeTotal++;
+            if (confirms) q.unsafe++;
+          }
         }
       }
     }

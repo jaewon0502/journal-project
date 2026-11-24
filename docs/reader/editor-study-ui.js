@@ -214,12 +214,28 @@
     table('phase-pair-table',['참여 코드','단계','원자료 평균(초)','저널 평균(초)','절감(초)'],pairRows,'');
     const q = a.quality;
     const warnings = [];
+    const variantLabels = {A:'보수 성향 표기', B:'진보 성향 표기'};
+    const qualityByVariant = [];
     if (q) {
-      const pointChange = (metricKey, denominator) => 100 * (q.journal[metricKey] / q.journal[denominator] - q.manual[metricKey] / q.manual[denominator]);
-      const accuracy = pointChange('correct', 'total'), joint = pointChange('qualityCorrect', 'total'), unsafe = pointChange('unsafe', 'unsafeTotal');
+      const pointChange = (group, key, denom) => 100 * (group.journal[key] / group.journal[denom] - group.manual[key] / group.manual[denom]);
+      const accuracy = pointChange(q, 'correct', 'total'), joint = pointChange(q, 'qualityCorrect', 'total'), unsafe = pointChange(q, 'unsafe', 'unsafeTotal');
       if (accuracy < 0) warnings.push('기준 판정 일치율 ' + fmt(-accuracy) + '%p 하락');
       if (joint < 0) warnings.push('판정·근거 동시 일치율 ' + fmt(-joint) + '%p 하락');
       if (unsafe > 0) warnings.push('근거 없는 사실 채택률 ' + fmt(unsafe) + '%p 상승');
+      for (const [variant, group] of Object.entries(q.byVariant)) {
+        const label = variantLabels[variant];
+        const labelJoint = pointChange(group, 'qualityCorrect', 'total'), labelUnsafe = pointChange(group, 'unsafe', 'unsafeTotal');
+        const labelAccuracy = pointChange(group, 'correct', 'total');
+        if (joint >= 0 && labelJoint < 0) warnings.push(label + '에서 판정·근거 동시 일치율 ' + fmt(-labelJoint) + '%p 하락');
+        else if (accuracy >= 0 && labelAccuracy < 0) warnings.push(label + '에서 기준 판정 일치율 ' + fmt(-labelAccuracy) + '%p 하락');
+        if (unsafe <= 0 && labelUnsafe > 0) warnings.push(label + '에서 근거 없는 사실 채택률 ' + fmt(labelUnsafe) + '%p 상승');
+        for (const method of ['manual', 'journal']) {
+          const v = group[method];
+          qualityByVariant.push([label + ' · ' + (method === 'manual' ? '원자료' : '저널'),
+            ratio(v.qualityCorrect, v.total), ratio(v.total - v.correct, v.total),
+            ratio(v.total - v.citationCorrect, v.total), ratio(v.unsafe, v.unsafeTotal)]);
+        }
+      }
     }
     el('quality-warning').hidden = !warnings.length;
     el('quality-warning').textContent = '원자료 방식과 비교한 저널의 판정 품질 · ' + warnings.join(', ') + '. 시간과 판정 품질을 함께 해석하세요.';
@@ -230,6 +246,8 @@
       ['판정과 근거 모두 일치', ...[q.manual, q.journal].map(v => ratio(v.qualityCorrect, v.total))]
     ] : [];
     table('quality', ['지표', '원자료', '저널'], qualityRows, '집계할 기준 판정이 없습니다.');
+    table('quality-by-variant', ['기사 표기 · 방식', '판정과 근거 모두 일치', '기준과 다른 판정', '대표 근거 불일치', '근거 없는 사실 채택'],
+      qualityByVariant, '완성된 4인 묶음에서 기사 표기별 판정과 근거 선택을 집계합니다.');
     const dist = b?.distribution;
     el('distribution-gap').textContent = dist ? '네 판정의 평균 분포 차이 · 원자료 ' + fmt(dist.manualGapPp) + '%p → 저널 ' +
       fmt(dist.journalGapPp) + '%p · ' + (dist.reductionPp === 0 ? '변화 없음' : fmt(Math.abs(dist.reductionPp)) +

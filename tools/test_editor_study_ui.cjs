@@ -562,3 +562,52 @@ test('같은 사실 채택률에서도 근거 불충분과 반박 응답을 구�
   const raw = [...p.el('cells').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
   assert.deepEqual(raw.find(row => row[0] === '인허가 처리 기간' && row[1] === '근거와 충돌').slice(2), ['0/1','1/1','0/1','0/1']);
 });
+
+test('전체 품질이 같아도 기사 표기에 따라 엇갈린 근거 선택과 잘못된 사실 채택을 보여 준다', async t => {
+  const p = page(t);
+  const cases = require('../docs/reader/editor-study-cases.js');
+  const table = () => [...p.el('quality-by-variant').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
+  assert.deepEqual(table(), []);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    for (const trial of record.trials) {
+      const gold = cases.get(trial.caseId, trial.variant);
+      const affected = trial.method === 'manual' ? trial.variant === 'B' : trial.variant === 'A';
+      trial.verdict = affected ? 'supported' : gold.expectedVerdict;
+      trial.sourceIds = affected ? [] : gold.expectedSourceIds;
+    }
+    return record;
+  });
+  await importFiles(p, records.map(record => JSON.stringify(record)));
+  assert.deepEqual(table(), [
+    ['보수 성향 표기 · 원자료', '100% (4/4)', '0% (0/4)', '0% (0/4)', '0% (0/2)'],
+    ['보수 성향 표기 · 저널', '0% (0/4)', '50% (2/4)', '100% (4/4)', '100% (2/2)'],
+    ['진보 성향 표기 · 원자료', '0% (0/4)', '50% (2/4)', '100% (4/4)', '100% (2/2)'],
+    ['진보 성향 표기 · 저널', '100% (4/4)', '0% (0/4)', '0% (0/4)', '0% (0/2)']
+  ]);
+  assert.equal(p.el('quality-warning').hidden, false);
+  assert.match(p.el('quality-warning').textContent, /보수 성향 표기에서 판정·근거 동시 일치율 100%p 하락/);
+  assert.match(p.el('quality-warning').textContent, /보수 성향 표기에서 근거 없는 사실 채택률 100%p 상승/);
+  p.el('demo-view').click();
+  assert.ok(table().every(row => row[1].endsWith('/8)')));
+  p.el('real-view').click();
+  assert.equal(table()[3][1], '100% (4/4)');
+});
+
+test('대표 근거가 모두 빠졌어도 한쪽 표기에만 늘어난 판정 오류가 드러난다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    for (const trial of record.trials) {
+      const affected = trial.method === 'manual' ? trial.variant === 'A' : trial.variant === 'B';
+      trial.verdict = affected ? 'opinion' : p.w.JournalStudyCases.get(trial.caseId, trial.variant).expectedVerdict;
+      trial.sourceIds = [];
+    }
+    return record;
+  });
+  await importFiles(p, records.map(record => JSON.stringify(record)));
+  assert.equal(p.el('quality-warning').hidden, false);
+  assert.match(p.el('quality-warning').textContent, /진보 성향 표기에서 기준 판정 일치율 100%p 하락/);
+});

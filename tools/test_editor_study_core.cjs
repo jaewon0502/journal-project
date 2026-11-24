@@ -158,6 +158,27 @@ test('출처가 없는 판단은 제출할 수 있고 정답과 근거 일치를
   assert.equal(result.quality.manual.qualityCorrect, 8);
 });
 
+test('전체 동시 일치율이 같아도 어느 기사 표기에서 근거를 잃었는지 비교한다', () => {
+  const records = [1,2,3,4].map(i => observations(i, (t, gold) => {
+    const omitSource = t.method === 'manual' ? t.variant === 'B' : t.variant === 'A';
+    return {verdict:t.method === 'manual' && t.variant === 'B' ? 'supported' : gold.expectedVerdict,
+      sourceIds:omitSource ? [] : gold.expectedSourceIds};
+  }));
+  const r = study.analyze(records);
+  assert.equal(r.bias.reductionPp, 50);
+  assert.deepEqual([r.quality.manual.qualityCorrect, r.quality.journal.qualityCorrect], [4,4]);
+  const {A,B} = r.quality.byVariant;
+  assert.deepEqual([A.manual.qualityCorrect, A.journal.qualityCorrect, B.manual.qualityCorrect, B.journal.qualityCorrect], [4,0,0,4]);
+  assert.deepEqual([B.manual.correct, B.manual.citationCorrect, B.manual.unsafe, B.manual.unsafeTotal, B.manual.total], [2,0,2,2,4]);
+  for (const method of ['manual','journal']) {
+    for (const key of Object.keys(r.quality[method])) {
+      assert.equal(A[method][key] + B[method][key], r.quality[method][key]);
+    }
+  }
+  // A record from an incomplete later block cannot change a label's denominator.
+  assert.deepEqual(study.analyze([...records, observations(5)]).quality.byVariant, r.quality.byVariant);
+});
+
 test('실측 자격·배정·방식·시간·대표 근거·네 회차 한도를 검사한다', () => {
   assert.throws(() => study.createRecord('E1',1,'editor',false));
   assert.throws(() => study.createRecord('editor 1',1,'editor',true));
