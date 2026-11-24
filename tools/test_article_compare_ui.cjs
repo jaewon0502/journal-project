@@ -440,14 +440,27 @@ test('입력과 화면을 바꾼 뒤 도착한 배정이나 회수 오류를 폐
 test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된 항목이 다르면 공통 비율은 산출 대기다', async t => {
   const p = page(t, '#blind-revision');
   const before = require('../experiments/article-review-pilot/a-original.json');
-  const after = require('../experiments/article-review-pilot/b-revised.json');
+  const after = structuredClone(require('../experiments/article-review-pilot/b-revised.json'));
+  const mixedText = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
+  after.article += '\n' + mixedText;
+  after.articleDraft = after.article;
   async function assigned(editor, important) {
     const {key, packets} = await p.w.JournalBlindRevision.prepare(before, after);
     for (const role of ['before', 'after']) {
       const work = packets[key.mapping[role].slot];
-      const report = engine.report(work.article, work.sources, []);
-      const [row, other] = report.rows;
+      const rows = engine.prepare(work.article, work.sources).rows;
+      const [row, other] = rows;
       const source = work.sources[0];
+      const status = role === 'before' || editor === '둘째 편집자' ? 'contradicted' : 'fact';
+      work.receipts = [engine.decide(row, {status, sourceIds:[source.id], acknowledged:true,
+        reason:editor + '의 구절 확인'}, work.sources)];
+      if (role === 'after') {
+        const choice = editor === '첫 편집자' ? {status:'fact'} : {status:'mixed',
+          factSpan:'시청은 시범 운영을 마쳤고', opinionSpan:'사업은 기대 이상이다.'};
+        work.receipts.push(engine.decide(rows.at(-1), {...choice, sourceIds:[source.id],
+          acknowledged:true, reason:editor + '의 확인 범위 기록'}, work.sources));
+      }
+      const report = engine.report(work.article, work.sources, work.receipts);
       const ratings = {};
       for (const axis of ['framing', 'omission']) {
         ratings[axis] = {level:role === 'before' && axis === important ? 2 : 0,
@@ -483,6 +496,20 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   const framing = [...joint.querySelectorAll('details')].find(d => d.querySelector('summary').textContent.includes('제목·도입부'));
   assert.match(framing.querySelector('summary').textContent, /첫 편집자 2단계 → 0단계 \(개선\).*둘째 편집자 0단계 → 0단계/);
   assert.match(framing.textContent, /첫 편집자의 자료 대조.*둘째 편집자의 자료 대조/);
+  const facts = p.el('joint-facts');
+  assert.match(facts.querySelector('[data-fact-row="articleFlagged"]').textContent, /1개1개/);
+  assert.match(facts.querySelector('[data-fact-row="support"]').textContent, /0% \(0\/1\)산출 대기 \(0\/0\)/);
+  const alert = facts.querySelector('.fact-alerts[data-edition="after"]');
+  assert.match(alert.textContent, /첫 편집자 · 원자료 지지.*첫 편집자의 구절 확인.*둘째 편집자 · 원문이 근거와 충돌.*둘째 편집자의 구절 확인/);
+  assert.ok(alert.querySelector('a[href]'), '원자료로 가는 링크');
+  const scope = facts.querySelector('.fact-disputes[data-edition="after"]');
+  assert.equal(scope.querySelectorAll('details').length, 1);
+  assert.equal(scope.querySelector('details').querySelector('summary').textContent, mixedText);
+  assert.match(scope.textContent, /첫 편집자 · 원자료 지지.*첫 편집자의 확인 범위 기록.*둘째 편집자.*확인 범위시청은 시범 운영을 마쳤고.*둘째 편집자의 확인 범위 기록/);
+  for (const editor of scope.querySelector('.pair').children) {
+    assert.ok(editor.querySelector('a[href]'), '각 편집자가 사용한 원자료로 가는 링크');
+  }
+  assert.ok(!alert.textContent.includes(mixedText));
   let exported, filename;
   p.w.Blob = Blob;
   p.w.URL.createObjectURL = value => { exported = value; return 'blob:article-score'; };
@@ -491,6 +518,10 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
+  assert.equal(record.version, 2);
+  assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
+  assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
+  assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});
   assert.equal(record.before.articleSha256, first.key.mapping.before.articleSha256);
   assert.equal(record.after.articleSha256, second.key.mapping.after.articleSha256);
   assert.equal(filename, '기사평가-' + record.before.articleSha256.slice(0, 12) + '-' + record.after.articleSha256.slice(0, 12) + '.json');

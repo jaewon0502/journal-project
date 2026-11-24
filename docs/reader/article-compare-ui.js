@@ -380,6 +380,45 @@
     clearResults();
     updateInputs();
   }
+  function jointFactPanel(joint, editors) {
+    const panel = section('편향 평가와 함께 본 사실 판정');
+    panel.id = 'joint-facts';
+    const before = window.JournalRevisionFacts.summarize(joint.facts.before);
+    const after = window.JournalRevisionFacts.summarize(joint.facts.after);
+    if (joint.improved.numerator && after.flagged) panel.append(element('p',
+      '두 사람이 개선으로 본 편향 항목 ' + joint.improved.numerator + '개 · 수정본에서 한 명 이상 원자료와 충돌한다고 표시한 구절 ' +
+        after.flagged + '개', 'warn'));
+    panel.append(window.JournalRevisionFactsView(before, after));
+    for (const role of ['after', 'before']) {
+      const isAfter = role === 'after';
+      const sameEdition = editors.map(editor => editor.snapshots[isAfter ? 1 : 0]);
+      const flagged = [], disputed = [];
+      joint.facts[role].forEach((fact, index) => {
+        if (fact.flag === 'none' && fact.outcome !== 'disputed') return;
+        const passage = sameEdition[0].rows[index].text;
+        const item = detail(passage);
+        const pair = element('div', null, 'pair');
+        sameEdition.forEach((snapshot, i) => {
+          const decision = snapshot.assessment.accuracy.rows[index];
+          pair.append(decisionEvidence(snapshot, decision, passage, i ? '둘째 편집자' : '첫 편집자'));
+        });
+        item.append(pair);
+        (fact.flag === 'none' ? disputed : flagged).push(item);
+      });
+      for (const [items, title, style] of [
+        [flagged, '충돌 표시 구절과 근거', 'fact-alerts'],
+        [disputed, '충돌 표시 없이 판정이나 범위가 엇갈린 구절', 'fact-disputes']
+      ]) {
+        if (!items.length) continue;
+        const group = detail((isAfter ? '수정 후 ' : '수정 전 ') + title + ' · ' + items.length + '개');
+        group.classList.add(style);
+        group.dataset.edition = role;
+        group.append(...items);
+        panel.append(group);
+      }
+    }
+    return panel;
+  }
   function jointPanel(current) {
     const panel = section('두 편집자가 함께 확인한 변화');
     panel.id = 'revision-agreement';
@@ -425,7 +464,7 @@
     series.rel = 'noopener';
     const actions = element('div', null, 'actions');
     actions.append(save, series);
-    panel.append(actions, note('집계용 요약에는 네 기준의 점수와 판본·원자료 식별값이 담깁니다. 구절과 판정 이유는 원래 작업 파일에서 다시 볼 수 있습니다.'));
+    panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정 종류와 충돌 표시, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     for (const dimension of joint.dimensions) {
       const line = [dimension.first, dimension.second].map((d, i) =>
@@ -445,7 +484,7 @@
       item.append(pair);
       panel.append(item);
     }
-    panel.append(note('아래의 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
+    panel.append(jointFactPanel(joint, editors), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
     return panel;
   }
   function show(snapshots, synthetic, restored) {

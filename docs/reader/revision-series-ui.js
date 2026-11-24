@@ -63,6 +63,33 @@
     panel.append(table);
     return panel;
   }
+  function factPanel(report, names) {
+    const panel = element('section', null, 'panel');
+    panel.id = 'series-facts';
+    panel.append(element('h3', '편향 개선과 사실 확인'));
+    const facts = report.facts;
+    panel.append(element('p', '사실 판정이 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
+    if (facts.missingArticles) panel.append(element('p', '이전 형식 요약 ' + facts.missingArticles +
+      '건에는 구절별 사실 판정이 없습니다. 두 편집자의 작업 파일과 대응표를 다시 열어 기사별 요약을 저장하면 함께 집계할 수 있습니다.', 'note'));
+    if (!facts.articleCount) return panel;
+    panel.append(element('p', '편향이 한 항목 이상 개선된 기사 ' + facts.improvedArticles + '건 중 사실 판정이 없는 이전 요약 ' +
+      facts.improvedMissingFacts + '건'));
+    const flagged = element('p', '편향 개선과 함께 수정본에 충돌 표시가 있는 기사 ' + facts.improvedWithRevisedFlags + '건');
+    if (facts.improvedWithRevisedFlags) flagged.className = 'warn';
+    panel.append(flagged);
+    if (facts.improvedWithRevisedFlags) {
+      const list = element('ul');
+      for (const article of report.articles) {
+        if (article.improved.numerator && article.facts?.after.flagged) list.append(element('li',
+          names.get(article.before.articleSha256) + ' · 수정본 충돌 표시 ' + article.facts.after.flagged + '개 구절'));
+      }
+      panel.append(list);
+    }
+    panel.append(element('p', '편향이 개선된 기사 중 수정본에 미결·판정 불일치·동일 판정 기록이 있는 기사 ' +
+      facts.improvedWithOpenFacts + '건. 충돌 표시가 있는 기사와 겹칠 수 있습니다.', 'note'),
+      window.JournalRevisionFactsView(facts.before, facts.after));
+    return panel;
+  }
 
   function articleList(articles, fileNames) {
     const panel = element('section', null, 'panel');
@@ -77,6 +104,11 @@
           ' · 두 판본의 원자료 묶음 ' + (article.sourceChanged ? '다름' : '같음'), 'note'),
         element('p', '네 판정이 모두 있는 항목 ' + article.paired + '/' + article.total + '개 · 개선·악화·유지 판단이 갈린 항목 ' + article.disagreed + '개'),
         element('p', '원본의 중요한 왜곡 중 수정본에서 비교할 단계가 부족한 항목 ' + article.pendingImportant + '개'));
+      if (article.facts) {
+        const {before: original, after: revised} = article.facts;
+        item.append(element('p', '두 편집자의 구절 전체 지지율 ' + rateText(original.support) + ' → ' + rateText(revised.support)),
+          element('p', '수정본 공동 판정 범위 ' + rateText(revised.coverage) + ' · 한 명 이상 충돌 표시 ' + revised.flagged + '개 구절'));
+      } else item.append(element('p', '이전 요약에 사실 판정 자료가 없습니다.', 'note'));
       panel.append(item);
     }
     return panel;
@@ -84,10 +116,13 @@
 
   function render(files, records, builtIn = false) {
     const report = window.JournalRevisionSeries.summarize(records);
-    const names = new Map();
+    const sources = new Map();
     records.forEach((record, i) => {
-      if (!names.has(record.before.articleSha256)) names.set(record.before.articleSha256, fileName(files[i]));
+      const id = record.before.articleSha256;
+      const prior = sources.get(id);
+      if (prior == null || record.version > records[prior].version) sources.set(id, i);
     });
+    const names = new Map(Array.from(sources, ([id, i]) => [id, fileName(files[i])]));
     byId('result-title').textContent = (report.demo ? '가상 예시 · ' : '') + '기사 ' + report.articleCount + '건의 수정 결과';
     const summary = element('section', null, 'panel');
     const grid = element('div', null, 'metrics');
@@ -101,7 +136,7 @@
     if (report.changedSources) {
       summary.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources + '건만 보면 공통 개선율은 ' + rateText(report.unchangedEvidenceImprovement) + '입니다.'));
     }
-    output.replaceChildren(summary, coverage(report), axisTable(report.dimensions), articleList(report.articles, names));
+    output.replaceChildren(summary, factPanel(report, names), coverage(report), axisTable(report.dimensions), articleList(report.articles, names));
     byId('result').hidden = false;
     return report;
   }

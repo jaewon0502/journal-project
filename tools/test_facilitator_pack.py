@@ -34,6 +34,8 @@ class FacilitatorPack(unittest.TestCase):
                 links = Dependencies()
                 links.feed(archive.read(page).decode())
                 self.assertLessEqual(links.local, files, page)
+                if page in ('article-compare.html', 'revision-series.html'):
+                    self.assertTrue({'revision-facts.js', 'revision-facts-view.js'} <= links.local, page)
             for page in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html'):
                 self.assertEqual(archive.read(page), (READER / page).read_bytes())
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
@@ -69,7 +71,8 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertNotIn('blind-revision.js', reviewer.namelist())
                 self.assertNotIn('article-compare.html', reviewer.namelist())
                 self.assertTrue({'revision-series.html', 'revision-series.js', 'revision-series-ui.js',
-                                 'revision-series-example.js'}.isdisjoint(reviewer.namelist()))
+                                 'revision-series-example.js', 'revision-facts.js',
+                                 'revision-facts-view.js'}.isdisjoint(reviewer.namelist()))
                 self.assertTrue(all(name.endswith(('.js', '.css')) for name in dependencies.local))
                 for name in dependencies.local:
                     self.assertEqual(reviewer.read(name), (READER / name).read_bytes())
