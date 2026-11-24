@@ -46,7 +46,12 @@
   let drafts = new Map();
   let articleAssessment = null, articleAssessmentDraft = null;
   const rubric = window.JournalArticleRubric, rubricUI = window.JournalArticleRubricUI;
-  const studyFrame = window !== window.parent && new URLSearchParams(location.search).get('study') === '1';
+  const parameters = new URLSearchParams(location.search);
+  const studyFrame = window !== window.parent && parameters.get('study') === '1';
+  const fieldHandoff = window === window.parent && parameters.get('field') === '1' &&
+    !parameters.has('study') && (!parameters.has('method') || parameters.get('method') === 'journal');
+  let fieldArticleCommitted = false;
+  let fieldCopyResult = null;
   let studyNonce = null;
   // Local file pages have opaque origins. Only the actual parent frame receives replies.
   const localFile = location.protocol === 'file:';
@@ -134,6 +139,51 @@
     if (source.originUrl) section.append(node('p', '최초 원문 · ' + source.originUrl, 'meta'));
     return section;
   }
+  function clearFieldCopy() {
+    fieldCopyResult?.remove();
+    fieldCopyResult = null;
+  }
+  function addFieldCopy(part, source) {
+    let text;
+    try {
+      const citation = window.JournalFieldCitation.fromSource(source);
+      text = window.JournalFieldCitation.encode(citation);
+    } catch { return; }
+    const copy = button('현장 답안용 위치 복사', async () => {
+      if (!copy.isConnected || byId('workspace').hidden) return;
+      clearFieldCopy();
+      const result = node('div'), status = node('p', '', 'message');
+      status.setAttribute('role', 'status');
+      result.append(status);
+      copy.after(result);
+      fieldCopyResult = result;
+      try {
+        await navigator.clipboard.writeText(text);
+        if (fieldCopyResult === result) status.textContent = '원자료 주소와 확인 위치를 복사했습니다. 현장 답안에 붙여넣으세요.';
+      } catch {
+        if (fieldCopyResult !== result) return;
+        const label = node('label', '현장 답안에 붙여넣을 원자료 위치');
+        const field = node('textarea');
+        field.readOnly = true;
+        field.rows = 3;
+        field.value = text;
+        label.append(field);
+        result.append(label);
+        status.textContent = '아래 내용을 선택했습니다. 키보드로 복사해 현장 답안에 붙여넣으세요.';
+        field.focus();
+        field.select();
+      }
+    });
+    part.append(copy);
+  }
+  if (fieldHandoff) {
+    const leaveCopiedSource = event => {
+      const next = event.target.closest('#source-list > details');
+      if (next && fieldCopyResult && !next.contains(fieldCopyResult)) clearFieldCopy();
+    };
+    byId('source-list').addEventListener('click', leaveCopiedSource);
+    byId('source-list').addEventListener('focusin', leaveCopiedSource);
+  }
   function showSources() {
     const catalog = byId('source-list');
     catalog.replaceChildren();
@@ -141,8 +191,10 @@
     for (const source of sources) {
       const part = node('details', undefined, 'source');
       part.append(node('summary', source.title || source.id), sourceDetails(source));
+      if (fieldHandoff && fieldArticleCommitted && !demo && !blindReview) addFieldCopy(part, source);
       part.append(button('자료 수정', () => {
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
+        clearFieldCopy();
         clearSourceTarget();
         suggestedLocator = '';
         offerPdfLocation(null);
@@ -435,6 +487,7 @@
     }
   }
   function refresh(keepForm = false, standardsDraft = null) {
+    clearFieldCopy();
     result = workspace.activeReport(article, sources, receipts, drafts);
     if (standardsDraft) {
       // Adding another source leaves the existing citations intact. Carry only the
@@ -487,12 +540,13 @@
     }
     byId(find ? 'document-text' : 'source-title').focus();
   }
-  function resetWork(text, initialSources, initialReceipts, sample, tag = null) {
+  function resetWork(text, initialSources, initialReceipts, sample, tag = null, committed = true) {
     window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
     articleAssessment = null;
     articleAssessmentDraft = null;
     article = text;
+    fieldArticleCommitted = committed;
     sources = initialSources;
     receipts = initialReceipts;
     demo = sample;
@@ -582,6 +636,7 @@
       }
       latestImport++;
       article = text;
+      fieldArticleCommitted = true;
       showBlindNotice();
       dirty = true;
       refresh();
@@ -591,6 +646,7 @@
     } catch (err) { message('article-status', err.message, true); }
   });
   byId('article').addEventListener('input', () => {
+    clearFieldCopy();
     dirty = true;
     showBlindNotice();
     byId('workspace').hidden = byId('article').value !== article || !article;
@@ -610,13 +666,9 @@
     byId('row-heading').focus();
   });
   byId('source-cancel').addEventListener('click', () => clearSourceForm());
-  function differentPhysicalPage(locator, page) {
-    const pages = [...locator.normalize('NFKC').matchAll(/PDF\s*(?:뷰어|파일)?\s*(\d+)(?:\s*(?:~|∼|–|-)\s*(\d+))?\s*(?:쪽|페이지)/giu)];
-    return pages.length > 0 && !pages.some(([, first, last]) => Number(first) <= page && page <= Number(last || first));
-  }
   byId('source-form').addEventListener('submit', event => {
     event.preventDefault();
-    if (sourcePdfHash && differentPhysicalPage(byId('source-locator').value, Number(byId('source-pdfPage').value))) {
+    if (sourcePdfHash && engine.pdfPageInLocator(byId('source-locator').value, byId('source-pdfPage').value) === false) {
       message('source-status', '확인 위치에 적은 PDF 쪽과 발췌한 PDF 쪽이 다릅니다. 원본을 대조해 확인 위치를 고치세요.', true);
       byId('source-locator').focus();
       return;
@@ -1136,6 +1188,7 @@
     message('finder-status', '');
   });
   byId('source-form').addEventListener('input', event => {
+    clearFieldCopy();
     dirty = true;
     if (event.target.id === 'source-excerpt') offerPdfLocation(null);
     if (['source-excerpt','source-url','source-pdfPage'].includes(event.target.id) && sourcePdfHash) {
@@ -1255,7 +1308,7 @@
     // Restore only the fields understood by the editor, including for a malformed tag.
     const catalog = blindFile || !trust ? w.sources.map(workspace.sourceInput) : w.sources;
     if (blindFile) keep = checked.rows.map(row => row.receipt || row.priorDecision).filter(Boolean);
-    resetWork(text, catalog, keep, w.demo || catalog.some(isMock), tag);
+    resetWork(text, catalog, keep, w.demo || catalog.some(isMock), tag, !!w.article.trim());
     if (trust) {
       const validIds = new Set(result.rows.map(r => r.id));
       drafts = new Map(w.rowDrafts.filter(d => validIds.has(d.rowId)).map(({rowId, data}) => {

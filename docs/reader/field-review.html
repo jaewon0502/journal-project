@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>실제 기사 검증 시간 · Journal</title><link rel="stylesheet" href="article-compare.css"><link rel="stylesheet" href="field-review.css"><script defer src="field-review-core.js"></script><script defer src="field-invite.js"></script><script defer src="field-review.js"></script></head><body>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>실제 기사 검증 시간 · Journal</title><link rel="stylesheet" href="article-compare.css"><link rel="stylesheet" href="field-review.css"><script defer src="field-review-core.js"></script><script defer src="field-invite.js"></script><script defer src="factcheck-engine.js"></script><script defer src="field-citation.js"></script><script defer src="field-evidence.js"></script><script defer src="field-review.js"></script></head><body>
 <header><strong>Journal</strong><nav><a href="editor-study.html">통제 실험</a></nav></header>
 <main><h1>실제 기사 검증 시간</h1><p>원자료를 찾고, 근거 위치를 확인하고, 판정을 기록하는 시간을 각각 잽니다. 기사와 과제는 시작 후 확인할 수 있습니다.</p><noscript>JavaScript를 켜 주세요.</noscript>
 <section class="panel" id="setup"><h2>과제 시작</h2>
@@ -18,7 +18,12 @@
 <p class="note">자리를 비우거나 나중에 이어서 하려면 먼저 휴식을 누르세요. 같은 브라우저에서 다시 열어 측정을 재개하면 쉬었던 시간은 빠집니다.</p>
 <fieldset id="answer"><legend>검증 결과</legend>
 <label>근거 위치 <select id="found"><option value="">선택하세요</option><option value="found">다시 찾을 수 있음</option><option value="missing">찾지 못함</option></select></label>
-<label>원자료 주소 <input id="documentUrl" type="url" placeholder="https://"></label><label>정확한 위치 <input id="locator" placeholder="표 제목, 행·열, 기준연도 또는 발언 시각"></label>
+<label>원자료 주소 <input id="documentUrl" type="url" placeholder="https://"></label><label>정확한 위치 <textarea id="locator" rows="2" placeholder="표 제목, 행·열, 기준연도 또는 발언 시각"></textarea></label>
+<details id="field-evidence" hidden><summary>저널에서 확인한 원자료 위치 가져오기</summary>
+<label>팩트체크에서 복사한 위치 붙여넣기 <textarea id="evidence-paste" rows="2"></textarea></label>
+<label>또는 이번 과제에서 저장한 내 작업 파일에서 선택 <input id="evidence-work" type="file" accept=".json,application/json"></label>
+<div id="evidence-selection" hidden><label>이 과제에 사용한 원자료 <select id="evidence-choices"></select></label><p id="evidence-preview" class="note"></p><button type="button" id="evidence-apply">주소와 위치 입력</button></div>
+<p id="evidence-status" role="status"></p></details>
 <label>판정 <select id="verdict"><option value="">선택하세요</option><option value="supported">근거가 지지</option><option value="contradicted">근거가 반박</option><option value="insufficient">근거 부족</option></select></label>
 <label>이 과제를 검증할 때 저널을 사용했습니까? <select id="journalUse"><option value="">선택하세요</option><option value="yes">사용함</option><option value="no">사용하지 않음</option></select></label>
 <label>확인한 값과 이유 <textarea id="reason" rows="3" aria-describedby="reason-note"></textarea></label><small id="reason-note">여기에는 값과 판정 근거를 적어 주세요. 사용 도구는 별도 항목에서 응답합니다.</small></fieldset>

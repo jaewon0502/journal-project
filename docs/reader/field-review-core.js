@@ -75,6 +75,8 @@
       !['editor', 'practice'].includes(v.kind) ||
       !['manual', 'journal'].includes(v.method) ||
       !['completed', 'withdrawn'].includes(v.status) ||
+      (Object.hasOwn(v, 'startedKitVersion') && (v.kitVersion !== null ||
+        (v.startedKitVersion !== null && !kitVersion(v.startedKitVersion)))) ||
       (v.journalUse !== undefined &&
         !['yes', 'no'].includes(v.journalUse) &&
         !(v.status === 'withdrawn' && v.journalUse === '')) ||
@@ -153,15 +155,17 @@
       const reasonGrade = checkedReasonGrade(t, basis, submittedReasonGrade);
       const verifiedWithReason = verified && reasonGrade === 'yes';
       const reasonOutcomeKnown = (verificationKnown && !verified) || reasonGrade === 'no' || verifiedWithReason;
-      const version = kitVersion(t.kitVersion);
+      const changedKit = Object.hasOwn(t, 'startedKitVersion');
+      const version = changedKit ? null : kitVersion(t.kitVersion);
       if (!g.timedKits.has(version)) {
         const totals = {...newTimeTotals(), partialCompleted:0, partialCompletedMs:0, partialWithdrawn:0, partialWithdrawnMs:0,
           partialVerified:0, partialOutcomePending:0, reasonGraded:0, verifiedWithReason:0, reasonOutcomePending:0,
-          gradingMeasured:0, gradingComplete:0, gradingMs:0};
+          gradingMeasured:0, gradingComplete:0, gradingMs:0, resumedWithoutMatchingKit:0};
         g.timedKits.set(version, totals);
         completedTimes.set(totals, []);
       }
       const kit = g.timedKits.get(version);
+      if (changedKit) kit.resumedWithoutMatchingKit++;
       if (gradingTime) {
         kit.gradingMeasured++;
         kit.gradingMs += gradingTime.ms;

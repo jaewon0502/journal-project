@@ -400,6 +400,8 @@
       card.append(node('p', '완료 시간 차이 산출 대기 · 두 방식 모두 시간 기록이 필요합니다. 온전한 완료 기록끼리 같은 배포본에서 비교합니다.'));
     else
       card.append(node('strong', '완료 시간 ' + timeChangeText(comparison)));
+    const resumed = (comparison.manual?.resumedWithoutMatchingKit || 0) + (comparison.journal?.resumedWithoutMatchingKit || 0);
+    if (resumed) card.append(node('p', '시작한 배포본과 다른 버전이거나 버전이 확인되지 않는 화면에서 재개한 기록 ' + resumed + '건입니다. 활동 시간과 채점 결과는 보존했습니다.'));
     for (const method of ['manual', 'journal']) {
       const group = comparison[method];
       if (!group?.totalTimed) {
@@ -852,7 +854,8 @@
       t.verdict || '',
       t.reason || '',
       t.journalUse || '',
-      c.kitVersion(t.kitVersion)
+      c.kitVersion(t.kitVersion),
+      Object.hasOwn(t, 'startedKitVersion') ? t.startedKitVersion : false
     ]);
   }
   function loadKey(v) {

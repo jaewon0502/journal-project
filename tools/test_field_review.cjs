@@ -281,7 +281,7 @@ test('수동·저널 배정을 유지하고 실제 도구 사용 응답과 다�
     el('task').selectedIndex = 1;
     el('start').click();
     assert.equal(
-      p.window.document.querySelectorAll('a[href="factcheck.html"]').length,
+      p.window.document.querySelectorAll('a[href="factcheck.html?field=1"]').length,
       arm === 'journal' ? 1 : 0
     );
     el('pause').click();

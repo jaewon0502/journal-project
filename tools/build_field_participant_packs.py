@@ -35,6 +35,11 @@ def html(name, method, tasks):
                               contents, count=1, flags=re.S)
     assert count == 1
     if name == 'field-review.html':
+        if method == 'manual':
+            for asset in ('factcheck-engine.js', 'field-citation.js', 'field-evidence.js'):
+                contents = contents.replace(f'<script defer src="{asset}"></script>', '')
+            contents, count = re.subn(r'<details id="field-evidence".*?</details>', '', contents, count=1, flags=re.S)
+            assert count == 1
         # Keep the participant JSON inert even if a quoted article contains an HTML end tag.
         payload = json.dumps(tasks, ensure_ascii=False).replace('<', r'\u003c')
         contents = contents.replace('</head>', '<script type="application/json" id="assigned-tasks">' +

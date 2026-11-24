@@ -8,11 +8,7 @@
   const contentStatuses = ['unverified','opinion','supported','contradicted'];
   const schema = 'journal-local-factcheck-v1';
   const sourceFields = ['title', 'url', 'locator', 'excerpt', 'version', 'originUrl', 'pdfPage'];
-  function isMock(source) {
-    return [source.url, source.originUrl].filter(Boolean).some(value => {
-      try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
-    });
-  }
+  const isMock = engine.isMock;
   function sourceDefaults(source = {}) {
     let url = source.url || '';
     if (url && engine.sourceTarget(source)?.page) {

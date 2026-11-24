@@ -80,6 +80,9 @@ class FieldKits(unittest.TestCase):
                     self.assertFalse(any('coordinator' in name or 'summary' in name for name in z.namelist()))
                     self.assertEqual(method == 'journal', 'factcheck.html' in z.namelist())
                     page = z.read('field-review.html').decode()
+                    self.assertEqual(method == 'journal', 'id="field-evidence"' in page)
+                    for asset in ('field-citation.js', 'field-evidence.js', 'factcheck-engine.js'):
+                        self.assertEqual(method == 'journal', asset in z.namelist())
                     self.assertEqual(json.loads(EmbeddedCase(page).payload), blind)
                     self.assertIn(f'data-case-id="{key["caseId"]}"', page)
                     self.assertIn(f'<select id="method" disabled><option value="{method}">', page)

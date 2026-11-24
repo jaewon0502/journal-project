@@ -69,6 +69,18 @@
     physicalPage(page);
   }
 
+  function isMock(source) {
+    return [source?.url, source?.originUrl].filter(Boolean).some(value => {
+      try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
+    });
+  }
+  // Null means that the written locator does not name a physical PDF page.
+  function pdfPageInLocator(locator, page) {
+    const named = [...locator.normalize('NFKC').matchAll(/PDF\s*(?:뷰어|파일)?\s*(\d+)(?:\s*(?:~|∼|–|-)\s*(\d+))?\s*(?:쪽|페이지)/giu)];
+    if (!named.length) return null;
+    return named.some(([, first, last]) => Number(first) <= Number(page) && Number(page) <= Number(last || first));
+  }
+
   const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
     'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
   const signingParameter = /^(?:x-(?:amz|goog)-(?:algorithm|credential|date|expires|signature|signedheaders)|x-amz-(?:security-token|content-sha256)|AWSAccessKeyId|GoogleAccessId)$/iu;
@@ -867,7 +879,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, validatePdfBinding, sameSourceDocument, digestValue: digest});
+  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);
