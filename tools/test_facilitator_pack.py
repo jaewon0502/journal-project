@@ -30,7 +30,7 @@ class FacilitatorPack(unittest.TestCase):
         with ZipFile(BytesIO(packet_bytes())) as archive:
             self.assertIsNone(archive.testzip())
             files = set(archive.namelist())
-            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'factcheck.html'):
+            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'factcheck.html', 'article-compare.html'):
                 links = Dependencies()
                 links.feed(archive.read(page).decode())
                 self.assertLessEqual(links.local, files, page)
@@ -46,6 +46,24 @@ class FacilitatorPack(unittest.TestCase):
                     self.assertEqual(archive.read(packed), (CASES / case / name).read_bytes())
                     expected_json.add(packed)
             self.assertEqual({n for n in files if n.endswith('.json')}, expected_json)
+
+    def test_two_reviewers_receive_the_editor_without_scoring_keys_or_each_others_work(self):
+        with ZipFile(BytesIO(packet_bytes())) as coordinator:
+            start = Dependencies()
+            start.feed(coordinator.read('시작.html').decode())
+            self.assertTrue({'독립 기사 검토.zip', 'article-compare.html', 'factcheck.html'} <= start.local)
+            self.assertIn('href="article-compare.html"', coordinator.read('factcheck.html').decode())
+            with ZipFile(BytesIO(coordinator.read('독립 기사 검토.zip'))) as reviewer:
+                self.assertIsNone(reviewer.testzip())
+                form = reviewer.read('factcheck.html').decode()
+                self.assertIn('id="load-work"', form)
+                self.assertIn('id="save-work"', form)
+                dependencies = Dependencies()
+                dependencies.feed(form)
+                self.assertEqual(set(reviewer.namelist()), {'factcheck.html'} | dependencies.local)
+                self.assertTrue(all(name.endswith(('.js', '.css')) for name in dependencies.local))
+                for name in dependencies.local:
+                    self.assertEqual(reviewer.read(name), (READER / name).read_bytes())
 
     def test_rebuilding_next_to_a_private_roster_preserves_it(self):
         builder = Path(__file__).with_name('build_facilitator_pack.py')
