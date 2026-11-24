@@ -100,12 +100,16 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertEqual(row['basis'], {**target, 'caseId': key['caseId'], 'articleUrl': key['articleUrl']})
             self.assertEqual(len({r['trial']['participant'] for r in rows}), 4)
             self.assertEqual(len({r['trial']['id'] for r in rows}), 4)
-            for method, expected in [('manual', (60000, 60000)), ('journal', (40000, 80000))]:
+            self.assertEqual(len({r['gradingTime']['id'] for r in rows}), 4)
+            for method, expected in [('manual', (60000, 60000, 65000)), ('journal', (40000, 80000, 130000))]:
                 arm = [r for r in rows if r['trial']['method'] == method]
                 self.assertEqual(len(arm), 2)
                 self.assertTrue(all(r['locationGrade'] == r['verdictGrade'] == 'yes' for r in arm))
                 total = sum(sum(r['trial']['phaseMs'].values()) for r in arm)
-                self.assertEqual((total / len(arm), total / sum(r['reasonGrade'] == 'yes' for r in arm)), expected)
+                verified = sum(r['reasonGrade'] == 'yes' for r in arm)
+                self.assertTrue(all(not r['gradingTime']['partial'] and r['gradingTime']['status'] == 'complete' for r in arm))
+                person_ms = total + sum(r['gradingTime']['ms'] for r in arm)
+                self.assertEqual((total / len(arm), total / verified, person_ms / verified), expected)
             for name in coordinator.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(coordinator.read(name))) as participant:

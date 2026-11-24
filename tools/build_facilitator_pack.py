@@ -48,7 +48,7 @@ START = """<!doctype html>
 ‘판정과 집계 기록 저장’으로 보관한 <code>field-grades-….json</code>은 다음에 같은 화면에서 다시 열 수 있습니다.</li></ol>
 <p><a href="data:application/json;base64,{{PRACTICE_DATA}}" download="고용률-판단이유-가상응답.json">가상 답안 4건 내려받기</a> ·
 <a href="field-summary.html" target="_blank" rel="noopener">새 집계 화면</a>에서 ‘참여 JSON 또는 이전 집계 JSON 불러오기’로 예시 파일을 여세요.
-‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 확인했을 때 성공 1건에 든 시간이 어떻게 달라지는지 볼 수 있습니다.</p></section>
+‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 맞은 답안 한 건에 참여자와 진행자가 각각 몇 초를 썼는지 볼 수 있습니다. 두 역할의 시간은 모두 가상 값입니다.</p></section>
 <section class="box"><h2>기사의 정확성과 정치적 편향 비교</h2>
 <ol><li><a href="factcheck.html">기사 팩트체크</a>에서 기사 입력을 확정하고 원자료를 등록하세요. ‘작업 파일 저장 · 이어 열기’에서 ‘독립 평가용 기사·자료 내려받기’를 누릅니다.</li>
 <li>두 편집자에게 같은 기사·자료 JSON과 <a href="독립 기사 검토.zip" download>독립 기사 검토.zip</a>을 전달하세요. 각자 압축을 풀고 <code>factcheck.html</code>의 ‘파일 이어 열기’로 JSON을 연 뒤 문장 판정과 편향 평가를 기록합니다. 각자 저장한 작업 JSON은 따로 보관하세요.</li>
@@ -96,8 +96,8 @@ def field_practice_sample():
     correct = '분모는 15세 이상 인구다. 2023년 62.6%에서 2024년 62.7%로 0.1%포인트 올랐다.'
     wrong = '15~64세 인구에서 69.2%가 69.5%가 됐으므로 15세 이상 고용률이 0.1%포인트 올랐다.'
     entries = []
-    for i, (method, reason) in enumerate([
-        ('manual', correct), ('manual', correct), ('journal', correct), ('journal', wrong)
+    for i, (method, reason, grading_seconds) in enumerate([
+        ('manual', correct, 5), ('manual', correct, 5), ('journal', correct, 45), ('journal', wrong, 5)
     ], start=1):
         trial = {
             'format': 'journal-field-trial-v1', 'id': f'practice-labour-reason-{i}',
@@ -109,8 +109,11 @@ def field_practice_sample():
             'found': 'found', 'documentUrl': task['reference']['documentUrl'], 'locator': task['reference']['locator'],
             'verdict': 'supported', 'reason': reason
         }
+        observation = {'id': sha256(('grading/' + trial['id']).encode()).hexdigest()[:32],
+                       'ms': grading_seconds * 1000, 'status': 'complete', 'partial': False}
         entries.append({'trial': trial, 'basis': basis, 'expected': task['verdict'], 'locationGrade': 'yes',
-                        'verdictGrade': 'yes', 'reasonGrade': 'no' if reason == wrong else 'yes'})
+                        'verdictGrade': 'yes', 'reasonGrade': 'no' if reason == wrong else 'yes',
+                        'gradingTime': observation})
     return json.dumps({'format': 'journal-field-grades-v1', 'entries': entries}, ensure_ascii=False, indent=2).encode()
 
 

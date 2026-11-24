@@ -102,7 +102,7 @@
   function group(records) {
     const groups = new Map();
     const completedTimes = new Map();
-    for (const { trial: t, locationGrade, verdictGrade, reasonGrade:submittedReasonGrade, expected, basis } of records) {
+    for (const { trial: t, locationGrade, verdictGrade, reasonGrade:submittedReasonGrade, expected, basis, gradingTime } of records) {
       const key = JSON.stringify([t.caseId, t.taskId, t.prompt, t.articleUrl, t.method, t.kind]);
       if (!groups.has(key))
         groups.set(key, {
@@ -149,11 +149,17 @@
       const version = kitVersion(t.kitVersion);
       if (!g.timedKits.has(version)) {
         const totals = {...newTimeTotals(), partialCompleted:0, partialCompletedMs:0, partialWithdrawn:0, partialWithdrawnMs:0,
-          partialVerified:0, partialOutcomePending:0, reasonGraded:0, verifiedWithReason:0, reasonOutcomePending:0};
+          partialVerified:0, partialOutcomePending:0, reasonGraded:0, verifiedWithReason:0, reasonOutcomePending:0,
+          gradingMeasured:0, gradingComplete:0, gradingMs:0};
         g.timedKits.set(version, totals);
         completedTimes.set(totals, []);
       }
       const kit = g.timedKits.get(version);
+      if (gradingTime) {
+        kit.gradingMeasured++;
+        kit.gradingMs += gradingTime.ms;
+        if (gradingTime.status === 'complete' && !gradingTime.partial) kit.gradingComplete++;
+      }
       if (t.status === 'completed') {
         if (verified && reasonGrade) kit.reasonGraded++;
         if (verifiedWithReason) kit.verifiedWithReason++;

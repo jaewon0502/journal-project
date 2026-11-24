@@ -8,6 +8,8 @@
   const blindRanks = new Map();
   let showingResults = false;
   let assignments = [];
+  let runningReview = null;
+  const reviewDisplays = new Map();
   const labels = {
     manual: '평소 검증 도구',
     journal: '평소 검증 도구와 저널',
@@ -25,6 +27,90 @@
   function grade(value) {
     if (!['', 'yes', 'no'].includes(value)) throw Error('진행자 채점 형식을 확인하세요.');
     return value;
+  }
+  function readGradingTime(value) {
+    if (value === undefined) return undefined;
+    if (!value || typeof value.id !== 'string' || !/^[0-9a-f]{32}$/.test(value.id) || !Number.isSafeInteger(value.ms) || value.ms < 0 ||
+      !['paused', 'complete'].includes(value.status) || typeof value.partial !== 'boolean') {
+      throw Error('진행자 채점 시간의 구간과 측정 상태를 확인하세요.');
+    }
+    return {id:value.id, ms:value.ms, status:value.status, partial:value.partial};
+  }
+  function clockId() {
+    return [...crypto.getRandomValues(new Uint32Array(4))].map(n => n.toString(16).padStart(8, '0')).join('');
+  }
+  function noteUnclockedWork(entry) {
+    if (runningReview?.entry === entry) return;
+    if (entry.gradingTime) {
+      entry.gradingTime = {...entry.gradingTime, partial:true, status:'paused'};
+    } else entry.unclockedGrade = true;
+  }
+  function stopReview(complete = false) {
+    if (!runningReview) return;
+    const {entry, start, checkpoint} = runningReview;
+    clearInterval(checkpoint);
+    runningReview = null;
+    const elapsed = Math.max(0, Math.round(performance.now()) - start);
+    entry.gradingTime = {...entry.gradingTime, ms:entry.gradingTime.ms + elapsed,
+      status:complete ? 'complete' : 'paused'};
+    unexported.add(entry.trial.kind);
+    persistDraft();
+    reviewDisplays.get(entry)?.();
+  }
+  function reviewControl(entry, card) {
+    const details = node('details', '');
+    details.append(node('summary', '진행자 채점 시간'));
+    const status = node('p', '');
+    status.setAttribute('role', 'status');
+    details.append(status);
+    const start = node('button', '측정 시작'), pause = node('button', '일시 정지'), finish = node('button', '채점 시간 확정');
+    const missed = node('button', '빠진 시간 표시');
+    function refresh() {
+      const saved = entry.gradingTime, active = runningReview?.entry === entry;
+      status.textContent = (active ? '측정 중' : !saved ? '미측정' : saved.status === 'complete' ? '측정 종료' : '측정 멈춤') +
+        (saved?.partial ? ' · 일부 구간만 측정' : '') +
+        (saved && showingResults ? ' · 기록한 진행자 활동 시간 ' + minimumSeconds(saved.ms) : '');
+      start.textContent = saved ? '측정 재개' : '측정 시작';
+      start.disabled = active;
+      pause.disabled = !active;
+      finish.disabled = !saved || saved.status === 'complete';
+      missed.disabled = !saved || saved.partial;
+    }
+    if (!showingResults) {
+      details.append(start, pause, finish, missed);
+      for (const button of [start, pause, finish, missed]) button.type = 'button';
+      const pauseOther = () => { if (runningReview && runningReview.entry !== entry) stopReview(); };
+      card.addEventListener('pointerdown', pauseOther);
+      card.addEventListener('focusin', pauseOther);
+      start.onclick = () => {
+        if (runningReview?.entry === entry) return;
+        stopReview();
+        const priorWork = !!(entry.unclockedGrade || entry.locationGrade || entry.reasonGrade || (!entry.basis && entry.verdictGrade));
+        entry.gradingTime = entry.gradingTime ? {...entry.gradingTime, status:'paused'} :
+          {id:clockId(), ms:0, status:'paused', partial:priorWork};
+        runningReview = {entry, start:Math.round(performance.now()), checkpoint:setInterval(persistDraft, 15000)};
+        unexported.add(entry.trial.kind);
+        persistDraft();
+        refresh();
+      };
+      pause.onclick = () => stopReview();
+      finish.onclick = () => {
+        if (runningReview?.entry === entry) return stopReview(true);
+        entry.gradingTime = {...entry.gradingTime, status:'complete'};
+        unexported.add(entry.trial.kind);
+        persistDraft();
+        refresh();
+      };
+      missed.onclick = () => {
+        entry.gradingTime = {...entry.gradingTime, partial:true};
+        unexported.add(entry.trial.kind);
+        persistDraft();
+        refresh();
+      };
+    }
+    reviewDisplays.set(entry, refresh);
+    refresh();
+    return details;
   }
   function selected() {
     return [...records.values()].filter((e) => e.trial.kind === el('kind').value);
@@ -85,11 +171,17 @@
   function sameBasis(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
   }
+  function resetReviewCoverage(entry) {
+    if (entry.gradingTime) return {gradingTime:{...entry.gradingTime, status:'paused'}};
+    if (entry.locationGrade || entry.reasonGrade || (!entry.basis && entry.verdictGrade)) return {unclockedGrade:true};
+    return {};
+  }
   function bind(entry, anchor) {
     if (!anchor) return entry;
     const same = sameBasis(anchor, entry.basis);
     return {
       ...entry,
+      ...(!same ? resetReviewCoverage(entry) : {}),
       basis: anchor,
       verdictGrade:
         entry.trial.status === 'completed' ? (entry.trial.verdict === anchor.verdict ? 'yes' : 'no') : '',
@@ -102,7 +194,7 @@
     if (!tasks) return entry;
     const match = tasks.get(trialTarget(entry.trial));
     if (match) return bind(entry, match);
-    return entry.basis ? { ...entry, basis: null, verdictGrade: '', locationGrade: '', reasonGrade: '' } : entry;
+    return entry.basis ? { ...entry, ...resetReviewCoverage(entry), basis: null, verdictGrade: '', locationGrade: '', reasonGrade: '' } : entry;
   }
   function applied(entry) {
     return { ...entry, expected: entry.basis?.verdict || '', anchor: entry.basis };
@@ -218,8 +310,8 @@
     const {manual, journal, difference} = cost;
     const section = node('section', '');
     section.className = withReason ? 'returned-reason-cost' : 'returned-cost';
-    section.append(node('h5', withReason ? '근거 위치·판정·판단 이유가 모두 맞은 1건당 투입 시간' :
-      '회수한 기록 전체의 검증 성공 1건당 투입 시간 · 근거 위치와 판정'));
+    section.append(node('h5', withReason ? '근거 위치·판정·판단 이유가 모두 맞은 1건당 투입 시간 · 참여자' :
+      '회수한 기록 전체의 검증 성공 1건당 투입 시간 · 근거 위치와 판정 · 참여자'));
     for (const method of ['manual', 'journal']) {
       const arm = cost[method];
       if (!arm) {
@@ -263,6 +355,40 @@
     }
     return section;
   }
+  function personTimePanel(comparison) {
+    const section = node('section', '');
+    section.className = 'person-time';
+    section.append(node('h5', '참여자와 진행자의 인력 투입 시간 · 세 항목이 모두 맞은 답안 1건당'));
+    if (![comparison.manual, comparison.journal].some(arm => arm?.gradingMeasured)) {
+      section.append(node('p', '진행자 채점 시간 미측정 · 합산 대기'));
+      return section;
+    }
+    const costs = {};
+    for (const method of ['manual', 'journal']) {
+      const arm = comparison[method];
+      if (!arm) continue;
+      const partial = arm.partialCompleted + arm.partialWithdrawn;
+      const n = arm.totalTimed + arm.timedWithdrawn + partial;
+      section.append(node('p', labels[method] + ' · 회수 ' + n + '건 · 참여자 전체 시간 ' + (n - partial) + '/' + n +
+        '건 · 진행자 전체 시간 ' + arm.gradingComplete + '/' + n + '건 · 세 항목 성공 ' + arm.verifiedWithReason +
+        '건, 확인 대기 ' + arm.reasonOutcomePending + '건'));
+      if (partial || arm.gradingComplete !== n || arm.reasonOutcomePending || !arm.verifiedWithReason) {
+        section.append(node('p', '성공당 인력 시간 산출 대기'));
+        continue;
+      }
+      const participant = arm.totalMs + arm.withdrawnMs;
+      costs[method] = (participant + arm.gradingMs) / arm.verifiedWithReason;
+      const amount = costs[method] > 0 && costs[method] < 50 ? '0.1초 미만' : seconds(costs[method], 1);
+      section.append(node('p', '참여자 ' + minimumSeconds(participant) + ' + 진행자 ' + minimumSeconds(arm.gradingMs) +
+        ' · 성공 1건당 ' + amount + '의 인력 시간'));
+    }
+    if (comparison.version && costs.manual !== undefined && costs.journal !== undefined) {
+      const savedMs = costs.manual - costs.journal;
+      section.append(node('strong', '저널의 성공당 인력 시간 ' + timeChangeText({savedMs,
+        savedPct:costs.manual ? 100 * savedMs / costs.manual : null})));
+    }
+    return section;
+  }
   function versionComparison(comparison) {
     const card = node('section', '');
     const heading = node('h4', comparison.version ? '배포본 ' + comparison.version : '버전 미확인');
@@ -292,7 +418,7 @@
       card.append(node('p', '평균과 중앙값이 반대 방향입니다. 저널 집단의 완료 시간 중앙값은 평소 검증 도구 집단보다 ' +
         gap + (medianDifference > 0 ? ' 짧습니다.' : ' 깁니다.')));
     }
-    card.append(node('h5', '검증 성공 1건당 투입 시간 · 활동 시간이 온전히 남은 기록'));
+    card.append(node('h5', '검증 성공 1건당 투입 시간 · 활동 시간이 온전히 남은 기록 · 참여자'));
     for (const method of ['manual', 'journal']) {
       const group = comparison[method];
       if (!group || !(group.totalTimed + group.timedWithdrawn)) {
@@ -310,6 +436,7 @@
     card.append(returnedCostPanel(comparison.version, comparison.returnedCost));
     if (comparison.returnedCostWithReason)
       card.append(returnedCostPanel(comparison.version, comparison.returnedCostWithReason, true));
+    card.append(personTimePanel(comparison));
     return card;
   }
   function assignmentCounts(n) {
@@ -538,6 +665,7 @@
   function chooser(label, entry, field, disabled = false) {
     const wrap = node('label', label + ' '),
       sel = document.createElement('select');
+    sel.setAttribute('aria-label', label);
     for (const [id, txt] of [
       ['', '채점 대기'],
       ['yes', '일치'],
@@ -548,10 +676,13 @@
     sel.value = disabled && field === 'locationGrade' ? 'no' : view[field];
     sel.disabled = disabled || showingResults;
     sel.onchange = () => {
+      if (runningReview && runningReview.entry !== entry) stopReview();
+      noteUnclockedWork(entry);
       entry[field] = sel.value;
       unexported.add(entry.trial.kind);
       persistDraft();
       stats();
+      reviewDisplays.get(entry)?.();
     };
     wrap.append(sel);
     return wrap;
@@ -561,6 +692,7 @@
       dupe = repeatIds();
     el('entries').replaceChildren();
     reasonControls.clear();
+    reviewDisplays.clear();
     stats();
     if (!showingResults) rows.sort((a, b) => blindRanks.get(a.trial.id) - blindRanks.get(b.trial.id));
     for (const [index, entry] of rows.entries()) {
@@ -578,6 +710,7 @@
       }
       if (t.status === 'withdrawn') {
         d.append(node('p', '중도 종료'));
+        if (!dupe.has(t.id)) d.append(reviewControl(entry, d));
         el('entries').append(d);
         continue;
       }
@@ -627,6 +760,7 @@
           d.append(details);
         }
       }
+      if (!dupe.has(t.id)) d.append(reviewControl(entry, d));
       d.append(
         node('p', labels[t.verdict] + ' · ' + t.reason),
         chooser('근거 위치', entry, 'locationGrade', t.found === 'missing')
@@ -704,14 +838,18 @@
         const trial = c.validate(item.trial);
         if (item.repeatExposure !== undefined && typeof item.repeatExposure !== 'boolean')
           throw Error('반복 노출 표시를 확인하세요.');
+        if (item.unclockedGrade !== undefined && typeof item.unclockedGrade !== 'boolean')
+          throw Error('채점 시간 누락 표시를 확인하세요.');
         let row = {
           trial,
           repeatExposure: item.repeatExposure === true,
           locationGrade: grade(item.locationGrade),
           verdictGrade: grade(item.verdictGrade),
           reasonGrade: grade(item.reasonGrade === undefined ? '' : item.reasonGrade),
-          basis: item.basis ? basis(item.basis.caseId, item.basis.articleUrl, item.basis) : null
+          basis: item.basis ? basis(item.basis.caseId, item.basis.articleUrl, item.basis) : null,
+          gradingTime: readGradingTime(item.gradingTime), unclockedGrade: item.unclockedGrade === true
         };
+        if (row.unclockedGrade && row.gradingTime) row.gradingTime.partial = true;
         if (trial.status !== 'completed' || trial.found !== 'found' || !row.basis?.explanation.trim()) row.reasonGrade = '';
         if (row.basis) {
           if (
@@ -732,12 +870,28 @@
         if (prev && canonical(prev.trial) !== canonical(trial)) {
           throw Error('같은 과제 기록 ID에 내용이 다른 파일이 있습니다.');
         }
+        if (prev) {
+          if (prev.gradingTime && row.gradingTime &&
+              JSON.stringify(prev.gradingTime) !== JSON.stringify(row.gradingTime)) {
+            throw Error('같은 답안의 진행자 시간 기록이 서로 다릅니다. 별도의 집계 탭에서 사용할 측정본 하나를 여세요.');
+          }
+          const timed = row.gradingTime ? row : prev;
+          const other = timed === row ? prev : row;
+          row.gradingTime ??= prev.gradingTime;
+          row.unclockedGrade ||= prev.unclockedGrade;
+          if (row.gradingTime && !other.gradingTime &&
+              (other.unclockedGrade || ['locationGrade', 'reasonGrade', ...(!other.basis ? ['verdictGrade'] : [])]
+                .some(field => other[field] && !timed[field]))) {
+            row.gradingTime = {...row.gradingTime, partial:true};
+          }
+        }
         if (prev?.repeatExposure) row.repeatExposure = true;
         if (prev && !sameBasis(row.basis, prev.basis)) {
           if (row.basis && prev.basis)
             throw Error('같은 기록을 다른 원자료 기준으로 채점했습니다. 사용할 집계본을 선택하세요.');
           if (prev.basis) {
-            next.set(trial.id, { ...prev, repeatExposure: row.repeatExposure });
+            next.set(trial.id, { ...prev, repeatExposure: row.repeatExposure, gradingTime:row.gradingTime,
+              unclockedGrade:row.unclockedGrade });
             continue;
           }
         } else if (prev) {
@@ -758,7 +912,12 @@
       throw error;
     }
     const versions = new Map();
+    const clockOwners = new Set();
     for (const entry of next.values()) {
+      if (entry.gradingTime) {
+        if (clockOwners.has(entry.gradingTime.id)) throw Error('서로 다른 답안에서 같은 진행자 시간 기록을 사용했습니다.');
+        clockOwners.add(entry.gradingTime.id);
+      }
       if (!entry.basis) continue;
       const k = trialTarget(entry.trial);
       if (versions.has(k) && !sameBasis(versions.get(k), entry.basis))
@@ -783,7 +942,14 @@
         const entries = [...tasks.values()];
         return {caseId:entries[0].caseId, articleUrl:entries[0].articleUrl, tasks:entries};
       });
-      const draft = {kind:el('kind').value, keys, entries:[...records.values()], unexported:[...unexported],
+      // If the browser dies, the last observed checkpoint is a lower bound. A
+      // normal pagehide stops the timer and replaces it with a paused record.
+      const entries = [...records.values()].map(entry => {
+        if (runningReview?.entry !== entry) return entry;
+        return {...entry, gradingTime:{...entry.gradingTime, partial:true,
+          ms:entry.gradingTime.ms + Math.max(0, Math.round(performance.now()) - runningReview.start)}};
+      });
+      const draft = {kind:el('kind').value, keys, entries, unexported:[...unexported],
         blindRanks:[...blindRanks]};
       sessionStorage.setItem(draftKey, JSON.stringify(draft));
       notice.textContent = '이 탭을 새로고침하면 채점을 복원합니다. 탭을 닫기 전 보관할 구분의 JSON을 저장하세요.';
@@ -820,12 +986,16 @@
     }
   }
   window.addEventListener('beforeunload', event => {
+    stopReview();
     if (!unexported.size) return;
     event.preventDefault();
     event.returnValue = '';
   });
+  window.addEventListener('pagehide', () => stopReview());
+  document.addEventListener('visibilitychange', () => { if (runningReview) persistDraft(); });
   let loading = false;
   function loadingState(on) {
+    if (on) stopReview();
     loading = on;
     el('next-reason').disabled = on;
     el('roster-file').disabled = on;
@@ -843,8 +1013,9 @@
       render();
     }
   }
-  el('choose-imports').onclick = () => el('imports').click();
-  el('choose-key').onclick = () => el('key-file').click();
+  function pickFile(id) { stopReview(); el(id).click(); }
+  el('choose-imports').onclick = () => pickFile('imports');
+  el('choose-key').onclick = () => pickFile('key-file');
   el('next-reason').onclick = () => {
     if (loading || showingResults) return;
     for (const [entry, details] of reasonControls) {
@@ -856,6 +1027,7 @@
   };
   el('toggle-results').onclick = () => {
     if (el('toggle-results').disabled) return;
+    stopReview();
     showingResults = !showingResults;
     render();
   };
@@ -870,7 +1042,7 @@
       el('roster-status').textContent = '이 탭의 배정표를 복원할 수 없습니다. 별도로 보관한 명부를 불러오세요.';
     }
   }
-  el('choose-roster').onclick = () => el('roster-file').click();
+  el('choose-roster').onclick = () => pickFile('roster-file');
   el('roster-file').onchange = async e => {
     if (loading) return;
     const files = [...e.target.files];
@@ -963,6 +1135,7 @@
     }
   };
   el('save').onclick = () => {
+    stopReview();
     const dupe = repeatIds();
     const data = {
       format,
@@ -974,6 +1147,8 @@
           locationGrade: v.locationGrade,
           verdictGrade: v.verdictGrade,
           ...(v.reasonGrade ? { reasonGrade: v.reasonGrade } : {}),
+          ...(v.gradingTime ? { gradingTime:v.gradingTime } : {}),
+          ...(v.unclockedGrade ? { unclockedGrade:true } : {}),
           expected: v.expected,
           basis: v.anchor || null
         };
@@ -995,7 +1170,7 @@
     if (showingResults && el('kind').value === 'editor' && assignments.length)
       downloadJson({format:c.assignmentFormat, assignments}, 'field-assignment-roster.json');
   };
-  el('kind').onchange = () => { showingResults = false; render(); persistDraft(); };
+  el('kind').onchange = () => { stopReview(); showingResults = false; render(); persistDraft(); };
   restoreDraft();
   restoreRoster();
   render();
