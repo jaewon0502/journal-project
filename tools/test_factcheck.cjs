@@ -314,6 +314,54 @@ test('간접 인용 속 두 절은 나누지 않아 화자의 주장을 발언 �
   }
 });
 
+test('반박 발언·금액 단문·구어체·이미 확정된 미래 기간의 예산은 같은 주장으로 지지와 반증을 모두 검토한다', () => {
+  const articles = ['의원은 “지난해 집행액은 20억 원이었다”고 반박했다.', '의원은 “지난해 집행액은 20억 원”이라고 밝혔다.',
+    '의원은 “지난해 집행액은 20억 원이었어요”라고 말했다.', '의원은 “내년 사업 예산은 이미 20억 원으로 확정됐다”고 밝혔다.'];
+  const refs = [{id:'speech', url:'https://assembly.example/hearing', version:'1', locator:'1문답', excerpt:articles.join(' ')},
+    {id:'other', url:'https://budget.example/ledger', version:'1', locator:'확정표', excerpt:'지난해 집행액과 내년도 의결 예산은 각각 10억 원이다.'}];
+  const decision = {status:'attribution', sourceIds:['speech'], acknowledged:true, reason:'녹취의 화자와 발언을 확인했다.',
+    contentChecked:true, contentReason:'발언 당시 결산·의결표에 같은 항목이 10억 원이다.', contentStatus:'contradicted', contentSourceIds:['other']};
+  // Captured from 7a3cb04 for these exact sources and review texts, including
+  // the entire affirmative quote. These legacy checksums must reopen unchanged.
+  const oldChecksums = ['14afa3f927d8915edc8886931656ea0dcfef4497443ee54359a64cf2a8701597',
+    '6d89077fdce208a5e866867cd5f18d50ec9529fbae017f205b36029eeb078f0c',
+    '2264ec29b4cdc0e283210ab22d7a8b4b4bf962d0220d59c20c39a8c5df839727',
+    'e224edce9d9dae1fab0066ac490ce0af3be1a6b7c5bafc29058447715982ad5d'];
+  for (const [i, article] of articles.entries()) {
+    const [row] = prepare(article, refs).rows;
+    const contentClaim = article.match(/“(.+)”/u)[1];
+    const old = {...decision, protocol:'journal-review/1', rowId:row.id, binding:row.binding, articleBinding:row.articleBinding,
+      references:'7ab765cf5285bd25e2756259bfeee901283e2bf086d1328ac02622f116d2e4f3', recordedAt:'2026-11-23T00:00:00.000Z',
+      contentClaim, checksum:oldChecksums[i]};
+    const reopened = report(article, refs, [old]);
+    assert.equal(reopened.contentContradictedCount, 1, article);
+    assert.equal(reopened.rows[0].receipt.checksum, old.checksum);
+    assert.equal(decide(row, decision, refs).contentClaim, contentClaim);
+    const agreeing = [refs[0], {...refs[1], excerpt:'지난해 집행액과 내년도 의결 예산은 각각 20억 원이다.'}];
+    const support = decide(prepare(article, agreeing).rows[0], {...decision, contentStatus:'supported',
+      contentReason:'발언 당시 결산·의결표의 금액이 일치한다.'}, agreeing);
+    assert.equal(report(article, agreeing, [support]).contentSupportedCount, 1, article);
+  }
+  for (const article of ['의원은 “집행액은 20억 원”은 아니라고 반박했다.', '의원은 “내년 실제 집행액은 20억 원”이라고 밝혔다.',
+    '의원은 “내년 예산을 20억 원으로 확정하겠다”고 말했다.', '의원은 “지난해 집행액은 20억 원이었어요?”라고 물었다.',
+    '의원은 “2024년 집행액은 20억 원이었을 것으로 추정된다”고 말했다.']) {
+    const [row] = prepare(article, refs).rows;
+    for (const contentStatus of ['supported', 'contradicted']) assert.throws(() => decide(row, {...decision, contentStatus}, refs), undefined, article);
+    assert.equal(decide(row, {...decision, contentStatus:'unverified'}, refs).contentStatus, 'unverified');
+  }
+  for (const article of ['의원은 “집행액은 20억 원이 아니다”라고 반박했다.', '의원은 집행액이 20억 원은 아니라고 반박했다.']) {
+    const actual = [{...refs[0], excerpt:article}, {...refs[1], excerpt:'당시 확정 결산표의 집행액은 20억 원이다.'}];
+    const [row] = prepare(article, actual).rows;
+    const saved = decide(row, {...decision, contentReason:'확정 결산표에 기재된 집행액은 20억 원이다.'}, actual);
+    assert.match(saved.contentClaim, /아니/u, article);
+    assert.equal(report(article, actual, [saved]).contentContradictedCount, 1);
+  }
+  const recorded = '의원은 “2024년 결산표에 집행액이 20억 원으로 기재돼 있다”고 설명했다.';
+  const source = {...refs[1], excerpt:'2024년 확정 결산표의 집행액은 10억 원이다.'};
+  const actual = [{...refs[0], excerpt:recorded}, source];
+  assert.equal(decide(prepare(recorded, actual).rows[0], decision, actual).contentClaim, '2024년 결산표에 집행액이 20억 원으로 기재돼 있다');
+});
+
 test('따옴표 밖 서술에 사실이 있으면 발언을 의견으로 닫아도 그 사실을 확인한 것으로 세지 않는다', () => {
   // A connective before a direct quotation gives the narrator clause its own row.
   for (const text of ['의회는 지난달 예산 3억 원을 삭감했는데 시장은 “무책임하다”고 말했다.',

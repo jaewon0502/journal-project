@@ -510,10 +510,15 @@
       || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
     return {hasForecast, allNonfactual: allNonfactual && !frameFact, quotes, frameFact};
   }
-  const reportEnding = /^(?:고|이?라고|하고)\s*(?:말했다|밝혔다|주장했다|설명했다|전했다|발표했다|강조했다|답했다|덧붙였다)[.!。！]?$/u;
+  const reportEnding = /^(?:고|이?라고|하고)\s*(?:말했다|밝혔다|주장했다|반박했다|설명했다|전했다|발표했다|강조했다|답했다|덧붙였다)[.!。！]?$/u;
   const multipleClaims = /(?:,(?!\d)|(?<!\d),)|[，、;；]|[.!。！]\s*\S|(?:[았었였했됐이하되]고|지만|으나|이며|으며|면서|는데|은데|반면)\s/u;
   const secondQuantity = /\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)[^.!?]{0,60}\s+[가-힣]+(?:은|는|이|가)\s+\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)/u;
-  const nonAssertion = /[?？]|겠|내년|내일|다음\s*(?:달|해|분기)|(?:을|할|될|일)\s*(?:것|계획|방침|예정|전망)|약속(?:한|했|드)|(?:라면|다면|이면|경우에는)|해야\s*(?:한|합)/u;
+  const nonAssertion = /[?？]|겠|(?:을|할|될|일)\s*(?:것|계획|방침|예정|전망)|약속(?:한|했|드)|(?:라면|다면|이면|경우에는)|해야\s*(?:한|합)/u;
+  // Korean reports frequently omit the copula for a named, measured quantity.
+  // A bare number, document title or noun phrase does not identify a proposition.
+  const namedMeasurement = /[가-힣](?:은|는|이|가)\s+(?:[약총]\s*)?\d[\d,.]*\s*(?:천|만|억|조)?\s*(?:원|명|건|석|곳|표|개|[%％]|퍼센트)[.!。！]?$/u;
+  const futurePeriod = /내년|내일|다음\s*(?:달|해|분기)/u;
+  const recordedDecision = /(?:확정|의결|가결|승인|편성|기재|기록)(?:됐|되었|했|하였|되지\s*않았|하지\s*않았|(?:돼|되어)\s*있었?)(?:다|어요|습니다)(?:고\s*\S+다)?[.!。！]?$/u;
   function conflictClaim(original, text, scope) {
     const quote = /[“"]([^“”"]+)[”"]/u.exec(text);
     const marks = text.match(/[“”"]/gu) || [];
@@ -528,13 +533,15 @@
       if (!reportEnding.test(after) || /[?？]|다면|라면|조건으로|가정해/u.test(before)) throw new Error(error);
       assertion = quote[1].trim();
     } else {
-      const reported = /^(.+다)(고\s*[^\s]+[.!。！]?)$/u.exec(text);
+      const reported = /^(.+(?:다|아니라))(고\s*[^\s]+[.!。！]?)$/u.exec(text);
       if (!reported || !reportEnding.test(reported[2]) || /(?:말|주장|밝|전|답|발언)(?:하지|하였|했|한|혔|힌|했다던)|(?:다고|라고)\s/u.test(reported[1])) throw new Error(error);
       assertion = reported[1];
     }
     // Only a complete declarative assertion can be contradicted as a whole.
     // Ignore commas and periods inside numbers when looking for a second claim.
-    if (!/다[.!。！]?$/u.test(assertion) || nonAssertion.test(assertion) || assessment.test(assertion)
+    const declarative = /(?:다|[았었였했됐]어요|이에요|예요)[.!。！]?$/u.test(assertion) || namedMeasurement.test(assertion)
+      || (!quote && assertion.endsWith('아니라'));
+    if (!declarative || nonAssertion.test(assertion) || assessment.test(assertion)
         || multipleClaims.test(assertion.replace(/(?<=\d)\.(?=\d)/gu, '')) || secondQuantity.test(assertion)) throw new Error(error);
     return quote ? assertion : original;
   }
@@ -551,13 +558,18 @@
       if (!scope.allNonfactual) throw new Error('발언에 남은 사실·의혹을 별도 근거로 확인하거나 내용 미확인으로 남겨 주세요.');
       return {contentStatus, contentChecked: true, contentReason: decision.contentReason};
     }
-    if (scope.hasForecast || (checkingConflict && /일\s*것|일\s*전망|예측(?:한|했|이)|예상(?:이|하)|전망(?:이|하)/u.test(scopedText))) {
-      throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과는 시점을 명시한 별도 주장과 원자료가 필요합니다.');
+    const content = scope.quotes.length ? scope.quotes.join(' ') : scopedText;
+    if (/(?:것으로|것이라(?:고)?|으로|로)\s*(?:추정|추산)(?:된|될|됐|했|하|한|되|됩)/u.test(content)) {
+      throw new Error('추정치를 실제 확정된 수치로 판정하기 어려우면 내용 미확인으로 남기고, 자료가 제시한 수치의 성격을 기록하세요.');
+    }
+    if (scope.hasForecast || /일\s*것|일\s*전망|예측(?:한|했|이)|예상(?:이|하)|전망(?:이|하)/u.test(content)
+        || (futurePeriod.test(content) && !recordedDecision.test(content))) {
+      throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과를 판단할 자료가 부족하면 내용 미확인으로 남겨 주세요.');
     }
     const closing = Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"'));
     const speechAct = closing < 0 ? scopedText : scopedText.slice(closing + 1);
-    const content = scope.quotes.length ? scope.quotes.join(' ') : scopedText;
     if (/[?？]|겠(?:다|습니)|(?:인가요|일까요|나요|습니까)[.!]?$/u.test(content)
+        || (closing >= 0 && /아니(?:라|었|냐)|사실이\s*아니/u.test(speechAct))
         || /(?:말한|주장한|발표한|발언한|밝힌)\s*(?:적|사실)(?:이|은)?\s*없|(?:말하|주장하|발표하|발언하|밝히)지\s*않|(?:부인했|물었|되물었|반문했|질문했|약속했)다/u.test(speechAct)) {
       throw new Error('부인·질문·약속의 원발언을 확인하고, 발언 속 표현을 독립된 사실로 단정하기 어려우면 내용 미확인으로 남겨 주세요.');
     }
