@@ -1,6 +1,6 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {prepare, decide, report} = require('../docs/reader/factcheck-engine.js');
+const {prepare, decide, report, sourceTarget} = require('../docs/reader/factcheck-engine.js');
 const archived = require('../experiments/source-evidence-ai-review/data/cases.json');
 
 const article = '의회는 심의안을 의결했다.';
@@ -259,6 +259,63 @@ test('같은 뷰어의 문서 주소를 구분하고 페이지·서명·추적�
       ['#page=2', '#section-10'], ['#utm_source=view', '#chapter']
     ]) assert.throws(() => inspect(left, right, state), /다른 원자료/);
   }
+});
+
+test('서명과 열람 쪽이 바뀐 PDF는 직접 주소와 뷰어에서 같은 원자료로 대조한다', () => {
+  const article = '의원은 “집행액은 20억 원이었다”고 말했다.';
+  const judgment = {...decision, status:'attribution', contentStatus:'contradicted', contentChecked:true,
+    contentReason:'같은 연도와 사업을 대조했다.', contentSourceIds:['audit']};
+  const direct = (id, provider, token) => {
+    const url = new URL('https://archive.example/minutes.pdf');
+    url.searchParams.set('docId', id);
+    for (const name of ['Algorithm','Credential','Date','Expires','SignedHeaders','Signature']) {
+      url.searchParams.set('X-' + provider + '-' + name, name + '-' + token);
+    }
+    url.hash = 'page=' + token;
+    return url.href;
+  };
+  const view = (file, where, extra = {}) => 'https://archive.example/reader' + where +
+    new URLSearchParams({file, ...extra}).toString();
+  function capture(left, right) {
+    const refs = [{...source, url:left, excerpt:article}, {...source, id:'audit', url:right, excerpt:'같은 연도 집행액은 10억 원이다.'}];
+    for (const ref of refs) assert.equal(sourceTarget(ref).href, ref.url, '열기 링크는 원래 서명과 쪽번호 유지');
+    const saved = decide(prepare(article, refs).rows[0], judgment, refs);
+    return report(article, refs, [saved]);
+  }
+  const original = direct('A','Amz',1), otherPage = direct('A','Goog',2), independent = direct('B','Goog',3);
+  for (const [first, second] of [
+    [original, otherPage], [original, view(otherPage, '?')], [view(original, '#'), view(otherPage, '?')],
+    [view(original, '#', {page:'1'}), view(otherPage, '#', {page:'2'})],
+    [view(view(original, '?'), '#'), view(view(otherPage, '#'), '?')],
+    [view(original, '#/reader?', {edition:'spring'}), view(otherPage, '#/reader?', {edition:'spring'})]
+  ]) assert.throws(() => capture(first, second), /다른 원자료/);
+  assert.equal(capture(view(original, '?'), view(independent, '#')).contentContradictedCount, 1);
+  assert.equal(capture(view(original, '?', {edition:'A'}), view(otherPage, '?', {edition:'B'})).contentContradictedCount, 1);
+  assert.equal(capture(original, original.replace('docId=A','docId=A&versionId=new')).contentContradictedCount, 1);
+});
+
+test('이전 버전에서 같은 서명 PDF의 다른 쪽을 독립 반증으로 저장한 판정을 다시 연다', () => {
+  const article = '의원은 “집행액은 20억 원이었다”고 말했다.';
+  const refs = ['first', 'second'].map((token, i) => ({
+    id:i ? 'audit' : 'minutes', url:'https://archive.example/minutes.pdf?docId=A&X-Amz-Signature=' + token + '#page=' + (i + 1),
+    version:'확정본', locator:(i + 1) + '쪽', excerpt:i ? '같은 연도 지출은 10억 원이다.' : article
+  }));
+  // Captured with the previous engine, including its verified receipt checksum.
+  const saved = {
+    protocol:'journal-review/1', rowId:'unit-0',
+    articleBinding:'a8958025b6999a121525ee48258a3b8b504278f65eb96835e1708bce1ddbdfdb',
+    binding:'29e55df8a8981709fba7251e567b436586e88997b70fcf0f6206aca64bfd08a4',
+    references:'f70d96ea33675aeecd503c5fd6c9105ab66e9e072e3ede9abc8d8468ec4e81ec',
+    recordedAt:'2026-11-24T17:55:05.182Z', status:'attribution', sourceIds:['minutes'], reason:'회의 발언을 확인했다.',
+    acknowledged:true, contentStatus:'contradicted', contentChecked:true, contentReason:'같은 사업과 회계연도를 대조했다.',
+    contentSourceIds:['audit'], contentClaim:'집행액은 20억 원이었다',
+    checksum:'d0eb4bd1348bd376c07b6eeac8ccd29846c80d9a00fc21d6a20fe83d51d4a5e9'
+  };
+  const [row] = report(article, refs, [saved]).rows;
+  assert.equal(row.binding, saved.binding);
+  assert.equal(row.status, 'pending');
+  assert.equal(row.receipt, null);
+  assert.equal(row.priorDecision, null);
 });
 
 test('전재 경로를 잇는 중간 자료가 들어오면 기존 내용 확인도 다시 연다', () => {
@@ -579,7 +636,6 @@ test('과거형 연결어와 수식어가 있어도 서술 사실과 발언을 �
 });
 
 test('PDF 파일 순번만 연결하고 인쇄 쪽·웹 문서·모의 출처를 구별한다', () => {
-  const {sourceTarget} = require('../docs/reader/factcheck-engine.js');
   const src = {id:'s',title:'예산안',url:'https://office.example/download.do?fid=87#old',locator:'인쇄 16쪽, 표 2, 전국 2023년 행',
     excerpt:'확정 총액',version:'2025년도'};
   assert.equal(sourceTarget(src).page,null);

@@ -61,28 +61,31 @@
 
   const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
     'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
-  function documentParams(query, fragment = false) {
-    const params = new URLSearchParams(query);
-    for (const key of [...params.keys()]) {
+  const signingParameter = /^(?:x-(?:amz|goog)-(?:algorithm|credential|date|expires|signature|signedheaders)|x-amz-(?:security-token|content-sha256)|AWSAccessKeyId|GoogleAccessId)$/iu;
+  function documentParams(query, fragment = false, normalizeFile) {
+    const params = new URLSearchParams();
+    for (const [key, value] of new URLSearchParams(query)) {
       if (/^(?:utm_.*|gclid|fbclid|page|pageNo|token|access_token|signature|expires)$/iu.test(key)
-          || (fragment && (pdfViewParameters.has(key.toLowerCase()) || /^(?:section|anchor|tab)$/iu.test(key)))) params.delete(key);
+          || signingParameter.test(key)
+          || (fragment && (pdfViewParameters.has(key.toLowerCase()) || /^(?:section|anchor|tab)$/iu.test(key)))) continue;
+      params.append(key, normalizeFile ? normalizeFile(key, value) : value);
     }
     params.sort();
     return params.toString();
   }
   // A viewer may select the document in a hash route or parameter. Anchors,
   // PDF pages, and tracking tokens change the view without changing its source.
-  function documentSelector(hash) {
+  function documentSelector(hash, normalizeFile) {
     const fragment = hash.slice(1).split('#', 1)[0].split(':~:', 1)[0];
     if (!fragment) return '';
     const route = /^(!?[^?=&]*\/[^?=&]*|![^?=&]+)(?:\?(.*))?$/u.exec(fragment);
     if (route) {
-      const query = documentParams(route[2], true);
+      const query = documentParams(route[2], true, normalizeFile);
       const path = route[1].replace(/^!/u, '').replace(/\/+$/u, '');
       return path || query ? '#' + path + (query ? '?' + query : '') : '';
     }
     if (!fragment.includes('=')) return '';
-    const selector = documentParams(fragment.replace(/^\?/u, ''), true);
+    const selector = documentParams(fragment.replace(/^\?/u, ''), true, normalizeFile);
     return selector ? '#' + selector : '';
   }
   function sourceTarget(source) {
@@ -471,12 +474,30 @@
     }
   }
   // Keep document selectors such as ?docId=, discard navigation and tracking variants.
-  function originAddress(url) {
+  function originAddress(url, depth = 0) {
     const parsed = new URL(url);
-    const query = documentParams(parsed.search);
+    const files = [];
+    function normalizeFile(key, value) {
+      if (depth >= 4 || !/^(?:file|pdf|fileUrl|pdfUrl|docUrl|documentUrl)$/iu.test(key)
+          || !/^https?:\/\//iu.test(value)) return value;
+      let file;
+      try { file = new URL(value); } catch (_) { return value; }
+      if (file.username || file.password) return value;
+      const address = originAddress(file, depth + 1);
+      const normalized = 'https://' + address;
+      files.push({address, selector:new URLSearchParams([[key, normalized]]).toString()});
+      return normalized;
+    }
+    const query = documentParams(parsed.search, false, normalizeFile);
+    const hash = documentSelector(parsed.hash, normalizeFile);
+    // A viewer selecting only one file is another way to open that file. Keep
+    // other selectors (such as an edition ID) when they also choose the document.
+    if (files.length === 1 && ((!hash && query === files[0].selector) || (!query && hash === '#' + files[0].selector))) {
+      return files[0].address;
+    }
     // A mobile or www copy is the same document as the desktop page.
     return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '')
-      + (query ? '?' + query : '') + documentSelector(parsed.hash);
+      + (query ? '?' + query : '') + hash;
   }
   // From the editor's recorded provenance only. Reprints may name another reprint
   // as their source, and two differently worded reports can share that chain.
