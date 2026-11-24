@@ -757,6 +757,46 @@ test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치�
   assert.doesNotMatch(el('finder-results').textContent, /원문 값/);
 });
 
+test('연도가 가로인 표에서 선택한 행을 원문 그대로 옮기고 편집자가 적은 위치를 보존한다', async t => {
+  const {el, set, click, snapshot} = open(t);
+  set('article', '2023년 장비 대여는 87건이었다.');
+  el('article-form').requestSubmit();
+  click('go-find');
+  const lines = ['구분\t2022년\t2023년', '장비 반납(건)\t48\t87', '장비 대여(건)\t29\t31  '];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2023년 장비 대여는 87건인가?');
+  click('find-passages');
+
+  const cards = el('finder-results').querySelectorAll('.source');
+  assert.equal(cards[0].querySelector('blockquote').textContent, lines[2]);
+  assert.match(cards[0].textContent, /장비 대여\(건\) 행 · 2023년 열 · 원문 값 31/);
+  assert.match(cards[0].textContent, /머리글 1문단 · 자료 3문단 · 왼쪽에서 3번째 열/);
+  assert.ok([...cards].slice(1).every(card => !card.textContent.includes('원문 값')));
+  assert.equal(el('source-excerpt').value, '');
+  assert.equal(el('source-locator').value, '');
+
+  const selectRow = cards[0].querySelector(':scope > button');
+  assert.equal(selectRow.textContent, '이 행을 발췌하고 표 위치 확인');
+  selectRow.click();
+  assert.equal(el('source-excerpt').value, lines[2]);
+  assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
+  assert.equal(el('source-locator').readOnly, false);
+  assert.equal(el('source-locator').disabled, false);
+
+  const editorLocation = '장비 이용 대장 7쪽, 표 2';
+  set('source-locator', editorLocation);
+  set('document-query', '2023년 장비 반납은 31건인가?');
+  click('find-passages');
+  el('finder-results').querySelector('.source > button').click();
+  assert.equal(el('source-excerpt').value, lines[1]);
+  assert.equal(el('source-locator').value, editorLocation);
+  assert.equal(el('verdict').value, '');
+  click('save-work');
+  const work = JSON.parse(await snapshot());
+  assert.deepEqual(work.sources, []);
+  assert.deepEqual(work.receipts, []);
+});
+
 test('대상 연도의 항목을 펼쳐도 표 전체의 값을 질문의 답으로 제시하거나 판정을 기록하지 않는다', t => {
   const {el, set, click, w} = open(t);
   click('load-demo');
