@@ -27,15 +27,19 @@ class Assets(HTMLParser):
             self.names.add(a['href'])
 
 
-def html(name, method, case_id):
+def html(name, method, tasks):
     contents = (READER / name).read_text()
     # Coordinator dashboards and case documentation are kept out of both kits.
     contents, count = re.subn(r'<header>.*?</header>', '<header><strong>Journal</strong></header>',
                               contents, count=1, flags=re.S)
     assert count == 1
     if name == 'field-review.html':
+        # Keep the participant JSON inert even if a quoted article contains an HTML end tag.
+        payload = json.dumps(tasks, ensure_ascii=False).replace('<', r'\u003c')
+        contents = contents.replace('</head>', '<script type="application/json" id="assigned-tasks">' +
+                                    payload + '</script></head>', 1)
         contents, count = re.subn(r'id="case-file"', lambda _: 'id="case-file" data-case-id="' +
-                                  escape(case_id, quote=True) + '"', contents, count=1)
+                                  escape(tasks['caseId'], quote=True) + '"', contents, count=1)
         assert count == 1
         contents, count = re.subn(r'<select id="method">.*?</select>',
                                   '<select id="method" disabled><option value="' + method + '">' +
@@ -60,15 +64,16 @@ def packet_bytes(method, case=DEFAULT_CASE):
     if method == 'journal':
         pages.append('factcheck.html')
     for name in pages:
-        contents = html(name, method, tasks['caseId'])
+        contents = html(name, method, tasks)
         packet[name] = contents.encode()
         scanner = Assets()
         scanner.feed(contents)
         for asset in scanner.names:
             assert Path(asset).name == asset
             packet[asset] = (READER / asset).read_bytes()
-    packet['시작 안내.txt'] = ('압축을 푼 뒤 field-review.html을 여세요. 같은 폴더의 blind-tasks.json을 '
-        '불러오고 진행자가 준 익명 코드와 과제 번호를 입력하세요. 시작 전에는 기사를 열지 마세요. '
+    packet['시작 안내.txt'] = ('압축을 푼 뒤 field-review.html을 여세요. 진행자가 준 과제 번호를 선택하고 익명 코드를 입력하세요. '
+        '과제 목록이 보이지 않으면 “과제 파일 직접 불러오기”에서 같은 폴더의 blind-tasks.json을 여세요. '
+        '“시간 측정 시작”을 누르면 과제 문장과 기사 링크가 나타납니다. '
         '외부 기사와 원자료를 열려면 인터넷 연결이 필요합니다. 기록 파일은 완료 또는 중도 종료 후 직접 저장합니다.\n').encode()
     buffer = BytesIO()
     with ZipFile(buffer, 'w') as z:

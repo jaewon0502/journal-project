@@ -48,7 +48,7 @@
     el('work').hidden = !session || !!session.result;
     el('ended').hidden = !session?.result;
     if (!session) {
-      el('start').disabled = !pack || !el('participant').value.trim();
+      el('start').disabled = !pack || !el('task').value || !el('participant').value.trim();
       return;
     }
     if (session.result) {
@@ -83,6 +83,18 @@
     for (const k of fields) el(k).value = session.answers[k] || '';
     showClock();
   }
+  function loadCase(raw) {
+    const data = c.readCase(raw);
+    if (assignedCase && data.caseId !== assignedCase)
+      throw Error('이 배포본과 다른 기사입니다. 같은 폴더의 blind-tasks.json을 선택하세요.');
+    pack = data;
+    el('case-name').textContent = data.title;
+    el('task').replaceChildren();
+    if (assignedCase) el('task').add(new Option('받은 과제 번호를 선택하세요', ''));
+    for (const t of data.tasks) el('task').add(new Option(t.id, t.id));
+    message('');
+    render();
+  }
   el('case-file').onchange = async (e) => {
     const gen = ++generation,
       file = e.target.files[0];
@@ -92,19 +104,14 @@
     render();
     if (!file) return;
     try {
-      const data = c.readCase(JSON.parse(await file.text()));
+      const raw = JSON.parse(await file.text());
       if (gen !== generation) return;
-      if (assignedCase && data.caseId !== assignedCase)
-        throw Error('이 배포본과 다른 기사입니다. 같은 폴더의 blind-tasks.json을 선택하세요.');
-      pack = data;
-      el('case-name').textContent = data.title;
-      for (const t of data.tasks) el('task').add(new Option(t.id, t.id));
-      message('');
-      render();
+      loadCase(raw);
     } catch (err) {
       if (gen === generation) message(err.message);
     }
   };
+  el('task').onchange = render;
   el('participant').oninput = render;
   el('start').onclick = () => {
     if (session || !pack || !el('participant').value.trim()) return;
@@ -212,6 +219,15 @@
     persist();
   });
   window.addEventListener('pageshow', render);
+  const assignedTasks = el('assigned-tasks');
+  if (assignedTasks) {
+    try {
+      loadCase(JSON.parse(assignedTasks.textContent));
+      el('case-import').open = false;
+    } catch {
+      message('과제 목록을 열지 못했습니다. 같은 폴더의 blind-tasks.json을 직접 불러오세요.');
+    }
+  }
   try {
     const raw = JSON.parse(localStorage.getItem(key));
     if (

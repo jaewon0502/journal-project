@@ -192,6 +192,52 @@ test('수동·저널 배정을 유지하고 실제 도구 사용 응답과 다�
     );
   }
 });
+test('배부본은 번호 선택과 시작을 기다리고 수동으로 다시 불러와도 같은 문장을 연다', async (t) => {
+  for (const arm of ['manual', 'journal']) {
+    const p = page(t, 'field-review', ({ document }) => {
+      document.getElementById('case-file').dataset.caseId = fixture.caseId;
+      const method = document.getElementById('method');
+      for (const option of [...method.options]) if (option.value !== arm) option.remove();
+      method.disabled = true;
+      const script = document.createElement('script');
+      script.type = 'application/json';
+      script.id = 'assigned-tasks';
+      script.textContent = JSON.stringify(fixture);
+      document.head.append(script);
+    });
+    const { el } = p;
+    assert.equal(el('case-import').open, false);
+    el('participant').value = 'E01';
+    el('participant').oninput();
+    for (const reloadFile of [false, true]) {
+      if (reloadFile) {
+        await p.upload('case-file', { ...fixture, caseId: 'other-case' });
+        assert.match(el('status').textContent, /다른 기사/);
+        assert.equal(el('task').options.length, 0);
+        await p.upload('case-file', fixture);
+      }
+      assert.equal(el('case-name').textContent, fixture.title);
+      assert.deepEqual([...el('task').options].map(o => o.value), ['', ...fixture.tasks.map(t => t.id)]);
+      assert.equal(el('task').value, '');
+      assert.equal(el('start').disabled, true);
+      p.select('#task', fixture.tasks[1].id);
+      assert.equal(el('start').disabled, false);
+      assert.equal(el('work').hidden, true);
+      assert.equal(el('question').textContent, '');
+      assert.equal(el('article-link').children.length, 0);
+      assert.equal(el('clock').textContent, '');
+      assert.equal(p.window.localStorage.length, 0);
+    }
+    el('start').click();
+    assert.equal(el('question').textContent, fixture.tasks[1].prompt);
+    assert.equal(el('article-link').firstElementChild.href, fixture.articleUrl);
+    assert.equal(el('tool-link').children.length, arm === 'journal' ? 1 : 0);
+    el('withdraw').click();
+    el('next').click();
+    assert.equal(el('task').value, '');
+    assert.equal(el('start').disabled, true);
+  }
+});
 test('배정과 실제 사용이 다른 완료 건수와 과거 미확인 파일을 배정별로 센다', () => {
   const rows = [
     { journalUse: 'yes' },
