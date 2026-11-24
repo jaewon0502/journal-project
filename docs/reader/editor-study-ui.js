@@ -366,7 +366,8 @@
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
     let sample = confirmed;
     if (demo) {
-      const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords, agreement:core.cueAgreementDemoRecords};
+      const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
+        agreement:core.cueAgreementDemoRecords, missing:core.missingCueDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
@@ -374,7 +375,7 @@
     el('real-view').setAttribute('aria-pressed', String(!demo));
     el('demo-view').setAttribute('aria-pressed', String(demo));
     el('data-notice').textContent = demo ? '가상 수치 예시 · 계산 방법을 보여 주기 위해 만든 응답과 시간입니다. 실제 편집자 집계에는 들어가지 않습니다.'
-      : a.completeBlocks ? '기사 편집·검증 업무를 수행한다고 본인이 응답한 참여자의 기록입니다. 완성된 배정 묶음만 지표에 반영했습니다.'
+      : a.completeBlocks ? '기사 편집·검증 업무를 수행한다고 본인이 응답한 참여자의 기록입니다. 시간과 판정의 관측값은 완성된 배정 묶음에서 계산했습니다.'
       : '실제 참여 기록 · 완성된 4인 묶음이 생기면 시간과 판정 차이를 표시합니다.';
     if (a.completeBlocks > 0 && a.completeBlocks <= 2) el('data-notice').textContent += ' 사례·방식·정당 표기별 응답은 각 ' + a.completeBlocks + '명으로, 한 사람의 응답에도 격차가 크게 바뀝니다.';
     if (!demo && confirmed.length < records.length) el('data-notice').textContent +=
@@ -420,6 +421,25 @@
     }
     showCaseQuality(b, biasCard);
     el('metrics').replaceChildren(timeCard, biasCard);
+    const bounds = a.missingAnswerBounds;
+    el('missing-answer-sample').textContent = bounds
+      ? '네 명의 등록 기록을 모두 확인한 ' + bounds.registeredBlocks + '묶음 · 제출 ' + bounds.submitted + '/' + bounds.assigned +
+        '건 · 미제출 ' + bounds.missing + '건 (참여 중단 뒤 남은 과제 포함)'
+      : '계산하려면 같은 배정 묶음 네 명의 등록 기록이 필요합니다.';
+    const excludedBlocks = a.blocks.length - (bounds?.registeredBlocks || 0);
+    if (excludedBlocks) el('missing-answer-sample').textContent += ' · 등록 기록이 일부만 있는 ' + excludedBlocks + '묶음 제외';
+    const amount = el('missing-answer-range');
+    amount.textContent = '';
+    if (bounds) {
+      if (bounds.missing) {
+        amount.textContent = '모든 배정 과제에 답했다고 가정할 때 격차 감소폭은 ' + fmt(bounds.minReductionPp) + '%p ~ ' +
+          fmt(bounds.maxReductionPp) + '%p입니다. ' +
+          (bounds.maxReductionPp < 0 ? '어느 답을 가정해도 격차가 커집니다.' : bounds.minReductionPp > 0 ?
+            '어느 답을 가정해도 격차가 줄어듭니다.' : '양수는 격차 감소, 음수는 증가, 0은 변화 없음을 뜻합니다.');
+      } else {
+        amount.textContent = '모든 답을 제출했습니다. 관측된 격차 감소폭 ' + fmt(bounds.minReductionPp) + '%p.';
+      }
+    }
     showTimingCoverage(a);
     showTimedQuality(a);
     const phases = a.phases;

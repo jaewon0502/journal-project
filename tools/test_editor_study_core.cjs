@@ -70,6 +70,43 @@ test('예시 여덟 명의 분모, 시간, 편향 지표, 잘못된 사실 확�
   }
 });
 
+test('등록한 8명의 답 31건과 마지막 가능한 네 판정에서 격차 변화의 두 끝값을 재현한다', () => {
+  const records = study.missingCueDemoRecords();
+  const report = study.analyze(records, 'demo');
+  assert.deepEqual([report.bias.reductionPp, report.trialCount, report.recordedTrials], [100, 16, 31]);
+  const expected = {registeredBlocks:2, submitted:31, assigned:32, missing:1, minReductionPp:-50, maxReductionPp:-37.5};
+  assert.deepEqual(report.missingAnswerBounds, expected);
+  const last = records.at(-1);
+  const stopped = {...last, withdrawn:true, withdrawalTask:null};
+  assert.deepEqual(study.analyze([...records.slice(0,-1), stopped], 'demo').missingAnswerBounds, expected);
+  for (const verdict of ['supported','contradicted','opinion','insufficient']) {
+    const done = study.addTrial(last, {elapsedMs:1, verdict, reason:'마지막 판정', sourceIds:[], journalUsed:true});
+    const all = study.analyze([...records.slice(0,-1), done], 'demo');
+    assert.equal(all.bias.reductionPp, verdict === 'supported' ? -37.5 : -50);
+    assert.deepEqual(all.missingAnswerBounds, {...expected, submitted:32, missing:0,
+      minReductionPp:all.bias.reductionPp, maxReductionPp:all.bias.reductionPp});
+  }
+  assert.equal(study.analyze(records).missingAnswerBounds, null);
+});
+
+test('미제출 네 건의 가능한 조합과 비교하고 등록이 일부인 묶음의 과제는 더하지 않는다', () => {
+  const full = [1,2,3,4].map(i => observations(i));
+  const partial = full.map(r => ({...r, trials:r.trials.slice(0,-1)}));
+  const report = study.analyze([...partial, observations(6)]);
+  const bounds = report.missingAnswerBounds;
+  assert.equal(report.bias, null);
+  assert.deepEqual([bounds.registeredBlocks,bounds.submitted,bounds.assigned,bounds.missing], [1,12,16,4]);
+  const allOutcomes = Array.from({length:16}, (_, flags) => {
+    const completed = partial.map((r, i) => study.addTrial(r, {...full[i].trials[3], verdict:flags & (1 << i) ? 'supported' : 'opinion'}));
+    return study.analyze(completed).bias.reductionPp;
+  });
+  assert.deepEqual([bounds.minReductionPp,bounds.maxReductionPp], [Math.min(...allOutcomes),Math.max(...allOutcomes)]);
+  const blank = full.map(r => ({...r, trials:[]}));
+  assert.deepEqual(study.analyze(blank).missingAnswerBounds, {registeredBlocks:1, assigned:16, submitted:0, missing:16,
+    minReductionPp:-100, maxReductionPp:100});
+  assert.equal(study.analyze([]).missingAnswerBounds, null);
+});
+
 test('빈 자료·중도탈락·빠진 배정은 시간 0이나 편향 감소로 해석하지 않는다', () => {
   assert.equal(study.analyze([]).quality, null);
   assert.equal(study.analyze([]).timedQuality, null);
@@ -80,6 +117,7 @@ test('빈 자료·중도탈락·빠진 배정은 시간 0이나 편향 감소로
   assert.deepEqual([r.enrolled,r.completed,r.included,r.excluded,r.recordedTrials,r.trialCount], [3,2,0,3,11,0]);
   assert.deepEqual(r.blocks, [{block:1,enrolled:3,completed:2,included:false,missingOrdinals:[4],unfinishedOrdinals:[3],withdrawnOrdinals:[]}]);
   assert.equal(r.bias, null);
+  assert.equal(r.missingAnswerBounds, null);
   const onceFull = study.analyze([...records, ...[5,6,7,8].map(i => observations(i))]);
   assert.deepEqual([onceFull.included, onceFull.excluded, onceFull.trialCount], [4,3,16]);
   assert.equal(onceFull.bias.reductionPct, null);

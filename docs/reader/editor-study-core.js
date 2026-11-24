@@ -273,6 +273,40 @@
     return new Map(cases.ids.map(id => [id, {manual:emptyCells(), journal:emptyCells()}]));
   }
 
+  function missingAnswerBounds(records, blocks) {
+    const registered = new Set(blocks.filter(block => block.enrolled === slots).map(block => block.block));
+    if (!registered.size) return null;
+    const items = caseCells();
+    let submitted = 0;
+    for (const record of records) {
+      if (!registered.has(Math.ceil(record.ordinal / slots))) continue;
+      for (const trial of record.trials) {
+        const cell = items.get(trial.caseId)[trial.method][trial.variant];
+        cell.total++;
+        if (trial.verdict === 'supported') cell.counts.supported++;
+        submitted++;
+      }
+    }
+    const total = {manual:{min:0, max:0}, journal:{min:0, max:0}};
+    for (const item of items.values()) {
+      for (const method of methods) {
+        const {A, B} = item[method];
+        const difference = A.counts.supported - B.counts.supported;
+        // Each registered block assigns one task per case, method and label.
+        const low = difference - (registered.size - B.total);
+        const high = difference + (registered.size - A.total);
+        total[method].min += Math.max(0, low, -high);
+        total[method].max += Math.max(Math.abs(low), Math.abs(high));
+      }
+    }
+    // Each missing answer belongs to just one cell, so both extremes are attainable.
+    const perLabel = cases.ids.length * registered.size;
+    const assigned = perLabel * methods.length * 2;
+    return {registeredBlocks:registered.size, assigned, submitted, missing:assigned - submitted,
+      minReductionPp:100 * (total.manual.min - total.journal.max) / perLabel,
+      maxReductionPp:100 * (total.manual.max - total.journal.min) / perLabel};
+  }
+
   function pooledBias(items, excluded) {
     const endorsementDifferences = {manual:0, journal:0}, verdictDifferences = {manual:0, journal:0};
     let totalPerLabel = 0;
@@ -483,6 +517,7 @@
     counts.timing = {included:timedSample.length, trialCount:timedSample.length * slots, partialTrials:partialTrials.length,
       observedMs:partialTrials.reduce((sum, t) => sum + t.observedMs, 0)};
     counts.timingCoverage = timingCoverage(sample);
+    counts.missingAnswerBounds = missingAnswerBounds(records, blocks);
     counts.phases = phaseStats(timedSample);
     counts.timedQuality = timedQualityStats(timedSample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
@@ -543,6 +578,21 @@
     });
   }
 
+  function missingCueDemoRecords() {
+    return Array.from({length:2 * slots}, (_, i) => {
+      let record = createRecord('demo-missing-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        if (record.ordinal === 2 * slots && task.position === slots) break;
+        const journal = task.method === 'journal';
+        const endorsed = i < slots ? !journal && task.variant === 'A'
+          : task.variant === (journal ? 'A' : 'B');
+        record = addTrial(record, {elapsedMs:60000, verdict:endorsed ? 'supported' : 'insufficient',
+          sourceIds:[], journalUsed:journal, reason:'미제출 한 건이 있는 묶음의 격차를 비교하는 가상 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords,
-    partialTimeDemoRecords, cueAgreementDemoRecords});
+    partialTimeDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords});
 });

@@ -78,6 +78,35 @@ test('진행자는 시간 누락 예시에서 4명과 12명의 결과를 대조�
   assert.ok(coverage.hidden);
 });
 
+test('미제출 답의 격차 범위를 완료 묶음과 구분하고 명부 미확인 응답은 범위에서 제외한다', async t => {
+  const p = page(t);
+  const sample = p.el('missing-answer-sample'), range = p.el('missing-answer-range');
+  p.el('demo-view').click();
+  const selector = p.el('demo-example');
+  selector.value = 'missing';
+  selector.dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('metrics').textContent, /격차 감소100%p/);
+  assert.match(sample.textContent, /2묶음 · 제출 31\/32건 · 미제출 1건/);
+  assert.match(range.textContent, /-50%p ~ -37.5%p.*격차가 커집니다/);
+  p.el('real-view').click();
+  assert.match(sample.textContent, /등록 기록이 필요/);
+  assert.equal(range.textContent, '');
+  p.el('issue-codes').click();
+  const roster = p.workspace().invitations;
+  const confirmed = roster.map(i => completedRecord(i.ordinal, i.id));
+  confirmed[3].trials.pop();
+  const foreign = [5,6,7,8].map(n => completedRecord(n, 'E' + String(n).padStart(16, '0')));
+  await importFiles(p, [JSON.stringify({type:'journal-editor-study-collection-v1', records:foreign}),
+    ...confirmed.slice(0,3).map(r => JSON.stringify(r))]);
+  assert.match(sample.textContent, /등록 기록이 일부만 있는 1묶음 제외/);
+  assert.equal(range.textContent, '');
+  await importFiles(p, [JSON.stringify(confirmed[3])]);
+  assert.match(p.el('data-notice').textContent, /명부 미확인 4명/);
+  assert.match(sample.textContent, /1묶음 · 제출 15\/16건 · 미제출 1건/);
+  assert.match(range.textContent, /가정할 때 격차 감소폭/);
+  assert.match(p.el('metrics').textContent, /측정 대기/);
+});
+
 test('실측이 비었을 때 예시 수치가 실측으로 남지 않는다', t => {
   const p = page(t);
   assert.match(p.el('counts').textContent, /등록 0명/);
