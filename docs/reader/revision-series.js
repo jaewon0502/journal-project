@@ -5,6 +5,7 @@
   const agreement = useNode ? require('./revision-agreement.js') : root.JournalRevisionAgreement;
   const factReview = useNode ? require('./revision-facts.js') : root.JournalRevisionFacts;
   const rubric = useNode ? require('./article-rubric.js') : root.JournalArticleRubric;
+  const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const format = 'journal-revision-series-record';
   const {summarizeScores} = agreement;
 
@@ -37,9 +38,9 @@
     if (![1, 2].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
-    const digest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
+    const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
     for (const side of [record.before, record.after]) {
-      if (!exactKeys(side, ['articleSha256', 'sourcesSha256']) || !digest(side.articleSha256) || !digest(side.sourcesSha256)) {
+      if (!exactKeys(side, ['articleSha256', 'sourcesSha256']) || !isDigest(side.articleSha256) || !isDigest(side.sourcesSha256)) {
         throw new Error('기사 또는 원자료의 SHA-256 식별값이 잘못되었습니다.');
       }
     }
@@ -71,8 +72,18 @@
 
   // A file may name the two reviewers in either order, but each reviewer's four ratings must stay together.
   function ratingProfile(record) {
-    const editors = ['first', 'second'].map(editor => JSON.stringify(record.dimensions.map(d => d[editor])));
+    const editors = ['first', 'second'].map(editor => JSON.stringify(
+      record.dimensions.map(d => [d.id, d[editor].before, d[editor].after])));
     return JSON.stringify(editors.sort());
+  }
+
+  // Only the global editor order is interchangeable. Preserve the before/after
+  // roles, each editor's complete rating profile, and fact observations in passage order.
+  function reviewId(input) {
+    const record = readRecord(input);
+    if (record.version !== 2) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    return engine.digestValue([format, record.version, record.demo, record.before, record.after,
+      ratingProfile(record), record.facts]);
   }
 
   function recordError(recordIndexes, message) {
@@ -142,7 +153,7 @@
       ...summarizeScores(unique.flatMap(r => r.dimensions)), dimensions, articles, facts};
   }
 
-  const api = Object.freeze({makeRecord, summarize});
+  const api = Object.freeze({makeRecord, reviewId, summarize});
   if (useNode) module.exports = api;
   else root.JournalRevisionSeries = api;
 })(globalThis);

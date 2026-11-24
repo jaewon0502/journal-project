@@ -6,7 +6,7 @@ const engine = require('../docs/reader/factcheck-engine.js');
 const rubric = require('../docs/reader/article-rubric.js');
 const blind = require('../docs/reader/blind-revision.js');
 const agreement = require('../docs/reader/revision-agreement.js');
-const {makeRecord, summarize} = require('../docs/reader/revision-series.js');
+const {makeRecord, reviewId, summarize} = require('../docs/reader/revision-series.js');
 
 const ratio = (numerator, denominator) => ({numerator, denominator, pct: denominator ? 100 * numerator / denominator : null});
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -48,6 +48,39 @@ function record(name, values = [], sourceChanged = false) {
 
 const fact = (outcome, flag = 'none') => ({outcome, flag});
 const withFacts = (legacy, before, after) => ({...legacy, version: 2, facts: {before, after}});
+
+test('요약 식별값은 JSON 순서와 두 편집자의 전체 자리 교환을 허용하고 원문·자료·판정 변경은 구별한다', () => {
+  const sample = withFacts(record('revisit', [[3, 0, 2, 1], [null, 'na', 3, 2]], true),
+    [fact('pending'), fact('supported')], [fact('disputed', 'quote'), fact('pending')]);
+  const id = reviewId(sample);
+  // Independently calculated with Python hashlib. Existing bookmarks rely on
+  // the same v2 summary keeping its identifier across application upgrades.
+  assert.equal(id, 'eee4e446977c73e967ac761809579f8bb7af24a317f33f0409ae6123e69346da');
+  function reorderKeys(value) {
+    if (!value || typeof value !== 'object') return value;
+    if (Array.isArray(value)) return value.map(reorderKeys);
+    return Object.fromEntries(Object.entries(value).reverse().map(([key, v]) => [key, reorderKeys(v)]));
+  }
+  const reordered = reorderKeys(sample);
+  reordered.dimensions.reverse();
+  for (const axis of reordered.dimensions) [axis.first, axis.second] = [axis.second, axis.first];
+  assert.equal(reviewId(reordered), id);
+  for (const change of [
+    r => { r.demo = false; }, r => { r.before.articleSha256 = hash('another original'); },
+    r => { r.after.articleSha256 = hash('another revision'); }, r => { r.before.sourcesSha256 = hash('sources A'); },
+    r => { r.after.sourcesSha256 = hash('sources B'); }, r => { [r.before, r.after] = [r.after, r.before]; },
+    r => { r.dimensions[1].first.after = null; },
+    r => { const a = r.dimensions[0]; [a.first, a.second] = [a.second, a.first]; },
+    r => { r.facts.before.reverse(); }, r => { r.facts.after.reverse(); },
+    r => { r.facts.after[0].flag = 'article'; }, r => { r.facts.after[0].outcome = 'pending'; }
+  ]) {
+    const changed = structuredClone(sample);
+    change(changed);
+    assert.notEqual(reviewId(changed), id);
+  }
+  assert.throws(() => reviewId(record('v1')), /구절별 검토 상태/);
+  assert.throws(() => reviewId({...sample, fields: 'ignored data'}), /형식과 버전/);
+});
 
 test('새로 배포한 네 파일과 일부만 회수한 결과는 열 수 있으나 화면 조작으로 기사 요약을 저장할 수 없다', async () => {
   const before = work('예산은 20억 원이다.'), after = work('예산은 10억 원이다.');
@@ -97,6 +130,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   }
   const reversed = makeRecord(agreement.compare(two, one), two.key);
   assert.deepEqual(saved.facts, reversed.facts);
+  assert.equal(reviewId(saved), reviewId(reversed));
   assert.equal(summarize([saved, reversed]).duplicateCount, 1);
 
   assert.throws(() => makeRecord({...joint}, one.key), /대응표/);

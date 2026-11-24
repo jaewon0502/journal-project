@@ -745,7 +745,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget});
+  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, digestValue: digest});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);
