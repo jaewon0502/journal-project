@@ -6,7 +6,8 @@
   const identity = '(?:(' + name + ')\\s+(' + role + ')|(' + role + ')\\s+(' + name + '))';
   const marker = /^\s*[◯○]/u;
   const header = new RegExp('^\\s*[◯○]\\s*' + identity + '(?=\\s|[:：]|$)\\s*[:：]?\\s*', 'u');
-  const unmarkedSpeaker = new RegExp('^\\s*' + identity + '\\s*[:：]', 'u');
+  const unmarkedSpeaker = new RegExp('^\\s*' + identity + '(?:\\s*[:：]|[ \\t]{2,}|\\s*$)', 'u');
+  const dashedSpeaker = new RegExp('(?:^|\\s)[―—–-]\\s*' + identity + '(?=\\s|[:：]|$)', 'u');
   const subject = new RegExp('^' + identity + '(?:은|는|이|가|께서는|께서)(?=\\s|$)', 'u');
   const framing = /^((?:[가-힣A-Za-z0-9·]+\s+){0,3}[가-힣A-Za-z0-9·]+)에\s*(?:대해|관해|대하여|관하여)$/u;
   const endsInRole = new RegExp(role + '$', 'u');
@@ -14,6 +15,12 @@
   const deniedTopic = /^([가-힣]{2,14})(?:은|는|이|가)\s*(?:아니|아닙|아닌|아닐|맞습|없습)/u;
   const reports = /^(?:이?라고|고|라며|라면서)\s*(?:말했|말하였|밝혔|강조했|주장했|답했|설명했|전했|덧붙였|발언했|해명했)[다으며고][.。!?\s]*$/u;
   const quote = /^(.*?)(?:“([^“”‘’"']+)”|‘([^“”‘’"']+)’|"([^“”‘’"']+)"|'([^“”‘’"']+)')(.*)$/u;
+  const citedBeforeQuote = new RegExp('(?:^|[^가-힣])' + identity +
+    '(?:께서는|께서|은|는|이|가)\\s*(?:(?:당시|앞서|어제|이렇게|다음과 같이)\\s*)*' +
+    '(?:(?:말씀하셨습니다|말했습니다|밝혔습니다|주장했습니다)[.:：]?\\s*)?$', 'u');
+  const citedAfterQuote = new RegExp('^\\s*(?:이?라고|라며|고)\\s*' + identity +
+    '(?:께서는|께서|은|는|이|가)\\s*(?:말씀|말했|말하|밝혔|주장했|답했)', 'u');
+  const quotedDocument = /(?:성명서?|보도자료|자료집|문서|보고서|회의록|공문)(?:에|에는|에서)\s*(?:적힌|실린|나온|기록된|기재된)\s*$/u;
   const interruption = /^(?:\s*[(（\[●◎◇▶■□]|\s*[가-힣]{2,20}\s*[:：]|\s*(?:(?:다음|새)\s*안건|의사일정|안건\s*[:：]|제\s*\d+\s*(?:항|호\s*안건)|\d+[.)]\s|정회|속개|산회|개의|휴회|표결\s*결과|출석\s*(?:위원|의원)|부록|첨부|별첨))/u;
   const response = /^(?:아닙니다|아니[요오]|그렇습니다|그렇지\s*않|그(?:런|러한)\s*(?:뜻|취지|의미)|그\s*(?:말씀|부분|점|질문|문제)|(?:네|예)[,.!\s]|맞습니다|사실이\s*아닙니다)/u;
   function compact(text) {
@@ -54,7 +61,7 @@
       if (text.trimStart().includes('\f')) continue;
       const match = header.exec(text);
       // A physical line containing two turns cannot be safely copied as a single speaker's excerpt.
-      if (/[◯○]/u.test(text.slice(match ? match[0].length : 0))) {
+      if (/[◯○]/u.test(text.slice(match ? match[0].length : 0)) || dashedSpeaker.test(text)) {
         current = null;
         previous = null;
         continue;
@@ -90,6 +97,20 @@
     return null;
   }
 
+  function repeatsAnotherSource(turn, phrase) {
+    const body = turn.rows.map(line => line.body).join(' ');
+    for (const span of body.matchAll(/“([^“”]*)”|‘([^‘’]*)’|"([^"]*)"|'([^']*)'|「([^「」]*)」/gu)) {
+      if (!compact(span.slice(1).find(value => value !== undefined)).includes(phrase)) continue;
+      const before = body.slice(Math.max(0, span.index - 120), span.index);
+      const after = body.slice(span.index + span[0].length, span.index + span[0].length + 120);
+      if (quotedDocument.test(before)) return true;
+      for (const cited of [citedBeforeQuote.exec(before), citedAfterQuote.exec(after)]) {
+        if (cited && (cited[1] || cited[4]) !== turn.name) return true;
+      }
+    }
+    return false;
+  }
+
   function lookup(source, query) {
     const target = attribution(query);
     if (!target) return null;
@@ -111,6 +132,7 @@
     const uniqueRole = !conversation.some(t => t.role === target.role && t.name !== target.name);
     const namedAddressee = new RegExp(role + '(?:님|께서|,|，)', 'u');
     const exactPassages = [], relatedPassages = [];
+    let foundRequotation = false;
     for (const turn of conversation) {
       if (turn.name !== target.name || turn.role !== target.role) continue;
       const prior = turn.previous;
@@ -123,6 +145,12 @@
         if (!target.framing.every(word => statedTopics.has(word))) continue;
       }
       const exact = endOfQuote(turn.rows, phrase);
+      // Excerpts include everything from the speaker header through the matching row.
+      // When that excerpt could attribute someone else's quoted words to this speaker, abstain.
+      if (exact && repeatsAnotherSource(turn, phrase)) {
+        foundRequotation = true;
+        continue;
+      }
       const direct = exact || turn.rows.find(line => relevant(line.body));
       const citedBefore = previousLine && relevant(previousLine.body);
       const outside = citedBefore ? previousLine.body.replace(/“[^”]*”|‘[^’]*’|"[^"]*"|'[^']*'/gu, ' ').trim() : '';
@@ -150,6 +178,7 @@
     const label = target.name + ' ' + target.role;
     return {passages, notice:passages.length ?
       label + '의 발언 위치를 찾았습니다. 앞선 질의와 답변의 범위를 원문에서 대조하세요.' :
+      foundRequotation ? label + '의 발언 중 다른 사람이나 문서를 인용한 곳에서 같은 표현을 찾았습니다. 원 발언자를 확인하세요.' :
       label + '의 발언과 인용 내용을 연결할 구간을 찾지 못했습니다. 원문의 화자 표기와 앞뒤 발언을 확인하세요.'};
   }
   const api = {lookup};

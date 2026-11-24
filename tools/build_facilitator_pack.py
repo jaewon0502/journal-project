@@ -50,6 +50,9 @@ START = """<!doctype html>
 <p><a href="data:application/json;base64,{{PRACTICE_DATA}}" download="고용률-판단이유-가상응답.json">가상 답안 4건 내려받기</a> ·
 <a href="field-summary.html" target="_blank" rel="noopener">새 집계 화면</a>에서 ‘참여 JSON 또는 이전 집계 JSON 불러오기’로 예시 파일을 여세요.
 ‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 맞은 답안 한 건에 참여자와 진행자가 각각 몇 초를 썼는지 볼 수 있습니다. 두 역할의 시간은 모두 가상 값입니다.</p>
+<details><summary>PDF 원문에서 후보가 있는 쪽 열기</summary>
+<p>진행자가 원본 PDF와 같은 폴더에 <a href="prepare_pdf_source.py" download>검색 파일 변환 도구</a>를 저장합니다. Python 3.9 이상과 Poppler의 pdftotext가 있는 컴퓨터에서 <code>python3 prepare_pdf_source.py "원본.pdf"</code>를 실행하세요.</p>
+<p><a href="factcheck.html">기사 팩트체크</a>에서 검토 목록을 만들고 ‘원자료 관리 → 원자료 본문에서 근거 구간 찾기 → 파일에서 원자료 불러오기’를 엽니다. 생성된 <code>.journal-source.json</code>과 원본 PDF를 차례로 고르세요. 검색 결과의 PDF 쪽 링크를 누르면 그 자리에서 원문을 대조할 수 있습니다. 검색 파일에는 자료 전문이 들어갑니다.</p></details>
 <details id="deadline-example"><summary>목표 120초에서 검증 성공률이 뒤집히는 가상 예시</summary>
 <p>15세 이상 고용률을 검증하는 과제입니다. 평소 도구를 쓴 두 명은 100초와 121초에 위치·판정·이유를 모두 맞혔습니다.
 저널을 쓴 두 명은 각각 60초에 표와 판정을 맞혔지만, 판단 이유에는 15~64세 수치를 썼습니다.</p>
@@ -133,7 +136,8 @@ def packet_bytes():
     # A data URL also downloads from a local file:// launch page in Chrome.
     start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii'))
     files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer),
-             'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice}
+             'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice,
+             'prepare_pdf_source.py': (ROOT / 'tools' / 'prepare_pdf_source.py').read_bytes()}
     for filename, destination in QUOTE_PRACTICE.items():
         files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()
     case = json.loads(files[QUOTE_PRACTICE['coordinator-case.json']])

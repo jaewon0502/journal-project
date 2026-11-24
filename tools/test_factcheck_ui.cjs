@@ -550,6 +550,96 @@ test('공식 다운로드 주소에 확인한 PDF 쪽·표·행을 연결하고 
   assert.equal(c.el('source-pdfPage').value,'17');
 });
 
+function selectEmploymentPassage(page, quote) {
+  page.set('document-text', 'PDF 28쪽\n전년 대비 전체 취업자 수는 5만 명 늘었다.\n\f\nPDF 42쪽\n' + quote);
+  page.set('document-query', quote);
+  page.click('find-passages');
+  const card = [...page.el('finder-results').querySelectorAll('.source')].find(hit => hit.querySelector('blockquote')?.textContent === quote);
+  assert.ok(card);
+  card.querySelector(':scope > button').click();
+}
+
+test('다른 쪽의 발췌문을 선택하면 취소·초안 복원 후에도 확인 전에는 자료와 기존 판단 기록을 바꾸지 않는다', async t => {
+  const p = open(t), url = 'https://stats.example/report.pdf';
+  const original = '전년 대비 전체 취업자 수는 5만 명 늘었다.';
+  const quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+  p.set('article', original); p.el('article-form').requestSubmit();
+  for (const [field, value] of Object.entries({title:'고용 조사', url, version:'확정본', locator:'28쪽 전체 취업자 행', pdfPage:'28', excerpt:original}))
+    p.set('source-' + field, value);
+  p.el('source-form').requestSubmit();
+  p.el('row-sources').querySelector('input').click(); p.set('verdict', 'fact');
+  p.set('reason', '확정본 전체 취업자 행과 대조했다.'); p.click('acknowledged'); p.el('decision-form').requestSubmit();
+  p.el('source-list').querySelector('button').click();
+  p.w.confirm = prompt => { assert.match(prompt, /PDF 28쪽/); return false; };
+  selectEmploymentPassage(p, quote);
+  assert.equal(p.el('source-excerpt').value, original);
+  assert.ok(p.el('source-location-review').hidden);
+  p.w.confirm = () => true;
+  selectEmploymentPassage(p, quote);
+  assert.equal(p.el('source-pdfPage').value, '28');
+  assert.equal(p.el('source-location-summary').textContent, 'PDF 28쪽 · 28쪽 전체 취업자 행');
+  p.el('source-form').requestSubmit();
+  assert.equal(p.doc.activeElement, p.el('source-location-checked'));
+  p.click('save-work'); const work = JSON.parse(await p.snapshot());
+  assert.equal(work.sources[0].excerpt, original); assert.equal(work.receipts.length, 1);
+  assert.equal(work.sourceDraft.locationReview, 'pending');
+  const restored = open(t); await loadWorkspace(restored, work);
+  assert.equal(restored.el('source-location-checked').checked, false);
+  restored.click('source-save');
+  assert.equal(restored.doc.activeElement, restored.el('source-location-checked'));
+  restored.click('source-location-checked');
+  restored.set('source-pdfPage', '42'); restored.set('source-locator', '42쪽 고용률 행');
+  assert.equal(restored.el('source-location-checked').checked, false);
+  assert.equal(restored.el('source-location-summary').textContent, 'PDF 42쪽 · 42쪽 고용률 행');
+  restored.click('source-location-checked'); restored.click('source-save');
+  assert.equal(restored.doc.querySelector('#source-list .source-page-links > a').href, url + '#page=42');
+  restored.click('save-work'); const corrected = JSON.parse(await restored.snapshot());
+  assert.equal(corrected.sources[0].excerpt, quote); assert.equal(corrected.receipts.length, 0);
+  assert.equal(corrected.sourceDraft.locationReview, undefined);
+});
+
+test('이미 등록한 발췌문과 글자가 같은 위치를 골라도 확인 대기 초안으로 복원하고 독립 검토에서 제외한다', async t => {
+  const p = open(t), quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+  p.set('article', quote); p.el('article-form').requestSubmit();
+  const fields = {title:'고용 조사', url:'https://stats.example/report.pdf#page=28', version:'확정본', locator:'집계표 고용률 행', excerpt:quote};
+  for (const [field, value] of Object.entries(fields)) p.set('source-' + field, value);
+  p.click('source-save'); p.el('source-list').querySelector('button').click();
+  selectEmploymentPassage(p, quote);
+  p.click('save-work'); const work = JSON.parse(await p.snapshot());
+  assert.ok(p.w.JournalWorkspaceSnapshot.read(work).sourceDraftPending);
+  const own = open(t); await loadWorkspace(own, work);
+  assert.equal(own.el('source-location-review').hidden, false);
+  own.click('source-save'); assert.equal(own.doc.activeElement, own.el('source-location-checked'));
+  const independent = open(t); await loadWorkspace(independent, work, false);
+  assert.ok(independent.el('source-location-review').hidden);
+  assert.equal(independent.el('source-excerpt').value, '');
+  assert.equal(independent.el('source-count').textContent, '· 1개');
+});
+
+test('주소에 적힌 PDF 쪽과 직접 적은 위치는 같은 쪽으로 다시 확인한 뒤에만 문장에 연결한다', async t => {
+  for (const [suffix, summary] of [['#page=28&zoom=100', '문서 주소의 #page=28 · 인쇄 21쪽 고용률 행'], ['', '인쇄 21쪽 고용률 행']]) {
+    const p = open(t), url = 'https://stats.example/report.pdf' + suffix;
+    const quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+    p.set('article', quote); p.el('article-form').requestSubmit(); p.click('go-find');
+    for (const [field, value] of Object.entries({title:'고용 조사', url, version:'확정본', locator:'인쇄 21쪽 고용률 행', excerpt:quote}))
+      p.set('source-' + field, value);
+    selectEmploymentPassage(p, quote);
+    assert.equal(p.el('source-location-summary').textContent, summary);
+    p.click('source-save-link');
+    assert.equal(p.el('source-count').textContent, '· 0개');
+    assert.equal(p.el('row-sources').querySelectorAll('input:checked').length, 0);
+    p.click('source-location-checked'); p.click('save-work');
+    const r = open(t); await loadWorkspace(r, JSON.parse(await p.snapshot()));
+    assert.ok(r.el('source-location-checked').checked);
+    r.click('source-save-link');
+    assert.equal(r.el('row-sources').querySelectorAll('input:checked').length, 1);
+    r.click('save-work'); const saved = JSON.parse(await r.snapshot());
+    assert.equal(saved.sources.length, 1); assert.equal(saved.sources[0].url, url);
+    assert.equal(saved.sources[0].locator, '인쇄 21쪽 고용률 행'); assert.equal(saved.receipts.length, 0);
+    assert.equal(saved.sources[0].locationReview, undefined);
+  }
+});
+
 test('첨부용 PDF는 같은 판본의 여러 쪽에만 연결되고 작업 파일에서는 빠진다', async t => {
   const a=open(t);
   const url='https://office.example/attachment.do?file=3';

@@ -98,6 +98,7 @@
   }
 
   function hasSourceDraft(w) {
+    if (['pending', 'confirmed'].includes(w.sourceDraft.locationReview)) return true;
     const editing = w.sources.find(s => s.id === w.sourceDraft.id);
     const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
     const baseline = editing || sourceDefaults(prefill);

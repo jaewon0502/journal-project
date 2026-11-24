@@ -38,6 +38,8 @@ class FacilitatorPack(unittest.TestCase):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:
             links = Dependencies()
             links.feed(coordinator.read('시작.html').decode())
+            self.assertIn('prepare_pdf_source.py', links.local)
+            self.assertEqual(coordinator.read('prepare_pdf_source.py'), Path(__file__).with_name('prepare_pdf_source.py').read_bytes())
             expected = {'participant-editor-study.zip': editor_participant_zip()}
             for case, folder in CASE_FOLDERS.items():
                 pair = packet_pair(case)

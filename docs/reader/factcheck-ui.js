@@ -144,6 +144,7 @@
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
         clearSourceTarget();
         suggestedLocator = '';
+        setLocationReview(false);
         editingId = source.id;
         for (const field of sourceFields) byId('source-' + field).value = source[field] || '';
         byId('source-form-title').textContent = '원자료 수정';
@@ -156,9 +157,25 @@
     }
   }
   let sourceBaseline = {}, prefillId = null, suggestedLocator = '';
+  function draftPageLabel() {
+    const page = byId('source-pdfPage').value.trim();
+    if (page) return 'PDF ' + page + '쪽';
+    try {
+      const hash = new URL(byId('source-url').value).hash;
+      const pageInAddress = new URLSearchParams(hash.slice(1)).get('page');
+      if (pageInAddress) return '문서 주소의 #page=' + pageInAddress;
+    } catch { /* The editor may still be typing the document address. */ }
+    return '';
+  }
+  function setLocationReview(visible, checked = false) {
+    byId('source-location-review').hidden = !visible;
+    byId('source-location-checked').checked = visible && checked;
+    byId('source-location-summary').textContent = visible
+      ? [draftPageLabel(), byId('source-locator').value.trim() || '확인 위치를 입력하세요.'].filter(Boolean).join(' · ') : '';
+  }
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
-    return sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
+    return !byId('source-location-review').hidden || sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
   }
   function sourceDraftNote() {
     if (!result || !sourceDraftIsDirty()) return '';
@@ -191,6 +208,7 @@
   function clearSourceForm(reuse = {}) {
     clearSourceTarget();
     suggestedLocator = '';
+    setLocationReview(false);
     editingId = null;
     prefillId = reuse.id || null;
     sourceBaseline = workspace.sourceDefaults(reuse);
@@ -465,6 +483,7 @@
     clearSourceForm();
     byId('article').value = text;
     showBlindNotice();
+    window.JournalDocumentFile?.clear();
     byId('document-text').value = '';
     clearSearchContext();
     byId('finder-results').replaceChildren();
@@ -574,6 +593,11 @@
   byId('source-cancel').addEventListener('click', () => clearSourceForm());
   byId('source-form').addEventListener('submit', event => {
     event.preventDefault();
+    if (!byId('source-location-review').hidden && !byId('source-location-checked').checked) {
+      message('source-status', '등록하려면 위 확인 위치와 발췌문을 원문에서 대조한 뒤 확인란을 선택하세요.', true);
+      byId('source-location-checked').focus();
+      return;
+    }
     const source = Object.fromEntries(sourceFields.map(field => {
       const value = byId('source-' + field).value;
       return [field, field === 'excerpt' ? value : value.trim()];
@@ -617,17 +641,20 @@
     const excerpt = byId('source-excerpt'), locator = byId('source-locator');
     const maySetLocation = !locator.value.trim() || (suggestedLocator && locator.value === suggestedLocator);
     const replacingLocation = (maySetLocation || tableLocation) && locator.value !== tableLocation;
-    if (excerpt.value && (excerpt.value !== entry.text || replacingLocation)) {
+    const pageLabel = draftPageLabel();
+    const inheritsLocation = !maySetLocation || !!pageLabel;
+    if (excerpt.value && (excerpt.value !== entry.text || replacingLocation || inheritsLocation)) {
       const next = maySetLocation
         ? (tableLocation ? '표 위치도 ' + tableLocation + '로 바뀝니다.' : '이전 표의 자동 위치는 비웁니다.')
         : '직접 적은 위치는 유지됩니다. 이 구간과 일치하는지 확인하세요.';
-      if (!confirm('선택한 원문으로 발췌문을 바꿀까요? ' + next)) return;
+      if (!confirm('선택한 원문으로 발췌문을 바꿀까요? ' + next + (pageLabel ? ' 남아 있는 쪽 지정은 ' + pageLabel + '입니다.' : ''))) return false;
     }
     if (maySetLocation) {
       locator.value = tableLocation;
       suggestedLocator = tableLocation;
     }
     excerpt.value = entry.text;
+    setLocationReview(inheritsLocation);
     updateSourceDraftNote();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
       ? entry.startParagraph + '~' + entry.paragraph : entry.paragraph;
@@ -637,6 +664,7 @@
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
     byId('source-locator').focus();
+    return true;
   }
   function citationRows(entries) {
     const ordered = [...new Map(entries.filter(Boolean).map(row => [row.paragraph, row])).values()]
@@ -878,7 +906,7 @@
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
-    if (!lookup.fiscalTable && !lookup.transcript) {
+    if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope) {
       for (const p of passages) if (!p.annualRate && !p.changeRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
@@ -912,7 +940,7 @@
     }
     let results = area;
     const sourceRows = () => rows ??= documentRows(text);
-    const matrixTable = !lookup.fiscalTable && lookup.yearMatrix;
+    const matrixTable = !lookup.fiscalTable && !lookup.labourScope && lookup.yearMatrix;
     const matrixHeader = matrixTable && sourceRows()[matrixTable.headerParagraph - 1];
     const browser = matrixTable && matrixBrowser(matrixTable, matrixHeader);
     const fallbackCount = passages.filter(passage => !passage.fiscalNavigation).length;
@@ -921,12 +949,10 @@
       results.append(node('summary', '표현이 겹친 위치 ' + fallbackCount + '개 보기'));
     }
     for (const passage of passages) {
-      if (passage.changeRows) {
-        results.append(priorChangeCard(passage));
-        continue;
-      }
-      if (passage.annualRate) {
-        results.append(annualRateCard(passage));
+      if (passage.changeRows || passage.annualRate) {
+        const card = passage.changeRows ? priorChangeCard(passage) : annualRateCard(passage);
+        window.JournalDocumentFile?.appendPageInfo(card, passage.paragraph);
+        results.append(card);
         continue;
       }
       const block = node('div', undefined, 'source');
@@ -942,6 +968,7 @@
         else if (speaker.exactQuote === false)
           block.append(node('p', '인용문과 일부 단어가 겹칩니다. 발언의 실제 표현과 수치를 대조하세요.', 'callout'));
       }
+      window.JournalDocumentFile?.appendPageInfo(block, passage.paragraph);
       const fiscal = passage.fiscalCell;
       let tableLocation = '';
       if (fiscal) {
@@ -969,6 +996,9 @@
         } else {
           block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
         }
+      } else if (passage.labourScope) {
+        block.append(node('p', '원자료의 기간 · ' + passage.context[0].text.trim()));
+        excerpt = citationRows([...passage.context, passage]);
       } else if (!lookup.fiscalTable && !speaker) {
         const annual = annualRows.get(passage);
         addColumnHints(block, text, query, passage, separateContext, annual);
@@ -1020,8 +1050,9 @@
           const label = '‘' + navigation.rowLabel + '’ 행의 ' + navigation.year + '년 열 직접 대조';
           block.append(button(label, () => browser.openAt(navigation.rowParagraph, navigation.year)));
         }
-        block.append(button(includeSpeaker ? '발언자 표지부터 이 문단까지 발췌' : '이 문단을 발췌문으로 사용',
-          () => useExcerpt(excerpt)));
+        const label = passage.labourScope ? '기간 표지와 구절을 함께 발췌' :
+          includeSpeaker ? '발언자 표지부터 이 문단까지 발췌' : '이 문단을 발췌문으로 사용';
+        block.append(button(label, () => useExcerpt(excerpt)));
       }
       (passage.fiscalNavigation ? area : results).append(block);
     }
@@ -1040,6 +1071,9 @@
     if (event.target.id === 'source-url' && byId('source-pdfPage').value) {
       byId('source-pdfPage').value = '';
       message('source-status', '문서 주소를 바꿨습니다. 새 주소에서 확인한 PDF 쪽번호를 입력하세요.');
+    }
+    if (!byId('source-location-review').hidden && ['source-url', 'source-version', 'source-pdfPage', 'source-locator', 'source-excerpt'].includes(event.target.id)) {
+      setLocationReview(true);
     }
     updateSourceDraftNote();
   });
@@ -1097,6 +1131,7 @@
       ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
         ...(suggestedLocator ? {suggestedLocator} : {}),
+        ...(!byId('source-location-review').hidden ? {locationReview: byId('source-location-checked').checked ? 'confirmed' : 'pending'} : {}),
         ...(sourceDraftIsDirty() ? {targetBinding: sourceForRow, panelOpen: byId('sources-panel').open} : {})}
     };
   }
@@ -1161,6 +1196,8 @@
       for (const field of sourceFields) byId('source-' + field).value = w.sourceDraft.fields[field] || '';
       if (w.sourceDraft.suggestedLocator === byId('source-locator').value)
         suggestedLocator = byId('source-locator').value;
+      if (['pending', 'confirmed'].includes(w.sourceDraft.locationReview))
+        setLocationReview(true, w.sourceDraft.locationReview === 'confirmed');
       refresh();
       const target = currentRow();
       if (w.article === w.articleDraft && sourceDraftIsDirty()) {

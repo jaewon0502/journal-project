@@ -1,6 +1,7 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {lookup} = require('../docs/reader/evidence-transcript.js');
+const {search} = require('../docs/reader/evidence-search.js');
 
 const claim = '김도현 장관은 “청년수당을 전면 중단하겠다”고 말했다.';
 const question = '◯박서윤 위원  김도현 장관님, “청년수당을 전면 중단하겠다”고 말씀하셨습니까?';
@@ -160,4 +161,59 @@ test('같은 화자·주제라도 소수점·부호·범위·숫자 경계가 �
   const source = '○교통국장 차예진  교통 지표를 1,500명으로 조정했습니다.';
   const q = '차예진 교통국장은 “교통 지표를 1500명으로 조정했습니다”라고 말했다.';
   assert.equal(lookup(source,q).passages[0].speaker.exactQuote,true);
+});
+
+test('화자 표지의 동그라미가 빠져도 다음 발언이나 답변을 앞사람에게 돌리지 않는다', () => {
+  const opening = '○김도현 장관  현행 제도를 유지합니다.';
+  const phrase = '청년수당을 전면 중단하겠다.';
+  for (const boundary of ['박서윤 위원  ', '위원 박서윤  ', '  ― 박서윤 위원 ', '박서윤 위원\n  ']) {
+    const result = search([opening, boundary + phrase, next].join('\n'),claim);
+    assert.equal(result.transcript,true);
+    assert.deepEqual(result.passages,[],boundary);
+    assert.deepEqual(search([question, boundary + '다음입니다.', answer].join('\n'),claim).passages,[],boundary);
+  }
+  const ours = '  박서윤 위원 의견을 들었습니다. 청년수당을 전면 중단하겠다.';
+  assert.equal(search([opening,ours].join('\n'),claim).passages[0].speaker.excerpt,opening + '\n' + ours);
+  const later = '○김도현 장관  ' + phrase;
+  assert.equal(search([opening,'박서윤 위원  ' + phrase,later].join('\n'),claim).passages[0].speaker.excerpt,later);
+});
+
+test('전주시의회 발췌에서 답변자 표지만 지워도 위원이 기획실장의 답변을 했다는 정확 인용은 만들지 않는다', () => {
+  const real = require('../experiments/evidence-retrieval-transfer/transcript-speakers/cases.json').cases[0].text;
+  const q = '신치범 위원은 “출장이 아니고 업무보고에 지장이 없는 분들을 오게하고”라고 말했다.';
+  for (const source of [real, real.replace('○기획실장','기획실장')]) {
+    const result = search(source,q);
+    assert.equal(result.transcript,true);
+    for (const hit of result.passages) {
+      assert.equal(hit.speaker.exactQuote,false);
+      assert.ok(!hit.speaker.excerpt.includes('기획실장'));
+    }
+  }
+});
+
+test('대상 화자가 인용한 타인의 발언이나 성명서는 직접 인용 근거에서 제외한다', () => {
+  const phrase = '청년수당을 전면 중단하겠다';
+  const opening = '○김도현 장관  ';
+  for (const body of [
+    '박서윤 위원이 “' + phrase + '”라고 말했습니다.',
+    '위원 박서윤은 앞서 이렇게 말했습니다. "' + phrase + '."',
+    '“' + phrase + '”라고 박서윤 위원이 말했습니다.',
+    '야당 의원 성명에 적힌\n  “' + phrase + '”\n  라는 말은 제 입장이 아닙니다.',
+    '보도자료에는 실린 「청년수당을\n전면 중단하겠다」라는 문구를 보셨습니까?',
+  ]) {
+    const result = search([opening + body,next].join('\n'),claim);
+    assert.equal(result.transcript,true);
+    assert.deepEqual(result.passages,[],body);
+    assert.match(result.notice,/다른 사람이나 문서를 인용/u);
+  }
+  const direct = opening + '“' + phrase + '”라고 제가 말씀드렸습니다.';
+  for (const source of [direct, opening + '김도현 장관은 “' + phrase + '”라고 서명했습니다.',
+    opening + '박서윤 위원이 “금액을 줄이자”고 말했습니다. 저는 ' + phrase + '.']) {
+    const [hit] = search(source,claim).passages;
+    assert.equal(hit.speaker.exactQuote,true);
+    assert.equal(hit.speaker.excerpt,source);
+  }
+  const other = opening + '박서윤 위원이 “' + phrase + '”라고 말했습니다.';
+  const hits = search([other,next,direct].join('\n'),claim).passages;
+  assert.deepEqual(hits.map(p => p.speaker.excerpt),[direct]);
 });

@@ -30,13 +30,14 @@ blockquote{margin:9px 0;padding:10px 14px;border-left:3px solid #8ca595;backgrou
 .study-frame #go-add-source,.study-frame #go-find{display:none!important}
 .study-frame main{padding:0 .6rem}.study-frame #review-panel{margin:.4rem 0}
 header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
+#document-file-status{overflow-wrap:anywhere}
 .finder-lines{max-height:24rem;overflow:auto;padding:0 0 0 3.2rem;border-block:1px solid var(--line)}
 .finder-lines li{padding:.25rem 0}.finder-lines label{display:flex;align-items:baseline;gap:.5rem;font-weight:400;cursor:pointer}
 .finder-lines input[type=radio]{flex:none;width:auto;margin:0;padding:0;accent-color:var(--green)}
 .finder-lines label:has(:checked){font-weight:700;color:var(--green)}
 </style>
 <script src="evidence-fiscal.js" defer></script>
-<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-columns.js" defer></script><script src="evidence-fiscal-table.js" defer></script><script src="evidence-transcript.js" defer></script><script src="evidence-search.js" defer></script><script src="factcheck-engine.js" defer></script><script src="source-reader.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="factcheck-ui.js" defer></script>
+<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-columns.js" defer></script><script src="evidence-fiscal-table.js" defer></script><script src="evidence-transcript.js" defer></script><script src="evidence-search.js" defer></script><script src="factcheck-engine.js" defer></script><script src="source-reader.js" defer></script><script src="document-file.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="factcheck-ui.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#article">기사 입력으로 이동</a>
@@ -62,6 +63,10 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <p class="hint">문서의 판본과 확인 위치를 함께 기록하면 각 문장에서 같은 자료를 다시 사용할 수 있습니다.</p>
 <div id="source-list"></div>
 <details id="finder"><summary>원자료 본문에서 근거 구간 찾기</summary><p class="hint">원자료에서 기사와 대조할 문단이나 표의 행을 찾습니다. 예산표는 연도·단계가 적힌 머리글과 단위 줄을 함께 붙여넣으세요. 문단 번호는 붙여넣은 글 안의 위치입니다. 회의록의 직접 인용은 발언자 이름과 직책이 적힌 구간을 대조하세요. 인용할 때는 원본에서 문맥을 확인하고 쪽·표·절을 입력하세요. 붙여넣은 원자료 중 직접 등록한 발췌문이 작업 파일에 담깁니다.</p>
+<details id="document-file-options"><summary>파일에서 원자료 불러오기</summary>
+<label class="field" for="document-file">텍스트(.txt) 또는 PDF에서 만든 검색 파일(.journal-source.json)</label><input type="file" id="document-file" accept=".txt,.json">
+<div id="document-pdf-panel" hidden><label class="field" for="document-pdf">검색 파일을 만들 때 사용한 원본 PDF</label><input type="file" id="document-pdf" accept=".pdf,application/pdf"></div>
+<p id="document-file-status" class="hint" role="status"></p></details>
 <label class="field" for="document-text">원자료 본문</label><textarea rows="4" id="document-text"></textarea>
 <label class="field" for="document-query">찾을 주장 또는 표현</label><input id="document-query">
 <details id="search-context-options"><summary>기사에서 비교 대상·기간 보충</summary><label class="field" for="search-context">기사 제목이나 앞뒤 문장에 나온 지표·기간</label><textarea rows="2" id="search-context"></textarea><div class="actions"><button type="button" id="use-article-title" hidden>기사 첫 줄로 다시 찾기</button><button type="button" id="use-article-context" hidden>앞뒤 구절로 다시 찾기</button></div></details>
@@ -72,6 +77,7 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="통계표 12, 서울특별시 행, 2023년 열, 인쇄 41쪽">
 <label class="field" for="source-pdfPage">PDF 뷰어에서 확인한 쪽번호 (선택)</label><input id="source-pdfPage" type="text" inputmode="numeric" pattern="[1-9][0-9]*" aria-describedby="pdf-page-hint" placeholder="예: 44"><p id="pdf-page-hint" class="hint">확인한 문서 주소가 PDF를 직접 열거나 내려받는 주소일 때 입력하세요. 표지부터 1쪽으로 세는 PDF 파일 순서입니다. 표·행·연도와 인쇄 쪽수는 위 확인 위치에 적으세요.</p>
 <label class="field" for="source-excerpt">해당 구간 원문</label><textarea id="source-excerpt" rows="2" required></textarea>
+<div id="source-location-review" class="callout" hidden><p>선택한 발췌문에 이전 확인 위치가 남아 있습니다. 원문에서 같은 쪽과 표·행인지 확인하고, 다르면 위에서 고치세요.</p><p id="source-location-summary"></p><label class="check-line"><input type="checkbox" id="source-location-checked" aria-describedby="source-location-summary"><span>이 위치에서 발췌문을 확인했습니다.</span></label></div>
 <div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="submit" id="source-save-link" hidden>이 문장의 근거로 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
 <section class="panel" id="review-panel"><div class="mast"><h2>문장 검토</h2><p class="count" id="counts"></p></div>
 <div class="review-grid"><nav class="queue" aria-label="검토할 문장"><label for="row-filter">검토 목록</label>
