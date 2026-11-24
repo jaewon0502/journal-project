@@ -26,8 +26,10 @@
     try {
       if (session) localStorage.setItem(key, JSON.stringify(session));
       else localStorage.removeItem(key);
+      el('storage-status').hidden = true;
     } catch {
-      message('이 브라우저에서 임시 복원을 사용할 수 없습니다. 완료 후 기록 파일을 저장하세요.');
+      el('storage-status').textContent = '이 브라우저에 임시 기록을 저장하지 못했습니다. 창을 열어 둔 채 완료하거나 중도 종료한 뒤 참여 기록 파일을 저장하세요.';
+      el('storage-status').hidden = false;
     }
   }
   function saveAnswer() {
@@ -60,7 +62,7 @@
         sec.toFixed(1) +
         '초' +
         (r.recovered ? ' · 새로고침으로 시간 비교 제외' : '') +
-        (!r.split ? ' · 일부 단계를 기록하지 않아 단계 비교 제외' : '');
+        (!r.split ? ' · 단계별 시간 비교 제외' : '');
       return;
     }
     el('question').textContent = session.base.prompt;
@@ -74,6 +76,8 @@
       b.disabled = paused;
     }
     el('pause').textContent = paused ? '측정 재개' : '휴식';
+    el('total-only').checked = session.totalOnly === true;
+    el('total-only').disabled = paused;
     el('answer').disabled = paused;
     el('submit').disabled = paused;
     for (const k of fields) el(k).value = session.answers[k] || '';
@@ -143,6 +147,11 @@
     persist();
     render();
   };
+  el('total-only').onchange = () => {
+    if (!session || session.result || session.timer.start === null) return;
+    session.totalOnly = el('total-only').checked;
+    persist();
+  };
   el('answer').oninput = () => {
     saveAnswer();
     persist();
@@ -157,7 +166,7 @@
         ...session.base,
         status,
         recovered: session.recovered,
-        split: session.visited.length === 3,
+        split: session.visited.length === 3 && !session.totalOnly,
         phaseMs: stopped.ms,
         ...session.answers
       };

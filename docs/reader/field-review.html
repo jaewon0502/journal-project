@@ -10,6 +10,7 @@
 <section class="panel" id="work" hidden><h2 id="question"></h2><p id="article-link"></p><p id="tool-link"></p>
 <fieldset><legend>현재 작업 단계</legend><div class="actions" id="phases"><button data-phase="search">원자료 찾기</button><button data-phase="locate">표·발언 위치 찾기</button><button data-phase="decide">판정 기록</button></div></fieldset>
 <p class="note">단계를 바꿀 때 누르세요. 앞 단계로 돌아가면 그 단계에 시간이 더해집니다. 다른 탭에서 읽는 동안에도 시간이 흐릅니다.</p>
+<label><input type="checkbox" id="total-only"> 단계 전환을 놓쳐 총시간만 사용</label>
 <p id="clock" aria-live="off"></p><button id="pause">휴식</button>
 <fieldset id="answer"><legend>검증 결과</legend>
 <label>근거 위치 <select id="found"><option value="">선택하세요</option><option value="found">다시 찾을 수 있음</option><option value="missing">찾지 못함</option></select></label>
@@ -19,4 +20,4 @@
 <label>확인한 값과 이유 <textarea id="reason" rows="3"></textarea></label></fieldset>
 <div class="actions"><button id="submit" class="primary">완료 기록</button><button id="withdraw">중도 종료</button></div></section>
 <section class="panel" id="ended" hidden><h2>측정 기록</h2><p id="end-summary"></p><button id="download">참여 기록 JSON 저장</button><button id="next">새 과제</button></section>
-<p id="status" role="status"></p></main></body></html>
+<p id="status" role="status"></p><p id="storage-status" class="note" role="status" hidden></p></main></body></html>

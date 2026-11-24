@@ -429,3 +429,45 @@ test('다른 참가자의 저장 기준을 같은 과제에 적용해 수동 점
     assert.equal(restored.el('groups').textContent,p.el('groups').textContent);
   }
 });
+
+test('현장에서 세 단계를 모두 눌러도 전환을 놓쳤다고 표시하면 전체 시간만 집계한다', async (t) => {
+  for (const totalOnly of [true, false]) {
+    const p = page(t, 'field-review');
+    await p.upload('case-file', fixture);
+    p.el('participant').value = '검토자';
+    p.el('participant').oninput();
+    p.el('start').click();
+    for (const phase of ['locate','decide'])
+      p.el('phases').querySelector('[data-phase="' + phase + '"]').click();
+    p.el('total-only').click();
+    if (!totalOnly) p.el('total-only').click();
+    p.el('pause').click();
+    assert.equal(p.el('total-only').disabled, true);
+    p.el('pause').click();
+    assert.equal(p.el('total-only').checked, totalOnly);
+    p.el('found').value = 'missing';
+    p.el('verdict').value = 'insufficient';
+    p.el('reason').value = '검토할 자료를 확보하지 못했다.';
+    p.el('journalUse').value = 'no';
+    p.el('submit').click();
+    const record = await p.download('download');
+    const [summary] = c.group([{trial:record}]);
+    assert.equal(record.split, !totalOnly);
+    assert.equal(summary.totalTimed, 1);
+    assert.equal(summary.timed, totalOnly ? 0 : 1);
+  }
+});
+
+test('임시 저장 실패 안내가 과제 진행 상태에 지워지지 않고 파일로 회수할 수 있다', async (t) => {
+  const p = page(t, 'field-review');
+  p.window.Storage.prototype.setItem = () => { throw new Error('storage unavailable'); };
+  await p.upload('case-file', fixture);
+  p.el('participant').value = '테스트';
+  p.el('participant').oninput();
+  p.el('start').click();
+  assert.equal(p.el('storage-status').hidden, false);
+  p.el('withdraw').click();
+  assert.equal(p.el('storage-status').hidden, false);
+  const record = await p.download('download');
+  assert.equal(record.status, 'withdrawn');
+});
