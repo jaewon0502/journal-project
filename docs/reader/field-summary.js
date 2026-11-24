@@ -123,8 +123,7 @@
       }
     }
     return '기록에 적힌 배포본 ' + versions.size + '종 · 버전 미확인 ' + unknown + '건.' +
-      (versions.size > 1 ? ' 여러 버전의 시간을 함께 집계했습니다.' : '') +
-      (unknown ? ' 미확인 기록은 어느 버전에서 측정했는지 알 수 없습니다.' : '');
+      (versions.size > 1 ? ' 여러 버전의 기록이 있습니다.' : '');
   }
   function kitDetails(groups) {
     const details = node('details', '');
@@ -132,7 +131,7 @@
     for (const group of groups) {
       for (const [version, counts] of group.timedKits) {
         details.append(node('p', labels[group.method] + ' · ' + (version || '버전 미확인') +
-          ' · 완료 ' + counts.completed + '건 (단계별 측정 ' + counts.split + '건) · 중도 종료 ' + counts.withdrawn + '건'));
+          ' · 완료 ' + counts.totalTimed + '건 (단계별 측정 ' + counts.timed + '건) · 중도 종료 ' + counts.timedWithdrawn + '건'));
       }
     }
     return details;
@@ -140,7 +139,7 @@
   function showComparisons(groups, area) {
     area.replaceChildren();
     if (!groups.length) {
-      area.append(node('p', '같은 과제의 평소 도구 기록과 저널 기록을 불러오면 절감률을 계산합니다.'));
+      area.append(node('p', '같은 배포본·과제의 평소 도구 기록과 저널 기록을 불러오면 절감률을 계산합니다.'));
       return;
     }
     for (const task of c.compareTimes(groups)) {
@@ -152,42 +151,53 @@
       card.append(node('h3', task.caseId + ' · ' + task.taskId), node('p', task.prompt), article);
       const arms = [task.manual, task.journal].filter(Boolean);
       if (arms.some(g => g.totalTimed))
-        card.append(node('p', '완료 시간 평균 · ' + kitCoverage(arms, n => n.completed)));
-      if (task.savedMs === null) {
-        card.append(node('strong', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
-      } else {
-        card.append(node('strong', timeChangeText(task)));
-      }
-      for (const method of ['manual', 'journal']) {
-        const group = task[method];
-        if (!group?.totalTimed) {
-          card.append(node('p', labels[method] + ' · 비교 가능한 완료 기록 0건'));
-          continue;
-        }
-        card.append(node('p', labels[method] + ' · 평균 ' + seconds(group.totalMs, group.totalTimed) +
-          ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.totalTimed - group.timedOutcomePending) +
-          ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
-      }
-      card.append(node('h4', '검증 성공 1건당 투입 시간'));
+        card.append(node('p', '완료 시간 평균 · ' + kitCoverage(arms, n => n.totalTimed)));
       if (arms.some(g => g.totalTimed + g.timedWithdrawn))
-        card.append(node('p', '완료·중도 종료 시간 · ' + kitCoverage(arms, n => n.completed + n.withdrawn)));
-      for (const method of ['manual', 'journal']) {
-        const group = task[method];
-        if (!group || !(group.totalTimed + group.timedWithdrawn)) {
-          card.append(node('p', labels[method] + ' · 비교할 시간 기록 0건'));
-          continue;
-        }
-        const ms = task.perVerified[method + 'Ms'];
-        card.append(node('p', labels[method] + ' · ' + (ms === null ? '산출 대기' : seconds(ms, 1) + '/건') +
-          ' · 총 ' + seconds(group.totalMs + group.withdrawnMs, 1) + ' (완료 ' + group.totalTimed +
-          '건, 중도 종료 ' + group.timedWithdrawn + '건) · 검증 성공 ' + group.timedVerified +
-          '건 · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
-      }
-      if (task.perVerified.savedMs !== null)
-        card.append(node('strong', '검증 성공 1건당 ' + timeChangeText(task.perVerified)));
+        card.append(node('p', '완료·중도 종료 시간 · ' + kitCoverage(arms, n => n.totalTimed + n.timedWithdrawn)));
+      if (!task.byVersion.length)
+        card.append(node('p', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
+      for (const comparison of task.byVersion) card.append(versionComparison(comparison));
       if (arms.some(g => g.timedKits.size)) card.append(kitDetails(arms));
       area.append(card);
     }
+  }
+  function versionComparison(comparison) {
+    const card = node('section', '');
+    const heading = node('h4', comparison.version ? '배포본 ' + comparison.version : '버전 미확인');
+    heading.style.overflowWrap = 'anywhere';
+    card.append(heading);
+    if (!comparison.version)
+      card.append(node('p', '같은 배포본인지 확인할 수 없어 절감률 계산을 보류합니다. 아래에서 방식별 시간과 채점 결과를 볼 수 있습니다.'));
+    else if (comparison.savedMs === null)
+      card.append(node('p', '완료 시간 차이 산출 대기 · 같은 배포본에서 두 방식 모두 시간 기록이 필요합니다.'));
+    else
+      card.append(node('strong', '완료 시간 ' + timeChangeText(comparison)));
+    for (const method of ['manual', 'journal']) {
+      const group = comparison[method];
+      if (!group?.totalTimed) {
+        card.append(node('p', labels[method] + ' · 비교 가능한 완료 기록 0건'));
+        continue;
+      }
+      card.append(node('p', labels[method] + ' · 평균 ' + seconds(group.totalMs, group.totalTimed) +
+        ' (' + group.totalTimed + '건) · 근거 위치와 판정 모두 일치 ' + pct(group.timedVerified, group.totalTimed - group.timedOutcomePending) +
+        ' · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
+    }
+    card.append(node('h5', '검증 성공 1건당 투입 시간'));
+    for (const method of ['manual', 'journal']) {
+      const group = comparison[method];
+      if (!group || !(group.totalTimed + group.timedWithdrawn)) {
+        card.append(node('p', labels[method] + ' · 비교할 시간 기록 0건'));
+        continue;
+      }
+      const ms = comparison.perVerified[method + 'Ms'];
+      card.append(node('p', labels[method] + ' · ' + (ms === null ? '산출 대기' : seconds(ms, 1) + '/건') +
+        ' · 총 ' + seconds(group.totalMs + group.withdrawnMs, 1) + ' (완료 ' + group.totalTimed +
+        '건, 중도 종료 ' + group.timedWithdrawn + '건) · 검증 성공 ' + group.timedVerified +
+        '건 · 성공 여부 확인 대기 ' + group.timedOutcomePending + '건'));
+    }
+    if (comparison.perVerified.savedMs !== null)
+      card.append(node('strong', '검증 성공 1건당 ' + timeChangeText(comparison.perVerified)));
+    return card;
   }
   function assignmentCounts(n) {
     return '배정 ' + n.assigned + '건 · 완료 ' + n.completed + '건 · 중도 종료 ' + n.withdrawn +
@@ -300,7 +310,7 @@
             '건)'
         )
       );
-      if (g.timed) d.append(node('p', '단계별 평균 · ' + kitCoverage([g], n => n.split)));
+      if (g.timed) d.append(node('p', '단계별 평균 · ' + kitCoverage([g], n => n.timed)));
       el('groups').append(d);
     }
   }

@@ -15,6 +15,7 @@ function trial(changes = {}) {
     taskId: fixture.tasks[0].id,
     prompt: fixture.tasks[0].prompt,
     articleUrl: fixture.articleUrl,
+    kitVersion: 'e'.repeat(64),
     kind: 'practice',
     method: 'manual',
     status: 'completed',
@@ -573,12 +574,78 @@ test('시간이 늘거나 기준 시간이 0초인 과제의 차이와 비율을
   function result(ms, js) {
     const samples = [['manual', ms], ['journal', js]].map(([method, search]) =>
       ({ trial: trial({ method, phaseMs: { search, locate: 0, decide: 0 } }) }));
-    return c.compareTimes(c.group(samples))[0];
+    return c.compareTimes(c.group(samples))[0].byVersion[0];
   }
   assert.equal(result(400, 500).savedPct, -25);
   assert.equal(result(400, 400).savedPct, 0);
   assert.equal(result(0, 500).savedMs, -500);
   assert.equal(result(0, 500).savedPct, null);
+});
+
+test('두 배포본 모두 느린데 표본을 합치면 빨라 보이는 경우 배포본별 시간과 성공만 비교한다', async t => {
+  const p = page(t, 'field-summary');
+  const records = [];
+  for (const [version, method, count, seconds] of [
+    ['a', 'manual', 9, 100], ['a', 'journal', 1, 120],
+    ['b', 'manual', 1, 10], ['b', 'journal', 9, 12]
+  ]) {
+    for (let i = 0; i < count; i++) {
+      const id = 'editor-' + records.length;
+      records.push(trial({id, participant:id, kind:'editor', method, kitVersion:version.repeat(64),
+        locator:'표의 위치 ' + id, phaseMs:{search:seconds * 1000, locate:0, decide:0}}));
+    }
+  }
+  await p.upload('roster-file', {format:c.assignmentFormat,
+    assignments:records.map(r => assignment(r.participant, {method:r.method}))});
+  await p.upload('key-file', gradingKey);
+  await p.upload('imports', ...records);
+  for (const r of records) p.gradeLocation(r.locator, 'yes');
+  for (const id of ['comparisons', 'allocation-comparisons']) {
+    const result = p.report(id);
+    assert.doesNotMatch(result, /74\.9%|초 절감/);
+    for (const seconds of ['20.0초', '2.0초']) {
+      assert.ok(result.includes('완료 시간 ' + seconds + ' 더 걸림 (20.0%)'));
+      assert.ok(result.includes('검증 성공 1건당 ' + seconds + ' 더 걸림 (20.0%)'));
+    }
+    assert.match(result, /평균 100\.0초 \(9건\) · 근거 위치와 판정 모두 일치 100\.0% \(9\/9\)/);
+    assert.match(result, /평균 120\.0초 \(1건\) · 근거 위치와 판정 모두 일치 100\.0% \(1\/1\)/);
+  }
+});
+
+test('배포본이 겹치지 않거나 버전을 모르면 두 방식의 시간을 보여 주고 절감률은 보류한다', async t => {
+  const p = page(t, 'field-summary');
+  const records = [
+    ['manual', 'a'.repeat(64), 100], ['journal', 'b'.repeat(64), 20],
+    ['manual', undefined, 90], ['journal', 'invalid', 10]
+  ].map(([method, kitVersion, seconds], index) => trial({
+    method, kitVersion, kind:'editor', id:'r' + index, participant:'E' + index, locator:'표 위치 ' + index,
+    phaseMs:{search:seconds * 1000, locate:0, decide:0}
+  }));
+  await p.upload('key-file', gradingKey);
+  await p.upload('imports', ...records);
+  for (const r of records) p.gradeLocation(r.locator, 'yes');
+  const result = p.report('comparisons');
+  assert.match(result, /기록에 적힌 배포본 2종 · 버전 미확인 2건/);
+  assert.match(result, /같은 배포본인지 확인할 수 없어/);
+  assert.match(result, /90\.0초\/건/);
+  assert.match(result, /10\.0초\/건/);
+  assert.doesNotMatch(result, /초 절감|초 더 걸림|초 차이 없음/);
+});
+
+test('오답과 중도 종료 시간, 성공 여부 대기는 해당 배포본의 성공당 시간에만 반영한다', () => {
+  function entry(version, method, seconds, grade, status = 'completed') {
+    return {trial:trial({kitVersion:version.repeat(64), method, status,
+      phaseMs:{search:seconds * 1000, locate:0, decide:0}}), locationGrade:grade, verdictGrade:'yes'};
+  }
+  const [task] = c.compareTimes(c.group([
+    entry('a', 'manual', 30, 'yes'), entry('a', 'journal', 20, 'yes'),
+    entry('a', 'journal', 10, 'no'), entry('a', 'journal', 15, '', 'withdrawn'),
+    entry('b', 'manual', 10, 'yes'), entry('b', 'journal', 12, '')
+  ]));
+  const [a, b] = task.byVersion;
+  assert.deepEqual([a.savedPct, a.perVerified.journalMs, a.perVerified.savedPct], [50, 45000, -50]);
+  assert.deepEqual([a.journal.timedVerified, a.journal.timedOutcomePending, a.journal.totalTimed], [1, 0, 2]);
+  assert.deepEqual([b.savedPct, b.journal.timedOutcomePending, b.perVerified.savedPct], [-20, 1, null]);
 });
 
 test('검증 성공 한 건의 투입 시간에 실패와 중도 종료를 포함하고 판정 전에는 수치를 보류한다', async t => {
@@ -622,10 +689,10 @@ test('한 항목의 실패가 확정되면 나머지 채점이 끝나지 않아�
   assert.equal(task.manual.verified, 1);
   assert.equal(task.manual.verificationKnown, 3);
   assert.equal(task.manual.timedOutcomePending, 0);
-  assert.equal(task.perVerified.manualMs, 4800);
-  assert.equal(task.perVerified.savedMs, null);
+  assert.equal(task.byVersion[0].perVerified.manualMs, 4800);
+  assert.equal(task.byVersion[0].perVerified.savedMs, null);
   const pending = [...entries, { trial: trial(), locationGrade: '', verdictGrade: 'yes' }];
-  assert.equal(c.compareTimes(c.group(pending))[0].perVerified.manualMs, null);
+  assert.equal(c.compareTimes(c.group(pending))[0].byVersion[0].perVerified.manualMs, null);
   const [withRecovered] = c.group([...pending, {
     trial: trial({recovered:true}), locationGrade:'yes', verdictGrade:'yes'
   }]);
@@ -816,7 +883,7 @@ test('중단 복원·다른 방식으로 완료한 응답의 품질은 원래 �
   const empty = arm(2);
   assert.match(empty, /판정 일치율 산출 대기 \(0\/0\) · 채점 대기 0건/);
   assert.doesNotMatch(empty, /%/);
-  assert.match(p.report('allocation-comparisons'), /평소 검증 도구 · 비교 가능한 완료 기록 0건/);
+  assert.match(p.report('allocation-comparisons'), /산출 대기 · 두 방식 모두 시간 기록이 필요/);
   await p.upload('imports', trial({...b, id:'unsupported', kind:'editor', method:'manual', verdict:'supported'}));
   assert.match(arm(2), /판정 일치율 0\.0% \(0\/1\).*근거 없는 사실 채택률 100\.0% \(1\/1\)/);
   assert.equal(arm(1), original);
@@ -943,7 +1010,7 @@ test('배포본 수는 시간 지표별로 원래 배정에 연결된 표본과 
   const recorded = p.report('comparisons', 'article');
   assert.ok(recorded.includes('평소 검증 도구와 저널 · ' + second + ' · 완료 0건'));
   assert.ok(recorded.includes(outside) && !recorded.includes(excluded));
-  await p.upload('imports', record('D', {}), record('malformed', {kitVersion:[first]}));
+  await p.upload('imports', record('D', {kitVersion:undefined}), record('malformed', {kitVersion:[first]}));
   assigned = p.report('allocation-comparisons');
   assert.match(assigned, /완료 시간 평균 · 기록에 적힌 배포본 1종 · 버전 미확인 1건/);
   assert.match(p.report('comparisons', 'article'), /완료 시간 평균 · 기록에 적힌 배포본 2종 · 버전 미확인 2건/);

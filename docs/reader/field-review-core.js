@@ -85,6 +85,12 @@
       throw Error('제출 기록의 근거 위치와 판정을 확인하세요.');
     return v;
   }
+  function newTimeTotals() {
+    return {
+      timed: 0, totalTimed: 0, totalMs: 0, timedWithdrawn: 0, withdrawnMs: 0,
+      timedGraded: 0, timedVerified: 0, timedOutcomePending: 0
+    };
+  }
   function group(records) {
     const groups = new Map();
     for (const { trial: t, locationGrade, verdictGrade, expected } of records) {
@@ -99,15 +105,8 @@
           kind: t.kind,
           submitted: 0,
           withdrawn: 0,
-          timedWithdrawn: 0,
-          withdrawnMs: 0,
-          timed: 0,
-          totalTimed: 0,
-          totalMs: 0,
+          ...newTimeTotals(),
           timedKits: new Map(),
-          timedGraded: 0,
-          timedVerified: 0,
-          timedOutcomePending: 0,
           recovered: 0,
           asAssigned: 0,
           differentMethod: 0,
@@ -125,42 +124,39 @@
         });
       const g = groups.get(key);
       const elapsedMs = phases.reduce((sum, p) => sum + t.phaseMs[p], 0);
-      if (!t.recovered) {
-        const version = kitVersion(t.kitVersion);
-        if (!g.timedKits.has(version)) g.timedKits.set(version, {completed:0, withdrawn:0, split:0});
-        const counts = g.timedKits.get(version);
-        counts[t.status]++;
-        if (t.status === 'completed' && t.split) counts.split++;
-      }
-      if (t.status === 'withdrawn') {
-        g.withdrawn++;
-        if (!t.recovered) {
-          g.timedWithdrawn++;
-          g.withdrawnMs += elapsedMs;
-        }
-        continue;
-      }
-      g.submitted++;
       const loc = t.found === 'missing' ? 'no' : locationGrade;
       const verified = loc === 'yes' && verdictGrade === 'yes';
       const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
+      if (!t.recovered) {
+        const version = kitVersion(t.kitVersion);
+        if (!g.timedKits.has(version)) g.timedKits.set(version, newTimeTotals());
+        for (const totals of [g, g.timedKits.get(version)]) {
+          if (t.status === 'withdrawn') {
+            totals.timedWithdrawn++;
+            totals.withdrawnMs += elapsedMs;
+          } else {
+            totals.totalTimed++;
+            totals.totalMs += elapsedMs;
+            if (t.split) totals.timed++;
+            if (['yes', 'no'].includes(loc) && ['yes', 'no'].includes(verdictGrade)) totals.timedGraded++;
+            if (verified) totals.timedVerified++;
+            if (!verificationKnown) totals.timedOutcomePending++;
+          }
+        }
+        if (t.status === 'completed' && t.split)
+          for (const p of phases) g.ms[p] += t.phaseMs[p];
+      }
+      if (t.status === 'withdrawn') {
+        g.withdrawn++;
+        continue;
+      }
+      g.submitted++;
       if (verified) g.verified++;
       if (verificationKnown) g.verificationKnown++;
       if (t.journalUse === undefined) g.unknownUse++;
       else if ((t.journalUse === 'yes') === (t.method === 'journal')) g.asAssigned++;
       else g.differentMethod++;
       if (t.recovered) g.recovered++;
-      else {
-        g.totalTimed++;
-        g.totalMs += elapsedMs;
-        if (['yes', 'no'].includes(loc) && ['yes', 'no'].includes(verdictGrade)) g.timedGraded++;
-        if (verified) g.timedVerified++;
-        if (!verificationKnown) g.timedOutcomePending++;
-        if (t.split) {
-          g.timed++;
-          for (const p of phases) g.ms[p] += t.phaseMs[p];
-        }
-      }
       if (['contradicted', 'insufficient'].includes(expected)) {
         g.unsafeTotal++;
         if (t.verdict === 'supported') g.unsafe++;
@@ -177,8 +173,8 @@
     return [...groups.values()];
   }
   function compareTimes(groups) {
-    function change(manualMs, journalMs) {
-      const savedMs = manualMs !== null && journalMs !== null ? manualMs - journalMs : null;
+    function change(version, manualMs, journalMs) {
+      const savedMs = version && manualMs !== null && journalMs !== null ? manualMs - journalMs : null;
       const savedPct = savedMs !== null && manualMs > 0 ? 100 * savedMs / manualMs : null;
       return { manualMs, journalMs, savedMs, savedPct };
     }
@@ -193,14 +189,16 @@
       tasks.get(key)[g.method] = g;
     }
     return [...tasks.values()].map((task) => {
-      const { manual, journal } = task;
-      const manualMs = manual?.totalTimed ? manual.totalMs / manual.totalTimed : null;
-      const journalMs = journal?.totalTimed ? journal.totalMs / journal.totalTimed : null;
-      return {
-        ...task,
-        ...change(manualMs, journalMs),
-        perVerified: change(msPerVerified(manual), msPerVerified(journal))
-      };
+      const versions = new Set([...(task.manual?.timedKits.keys() || []), ...(task.journal?.timedKits.keys() || [])]);
+      const byVersion = Array.from(versions, version => {
+        const manual = task.manual?.timedKits.get(version);
+        const journal = task.journal?.timedKits.get(version);
+        const manualMs = manual?.totalTimed ? manual.totalMs / manual.totalTimed : null;
+        const journalMs = journal?.totalTimed ? journal.totalMs / journal.totalTimed : null;
+        return { version, manual, journal, ...change(version, manualMs, journalMs),
+          perVerified: change(version, msPerVerified(manual), msPerVerified(journal)) };
+      });
+      return { ...task, byVersion };
     });
   }
   const assignmentFormat = 'journal-field-assignment-v1';
