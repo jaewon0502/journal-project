@@ -50,8 +50,13 @@ class FacilitatorPack(unittest.TestCase):
     def test_two_reviewers_receive_the_editor_without_scoring_keys_or_each_others_work(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:
             start = Dependencies()
-            start.feed(coordinator.read('시작.html').decode())
+            guide = coordinator.read('시작.html').decode()
+            start.feed(guide)
             self.assertTrue({'독립 기사 검토.zip', 'article-compare.html', 'factcheck.html'} <= start.local)
+            self.assertIn('href="article-compare.html#blind-revision"', guide)
+            comparison = coordinator.read('article-compare.html').decode()
+            self.assertIn('id="blind-revision"', comparison)
+            self.assertIn('src="blind-revision.js"', comparison)
             self.assertIn('href="article-compare.html"', coordinator.read('factcheck.html').decode())
             with ZipFile(BytesIO(coordinator.read('독립 기사 검토.zip'))) as reviewer:
                 self.assertIsNone(reviewer.testzip())
@@ -61,6 +66,8 @@ class FacilitatorPack(unittest.TestCase):
                 dependencies = Dependencies()
                 dependencies.feed(form)
                 self.assertEqual(set(reviewer.namelist()), {'factcheck.html'} | dependencies.local)
+                self.assertNotIn('blind-revision.js', reviewer.namelist())
+                self.assertNotIn('article-compare.html', reviewer.namelist())
                 self.assertTrue(all(name.endswith(('.js', '.css')) for name in dependencies.local))
                 for name in dependencies.local:
                     self.assertEqual(reviewer.read(name), (READER / name).read_bytes())
