@@ -283,20 +283,23 @@
     '(전년동월|전월|전년)(?:대비|보다|과|와)(?:[+−-]?' + percentage +
     '(?:p|포인트)(?:상승|하락|증가|감소)|동일|같음|변동없음))?(?:이다|였다|입니다)?[.]?$', 'iu');
   const compactLabour = value => value.normalize('NFKC').replace(/\s+/gu,'').replace(/[∼〜–]/gu,'~');
-  const periodKey = value => value.replace(/^0(?=\d월)/u,'');
+  const periodKey = value => value.startsWith('한해') ? '연간' : value.replace(/^0(?=\d월)/u,'');
   // Unknown text on either side of the metric may qualify the population.
-  const rateTailTerms = /퍼센트포인트|퍼센트|포인트|전년동월|전월|전년|대비|보다|얼마나|얼마|몇|올랐|오른|올라|내렸|내린|떨어졌|상승|하락|증가|감소|변동|변했|같았|동일|그대로|기록|맞습니까|맞나요|맞나|맞는가|사실인가|주장|인가요|인가|였나요|였나|했나요|했나|했는가|했다|이다|입니다|습니다|나요|다는|라는|라고|으로|에서|[이가는은을를로과와의인한했나다]|\d+(?:\.\d+)?|[%p?.!'‘’“”"]/giu;
+  const rateTailTerms = /퍼센트포인트|퍼센트|포인트|전년동월|전월|전년|대비|보다|얼마나|얼마|몇|올랐|오른|올라|오르지|않았|내렸|내린|떨어졌|상승|하락|증가|감소|변동|변했|같았|동일|그대로|기록|맞습니까|맞나요|맞나|맞는가|사실인가|주장|인가요|인가|였나요|였나|했나요|했나|했는가|했다|이다|입니다|습니다|나요|다는|라는|라고|으로|에서|[이가는은을를로과와의인한했나다]|\d+(?:\.\d+)?|[%p?.!'‘’“”"]/giu;
 
   function labourSummary(text, question, separateContext) {
     const q = compactLabour(question);
-    if (!/(?:19|20)\d{2}년/u.test(q) || !/연간|\d월|분기|반기/u.test(q) ||
-        !/경제활동참가율|고용률|실업률/u.test(q) || !/고용\s*동향/u.test(text)) return null;
-    const period = /^((?:19|20)\d{2})년(연간|(?:0?[1-9]|1[0-2])월)(?:의)?/u.exec(q);
-    const subject = period && rateSubject.exec(q.slice(period[0].length));
-    const tail = subject && q.slice(period[0].length + subject[0].length);
+    const year = /((?:19|20)\d{2})년(?:도)?(?:에는|에|의)?/u.exec(q);
+    if (!year || !/경제활동참가율|고용률|실업률/u.test(q) || !/고용\s*동향/u.test(text)) return null;
+    const period = /((?:19|20)\d{2})년(?:도)?(?:에는|에|의)?(연간|한해(?:동안)?|(?:0?[1-9]|1[0-2])월)(?:에는|에|의)?/u.exec(q);
+    const bareYear = !period && rateSubject.test(q.replace(year[0],''));
+    if (!period && !bareYear && !/연간|한해|연평균|\d월|분기|반기/u.test(q)) return null;
+    const rest = period && q.replace(period[0],'');
+    const subject = period && rateSubject.exec(rest);
+    const tail = subject && rest.slice(subject[0].length);
     const comparisons = new Set(tail?.match(/전년동월|전월|전년/gu));
     const understood = subject && !tail.replace(rateTailTerms,'') && comparisons.size <= 1 && !separateContext;
-    const asksChange = tail && /%p|포인트|올랐|오른|상승|하락|증가|감소|내렸|내린|떨어졌|변동|변했|동일|같았/iu.test(tail);
+    const asksChange = tail && /%p|포인트|올랐|오른|오르지|상승|하락|증가|감소|내렸|내린|떨어졌|변동|변했|동일|같았/iu.test(tail);
     let seenHeading = false, heading = null, paragraph = 0;
     const hits = new Map();
     for (const raw of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
@@ -325,15 +328,17 @@
       const rate = reportedRate.exec(line.slice(1 + printed[0].length));
       if (!rate) continue;
       const compatible = (!comparisons.size || comparisons.has(rate[2])) && (!asksChange || rate[2]) &&
-        !(period[2] === '연간' && (rate[2] === '전년동월' || rate[2] === '전월'));
+        !(periodKey(period[2]) === '연간' && (rate[2] === '전년동월' || rate[2] === '전월'));
       if (!hits.has(line)) hits.set(line, compatible
         ? {paragraph,text:raw,matched:[found.metric],context:[heading],labourScope:true} : null);
     }
     if (!seenHeading) return null;
     const passages = hits.size === 1 ? [...hits.values()].filter(Boolean) : [];
-    const gap = passages.length ? null : (hits.size > 1
+    let gap = passages.length ? null : (hits.size > 1
       ? '같은 기간과 대상의 요약 문장이 여러 가지입니다. 원자료의 범위와 정정 여부를 대조하세요.'
       : '질문의 기간·대상·지표에 맞는 고용동향 요약 문장을 특정하지 못했습니다. 원표의 머리글과 비교 기준을 확인하세요.');
+    if (!period && /연평균/u.test(q)) gap = '연평균의 산출 기준을 요약에서 확인할 수 없습니다. 원표에서 지표 정의와 평균 계산 방식을 확인하세요.';
+    else if (bareYear && !/분기|반기|\d월/u.test(q)) gap = '연간 수치인지 특정 월 수치인지 질문에 적고 원표의 기간과 대조하세요.';
     return {passages,gap,labourScope:true,state:'ordinary',usedArticleContext:false,needsPublicationDate:false};
   }
 

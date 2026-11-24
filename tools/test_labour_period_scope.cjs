@@ -50,6 +50,29 @@ test('모르는 연도·분기·비교 기준·추가 조건과 누락된 대상
   expectGap(lines[3]+'\n'+lines[2],annual);
 });
 
+test('한 해의 증감을 묻는 긍정·부정 표현은 같은 연간 근거를 찾고, 연평균·성별·기간 미상은 보류한다', () => {
+  for (const query of [
+    '2021년 한 해 청년층(15~29세) 실업률이 0.3%p 올랐다는 주장은 맞나?',
+    '청년층(15~29세) 실업률이 2021년도 한 해 동안 전년보다 오르지 않았나요?',
+    '청년 실업률은 2021년 9월에 전년동월보다 0.3%p 올랐나요?',
+  ]) {
+    const head = query.includes('9월') ? 1 : 4;
+    const {passages,gap} = search(doc,query);
+    assert.equal(gap,null,query);
+    assert.deepEqual(passages.map(p => [p.context[0].paragraph,p.paragraph]),[[head,head===1 ? 3 : 8]]);
+  }
+  for (const q of ['2021년 한 해 청년층(15~29세) 여성의 실업률이 0.3%p 올랐나?',
+    '2021년 한 해 청년 실업률은 남성을 제외하고 전년보다 오르지 않았나?',
+    '2021년 한 해 20~34세 청년 실업률이 오르지 않았나?']) expectGap(doc,q);
+  const levelOnly = lines[3]+'\n ○ 청년층(15~29세) 실업률은 7.1%이다.';
+  expectGap(levelOnly,'2021년 한 해 청년 실업률은 오르지 않았나?');
+  for (const [query,reason] of [['2021년에는 청년 실업률이 올랐나?',/연간.*특정 월/],
+    ['청년 실업률은 2021년 연평균 몇 퍼센트인가?',/산출 기준/]]) {
+    expectGap(doc,query);
+    assert.match(search(doc,query).gap,reason);
+  }
+});
+
 test('충돌하는 보고서와 다른 장·쪽·지역의 수치가 같은 범위로 병합되지 않는다', () => {
   expectGap(doc+'\n'+lines[3]+'\n'+lines[7].replace('7.1','5.4'),annual);
   for (const boundary of ['\f', '서울 지역 수치', '□ 서울 지역 고용동향', '2021년 3분기 고용동향']) {
