@@ -1,0 +1,54 @@
+{
+  "stats": {
+    "answerable": 4,
+    "firstRow": 4,
+    "topThreeRow": 4,
+    "exactCell": 0,
+    "incorrectCell": 0,
+    "controls": 2,
+    "controlsShowingCell": 0
+  },
+  "results": [
+    {
+      "id": "ks-01",
+      "candidateRows": [
+        2
+      ],
+      "cells": []
+    },
+    {
+      "id": "ks-02",
+      "candidateRows": [
+        3,
+        2
+      ],
+      "cells": []
+    },
+    {
+      "id": "ks-03",
+      "candidateRows": [
+        4
+      ],
+      "cells": []
+    },
+    {
+      "id": "ks-04",
+      "candidateRows": [
+        3
+      ],
+      "cells": []
+    },
+    {
+      "id": "ks-05",
+      "candidateRows": [],
+      "cells": []
+    },
+    {
+      "id": "ks-06",
+      "candidateRows": [
+        4
+      ],
+      "cells": []
+    }
+  ]
+}
