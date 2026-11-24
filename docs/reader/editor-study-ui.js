@@ -156,7 +156,8 @@
       '중단 확인 ' + a.withdrawn + '명', '완성 ' + a.completeBlocks + '묶음'].map(s => node('span', s)));
     const t = a.time, b = a.bias;
     const timeTitle = t && t.reductionPct < 0 ? '검토 시간 증가율' : '검토 시간 절감률';
-    const biasTitle = b && b.reductionPp < 0 ? '정당 표기별 사실 채택률 격차 증가' : '정당 표기별 사실 채택률 격차 감소';
+    const biasTitle = !b ? '정당 표기별 사실 채택률 격차' : '정당 표기별 사실 채택률 격차 ' +
+      (b.reductionPp > 0 ? '감소' : b.reductionPp < 0 ? '증가' : '변화 없음');
     const timeCard = metric(timeTitle, t && fmt(Math.abs(t.reductionPct)) + '%', t && [t.manualSeconds, t.journalSeconds], '초',
       t ? '사례당 평균 ' + fmt(Math.abs(t.savedSeconds)) + '초 ' + (t.savedSeconds >= 0 ? '단축' : '증가') : '사례 1건의 평균 검토 시간');
     if (t) {
@@ -211,9 +212,14 @@
       ['판정과 근거 모두 일치', ...[q.manual, q.journal].map(v => ratio(v.qualityCorrect, v.total))]
     ] : [];
     table('quality', ['지표', '원자료', '저널'], qualityRows, '집계할 기준 판정이 없습니다.');
-    const count = cell => cell.endorsed + '/' + cell.total;
-    table('cells', ['사례', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보'],
-      b ? b.cases.map(c => [cases.get(c.caseId, 'A').title, count(c.manual.A), count(c.manual.B), count(c.journal.A), count(c.journal.B)]) : [],
+    const dist = b?.distribution;
+    el('distribution-gap').textContent = dist ? '네 판정의 평균 분포 차이 · 원자료 ' + fmt(dist.manualGapPp) + '%p → 저널 ' +
+      fmt(dist.journalGapPp) + '%p · ' + (dist.reductionPp === 0 ? '변화 없음' : fmt(Math.abs(dist.reductionPp)) +
+      '%p ' + (dist.reductionPp > 0 ? '감소' : '증가')) : '완성된 4인 묶음에서 네 판정의 분포를 비교합니다.';
+    const verdictLabels = {supported:'근거로 지지됨', contradicted:'근거와 충돌', insufficient:'근거 불충분', opinion:'의견·가치판단'};
+    const decisionRows = (b?.cases || []).flatMap(c => Object.entries(verdictLabels).map(([key, label]) =>
+      [cases.get(c.caseId, 'A').title, label, ...[c.manual.A, c.manual.B, c.journal.A, c.journal.B].map(cell => cell.counts[key] + '/' + cell.total)]));
+    table('cells', ['사례', '판정', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보'], decisionRows,
       '완성된 묶음에서 각 표기별 분모를 집계합니다.');
     table('blocks', ['묶음', '등록', '완료', '미등록 번호', '미완료 번호', '그중 중단 확인 번호'], a.blocks.map(v => [
       String(v.block), String(v.enrolled), String(v.completed), v.missingOrdinals.join(', ') || '—', v.unfinishedOrdinals.join(', ') || '—', v.withdrawnOrdinals.join(', ') || '—'

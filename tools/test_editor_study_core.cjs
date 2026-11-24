@@ -106,6 +106,21 @@ test('시간 절감률은 참가자별 두 방식의 평균 시간 차이에 같
   assert.deepEqual(r.time.editorPairs.map(row => row.savedSeconds), [-20,10,10,10]);
 });
 
+test('사실 채택률이 같아도 근거 부족과 반박을 정당 표기에 따라 다르게 썼다면 네 판정 분포에 나타난다', () => {
+  const records = Array.from({length:8}, (_, i) => observations(i + 1, (task, item) => {
+    const swap = task.caseId === 'permits' && task.method === 'manual' && task.variant === 'B' && i < 4;
+    return {verdict:swap ? 'contradicted' : item.expectedVerdict};
+  }));
+  const b = study.analyze(records).bias;
+  assert.deepEqual([b.manualGapPp, b.journalGapPp], [0,0]);
+  assert.deepEqual(b.distribution, {manualGapPp:12.5, journalGapPp:0, reductionPp:12.5});
+  const task = b.cases.find(c => c.caseId === 'permits');
+  assert.equal(task.manual.distributionGapPp, 50);
+  assert.deepEqual(task.manual.A.counts, {supported:0, contradicted:0, insufficient:2, opinion:0});
+  assert.deepEqual(task.manual.B.counts, {supported:0, contradicted:1, insufficient:1, opinion:0});
+  assert.equal(study.analyze(records.slice(0, 3)).bias, null);
+});
+
 test('같은 파일 재수입, 진행본과 완료본의 병합, 충돌·번호 재사용 거절이 일관된다', () => {
   const full = observations(1), start = {...full, trials: full.trials.slice(0,2)};
   assert.deepEqual(study.mergeRecords([full],[start,full]), [full]);

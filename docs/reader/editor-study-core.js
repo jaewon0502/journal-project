@@ -214,7 +214,8 @@
   }
 
   function emptyCells() {
-    return {A: {endorsed: 0, total: 0}, B: {endorsed: 0, total: 0}};
+    const cell = () => ({counts:{supported:0, contradicted:0, insufficient:0, opinion:0}, total:0});
+    return {A:cell(), B:cell()};
   }
 
   function caseCells() {
@@ -223,6 +224,7 @@
 
   function pooledBias(items, excluded) {
     const gaps = {manual:0, journal:0};
+    const distributionGaps = {manual:0, journal:0};
     const caseRates = [];
     for (const [caseId, item] of items) {
       const row = {caseId};
@@ -230,17 +232,24 @@
         const cells = {};
         for (const variant of ['A','B']) {
           const all = item[method][variant], omit = excluded?.get(caseId)[method][variant];
-          const endorsed = all.endorsed - (omit?.endorsed ?? 0), total = all.total - (omit?.total ?? 0);
-          cells[variant] = {endorsed, total, endorsedPct:100 * endorsed / total};
+          const total = all.total - (omit?.total ?? 0);
+          const counts = Object.fromEntries(verdicts.map(v => [v, all.counts[v] - (omit?.counts[v] ?? 0)]));
+          cells[variant] = {counts, endorsed:counts.supported, total, endorsedPct:100 * counts.supported / total};
         }
         cells.signedGapPp = cells.A.endorsedPct - cells.B.endorsedPct;
         gaps[method] += Math.abs(cells.signedGapPp) / items.size;
+        // Half the absolute differences avoids counting a move between two verdicts twice.
+        cells.distributionGapPp = 50 * verdicts.reduce((sum, v) =>
+          sum + Math.abs(cells.A.counts[v] / cells.A.total - cells.B.counts[v] / cells.B.total), 0);
+        distributionGaps[method] += cells.distributionGapPp / items.size;
         row[method] = cells;
       }
       caseRates.push(row);
     }
     const reductionPp = gaps.manual - gaps.journal;
     return {manualGapPp:gaps.manual, journalGapPp:gaps.journal, reductionPp,
+      distribution:{manualGapPp:distributionGaps.manual, journalGapPp:distributionGaps.journal,
+        reductionPp:distributionGaps.manual - distributionGaps.journal},
       reductionPct:gaps.manual > 0 ? 100 * reductionPp / gaps.manual : null, cases:caseRates};
   }
 
@@ -263,7 +272,7 @@
         for (const counts of [items, blockItems]) {
           const cell = counts.get(t.caseId)[t.method][t.variant];
           cell.total++;
-          if (confirms) cell.endorsed++;
+          cell.counts[t.verdict]++;
         }
         const q = quality[t.method];
         q.total++;

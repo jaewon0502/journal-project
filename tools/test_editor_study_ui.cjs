@@ -444,3 +444,21 @@ test('집계 화면에서 정당 격차 감소폭의 묶음별 범위를 실제 
   p.el('real-view').click();
   assert.match(card(), /완성 3묶음.*-50%p ~ 50%p/);
 });
+
+test('같은 사실 채택률에서도 근거 불충분과 반박 응답을 구분해 집계 화면에 표시한다', async t => {
+  const p = page(t);
+  assert.match(p.el('distribution-gap').textContent, /완성된 4인 묶음/);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const record = completedRecord(inv.ordinal, inv.id);
+    for (const trial of record.trials) {
+      trial.verdict = trial.caseId === 'permits' && trial.method === 'manual' && trial.variant === 'B' ? 'contradicted' : 'insufficient';
+    }
+    return record;
+  });
+  await importFiles(p, records.map(record => JSON.stringify(record)));
+  assert.match(p.el('metrics').textContent, /사실 채택률 격차 변화 없음0%p/);
+  assert.match(p.el('distribution-gap').textContent, /원자료 25%p → 저널 0%p · 25%p 감소/);
+  const raw = [...p.el('cells').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
+  assert.deepEqual(raw.find(row => row[0] === '인허가 처리 기간' && row[1] === '근거와 충돌').slice(2), ['0/1','1/1','0/1','0/1']);
+});
