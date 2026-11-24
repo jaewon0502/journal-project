@@ -246,3 +246,46 @@ test('두 편집자의 판정이 같아도 구절별로 선택한 자료와 발�
   await p.settled(); p.el('compare').click();
   assert.match(output.textContent, /선택한 근거가 다른 구절 · 0개/);
 });
+
+test('파일이나 나머지 판정이 달라도 양쪽에 동일한 저장 기록을 찾아 남은 비교 건수를 표시한다', async t => {
+  t.mock.timers.enable({apis:['Date'], now:Date.UTC(2026, 10, 24, 10)});
+  const p = page(t);
+  const file = workspace('시범 구역은 한 곳이다.\n조사 시점은 4월이다.\n의회는 어제 예산안을 의결했다.\n이 결정은 무책임하다.');
+  file.sources = [{id:'minutes', title:'회의록', version:'1판', url:'https://assembly.example/minutes',
+    locator:'표 1', excerpt:'시범 구역은 한 곳이다. 조사 시점은 4월이다. 의회는 어제 예산안을 의결했다.'}];
+  const rows = engine.prepare(file.article, file.sources).rows;
+  const decide = (row, status) => engine.decide(row, {status, acknowledged:true, reason:'회의록에서 확인했다.',
+    sourceIds:status === 'opinion' ? [] : ['minutes']}, file.sources);
+  file.receipts = rows.map((row, i) => decide(row, i === 3 ? 'opinion' : 'fact'));
+  const [first, second, third, opinion] = file.receipts;
+  const original = JSON.stringify(file);
+  // Both source files retain the first judgment and the excluded opinion. A third judgment
+  // is disputed, while the second will be independently recorded with the same evidence.
+  t.mock.timers.tick(1000);
+  const rechecked = decide(rows[1], 'fact');
+  assert.notEqual(rechecked.recordedAt, second.recordedAt);
+  const modified = {...file, receipts:[first, rechecked, decide(rows[2], 'contradicted'), opinion]};
+  p.reviewers();
+  p.load('left', '편집자A.json', original);
+  p.load('right', '편집자B.json', JSON.stringify(modified));
+  await p.settled(); p.el('compare').click();
+  const output = p.el('output');
+  assert.doesNotMatch(output.textContent, /두 작업 파일의 내용이 같습니다/);
+  assert.match(output.textContent, /같은 범위와 판정으로 확인66.7%2 \/ 3개/);
+  assert.match(output.textContent, /양쪽에 동일한 판정 기록 · 1\/3개/);
+  assert.match(output.textContent, /동일 기록을 제외한 사실 판정 일치율 50% \(1\/2\)/);
+  // A differently formatted copy can share every saved decision without being byte-identical.
+  p.load('right', '다른서식.json', JSON.stringify(file, null, 2));
+  await p.settled(); p.el('compare').click();
+  assert.match(output.textContent, /양쪽에 동일한 판정 기록 · 3\/3개/);
+  assert.match(output.textContent, /동일 기록을 제외한 사실 판정 일치율 산출 대기 \(0\/0\)/);
+  // The checksum of a damaged entry is not a valid shared receipt.
+  p.load('right', '손상기록.json', JSON.stringify({...file, receipts:[{...first,reason:'바뀐 이유'}, rechecked, third, opinion]}));
+  await p.settled(); p.el('compare').click();
+  assert.match(output.textContent, /양쪽에 동일한 판정 기록 · 1\/2개/);
+  assert.match(output.textContent, /동일 기록을 제외한 사실 판정 일치율 100% \(1\/1\)/);
+  p.load('right', '새로판정.json', JSON.stringify({...file, receipts:rows.map((row,i) => decide(row,i === 3?'opinion':'fact'))}));
+  await p.settled(); p.el('compare').click();
+  assert.match(output.textContent, /양쪽에 동일한 판정 기록 · 0\/3개/);
+  assert.doesNotMatch(output.textContent, /동일 기록을 제외한 사실 판정 일치율/);
+});

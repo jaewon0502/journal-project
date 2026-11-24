@@ -295,6 +295,14 @@
     const panel = section('사실 판정 일치도');
     panel.append(card('같은 범위와 판정으로 확인', f.agreement, '두 사람 모두 지지·충돌을 판정한 구간 (인용 속 사실 주장 포함)'),
       note('전체 ' + f.total + '개 · 한쪽 이상 미결 ' + f.unresolved + '개 · 한쪽 이상 분모 제외 ' + f.excluded + '개 (두 집계는 겹칠 수 있습니다.)'));
+    const shared = '양쪽에 동일한 판정 기록 · ' + f.sharedReceipts.length + '/' + f.agreement.denominator + '개';
+    if (f.sharedReceipts.length) {
+      const list = detail(shared);
+      list.append(note('두 작업 파일에 구절·판정·근거·기록 시각이 모두 같은 저장 기록이 있습니다.'));
+      for (const row of f.sharedReceipts) list.append(element('blockquote', row.text));
+      const a = f.distinctAgreement;
+      panel.append(list, note('동일 기록을 제외한 사실 판정 일치율 ' + ratio(a.numerator, a.denominator, a.pct)));
+    } else panel.append(note(shared));
     const disputed = detail('판정 또는 확인 범위가 다른 구절 · ' + f.disagreements.length + '개');
     if (!f.disagreements.length) disputed.append(note(f.agreement.denominator
       ? '판정 또는 확인 범위의 차이가 발견되지 않았습니다.' : '두 사람이 모두 판정을 마친 사실 구간이 없습니다.'));

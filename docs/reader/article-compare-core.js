@@ -60,6 +60,9 @@
       const sameJudgment = isDecided(a.category) && isDecided(b.category)
         ? a.category === b.category && sameScope : null;
       const leftRow = leftRows.get(a.rowId), rightRow = rightRows.get(b.rowId);
+      // The reader restores this checksum only after validating the decision, its evidence and recording time.
+      const sameReceipt = sameJudgment !== null && !!leftRow.receipt?.checksum &&
+        leftRow.receipt.checksum === rightRow.receipt?.checksum;
       const openScopeDifference = a.category === 'unresolved' && b.category === 'unresolved' && !sameScope
         && !!leftRow.receipt && !!rightRow.receipt && !leftRow.draftPending && !rightRow.draftPending;
       const differentSources = [];
@@ -72,13 +75,16 @@
         }
       }
       return {rowId: a.rowId, text: leftRow.text, left: a.category, right: b.category, openScopeDifference,
-        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment,
+        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment, sameReceipt,
         coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId), differentSources};
     });
     const pairs = rows.filter(r => r.sameJudgment !== null);
+    const distinct = pairs.filter(r => !r.sameReceipt);
     return {
       total: rows.length, rows,
       agreement: ratio(pairs.filter(r => r.sameJudgment).length, pairs.length),
+      sharedReceipts: pairs.filter(r => r.sameReceipt),
+      distinctAgreement: ratio(distinct.filter(r => r.sameJudgment).length, distinct.length),
       unresolved: rows.filter(r => r.left === 'unresolved' || r.right === 'unresolved').length,
       excluded: rows.filter(r => r.left === 'excluded' || r.right === 'excluded').length,
       bothExcluded: rows.filter(r => r.left === 'excluded' && r.right === 'excluded').length,
