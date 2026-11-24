@@ -22,7 +22,7 @@
   }
 
   async function fingerprints(work) {
-    const identities = [...new Set(work.sources.map(workspace.sourceIdentity))].sort();
+    const identities = workspace.sourceIdentities(work.sources);
     const [articleSha256, sourcesSha256] = await Promise.all([digest(work.article), digest(identities)]);
     return {articleSha256, sourcesSha256};
   }

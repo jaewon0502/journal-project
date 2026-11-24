@@ -8,8 +8,6 @@
   function snapshot(work, demo) {
     const result = workspace.read(work);
     if (result.demo !== demo) throw new Error('배포 당시의 연습·실제 기사 구분과 회수한 기록이 다릅니다.');
-    // The blind key fingerprints a set of passages. A second local reference to the same passage adds no evidence.
-    result.sourceKey = JSON.stringify([...new Set(result.sources.map(workspace.sourceIdentity))].sort());
     return result;
   }
 
@@ -47,9 +45,12 @@
       id: d.id, title: d.title, first: transition(d.left, after.get(d.id).left), second: transition(d.right, after.get(d.id).right)
     }));
     const paired = dimensions.filter(d => d.first.change !== 'unpaired' && d.second.change !== 'unpaired');
+    const different = paired.filter(d => d.first.change !== d.second.change);
+    const stable = change => change === 'high' || change === 'low';
+    const stableSeverityDifferences = different.filter(d => stable(d.first.change) && stable(d.second.change)).length;
     return {
       demo: first.key.demo, total: dimensions.length, paired: paired.length, unpaired: dimensions.length - paired.length,
-      disagreed: paired.filter(d => d.first.change !== d.second.change).length,
+      disagreed: different.length - stableSeverityDifferences, stableSeverityDifferences,
       improved: agreedRate(paired.filter(d => d.first.before >= 2 && d.second.before >= 2), 'improved'),
       worsened: agreedRate(paired.filter(d => d.first.before < 2 && d.second.before < 2), 'worsened'),
       dimensions

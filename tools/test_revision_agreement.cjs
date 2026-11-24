@@ -90,6 +90,15 @@ test('문턱을 넘은 편집자가 한 명이면 분모에만 포함하고 단�
   assert.deepEqual(result.dimensions[0].second, {before:2, after:2, change:'high'});
 });
 
+test('두 편집자 모두 유지로 보면서 중요도만 다르게 매긴 항목은 변화 방향 불일치에서 제외한다', async () => {
+  const first = await assignment(0, [{wording:3, framing:0}, {wording:3, framing:1}]);
+  const second = await assignment(1, [{wording:0, framing:3}, {wording:0, framing:2}]);
+  const result = compare(first, second);
+  assert.equal(result.disagreed, 0);
+  assert.equal(result.stableSeverityDifferences, 2);
+  assert.deepEqual(result.improved, ratio(0, 0));
+});
+
 test('해당 없음, 미평가, 작성 중과 사용할 수 없는 평가는 네 점수가 있는 기준에서 제외한다', async () => {
   const first = await assignment(0, [{wording:2, framing:'na', omission:2}, {wording:1, framing:0, omission:1, standards:'na'}]);
   const second = await assignment(1, [{wording:3, framing:1, omission:3}, {wording:0, framing:1, omission:0}]);

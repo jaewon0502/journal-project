@@ -24,3 +24,4 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeri
 footer{padding-block:1rem;border-top:1px solid var(--line)}.skip{position:absolute;left:-9999px}.skip:focus{position:static}:focus-visible{outline:3px solid #a25b19;outline-offset:3px}
 @media(max-width:630px){.pair{grid-template-columns:minmax(0,1fr)}header nav{gap:8px}th,td{padding:.38rem .2rem}.metric{padding:.6rem}.metrics{gap:6px}}
 @media(max-width:340px){.metrics{grid-template-columns:minmax(0,1fr)}}
+.joint-levels{display:block;font-weight:400;margin-left:1rem}

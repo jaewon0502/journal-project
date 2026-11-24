@@ -40,6 +40,7 @@ test('비교가 원문의 작업 중인 버전이나 이전 판정으로 점수�
 test('독립 등록된 동일 자료와 판본이 바뀐 자료를 구분하고 예시 출처를 복원한다', () => {
   const a=recorded(), b=structuredClone(a);
   b.sources[0].id='elsewhere'; b.sources[0].title='내 표시명';
+  b.sources.push({...b.sources[0], id:'다시 저장한 같은 대목'});
   assert.equal(workspace.read(a).sourceKey,workspace.read(b).sourceKey);
   b.sources[0].version='정정본';
   assert.notEqual(workspace.read(a).sourceKey,workspace.read(b).sourceKey);

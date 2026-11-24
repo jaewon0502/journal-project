@@ -436,3 +436,52 @@ test('입력과 화면을 바꾼 뒤 도착한 배정이나 회수 오류를 폐
   assert.match(p.el('blind-return-status').textContent, /재선택.json/);
   assert.equal(p.el('result').hidden, true);
 });
+
+test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된 항목이 다르면 공통 비율은 산출 대기다', async t => {
+  const p = page(t, '#blind-revision');
+  const before = require('../experiments/article-review-pilot/a-original.json');
+  const after = require('../experiments/article-review-pilot/b-revised.json');
+  async function assigned(editor, important) {
+    const {key, packets} = await p.w.JournalBlindRevision.prepare(before, after);
+    for (const role of ['before', 'after']) {
+      const work = packets[key.mapping[role].slot];
+      const report = engine.report(work.article, work.sources, []);
+      const [row, other] = report.rows;
+      const source = work.sources[0];
+      const ratings = {};
+      for (const axis of ['framing', 'omission']) {
+        ratings[axis] = {level:role === 'before' && axis === important ? 2 : 0,
+          rowId:row.id, quote:row.text, compareRowId:other.id, compareQuote:other.text, sourceId:source.id,
+          sourceQuote:source.excerpt, reason:editor + '의 자료 대조', impact:'독자가 모집단을 잘못 알 수 있다.'};
+      }
+      work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:[], ratings});
+    }
+    return {key, packets};
+  }
+  async function restore(set) {
+    p.select('blind-return-first', 'B.json', JSON.stringify(set.packets.B));
+    p.select('blind-return-second', 'A.json', JSON.stringify(set.packets.A));
+    p.select('blind-return-key', '대응표.json', JSON.stringify(set.key));
+    p.el('blind-resolve').click();
+    await t.waitFor(() => assert.equal(p.el('result').hidden, false));
+  }
+  const first = await assigned('첫 편집자', 'framing');
+  const second = await assigned('둘째 편집자', 'omission');
+  await restore(first);
+  assert.match(p.el('output').textContent, /중요한 왜곡 개선율100%1 \/ 1개/);
+  p.el('agreement-keep').click();
+  assert.ok(p.el('agreement-status').textContent.includes(first.key.pairId.slice(0,8)));
+  await restore(first);
+  assert.match(p.el('revision-agreement').textContent, /같은 배포 묶음/);
+  await restore(second);
+  const joint = p.el('revision-agreement');
+  assert.match(joint.textContent, /두 사람 모두 개선으로 판정산출 대기0 \/ 0개/);
+  assert.match(joint.textContent, /네 판정이 모두 있는 항목 2\/4개.*판단이 갈린 항목 2개/);
+  assert.match(p.el('output').textContent, /중요한 왜곡 개선율100%1 \/ 1개/);
+  const framing = [...joint.querySelectorAll('details')].find(d => d.querySelector('summary').textContent.includes('제목·도입부'));
+  assert.match(framing.querySelector('summary').textContent, /첫 편집자 2단계 → 0단계 \(개선\).*둘째 편집자 0단계 → 0단계/);
+  assert.match(framing.textContent, /첫 편집자의 자료 대조.*둘째 편집자의 자료 대조/);
+  p.el('agreement-reset').click();
+  assert.equal(p.el('agreement-held').hidden, true);
+  assert.equal(p.el('result').hidden, true);
+});

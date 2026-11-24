@@ -93,6 +93,9 @@
     return JSON.stringify([target?.page ? url.href : source.url, source.originUrl || '', source.version,
       source.locator, source.excerpt, target?.page || source.pdfPage || '']);
   }
+  function sourceIdentities(sources) {
+    return [...new Set(sources.map(sourceIdentity))].sort();
+  }
 
   function read(w) {
     validateWork(w);
@@ -104,7 +107,7 @@
     const report = activeReport(w.article, w.sources, receipts, drafts);
     if (!report.rows.length) throw new Error('비교할 기사 구간이 없습니다.');
     const checked = review(report, w.sources, w.articleAssessment, w.articleAssessmentDraft);
-    const sourceKey = JSON.stringify(w.sources.map(sourceIdentity).sort());
+    const sourceKey = JSON.stringify(sourceIdentities(w.sources));
     const editing = w.sources.find(s => s.id === w.sourceDraft.id);
     const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
     const baseline = editing || sourceDefaults(prefill);
@@ -135,7 +138,7 @@
     return {pairId: value.pairId, slot: value.slot};
   }
 
-  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceInput, isMock, validateWork, activeReport,
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceIdentities, sourceInput, isMock, validateWork, activeReport,
     draftChangesRecord, review, read, independentInput, blindTag});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;

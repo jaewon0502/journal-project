@@ -9,6 +9,7 @@
   const returnInput = id => byId('blind-return-' + id);
   let generation = 0, recovery = 0;
   let kit = null, preparing = false, resolving = false;
+  let firstReview = null;
   const mode = () => document.querySelector('[name=mode]:checked').value;
   const names = () => mode() === 'revision' ? ['수정 전', '수정 후'] : ['편집자 A', '편집자 B'];
   const percent = value => Number.isFinite(value) ? Number(value.toFixed(1)) + '%' : '산출 대기';
@@ -91,6 +92,7 @@
   async function loadFile(side, file) {
     const current = ++reads[side];
     files[side] = null;
+    selectFirstReview(null);
     clearResults();
     updateInputs();
     const preview = byId('preview-' + side);
@@ -367,6 +369,72 @@
     panel.append(disputed, evidence, core);
     return panel;
   }
+  function selectFirstReview(review) {
+    firstReview = review;
+    byId('agreement-held').hidden = !review;
+    byId('agreement-status').textContent = review
+      ? '첫 편집자 묶음 ' + review.key.pairId.slice(0, 8) + '을 선택했습니다. 두 번째 편집자의 결과 두 개와 대응표를 여세요.' : '';
+  }
+  function clearReturnFiles() {
+    for (const id of returns) returnInput(id).value = '';
+    clearResults();
+    updateInputs();
+  }
+  function jointPanel(current) {
+    const panel = section('두 편집자가 함께 확인한 변화');
+    panel.id = 'revision-agreement';
+    if (!firstReview) {
+      if (current.sourceChanged) return null;
+      const keep = element('button', '첫 편집자 결과로 선택');
+      keep.type = 'button';
+      keep.id = 'agreement-keep';
+      keep.addEventListener('click', () => {
+        selectFirstReview(current);
+        clearReturnFiles();
+        byId('blind-revision').open = true;
+        returnInput('first').focus();
+      });
+      panel.append(note('두 사람이 같은 두 판본을 따로 평가했다면 이 결과를 선택한 뒤, 다른 편집자의 결과 두 개와 대응표를 여세요. 첫 결과는 이 화면을 열어 둔 동안 보관합니다.'), keep);
+      return panel;
+    }
+    let joint;
+    try { joint = window.JournalRevisionAgreement.compare(firstReview, current); }
+    catch (error) {
+      panel.append(element('p', error.message, 'warn'), note('아래 수치는 방금 연 편집자 한 사람의 결과입니다.'));
+      return panel;
+    }
+    const grid = element('div', null, 'metrics');
+    grid.append(card('두 사람 모두 개선으로 판정', joint.improved, '두 사람 모두 원본을 2~3단계로 평가하고 수정본도 채점한 항목 중'),
+      card('두 사람 모두 악화로 판정', joint.worsened, '두 사람 모두 원본을 0~1단계로 평가하고 수정본도 채점한 항목 중'));
+    const editors = [firstReview, current];
+    const editorNames = ['첫 편집자', '둘째 편집자'];
+    panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid,
+      note('네 판정이 모두 있는 항목 ' + joint.paired + '/' + joint.total + '개 · 비교할 단계가 부족한 항목 ' + joint.unpaired +
+        '개 · 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'));
+    if (joint.stableSeverityDifferences) panel.append(note('두 사람 모두 유지로 보았지만 중요한 왜곡이 있는지에 대한 판단이 다른 항목 ' +
+      joint.stableSeverityDifferences + '개'));
+    const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
+    for (const dimension of joint.dimensions) {
+      const line = [dimension.first, dimension.second].map((d, i) =>
+        editorNames[i] + ' ' + level(d.before) + ' → ' + level(d.after) + ' (' + labels[d.change] + ')');
+      const item = detail(dimension.title);
+      item.firstChild.append(element('small', line.join(' / '), 'joint-levels'));
+      const pair = element('div', null, 'pair');
+      editors.forEach((editor, i) => {
+        const column = element('div');
+        column.append(element('h4', editorNames[i]));
+        editor.snapshots.forEach((snapshot, j) => {
+          const rating = snapshot.assessment.bias.items.find(d => d.id === dimension.id).rating;
+          column.append(ratingEvidence(snapshot, rating, j ? '수정 후' : '수정 전'));
+        });
+        pair.append(column);
+      });
+      item.append(pair);
+      panel.append(item);
+    }
+    panel.append(note('아래의 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
+    return panel;
+  }
   function show(snapshots, synthetic, restored) {
     try {
       const c = window.JournalArticleCompare.compare(...snapshots, mode());
@@ -374,7 +442,7 @@
       output.replaceChildren();
       const sample = synthetic || c.demo;
       byId('result-title').textContent = (sample ? '가상 예시 · ' : '') + (mode() === 'revision' ? '수정 전후 비교 결과' : '두 편집자의 비교 결과');
-      if (sample) output.append(element('p', '가상 기사와 모의 원자료로 만든 연습 결과입니다.', 'warn'));
+      if (sample) output.append(element('p', '연습용 평가 결과입니다. 실제 편집자의 효과 측정과 구분해 보세요.', 'warn'));
       if (!synthetic) {
         const [left, right] = names();
         const [first, second] = restored?.ordered || [files.left, files.right];
@@ -388,7 +456,7 @@
       }
       if (mode() === 'reviewers') output.append(note('독립 일치도로 해석하려면 서로의 기록을 보기 전에 각자 평가했는지 확인하세요.'));
       if (c.sourceChanged) output.append(element('p', '두 판본의 원자료 묶음이 다릅니다. 수치의 변화에는 근거가 바뀐 영향도 포함됩니다.', 'warn'));
-      if (restored?.sourceChanged) output.append(element('p', '평가 중 등록된 원자료가 배포할 때와 달라졌습니다. 변경된 자료가 판정에 미친 영향을 확인하세요.', 'warn'));
+      if (restored?.sourceChanged) output.append(element('p', '평가 중 등록된 원자료가 배포할 때와 달라졌습니다. 변경된 자료가 판정에 미친 영향을 확인하세요. 두 편집자의 공통 집계에는 배포 당시 자료로 평가한 결과만 사용합니다.', 'warn'));
       if (mode() === 'revision') {
         const {left, right} = c.accuracy;
         if (right.total < left.total || right.reviewed < left.reviewed || right.adjudicated < left.adjudicated ||
@@ -405,6 +473,10 @@
           for (const row of c.untracedCore) check.append(element('blockquote',row.text));
           output.append(check);
         }
+      }
+      if (restored) {
+        const joint = jointPanel(restored);
+        if (joint) output.append(joint);
       }
       output.append(biasPanel(c, snapshots), accuracyPanel(c, snapshots), mode() === 'revision' ? revisionFacts(c, snapshots) : reviewerFacts(c, snapshots));
       byId('result').hidden = false;
@@ -477,7 +549,7 @@
       const code = key.data.pairId.slice(0, 8);
       const snapshots = [result.before, result.after].map(work => window.JournalWorkspaceSnapshot.read(work));
       blindStatus('blind-return-status', '묶음 ' + code + '의 수정 전후 순서를 복원했습니다.');
-      show(snapshots, false, {ordered, code, sourceChanged:result.sourceChanged});
+      show(snapshots, false, {...result, ordered, code, snapshots, key:key.data});
     } catch (error) {
       if (current === recovery) blindStatus('blind-return-status', error.message, true);
     } finally {
@@ -489,9 +561,14 @@
     input.addEventListener('change', () => loadFile(side, input.files[0]));
   }
   document.querySelectorAll('[name=mode]').forEach(radio => radio.addEventListener('change', () => {
-    for (const id of returns) returnInput(id).value = '';
-    clearResults(); updateInputs();
+    selectFirstReview(null);
+    clearReturnFiles();
   }));
+  byId('agreement-reset').addEventListener('click', () => {
+    selectFirstReview(null);
+    clearReturnFiles();
+    returnInput('first').focus();
+  });
   byId('ack').addEventListener('change', () => {
     if (!byId('ack').checked) clearResults();
     updateInputs();
