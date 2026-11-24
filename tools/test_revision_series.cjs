@@ -15,11 +15,16 @@ function work(article) {
     sources: [{id: 'budget', title: '비공개 자료', url: 'https://desk.invalid/budget', version: '초판', locator: '1쪽', excerpt: '10억 원'}],
     sourceDraft: {id: null, fields: Object.fromEntries(workspace.sourceFields.map(k => [k, '']))}};
 }
-async function assignment(before, after, levels) {
+async function assignment(before, after, levels, revisedStatus) {
   const {key, packets} = await blind.prepare(before, after);
   for (const [i, role] of ['before', 'after'].entries()) {
     const w = packets[key.mapping[role].slot];
-    const report = engine.report(w.article, w.sources, []);
+    if (role === 'after' && revisedStatus) {
+      const row = engine.report(w.article, w.sources).rows[0];
+      w.receipts = [engine.decide(row, {status: revisedStatus, sourceIds: [w.sources[0].id], acknowledged: true,
+        reason: '공개하지 않을 검토 메모'}, w.sources)];
+    }
+    const report = engine.report(w.article, w.sources, w.receipts);
     const row = report.rows[0];
     w.articleAssessment = rubric.save(report, w.sources, {coreRowIds: [], ratings: {wording: {
       level: levels[i], rowId: row.id, quote: row.text, sourceId: w.sources[0].id, sourceQuote: w.sources[0].excerpt,
@@ -41,24 +46,34 @@ function record(name, values = [], sourceChanged = false) {
     })};
 }
 
-test('두 대응표 중 어느 쪽으로도 검증한 점수만 내보내고 집계 수치·출처·식별 정보를 제외한다', async () => {
+const fact = (outcome, flag = 'none') => ({outcome, flag});
+const withFacts = (legacy, before, after) => ({...legacy, version: 2, facts: {before, after}});
+
+test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 집계 수치·출처·검토 내용을 제외한다', async () => {
   const original = work('사업비 20억 원을 책정했다.'), revision = work('사업비 10억 원을 책정했다.');
-  const [one, two] = await Promise.all([assignment(original, revision, [2, 1]), assignment(original, revision, [3, 0])]);
+  const [one, two] = await Promise.all([
+    assignment(original, revision, [2, 1], 'fact'), assignment(original, revision, [3, 0], 'contradicted')
+  ]);
   const joint = agreement.compare(one, two);
   const saved = makeRecord(joint, one.key);
   assert.deepEqual(saved, makeRecord(joint, two.key));
   const wire = JSON.stringify(saved);
-  const expected = record('example', [[2, 1, 3, 0]]);
+  const expected = withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]);
   for (const role of ['before', 'after']) {
     expected[role] = {articleSha256: one.key.mapping[role].articleSha256, sourcesSha256: one.key.mapping[role].sourcesSha256};
   }
   assert.deepEqual(saved, expected);
-  assert.equal(wire.includes(one.key.pairId), false);
-  assert.equal(wire.includes(two.key.pairId), false);
+  for (const privateValue of [one.key.pairId, two.key.pairId, original.article, revision.article,
+    ...Object.values(original.sources[0]), '공개하지 않을 검토 메모', '확정 예산이 다르게 보인다.', 'unit-0']) {
+    assert.equal(wire.includes(privateValue), false, privateValue);
+  }
   const report = summarize([JSON.parse(wire)]);
   for (const metric of ['paired', 'total', 'unpaired', 'disagreed', 'stableSeverityDifferences', 'improved', 'worsened']) {
     assert.deepEqual(report[metric], joint[metric]);
   }
+  const reversed = makeRecord(agreement.compare(two, one), two.key);
+  assert.deepEqual(saved.facts, reversed.facts);
+  assert.equal(summarize([saved, reversed]).duplicateCount, 1);
 
   assert.throws(() => makeRecord({...joint}, one.key), /대응표/);
   const otherKey = structuredClone(one.key);
@@ -66,6 +81,7 @@ test('두 대응표 중 어느 쪽으로도 검증한 점수만 내보내고 집
   assert.throws(() => makeRecord(joint, otherKey), /대응표/);
   joint.dimensions[0].first.before = 0;
   saved.dimensions[0].first.before = null;
+  saved.facts.after[0].flag = 'none';
   assert.deepEqual(makeRecord(joint, one.key), expected);
 });
 
@@ -108,6 +124,83 @@ test('모든 기준에서 편집자 순서를 함께 바꾸거나 기준을 재�
   const firstAxis = crosswise.dimensions[0];
   [firstAxis.first, firstAxis.second] = [firstAxis.second, firstAxis.first];
   assert.throws(() => summarize([r, crosswise]), /하나만/);
+});
+
+test('이전 기록과 새 기록의 입력 순서에 관계없이 같은 기사 한 건의 사실 검토 자료를 보존한다', () => {
+  const old = record('same', [[3, 0, 2, 1]]);
+  const rich = withFacts(structuredClone(old), [fact('limited')], [fact('quotedConflict', 'quote')]);
+  for (const d of rich.dimensions) [d.first, d.second] = [d.second, d.first];
+  const solo = summarize([rich]);
+  for (const records of [[old, old, rich], [rich, old, old], [old, rich, old]]) {
+    assert.deepEqual(summarize(records), {...solo, duplicateCount: 2});
+  }
+  assert.deepEqual([solo.facts.articleCount, solo.facts.missingArticles, solo.facts.improvedWithRevisedFlags], [1, 0, 1]);
+  assert.equal(solo.articles[0].facts.after.quotedConflict, 1);
+});
+
+test('사실 판정이 다른 두 새 파일을 찾아내고 먼저 가져온 이전 파일과 혼동하지 않는다', () => {
+  const old = record('same');
+  const rich = withFacts(old, [fact('supported')], [fact('pending'), fact('disputed', 'both')]);
+  const changed = structuredClone(rich);
+  changed.facts.after.reverse();
+  for (const [records, indexes] of [
+    [[old, rich, changed], [1, 2]], [[changed, old, rich], [0, 2]], [[rich, changed, old], [0, 1]]
+  ]) {
+    assert.throws(() => summarize(records), error => {
+      assert.deepEqual(error.recordIndexes, indexes);
+      return /사실 검토/.test(error.message);
+    });
+  }
+  const differentFlag = structuredClone(rich);
+  differentFlag.facts.after[1].flag = 'article';
+  assert.throws(() => summarize([old, rich, differentFlag]), /2번째와 3번째/);
+});
+
+test('사실 검토의 분자·분모는 판본별 구간에서 합산하고 편향 개선과 충돌의 동시 발생은 기사별로 센다', () => {
+  const improved = [[3, 1, 2, 0], [2, 1, 3, 1]];
+  const a = withFacts(record('a', improved), [fact('supported')], [
+    fact('supported'), fact('pending', 'quote'), fact('disputed', 'both')]);
+  const b = withFacts(record('b', [[2, 2, 3, 2]], true), [fact('contradicted', 'article'), fact('limited')],
+    [fact('contradicted', 'article'), fact('contradicted', 'article'), fact('contradicted', 'article'), fact('excluded')]);
+  const c = withFacts(record('c', improved), [fact('shared')], [fact('pending')]);
+  const old = record('d', improved, true);
+  const s = summarize([a, b, c, old]);
+  assert.deepEqual(s.facts.before.support, ratio(1, 2));
+  assert.deepEqual(s.facts.before.coverage, ratio(3, 4));
+  assert.deepEqual(s.facts.after.support, ratio(1, 4));
+  assert.deepEqual(s.facts.after.coverage, ratio(4, 7));
+  assert.deepEqual([s.facts.after.articleFlagged, s.facts.after.quoteFlagged, s.facts.after.flagged], [4, 2, 5]);
+  assert.deepEqual([s.facts.articleCount, s.facts.missingArticles, s.facts.improvedArticles,
+    s.facts.improvedWithRevisedFlags, s.facts.improvedWithOpenFacts, s.facts.improvedMissingFacts], [3, 1, 3, 1, 2, 1]);
+  assert.deepEqual(s.articles.map(a => a.facts?.after.support ?? null), [ratio(1, 1), ratio(0, 3), ratio(0, 0), null]);
+  assert.deepEqual(s.improved, ratio(6, 7));
+  assert.deepEqual([s.changedSources, s.unchangedSources, s.unchangedEvidenceImprovement], [2, 2, ratio(4, 4)]);
+  const v1 = summarize([old]);
+  assert.deepEqual([v1.facts.articleCount, v1.facts.missingArticles, v1.facts.after.total, v1.articles[0].facts], [0, 1, 0, null]);
+  const pending = summarize([c]);
+  assert.deepEqual([pending.facts.articleCount, pending.facts.missingArticles, pending.facts.after.pending,
+    pending.facts.improvedWithOpenFacts, pending.facts.improvedWithRevisedFlags], [1, 0, 1, 1, 0]);
+  assert.deepEqual(pending.facts.after.coverage, ratio(0, 1));
+});
+
+test('버전별 사실 검토 형식·필수 구간·판정 및 충돌 조합·개인 자료 필드를 엄격히 검증한다', () => {
+  const old = record('old');
+  const valid = withFacts(old, [fact('supported')], [fact('pending')]);
+  const changes = [
+    r => { r.version = 1; }, r => { r.version = 3; }, r => { delete r.facts; }, r => { r.facts = null; },
+    r => { delete r.facts.after; }, r => { r.facts.before = []; }, r => { r.facts.after = {}; },
+    r => { r.facts.after = Array(2); }, r => { r.facts.after.push(null); }, r => { r.facts.reviewer = 'private'; },
+    r => { r.facts.before[0].flag = 'quote'; }, r => { r.facts.after[0].outcome = 'toString'; },
+    r => { delete r.facts.after[0].flag; }, r => { r.facts.after[0].rowId = 'unit-private'; }
+  ];
+  for (const change of changes) {
+    const invalid = structuredClone(valid);
+    change(invalid);
+    assert.throws(() => summarize([old, invalid]), error => {
+      assert.deepEqual(error.recordIndexes, [1]);
+      return /2번째/.test(error.message);
+    });
+  }
 });
 
 test('재채점·자료 변경·역순·같은 원본/수정본·연속 개정이 겹치면 잘못 집계할 파일 위치를 알려 준다', () => {
