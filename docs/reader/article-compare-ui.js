@@ -8,6 +8,7 @@
   const returns = ['first', 'second', 'key'];
   const returnInput = id => byId('blind-return-' + id);
   let bundleFiles = [];
+  let reviewTarget = null;
   let generation = 0, recovery = 0;
   let kit = null, preparing = false, resolving = false;
   let firstReview = null;
@@ -57,6 +58,9 @@
     byId('output').replaceChildren();
     byId('ack').checked = false;
     message('');
+    if (reviewTarget?.id && !reviewTarget.example) {
+      blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표를 선택하세요.');
+    }
   }
   function updateInputs() {
     const [left, right] = names();
@@ -387,6 +391,22 @@
     clearResults();
     updateInputs();
   }
+  function markRepeatedPassage(item, snapshot, index, first, total) {
+    const {article, rows} = snapshot;
+    const positions = rows[index].positions;
+    const last = first + positions.length - 1;
+    item.firstChild.append(element('small', '같은 문구 ' + total + '곳 중 ' +
+      (first === last ? first : first + '–' + last) + '번째 · 기사 검토 구절 ' + (index + 1), 'joint-levels'));
+    let cursor = rows[index - 1]?.positions.at(-1).start ?? positions[0].start;
+    const end = rows[index + 1]?.positions[0].end ?? positions.at(-1).end;
+    const context = element('blockquote');
+    for (const pos of positions) {
+      context.append(document.createTextNode(article.slice(cursor, pos.start)), element('mark', article.slice(pos.start, pos.end)));
+      cursor = pos.end;
+    }
+    context.append(document.createTextNode(article.slice(cursor, end)));
+    item.append(note('같은 문구가 나온 위치와 앞뒤 원문'), context);
+  }
   function jointFactPanel(joint, editors) {
     const panel = section('편향 평가와 함께 본 사실 판정');
     panel.id = 'joint-facts';
@@ -399,11 +419,16 @@
     for (const role of ['after', 'before']) {
       const isAfter = role === 'after';
       const sameEdition = editors.map(editor => editor.snapshots[isAfter ? 1 : 0]);
+      const totals = new Map(), seen = new Map();
+      for (const row of sameEdition[0].rows) totals.set(row.text, (totals.get(row.text) || 0) + row.positions.length);
       const flagged = [], disputed = [];
       joint.facts[role].forEach((fact, index) => {
+        const row = sameEdition[0].rows[index], passage = row.text;
+        const previous = seen.get(passage) || 0;
+        seen.set(passage, previous + row.positions.length);
         if (fact.flag === 'none' && fact.outcome !== 'disputed') return;
-        const passage = sameEdition[0].rows[index].text;
         const item = detail(passage);
+        if (totals.get(passage) > 1) markRepeatedPassage(item, sameEdition[0], index, previous + 1, totals.get(passage));
         const pair = element('div', null, 'pair');
         sameEdition.forEach((snapshot, i) => {
           const decision = snapshot.assessment.accuracy.rows[index];
@@ -632,6 +657,48 @@
       list.append(item);
     });
   }
+  function showTargetEvidence(reviews) {
+    const joint = window.JournalRevisionAgreement.compare(...reviews);
+    if (joint.missingReturns.length) {
+      const missing = joint.missingReturns.map(({editor, role}) => {
+        const file = reviews[editor].ordered[role === 'before' ? 0 : 1];
+        return file.position + '번 ' + file.name;
+      });
+      throw new Error('저장된 판정을 확인할 수 없는 파일이 있습니다. ' + missing.join(', ') + ' 파일을 교체하세요.');
+    }
+    const record = window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
+    if (window.JournalRevisionSeries.reviewId(record) !== reviewTarget.id) {
+      throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
+    }
+    const panel = jointFactPanel(joint, reviews);
+    const group = panel.querySelector('.fact-alerts[data-edition="after"]');
+    const first = group?.querySelector('details');
+    if (!first) throw new Error('선택한 요약에는 수정본과 원자료의 충돌 표시가 없습니다.');
+    byId('result-title').textContent = (joint.demo ? '가상 예시 · ' : '') + '수정본의 충돌 구절과 근거';
+    byId('output').replaceChildren(panel);
+    byId('result').hidden = false;
+    const notice = reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
+    blindStatus('review-target-status', notice + ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.');
+    group.open = first.open = true;
+    const summary = first.querySelector('summary');
+    summary.focus();
+    summary.scrollIntoView?.({block:'start'});
+  }
+  async function openReviewFiles(items, current) {
+    if (current !== recovery) return;
+    const reviews = await window.JournalBlindRevision.resolveBundle(items);
+    if (current !== recovery) return;
+    for (const review of reviews) {
+      review.snapshots = [review.before, review.after].map(work => window.JournalWorkspaceSnapshot.read(work));
+    }
+    if (reviewTarget) {
+      showTargetEvidence(reviews);
+      blindStatus('blind-bundle-status', '');
+    } else {
+      blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 수정 전후 판본이 일치합니다.');
+      show(reviews[1].snapshots, false, reviews[1], reviews[0]);
+    }
+  }
   async function compareBundleSelection() {
     selectFirstReview(null);
     clearResults(true);
@@ -648,14 +715,7 @@
     blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 기사 판본을 확인하고 있습니다.');
     try {
       const items = await Promise.all(bundleFiles.map((file, index) => readReturnFile(file, index + 1)));
-      if (current !== recovery) return;
-      const reviews = await window.JournalBlindRevision.resolveBundle(items);
-      if (current !== recovery) return;
-      for (const review of reviews) {
-        review.snapshots = [review.before, review.after].map(work => window.JournalWorkspaceSnapshot.read(work));
-      }
-      blindStatus('blind-bundle-status', '파일 6개의 배정 번호와 수정 전후 판본이 일치합니다.');
-      show(reviews[1].snapshots, false, reviews[1], reviews[0]);
+      await openReviewFiles(items, current);
     } catch (error) {
       if (current === recovery) blindStatus('blind-bundle-status', error.message, true);
     }
@@ -734,9 +794,58 @@
     bundleInput.focus();
   });
   byId('blind-resolve').addEventListener('click', restoreKit);
-  function openCoordinatorLink() {
+  const picker = byId('blind-bundle-picker');
+  const originalParent = picker.parentNode;
+  const nextField = picker.nextElementSibling;
+  async function openCoordinatorLink() {
+    const requested = /^#review(?:=|&|$)/.test(location.hash);
+    const leaving = reviewTarget && !requested;
+    if (reviewTarget || requested) {
+      selectFirstReview(null);
+      reviewTarget = null;
+      clearReturnFiles();
+      byId('inputs').hidden = requested;
+      byId('review-target').hidden = !requested;
+      document.querySelector('main > .intro').hidden = requested;
+      picker.hidden = false;
+      blindStatus('review-target-status', '');
+      if (!requested) {
+        originalParent.insertBefore(picker, nextField);
+      }
+    }
+    if (requested) {
+      const match = /^#review=([a-f0-9]{64})(&example=library)?$/.exec(location.hash);
+      reviewTarget = {id:match?.[1], example:!!match?.[2]};
+      byId('review-upload').append(picker);
+      picker.hidden = !match || reviewTarget.example;
+      if (!match) {
+        blindStatus('review-target-status', '기사 요약을 식별할 수 없는 링크입니다. 여러 기사 집계에서 충돌 구절을 다시 선택하세요.', true);
+        byId('review-target-title').focus();
+        return;
+      }
+      if (!reviewTarget.example) {
+        blindStatus('review-target-status', '집계에 사용한 작업 파일과 대응표를 선택하세요.');
+        bundleInput.focus();
+        return;
+      }
+      const current = recovery;
+      blindStatus('review-target-status', '도서관 연습 기사의 발언록과 조사표를 열고 있습니다.');
+      try {
+        const items = await window.JournalRevisionEvidenceExample.files();
+        await openReviewFiles(items, current);
+      } catch (error) {
+        if (current === recovery) blindStatus('review-target-status', error.message, true);
+      }
+      return;
+    }
     if (location.hash === '#blind-revision' && mode() === 'revision') byId('blind-revision').open = true;
+    if (leaving) (byId('blind-revision').open && mode() === 'revision' ? bundleInput : byId('inputs')).focus();
   }
+  for (const link of document.querySelectorAll('a[href="#inputs"]')) link.addEventListener('click', event => {
+    if (!reviewTarget) return;
+    event.preventDefault();
+    (picker.hidden ? byId('review-target-title') : bundleInput).focus();
+  });
   window.addEventListener('hashchange', openCoordinatorLink);
   updateInputs();
   openCoordinatorLink();

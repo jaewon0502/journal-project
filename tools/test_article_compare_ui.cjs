@@ -34,6 +34,59 @@ function page(t, hash = '') {
   return {w, el, load, select, selectFiles, reviewers, settled};
 }
 
+test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 구절과 두 사람의 근거를 연다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const blind = require('../docs/reader/blind-revision.js');
+  const compare = require('../docs/reader/revision-agreement.js').compare;
+  const {makeRecord, reviewId} = require('../docs/reader/revision-series.js');
+  const items = await example.files();
+  const pair = await blind.resolveBundle(items);
+  const record = makeRecord(compare(...pair), pair[0].key);
+  const id = reviewId(record);
+  const p = page(t, '#review=' + id);
+  assert.equal(p.el('inputs').hidden, true);
+  assert.equal(p.el('review-target').hidden, false);
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.w.document.activeElement, p.el('blind-bundle-files'));
+  const upload = files => p.selectFiles('blind-bundle-files', files);
+  const files = items.map(item => ({name:item.name, text:async () => item.raw}));
+  upload(files);
+  await t.waitFor(() => assert.equal(p.el('result').hidden, false));
+  const group = p.el('joint-facts').querySelector('.fact-alerts[data-edition="after"]');
+  assert.equal(group.open, true);
+  assert.equal(group.querySelector('details').open, true);
+  assert.equal(p.w.document.activeElement, group.querySelector('details').firstElementChild);
+  assert.match(group.textContent, /80곳/);
+  assert.match(group.textContent, /20개/);
+  assert.equal(group.querySelectorAll('.pair > div').length, 2);
+  assert.equal(p.el('agreement-export'), null);
+  p.el('blind-bundle-clear').click();
+  assert.equal(p.el('result').hidden, true);
+  assert.doesNotMatch(p.el('review-target-status').textContent, /일치합니다/);
+  const changed = structuredClone(record);
+  changed.dimensions[0].first.before = changed.dimensions[0].first.before === 2 ? 3 : 2;
+  const nextTarget = new Promise(resolve => p.w.addEventListener('hashchange', resolve, {once:true}));
+  p.w.location.hash = '#review=' + reviewId(changed);
+  await nextTarget;
+  upload(files);
+  await t.waitFor(() => assert.match(p.el('blind-bundle-status').textContent, /일치하지 않습니다/));
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.el('output').textContent, '');
+  p.w.location.hash = '#review=' + id + '&example=library';
+  await t.waitFor(() => assert.equal(p.el('result').hidden, false));
+  assert.match(p.el('result-title').textContent, /가상 예시/);
+  assert.equal(p.el('blind-bundle-picker').hidden, true);
+  p.w.location.hash = '#review=잘못된주소';
+  await t.waitFor(() => assert.match(p.el('review-target-status').textContent, /식별할 수 없는/));
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.el('output').textContent, '');
+  p.el('review-release').click();
+  await t.waitFor(() => assert.equal(p.el('inputs').hidden, false));
+  assert.equal(p.el('review-target').hidden, true);
+  assert.equal(p.el('blind-revision').contains(p.el('blind-bundle-picker')), true);
+  assert.equal(p.el('result').hidden, true);
+});
+
 test('다른 폴더의 같은 이름 파일도 모아서 비교하고 잘못 고른 한 개만 교체한다', async t => {
   const p = page(t, '#blind-revision');
   const before = require('../experiments/article-review-pilot/a-original.json');
@@ -85,6 +138,35 @@ test('다른 폴더의 같은 이름 파일도 모아서 비교하고 잘못 고
   assert.equal(p.el('result').hidden, true);
   assert.equal(p.el('agreement-export'), null);
   assert.equal(p.el('blind-bundle-status').textContent, '');
+});
+
+test('반복된 발언은 충돌을 표시한 회의의 기사 원문 위치와 강조 구절을 보여 준다', async t => {
+  const p = page(t);
+  const q = '시장은 “예산은 20억 원이었다”고 말했다.';
+  const source = {id:'doc', url:'https://archive.example/minutes', title:'회의록', version:'1', locator:'부산 회의', excerpt:q};
+  const manuscript = article => ({...workspace(article), sources:[source]});
+  const before = manuscript('편집 전 기사.');
+  const after = manuscript(['서울시 3월 회의.', q, '부산시 4월 회의.', q].join('\n'));
+  const files = [];
+  for (const editor of ['가', '나']) {
+    const {key,packets} = await p.w.JournalBlindRevision.prepare(before, after);
+    for (const role of ['before', 'after']) {
+      const work = packets[key.mapping[role].slot];
+      work.receipts = engine.prepare(work.article, work.sources).rows.map((row, i) => engine.decide(row, {
+        status:role === 'after' && i === 3 ? 'contradicted' : 'held',
+        sourceIds:[work.sources[0].id], acknowledged:true, reason:editor + '의 모의 대조'
+      }, work.sources));
+    }
+    files.push(...[key,packets.A,packets.B].map(data => ({name:'기사.json', text:async () => JSON.stringify(data)})));
+  }
+  p.selectFiles('blind-bundle-files', files);
+  await t.waitFor(() => assert.ok(p.el('joint-facts')));
+  const flagged = p.el('joint-facts').querySelector('.fact-alerts[data-edition="after"] details');
+  assert.match(flagged.firstElementChild.textContent, /같은 문구 2곳 중 2번째/);
+  const context = flagged.querySelector('blockquote');
+  assert.match(context.textContent, /부산시 4월 회의/);
+  assert.doesNotMatch(context.textContent, /서울시 3월 회의/);
+  assert.equal(context.querySelector('mark').textContent, q);
 });
 
 test('판본 확인 이후에만 비교하고 파일을 바꾸거나 잘못 열면 이전 승인과 수치를 걷는다', async t => {

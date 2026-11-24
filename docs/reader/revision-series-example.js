@@ -40,6 +40,7 @@ globalThis.JournalRevisionSeriesExample = [
   },
   {
     name: "도서관 운영 연습 기사",
+    evidenceExample: "library",
     record: {
       format: "journal-revision-series-record", version: 2, demo: true,
       before: {

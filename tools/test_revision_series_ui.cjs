@@ -28,6 +28,7 @@ function page(t) {
   });
   t.after(() => dom.window.close());
   const {window} = dom;
+  window.TextEncoder = TextEncoder;
   const get = id => window.document.getElementById(id);
   for (const script of window.document.querySelectorAll('script[src]')) {
     window.eval(fs.readFileSync(path.join(dir, script.getAttribute('src')), 'utf8'));
@@ -59,6 +60,7 @@ test('편향이 나아진 기사에 남은 사실 충돌·미결과 이전 요�
   assert.match(section.textContent, /구절별 검토 상태가 담긴 기사 1\/2건.*이전 형식 요약 1건/);
   assert.match(section.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 1건.*새 요약.json · 수정본 충돌 표시 2개 구절/);
   assert.match(section.textContent, /미결·판정 불일치·동일 판정 기록이 있는 기사 1건/);
+  assert.equal(section.querySelector('.review-evidence').hash, '#review=' + require('../docs/reader/revision-series').reviewId(current));
   assert.deepEqual(factCells(section, 'support'), ['0% (0/1)', '100% (1/1)']);
   assert.deepEqual(factCells(section, 'coverage'), ['50% (1/2)', '33.3% (1/3)']);
   assert.deepEqual(factCells(section, 'shared'), ['0개', '1개']);
@@ -67,6 +69,19 @@ test('편향이 나아진 기사에 남은 사실 충돌·미결과 이전 요�
   await flushed();
   assert.match(p.get('series-facts').textContent, /구절별 검토 상태가 담긴 기사 0\/1건/);
   assert.equal(p.get('series-facts').querySelector('table'), null);
+});
+
+test('편향 개선이 0건이어도 수정본에 충돌 표시가 있는 기사로 이동한다', async t => {
+  const p = page(t);
+  const marked = {...two, version:2, facts:{before:[{outcome:'pending', flag:'none'}], after:[{outcome:'quotedConflict',flag:'quote'}]}};
+  p.select(file('개선 없음.json', marked), file('옛 형식.json', one));
+  await flushed();
+  const section = p.get('series-facts');
+  assert.match(section.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 0건/);
+  const links = section.querySelectorAll('a.review-evidence');
+  assert.equal(links.length, 1);
+  assert.equal(links[0].textContent, '개선 없음.json · 수정본 충돌 표시 1개 구절');
+  assert.match(links[0].hash, /^#review=[a-f0-9]{64}$/);
 });
 
 test('기사별 분모를 합산하고 고유 기사, 중복, 빠진 판정, 자료 변경을 화면에서 구분한다', async t => {
@@ -200,6 +215,7 @@ test('내장 예시와 직접 고른 기사 사이를 전환해도 한쪽 기록
   assert.deepEqual(factCells(facts, 'quoteFlagged'), ['1개', '1개']);
   assert.match(facts.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 1건/);
   assert.deepEqual([...facts.querySelectorAll('li')].map(item => item.textContent), ['도서관 운영 연습 기사 · 수정본 충돌 표시 1개 구절']);
+  assert.match(facts.querySelector('.review-evidence').hash, /^#review=[a-f0-9]{64}&example=library$/);
   const articles = [...p.get('series-articles').querySelectorAll('details')].map(item => item.textContent);
   assert.match(articles[0], /출생 통계 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 0% \(0\/1\) → 100% \(1\/1\).*수정본 공동 판정 범위 16.7% \(1\/6\)/);
   assert.match(articles[1], /도서관 운영 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 50% \(1\/2\) → 100% \(2\/2\).*수정본 공동 판정 범위 66.7% \(2\/3\)/);

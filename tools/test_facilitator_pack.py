@@ -59,6 +59,7 @@ class FacilitatorPack(unittest.TestCase):
             comparison = coordinator.read('article-compare.html').decode()
             self.assertIn('id="blind-revision"', comparison)
             self.assertIn('src="blind-revision.js"', comparison)
+            self.assertIn('src="revision-evidence-example.js"', comparison)
             self.assertIn('href="article-compare.html"', coordinator.read('factcheck.html').decode())
             with ZipFile(BytesIO(coordinator.read('독립 기사 검토.zip'))) as reviewer:
                 self.assertIsNone(reviewer.testzip())
@@ -72,7 +73,7 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertNotIn('article-compare.html', reviewer.namelist())
                 self.assertTrue({'revision-series.html', 'revision-series.js', 'revision-series-ui.js',
                                  'revision-series-example.js', 'revision-facts.js',
-                                 'revision-facts-view.js'}.isdisjoint(reviewer.namelist()))
+                                 'revision-facts-view.js', 'revision-evidence-example.js'}.isdisjoint(reviewer.namelist()))
                 self.assertTrue(all(name.endswith(('.js', '.css')) for name in dependencies.local))
                 for name in dependencies.local:
                     self.assertEqual(reviewer.read(name), (READER / name).read_bytes())

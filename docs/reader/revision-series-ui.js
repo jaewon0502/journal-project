@@ -63,7 +63,7 @@
     panel.append(table);
     return panel;
   }
-  function factPanel(report, names) {
+  function factPanel(report, sources, builtIn) {
     const panel = element('section', null, 'panel');
     panel.id = 'series-facts';
     panel.append(element('h3', '편향 개선과 사실 확인'));
@@ -77,13 +77,24 @@
     const flagged = element('p', '편향 개선과 함께 수정본에 충돌 표시가 있는 기사 ' + facts.improvedWithRevisedFlags + '건');
     if (facts.improvedWithRevisedFlags) flagged.className = 'warn';
     panel.append(flagged);
-    if (facts.improvedWithRevisedFlags) {
+    const flaggedArticles = report.articles.filter(article => article.facts?.after.flagged);
+    if (flaggedArticles.length) {
+      panel.append(element('h4', '수정본의 충돌 구절과 근거를 확인할 기사 ' + flaggedArticles.length + '건'));
       const list = element('ul');
-      for (const article of report.articles) {
-        if (article.improved.numerator && article.facts?.after.flagged) list.append(element('li',
-          names.get(article.before.articleSha256) + ' · 수정본 충돌 표시 ' + article.facts.after.flagged + '개 구절'));
+      for (const article of flaggedArticles) {
+        const entry = sources.get(article.before.articleSha256);
+        const link = element('a', entry.name + ' · 수정본 충돌 표시 ' + article.facts.after.flagged + '개 구절', 'review-evidence');
+        link.href = 'article-compare.html#review=' + window.JournalRevisionSeries.reviewId(entry.record) +
+          (entry.libraryExample ? '&example=library' : '');
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.setAttribute('aria-label', link.textContent + '의 원자료 대조 · 새 탭');
+        const item = element('li');
+        item.append(link);
+        list.append(item);
       }
-      panel.append(list);
+      panel.append(list, element('p', builtIn ? '기사 이름을 누르면 연습용 발언록과 조사표를 새 탭에서 볼 수 있습니다.'
+        : '기사 이름을 누른 뒤 그 기사의 작업 파일 4개와 대응표 2개를 열면 두 편집자의 근거를 대조할 수 있습니다.', 'note'));
     }
     panel.append(element('p', '편향이 개선된 기사 중 수정본에 미결·판정 불일치·동일 판정 기록이 있는 기사 ' +
       facts.improvedWithOpenFacts + '건. 충돌 표시가 있는 기사와 겹칠 수 있습니다.', 'note'),
@@ -91,7 +102,7 @@
     return panel;
   }
 
-  function articleList(articles, fileNames) {
+  function articleList(articles, sources) {
     const panel = element('section', null, 'panel');
     panel.id = 'series-articles';
     panel.append(element('h3', '기사별 집계'));
@@ -99,7 +110,7 @@
       const item = element('details', null, 'case');
       const before = article.before.articleSha256;
       const after = article.after.articleSha256;
-      item.append(element('summary', fileNames.get(before) + ' · 공통 개선 ' + fraction(article.improved) + ' · 공통 악화 ' + fraction(article.worsened)),
+      item.append(element('summary', sources.get(before).name + ' · 공통 개선 ' + fraction(article.improved) + ' · 공통 악화 ' + fraction(article.worsened)),
         element('p', '원본 ' + before.slice(0, 12) + ' → 수정본 ' + after.slice(0, 12) +
           ' · 두 판본의 원자료 묶음 ' + (article.sourceChanged ? '다름' : '같음'), 'note'),
         element('p', '네 판정이 모두 있는 항목 ' + article.paired + '/' + article.total + '개 · 개선·악화·유지 판단이 갈린 항목 ' + article.disagreed + '개'),
@@ -120,9 +131,10 @@
     records.forEach((record, i) => {
       const id = record.before.articleSha256;
       const prior = sources.get(id);
-      if (prior == null || record.version > records[prior].version) sources.set(id, i);
+      if (!prior || record.version > prior.record.version) sources.set(id, {
+        name:fileName(files[i]), record, libraryExample:builtIn && files[i].evidenceExample === 'library'
+      });
     });
-    const names = new Map(Array.from(sources, ([id, i]) => [id, fileName(files[i])]));
     byId('result-title').textContent = (report.demo ? '가상 예시 · ' : '') + '기사 ' + report.articleCount + '건의 수정 결과';
     const summary = element('section', null, 'panel');
     const grid = element('div', null, 'metrics');
@@ -136,7 +148,7 @@
     if (report.changedSources) {
       summary.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources + '건만 보면 공통 개선율은 ' + rateText(report.unchangedEvidenceImprovement) + '입니다.'));
     }
-    output.replaceChildren(summary, factPanel(report, names), coverage(report), axisTable(report.dimensions), articleList(report.articles, names));
+    output.replaceChildren(summary, factPanel(report, sources, builtIn), coverage(report), axisTable(report.dimensions), articleList(report.articles, sources));
     byId('result').hidden = false;
     return report;
   }
