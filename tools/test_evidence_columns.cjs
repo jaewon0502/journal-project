@@ -231,3 +231,67 @@ test('연도 행은 항목별 원문 값을 제공하고, 명시한 행정 행�
   assert.equal(inspect('2020년 표의 항목은?', table.replace('확인', '2021년')),null);
   assert.equal(inspect('2020년에 지정한 시설은?', table + '\n2021\t10\t4'),null);
 });
+
+test('연도가 가로로 인쇄된 표에서 이름과 물리적 행·열을 함께 찾고 질문 속 수치는 선택에 쓰지 않는다', () => {
+  const rows = [['구분','2021년','2023년도','2022'], ['공구 반납(건)','31','92','17'],
+    ['공구 대여(건)','81','1,270','92'], ['연장 대여(건)','90','51','92']];
+  const q = '원표에서 2023년의 공구대여는 92건이라는 주장이 맞나?';
+  for (const format of [parts => parts.join('\t'), parts => '| ' + parts.join(' | ') + ' |', parts => parts.join('   ')]) {
+    const text = '\n' + rows.map(format).join('\n') + '\n';
+    assert.deepEqual(columns.findYearMatrixCell(text,q), {
+      headerParagraph:1,rowParagraph:3,rowLabel:'공구 대여(건)',year:'2023',heading:'2023년도',column:3,value:'1,270'
+    });
+  }
+  const pipes = ['| 항목 | 2022 | 2023 |','|:---|---:|---:|','| 대여 | 11 | 17 |','| 수리 | 12 | 18 |'];
+  const matrix = ['(단위: 만 원)',...pipes].join('\n');
+  const cell = columns.findYearMatrixCell(matrix,'2022년 수리는 몇 만 원인가?');
+  assert.equal(cell.value, '12');
+  assert.equal(cell.headerParagraph, 2);
+  assert.equal(cell.rowParagraph, 5);
+  assert.equal(cell.column, 2);
+  assert.equal(columns.findYearMatrixCell(matrix,'2022년 수리는 몇 원인가?'), null);
+  const rentals = rows.map(parts => parts.join('\t')).join('\n');
+  assert.equal(columns.findYearMatrixCell(rentals, '2023년 공구 대여 건수는 몇 건인가요?').value, '1,270');
+  assert.equal(columns.findYearMatrixCell(rentals, '2023년 공구 대여(건)은 얼마였나?').value, '1,270');
+  assert.equal(columns.findYearMatrixCell(rentals, '2023년 공구 대여(명)은 얼마였나?'), null);
+  assert.equal(columns.findYearMatrixCell(rentals, '2023년 공구 대여 인원은?'), null);
+  const counts = '구분\t2022\t2023\n회수 건수\t20\t13';
+  assert.equal(columns.findYearMatrixCell(counts,'2023년 회수 건수는 몇 건인가?').value,'13');
+  assert.equal(columns.findYearMatrixCell('단위: 명\n' + counts,'2023년 회수 건수는 몇 명인가?'),null);
+});
+
+test('합계·부분 집단·단위·기간·질문 종류의 차이를 해당 연도 셀로 대신하지 않는다', () => {
+  const table = '구분\t2022\t2023\n재사용(건)\t12\t17\n최종 재사용(건)\t11\t16\n합계(건)\t30\t31';
+  for (const q of ['2021년 재사용은 몇 건인가?', '올해 재사용은 몇 건인가?', '2023년 4분기 재사용은?',
+    '2023년 9월 재사용은?', '2022~2023년 재사용은 몇 건인가?', '2023년 재사용은 전년 대비 얼마나 올랐나?',
+    '2023년 재사용과 최종 재사용은?', '2023년 재사용은 몇 명인가?', '2023년 재사용은 17%인가?',
+    '2023년 재사용 비중은?', '2023년 잠정 재사용은 몇 건인가?', '2023년 재사용은 동부 지점에서 몇 건인가?',
+    '2023년 길잡이 프로그램 재사용은?', '2023년 바다팀의 합계는 몇 건인가?', '2023년 재사용은 원래 몇 건인가?',
+    '2023년 미재사용은 몇 건인가?', '2023년 합계에서 재사용을 제외한 값은?', '2023년 재사용의 원인은?',
+    '2023년 재사용의 단위는?', '2023년 재사용은 구입 비용이 17원인가?']) {
+    assert.equal(columns.findYearMatrixCell(table, q), null, q);
+  }
+  assert.equal(columns.findYearMatrixCell(table, '2023년에 최종 재사용은 몇 건인가?').value, '16');
+  assert.equal(columns.findYearMatrixCell(table, '2023년 합계는 몇 건인가?').value, '31');
+});
+
+test('연도 행렬의 결측·중복·밀린 셀·다른 표를 건너뛰어 임의로 값을 만들지 않는다', () => {
+  const q = '2023년 점검은 몇 건인가?';
+  const match = lines => columns.findYearMatrixCell(lines.join('\n'), q);
+  const header = '구분\t2022\t2023', row = '점검(건)\t10\t21';
+  for (const grid of [[header,row,'점 검(명)\t5\t9'], [header,row,'점검(건)\t1\t2'],
+    ['구분\t2023\t2023',row], [header,'점검(건)\t10\t'], [header,'점검(건)\t10\t—'],
+    [header,'점검(건)\t10\t21명'], [header,'점검\t10\t21'], [header,row,'\t점검(건)\t10\t21'],
+    ['\t'+header,row], [header,row,'유지\t10'], [header,row,header,'정비\t10\t3'],
+    [header,'정비\t11\t22','',row], [header,'\f'+row], ['단위: 명', header,row], [header,'점검(건)\t\t10\t21']]) {
+    assert.equal(match(grid), null, JSON.stringify(grid));
+  }
+  assert.equal(match([header,'점검(건)\t\t21']).value,'21');
+  assert.equal(match(['구분(건)\t2022\t2023','점검\t10\t21']).value,'21');
+  assert.equal(match([header,'점검\t10건\t21건']).value,'21건');
+  const rates = header + '\n달성률(%)\t30%\t41%\n조정폭(%p)\t+3%p\t−2.5%p';
+  assert.equal(columns.findYearMatrixCell(rates, '2023년 달성률은 몇 퍼센트인가?').value,'41%');
+  assert.equal(columns.findYearMatrixCell(rates, '2023년 조정폭은 몇 퍼센트포인트인가?').value,'−2.5%p');
+  assert.equal(columns.findYearMatrixCell(rates, '2023년 달성률은 몇 %p인가?'),null);
+  assert.equal(columns.findYearMatrixCell(rates, '2023년 조정폭은 몇 퍼센트인가?'),null);
+});

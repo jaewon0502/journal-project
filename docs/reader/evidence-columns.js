@@ -208,6 +208,108 @@
     return inspectAnnualRow(documentText, query, passage)?.metric || null;
   }
 
+  // A complete matrix with a named stub and distinct years printed across it.
+  // Keep a scale as part of its unit: the raw cell is never converted.
+  const matrixUnit = '(?:(?:%|퍼센트)\\s*(?:포인트|p)?|(?:[십백천만억조]+\\s*)?(?:가구|시간|개월|킬로그램|킬로미터|톤|kg|km|원|건|명|개|회|대|종|곳|장|권|점|일|분))';
+  const matrixNumber = '[+△▲▼−-]?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?';
+  const matrixValue = new RegExp('^' + matrixNumber + '\\s*(' + matrixUnit + ')?$', 'iu');
+  const unitSuffix = new RegExp('\\(\\s*(' + matrixUnit + ')\\s*\\)$', 'iu');
+  const unitLine = new RegExp('^단\\s*위\\s*:\\s*(' + matrixUnit + ')$', 'iu');
+  const askedValue = new RegExp('^(?:몇|얼마(?:나)?|' + matrixNumber + ')\\s*(' + matrixUnit + ')?', 'iu');
+  const sourceFrame = /(?<![\p{L}\p{N}])(?:(?:이|위|아래)\s+)?(?:통계표|원표|표|원자료|자료)(?:에서(?:는)?|에\s*따르면|의|상(?:으로)?)(?![\p{L}\p{N}])/gu;
+  const valueSubject = /^(?:(?:행|항목)(?:에서|의|은|는)?\s*)?(?:(?:수치|값)(?:은|는|이|가|을|를)?\s*)?/u;
+  const countNames = new Map([['건수','건'], ['인원','명'], ['인원수','명'], ['가구수','가구'], ['횟수','회']]);
+  const countSubject = /^(건\s*수|인원(?:\s*수)?|가구\s*수|횟수)(?:는|은|이|가|을|를)?(?=\s|[?!.。]|$)/u;
+  const directEnding = /^(?:인가(?:요)?|입니까|입니다|이다|(?:이었|였)(?:나(?:요)?|는가|습니까|다|어)|이?야|인지|(?:로|으로)?\s*(?:집계|기록)(?:됐나|되었나)|(?:어떻게\s*)?(?:되나(?:요)?|됩니까)|알려\s*(?:줘|주세요))?$/u;
+  const claimEnding = /^(?:이?라는|이?었다는|였다는)\s*(?:주장|내용|말)(?:이|은)?\s*(?:(?:원자료|통계|표)(?:와|과)\s*)?(?:맞(?:나(?:요)?|는가)|일치하(?:나(?:요)?|는가)|사실인가(?:요)?)$/u;
+
+  function normalizedMatrixUnit(unit) {
+    return unit?.toLowerCase().replace(/\s+/gu, '').replace('퍼센트','%').replace('포인트','p')
+      .replace('킬로그램','kg').replace('킬로미터','km');
+  }
+
+  function matrixQuestion(text, label, unit) {
+    // Require all qualifications to be accounted for by the dated row itself.
+    // An unprinted district, program, comparison or denominator can be any noun.
+    const name = [...label.replace(/\s+/gu, '')].map(c => c.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')).join('\\s*');
+    const mention = new RegExp('(?<![\\p{L}\\p{N}])' + name + '(?:\\s*\\(\\s*(' + matrixUnit + ')\\s*\\))?' +
+      '(?:에서는|에서|에는|의|은|는|이|가|을|를)?(?![\\p{L}\\p{N}])', 'iu');
+    const named = mention.exec(text);
+    if (!named || (named[1] && normalizedMatrixUnit(named[1]) !== unit)) return false;
+    let rest = text.replace(mention, ' ').replace(sourceFrame, ' ').trim()
+      .replace(valueSubject, '').replace(/[?!.。]+$/u, '').trim();
+    const count = countSubject.exec(rest);
+    if (count) {
+      if (countNames.get(count[1].replace(/\s+/gu, '')) !== unit) return false;
+      rest = rest.slice(count[0].length).trim();
+    }
+    const ask = askedValue.exec(rest);
+    if (ask) {
+      if (ask[1] && normalizedMatrixUnit(ask[1]) !== unit) return false;
+      rest = rest.slice(ask[0].length).trim();
+    }
+    return directEnding.test(rest) || Boolean(ask && claimEnding.test(rest));
+  }
+
+  function findYearMatrixCell(documentText, query) {
+    if (typeof documentText !== 'string' || typeof query !== 'string' || documentText.includes('\f')) return null;
+    const normalized = query.normalize('NFKC');
+    const period = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
+    const asked = period?.requestedPeriod(normalized);
+    if (!asked || asked.month || asked.day) return null;
+    const question = normalized.replace(/(?<!\d)(?:19|20)\d{2}년(?:도)?(?:에는|에도|의|에|은|는)?/u, ' ');
+    const compact = question.replace(/\s+/gu, '');
+    const lines = documentText.split(lineBreak);
+    const start = lines.findIndex(line => line.trim());
+    if (start < 0) return null;
+    const block = lines.slice(start);
+    while (block.length && !block.at(-1).trim()) block.pop();
+    const first = block[0].normalize('NFKC').trim();
+    const legend = unitLine.exec(/^\(.*\)$/u.test(first) ? first.slice(1,-1).trim() : first);
+    const index = legend ? 1 : 0;
+    // cellsOf also supports unlabeled stubs in legacy grouped layouts. Here
+    // a blank first cell would shift every physical column by one.
+    const split = line => line && !/^ *\t|^\s*\|\s*\|/u.test(line) ? cellsOf(line) : null;
+    const header = split(block[index]);
+    if (!header || header.cells.length < 3 || !/[가-힣]/u.test(header.cells[0]) || yearCell.test(header.cells[0])) return null;
+    const years = header.cells.slice(1).map(cell => yearCell.exec(cell)?.[1]);
+    const col = years.indexOf(asked.year) + 1;
+    if (!col || years.some(year => !year) || new Set(years).size !== years.length) return null;
+
+    const headerUnit = unitSuffix.exec(header.cells[0].normalize('NFKC'))?.[1];
+    const labels = new Set();
+    let match = null;
+    for (let i = index + 1; i < block.length; i++) {
+      const row = split(block[i]);
+      if (!row || row.kind !== header.kind || row.cells.length !== header.cells.length) return null;
+      if (i === index + 1 && row.kind === 'pipe' && row.cells.every(cell => /^:?-{3,}:?$/u.test(cell))) continue;
+      const [rowLabel, ...values] = row.cells;
+      const printed = rowLabel.normalize('NFKC');
+      const label = printed.replace(unitSuffix, '').trim();
+      const key = label.replace(/\s+/gu, '');
+      if (!/[가-힣]/u.test(label) || yearCell.test(label) || labels.has(key) || values.every(cell => yearCell.test(cell))) return null;
+      labels.add(key);
+      const parsed = values.map(value => matrixValue.exec(value.normalize('NFKC')));
+      if (parsed.some((cell, n) => !cell && !/^(?:[-—–…]|)$/u.test(values[n]))) return null;
+      if (!parsed[col - 1] || !compact.includes(key)) continue;
+      const units = new Set([legend?.[1], headerUnit, unitSuffix.exec(printed)?.[1], parsed[col - 1][1]]
+        .filter(Boolean).map(normalizedMatrixUnit));
+      // 건수 and 횟수 name their counting unit. Other measures, particularly
+      // rates and money amounts, need an explicit printed unit for a unit query.
+      const printedCount = /(?:건수|인원수?|가구수|횟수)$/u.exec(key)?.[0];
+      if (printedCount) {
+        const countUnit = countNames.get(printedCount);
+        if ([...units].some(unit => unit.replace(/^[십백천만억조]+/u, '') !== countUnit)) continue;
+        if (!units.size) units.add(countUnit);
+      }
+      if (units.size > 1 || !matrixQuestion(question, label, [...units][0])) continue;
+      if (match) return null;
+      match = {headerParagraph:index + 1, rowParagraph:i + 1, rowLabel, year:asked.year,
+        heading:header.cells[col], column:col + 1, value:row.cells[col]};
+    }
+    return match;
+  }
+
   const levelCell = /^(\d+(?:\.\d+)?)(?:\(\s*([+−-]?\d+(?:\.\d+)?)\s*\))?$/u;
   const legend = /^\(?\s*단위\s*:\s*%\s*[/,]\s*(?:\(\s*\)|괄호(?:\s*안)?(?:은|는)?)\s*(?:직전\s*조사\s*대비\s*)?증감(?:폭)?(?:\s*\(\s*%p\s*\))?\s*\)?$/iu;
 
@@ -308,7 +410,7 @@
       legendParagraph:headerParagraph - (hasStub ? 3 : 2), comparisons} : null;
   }
 
-  const api = {forRow, inspectAnnualRow, annualMetricCell, changeNote};
+  const api = {forRow, inspectAnnualRow, annualMetricCell, findYearMatrixCell, changeNote};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceColumns = api;
 })(globalThis);
