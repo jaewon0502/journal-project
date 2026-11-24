@@ -14,6 +14,10 @@ from build_field_participant_packs import Assets, CASES, READER, ROOT, html, pac
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
 PRACTICE_SAMPLE = '연습 예시/고용률-판단이유-가상응답.json'
+QUOTE_PRACTICE = {
+    'series-summary.json': '연습 예시/핵심발언/기사별-요약.json',
+    'coordinator-case.json': '연습 예시/핵심발언/진행자용-대조기록.json'
+}
 
 START = """<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -55,7 +59,10 @@ START = """<!doctype html>
 <li>‘두 편집자의 결과 한꺼번에 열기’에서 작업 파일 4개와 대응표 2개를 선택하세요. 다른 폴더에 있으면 나눠서 추가하세요. 파일 6개가 모이면 같은 두 판본을 평가했는지 확인하고 결과가 열립니다. 판단이 갈린 구절이나 기준을 펼쳐 각자 선택한 원자료를 대조하세요.</li>
 <li>‘기사별 평가 요약 저장’으로 기사마다 요약 한 개를 보관하세요. <a href="revision-series.html">여러 기사 개선율 집계</a>에서 편향 개선율과 공동 사실 판정 범위를 확인하세요. 수정본에 충돌 표시가 남았거나 원본에서 확인한 사실을 다시 대조해야 하면 해당 기사 이름을 누르세요. 작업 파일 4개와 대응표 2개를 열면 선택한 구절과 두 편집자의 근거가 나옵니다.</li>
 <li>‘같은 항목에서 본 중요한 왜곡’에서 원본과 수정본의 비율을 공통 개선율과 함께 확인하세요. 판단이 갈린 항목의 링크를 누르고 그 기사의 원래 파일을 열면, 해당 기준에 적은 두 편집자의 이유와 근거가 나옵니다.</li>
-<li>원본 사실이 수정본에도 남았는지 직접 대조했다면 구절별 판단과 이유를 넣고 ‘진행자용 대조 파일 저장’을 누르세요. 다음에는 ‘두 편집자의 결과 한꺼번에 열기’에서 이 파일 하나로 이어갑니다. 이 파일에는 두 편집자의 원자료·미적용 초안과 진행자 대응표가 모두 들어갑니다.</li></ol></section>
+<li>원본 사실이 수정본에도 남았는지 직접 대조했다면 구절별 판단과 이유를 넣고 ‘진행자용 대조 파일 저장’을 누르세요. 다음에는 ‘두 편집자의 결과 한꺼번에 열기’에서 이 파일 하나로 이어갑니다. 이 파일에는 두 편집자의 원자료·미적용 초안과 진행자 대응표가 모두 들어갑니다.</li></ol>
+<p><strong>가상 기사에서 사라진 반대 발언 찾기</strong> ·
+<a href="revision-series.html">여러 기사 개선율 집계</a>에서 <code>연습 예시/핵심발언/기사별-요약.json</code>을 여세요.
+‘대응을 찾지 못한 원본 핵심 구절 1개 대조’를 누르고 같은 폴더의 <code>진행자용-대조기록.json</code>을 열면 원래 발언과 수정본을 읽을 수 있습니다.</p></section>
 </main></body></html>
 """
 
@@ -116,6 +123,8 @@ def packet_bytes():
     start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii'))
     files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': start.encode(),
              'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice}
+    for filename, destination in QUOTE_PRACTICE.items():
+        files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()

@@ -1,0 +1,123 @@
+{
+  "format": "journal-revision-series-record",
+  "version": 5,
+  "demo": true,
+  "before": {
+    "articleSha256": "f4706486969edc188494627979451b4b98fb255f983cf0f97185abe20aa9f3c9",
+    "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+  },
+  "after": {
+    "articleSha256": "f92ed590f6c619e82ba69a70df5588589cbf7960722720c748bca4d09a4d3058",
+    "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+  },
+  "dimensions": [
+    {
+      "id": "wording",
+      "first": {
+        "before": 2,
+        "after": 0
+      },
+      "second": {
+        "before": 2,
+        "after": 0
+      }
+    },
+    {
+      "id": "framing",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "omission",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "standards",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    }
+  ],
+  "facts": {
+    "before": [
+      {
+        "outcome": "supported",
+        "flag": "none"
+      },
+      {
+        "outcome": "excluded",
+        "flag": "none"
+      },
+      {
+        "outcome": "contradicted",
+        "flag": "article"
+      },
+      {
+        "outcome": "limited",
+        "flag": "none"
+      }
+    ],
+    "after": [
+      {
+        "outcome": "supported",
+        "flag": "none"
+      },
+      {
+        "outcome": "excluded",
+        "flag": "none"
+      },
+      {
+        "outcome": "supported",
+        "flag": "none"
+      },
+      {
+        "outcome": "limited",
+        "flag": "none"
+      }
+    ]
+  },
+  "factMatches": [
+    [
+      0,
+      0
+    ]
+  ],
+  "factContext": {
+    "beforeCore": [
+      2,
+      0,
+      0,
+      2
+    ],
+    "afterCore": [
+      2,
+      0,
+      0,
+      2
+    ],
+    "matches": [
+      [
+        0,
+        0
+      ]
+    ]
+  }
+}

@@ -53,3 +53,32 @@ test('도서관 연습 파일 여섯 개는 다시 열어도 같은 기록과 �
     assert.ok(one.sources.every(source => new URL(source.url).hostname.endsWith('.example.invalid')));
   }
 });
+
+test('편향 표현을 고쳤어도 원래 핵심 반대 발언이 이어지지 않은 가상 기사를 진행자 파일에서 다시 찾는다', async () => {
+  const file = name => JSON.parse(readFileSync(path.join(__dirname, '../experiments/core-quote-revision', name), 'utf8'));
+  const archive = file('coordinator-case.json'), record = file('series-summary.json');
+  const retention = require('../docs/reader/retention-case.js');
+  const reviews = await blind.resolveBundle(retention.read(archive).items);
+  const joint = agreement.compare(...reviews);
+  const rebuilt = series.makeRecord(joint, reviews[0].key);
+  assert.equal(series.reviewId(rebuilt), series.reviewId(record));
+  assert.deepEqual(retention.verify(archive, rebuilt), []);
+  assert.deepEqual(joint.missingReturns, []);
+  const [article] = series.summarize([record]).articles;
+  assert.deepEqual(article.coreContextReview, {total:1, unmatched:[3]});
+  assert.deepEqual(article.improved, {numerator:1, denominator:1, pct:100});
+  assert.deepEqual(article.factAudit.core, {total:1, retained:1, changed:0, unmatched:0});
+  const sourceTitles = new Set();
+  for (const review of reviews) {
+    const old = workspace.read(review.before);
+    const revised = workspace.read(review.after);
+    assert.ok(old.demo && revised.demo);
+    assert.match(old.rows[3].text, /야당 의원.*무책임하다/);
+    assert.match(revised.rows[3].text, /여당 의원.*바람직하다/);
+    const receipt = old.rows[3].receipt;
+    assert.equal(receipt.contentStatus, 'opinion');
+    sourceTitles.add(old.sources.find(s => s.id === receipt.sourceIds[0]).title);
+  }
+  assert.deepEqual([...sourceTitles].sort(), ['가상 공청회 속기록','가상 공청회 회의록']);
+  assert.doesNotMatch(JSON.stringify(record), /무책임|야당 의원|속기록/);
+});

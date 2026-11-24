@@ -44,6 +44,18 @@
     return {total: factMatches.length, retained, unmatched, changed};
   }
 
+  function coreContextReview(facts, context) {
+    const matched = new Set(context.matches.map(([original]) => original));
+    const unmatched = [];
+    let total = 0;
+    for (const [index, row] of facts.before.entries()) {
+      if (context.beforeCore[index] !== 2 || row.outcome === 'supported') continue;
+      total++;
+      if (!matched.has(index)) unmatched.push(index);
+    }
+    return {total, unmatched};
+  }
+
   function emptyAudit() {
     return {core: {total: 0, retained: 0, changed: 0, unmatched: 0},
       flags: {total: 0, previouslyFlagged: 0, previouslySupported: 0, previouslyUnflagged: 0, unmatched: 0, core: 0}};
@@ -84,7 +96,7 @@
     return result;
   }
 
-  const api = Object.freeze({validRow, summarize, summarizeFactMatches, auditFacts, sumFactAudits});
+  const api = Object.freeze({validRow, summarize, summarizeFactMatches, coreContextReview, auditFacts, sumFactAudits});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalRevisionFacts = api;
 })(globalThis);

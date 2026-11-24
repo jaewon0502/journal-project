@@ -536,6 +536,8 @@
       '두 사람이 개선으로 본 편향 항목 ' + joint.improved.numerator + '개 · 수정본에서 한 명 이상 원자료와 충돌한다고 표시한 구절 ' +
         after.flagged + '개', 'warn'));
     jointRetention(panel, joint, editors);
+    const coreContext = unmatchedCoreDetails(joint, editors);
+    if (coreContext) panel.append(coreContext);
     if (record && panel.querySelector('.fact-retention')) {
       window.JournalRetentionNotesUI.mount({container:panel, record, editors, notes, decisionEvidence,
         async onSave(entries) {
@@ -594,6 +596,30 @@
     return panel;
   }
   const editorNames = ['첫 편집자', '둘째 편집자'];
+  function unmatchedCoreDetails(joint, editors) {
+    const {unmatched: indices} = window.JournalRevisionFacts.coreContextReview(joint.facts, joint.factContext);
+    if (!indices.length) return null;
+    const group = detail('수정본과 대응을 확인할 원본 핵심 구절 ' + indices.length + '개');
+    group.classList.add('core-context');
+    group.append(note('두 편집자 모두 핵심으로 골랐지만 구절 전체를 지지하는 공동 판정이 없고, 수정본에서 같은 구절을 연결하지 못했습니다. 다른 표현으로 담겼는지 수정본 전문을 대조하세요.'));
+    const [original, revision] = editors[0].snapshots;
+    for (const index of indices) {
+      const row = original.rows[index];
+      const item = detail('원본 ' + (index + 1) + '번 · ' + row.text);
+      item.append(ratingPassage(original, '원본 기사', row.text, row.id));
+      const pair = element('div', null, 'pair');
+      editors.forEach((editor, i) => {
+        const snapshot = editor.snapshots[0];
+        pair.append(decisionEvidence(snapshot, snapshot.assessment.accuracy.rows[index], row.text, editorNames[i]));
+      });
+      item.append(pair);
+      group.append(item);
+    }
+    const full = detail('수정본 전문에서 대응 구절 찾기');
+    full.append(element('blockquote', revision.article));
+    group.append(full);
+    return group;
+  }
   function jointDimensionDetails(dimension, editors) {
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     const line = [dimension.first, dimension.second].map((d, i) =>
@@ -857,7 +883,7 @@
     }
     const record = reopened?.record ?? window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
     const series = window.JournalRevisionSeries;
-    const oldestVersion = reviewTarget.retention ? 3 : 2;
+    const oldestVersion = reviewTarget.coreContext ? 4 : reviewTarget.retention ? 3 : 2;
     const versions = [5, 4, 3, 2].filter(version => version <= record.version && version >= oldestVersion);
     if (!versions.some(version => series.reviewId(record, version) === reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
@@ -869,6 +895,12 @@
       row = jointDimensionDetails(dimension, reviews);
       panel.append(note('단계는 집계한 요약과 대조했습니다. 발췌문과 판단 이유는 지금 연 작업 파일에서 읽었습니다.'), row);
       title = dimension.title + ' · 수정 전후 판정 근거';
+    } else if (reviewTarget.coreContext) {
+      group = unmatchedCoreDetails(joint, reviews);
+      if (!group) throw new Error('선택한 요약에는 수정본과 다시 대조할 원본 핵심 구절이 없습니다.');
+      title = '수정본과 대응을 확인할 원본 핵심 구절';
+      panel = section('두 편집자의 원본 판정과 수정본 전문');
+      panel.append(group);
     } else {
       panel = jointFactPanel(joint, reviews, record, reopened?.notes);
       group = panel.querySelector(reviewTarget.retention ? '.fact-retention' : '.fact-alerts[data-edition="after"]');
@@ -1081,8 +1113,9 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|bias-(wording|framing|omission|standards)))?(&example=library)?$/.exec(location.hash);
-      reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', axis:match?.[3], example:!!match?.[4]};
+      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|core-context|bias-(wording|framing|omission|standards)))?(&example=library)?$/.exec(location.hash);
+      reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', coreContext:match?.[2] === 'core-context',
+        axis:match?.[3], example:!!match?.[4]};
       resumeExample.hidden = !(reviewTarget.example && reviewTarget.retention);
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;

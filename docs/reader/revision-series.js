@@ -197,6 +197,7 @@
     const articles = unique.map(r => ({before: r.before, after: r.after,
       sourceChanged: r.before.sourcesSha256 !== r.after.sourcesSha256, ...summarizeScores(r.dimensions),
       facts: r.facts ? {before: factReview.summarize(r.facts.before), after: factReview.summarize(r.facts.after)} : null,
+      coreContextReview: r.factContext ? factReview.coreContextReview(r.facts, r.factContext) : null,
       factTrace: r.factMatches ? factReview.summarizeFactMatches(r.factMatches, r.facts.after) : null,
       factAudit: r.factContext ? factReview.auditFacts(r.facts, r.factContext) : null}));
     const dimensions = rubric.dimensions.map(({id, title}, i) =>
@@ -206,10 +207,15 @@
     const withFacts = unique.filter(r => r.facts);
     const improvedArticles = articles.filter(a => a.improved.numerator > 0);
     const improvedAudits = improvedArticles.map(a => a.factAudit).filter(audit => audit !== null);
+    const coreContexts = improvedArticles.map(a => a.coreContextReview).filter(Boolean);
     const facts = {articleCount: withFacts.length, missingArticles: articles.length - withFacts.length,
       before: factReview.summarize(withFacts.flatMap(r => r.facts.before)),
       after: factReview.summarize(withFacts.flatMap(r => r.facts.after)),
       improvedArticles: improvedArticles.length,
+      coreContext: {
+        total: coreContexts.reduce((sum, review) => sum + review.total, 0),
+        unmatched: coreContexts.reduce((sum, review) => sum + review.unmatched.length, 0)
+      },
       audit: {improvedArticles: improvedAudits.length, missingImprovedArticles: improvedArticles.length - improvedAudits.length,
         ...factReview.sumFactAudits(improvedAudits)},
       improvedWithUnconfirmedRetention: improvedArticles.filter(a => a.factTrace && a.factTrace.retained < a.factTrace.total).length,

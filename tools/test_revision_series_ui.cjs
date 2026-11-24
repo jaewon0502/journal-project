@@ -385,3 +385,26 @@ test('공통 개선 100%여도 수정본에서 확인된 중요한 왜곡과 원
   assert.match(p.get('series-revised-unpaired').textContent,/원본 미평가.*미평가 → 3단계/);
   assert.equal(p.get('series-revised-unpaired').querySelector('a'),null);
 });
+
+test('보존율 1/1 옆에 대응 없는 핵심 발언의 증거 링크를 내고 예전 핵심 미기록은 제외한다', async t => {
+  const p = page(t);
+  const example = require('../experiments/core-quote-revision/series-summary.json');
+  const legacy = {...structuredClone(example), version:3};
+  delete legacy.factContext;
+  const title = '발언 교체 연습.json';
+  p.select(file('구버전', legacy), file(title, example), file('중복', example));
+  await flushed();
+  assert.match(p.get('series-core-audit').textContent, /100% \(1\/1개\)/);
+  const section = p.get('series-core-context');
+  assert.match(section.textContent, /원본 구절 1개 중 수정본 대응을 찾지 못한 구절 1개/);
+  const links = [...section.querySelectorAll('a')];
+  assert.equal(links.length, 1);
+  const series = require('../docs/reader/revision-series.js');
+  assert.equal(links[0].hash, '#review=' + series.reviewId(example) + '&focus=core-context');
+  assert.ok(links[0].textContent.startsWith(title));
+  assert.doesNotMatch(section.textContent, /야당 의원|무책임하다/);
+  p.select(file('구버전', legacy));
+  await flushed();
+  assert.equal(p.get('series-core-context'), null);
+  assert.match(p.get('series-core-audit').textContent,/이전 형식으로 저장한 개선 기사 1건/);
+});

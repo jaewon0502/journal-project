@@ -97,3 +97,19 @@ test('개선 기사마다 분모가 달라도 기사 평균 대신 해당 구절
     core: {total: 3, retained: 1, changed: 1, unmatched: 1},
     flags: {...noFlags, total: 2, previouslySupported: 1, unmatched: 1, core: 1}});
 });
+
+test('핵심 구절의 자동 대응을 완전 지지, 제한된 지지, 의견, 충돌과 구분하고 한 사람만 핵심으로 삼으면 제외한다', () => {
+  const s = record('different core outcomes'), stable = record('stable other article', {improved:false});
+  s.facts = {before:[fact('limited'), fact('excluded'), fact('pending'), fact('contradicted','article'), fact('quotedConflict','quote'), fact('supported')],
+    after:[fact('excluded'),fact('pending')]};
+  s.factMatches = [[5,null]];
+  s.factContext = {beforeCore:[2,2,1,2,2,2], afterCore:[0,0], matches:[[1,0],[3,1]]};
+  stable.facts.before[0] = fact('disputed');
+  stable.factMatches = [[1,null]];
+  stable.factContext.matches = [];
+  const result = summarize([s, stable, structuredClone(s)]);
+  assert.deepEqual(result.articles[0].coreContextReview, {total:4, unmatched:[0,4]});
+  assert.deepEqual(result.articles[1].coreContextReview, {total:1, unmatched:[0]});
+  assert.deepEqual(result.facts.coreContext,{total:4,unmatched:2});
+  assert.deepEqual(result.articles[0].factAudit.core,{total:1,retained:0,changed:0,unmatched:1});
+});

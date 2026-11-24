@@ -126,6 +126,82 @@ test('집계에서 지정한 편향 기준은 같은 판본과 익명 판정이 
   assert.equal(p.el('result').hidden, true);
 });
 
+test('같은 핵심 발언에 대응할 수정본 구절이 없으면 원본 위치와 두 판정의 실제 발언 근거, 수정본 전문을 연다', async t => {
+  const blind = require('../docs/reader/blind-revision.js');
+  const agreement = require('../docs/reader/revision-agreement.js');
+  const series = require('../docs/reader/revision-series.js');
+  const quote = '의원은 “참담하다”고 말했다.';
+  const revised = '위원장은 “최대의 치적이다”라고 말했다.';
+  const body = '사업비는 10억 원이다.';
+  const manuscript = speech => ({...workspace(body + '\n' + speech), sources:
+    ['회의 속기록', '공개 영상 대본'].map((title, i) => ({id:'source' + i, title, version:'초판',
+      url:'https://example.invalid/minutes/' + i, locator:'첫 발언', excerpt:[body, quote, revised].join(' ')}))});
+  const items = [];
+  for (const editor of [0, 1]) {
+    const {key, packets} = await blind.prepare(manuscript(quote), manuscript(revised));
+    for (const role of ['before', 'after']) {
+      const work = packets[key.mapping[role].slot];
+      work.receipts = engine.prepare(work.article, work.sources).rows.map((row, i) =>
+        engine.decide(row, {status:i ? 'attribution' : 'fact', sourceIds:[work.sources[editor].id], acknowledged:true,
+          reason:'편집자 ' + (editor + 1) + '의 원자료 대조', ...(i ? {contentStatus:'opinion', contentChecked:true,
+            contentReason:'발언자의 평가다.'} : {})}, work.sources));
+      const report = engine.report(work.article, work.sources, work.receipts);
+      work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:report.rows.map(row => row.id), ratings:{}});
+    }
+    for (const [name, data] of Object.entries({key, ...packets})) items.push({name:name + editor + '.json', data});
+  }
+  const pair = await blind.resolveBundle(items);
+  const record = series.makeRecord(agreement.compare(...pair), pair[0].key);
+  assert.deepEqual(record.facts.before.map(r => r.outcome), ['supported', 'limited']);
+  const link = id => '#review=' + id + '&focus=core-context';
+  const p = page(t, link(series.reviewId(record)));
+  const upload = () => p.selectFiles('blind-bundle-files', items.map(item => ({name:item.name, text:async () => JSON.stringify(item.data)})));
+  async function assertContext() {
+    upload();
+    await t.waitFor(() => assert.ok(p.el('output').querySelector('.core-context[open]')));
+    const group = p.el('output').querySelector('.core-context');
+    const [item, full] = group.querySelectorAll(':scope > details');
+    assert.equal(group.querySelectorAll(':scope > details').length, 2);
+    assert.equal(item.open, true);
+    assert.equal(p.w.document.activeElement, item.firstElementChild);
+    assert.equal(item.querySelector('mark').textContent, quote);
+    assert.match(item.firstElementChild.textContent, /원본 2번/);
+    const sides = [...item.querySelectorAll('.pair > div')];
+    assert.equal(sides.length, 2);
+    assert.ok(sides.every(side => side.textContent.includes('발언 사실 확인 · 내용은 의견이나 전망')));
+    assert.match(sides[0].textContent, /^첫 편집자/);
+    assert.match(sides[1].textContent, /^둘째 편집자/);
+    assert.ok(sides.some(side => /편집자 1의 원자료 대조.*원발언 · 회의 속기록/.test(side.textContent)));
+    assert.ok(sides.some(side => /편집자 2의 원자료 대조.*원발언 · 공개 영상 대본/.test(side.textContent)));
+    assert.equal(full.querySelector('blockquote').textContent, body + '\n' + revised);
+    assert.doesNotMatch(group.textContent, /삭제됨|삭제됐|유지 확인/);
+  }
+  assert.equal(p.el('result').hidden, true);
+  await assertContext();
+  async function navigate(id) {
+    const moved = new Promise(resolve => p.w.addEventListener('hashchange', resolve, {once:true}));
+    p.w.location.hash = link(id);
+    await moved;
+    assert.equal(p.el('output').textContent, '');
+  }
+  await navigate(series.reviewId(record, 4));
+  await assertContext();
+  const changed = structuredClone(record);
+  changed.factContext.beforeCore[1] = 1;
+  for (const id of [series.reviewId(record, 3), series.reviewId(changed)]) {
+    await navigate(id);
+    upload();
+    await t.waitFor(() => assert.match(p.el('blind-bundle-status').textContent, /요약과 일치하지 않습니다/));
+    assert.equal(p.el('result').hidden, true);
+  }
+  const example = await blind.resolveBundle(await require('../docs/reader/revision-evidence-example.js').files());
+  const noTarget = series.makeRecord(agreement.compare(...example), example[0].key);
+  p.w.location.hash = link(series.reviewId(noTarget)) + '&example=library';
+  await t.waitFor(() => assert.match(p.el('review-target-status').textContent, /다시 대조할 원본 핵심 구절이 없습니다/));
+  assert.equal(p.el('result').hidden, true);
+  assert.equal(p.el('output').textContent, '');
+});
+
 test('중요한 왜곡의 전후 개수를 같은 네 점수로 비교하고 경계 안에서 반대로 움직인 항목을 센다', async t => {
   const items = await require('../docs/reader/revision-evidence-example.js').files();
   const keys = items.map(item => item.data).filter(data => data.mapping);

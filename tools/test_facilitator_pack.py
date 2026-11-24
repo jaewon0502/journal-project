@@ -11,7 +11,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, PRACTICE_SAMPLE, READER, packet_bytes
+from build_facilitator_pack import CASES, CASE_FOLDERS, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -63,13 +63,22 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = {PRACTICE_SAMPLE}
+            expected_json = {PRACTICE_SAMPLE, *QUOTE_PRACTICE.values()}
             for case, label in CASE_FOLDERS.items():
                 for subdir, name in [('채점표', 'coordinator-key.json'), ('참여 과제', 'blind-tasks.json')]:
                     packed = f'{subdir}/{label}/{name}'
                     self.assertEqual(archive.read(packed), (CASES / case / name).read_bytes())
                     expected_json.add(packed)
             self.assertEqual({n for n in files if n.endswith('.json')}, expected_json)
+
+    def test_only_the_coordinator_receives_the_synthetic_political_quote_reviews(self):
+        with ZipFile(BytesIO(packet_bytes())) as archive:
+            for name, bundled in QUOTE_PRACTICE.items():
+                self.assertEqual(archive.read(bundled), (CASES / 'core-quote-revision' / name).read_bytes())
+            for name in archive.namelist():
+                if name.endswith('.zip'):
+                    with ZipFile(BytesIO(archive.read(name))) as nested:
+                        self.assertTrue(set(QUOTE_PRACTICE.values()).isdisjoint(nested.namelist()))
 
     def test_synthetic_rationales_are_only_in_the_coordinator_kit(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:
