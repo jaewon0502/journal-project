@@ -217,6 +217,43 @@ test('중단 확정 파일은 진행본과 합쳐도 종료 상태를 유지하�
   assert.deepEqual(result.blocks[0].withdrawnOrdinals, [1]);
 });
 
+test('미제출 과제의 배정과 시간은 양방향 병합에서 보존되며 모순된 기록은 거절한다', () => {
+  const active = {...observations(1), trials:[]};
+  const legacy = {...active, withdrawn:true}, between = {...legacy, withdrawalTask:null};
+  const task = {...study.plan(1)[0], elapsedMs:2345, partial:false};
+  const started = {...legacy, withdrawalTask:task};
+  for (const known of [between, started]) for (const prior of [legacy, active, known]) {
+    assert.deepEqual(study.mergeRecords([prior],[known]), [known]);
+    assert.deepEqual(study.mergeRecords([known],[prior]), [known]);
+  }
+  for (const conflicting of [between, {...legacy, withdrawalTask:{...task, elapsedMs:1000}},
+    {...legacy, withdrawalTask:{...task, partial:true}}]) {
+    assert.throws(() => study.mergeRecords([conflicting],[started]), /중단/);
+    assert.throws(() => study.mergeRecords([started],[conflicting]), /중단/);
+  }
+  for (const invalid of [{...active, withdrawalTask:null}, {...active, withdrawalTask:task},
+    ...[{position:2},{caseId:'other'},{variant:'B'},{method:'journal'},{elapsedMs:-1},{elapsedMs:null},{partial:1}]
+      .map(delta => ({...legacy, withdrawalTask:{...task, ...delta}}))]) {
+    assert.throws(() => study.validateRecord(invalid));
+  }
+});
+
+test('중단 과제에서 확인한 시간과 미확인 기록은 완성 묶음의 시간·판정·단계 통계와 독립적이다', () => {
+  const cohort = [1,2,3,4].map(i => observations(i));
+  const stopped = i => ({...observations(i), trials:[], withdrawn:true});
+  const withTask = (i, elapsedMs, partial) => ({...stopped(i), withdrawalTask:{...study.plan(i)[0], elapsedMs, partial}});
+  const extra = [withTask(5,2234,false), withTask(6,0,true), {...stopped(7),withdrawalTask:null}, stopped(8)];
+  const before = study.analyze(cohort), after = study.analyze([...cohort, ...extra]);
+  assert.equal(after.withdrawn,4);
+  assert.equal(after.withdrawalWork.unknown,1);
+  assert.equal(after.withdrawalWork.betweenTasks,1);
+  for (const [method, stats] of Object.entries(after.withdrawalWork.byMethod)) {
+    const tasks = extra.map(r => r.withdrawalTask).filter(t => t?.method === method);
+    assert.deepEqual(stats, {tasks:tasks.length, elapsedMs:tasks.reduce((n,t) => n+t.elapsedMs,0), partial:tasks.filter(t => t.partial).length});
+  }
+  for (const k of ['time','phases','quality','bias','trialCount','recordedTrials']) assert.deepEqual(after[k], before[k]);
+});
+
 test('한 사람의 큰 절감이 과반 편집자의 증가를 가려도 개인별 중앙값과 인원은 방향을 보존한다', () => {
   const journal = [10000, 110000, 120000, 130000];
   const records = [1,2,3,4].map(ordinal => observations(ordinal, task => ({

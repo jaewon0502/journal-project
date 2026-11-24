@@ -63,13 +63,17 @@
     return Object.fromEntries(stages.map(stage => [stage, ms[stage]]));
   }
 
-  function checkedTrial(expected, observation, fromFile) {
+  function checkAssignment(expected, observation, fromFile) {
     if (!observation || typeof observation !== 'object') throw new Error('누락된 회차 기록입니다.');
     for (const key of ['position', 'caseId', 'method', 'variant']) {
       if ((fromFile || Object.hasOwn(observation, key)) && observation[key] !== expected[key]) {
         throw new Error('사전에 배정한 기사, 정당, 방식 또는 순서와 일치하지 않습니다.');
       }
     }
+  }
+
+  function checkedTrial(expected, observation, fromFile) {
+    checkAssignment(expected, observation, fromFile);
     const {elapsedMs, verdict, sourceIds, reason} = observation;
     if (!Number.isSafeInteger(elapsedMs) || elapsedMs <= 0) throw new Error('측정 시간은 양의 밀리초 값이어야 합니다.');
     if (!verdicts.includes(verdict)) throw new Error('판정 범주를 확인하세요.');
@@ -99,6 +103,18 @@
       if (typeof input.withdrawn !== 'boolean' || (input.withdrawn && result.trials.length === slots))
         throw new Error('중단 여부와 제출한 과제 수를 확인하세요.');
       if (input.withdrawn) result.withdrawn = true;
+    }
+    if (Object.hasOwn(input, 'withdrawalTask')) {
+      if (!result.withdrawn) throw new Error('중단을 확인한 기록에만 미제출 과제를 표시할 수 있습니다.');
+      const task = input.withdrawalTask;
+      if (task === null) result.withdrawalTask = null; // Explicitly withdrew between tasks.
+      else {
+        const expected = assignments[result.trials.length];
+        checkAssignment(expected, task, true);
+        if (!Number.isSafeInteger(task.elapsedMs) || task.elapsedMs < 0 || typeof task.partial !== 'boolean')
+          throw new Error('중단 과제의 측정 시간과 일부 측정 여부를 확인하세요.');
+        result.withdrawalTask = {...expected, elapsedMs:task.elapsedMs, partial:task.partial};
+      }
     }
     return result;
   }
@@ -145,6 +161,12 @@
         }
         const merged = {...longer, trials};
         if (previous.withdrawn || record.withdrawn) merged.withdrawn = true;
+        if (previous.withdrawalTask !== undefined && record.withdrawalTask !== undefined &&
+            JSON.stringify(previous.withdrawalTask) !== JSON.stringify(record.withdrawalTask)) {
+          throw new Error('같은 참가자의 중단 과제 기록이 서로 다릅니다. 원본을 확인하세요.');
+        }
+        if (previous.withdrawalTask !== undefined) merged.withdrawalTask = previous.withdrawalTask;
+        else if (record.withdrawalTask !== undefined) merged.withdrawalTask = record.withdrawalTask;
         byId.set(id, merged);
       } else {
         byId.set(id, record);
@@ -306,7 +328,20 @@
     const eligible = new Set(blocks.filter(b => b.included).map(b => b.block));
     const sample = records.filter(r => eligible.has(Math.floor((r.ordinal - 1) / slots) + 1));
     const completed = records.filter(r => r.trials.length === slots).length;
-    const counts = {kind, enrolled: records.length, completed, withdrawn: records.filter(r => r.withdrawn).length,
+    const withdrawn = records.filter(r => r.withdrawn);
+    const withdrawalWork = {betweenTasks:0, unknown:0, byMethod:Object.fromEntries(methods.map(m => [m, {tasks:0, elapsedMs:0, partial:0}]))};
+    for (const record of withdrawn) {
+      const task = record.withdrawalTask;
+      if (task === undefined) withdrawalWork.unknown++;
+      else if (task === null) withdrawalWork.betweenTasks++;
+      else {
+        const work = withdrawalWork.byMethod[task.method];
+        work.tasks++;
+        work.elapsedMs += task.elapsedMs;
+        if (task.partial) work.partial++;
+      }
+    }
+    const counts = {kind, enrolled: records.length, completed, withdrawn:withdrawn.length, withdrawalWork,
       included: sample.length, excluded: records.length - sample.length,
       completeBlocks: eligible.size, pendingBlocks: blocks.length - eligible.size, blocks, trialCount: sample.length * slots,
       recordedTrials: records.reduce((total, record) => total + record.trials.length, 0)};

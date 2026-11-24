@@ -114,6 +114,7 @@ test('참여 등록 화면에서 집계로 갈 수 없고, 참여를 닫으면 �
   p.w.confirm = () => true;
   p.enroll(1);
   p.el('withdraw').click();
+  assert.equal(p.workspace().records[0].withdrawalTask, null);
   p.el('leave-session').click();
   assert.equal(p.el('dashboard').hidden, true);
   assert.equal(p.el('enroll-box').hidden, false);
@@ -365,17 +366,26 @@ test('중단한 편집자의 개인 파일과 진행자 백업이 대기 중인 
   participant.w.confirm = () => true;
   const participantFiles = captureDownloads(participant);
   participant.el('export-one').click();
+  participant.el('begin-trial').click(); participant.advance(1300);
+  participant.el('pause-trial').click(); participant.advance(30000);
+  participant.el('resume-trial').click(); participant.advance(1000);
   participant.el('withdraw').click(); participant.el('export-finished').click();
   const [active, stopped] = await Promise.all(participantFiles.map(file => file.text()));
   assert.equal(JSON.parse(stopped).withdrawn, true);
+  const expected = {...require('../docs/reader/editor-study-core.js').plan(1)[1], elapsedMs:2300, partial:false};
+  assert.deepEqual(JSON.parse(stopped).withdrawalTask, expected);
   await importFiles(coordinator, [stopped, active]);
   assert.match(coordinator.el('counts').textContent, /중단 확인 1명/);
   assert.match(coordinator.el('counts').textContent, /분석 0명 · 0건/);
+  const row = p => [...p.el('withdrawal-table').querySelector('tbody tr').cells].map(cell => cell.textContent);
+  assert.deepEqual(row(coordinator), ['저널','1','2.3','0']);
   const backup = captureDownloads(coordinator);
   coordinator.el('export-all').click();
   const restored = page(t);
   await importFiles(restored, [await backup[0].text()]);
   assert.match(restored.el('counts').textContent, /중단 확인 1명/);
+  assert.deepEqual(row(restored), row(coordinator));
+  assert.deepEqual(restored.workspace().records[0].withdrawalTask, expected);
   const id = JSON.parse(stopped).participantId;
   const longer = {...completedRecord(1,id), trials:JSON.parse(stopped).trials.concat(completedRecord(1,id).trials.slice(1))};
   await importFiles(restored, [JSON.stringify(longer)]);
@@ -396,8 +406,40 @@ test('이전 버전의 기기 상태에서 확인된 중단만 개인 파일에 
     restored.el(state === 'ready' ? 'export-one' : 'export-finished').click();
     const record = JSON.parse(await files[0].text());
     assert.equal(record.withdrawn, state === 'withdrawn' ? true : undefined);
+    assert.ok(!Object.hasOwn(record, 'withdrawalTask'));
     assert.equal(record.trials.length, 1);
   }
+});
+
+test('휴식 중 철회는 측정 총시간을, 복구 화면과 재개 뒤 철회는 확인 가능한 구간만 내보낸다', t => {
+  const p = page(t,'#participate'); p.enroll(1); p.el('begin-trial').click();
+  p.advance(600); p.el('pause-trial').click(); p.advance(10000);
+  const paused = p.workspace();
+  const finish = (q, button = 'withdraw') => {
+    q.w.confirm = () => true; q.el(button).click();
+    return q.workspace().records[0].withdrawalTask;
+  };
+  assert.equal(finish(p).elapsedMs,600);
+  const q = page(t,'#participate',undefined,paused);
+  q.el('resume-trial').click(); q.advance(500);
+  q.w.dispatchEvent(new q.w.Event('pagehide'));
+  const interrupted = q.workspace();
+  interrupted.session.segmentAt = Date.now() - 60000;
+  for (const resume of [false,true]) {
+    const r = page(t,'#participate',undefined,interrupted);
+    if (resume) { r.el('resume-unbroken').click(); r.advance(200); r.el('pause-trial').click(); }
+    const task = finish(r, resume ? 'withdraw' : 'stop-interrupted');
+    assert.equal(task.partial,true);
+    assert.equal(task.elapsedMs,resume ? 1300 : 1100);
+  }
+  // A legacy resumed timer without phase data cannot distinguish measured and recovered time.
+  delete paused.session.recoveredMs;
+  paused.session.phaseMs = null;
+  const legacy = page(t,'#participate',undefined,paused);
+  legacy.el('resume-trial').click(); legacy.advance(120);
+  const task = finish(legacy);
+  assert.equal(task.partial,true);
+  assert.equal(task.elapsedMs,120);
 });
 
 test('실제 네 명의 집단 평균이 개선되어도 개인별 중앙값 증가와 인원은 같은 카드에 표시한다', async t => {

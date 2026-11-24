@@ -79,6 +79,11 @@
         }
         checkRosterConflicts(restored, roster);
         records = restored; invitations = roster; session = saved.session;
+        if (session && ['running','paused','interrupted'].includes(session.state) &&
+            !Object.hasOwn(session, 'recoveredMs') && !session.phaseMs) {
+          // Older timers without phase data could include an unknown wall-clock recovery interval.
+          session.recoveredMs = session.activeMs;
+        }
         if (session?.state === 'running') session.state = 'interrupted';
       }
     } catch (_) {
@@ -154,6 +159,15 @@
     el('counts').replaceChildren(...['등록 ' + a.enrolled + '명', '4과제 완료 ' + a.completed + '명',
       '분석 ' + a.included + '명 · ' + a.trialCount + '건', '분석 미포함 ' + a.excluded + '명',
       '중단 확인 ' + a.withdrawn + '명', '완성 ' + a.completeBlocks + '묶음'].map(s => node('span', s)));
+    const work = a.withdrawalWork;
+    el('withdrawal-work').hidden = !a.withdrawn;
+    el('withdrawal-counts').textContent = '과제 시작 전 또는 과제 사이 중단 ' + work.betweenTasks +
+      '명 · 중단 당시 과제 시작 여부를 알 수 없는 예전 기록 ' + work.unknown + '명';
+    const workRows = Object.entries(work.byMethod).filter(([, v]) => v.tasks).map(([method, v]) => [
+      method === 'manual' ? '원자료' : '저널', String(v.tasks), (v.elapsedMs / 1000).toLocaleString('ko-KR'), String(v.partial)
+    ]);
+    table('withdrawal-table', ['검토 방식','중단 과제 수','확인된 시간 합계(초)','시간이 일부만 남은 과제 수'], workRows,
+      '시작한 뒤 중단했다고 확인된 과제가 없습니다.');
     const t = a.time, b = a.bias;
     const timeTitle = t && t.reductionPct < 0 ? '검토 시간 증가율' : '검토 시간 절감률';
     const biasTitle = !b ? '정당 표기별 사실 채택률 격차' : '정당 표기별 사실 채택률 격차 ' +
@@ -365,6 +379,7 @@
     if (!session || !['ready','paused','interrupted'].includes(session.state)) return;
     if (session.state === 'ready') {
       session.stage = 'select'; session.phaseMs = {select:0}; session.phaseOmitted = false;
+      session.recoveredMs = null;
     }
     if (session.state === 'interrupted') {
       const delta = Date.now() - session.segmentAt;
@@ -372,6 +387,7 @@
         message('session-status', '시계가 바뀌어 경과 시간을 복원할 수 없습니다. 중단 기록으로 종료하세요.', true); return;
       }
       session.activeMs += delta;
+      session.recoveredMs = (session.recoveredMs ?? 0) + delta;
       // No phase boundaries can be verified while the task page was closed.
       session.phaseMs = null; session.stage = null;
     }
@@ -384,8 +400,12 @@
     persist(); renderParticipant(); el('resume-trial').focus();
   }
   function withdraw() {
-    if (!session || !confirm('제출한 과제는 미완료 참여 기록으로 보관됩니다. 이번 참여를 중단할까요?')) return;
-    records = core.mergeRecords(records, [{...currentRecord(), withdrawn:true}]);
+    if (!session || !['ready','running','paused','interrupted'].includes(session.state)) return;
+    const task = session.state === 'ready' ? null : {...assignment(),
+      elapsedMs:Math.round(elapsed() - (session.recoveredMs ?? 0)),
+      partial:session.state === 'interrupted' || session.recoveredMs != null};
+    if (!confirm('제출한 과제와 현재 과제에서 측정한 시간을 보관합니다. 이번 참여를 중단할까요?')) return;
+    records = core.mergeRecords(records, [{...currentRecord(), withdrawn:true, withdrawalTask:task}]);
     clearTaskState('withdrawn'); persist(); renderParticipant(); el('ended-heading').focus();
   }
   function mountJournal() {
@@ -564,6 +584,9 @@
   }
   window.addEventListener('beforeunload', event => {
     if (session?.state === 'running') { event.preventDefault(); event.returnValue = ''; }
+  });
+  window.addEventListener('pagehide', () => {
+    if (session?.state === 'running' && liveStart !== null) { bankTime(); persist(); }
   });
   window.addEventListener('hashchange',route);
   setInterval(updateTime, 1000); route();
