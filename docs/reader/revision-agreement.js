@@ -4,6 +4,7 @@
   const useNode = typeof module === 'object' && !!module.exports;
   const workspace = useNode ? require('./workspace-snapshot.js') : root.JournalWorkspaceSnapshot;
   const comparison = useNode ? require('./article-compare-core.js') : root.JournalArticleCompare;
+  const compared = new WeakMap();
 
   function snapshot(work, demo) {
     const result = workspace.read(work);
@@ -19,19 +20,64 @@
     return comparison.compare(snapshot(first[role], first.key.demo), snapshot(second[role], second.key.demo), 'reviewers').dimensions;
   }
 
-  function transition(before, after) {
-    let change = 'unpaired';
-    if (Number.isInteger(before) && Number.isInteger(after)) {
-      if (before >= 2) change = after >= 2 ? 'high' : 'improved';
-      else change = after >= 2 ? 'worsened' : 'low';
-    }
-    return {before, after, change};
+  function change(before, after) {
+    if (!Number.isInteger(before) || !Number.isInteger(after)) return 'unpaired';
+    if (before >= 2) return after >= 2 ? 'high' : 'improved';
+    return after >= 2 ? 'worsened' : 'low';
   }
 
-  function agreedRate(eligible, change) {
-    const numerator = eligible.filter(d => d.first.change === change && d.second.change === change).length;
-    const denominator = eligible.length;
+  function transition(before, after) {
+    return {before, after, change: change(before, after)};
+  }
+
+  function ratio(numerator, denominator) {
     return {numerator, denominator, pct: denominator ? 100 * numerator / denominator : null};
+  }
+
+  // An observation is one article and one dimension with both editors' score pairs.
+  // The same rule counts a single article, a collection, or a particular dimension.
+  function summarizeScores(dimensions) {
+    let paired = 0, disagreed = 0, stableSeverityDifferences = 0;
+    let missingScores = 0, naScores = 0, pendingImportant = 0;
+    let high = 0, low = 0, improved = 0, worsened = 0;
+    for (const {first, second} of dimensions) {
+      for (const level of [first.before, first.after, second.before, second.after]) {
+        if (level === null) missingScores++;
+        if (level === 'na') naScores++;
+      }
+      const a = change(first.before, first.after), b = change(second.before, second.after);
+      if (a === 'unpaired' || b === 'unpaired') {
+        if (first.before >= 2 && second.before >= 2) pendingImportant++;
+        continue;
+      }
+      paired++;
+      if (first.before >= 2 && second.before >= 2) high++;
+      if (first.before < 2 && second.before < 2) low++;
+      if (a === 'improved' && b === 'improved') improved++;
+      if (a === 'worsened' && b === 'worsened') worsened++;
+      if (a !== b) {
+        if ((a === 'high' && b === 'low') || (a === 'low' && b === 'high')) stableSeverityDifferences++;
+        else disagreed++;
+      }
+    }
+    return {total: dimensions.length, paired, unpaired: dimensions.length - paired, disagreed, stableSeverityDifferences,
+      missingScores, naScores, pendingImportant, improved: ratio(improved, high), worsened: ratio(worsened, low)};
+  }
+
+  function keySignature(key) {
+    return JSON.stringify([key?.format, key?.pairId, key?.demo, ...['before', 'after'].map(role => {
+      const side = key?.mapping?.[role];
+      return [side?.slot, side?.articleSha256, side?.sourcesSha256];
+    })]);
+  }
+
+  function comparedScores(joint, key) {
+    const saved = compared.get(joint);
+    if (!saved || !saved.keys.includes(keySignature(key))) {
+      throw new Error('두 편집자 결과를 대조한 뒤 같은 비교에 사용한 대응표로 기록을 저장하세요.');
+    }
+    // Return only the original comparison's public fields, even if the caller edited its display result.
+    return JSON.parse(saved.scores);
   }
 
   function compare(first, second) {
@@ -44,20 +90,14 @@
     const dimensions = before.map(d => ({
       id: d.id, title: d.title, first: transition(d.left, after.get(d.id).left), second: transition(d.right, after.get(d.id).right)
     }));
-    const paired = dimensions.filter(d => d.first.change !== 'unpaired' && d.second.change !== 'unpaired');
-    const different = paired.filter(d => d.first.change !== d.second.change);
-    const stable = change => change === 'high' || change === 'low';
-    const stableSeverityDifferences = different.filter(d => stable(d.first.change) && stable(d.second.change)).length;
-    return {
-      demo: first.key.demo, total: dimensions.length, paired: paired.length, unpaired: dimensions.length - paired.length,
-      disagreed: different.length - stableSeverityDifferences, stableSeverityDifferences,
-      improved: agreedRate(paired.filter(d => d.first.before >= 2 && d.second.before >= 2), 'improved'),
-      worsened: agreedRate(paired.filter(d => d.first.before < 2 && d.second.before < 2), 'worsened'),
-      dimensions
-    };
+    const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions};
+    const scores = ({before, after}) => ({before, after});
+    compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)],
+      scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
+    return result;
   }
 
-  const api = Object.freeze({compare});
+  const api = Object.freeze({compare, comparedScores, summarizeScores});
   if (useNode) module.exports = api;
   else root.JournalRevisionAgreement = api;
 })(globalThis);
