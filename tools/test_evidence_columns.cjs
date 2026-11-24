@@ -93,3 +93,21 @@ test('반올림과 상대 증감 해석, 일반 괄호, 맞지 않는 수준값�
   assert.equal(notice([...head,'[표 2] 다른 표',data]),null);
   assert.equal(notice([...head,'합계\t60.0\t60.0(0.0)\t61.0\t61.0(-4.0)']),null);
 });
+
+test('비수도권이나 비정규직 질문에 수도권·정규직 열의 증감 오류를 옮기지 않는다', () => {
+  function grid(headings) {
+    return ['단위: % / () 증감', headings.join('\t\t') + '\t', '2023\t2024\t2023\t2024',
+      '전체\t62.1\t62.1(-4.5)\t30.0\t35.0(+5.0)'];
+  }
+  for (const name of ['수도권', '정규직']) {
+    const rows = grid([name, '비' + name]);
+    assert.equal(notice(rows, '2024년 비' + name + ' 고용률'), null);
+    assert.equal(notice(grid([name, '전국']), '2024년 비' + name + ' 고용률'), null);
+    assert.equal(notice(rows, '2024년 ' + name + '을 제외한 고용률'), null);
+    assert.equal(notice(rows, '2024년 비' + name + '과 ' + name + ' 고용률').comparisons[0].current.column, 2);
+  }
+  // The label in the table contains literal punctuation, a space, and a shared prefix.
+  const grouped = grid(['특별(가)', '특별(가) 지역']);
+  assert.equal(notice(grouped, '2024년 특별(가)지역 점검률'), null);
+  assert.equal(notice(grouped, '2024년 특별(가) 점검률').comparisons[0].current.column, 2);
+});

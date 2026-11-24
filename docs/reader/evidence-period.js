@@ -50,7 +50,10 @@
     const text = query.normalize('NFKC');
     const mentions = [...text.matchAll(years)];
     if (mentions.length !== 1 || comparison.test(text) || (text.match(/\d+\s*월/gu) || []).length > 1) return null;
-    return periodAtYear(text.slice(mentions[0].index), false);
+    const period = periodAtYear(text.slice(mentions[0].index), false);
+    // One written month can govern multiple observation days (e.g. "6일과 9일").
+    if (period && (/\d+\s*일/u.test(period.tail) || (text.match(/\d+\s*일/gu) || []).length > 1)) return null;
+    return period;
   }
 
   // Some Korean tables mark both years with apostrophes. Keep those printed
@@ -136,6 +139,10 @@
       if (relation !== undefined) return relation?.notice || null; // The first date alone cannot establish a mismatch.
     }
     const source = firstPeriod(hit.text);
+    if (source && asked.year === source.year && asked.month === source.month &&
+        asked.day && source.day && asked.day !== source.day) {
+      return {requested: label(asked) + ' ' + asked.day + '일', source: label(source) + ' ' + source.day + '일'};
+    }
     if (!source || (asked.year === source.year && (!asked.month || !source.month || asked.month === source.month))) return null;
     // A bare 4-digit cell can also be an amount or a count. Require a year header
     // or a neighbouring data row with another plausible adjacent year.

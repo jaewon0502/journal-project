@@ -157,7 +157,15 @@
     if (!legend.test(unitLine)) return null;
 
     const comparisons = [];
-    const words = query.normalize('NFKC').replace(/\s+/gu, '');
+    const compact = value => value.normalize('NFKC').replace(/\s+/gu, '');
+    const names = labels.map(compact);
+    if (new Set(names).size !== labels.length || /제외|빼고/u.test(query)) return null;
+    // Match the longest printed heading at a word start. "비수도권" must
+    // not select "수도권", even if only the shorter heading exists in the table.
+    const alternatives = [...names].sort((a, b) => b.length - a.length).map(name =>
+      [...name].map(char => char.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')).join('\\s*'));
+    const headings = new RegExp('(?<![\\p{L}\\p{N}])(?:' + alternatives.join('|') + ')', 'gu');
+    const mentioned = new Set([...query.normalize('NFKC').matchAll(headings)].map(m => compact(m[0])));
     for (let within = 1; within < width; within++) {
       if (!wanted.includes(header[within])) continue;
       const questionable = [];
@@ -174,7 +182,7 @@
           continue;
         }
         if (Math.abs(delta.value) <= tolerance ||
-            !words.includes(labels[Math.floor(col / width)].normalize('NFKC').replace(/\s+/gu,''))) continue;
+            !mentioned.has(names[Math.floor(col / width)])) continue;
         // Without a percentage-point label, also allow for a relative change
         // between underlying rounded rates; near zero it can be arbitrarily large.
         if (!/%p/iu.test(unitLine) && (prev.value <= prev.error ||
