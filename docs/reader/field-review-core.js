@@ -99,6 +99,16 @@
       timedGraded: 0, timedVerified: 0, timedOutcomePending: 0
     };
   }
+  function hasReference(trial, basis) {
+    return basis && basis.caseId === trial.caseId && basis.articleUrl === trial.articleUrl &&
+      basis.id === trial.taskId && basis.prompt === trial.prompt &&
+      text(basis.reference?.document) && text(basis.reference?.locator) &&
+      ['supported', 'contradicted', 'insufficient'].includes(basis.verdict);
+  }
+  function checkedReasonGrade(trial, basis, submitted) {
+    return ['yes', 'no'].includes(submitted) && trial.status === 'completed' && trial.found === 'found' &&
+      hasReference(trial, basis) && basis.verdict === trial.verdict && text(basis.explanation) ? submitted : '';
+  }
   function group(records) {
     const groups = new Map();
     const completedTimes = new Map();
@@ -140,10 +150,7 @@
       const loc = t.found === 'missing' ? 'no' : locationGrade;
       const verified = loc === 'yes' && verdictGrade === 'yes';
       const verificationKnown = verified || loc === 'no' || verdictGrade === 'no';
-      const reasonGrade = ['yes', 'no'].includes(submittedReasonGrade) && t.status === 'completed' && t.found === 'found' &&
-        basis?.caseId === t.caseId && basis.articleUrl === t.articleUrl && basis.id === t.taskId && basis.prompt === t.prompt &&
-        basis.verdict === t.verdict && text(basis.explanation) && text(basis.reference?.document) && text(basis.reference?.locator)
-        ? submittedReasonGrade : '';
+      const reasonGrade = checkedReasonGrade(t, basis, submittedReasonGrade);
       const verifiedWithReason = verified && reasonGrade === 'yes';
       const reasonOutcomeKnown = (verificationKnown && !verified) || reasonGrade === 'no' || verifiedWithReason;
       const version = kitVersion(t.kitVersion);
@@ -363,15 +370,20 @@
     if (trial.found === 'missing') return 'failedQuality';
     // The grading importer binds location grades to this exact reference and clears them
     // when the source changes. Manual verdict grades without a bound reference cannot verify an answer.
-    const keyed = basis && basis.caseId === trial.caseId && basis.articleUrl === trial.articleUrl &&
-      basis.id === trial.taskId && basis.prompt === trial.prompt &&
-      text(basis.reference?.document) && text(basis.reference?.locator) &&
-      ['supported', 'contradicted', 'insufficient'].includes(basis.verdict);
+    const keyed = hasReference(trial, basis);
     if (keyed && (locationGrade === 'no' || trial.verdict !== basis.verdict)) return 'failedQuality';
     const elapsedMs = phases.reduce((sum, phase) => sum + trial.phaseMs[phase], 0);
     if (elapsedMs > targetSeconds * 1000) return 'overTime';
     if (trial.recovered) return 'unknown';
     return keyed && locationGrade === 'yes' ? 'verified' : 'unknown';
+  }
+
+  function deadlineWithReason(outcome, status, entry) {
+    if (status !== 'completed' || outcome === 'failedQuality') return outcome;
+    const grade = checkedReasonGrade(entry.trial, entry.basis, entry.reasonGrade);
+    if (grade === 'no') return 'failedReason';
+    if (outcome === 'verified' && grade !== 'yes') return 'unknown';
+    return outcome;
   }
 
   function yieldDifference(manual, journal, manualYield = manual, journalYield = journal) {
@@ -444,11 +456,17 @@
       if (targetSeconds !== undefined) {
         const {caseId, articleUrl, taskId, prompt} = a;
         const deadlineKey = JSON.stringify([caseId, articleUrl, taskId, prompt, targetSeconds]);
-        if (!deadlines.has(deadlineKey))
-          deadlines.set(deadlineKey, {caseId, articleUrl, taskId, prompt, targetSeconds, manual:deadlineArm(), journal:deadlineArm()});
-        const counts = deadlines.get(deadlineKey)[a.method];
+        if (!deadlines.has(deadlineKey)) {
+          deadlines.set(deadlineKey, {caseId, articleUrl, taskId, prompt, targetSeconds, manual:deadlineArm(), journal:deadlineArm(),
+            withReason:{manual:{...deadlineArm(), failedReason:0}, journal:{...deadlineArm(), failedReason:0}}});
+        }
+        const deadline = deadlines.get(deadlineKey);
+        const counts = deadline[a.method], strict = deadline.withReason[a.method];
+        const outcome = deadlineOutcome(status, related[0], targetSeconds);
         counts.assigned++;
-        counts[deadlineOutcome(status, related[0], targetSeconds)]++;
+        counts[outcome]++;
+        strict.assigned++;
+        strict[deadlineWithReason(outcome, status, related[0])]++;
         deadlineAssigned++;
       }
     }
@@ -471,8 +489,10 @@
       const {manual, journal} = comparison;
       comparison.difference = yieldDifference(manual, journal, manual?.yieldBounds, journal?.yieldBounds);
     }
-    for (const comparison of deadlines.values())
+    for (const comparison of deadlines.values()) {
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);
+      comparison.withReason.difference = yieldDifference(comparison.withReason.manual, comparison.withReason.journal);
+    }
     return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()],
       deadlineAssigned, deadlineComparisons:[...deadlines.values()]};
   }

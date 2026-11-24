@@ -1315,6 +1315,89 @@ test('배포본 수는 시간 지표별로 원래 배정에 연결된 표본과 
   assert.ok(practice.includes(excluded) && !practice.includes(first));
 });
 
+test('초안에서 위치 19건을 복원한 뒤 익명 순서의 마지막 미채점 답안으로 이동한다', async t => {
+  const p = page(t, 'field-summary');
+  const items = Array.from({length:20}, (_, i) => trial({id:'record-' + i, participant:'ANON-' + i,
+    kind:'editor', method:i % 2 ? 'manual' : 'journal', locator:'확인 행 ' + i, verdict:gradingKey.tasks[0].verdict}));
+  await p.upload('key-file', gradingKey);
+  await p.upload('imports', ...items);
+  const cards = [...p.el('entries').querySelectorAll('article')];
+  for (const card of cards.slice(0, 19)) {
+    const location = card.querySelector('[aria-label="근거 위치"]');
+    location.value = 'no';
+    location.dispatchEvent(new p.window.Event('change', {bubbles:true}));
+  }
+  const fresh = page(t, 'field-summary', w => {
+    for (const key of Object.keys(p.window.sessionStorage)) w.sessionStorage.setItem(key, p.window.sessionStorage.getItem(key));
+  });
+  const next = fresh.el('next-primary');
+  assert.match(fresh.el('status').textContent, /복원/);
+  assert.match(next.textContent, /1건 남음/);
+  assert.equal(next.hidden, false);
+  assert.equal(fresh.el('next-reason').hidden, true);
+  next.click();
+  const control = fresh.window.document.activeElement, card = control.closest('article');
+  assert.equal(control.getAttribute('aria-label'), '근거 위치');
+  assert.match(card.querySelector('h3').textContent, /^답안 20 ·/);
+  assert.match(card.textContent, /미측정/);
+  assert.doesNotMatch(card.outerHTML, /ANON-|record-\d+|평소 검증 도구/);
+  control.value = 'yes';
+  control.dispatchEvent(new fresh.window.Event('change', {bubbles:true}));
+  assert.equal(next.hidden, true);
+  assert.equal(fresh.el('next-reason').hidden, false);
+  assert.match(fresh.el('count').textContent, /위치·판정 채점 대기 0건/);
+  assert.equal((await fresh.download('save')).entries.some(e => e.gradingTime), false);
+});
+
+test('기준이 없는 답안은 같은 카드에서 위치 다음 판정으로 이동하고 누락된 자료와 제외 기록을 구별한다', async t => {
+  const p = page(t, 'field-summary', w => {
+    const ranks = [0.7, 0.95, 0.3, 0.01, 0.1, 0.2];
+    w.Math.random = () => ranks.shift() ?? 0.5;
+  });
+  const row = (id, change = {}) => trial({id, participant:id, kind:'editor', locator:'위치 ' + id, ...change});
+  await p.upload('imports', row('found'), row('missing', {found:'missing'}), row('withdrawn', {status:'withdrawn'}),
+    row('repeat-one', {participant:'repeated'}), row('repeat-two', {participant:'repeated'}), row('practice', {kind:'practice'}));
+  const next = p.el('next-primary'), active = () => p.window.document.activeElement;
+  assert.match(next.textContent, /2건 남음/);
+  next.click();
+  const first = active().closest('article');
+  const advance = () => [...first.querySelectorAll('button')].find(b => b.textContent.includes('다음 미채점'));
+  const grade = () => {
+    const field = active();
+    field.value = 'yes';
+    field.dispatchEvent(new p.window.Event('change', {bubbles:true}));
+  };
+  assert.equal(active().getAttribute('aria-label'), '근거 위치');
+  assert.equal(active().closest('label').nextElementSibling, advance());
+  // Leave the first response open while waiting for its source; the inline button can return to it.
+  advance().click();
+  assert.match(active().closest('article').textContent, /근거 위치를 찾지 못했습니다/);
+  active().closest('label').nextElementSibling.click();
+  assert.equal(active().closest('article'), first);
+  grade();
+  assert.match(next.textContent, /2건 남음/);
+  advance().click();
+  assert.equal(active().getAttribute('aria-label'), '판정');
+  assert.equal(active().closest('article'), first);
+  grade();
+  assert.match(next.textContent, /1건 남음/);
+  advance().click();
+  assert.equal(active().getAttribute('aria-label'), '판정');
+  assert.match(active().closest('article').textContent, /근거 위치를 찾지 못했습니다/);
+  p.el('toggle-results').click();
+  assert.equal(next.hidden, true);
+  assert.equal(p.el('entries').querySelector('select:enabled'), null);
+  p.el('toggle-results').click();
+  next.click();
+  grade();
+  assert.equal(next.hidden, true);
+  p.select('#kind', 'practice');
+  assert.match(next.textContent, /1건 남음/);
+  next.click();
+  assert.equal(active().getAttribute('aria-label'), '근거 위치');
+  assert.match(active().closest('article').textContent, /위치 practice/);
+});
+
 test('정답·원표 위치가 같아도 연령대가 다른 판단 이유를 따로 채점하고 익명 상태에서 다음 답안을 연다', async t => {
   const key = require('../experiments/labour-field-review/coordinator-key.json');
   const task = key.tasks.find(q => q.id === 'labour-rate');

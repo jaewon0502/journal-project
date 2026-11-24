@@ -56,6 +56,67 @@ test('120초 이내 검증 성공은 평소 도구 2/4, 저널 병행 0/4이고 
   assert.doesNotMatch(JSON.stringify(result), /private-|trial-/u);
 });
 
+test('고용률의 분모를 잘못 설명하면 목표 시간 내 성공률 차이가 +50%p에서 −50%p로 뒤집힌다', () => {
+  const labour = require('../experiments/labour-field-review/coordinator-key.json');
+  const task = labour.tasks.find(t => t.id === 'labour-rate');
+  const basis = {caseId:labour.caseId, articleUrl:labour.articleUrl, ...task};
+  const slots = [0,1,2,3].map(i => slot(i, i < 2 ? 'manual' : 'journal',
+    {caseId:labour.caseId, articleUrl:labour.articleUrl, taskId:task.id, prompt:task.prompt}));
+  const times = [100000,121000,60000,60000];
+  const entries = slots.map((a, i) => response(a, times[i],
+    {documentUrl:task.reference.documentUrl, locator:task.reference.locator, verdict:task.verdict,
+      reason:i < 2 ? task.explanation : '15~64세 인구만을 분모로 삼았다.'},
+    {basis, expected:task.verdict, verdictGrade:'yes', reasonGrade:i < 2 ? 'yes' : 'no'}));
+  const {deadlineComparisons:[d]} = core.allocationReport(slots, entries, new Set());
+  assert.deepEqual(d.difference, {low:50, high:50});
+  assert.deepEqual(d.withReason.manual, {assigned:2, verified:1, failedQuality:0, failedReason:0, overTime:1, withdrawn:0, unknown:0});
+  assert.deepEqual(d.withReason.journal, {assigned:2, verified:0, failedQuality:0, failedReason:2, overTime:0, withdrawn:0, unknown:0});
+  assert.deepEqual(d.withReason.difference, {low:-50, high:-50});
+  assert.doesNotMatch(JSON.stringify(d.withReason), /private-|15~64세/);
+});
+
+test('이유 대조와 시간의 불확실성은 처음 배정한 사람을 포함해 계산하고 확정된 실패를 중복 집계하지 않는다', () => {
+  const manual = ['exact','missing','other-task','unknown'].map(id => slot(id));
+  const journal = ['crossed','wrong','over','withdrawn'].map(id => slot(id, 'journal'));
+  const entries = [
+    response(manual[0], 120000, {}, {reasonGrade:'yes'}),
+    response(manual[2], 30000, {prompt:'다른 과제'}, {reasonGrade:'no'}),
+    response(manual[3], 60000, {}, {reasonGrade:''}),
+    response(journal[0], 60000, {method:'manual',journalUse:'no'}, {reasonGrade:'yes'}),
+    response(journal[1], 120001, {recovered:true}, {reasonGrade:'no'}),
+    response(journal[2], 120001, {recovered:true}),
+    response(journal[3], 7000, {status:'withdrawn'}, {reasonGrade:'no'})
+  ];
+  const {deadlineComparisons:[d], all} = core.allocationReport([...manual,...journal], entries, new Set());
+  assert.equal(all.crossover, 1);
+  assert.deepEqual(d.withReason.manual, {assigned:4, verified:1, failedQuality:0, failedReason:0, overTime:0, withdrawn:0, unknown:3});
+  assert.deepEqual(d.withReason.journal, {assigned:4, verified:1, failedQuality:0, failedReason:1, overTime:1, withdrawn:1, unknown:0});
+  assert.deepEqual(d.withReason.difference, {low:-75, high:0});
+});
+
+test('이유 합격·불합격은 같은 원자료와 설명에 묶이며 위치·판정 실패 및 시간 누락의 우선순위를 지킨다', () => {
+  const only = slot('editor');
+  const outcome = (time, trial, grades, repeated = false) => {
+    const entry = response(only, time, trial, grades);
+    const {withReason} = core.allocationReport([only], [entry], new Set(repeated ? [entry.trial.id] : [])).deadlineComparisons[0];
+    assert.equal(withReason.difference, null);
+    assert.equal(withReason.manual.assigned, 1);
+    return Object.keys(withReason.manual).filter(k => k !== 'assigned' && withReason.manual[k] === 1);
+  };
+  for (const badKey of [null, {...basis,explanation:' '}, {...basis,reference:{}}, {...basis,prompt:'다른 질문'},
+    {...basis,caseId:'다른 기사'}, {...basis,articleUrl:'https://other.example/'}, {...basis,id:'다른 과제'}]) {
+    for (const reasonGrade of ['yes','no']) {
+      assert.deepEqual(outcome(1000, {}, {reasonGrade, basis:badKey}), ['unknown']);
+    }
+  }
+  assert.deepEqual(outcome(120000, {recovered:true}, {reasonGrade:'yes'}), ['unknown']);
+  assert.deepEqual(outcome(120000, {recovered:true}, {reasonGrade:'no'}), ['failedReason']);
+  assert.deepEqual(outcome(120001, {}, {reasonGrade:'no',locationGrade:'no'}), ['failedQuality']);
+  assert.deepEqual(outcome(1000, {found:'missing'}, {reasonGrade:'yes'}), ['failedQuality']);
+  assert.deepEqual(outcome(1000, {}, {locationGrade:'',reasonGrade:'yes'}), ['unknown']);
+  assert.deepEqual(outcome(1000, {}, {reasonGrade:'no'}, true), ['unknown']);
+});
+
 test('원래 배정과 밀리초 경계를 지키고 복원·미채점·누락이 있는 차이의 범위를 계산한다', () => {
   const manual = ['boundary', 'over', 'paused', 'ended'].map(id => slot(id));
   const journal = ['crossed', 'pending', 'wrong', 'absent'].map(id => slot(id, 'journal'));

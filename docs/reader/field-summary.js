@@ -514,6 +514,27 @@
     else if (low !== high && (low === 0 || high === 0))
       card.append(node('p', '미확인 결과에 따라 두 방식의 성공률이 같을 수도 있습니다.'));
   }
+  function deadlinePanel(result, includeReason) {
+    const panel = node('section', '');
+    panel.className = includeReason ? 'deadline-with-reason' : 'deadline-basic';
+    panel.append(node('h5', includeReason ? '근거 위치·판정·판단 이유 일치' : '근거 위치·판정 일치'));
+    for (const method of ['manual', 'journal']) {
+      const arm = result[method];
+      if (!arm.assigned) {
+        panel.append(node('p', labels[method] + ' · 이 목표로 배정한 과제 0건'));
+        continue;
+      }
+      const range = yieldRange(arm.verified, arm.unknown, arm.assigned);
+      panel.append(node('p', labels[method] + ' · 시간 내 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
+        node('p', '시간 내 성공 ' + arm.verified + '건 · 위치 또는 판정 불일치 ' + arm.failedQuality +
+          '건' + (includeReason ? ' · 판단 이유 불일치 ' + arm.failedReason + '건' : '') + ' · 시간 초과 ' + arm.overTime +
+          '건 · 중도 종료 ' + arm.withdrawn + '건 · 결과 미확인 ' + arm.unknown + '건'));
+    }
+    appendYieldDifference(panel, result.difference, '같은 과제와 목표 시간을 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
+    if (result.difference && (result.difference.high < 0 || result.difference.low > 0))
+      panel.append(node('p', '목표 시간 내 성공률은 저널을 배정받은 집단에서 더 ' + (result.difference.high < 0 ? '낮습니다.' : '높습니다.')));
+    return panel;
+  }
   function showDeadlineComparisons(report) {
     const {assigned} = report.all;
     const count = report.deadlineAssigned;
@@ -524,24 +545,14 @@
       area.append(node('p', '사전 배정표에 목표 시간이 없어 이 비율을 계산할 수 없습니다.'));
       return;
     }
-    area.append(node('p', '같은 기사와 과제에 같은 목표 시간을 배정받은 서로 다른 참여자 집단을 비교합니다. 진행자 기준과 근거 위치·판정이 모두 일치하고 참여자 기기에 기록된 활동 시간이 목표 이하면 성공입니다. 목표 시간을 지나도 과제는 계속할 수 있습니다. 명부에는 배포본 ID가 없어 같은 과제와 목표의 여러 판본이 함께 집계될 수 있습니다.'),
-      node('p', '각 방식에 원래 배정한 건수가 분모입니다. 최솟값은 확인된 성공만, 최댓값은 결과 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 시간 일부 누락 등으로 성공 여부를 판단할 수 없는 건이 여기에 포함됩니다. 시간이 일부 빠졌어도 기록된 구간만으로 목표를 넘겼다면 시간 초과로 셉니다.'));
+    area.append(node('p', '같은 기사와 과제에 같은 목표 시간을 배정받은 사람 전체가 각 방식의 분모입니다. 참여자가 목표 안에 제출한 답을 두 기준으로 봅니다. 두 번째 기준은 답에 적은 수치·대상·계산 등 판단 이유까지 진행자가 원자료와 대조해 일치로 채점해야 성공입니다. 시간은 참여자 기기에 기록된 활동 시간입니다.'),
+      node('p', '최솟값은 확인된 성공만, 최댓값은 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 시간 일부 누락으로 성공 여부가 달라질 수 있습니다. 기록된 시간만으로 목표를 넘겼으면 성공에서 제외합니다. 불일치와 시간 초과가 겹친 답안은 불일치로 한 번만 셉니다. 명부에는 배포본 ID가 없어 같은 과제와 목표의 여러 판본이 함께 집계될 수 있습니다.'));
     for (const task of report.deadlineComparisons) {
       const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId + ' · 목표 ' + task.targetSeconds + '초');
-      for (const method of ['manual', 'journal']) {
-        const arm = task[method];
-        if (!arm?.assigned) {
-          card.append(node('p', labels[method] + ' · 이 목표로 배정한 과제 0건'));
-          continue;
-        }
-        const range = yieldRange(arm.verified, arm.unknown, arm.assigned);
-        card.append(node('p', labels[method] + ' · 시간 내 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
-          node('p', '시간 내 성공 ' + arm.verified + '건 · 위치 또는 판정 불일치 ' + arm.failedQuality +
-            '건 · 시간 초과 ' + arm.overTime + '건 · 중도 종료 ' + arm.withdrawn + '건 · 결과 미확인 ' + arm.unknown + '건'));
-      }
-      appendYieldDifference(card, task.difference, '같은 과제와 목표 시간을 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
-      if (task.difference && (task.difference.high < 0 || task.difference.low > 0))
-        card.append(node('p', '목표 시간 내 성공률은 저널을 배정받은 집단에서 더 ' + (task.difference.high < 0 ? '낮습니다.' : '높습니다.')));
+      const criteria = node('div', '');
+      criteria.className = 'pair deadline-criteria';
+      criteria.append(deadlinePanel(task, false), deadlinePanel(task.withReason, true));
+      card.append(criteria);
       area.append(card);
     }
   }
@@ -571,20 +582,43 @@
     showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
   const reasonControls = new Map();
+  const primaryControls = [];
+  const continueGrading = node('button', '다음 미채점 위치·판정으로 이동');
+  continueGrading.type = 'button';
+  continueGrading.setAttribute('aria-controls', 'entries');
+  function nextGradeField(entry) {
+    if (entry.trial.status !== 'completed') return null;
+    if (entry.trial.found === 'found' && !entry.locationGrade) return 'locationGrade';
+    return entry.verdictGrade ? null : 'verdictGrade';
+  }
+  function focusNextGrade(after) {
+    if (loading || showingResults) return;
+    const start = after ? primaryControls.findIndex(control => control.select === after) + 1 : 0;
+    for (let i = 0; i < primaryControls.length; i++) {
+      const {entry, field, select} = primaryControls[(start + i) % primaryControls.length];
+      if (nextGradeField(entry) === field) {
+        select.focus();
+        return;
+      }
+    }
+  }
   const needsReason = e => e.trial.status === 'completed' && e.trial.found === 'found' &&
     e.locationGrade === 'yes' && e.verdictGrade === 'yes' && e.basis?.explanation.trim() && !e.reasonGrade;
   function stats() {
     const rows = selected(),
       dupe = repeatIds(),
       eligible = rows.filter((r) => !dupe.has(r.trial.id));
-    const pending = eligible.filter(({ trial, locationGrade, verdictGrade }) =>
-      trial.status === 'completed' && (!verdictGrade || (trial.found === 'found' && !locationGrade))).length;
+    const pending = eligible.filter(nextGradeField).length;
     el('count').textContent =
       '불러온 ' +
       rows.length +
       '건 · 같은 참여 코드로 같은 사례나 기사를 다시 열어 요약에서 제외 ' +
       (rows.length - eligible.length) +
       '건 · 위치·판정 채점 대기 ' + pending + '건';
+    const nextPrimary = el('next-primary');
+    nextPrimary.hidden = continueGrading.hidden = showingResults || !pending;
+    nextPrimary.disabled = continueGrading.disabled = loading;
+    nextPrimary.textContent = '다음 위치·판정 대조 (' + pending + '건 남음)';
     const awaitingReason = eligible.filter(needsReason).length;
     const nextReason = el('next-reason');
     nextReason.hidden = showingResults || !awaitingReason;
@@ -675,6 +709,10 @@
     const view = applied(entry);
     sel.value = disabled && field === 'locationGrade' ? 'no' : view[field];
     sel.disabled = disabled || showingResults;
+    if (!sel.disabled && field !== 'reasonGrade') {
+      primaryControls.push({entry, field, select:sel});
+      sel.addEventListener('focus', () => wrap.after(continueGrading));
+    }
     sel.onchange = () => {
       if (runningReview && runningReview.entry !== entry) stopReview();
       noteUnclockedWork(entry);
@@ -692,6 +730,7 @@
       dupe = repeatIds();
     el('entries').replaceChildren();
     reasonControls.clear();
+    primaryControls.length = 0;
     reviewDisplays.clear();
     stats();
     if (!showingResults) rows.sort((a, b) => blindRanks.get(a.trial.id) - blindRanks.get(b.trial.id));
@@ -700,7 +739,10 @@
         d = node('article', '');
       const heading = showingResults ? t.participant + ' · ' + t.taskId + ' · 기록상 방식 ' + labels[t.method]
         : '답안 ' + (index + 1) + ' · ' + t.taskId;
-      d.append(node('h3', heading), node('p', t.prompt));
+      const title = node('h3', heading);
+      title.id = 'field-answer-' + (index + 1);
+      d.setAttribute('aria-labelledby', title.id);
+      d.append(title, node('p', t.prompt));
       if (dupe.has(t.id)) {
         d.append(node('p', '같은 기사 사례에 반복 참여해 채점을 건너뜁니다. 연습·중도 종료를 포함해 시간과 품질 요약에서 제외했습니다.'));
         if (!showingResults) {
@@ -997,6 +1039,7 @@
   function loadingState(on) {
     if (on) stopReview();
     loading = on;
+    el('next-primary').disabled = continueGrading.disabled = on;
     el('next-reason').disabled = on;
     el('roster-file').disabled = on;
     el('choose-roster').disabled = on;
@@ -1016,6 +1059,8 @@
   function pickFile(id) { stopReview(); el(id).click(); }
   el('choose-imports').onclick = () => pickFile('imports');
   el('choose-key').onclick = () => pickFile('key-file');
+  el('next-primary').onclick = () => focusNextGrade();
+  continueGrading.onclick = () => focusNextGrade(continueGrading.previousElementSibling?.querySelector('select'));
   el('next-reason').onclick = () => {
     if (loading || showingResults) return;
     for (const [entry, details] of reasonControls) {

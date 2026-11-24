@@ -10,6 +10,7 @@ button,.button{font:inherit;font-size:.92rem;font-weight:630;display:inline-bloc
 .phase-controls{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.phase-controls button{padding:5px 8px;font-size:.87rem}.phase-controls button[aria-pressed=true]{background:var(--green);color:white}.phase-controls #pause-trial{margin-left:auto}.phase-controls strong{font-size:.88rem}
 #phase-pairs{margin-top:10px}
 #demo-options{max-width:26rem}
+#deadline-example :is(caption,th){white-space:normal;word-break:keep-all}
 .case-cautions{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
 .case-cautions p{margin:0 0 6px}
 .case-cautions button{margin:2px 4px 2px 0;text-align:left}

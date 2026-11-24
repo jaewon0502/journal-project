@@ -100,6 +100,38 @@ test('목표별 원배정 분모와 시간 내 성공 범위를 보여 주고 �
   assert.equal(area.textContent, '');
 });
 
+test('같은 배정과 120초를 기준으로 위치·판정과 판단 이유의 성공률 방향을 각각 표시한다', async t => {
+  const p = summary(t);
+  const rows = ['M-100','M-121','J-60A','J-60B'].map((id,i) => assignment(id, i < 2 ? 'manual' : 'journal', 120));
+  await p.upload('key-file', key);
+  await p.upload('roster-file', roster(rows));
+  await p.upload('imports', ...rows.map((row,i) => submission(row, [100000,121000,60000,60000][i])));
+  for (const row of rows) p.grade(row.participant);
+  for (const row of rows.slice(0,2)) p.grade(row.participant, '판단 이유');
+  p.grade('J-60A', '판단 이유', 'no');
+  const area = p.el('allocation-deadlines');
+  assert.equal(area.textContent, '');
+  p.toggle();
+  const difference = selector => area.querySelector(selector + ' strong').textContent;
+  assert.match(difference('.deadline-basic'), /\+50\.0%p$/);
+  assert.match(difference('.deadline-with-reason'), /-50\.0%p ~ 0\.0%p$/);
+  p.toggle();
+  p.grade('J-60B', '판단 이유', 'no');
+  p.toggle();
+  assert.match(difference('.deadline-basic'), /\+50\.0%p$/);
+  assert.match(difference('.deadline-with-reason'), /-50\.0%p$/);
+  const result = area.querySelector('.deadline-with-reason');
+  assert.match(result.textContent, /저널 · 시간 내 검증 성공률 0\.0% \(배정 2건\).*판단 이유 불일치 2건/);
+  const stored = await p.download('save');
+  const reopened = summary(t);
+  await reopened.upload('roster-file', roster(rows));
+  await reopened.upload('imports', stored);
+  reopened.toggle();
+  assert.equal(reopened.el('allocation-deadlines').textContent, area.textContent);
+  p.toggle();
+  assert.equal(area.textContent, '');
+});
+
 test('명부의 목표 시간을 새로고침과 별도 내보내기에서 보존하고, 목표 없는 옛 명부에서는 비율을 보류한다', async t => {
   const rows = [assignment('CODE-A', 'manual', 60), assignment('CODE-B', 'journal', 60)];
   const p = summary(t);
