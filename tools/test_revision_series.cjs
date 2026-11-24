@@ -48,6 +48,7 @@ function record(name, values = [], sourceChanged = false) {
 
 const fact = (outcome, flag = 'none') => ({outcome, flag});
 const withFacts = (legacy, before, after) => ({...legacy, version: 2, facts: {before, after}});
+const withMatches = (previous, factMatches) => ({...previous, version: 3, factMatches});
 
 test('요약 식별값은 JSON 순서와 두 편집자의 전체 자리 교환을 허용하고 원문·자료·판정 변경은 구별한다', () => {
   const sample = withFacts(record('revisit', [[3, 0, 2, 1], [null, 'na', 3, 2]], true),
@@ -115,7 +116,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   const saved = makeRecord(joint, one.key);
   assert.deepEqual(saved, makeRecord(joint, two.key));
   const wire = JSON.stringify(saved);
-  const expected = withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]);
+  const expected = withMatches(withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]), []);
   for (const role of ['before', 'after']) {
     expected[role] = {articleSha256: one.key.mapping[role].articleSha256, sourcesSha256: one.key.mapping[role].sourcesSha256};
   }
@@ -141,6 +142,95 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   saved.dimensions[0].first.before = null;
   saved.facts.after[0].flag = 'none';
   assert.deepEqual(makeRecord(joint, one.key), expected);
+});
+
+test('동일한 사실 판정과 편향 점수라도 구절 대응이 다른 새 요약은 구별하고 이전 링크는 보존한다', () => {
+  const old = record('cases', [[3, 0, 2, 1]]);
+  const rich = withFacts(old, [fact('supported'), fact('pending')], [fact('supported'), fact('supported')]);
+  const original = withMatches(rich, [[0, 1]]);
+  const replacement = withMatches(rich, [[0, null]]);
+  assert.notEqual(reviewId(original), reviewId(replacement));
+  assert.notEqual(reviewId(original), reviewId(rich));
+  assert.equal(reviewId(original, 2), reviewId(rich));
+  assert.equal(reviewId(replacement, 2), reviewId(rich));
+  assert.throws(() => reviewId(rich, 3), /구절별/);
+  const unsorted = structuredClone(original);
+  unsorted.dimensions.reverse();
+  for (const d of unsorted.dimensions) [d.first, d.second] = [d.second, d.first];
+  assert.equal(reviewId(unsorted), reviewId(original));
+  assert.deepEqual(summarize([original]).articles[0].factTrace, {total:1, retained:1, unmatched:0, changed:0});
+  for (const incoming of [[rich, old, original], [original, old, rich], [old, original, rich]]) {
+    const expected = summarize([original]);
+    assert.deepEqual(summarize(incoming), {...expected, duplicateCount:2});
+  }
+  for (const incoming of [[old, original, rich, replacement], [rich, replacement, old, original]]) {
+    assert.throws(() => summarize(incoming), error => {
+      assert.deepEqual(error.recordIndexes, [1, 3]);
+      return /구절 대응/.test(error.message);
+    });
+  }
+});
+
+test('두 편집자가 새 구절도 확인한 배포 파일을 회수해도 교체된 원본 구절의 지지는 이어지지 않는다', async () => {
+  const rows = ['승인액은 10억 원이다.', '위원회는 수요일에 열렸다.', '결과는 금요일에 공개됐다.', '작년에는 11명이 참석했다.'];
+  const before = work(rows.join('\n'));
+  const after = work([...rows.slice(0, -1), '올해는 12명이 참석했다.'].join('\n'));
+  for (const manuscript of [before, after]) manuscript.sources[0].excerpt = '승인액 10억 원. 참석자 수는 작년 11명, 올해 12명.';
+  const reviews = await Promise.all([assignment(before, after, [2,0]), assignment(before, after, [3,1])]);
+  for (const [editor, review] of reviews.entries()) {
+    for (const role of ['before', 'after']) {
+      const copy = review[role];
+      const rows = engine.report(copy.article, copy.sources).rows;
+      copy.receipts = [rows[0], rows.at(-1)].map(row => engine.decide(row, {status:'fact',
+        sourceIds:[copy.sources[0].id], acknowledged:true, reason:'독립 검토 ' + editor}, copy.sources));
+    }
+  }
+  const joint = agreement.compare(...reviews);
+  const saved = makeRecord(joint, reviews[1].key);
+  assert.deepEqual(saved.factMatches, [[0, 0], [3, null]]);
+  assert.deepEqual(summarize([JSON.parse(JSON.stringify(saved))]).articles[0].factTrace,
+    {total:2, retained:1, unmatched:1, changed:0});
+  assert.deepEqual(makeRecord(agreement.compare(...[...reviews].reverse()), reviews[0].key).factMatches, saved.factMatches);
+  joint.factMatches[1][1] = 3;
+  saved.factMatches[0].length = 0;
+  assert.deepEqual(makeRecord(joint, reviews[0].key).factMatches, [[0, 0], [3, null]]);
+});
+
+test('원본의 모든 공동 전체 지지 구간만 순서대로 연결하고 수정본 구간 재사용과 잘못된 위치를 거부한다', () => {
+  const reviewed = withFacts(record('ordered'), [fact('pending'), fact('supported'), fact('limited'), fact('supported')],
+    [fact('supported'), fact('pending')]);
+  for (const matches of [null, {}, [], [[1, 0]], [[1, 0], [1, null]], [[3, 1], [1, 0]], [[0, 1], [3, null]],
+    [[1, null], [2, 0]], [[1, 0], [3, 0]], [[1, 0], [3, -1]], [[1, 0], [3, 2]], [[1, 0], [3, 0.5]],
+    [[1, 0], [3, false]], [[1, 0], [3, '1']], [[1, 0], [3, {}]], [[1, 0], [3]], [[1, '원문', 0], [3, null]],
+    [[1, 0], ['3', null]], Array(2), [[1, 0], [3, 1], [4, null]]]) {
+    assert.throws(() => summarize([withMatches(reviewed, matches)]), /대응 기록/);
+  }
+  const changed = withMatches(reviewed, [[1, 1], [3, 0]]);
+  assert.deepEqual(summarize([changed]).articles[0].factTrace, {total:2, retained:1, unmatched:0, changed:1});
+  const unmatched = withMatches(reviewed, [[1, null], [3, null]]);
+  assert.deepEqual(summarize([unmatched]).articles[0].factTrace, {total:2, retained:0, unmatched:2, changed:0});
+});
+
+test('편향이 개선된 기사에서 원본 사실의 대응, 수정 후 판정 변화, 구형 기록과 분모 감소를 기사별로 센다', () => {
+  const improved = [[2, 0, 3, 0], [2, 1, 2, 0]];
+  const replaced = withMatches(withFacts(record('replaced', improved),
+    [fact('supported'), fact('supported'), fact('supported')], [fact('limited'), fact('supported'), fact('supported')]),
+    [[0, 2], [1, null], [2, 0]]);
+  const earlier = withFacts(record('legacy', improved), [fact('supported'), fact('pending')], [fact('supported')]);
+  const newer = withMatches(withFacts(record('empty original', improved), [fact('pending')], [fact('supported')]), []);
+  const stableBias = withMatches(withFacts(record('stable', [[2, 2, 2, 2]]),
+    [fact('supported'), fact('supported')], [fact('excluded'), fact('pending')]), [[0, null], [1, 1]]);
+  const s = summarize([replaced, earlier, newer, stableBias, record('score only', improved)]);
+  assert.deepEqual(s.articles.map(a => a.factTrace), [
+    {total:3, retained:1, unmatched:1, changed:1}, null, {total:0, retained:0, unmatched:0, changed:0},
+    {total:2, retained:0, unmatched:1, changed:1}, null
+  ]);
+  assert.deepEqual([s.facts.improvedArticles, s.facts.improvedWithUnconfirmedRetention,
+    s.facts.improvedWithoutTrace, s.facts.improvedWithFewerFactRows], [4, 1, 2, 1]);
+  assert.equal(summarize([replaced]).facts.improvedWithFewerFactRows, 0);
+  assert.deepEqual(summarize([replaced]).improved, ratio(2, 2));
+  const opinionOnly = withFacts(record('opinion', improved), [fact('supported'), fact('pending')], [fact('supported'), fact('excluded')]);
+  assert.equal(summarize([opinionOnly]).facts.improvedWithFewerFactRows, 1);
 });
 
 test('기사별 1/1과 0/3은 1/4이고 원자료가 같은 기사에는 별도 분모를 적용한다', () => {

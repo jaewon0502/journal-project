@@ -19,8 +19,9 @@
   }
 
   function makeRecord(joint, key) {
-    const {dimensions, facts} = agreement.recordFields(joint, key);
-    return readRecord({format, version: 2, demo: key.demo, before: edition(key.mapping.before), after: edition(key.mapping.after), dimensions, facts});
+    const {dimensions, facts, factMatches} = agreement.recordFields(joint, key);
+    return readRecord({format, version: 3, demo: key.demo, before: edition(key.mapping.before),
+      after: edition(key.mapping.after), dimensions, facts, factMatches});
   }
 
   function readFactRows(rows) {
@@ -31,11 +32,33 @@
     });
   }
 
+  function readFactMatches(matches, facts) {
+    const supported = facts.before.flatMap((row, index) => row.outcome === 'supported' ? [index] : []);
+    if (!Array.isArray(matches) || matches.length !== supported.length) {
+      throw new Error('원본에서 두 편집자가 구절 전체를 지지한 각 구간의 대응 기록이 필요합니다.');
+    }
+    const linked = new Set();
+    return Array.from(matches, (pair, index) => {
+      if (!Array.isArray(pair) || pair.length !== 2 || pair[0] !== supported[index]) {
+        throw new Error('대응 기록의 원본 구간 번호와 순서를 확인하세요.');
+      }
+      const revised = pair[1];
+      if (revised !== null) {
+        if (!Number.isInteger(revised) || revised < 0 || revised >= facts.after.length || linked.has(revised)) {
+          throw new Error('대응 기록의 수정본 구간 번호가 범위를 벗어나거나 겹칩니다.');
+        }
+        linked.add(revised);
+      }
+      return [pair[0], revised];
+    });
+  }
+
   function readRecord(record) {
     const version = record?.version;
     const keys = ['format', 'version', 'demo', 'before', 'after', 'dimensions'];
-    if (version === 2) keys.push('facts');
-    if (![1, 2].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    if (version === 2 || version === 3) keys.push('facts');
+    if (version === 3) keys.push('factMatches');
+    if (![1, 2, 3].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
     const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
@@ -63,10 +86,11 @@
       return {id, first: readPair(dimension.first), second: readPair(dimension.second)};
     });
     const result = {format, version, demo: record.demo, before: edition(record.before), after: edition(record.after), dimensions};
-    if (version === 2) {
+    if (version >= 2) {
       if (!exactKeys(record.facts, ['before', 'after'])) throw new Error('원본과 수정본의 사실 검토 구간을 확인하세요.');
       result.facts = {before: readFactRows(record.facts.before), after: readFactRows(record.facts.after)};
     }
+    if (version === 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
     return result;
   }
 
@@ -79,11 +103,12 @@
 
   // Only the global editor order is interchangeable. Preserve the before/after
   // roles, each editor's complete rating profile, and fact observations in passage order.
-  function reviewId(input) {
+  function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (record.version !== 2) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
-    return engine.digestValue([format, record.version, record.demo, record.before, record.after,
-      ratingProfile(record), record.facts]);
+    if (![2, 3].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
+    if (version === 3) fields.push(record.factMatches);
+    return engine.digestValue(fields);
   }
 
   function recordError(recordIndexes, message) {
@@ -113,7 +138,10 @@
           if (prior.facts && record.facts && JSON.stringify(prior.facts) !== JSON.stringify(record.facts)) {
             throw recordError([previous.index, index], '같은 기사 판본의 사실 검토 판정이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          if (!prior.facts && record.facts) {
+          if (prior.version === 3 && record.version === 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
+            throw recordError([previous.index, index], '같은 기사 판본의 원본·수정본 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
+          }
+          if (record.version > prior.version) {
             previous.index = index;
             previous.record = record;
           }
@@ -130,7 +158,8 @@
     const unique = entries.map(entry => entry.record);
     const articles = unique.map(r => ({before: r.before, after: r.after,
       sourceChanged: r.before.sourcesSha256 !== r.after.sourcesSha256, ...summarizeScores(r.dimensions),
-      facts: r.facts ? {before: factReview.summarize(r.facts.before), after: factReview.summarize(r.facts.after)} : null}));
+      facts: r.facts ? {before: factReview.summarize(r.facts.before), after: factReview.summarize(r.facts.after)} : null,
+      factTrace: r.version === 3 ? factReview.summarizeFactMatches(r.factMatches, r.facts.after) : null}));
     const dimensions = rubric.dimensions.map(({id, title}, i) =>
       ({id, title, ...summarizeScores(unique.map(r => r.dimensions[i]))}));
     const unchanged = unique.filter(r => r.before.sourcesSha256 === r.after.sourcesSha256);
@@ -140,6 +169,9 @@
       before: factReview.summarize(withFacts.flatMap(r => r.facts.before)),
       after: factReview.summarize(withFacts.flatMap(r => r.facts.after)),
       improvedArticles: improvedArticles.length,
+      improvedWithUnconfirmedRetention: improvedArticles.filter(a => a.factTrace && a.factTrace.retained < a.factTrace.total).length,
+      improvedWithoutTrace: improvedArticles.filter(a => !a.factTrace).length,
+      improvedWithFewerFactRows: improvedArticles.filter(a => a.facts && a.facts.after.coverage.denominator < a.facts.before.coverage.denominator).length,
       improvedWithRevisedFlags: improvedArticles.filter(a => a.facts && a.facts.after.flagged > 0).length,
       improvedWithOpenFacts: improvedArticles.filter(a => a.facts && ['pending', 'disputed', 'shared'].some(
         outcome => a.facts.after[outcome] > 0)).length,

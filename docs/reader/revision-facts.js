@@ -34,7 +34,17 @@
       coverage: ratio(supported + contradicted + limited + quotedConflict, rows.length - excluded)};
   }
 
-  const api = Object.freeze({validRow, summarize});
+  function summarizeFactMatches(factMatches, afterRows) {
+    let retained = 0, unmatched = 0, changed = 0;
+    for (const [, revised] of factMatches) {
+      if (revised === null) unmatched++;
+      else if (afterRows[revised].outcome === 'supported') retained++;
+      else changed++;
+    }
+    return {total: factMatches.length, retained, unmatched, changed};
+  }
+
+  const api = Object.freeze({validRow, summarize, summarizeFactMatches});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalRevisionFacts = api;
 })(globalThis);
