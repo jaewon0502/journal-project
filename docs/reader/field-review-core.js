@@ -188,7 +188,105 @@
       };
     });
   }
-  const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url };
+  const assignmentFormat = 'journal-field-assignment-v1';
+  const assignmentFields = ['participant', 'caseId', 'articleUrl', 'taskId', 'prompt', 'method'];
+
+  function articleIdentity(value) {
+    const article = new URL(value);
+    // Keep the SPA article route; drop an ordinary in-document anchor and tracking parameters.
+    article.hash = article.hash.match(/^#!?\/[^#]*/u)?.[0] || '';
+    for (const name of [...article.searchParams.keys()]) {
+      if (/^(?:utm_.+|fbclid|gclid)$/iu.test(name)) article.searchParams.delete(name);
+    }
+    return article.href;
+  }
+
+  function mergeAssignments(existing, files) {
+    const byCase = new Map(), byArticle = new Map();
+    function insert(row) {
+      if (!row || !assignmentFields.every(k => typeof row[k] === 'string' && text(row[k])) ||
+          row.participant !== row.participant.trim() || row.participant.length > 64 ||
+          !url(row.articleUrl) || !['manual','journal'].includes(row.method))
+        throw Error('배정표의 참여 코드, 기사, 과제와 방식을 확인하세요.');
+      const assignment = Object.fromEntries(assignmentFields.map(k => [k, row[k]]));
+      const caseKey = JSON.stringify([row.participant, row.caseId]);
+      const articleKey = JSON.stringify([row.participant, articleIdentity(row.articleUrl)]);
+      const prior = byCase.get(caseKey) || byArticle.get(articleKey);
+      if (prior && !assignmentFields.every(k => prior[k] === assignment[k]))
+        throw Error('같은 참여 코드에 같은 사례나 기사의 서로 다른 배정이 있습니다. 원래 명부를 확인하세요.');
+      byCase.set(caseKey, assignment);
+      byArticle.set(articleKey, assignment);
+    }
+    existing.forEach(insert);
+    for (const file of files) {
+      if (file?.format !== assignmentFormat || !Array.isArray(file.assignments) || !file.assignments.length)
+        throw Error('진행자가 별도로 보관한 현장 사전 배정표 JSON을 선택하세요.');
+      file.assignments.forEach(insert);
+    }
+    return [...byCase.values()];
+  }
+
+  // The packet is an observed method. Only a separate assignment can supply the intended arm.
+  function allocationReport(assignments, records, repeated) {
+    const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
+    const byParticipant = new Map(), arms = new Map(), matched = [];
+    let outsideRoster = 0, unlinked = 0;
+    for (const a of assignments) {
+      if (!byParticipant.has(a.participant)) byParticipant.set(a.participant, []);
+      byParticipant.get(a.participant).push({a, article:articleIdentity(a.articleUrl), related:[], ambiguous:false});
+    }
+    const otherArticles = [];
+    for (const entry of records) {
+      const t = entry.trial;
+      if (t.kind !== 'editor') continue;
+      const assigned = byParticipant.get(t.participant);
+      if (!assigned) { outsideRoster++; continue; }
+      const article = articleIdentity(t.articleUrl);
+      const candidates = assigned.filter(slot => slot.a.caseId === t.caseId || slot.article === article);
+      if (!candidates.length) { otherArticles.push(assigned); continue; }
+      for (const slot of candidates) {
+        slot.related.push(entry);
+        if (candidates.length > 1) slot.ambiguous = true;
+      }
+    }
+    // If the code has one assignment and only unrelated articles came back, the assigned
+    // task was not done; when several slots are possible, don't guess which one was attempted.
+    for (const assigned of otherArticles) {
+      if (assigned.length === 1 && !assigned[0].related.length) assigned[0].otherArticle = true;
+      unlinked++;
+    }
+    const all = totals();
+    for (const slots of byParticipant.values()) for (const slot of slots) {
+      const {a, related} = slot;
+      const key = JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
+      if (!arms.has(key)) arms.set(key, {caseId:a.caseId, articleUrl:a.articleUrl, taskId:a.taskId,
+        prompt:a.prompt, method:a.method, ...totals(), selfSame:0, selfDifferent:0, selfUnknown:0});
+      const arm = arms.get(key);
+      arm.assigned++; all.assigned++;
+      let status;
+      if (!related.length) status = slot.otherArticle ? 'wrongTask' : 'missing';
+      else if (slot.ambiguous || related.length > 1 || repeated.has(related[0].trial.id)) status = 'excluded';
+      else {
+        const entry = related[0], t = entry.trial;
+        if (a.caseId !== t.caseId || a.articleUrl !== t.articleUrl || a.taskId !== t.taskId || a.prompt !== t.prompt) status = 'wrongTask';
+        else {
+          status = t.status;
+          if (t.method !== a.method) { arm.crossover++; all.crossover++; }
+          if (status === 'completed') {
+            if (t.journalUse === undefined) arm.selfUnknown++;
+            else if ((t.journalUse === 'yes') === (a.method === 'journal')) arm.selfSame++;
+            else arm.selfDifferent++;
+          }
+          matched.push({...entry, trial:{...t, method:a.method}});
+        }
+      }
+      arm[status]++; all[status]++;
+    }
+    return {all, arms:[...arms.values()], groups:group(matched), outsideRoster, unlinked};
+  }
+
+  const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url,
+    assignmentFormat, articleIdentity, mergeAssignments, allocationReport };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFieldReview = api;
 })(globalThis);

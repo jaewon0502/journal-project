@@ -7,6 +7,7 @@
   const anchors = new Map();
   const blindRanks = new Map();
   let showingResults = false;
+  let assignments = [];
   const labels = {
     manual: '평소 검증 도구',
     journal: '평소 검증 도구와 저널',
@@ -32,10 +33,7 @@
     const first = new Map(), repeated = new Set();
     for (const { trial, repeatExposure } of records.values()) {
       if (repeatExposure) repeated.add(trial.id);
-      const article = new URL(trial.articleUrl);
-      // Hash routers identify the story before an optional second, in-story anchor.
-      article.hash = article.hash.match(/^#!?\/[^#]*/u)?.[0] || '';
-      for (const [type, value] of [['case', trial.caseId], ['article', article.href]]) {
+      for (const [type, value] of [['case', trial.caseId], ['article', c.articleIdentity(trial.articleUrl)]]) {
         const key = JSON.stringify([trial.participant, type, value]);
         if (first.has(key)) {
           repeated.add(first.get(key));
@@ -113,8 +111,7 @@
     const percent = savedPct === null ? '기준 시간 0초로 비율 산출 대기' : Math.abs(savedPct).toFixed(1) + '%';
     return seconds(Math.abs(savedMs), 1) + ' ' + change + ' (' + percent + ')';
   }
-  function showComparisons(groups) {
-    const area = el('comparisons');
+  function showComparisons(groups, area) {
     area.replaceChildren();
     if (!groups.length) {
       area.append(node('p', '같은 과제의 평소 도구 기록과 저널 기록을 불러오면 절감률을 계산합니다.'));
@@ -160,6 +157,26 @@
       area.append(card);
     }
   }
+  function assignmentCounts(n) {
+    return '배정 ' + n.assigned + '건 · 완료 ' + n.completed + '건 · 중도 종료 ' + n.withdrawn +
+      '건 · 기사·과제 불일치 ' + n.wrongTask + '건 · 반복·배정 충돌 ' + n.excluded +
+      '건 · 연결된 현업 기록 없음 ' + n.missing + '건';
+  }
+  function showAllocations(report) {
+    el('allocation-counts').textContent = assignmentCounts(report.all) +
+      '. 명부 밖 코드의 현업 기록 ' + report.outsideRoster + '건 · 등록한 기사를 찾을 수 없는 현업 기록 ' +
+      report.unlinked + '건.';
+    for (const arm of report.arms) {
+      const card = node('article', '');
+      card.append(node('h3', arm.caseId + ' · ' + arm.taskId + ' · ' + labels[arm.method]),
+        node('p', arm.prompt), node('p', assignmentCounts(arm)),
+        node('p', '같은 과제의 완료·중도 종료 ' + (arm.completed + arm.withdrawn) + '건 중 기록상 방식이 원래 배정과 다른 경우 ' +
+          arm.crossover + '건'), node('p', '완료 응답 ' + arm.completed + '건 중 실제 사용이 원래 배정과 일치 ' +
+          arm.selfSame + '건 · 불일치 ' + arm.selfDifferent + '건 · 미확인 ' + arm.selfUnknown + '건'));
+      el('allocation-arms').append(card);
+    }
+    showComparisons(report.groups, el('allocation-comparisons'));
+  }
   function stats() {
     const rows = selected(),
       dupe = repeatIds(),
@@ -173,8 +190,9 @@
       (rows.length - eligible.length) +
       '건 · 채점 대기 ' + pending + '건';
     el('save').disabled = loading || !rows.length;
+    const hasAssignments = el('kind').value === 'editor' && assignments.length > 0;
     const toggle = el('toggle-results');
-    toggle.disabled = loading || !rows.length;
+    toggle.disabled = loading || (!rows.length && !hasAssignments);
     toggle.textContent = showingResults ? '배정 가리고 채점하기' : '배정과 결과 보기';
     toggle.setAttribute('aria-expanded', String(showingResults));
     el('results').hidden = !showingResults;
@@ -182,12 +200,17 @@
       ? '배정과 소요 시간을 보는 중입니다. 채점을 계속하려면 배정을 다시 가리세요.'
       : '채점 중에는 참여 코드·배정 방식·소요 시간을 가립니다. 이미 본 배정은 화면을 다시 가려도 알 수 있습니다.';
     el('groups').replaceChildren();
+    el('allocation-results').hidden = !showingResults || !hasAssignments;
+    el('allocation-counts').textContent = '';
+    el('allocation-arms').replaceChildren();
+    el('allocation-comparisons').replaceChildren();
     if (!showingResults) {
       el('comparisons').replaceChildren();
       return;
     }
     const groups = c.group(eligible.map(applied));
-    showComparisons(groups);
+    if (hasAssignments) showAllocations(c.allocationReport(assignments, rows.map(applied), dupe));
+    showComparisons(groups, el('comparisons'));
     if (!groups.length) el('groups').append(node('p', '집계할 참여 기록이 없습니다.'));
     for (const g of groups) {
       const d = node('article', '');
@@ -199,9 +222,9 @@
         node('p', g.prompt),
         node(
           'p',
-          '배정 기준 집계 · 실제 도구 사용은 본인 응답 · 배정대로 사용 ' +
+          '기록상 방식과 본인 응답 일치 ' +
             g.asAssigned +
-            '건 · 다르게 사용 ' +
+            '건 · 불일치 ' +
             g.differentMethod +
             '건 · 미확인 ' +
             g.unknownUse +
@@ -283,7 +306,7 @@
     for (const [index, entry] of rows.entries()) {
       const t = entry.trial,
         d = node('article', '');
-      const heading = showingResults ? t.participant + ' · ' + t.taskId + ' · ' + labels[t.method]
+      const heading = showingResults ? t.participant + ' · ' + t.taskId + ' · 기록상 방식 ' + labels[t.method]
         : '답안 ' + (index + 1) + ' · ' + t.taskId;
       d.append(node('h3', heading), node('p', t.prompt));
       if (dupe.has(t.id)) {
@@ -520,6 +543,8 @@
   let loading = false;
   function loadingState(on) {
     loading = on;
+    el('roster-file').disabled = on;
+    el('choose-roster').disabled = on;
     el('imports').disabled = on;
     el('choose-imports').disabled = on;
     el('key-file').disabled = on;
@@ -527,7 +552,7 @@
     el('kind').disabled = on;
     el('entries').inert = on;
     el('save').disabled = on || !selected().length;
-    el('toggle-results').disabled = on || !selected().length;
+    el('toggle-results').disabled = on || !(selected().length || (el('kind').value === 'editor' && assignments.length));
     if (on && showingResults) {
       showingResults = false;
       render();
@@ -536,9 +561,44 @@
   el('choose-imports').onclick = () => el('imports').click();
   el('choose-key').onclick = () => el('key-file').click();
   el('toggle-results').onclick = () => {
-    if (loading || !selected().length) return;
+    if (el('toggle-results').disabled) return;
     showingResults = !showingResults;
     render();
+  };
+  const rosterKey = 'journal-field-assignments-v1/' + location.pathname;
+  function restoreRoster() {
+    try {
+      const existing = sessionStorage.getItem(rosterKey);
+      if (!existing) return;
+      assignments = c.mergeAssignments([], [JSON.parse(existing)]);
+      el('roster-status').textContent = '이 탭의 사전 배정표를 복원했습니다.';
+    } catch {
+      el('roster-status').textContent = '이 탭의 배정표를 복원할 수 없습니다. 별도로 보관한 명부를 불러오세요.';
+    }
+  }
+  el('choose-roster').onclick = () => el('roster-file').click();
+  el('roster-file').onchange = async e => {
+    if (loading) return;
+    const files = [...e.target.files];
+    e.target.value = '';
+    if (!files.length) return;
+    loadingState(true);
+    try {
+      const values = [];
+      for (const file of files) values.push(JSON.parse(await file.text()));
+      assignments = c.mergeAssignments(assignments, values);
+      el('roster-status').textContent = '현장 사전 배정표를 불러왔습니다. 현업 참여에서 배정과 결과를 열어 확인하세요.';
+      try {
+        sessionStorage.setItem(rosterKey, JSON.stringify({format:c.assignmentFormat, assignments}));
+      } catch {
+        el('roster-status').textContent += ' 탭에 임시 저장할 수 없어 새로고침 후에는 명부를 다시 불러와야 합니다.';
+      }
+      render();
+    } catch (err) {
+      el('roster-status').textContent = err instanceof SyntaxError ? '사전 배정표의 JSON 형식을 확인하세요.' : err.message;
+    } finally {
+      loadingState(false);
+    }
   };
   el('key-file').onchange = async (e) => {
     if (loading) return;
@@ -590,30 +650,38 @@
   };
   el('save').onclick = () => {
     const dupe = repeatIds();
-    const a = document.createElement('a'),
-      data = {
-        format,
-        entries: selected().map((entry) => {
-          const v = applied(entry);
-          return {
-            trial: v.trial,
-            ...(dupe.has(v.trial.id) ? { repeatExposure: true } : {}),
-            locationGrade: v.locationGrade,
-            verdictGrade: v.verdictGrade,
-            expected: v.expected,
-            basis: v.anchor || null
-          };
-        })
-      };
-    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
-    a.href = url;
-    a.download = 'field-grades-' + el('kind').value + '.json';
-    a.click();
+    const data = {
+      format,
+      entries: selected().map((entry) => {
+        const v = applied(entry);
+        return {
+          trial: v.trial,
+          ...(dupe.has(v.trial.id) ? { repeatExposure: true } : {}),
+          locationGrade: v.locationGrade,
+          verdictGrade: v.verdictGrade,
+          expected: v.expected,
+          basis: v.anchor || null
+        };
+      })
+    };
+    downloadJson(data, 'field-grades-' + el('kind').value + '.json');
     unexported.delete(el('kind').value);
     persistDraft();
+  };
+  function downloadJson(data, filename) {
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}));
+    a.href = url;
+    a.download = filename;
+    a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  el('save-roster').onclick = () => {
+    if (showingResults && el('kind').value === 'editor' && assignments.length)
+      downloadJson({format:c.assignmentFormat, assignments}, 'field-assignment-roster.json');
   };
   el('kind').onchange = () => { showingResults = false; render(); persistDraft(); };
   restoreDraft();
+  restoreRoster();
   render();
 })();

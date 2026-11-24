@@ -673,3 +673,94 @@ test('임시 저장 실패 안내가 과제 진행 상태에 지워지지 않고
   const record = await p.download('download');
   assert.equal(record.status, 'withdrawn');
 });
+
+test('사전 배정표가 서로 다른 기사와 명부를 합치고 같은 기사에 대한 상충 배정을 거부한다', () => {
+  const a = assignment('E01');
+  const b = assignment('E01', {caseId:'other', articleUrl:'https://example.com/other'});
+  const roster = rows => ({format:c.assignmentFormat, assignments:rows});
+  assert.deepEqual(c.mergeAssignments([a], [roster([a,b,a])]), [a,b]);
+  assert.deepEqual(c.mergeAssignments([], [roster([{...a, ignored:'not exported'}])]), [a]);
+  for (const bad of [
+    {...a, method:'unknown'}, {...a, participant:' '},
+    {...a, articleUrl:'file:///private'}, {...a, prompt:''},
+    {...a, method:'journal'}, {...a, taskId:'changed'},
+    {...a, caseId:'other', articleUrl:a.articleUrl + '#page'},
+    {...a, caseId:'other', articleUrl:a.articleUrl + '?utm_source=list'}
+  ]) assert.throws(() => c.mergeAssignments([a], [roster([bad])]), /배정/);
+  for (const bad of [{}, roster([])]) assert.throws(() => c.mergeAssignments([a], [bad]));
+});
+
+function assignment(participant, changes = {}) {
+  const {caseId, articleUrl, taskId, prompt} = trial();
+  return {participant, caseId, articleUrl, taskId, prompt, method:'manual', ...changes};
+}
+
+test('사전 배정과 과제가 일치한 현업 기록을 원래 방식으로 비교하고 모든 배정을 분모에 남긴다', async t => {
+  const roster = rows => ({format:c.assignmentFormat, assignments:rows});
+  const as = ['A','B','C','D','E','F','G','H'].map((id,i) => assignment(id, {method:i%2 ? 'journal' : 'manual'}));
+  const p = page(t, 'field-summary');
+  await p.upload('roster-file', roster(as.slice(0,4)), roster(as.slice(4)));
+  assert.equal(p.el('allocation-arms').textContent, '');
+  assert.equal(p.el('entries').textContent, '');
+  assert.match(p.report('allocation-counts'), /배정 8건.*연결된 현업 기록 없음 8건/);
+  const run = (participant, changes={}) => trial({id:participant, participant, kind:'editor', ...changes});
+  const left = run('A', {method:'journal', journalUse:'yes', phaseMs:{search:60000,locate:0,decide:0}});
+  const right = run('B', {method:'manual', journalUse:'yes', phaseMs:{search:30000,locate:0,decide:0}});
+  const submissions = [
+    left, right, right,
+    run('C', {taskId:'wrong-task'}),
+    run('D', {method:'journal', status:'withdrawn', journalUse:''}),
+    run('F', {id:'f1'}), run('F', {id:'f2'}),
+    run('G', {kind:'practice'}), run('H', {caseId:'unknown', articleUrl:'https://example.com/unrelated'}),
+    run('outside', {method:'manual', phaseMs:{search:600000,locate:0,decide:0}})
+  ];
+  await p.upload('imports', ...submissions);
+  await p.upload('roster-file', roster(as));
+  assert.doesNotMatch(p.el('roster-status').textContent, /A|journal|manual/);
+  assert.equal(p.el('allocation-arms').textContent, '');
+  assert.match(p.report('allocation-counts'), /배정 8건 · 완료 2건 · 중도 종료 1건 · 기사·과제 불일치 2건 · 반복·배정 충돌 1건 · 연결된 현업 기록 없음 2건/);
+  assert.match(p.report('allocation-counts'), /명부 밖 코드의 현업 기록 1건/);
+  assert.match(p.report('allocation-comparisons'), /30\.0초 절감 \(50\.0%\)/);
+  p.el('toggle-results').click();
+  const arms = [...p.el('allocation-arms').children].map(card => card.textContent);
+  assert.match(arms[0], /배정 4건.*기록상 방식이 원래 배정과 다른 경우 1건.*실제 사용이 원래 배정과 일치 0건 · 불일치 1건/);
+  assert.match(arms[1], /배정 4건.*기록상 방식이 원래 배정과 다른 경우 1건.*실제 사용이 원래 배정과 일치 1건/);
+  assert.deepEqual(await p.download('save-roster'), roster(as));
+  const grades = await p.download('save');
+  assert.equal(grades.entries.find(v => v.trial.id === 'A').trial.method, 'journal');
+  assert.doesNotMatch(JSON.stringify(grades), /assignments|field-assignment|"participant":"E"/);
+  await p.upload('roster-file', roster([assignment('I')]), roster([{...as[0], method:'journal'}]));
+  assert.match(p.el('roster-status').textContent, /서로 다른 배정/);
+  assert.equal(p.el('allocation-results').hidden,true);
+  assert.match(p.report('allocation-counts'), /배정 8건/);
+  const store = p.window.sessionStorage;
+  const restored = page(t,'field-summary',w=>{
+    for (const key of Object.keys(store)) w.sessionStorage.setItem(key,store.getItem(key));
+  });
+  assert.equal(restored.el('allocation-comparisons').textContent,'');
+  assert.match(restored.report('allocation-comparisons'), /30\.0초 절감/);
+  restored.select('#kind','practice');
+  restored.el('toggle-results').click();
+  assert.equal(restored.el('allocation-results').hidden,true);
+  assert.equal(restored.el('allocation-counts').textContent, '');
+  const fresh = page(t, 'field-summary');
+  await fresh.upload('imports', grades);
+  fresh.el('toggle-results').click();
+  assert.equal(fresh.el('allocation-results').hidden,true);
+  assert.match(fresh.el('groups').textContent, /기록상 방식과 본인 응답 일치/);
+  assert.doesNotMatch(fresh.el('groups').textContent, /배정대로 사용/);
+});
+
+test('한 편집자가 서로 다른 기사를 배정받으면 과제와 기사가 동시에 맞는 응답만 해당 배정에 연결한다', () => {
+  const a = assignment('A'), b = assignment('A', {caseId:'B',articleUrl:'https://example.com/B'});
+  const slots = c.mergeAssignments([],[{format:c.assignmentFormat,assignments:[a,b]}]);
+  const row = (id, extra) => ({trial: trial({kind:'editor', id, ...extra})});
+  const qualified = row('exact', b);
+  const stray = row('stray', {...a, caseId:'stray', articleUrl:'https://example.com/stray'});
+  const report = rows=>c.allocationReport(slots,rows,new Set());
+  const two = report([qualified,stray]);
+  assert.deepEqual([two.all.completed,two.all.missing,two.unlinked],[1,1,1]);
+  const conflict = report([row('crossed identifiers',{...a, articleUrl:b.articleUrl})]);
+  assert.deepEqual([conflict.all.excluded,conflict.all.completed,conflict.groups.length],[2,0,0]);
+  assert.equal(c.allocationReport(slots,[qualified],new Set(['exact'])).all.excluded,1);
+});
