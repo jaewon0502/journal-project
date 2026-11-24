@@ -86,7 +86,64 @@
     return result;
   }
 
-  const api = Object.freeze({prepare, resolve});
+  async function resolveBundle(items) {
+    if (!Array.isArray(items) || items.length !== 6) {
+      throw new Error('두 편집자의 작업 파일 네 개와 진행자용 대응표 두 개를 선택하세요. 모두 여섯 개가 필요합니다.');
+    }
+    const keys = [];
+    const files = new Map();
+    for (const item of items) {
+      const data = item?.data;
+      if (data?.format === format) {
+        if (!validKey(data)) throw new Error('진행자용 대응표를 확인하세요. 선택한 파일 · ' + item.name);
+        if (files.has(data.pairId)) throw new Error('같은 배포 묶음의 대응표가 두 개입니다. 편집자별 대응표를 하나씩 선택하세요.');
+        keys.push(data);
+        files.set(data.pairId, new Map());
+      }
+    }
+    if (keys.length !== 2) throw new Error('서로 다른 두 편집자에게 배포한 진행자용 대응표가 하나씩 필요합니다.');
+    for (const item of items) {
+      const data = item?.data;
+      if (data?.format === format) continue;
+      const tag = workspace.blindTag(data?.blindReview);
+      if (data?.format !== workspace.schema || !tag) {
+        throw new Error('A·B로 배정한 작업 파일을 선택하세요. 확인할 파일 · ' + (item?.name || '이름 없음'));
+      }
+      const group = files.get(tag.pairId);
+      if (!group) throw new Error('선택한 대응표와 다른 묶음의 작업 파일입니다. 확인할 파일 · ' + item.name);
+      if (group.has(tag.slot)) {
+        throw new Error('같은 묶음의 ' + tag.slot + ' 파일을 두 번 선택했습니다. A와 B를 하나씩 선택하세요.');
+      }
+      group.set(tag.slot, item);
+    }
+    keys.sort((a, b) => a.pairId.localeCompare(b.pairId));
+    const [first, second] = keys;
+    if (first.demo !== second.demo) throw new Error('연습 기록끼리 또는 실제 기사 기록끼리 선택하세요.');
+    for (const role of roles) {
+      const side = role === 'before' ? '원본' : '수정본';
+      if (first.mapping[role].articleSha256 !== second.mapping[role].articleSha256) {
+        throw new Error('두 편집자에게 배포한 ' + side + '의 기사 원문이 다릅니다. 같은 기사의 파일을 선택하세요.');
+      }
+      if (first.mapping[role].sourcesSha256 !== second.mapping[role].sourcesSha256) {
+        throw new Error('두 편집자에게 배포한 ' + side + '의 원자료 묶음이 다릅니다. 같은 자료로 평가한 파일을 선택하세요.');
+      }
+    }
+    return Promise.all(keys.map(async key => {
+      // Four distinct work files tagged A/B across these two keys fill all four slots.
+      const group = files.get(key.pairId);
+      const ordered = roles.map(role => group.get(key.mapping[role].slot));
+      const code = key.pairId.slice(0, 8);
+      try {
+        const result = await resolve(key, ordered[0].data, ordered[1].data);
+        if (result.sourceChanged) throw new Error('배포 후 등록된 원자료가 달라졌습니다. 배포 당시 자료로 평가한 파일을 선택하세요.');
+        return {...result, key, ordered, code};
+      } catch (error) {
+        throw new Error('묶음 ' + code + ' · ' + error.message);
+      }
+    }));
+  }
+
+  const api = Object.freeze({prepare, resolve, resolveBundle});
   if (useNode) module.exports = api;
   else root.JournalBlindRevision = api;
 })(globalThis);
