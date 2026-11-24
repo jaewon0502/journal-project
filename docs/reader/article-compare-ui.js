@@ -5,6 +5,10 @@
   const inputs = ['left', 'right'];
   const files = {left: null, right: null};
   const reads = {left: 0, right: 0};
+  const returns = ['first', 'second', 'key'];
+  const returnInput = id => byId('blind-return-' + id);
+  let generation = 0, recovery = 0;
+  let kit = null, preparing = false, resolving = false;
   const mode = () => document.querySelector('[name=mode]:checked').value;
   const names = () => mode() === 'revision' ? ['수정 전', '수정 후'] : ['편집자 A', '편집자 B'];
   const percent = value => Number.isFinite(value) ? Number(value.toFixed(1)) + '%' : '산출 대기';
@@ -27,7 +31,18 @@
     byId('status').textContent = content;
     byId('status').classList.toggle('error', error);
   }
+  function cancelRecovery() {
+    recovery++;
+    resolving = false;
+    byId('blind-return-status').textContent = '';
+  }
   function clearResults() {
+    generation++;
+    kit = null;
+    preparing = false;
+    byId('blind-downloads').hidden = true;
+    byId('blind-prep-status').textContent = '';
+    cancelRecovery();
     showingExample = false;
     byId('example').textContent = '가상 예시 보기';
     byId('result').hidden = true;
@@ -41,9 +56,15 @@
     byId('label-right').textContent = right + ' 작업 파일';
     const both = !!files.left && !!files.right;
     const revision = mode() === 'revision';
-    byId('ack-wrap').hidden = !revision || !both;
-    byId('compare').disabled = !both || (revision && !byId('ack').checked);
-    byId('mode-note').textContent = revision
+    const tagged = revision && inputs.some(side => files[side]?.data.blindReview != null);
+    byId('ack-wrap').hidden = !revision || !both || tagged;
+    byId('compare').disabled = !both || (revision && (!byId('ack').checked || tagged));
+    byId('blind-revision').hidden = !revision;
+    byId('blind-prepare').disabled = !revision || byId('compare').disabled || preparing || !!kit;
+    byId('blind-resolve').disabled = !revision || resolving || !returns.every(id => returnInput(id).files.length);
+    byId('mode-note').textContent = tagged
+      ? 'A·B로 배정된 작업 파일입니다. 아래 진행자용 메뉴의 ‘돌아온 평가 비교’에 두 파일과 대응표를 넣으세요.'
+      : revision
       ? '같은 기사의 수정 전·후 작업 JSON을 순서대로 선택하세요.'
       : '같은 기사와 같은 원자료를 각자 검토한 편집자 두 명의 작업 JSON을 선택하세요.';
   }
@@ -56,6 +77,16 @@
     if (s.stale) preview.append(note('현재 기사와 일치하지 않는 이전 평가가 제외되었습니다.'));
     if (s.sourceDraftPending) preview.append(note('원자료 입력 초안이 있습니다. 비교에는 등록된 자료만 사용합니다.'));
   }
+  async function readJson(file) {
+    const raw = typeof file.text === 'function' ? await file.text() : await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('파일을 읽을 수 없습니다.'));
+      reader.readAsText(file);
+    });
+    try { return {name:file.name, raw, data:JSON.parse(raw)}; }
+    catch (_) { throw new Error('JSON을 읽지 못했습니다. 파일 형식을 확인하세요.'); }
+  }
   async function loadFile(side, file) {
     const current = ++reads[side];
     files[side] = null;
@@ -66,17 +97,10 @@
     preview.textContent = file ? '파일을 읽고 있습니다.' : '';
     if (!file) return;
     try {
-      const raw = typeof file.text === 'function' ? await file.text() : await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => reject(new Error('파일을 읽을 수 없습니다.'));
-        reader.readAsText(file);
-      });
+      const loaded = await readJson(file);
       if (current !== reads[side]) return;
-      let data;
-      try { data = JSON.parse(raw); } catch (_) { throw new Error('JSON을 읽지 못했습니다. 팩트체크 화면에서 저장한 작업 파일을 선택하세요.'); }
-      const snapshot = window.JournalWorkspaceSnapshot.read(data);
-      files[side] = {name: file.name, raw, snapshot};
+      const snapshot = window.JournalWorkspaceSnapshot.read(loaded.data);
+      files[side] = {...loaded, snapshot};
       renderPreview(side, files[side]);
     } catch (error) {
       if (current !== reads[side]) return;
@@ -342,7 +366,7 @@
     panel.append(disputed, evidence, core);
     return panel;
   }
-  function show(snapshots, synthetic) {
+  function show(snapshots, synthetic, restored) {
     try {
       const c = window.JournalArticleCompare.compare(...snapshots, mode());
       const output = byId('output');
@@ -352,8 +376,10 @@
       if (sample) output.append(element('p', '가상 기사와 모의 원자료로 만든 연습 결과입니다.', 'warn'));
       if (!synthetic) {
         const [left, right] = names();
-        output.append(note(left + ' · ' + files.left.name + ' / ' + right + ' · ' + files.right.name));
-        if (files.left.raw === files.right.raw) {
+        const [first, second] = restored?.ordered || [files.left, files.right];
+        if (restored) output.append(note('대응표로 확인한 판본 순서 · 묶음 ' + restored.code));
+        output.append(note(left + ' · ' + first.name + ' / ' + right + ' · ' + second.name));
+        if (first.raw === second.raw) {
           output.append(element('p', mode() === 'revision'
             ? '두 작업 파일의 내용이 같습니다. 원본과 수정본을 각각 선택했는지 확인하세요.'
             : '두 작업 파일의 내용이 같습니다. 서로 독립적으로 작성한 평가인지 원본을 확인하세요.', 'warn'));
@@ -361,6 +387,7 @@
       }
       if (mode() === 'reviewers') output.append(note('독립 일치도로 해석하려면 서로의 기록을 보기 전에 각자 평가했는지 확인하세요.'));
       if (c.sourceChanged) output.append(element('p', '두 판본의 원자료 묶음이 다릅니다. 수치의 변화에는 근거가 바뀐 영향도 포함됩니다.', 'warn'));
+      if (restored?.sourceChanged) output.append(element('p', '평가 중 등록된 원자료가 배포할 때와 달라졌습니다. 변경된 자료가 판정에 미친 영향을 확인하세요.', 'warn'));
       if (mode() === 'revision') {
         const {left, right} = c.accuracy;
         if (right.total < left.total || right.reviewed < left.reviewed || right.adjudicated < left.adjudicated ||
@@ -390,11 +417,76 @@
       message(error.message, true);
     }
   }
+  function blindStatus(id, content, error = false) {
+    const status = byId(id);
+    status.textContent = content;
+    status.classList.toggle('error', error);
+  }
+  async function prepareKit() {
+    if (byId('blind-prepare').disabled) return;
+    const current = ++generation;
+    preparing = true;
+    updateInputs();
+    blindStatus('blind-prep-status', '검토용 파일을 준비하고 있습니다.');
+    try {
+      const ready = await window.JournalBlindRevision.prepare(files.left.data, files.right.data);
+      if (current !== generation) return;
+      kit = ready;
+      blindStatus('blind-prep-status', '묶음 ' + kit.key.pairId.slice(0, 8) + ' · 파일 세 개를 각각 저장하세요.');
+      byId('blind-downloads').hidden = false;
+    } catch (error) {
+      if (current === generation) blindStatus('blind-prep-status', error.message, true);
+    } finally {
+      if (current === generation) { preparing = false; updateInputs(); }
+    }
+  }
+  function downloadKitPart(part) {
+    if (!kit || mode() !== 'revision') return;
+    const key = part === 'key';
+    const data = key ? kit.key : kit.packets[part];
+    const code = kit.key.pairId.slice(0, 8);
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}));
+    const link = element('a');
+    link.href = url;
+    link.download = (key ? '진행자전용-대응표-' + code : '검토-' + code + '-' + part) + '.json';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+  async function restoreKit() {
+    if (byId('blind-resolve').disabled) return;
+    clearResults();
+    const current = ++recovery;
+    resolving = true;
+    updateInputs();
+    blindStatus('blind-return-status', '파일과 대응표를 확인하고 있습니다.');
+    try {
+      const [first, second, key] = await Promise.all(returns.map(async id => {
+        const file = returnInput(id).files[0];
+        try { return await readJson(file); }
+        catch (error) { throw new Error(file.name + ' · ' + error.message); }
+      }));
+      if (current !== recovery) return;
+      const result = await window.JournalBlindRevision.resolve(key.data, first.data, second.data);
+      if (current !== recovery) return;
+      const ordered = first.data === result.before ? [first, second] : [second, first];
+      const code = key.data.pairId.slice(0, 8);
+      const snapshots = [result.before, result.after].map(work => window.JournalWorkspaceSnapshot.read(work));
+      blindStatus('blind-return-status', '묶음 ' + code + '의 수정 전후 순서를 복원했습니다.');
+      show(snapshots, false, {ordered, code, sourceChanged:result.sourceChanged});
+    } catch (error) {
+      if (current === recovery) blindStatus('blind-return-status', error.message, true);
+    } finally {
+      if (current === recovery) { resolving = false; updateInputs(); }
+    }
+  }
   for (const side of inputs) {
     const input = byId('file-' + side);
     input.addEventListener('change', () => loadFile(side, input.files[0]));
   }
   document.querySelectorAll('[name=mode]').forEach(radio => radio.addEventListener('change', () => {
+    for (const id of returns) returnInput(id).value = '';
     clearResults(); updateInputs();
   }));
   byId('ack').addEventListener('change', () => {
@@ -402,7 +494,9 @@
     updateInputs();
   });
   byId('compare').addEventListener('click', () => {
-    if (!files.left || !files.right || (mode() === 'revision' && !byId('ack').checked)) return;
+    if (byId('compare').disabled) return;
+    cancelRecovery();
+    updateInputs();
     show([files.left.snapshot, files.right.snapshot], false);
   });
   byId('example').addEventListener('click', () => {
@@ -411,5 +505,18 @@
     try { show(window.JournalCompareExample(mode()), true); }
     catch (error) { message(error.message, true); }
   });
+  byId('blind-prepare').addEventListener('click', prepareKit);
+  for (const part of ['A', 'B', 'key']) {
+    byId('blind-download-' + part.toLowerCase()).addEventListener('click', () => downloadKitPart(part));
+  }
+  for (const id of returns) returnInput(id).addEventListener('change', () => {
+    clearResults(); updateInputs();
+  });
+  byId('blind-resolve').addEventListener('click', restoreKit);
+  function openCoordinatorLink() {
+    if (location.hash === '#blind-revision' && mode() === 'revision') byId('blind-revision').open = true;
+  }
+  window.addEventListener('hashchange', openCoordinatorLink);
   updateInputs();
+  openCoordinatorLink();
 })();

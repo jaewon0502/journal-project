@@ -11,24 +11,26 @@ function workspace(article) {
   return {format:'journal-local-factcheck-v1', article, articleDraft:article, sources:[], receipts:[], rowDrafts:[],
     demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}};
 }
-function page(t) {
-  const dom = new JSDOM(fs.readFileSync(path.join(dir,'article-compare.html'),'utf8'), {url:'file:///reader/article-compare.html', runScripts:'outside-only'});
+function page(t, hash = '') {
+  const dom = new JSDOM(fs.readFileSync(path.join(dir,'article-compare.html'),'utf8'), {url:'file:///reader/article-compare.html' + hash, runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window;
   w.TextEncoder = TextEncoder;
+  Object.defineProperty(w, 'crypto', {value:require('node:crypto').webcrypto});
   for (const script of w.document.querySelectorAll('script[src]')) w.eval(fs.readFileSync(path.join(dir,script.getAttribute('src')), 'utf8'));
   const el = id => w.document.getElementById(id);
-  function load(side, name, content) {
-    const field = el('file-' + side);
+  function select(id, name, content) {
+    const field = el(id);
     Object.defineProperty(field,'files',{configurable:true, value:[{name, text:()=>Promise.resolve(content)}]});
     field.dispatchEvent(new w.Event('change'));
   }
+  const load = (side, name, content) => select('file-' + side, name, content);
   function reviewers() {
     const radio = w.document.querySelector('[value=reviewers]');
     radio.click();
   }
   const settled = () => new Promise(resolve => setImmediate(resolve));
-  return {el, load, reviewers, settled};
+  return {w, el, load, select, reviewers, settled};
 }
 
 test('판본 확인 이후에만 비교하고 파일을 바꾸거나 잘못 열면 이전 승인과 수치를 걷는다', async t => {
@@ -288,4 +290,131 @@ test('파일이나 나머지 판정이 달라도 양쪽에 동일한 저장 기�
   await p.settled(); p.el('compare').click();
   assert.match(output.textContent, /양쪽에 동일한 판정 기록 · 0\/3개/);
   assert.doesNotMatch(output.textContent, /동일 기록을 제외한 사실 판정 일치율/);
+});
+
+test('진행자가 파일을 따로 저장하고 역순으로 회수해도 실제 판본에 맞춰 채점 결과를 표시한다', async t => {
+  const p = page(t, '#blind-revision');
+  assert.equal(p.el('blind-revision').open, true);
+  const before = require('../experiments/article-review-pilot/a-original.json');
+  const after = require('../experiments/article-review-pilot/b-revised.json');
+  p.load('left', '원본.json', JSON.stringify(before));
+  p.load('right', '수정본.json', JSON.stringify(after));
+  await p.settled();
+  assert.equal(p.el('blind-prepare').disabled, true);
+  p.el('ack').click();
+  p.el('blind-prepare').click();
+  await t.waitFor(() => assert.equal(p.el('blind-downloads').hidden, false));
+
+  const downloads = [];
+  p.w.Blob = Blob;
+  let created;
+  p.w.URL.createObjectURL = blob => { created = blob; return 'blob:local'; };
+  p.w.URL.revokeObjectURL = () => {};
+  p.w.HTMLAnchorElement.prototype.click = function () { downloads.push({name:this.download, blob:created}); };
+  for (const part of ['a','b','key']) p.el('blind-download-' + part).click();
+  const [a, b, key] = await Promise.all(downloads.map(async f => JSON.parse(await f.blob.text())));
+  const code = key.pairId.slice(0, 8);
+  assert.match(p.el('blind-prep-status').textContent, new RegExp(code));
+  assert.deepEqual(downloads.map(f => f.name), ['검토-' + code + '-A.json', '검토-' + code + '-B.json', '진행자전용-대응표-' + code + '.json']);
+  assert.deepEqual([a.blindReview.slot, b.blindReview.slot], ['A','B']);
+  for (const pack of [a,b]) {
+    assert.equal(pack.articleAssessment, null);
+    assert.deepEqual(pack.receipts, []);
+    assert.equal(pack.mapping, undefined);
+  }
+  function score(pack, sample, status) {
+    // Add the same source to both returned versions to isolate a change since distribution.
+    pack.sources.push({id:'extra', title:'별표', url:'https://example.org/table',
+      version:'1', locator:'별표 1', excerpt:'출생 통계 집계 범위'});
+    const first = engine.prepare(pack.article, pack.sources).rows[0];
+    pack.receipts = [engine.decide(first, {status, sourceIds:[pack.sources[0].id],
+      reason:'출생 통계 전국 수치와 대조했다.', acknowledged:true}, pack.sources)];
+    const report = engine.report(pack.article, pack.sources, pack.receipts);
+    const rating = sample.articleAssessment.ratings.framing;
+    const source = pack.sources[sample.sources.findIndex(s => s.id === rating.sourceId)];
+    pack.articleAssessment = rubric.save(report, pack.sources, {coreRowIds:[first.id],
+      ratings:{framing:{...rating, sourceId:source.id}}});
+  }
+  const original = a.article === before.article ? a : b;
+  const revision = original === a ? b : a;
+  score(original, before, 'contradicted');
+  score(revision, after, 'fact');
+  const firstName = '평가-1.json', secondName = '평가-2.json';
+  p.select('blind-return-first', firstName, JSON.stringify(revision));
+  p.select('blind-return-second', secondName, JSON.stringify(original));
+  assert.equal(p.el('blind-resolve').disabled, true);
+  p.select('blind-return-key', '진행자.json', JSON.stringify(key));
+  p.el('blind-resolve').click();
+  await t.waitFor(() => assert.equal(p.el('result').hidden, false));
+  const output = p.el('output').textContent;
+  assert.match(output, /수정 전 · 평가-2.json \/ 수정 후 · 평가-1.json/);
+  assert.match(output, /중요한 왜곡 개선율100%1 \/ 1개/);
+  assert.match(output, /양쪽 모두 채점 1\/4개/);
+  assert.match(output, /근거 지지율0% \(0\/1\)100% \(1\/1\)/);
+  assert.match(output, /평가 중 등록된 원자료가 배포할 때와 달라졌습니다/);
+  assert.doesNotMatch(output, /두 판본의 원자료 묶음이 다릅니다/);
+  assert.match(p.el('result-title').textContent, /가상 예시 · 수정 전후/);
+
+  p.select('blind-return-second', '같은-배정.json', JSON.stringify(revision));
+  assert.equal(p.el('result').hidden, true);
+  p.el('blind-resolve').click();
+  await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /같은 배정/));
+  const otherId = (key.pairId.startsWith('f') ? '0' : 'f') + key.pairId.slice(1);
+  p.select('blind-return-key', '다른-대응표.json', JSON.stringify({...key, pairId:otherId}));
+  p.el('blind-resolve').click();
+  await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /다른 묶음/));
+  p.select('blind-return-key', '손상.json', '{');
+  p.el('blind-resolve').click();
+  await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /손상.json.*JSON을 읽지 못했습니다/));
+  assert.equal(p.el('result').hidden, true);
+
+  p.load('left', firstName, JSON.stringify(revision));
+  p.load('right', secondName, JSON.stringify(original));
+  await p.settled();
+  assert.match(p.el('mode-note').textContent, /대응표/);
+  assert.equal(p.el('ack-wrap').hidden, true);
+  assert.equal(p.el('compare').disabled, true);
+  assert.equal(p.el('blind-prepare').disabled, true);
+});
+
+test('입력과 화면을 바꾼 뒤 도착한 배정이나 회수 오류를 폐기하고 이전 대응표 다운로드를 숨긴다', async t => {
+  const p = page(t);
+  const before = JSON.stringify(workspace('시의회에서 올해 예산안을 의결했다.'));
+  const after = JSON.stringify(workspace('시의회가 내년 예산안을 의결했다.'));
+  p.load('left', '원본.json', before);
+  p.load('right', '수정본.json', after);
+  await p.settled();
+  p.el('ack').click(); p.el('blind-prepare').click();
+  await t.waitFor(() => assert.equal(p.el('blind-downloads').hidden, false));
+  p.load('right', '재선택.json', after);
+  assert.equal(p.el('blind-downloads').hidden, true);
+  assert.equal(p.el('blind-prep-status').textContent, '');
+  await p.settled();
+
+  let finish;
+  const pending = new Promise(r => { finish = r; });
+  p.w.JournalBlindRevision = {...p.w.JournalBlindRevision, prepare:() => pending};
+  p.el('ack').click(); p.el('blind-prepare').click();
+  p.reviewers();
+  finish({key:{pairId:'0'.repeat(32)}});
+  await p.settled();
+  assert.equal(p.el('blind-revision').hidden, true);
+  assert.equal(p.el('blind-downloads').hidden, true);
+  assert.equal(p.el('blind-prep-status').textContent, '');
+  p.w.document.querySelector('[value=revision]').click();
+
+  let fail;
+  p.w.JournalBlindRevision = {...p.w.JournalBlindRevision, resolve:() => new Promise((_, reject) => { fail = reject; })};
+  p.select('blind-return-first', '평가1.json', before);
+  p.select('blind-return-second', '평가2.json', after);
+  p.select('blind-return-key', '이전.json', '{}');
+  p.el('blind-resolve').click();
+  await p.settled();
+  p.select('blind-return-key', '재선택.json', '{');
+  p.el('blind-resolve').click();
+  await p.settled();
+  fail(new Error('이전에 선택한 대응표 오류'));
+  await p.settled();
+  assert.match(p.el('blind-return-status').textContent, /재선택.json/);
+  assert.equal(p.el('result').hidden, true);
 });
