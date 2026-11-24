@@ -311,11 +311,26 @@ test('진행자가 파일을 따로 저장하고 역순으로 회수해도 실�
   p.w.URL.createObjectURL = blob => { created = blob; return 'blob:local'; };
   p.w.URL.revokeObjectURL = () => {};
   p.w.HTMLAnchorElement.prototype.click = function () { downloads.push({name:this.download, blob:created}); };
-  for (const part of ['a','b','key']) p.el('blind-download-' + part).click();
-  const [a, b, key] = await Promise.all(downloads.map(async f => JSON.parse(await f.blob.text())));
-  const code = key.pairId.slice(0, 8);
-  assert.match(p.el('blind-prep-status').textContent, new RegExp(code));
-  assert.deepEqual(downloads.map(f => f.name), ['검토-' + code + '-A.json', '검토-' + code + '-B.json', '진행자전용-대응표-' + code + '.json']);
+  async function saveSet() {
+    downloads.length = 0;
+    for (const part of ['a','b','key']) p.el('blind-download-' + part).click();
+    const [a, b, key] = await Promise.all(downloads.map(async f => JSON.parse(await f.blob.text())));
+    const code = key.pairId.slice(0, 8);
+    assert.match(p.el('blind-prep-status').textContent, new RegExp(code));
+    assert.deepEqual(downloads.map(f => f.name), ['검토-' + code + '-A.json', '검토-' + code + '-B.json', '진행자전용-대응표-' + code + '.json']);
+    assert.equal(a.blindReview.pairId, key.pairId);
+    assert.equal(b.blindReview.pairId, key.pairId);
+    return {a, b, key};
+  }
+  const {a, b, key} = await saveSet();
+  assert.equal(p.el('blind-next').disabled, false);
+  p.el('blind-next').click();
+  assert.equal(p.el('blind-downloads').hidden, true);
+  p.el('blind-download-key').click();
+  assert.equal(downloads.length, 3);
+  await t.waitFor(() => assert.equal(p.el('blind-downloads').hidden, false));
+  const next = await saveSet();
+  assert.notEqual(next.key.pairId, key.pairId);
   assert.deepEqual([a.blindReview.slot, b.blindReview.slot], ['A','B']);
   for (const pack of [a,b]) {
     assert.equal(pack.articleAssessment, null);
@@ -359,8 +374,11 @@ test('진행자가 파일을 따로 저장하고 역순으로 회수해도 실�
   assert.equal(p.el('result').hidden, true);
   p.el('blind-resolve').click();
   await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /같은 배정/));
-  const otherId = (key.pairId.startsWith('f') ? '0' : 'f') + key.pairId.slice(1);
-  p.select('blind-return-key', '다른-대응표.json', JSON.stringify({...key, pairId:otherId}));
+  p.select('blind-return-second', '다음편집자.json', JSON.stringify(next.a));
+  p.el('blind-resolve').click();
+  await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /다른 묶음/));
+  p.select('blind-return-second', secondName, JSON.stringify(original));
+  p.select('blind-return-key', '다음편집자-대응표.json', JSON.stringify(next.key));
   p.el('blind-resolve').click();
   await t.waitFor(() => assert.match(p.el('blind-return-status').textContent, /다른 묶음/));
   p.select('blind-return-key', '손상.json', '{');

@@ -61,6 +61,7 @@
     byId('compare').disabled = !both || (revision && (!byId('ack').checked || tagged));
     byId('blind-revision').hidden = !revision;
     byId('blind-prepare').disabled = !revision || byId('compare').disabled || preparing || !!kit;
+    byId('blind-next').disabled = !kit || preparing;
     byId('blind-resolve').disabled = !revision || resolving || !returns.every(id => returnInput(id).files.length);
     byId('mode-note').textContent = tagged
       ? 'A·B로 배정된 작업 파일입니다. 아래 진행자용 메뉴의 ‘돌아온 평가 비교’에 두 파일과 대응표를 넣으세요.'
@@ -422,9 +423,11 @@
     status.textContent = content;
     status.classList.toggle('error', error);
   }
-  async function prepareKit() {
-    if (byId('blind-prepare').disabled) return;
+  async function prepareKit(event) {
+    if (event.currentTarget.disabled) return;
     const current = ++generation;
+    kit = null;
+    byId('blind-downloads').hidden = true;
     preparing = true;
     updateInputs();
     blindStatus('blind-prep-status', '검토용 파일을 준비하고 있습니다.');
@@ -506,6 +509,7 @@
     catch (error) { message(error.message, true); }
   });
   byId('blind-prepare').addEventListener('click', prepareKit);
+  byId('blind-next').addEventListener('click', prepareKit);
   for (const part of ['A', 'B', 'key']) {
     byId('blind-download-' + part.toLowerCase()).addEventListener('click', () => downloadKitPart(part));
   }
