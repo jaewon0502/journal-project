@@ -17,7 +17,7 @@
     approved: /의결|가결|통과|확정|승인|본예산/u,
     spent: /집행|지출|지급|결산/u
   };
-  const labels = {request:'부처·기관 요구액', proposal:'정부 제출안', approved:'의회 의결·확정 예산', spent:'결산·실제 집행액'};
+  const labels = {request:'부처·기관 요구액', proposal:'정부 제출안', approved:'의회 의결·확정 예산', spent:'결산·실제 집행액', budget:'예산', difference:'예산 대비 증감액'};
 
   // Strip forward-looking and negated mentions before testing the clause. A
   // nearby real budget submission may still be usable in that same clause.

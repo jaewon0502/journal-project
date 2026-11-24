@@ -1,0 +1,45 @@
+{
+  "fixtureSha256": "261697a6a0e10eb2a5419394e96084ceab665fee6c7099ac6e8f4c57b47bbdce",
+  "variants": [
+    {
+      "id": "unitless-settlement",
+      "document": "settlement",
+      "prefixLines": [],
+      "expectedAction": "row-and-unit-warning",
+      "expectedUnit": null,
+      "provenance": "고정한 결산표 발췌. 단위 줄을 복사하지 않은 상태."
+    },
+    {
+      "id": "unitless-adoption",
+      "document": "adoption",
+      "prefixLines": [],
+      "expectedAction": "row-and-unit-warning",
+      "expectedUnit": null,
+      "provenance": "고정한 의결표 발췌. 단위 줄을 복사하지 않은 상태."
+    },
+    {
+      "id": "printed-settlement-unit",
+      "document": "settlement",
+      "prefixLines": ["(단위: 조원)"],
+      "expectedAction": "exact-cell",
+      "expectedUnit": "조원",
+      "provenance": "결산 분석 인쇄본 4쪽 아래 표에 붙은 단위 표기."
+    },
+    {
+      "id": "printed-adoption-units",
+      "document": "adoption",
+      "prefixLines": ["(단위: 조원, %, %p)"],
+      "expectedAction": "row-and-unit-warning",
+      "expectedUnit": null,
+      "provenance": "NABO Focus 제69호 표 2에 붙은 혼합 단위 표기. 발췌 안에 행별 단위는 없다."
+    },
+    {
+      "id": "annotated-adoption-amounts",
+      "document": "adoption",
+      "prefixLines": ["(단위: 조원)"],
+      "expectedAction": "exact-cell",
+      "expectedUnit": "조원",
+      "provenance": "평가자가 같은 호 1쪽 설명을 확인하고 2쪽 표 2에서 조 원 단위의 네 행만 남은 발췌에 붙인 단위 표기. 원표의 단위 줄은 '(단위: 조원, %, %p)'이다."
+    }
+  ]
+}

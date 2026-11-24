@@ -1,0 +1,66 @@
+{
+  "baseline": "6e8aa6dc2c25906953fa61d80092c49bab991551",
+  "sources": {
+    "settlementReport": {
+      "publisher": "국회예산정책처",
+      "title": "2024회계연도 결산 재정총량 분석",
+      "published": "2025-07-28",
+      "url": "https://www.nabo.go.kr/board/file/down.do?fid=33318702",
+      "catalog": "https://nabo.go.kr/ko/report/analysisView.do?idx=8815&key=2509250001",
+      "pdfSha256": "6e5cc78d96e596556d352e2932fb0971cd147f29c9e3552a48e875f4f6305dae",
+      "location": "PDF 14쪽, 인쇄본 4쪽 아래 표 ‘2024회계연도 총지출 결산’. 원표 단위는 조원. 자료는 기획재정부."
+    },
+    "budgetReview": {
+      "publisher": "국회예산정책처",
+      "title": "2024년도 예산안 심의결과 주요내용",
+      "published": "2023-12-27",
+      "url": "https://nabo.go.kr/board/file/down.do?fid=33317867",
+      "pdfSha256": "ec7e48a0100f49a4ed37568f765b68a2f1dd930a67a424130ac714a2a755d35c",
+      "location": "NABO Focus 제69호 PDF 2쪽 표 2. 원표에 조원·%·%p 단위가 있고, 이 발췌에 포함된 금액 행은 조원이다. 심의 일정은 PDF 1쪽 표 1."
+    }
+  },
+  "documents": {
+    "settlement": {
+      "sourceId": "settlementReport",
+      "lines": [
+        "구분\t2023년 결산(A)\t2023년 예산 대비\t2024년 예산(B)\t2024년 결산(C)\t2024년 예산 대비(C-B)\t전년 대비(C-A)",
+        "총지출\t610.7\t△28.0\t656.6\t638.0\t△18.6\t27.3",
+        "일반회계\t343.5\t△25.9\t356.5\t344.5\t△12.0\t1.0",
+        "특별회계\t69.6\t△2.0\t81.7\t78.6\t△3.1\t8.9",
+        "기금\t196.5\t△1.1\t218.4\t214.5\t△3.9\t18.0"
+      ]
+    },
+    "adoption": {
+      "sourceId": "budgetReview",
+      "lines": [
+        "구분\t2023년 본예산(A)\t2024년 예산안(B)\t2024년 확정예산(C)\t증감 국회증감(C-B)\t증감 전년대비(C-A)",
+        "총수입\t625.7\t612.1\t612.2\t+0.1\t△13.5",
+        "총지출\t638.7\t656.9\t656.6\t△0.3\t+17.9",
+        "통합재정수지\t△13.1\t△44.8\t△44.4\t+0.4\t△31.3",
+        "관리재정수지\t△58.2\t△92.0\t△91.6\t+0.4\t△33.4"
+      ]
+    },
+    "proceedings": {
+      "sourceId": "budgetReview",
+      "lines": [
+        "정부는 2023년 9월 1일 국회에 2024년도 예산안을 제출했다.",
+        "국회 본회의는 2023년 12월 21일 예산안 수정안을 의결했다."
+      ]
+    }
+  },
+  "cases": [
+    {"id":"settled-total","document":"settlement","kind":"cell","query":"2024회계연도 총지출 결산액은 얼마인가?","expected":{"row":2,"col":5,"value":"638.0"}},
+    {"id":"settled-prior-year","document":"settlement","kind":"cell","query":"2023회계연도 기금 결산액은 얼마였나?","expected":{"row":5,"col":2,"value":"196.5"}},
+    {"id":"budget-not-settlement","document":"settlement","kind":"cell","query":"2024년 일반회계 예산액이 344.5조 원이라고 쓴 수치는 맞는가?","expected":{"row":3,"col":4,"value":"356.5"}},
+    {"id":"wrong-account-figure","document":"settlement","kind":"cell","query":"2024년 특별회계 결산액이 344.5조 원이었나?","expected":{"row":4,"col":5,"value":"78.6"}},
+    {"id":"proposed-revenue","document":"adoption","kind":"cell","query":"정부가 제출한 2024년도 예산안에서 총수입은 얼마였나?","expected":{"row":2,"col":3,"value":"612.1"}},
+    {"id":"quoted-proposal-as-adopted","document":"adoption","kind":"cell","query":"국회가 의결한 2024년도 총지출이 656.9조 원이었다는 보도는 맞는가?","expected":{"row":3,"col":4,"value":"656.6"}},
+    {"id":"previous-original-budget","document":"adoption","kind":"cell","query":"2023년 본예산의 총지출은 얼마였나?","expected":{"row":3,"col":2,"value":"638.7"}},
+    {"id":"adopted-balance","document":"adoption","kind":"cell","query":"2024년 확정예산에서 관리재정수지는 얼마였나?","expected":{"row":5,"col":4,"value":"△91.6"}},
+    {"id":"settlement-not-yet-present","document":"adoption","kind":"missing","query":"2024년 총지출 결산액은 얼마였나?","expected":null},
+    {"id":"proposal-not-in-settlement","document":"settlement","kind":"missing","query":"2024년 정부 제출안의 총지출은 얼마였나?","expected":null},
+    {"id":"year-not-present","document":"settlement","kind":"missing","query":"2022년 기금 결산액은 얼마였나?","expected":null},
+    {"id":"stage-unspecified","document":"adoption","kind":"ambiguous","query":"2024년 총지출은 얼마인가?","expected":null},
+    {"id":"ordinary-submission-date","document":"proceedings","kind":"ordinary","query":"정부가 국회에 예산안을 제출한 날짜는 언제인가?","expected":null,"expectedParagraph":1}
+  ]
+}

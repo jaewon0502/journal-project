@@ -617,7 +617,7 @@
     excerpt.value = entry.text;
     updateSourceDraftNote();
     message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. ' +
-      (tableLocation ? '원표의 제목·단위와 아래 위치가 이 행·열에 맞는지 확인하세요.' :
+      (tableLocation ? '원본에서 쪽번호와 표 제목·단위를 대조하고 아래 위치를 확인하세요.' :
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
     dirty = true;
     byId('source-locator').focus();
@@ -625,6 +625,10 @@
   function matrixLocation(label, heading, caption) {
     const coordinate = '‘' + label + '’ 행 · ‘' + heading + '’ 열';
     return caption ? caption.text.trim() + ' · ' + coordinate : coordinate;
+  }
+  function fiscalLocation(cell) {
+    const year = cell.heading.includes(cell.year) ? '' : cell.year + '년 · ';
+    return year + matrixLocation(cell.rowLabel, cell.heading) + ' (왼쪽에서 ' + cell.column + '번째 열)';
   }
   function matrixBrowser(matrix) {
     const details = node('details');
@@ -684,7 +688,7 @@
     }
     return rows;
   }
-  function addNearbyRows(details, list, passage, rows) {
+  function addNearbyRows(details, list, passage, rows, tableLocation) {
     const center = rows[passage.paragraph - 1];
     if (!center || center.text !== passage.text) return;
     const nearby = rows.slice(Math.max(0, passage.paragraph - 13), passage.paragraph + 12)
@@ -708,7 +712,7 @@
       list.append(item);
     }
     details.insertBefore(node('p', '후보 앞뒤 최대 12문단과 표 머리글입니다. 발췌할 행을 선택하세요.'), list);
-    details.append(button('선택한 행을 발췌문으로 사용', () => useExcerpt(selected)));
+    details.append(button('선택한 행을 발췌문으로 사용', () => useExcerpt(selected, selected === center ? tableLocation : '')));
   }
   function clearSearchContext() {
     byId('search-context').value = '';
@@ -731,6 +735,65 @@
   }
   byId('use-article-context').addEventListener('click', () => searchWithContext(currentRow()?.context));
   byId('use-article-title').addEventListener('click', () => searchWithContext(firstArticleLine()));
+  function addColumnHints(block, text, query, passage, separateContext) {
+    if (passage.datedCell) {
+      const cell = passage.datedCell;
+      block.append(node('p', '자료 행의 ' + cell.column + '열 · ' + cell.heading + ' · 원문 표기 ' + cell.value));
+    }
+    const period = window.JournalEvidencePeriod.different(query, passage);
+    if (period) {
+      block.append(node('p', '질문에 적힌 시점은 ' + period.requested + ', 이 행 첫 칸은 ' + period.source
+        + '입니다. 원표에서 기준 시점을 확인하세요.', 'callout'));
+    }
+    if (passage.matrixNavigation) block.append(node('p', '질문에 적힌 ‘' + passage.matrixNavigation.rowLabel +
+      '’ 행입니다. 질문의 세부 조건과 단위는 원표에서 확인하세요.'));
+    const columns = !passage.matrixNavigation && window.JournalEvidenceColumns.forRow(text, query, passage);
+    if (columns) {
+      const values = columns.cells.map(c => c.year + '년 · ' + c.column + '번째 수치 열 ' + c.value);
+      block.append(node('p', '연도 머리글(' + columns.headerParagraph + '문단) 기준 · ' + values.join(' / ')));
+      if (columns.ambiguousYears.length)
+        block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
+    }
+    const matrix = passage.matrixCell;
+    if (matrix) {
+      block.append(node('p', matrix.rowLabel + ' 행 · ' + matrix.heading + ' 열 · 원문 값 ' + matrix.value +
+        ' (머리글 ' + matrix.headerParagraph + '문단 · 자료 ' + matrix.rowParagraph +
+        '문단 · 왼쪽에서 ' + matrix.column + '번째 열)'));
+    }
+    const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
+    const metric = !separateContext && annual?.metric;
+    if (annual?.scopeIssue === 'period') {
+      block.append(node('p', '질문은 한 해의 특정 기간을 묻습니다. 연간 합계와 구별해 그 기간을 따로 집계한 원표를 확인하세요.', 'callout'));
+    } else if (annual?.scopeIssue === 'unit') {
+      block.append(node('p', '수치의 단위가 서로 다릅니다. 질문·표 머리글·셀에 적힌 단위와 배율을 대조하세요.', 'callout'));
+    } else if (separateContext && annual?.metric) {
+      block.append(node('p', '추가한 기사 문맥의 조건이 이 표에 적용되는지 확인하세요. 아래에서 해당 연도의 원표 항목을 펼칠 수 있습니다.', 'callout'));
+    }
+    if (metric) {
+      block.append(node('p', metric.year + '년 · ' + metric.heading + ' · 원문 값 ' + metric.value +
+        ' (머리글 ' + metric.headerParagraph + '문단 · 자료 ' + metric.rowParagraph +
+        '문단 · 왼쪽에서 ' + metric.column + '번째 열)'));
+    }
+    if (annual) {
+      const details = node('details');
+      details.append(node('summary', annual.year + '년 원표 항목 ' + annual.cells.length + '개 보기'));
+      details.addEventListener('toggle', function showCells() {
+        if (!details.open) return;
+        details.removeEventListener('toggle', showCells);
+        const list = node('ul');
+        for (const cell of annual.cells)
+          list.append(node('li', cell.column + '열 · ' + cell.heading + ' · ' + cell.value));
+        details.append(node('p', '머리글 ' + annual.headerParagraph + '문단 · 자료 ' + annual.rowParagraph + '문단'), list);
+      });
+      block.append(details);
+    }
+    const changes = window.JournalEvidenceColumns.changeNote(text, query, passage);
+    for (const diff of changes?.comparisons || []) {
+      block.append(node('p', '같은 묶음의 ' + diff.prior.year + '년 ' + diff.prior.column + '번째 열은 ' +
+        diff.prior.value + ', ' + diff.current.year + '년 ' + diff.current.column + '번째 열은 ' +
+        diff.current.value + '입니다. 두 표시값과 괄호 증감이 어긋납니다. 원보고서나 통계표에서 확인하세요.', 'callout'));
+    }
+  }
   function findPassages() {
     const text = byId('document-text').value;
     const query = byId('document-query').value.trim();
@@ -771,72 +834,42 @@
       area.append(block);
     }
     let results = area;
-    const browser = lookup.yearMatrix && matrixBrowser(lookup.yearMatrix);
-    if (passages.length && (lookup.gap || lookup.state === 'needs-context')) {
+    const browser = !lookup.fiscalTable && lookup.yearMatrix && matrixBrowser(lookup.yearMatrix);
+    const fallbackCount = passages.filter(passage => !passage.fiscalNavigation).length;
+    if (fallbackCount && (lookup.gap || lookup.state === 'needs-context')) {
       results = node('details');
-      results.append(node('summary', '표현이 겹친 위치 ' + passages.length + '개 보기'));
-      area.append(results);
+      results.append(node('summary', '표현이 겹친 위치 ' + fallbackCount + '개 보기'));
     }
     for (const passage of passages) {
       const block = node('div', undefined, 'source');
       block.append(node('strong', '붙여넣은 본문 ' + passage.paragraph + '문단'), node('blockquote', passage.text));
-      if (passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
-      if (passage.datedCell) {
-        const cell = passage.datedCell;
-        block.append(node('p', '자료 행의 ' + cell.column + '열 · ' + cell.heading + ' · 원문 표기 ' + cell.value));
-      }
-      const period = window.JournalEvidencePeriod.different(query, passage);
-      if (period) {
-        block.append(node('p', '질문에 적힌 시점은 ' + period.requested + ', 이 행 첫 칸은 ' + period.source
-          + '입니다. 원표에서 기준 시점을 확인하세요.', 'callout'));
-      }
-      if (passage.matrixNavigation) block.append(node('p', '질문에 적힌 ‘' + passage.matrixNavigation.rowLabel +
-        '’ 행입니다. 질문의 세부 조건과 단위는 원표에서 확인하세요.'));
-      const columns = !passage.matrixNavigation && window.JournalEvidenceColumns.forRow(text, query, passage);
-      if (columns) {
-        const values = columns.cells.map(c => c.year + '년 · ' + c.column + '번째 수치 열 ' + c.value);
-        block.append(node('p', '연도 머리글(' + columns.headerParagraph + '문단) 기준 · ' + values.join(' / ')));
-        if (columns.ambiguousYears.length)
-          block.append(node('p', '같은 연도의 열이 여러 개입니다. 원표에서 각 열의 상위 제목과 단위를 확인하세요.', 'callout'));
-      }
-      const matrix = passage.matrixCell;
-      if (matrix) {
-        block.append(node('p', matrix.rowLabel + ' 행 · ' + matrix.heading + ' 열 · 원문 값 ' + matrix.value +
-          ' (머리글 ' + matrix.headerParagraph + '문단 · 자료 ' + matrix.rowParagraph +
-          '문단 · 왼쪽에서 ' + matrix.column + '번째 열)'));
-      }
-      const annual = window.JournalEvidenceColumns.inspectAnnualRow(text, query, passage);
-      const metric = !separateContext && annual?.metric;
-      if (annual?.scopeIssue === 'period') {
-        block.append(node('p', '질문은 한 해의 특정 기간을 묻습니다. 연간 합계와 구별해 그 기간을 따로 집계한 원표를 확인하세요.', 'callout'));
-      } else if (annual?.scopeIssue === 'unit') {
-        block.append(node('p', '수치의 단위가 서로 다릅니다. 질문·표 머리글·셀에 적힌 단위와 배율을 대조하세요.', 'callout'));
-      } else if (separateContext && annual?.metric) {
-        block.append(node('p', '추가한 기사 문맥의 조건이 이 표에 적용되는지 확인하세요. 아래에서 해당 연도의 원표 항목을 펼칠 수 있습니다.', 'callout'));
-      }
-      if (metric) {
-        block.append(node('p', metric.year + '년 · ' + metric.heading + ' · 원문 값 ' + metric.value +
-          ' (머리글 ' + metric.headerParagraph + '문단 · 자료 ' + metric.rowParagraph +
-          '문단 · 왼쪽에서 ' + metric.column + '번째 열)'));
-      }
-      if (annual) {
-        const details = node('details');
-        details.append(node('summary', annual.year + '년 원표 항목 ' + annual.cells.length + '개 보기'));
-        details.addEventListener('toggle', function showCells() {
-          if (!details.open) return;
-          details.removeEventListener('toggle', showCells);
-          const list = node('ul');
-          for (const cell of annual.cells)
-            list.append(node('li', cell.column + '열 · ' + cell.heading + ' · ' + cell.value));
-          details.append(node('p', '머리글 ' + annual.headerParagraph + '문단 · 자료 ' + annual.rowParagraph + '문단'), list);
-        });
-        block.append(details);
-      }
-      const changes = window.JournalEvidenceColumns.changeNote(text, query, passage);
-      for (const diff of changes?.comparisons || []) {
-        block.append(node('p', '같은 묶음의 ' + diff.prior.year + '년 ' + diff.prior.column + '번째 열은 ' +
-          diff.prior.value + ', ' + diff.current.year + '년 ' + diff.current.column + '번째 열은 ' +
-          diff.current.value + '입니다. 두 표시값과 괄호 증감이 어긋납니다. 원보고서나 통계표에서 확인하세요.', 'callout'));
+      if (!lookup.fiscalTable && passage.fiscalStage) block.append(node('p', '찾은 예산 단계 · ' + window.JournalEvidenceFiscal.label(passage.fiscalStage)));
+      const fiscal = passage.fiscalCell;
+      let tableLocation = '';
+      if (fiscal) {
+        const coordinate = fiscalLocation(fiscal);
+        tableLocation = coordinate + ' · 단위 ' + fiscal.unit;
+        block.append(node('p', window.JournalEvidenceFiscal.label(fiscal.stage) + ' · ' + coordinate),
+          node('p', '원문 표기 ' + fiscal.value + ' · 단위 ' + fiscal.unit + ' · 머리글 ' + fiscal.headerParagraph + '문단', 'verbatim'),
+          node('p', '원본에서 이 표가 실린 쪽과 머리글·단위를 대조하세요.'));
+      } else if (passage.fiscalNavigation) {
+        const guide = passage.fiscalNavigation;
+        const coordinate = guide.column ? fiscalLocation(guide) : '‘' + guide.rowLabel + '’ 행';
+        const location = [guide.caption, coordinate].filter(Boolean).join(' · ');
+        tableLocation = guide.column ? location + ' · 단위 확인 필요' : location;
+        block.append(node('p', location));
+        if (guide.column) {
+          block.append(node('p', '원문 표기 ' + guide.value + ' · 단위 미확인', 'verbatim'),
+            node('p', '머리글 ' + guide.headerParagraph + '문단을 원본과 대조해 이 셀에 적용되는 단위를 확인하세요.'));
+        } else if (guide.reason === 'context') {
+          block.append(node('p', '이 행이 기사 문맥에서 지정한 범위를 따로 집계하는지 원표에서 확인하세요.'));
+        } else {
+          block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
+        }
+      } else if (!lookup.fiscalTable) {
+        addColumnHints(block, text, query, passage, separateContext);
+        if (passage.matrixCell)
+          tableLocation = matrixLocation(passage.matrixCell.rowLabel, passage.matrixCell.heading, lookup.yearMatrix?.caption);
       }
       if (passage.context.length) {
         const details = node('details');
@@ -855,13 +888,13 @@
           if (!details.open) return;
           details.removeEventListener('toggle', expand);
           rows ??= documentRows(text);
-          addNearbyRows(details, list, passage, rows);
+          addNearbyRows(details, list, passage, rows, lookup.fiscalTable ? tableLocation : '');
         });
         block.append(details);
       }
-      if (matrix) {
-        const location = matrixLocation(matrix.rowLabel, matrix.heading, lookup.yearMatrix?.caption);
-        block.append(button('이 행을 발췌하고 표 위치 확인', () => useExcerpt(passage, location)));
+      if (tableLocation) {
+        const label = passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
+        block.append(button(label, () => useExcerpt(passage, tableLocation)));
       } else {
         const navigation = passage.matrixNavigation;
         if (browser && navigation) {
@@ -870,8 +903,9 @@
         }
         block.append(button('이 문단을 발췌문으로 사용', () => useExcerpt(passage)));
       }
-      results.append(block);
+      (passage.fiscalNavigation ? area : results).append(block);
     }
+    if (results !== area) area.append(results);
     if (browser) area.append(browser.details);
   }
   byId('find-passages').addEventListener('click', findPassages);

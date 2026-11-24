@@ -7,6 +7,7 @@
   const columns = node ? require('./evidence-columns.js') : root.JournalEvidenceColumns;
   const periods = node ? require('./evidence-period.js') : root.JournalEvidencePeriod;
   const fiscal = node ? require('./evidence-fiscal.js') : root.JournalEvidenceFiscal;
+  const fiscalTable = node ? require('./evidence-fiscal-table.js') : root.JournalEvidenceFiscalTable;
 
   const measures = [
     {unit: '명', ask: /몇\s*(?:명|사람)|인원(?:수|은|이)?\s*(?:얼마|몇)/u,
@@ -187,9 +188,87 @@
     return {targets, gap:fullScope ? null : fiscal.gap(stage)};
   }
 
+  // PDF layout text can split a year and its subordinate headings over
+  // several lines. Preserve its source row, without inferring a cell from spacing.
+  function printedFiscalTable(text, query) {
+    if (/[\t|｜]/u.test(text) || !/단위\s*[:：]/u.test(text)) return null;
+    const ask = fiscalTable.rowQuestion(query);
+    if (!ask) return null;
+    const lines = text.split(/\r\n|[\n\r\u2028\u2029]/u).filter(line => line.trim());
+    const captions = /^\s*(?:[\[〈<【]|표\s*\d)/u;
+    const headers = [];
+    const candidates = [];
+    let block = null;
+    const labels = {request:/요구|요청/u, proposal:/예산안|정부안/u, approved:/확정|본예산|의결/u, spent:/결산|집행|실제\s*지출/u, budget:/예산/u, difference:/증감|대비/u};
+    for (const [i, line] of lines.entries()) {
+      if (captions.test(line) || /\f|^\s*(?:주(?:석)?\s*\d*[:：]|자료\s*[:：]|출처\s*[:：])/u.test(line)) block = null;
+      if (/^\s*[(（]?단위\s*[:：].*원/u.test(line)) {
+        const caption = i > 0 && captions.test(lines[i - 1]) ? lines[i - 1].trim() : '';
+        block = {caption, start:i, data:false, header:[], rows:[]};
+        headers.push(block);
+        continue;
+      }
+      if (!block) continue;
+      const cells = line.trim().split(/\s{2,}/u);
+      if (cells.length >= 3 && /[가-힣]/u.test(cells[0]) && cells.slice(1).every(cell =>
+          /^(?:[+−△▲▼-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?|[-—…])$/u.test(cell))) {
+        block.data = true;
+        block.rows.push({index:i,label:cells[0]});
+      } else if (!block.data && i - block.start <= 12) {
+        block.header.push({text:line,paragraph:i + 1});
+      } else {
+        block = null;
+      }
+    }
+    for (const table of headers) {
+      const heading = table.header.map(h => h.text).join(' ');
+      if (!table.rows.length || !/구\s*분|항\s*목|사업명/u.test(heading) || !/예산|결산|집행/u.test(heading)) continue;
+      for (const row of table.rows) {
+        if (ask.matches(row.label)) candidates.push({table, heading, row});
+      }
+    }
+    if (!candidates.length) return null;
+    const matching = candidates.filter(({heading}) => heading.includes(ask.year) && labels[ask.stage]?.test(heading));
+    if (matching.length !== 1 || candidates.length !== matching.length)
+      return {gap:'붙여넣은 표에서 질문의 행과 회계연도·예산 단계를 함께 특정하기 어렵습니다. 원표 머리글을 확인하세요.', passages:[]};
+    const {table, row} = matching[0];
+    return {gap:'해당 행을 찾았습니다. 여러 줄 머리글에서 질문의 연도와 예산 단계가 겹치는 열을 특정하기 어렵습니다. 원표 머리글과 단위를 대조하세요.',
+      passages:[{paragraph:row.index + 1, text:lines[row.index], matched:[row.label], context:[
+        {paragraph:table.start + 1, text:lines[table.start]}, ...table.header],
+        fiscalNavigation:{rowLabel:row.label, caption:table.caption, headingParagraph:table.header[0].paragraph}}]};
+  }
+
   function search(documentText, query, {articleContext = ''} = {}) {
     const table = trend.find(documentText, query, {articleContext});
     const context = articleContext.trim();
+    if (table.state === 'ordinary') {
+      const separate = context && context !== query.trim();
+      const statedYear = separate && /^((?:19|20)\d{2})\s*(?:회계\s*연도|년도|년)$/u.exec(context);
+      const years = statedYear && fiscal.years(query);
+      const yearOnly = statedYear && (!years.size || (years.size === 1 && years.has(statedYear[1])));
+      const asked = yearOnly && !years.size ? context + ' ' + query : query;
+      const result = fiscalTable.lookup(documentText, asked) || printedFiscalTable(documentText, asked);
+      if (result) {
+        let {passages, gap, notice} = result;
+        if (separate && !yearOnly) {
+          // The registered row may match the short query while the surrounding
+          // article asks about only one region or program. Offer its location.
+          passages = passages.map(p => {
+            const cell = p.fiscalCell || p.fiscalNavigation;
+            return {text:p.text, paragraph:p.paragraph, matched:[], context:p.context,
+              fiscalNavigation:{rowLabel:cell.rowLabel, caption:cell.caption, reason:'context'}};
+          });
+          gap = [gap, '추가한 기사 문맥의 조건이 이 표에 적용되는지 원표에서 확인하세요.'].filter(Boolean).join(' ');
+        } else if (yearOnly) {
+          notice = '추가한 기사 문맥의 회계연도 ' + statedYear[1] + '년을 함께 사용했습니다.';
+        }
+        const fiscalNavigation = passages.some(p => p.fiscalNavigation);
+        if (!passages.length && gap) passages = finder.find(documentText, query, {includeContext:true})
+          .map(({paragraph, text, matched, context}) => ({paragraph, text, matched, context}));
+        return {passages, gap, notice, state:'ordinary', usedArticleContext:Boolean(yearOnly), needsPublicationDate:false,
+          fiscalTable:true, fiscalNavigation};
+      }
+    }
     const dated = table.state === 'ordinary' && (!context || context === query.trim()) && datedRows(documentText, query);
     let gap = dated ? dated.gap || null : coverageNotice(documentText, query);
     const yearMatrix = table.state === 'ordinary' ? columns.parseYearMatrix(documentText) : null;
