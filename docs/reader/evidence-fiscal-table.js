@@ -78,7 +78,7 @@
   };
   const questionYear = /(?<!\d)((?:19|20)\d{2})\s*(?:회계\s*연도|년도|년)/gu;
   // Consume complete tokens once so a long failed match cannot backtrack across particles.
-  const filler = /(?:예산서에서|결산서에서|원표에서|자료에서|기사에서|표에서|원표의|기사의|표의|얼마|였다는|이었다는|이었나|이었다|인가요|인가|인지|이었|이에요|입니다|입니까|이라고|라고|이라는|라는|보도한|제시한|기재한|기록한|적은|쓴|수치|였나|였던|맞는가|맞나요|맞습니까|맞나|금액|규모|주장|보도|해당|에서|으로|에는|몇|[원은는이가의를를에로다나요까?!.])/uy;
+  const filler = /(?:예산서에서|결산서에서|원표에서|자료에서|기사에서|표에서|원표의|기사의|표의|얼마|였다는|이었다는|이었나|이었다|인가요|인가|인지|이었|이에요|입니다|입니까|이라고|라고|이라는|라는|보도한|제시한|기재한|기록한|적은|쓴|였나|였던|맞는가|맞나요|맞습니까|맞나|(?:수치|금액|규모|주장|보도)(?:으로|[은는이가의를를에로])?|해당|이다|[?!.])/uy;
   function onlyFiller(value) {
     filler.lastIndex = 0;
     while (filler.lastIndex < value.length) if (!filler.exec(value)) return false;
@@ -87,6 +87,7 @@
   const claimedAmount = /[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?\s*원/gu;
   function question(text) {
     const q = text.normalize('NFKC');
+    if (q.includes('\u0000')) return null;
     if (!/예산|결산|총지출|총수입|일반회계|특별회계|기금|금액|사업비|재정수지|정부\s*안|요구액|확정액|집행|지출액/u.test(q) ||
         /의원|표결|몇\s*(?:명|표|건|일)|누가|누구|언제|날짜|이유|왜|이메일|연락처|명단/u.test(q)) return null;
     const terms = compact(q);
@@ -108,12 +109,14 @@
     const years = [...q.matchAll(questionYear)];
     const amounts = [...q.matchAll(claimedAmount)];
     function remainder(value) {
-      let rest = compact(value.replace(questionYear,'').replace(claimedAmount,'')
+      let rest = compact(value.replace(questionYear,'\u0000').replace(claimedAmount,'\u0000')
         .replace(/몇\s*(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?\s*원/gu,'얼마'));
-      if (stage) rest = rest.replace(new RegExp(stageWording[stage].source,'gu'), '');
+      if (stage) rest = rest.replace(new RegExp(stageWording[stage].source,'gu'), '\u0000');
       // An approval may name the object explicitly ('국회가 의결한 … 예산').
-      if (stage === 'approved' && !stageConflict) rest = rest.replace(/예산(?:액)?/gu,'');
-      return rest;
+      if (stage === 'approved' && !stageConflict) rest = rest.replace(/예산(?:액)?/gu,'\u0000');
+      // A particle can follow a printed row, monetary claim, year or stage once.
+      // Free-standing words made of the same syllables can be place names.
+      return rest.replace(/\u0000(?:(?:에서는|에서도|에는|에도|에서|으로|[은는가의를를에로]|이(?!었|라|다|에)))?/gu,'');
     }
     return {q, terms, stage, stageConflict, year:years.length === 1 && years[0][1],
       supported:amounts.length <= 1 && !nonAmount.test(q), rest:remainder(q), remainder};
@@ -138,7 +141,7 @@
       const pattern = new RegExp('(?<![\\p{L}\\p{N}])' + name + suffix +
         '(?:에서는|에는|에도|에서|으로|[은는이가의를를에로])?(?![\\p{L}\\p{N}])','gu');
       for (const m of ask.q.matchAll(pattern)) {
-        const outside = ask.q.slice(0,m.index) + ' ' + ask.q.slice(m.index + m[0].length);
+        const outside = ask.q.slice(0,m.index) + '\u0000' + ask.q.slice(m.index + m[0].length);
         if (stageWording[ask.stage].test(compact(outside)) && onlyFiller(ask.remainder(outside))) return true;
       }
       return false;

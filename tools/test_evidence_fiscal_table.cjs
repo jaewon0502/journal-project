@@ -222,3 +222,10 @@ test('fiscal vocabulary inside the project name or an ordinary data row does not
   assert.equal(cell(source,'2024년 결산기금의 결산액은 얼마인가?').fiscalCell.value,'13');
   assert.equal(lookup('연도\t법안 제목\n2024\t예산안 심의',query),null);
 });
+
+test('a separate place name cannot be consumed as a sequence of Korean particles', () => {
+  for (const place of ['가나','나로','이의'])
+    unresolved(horizontal,'2024년 ' + place + ' 총지출의 결산액은 얼마인가요?');
+  assert.equal(cell(horizontal,'2024년 총지출의 결산액은 얼마인가요?').fiscalCell.value,'638.0');
+  assert.equal(cell(horizontal,'특별회계에서 2024년 결산액은 78.6조 원이었다.').fiscalCell.value,'53');
+});
