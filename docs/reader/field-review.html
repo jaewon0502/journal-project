@@ -17,7 +17,7 @@
 <label>원자료 주소 <input id="documentUrl" type="url" placeholder="https://"></label><label>정확한 위치 <input id="locator" placeholder="표 제목, 행·열, 기준연도 또는 발언 시각"></label>
 <label>판정 <select id="verdict"><option value="">선택하세요</option><option value="supported">근거가 지지</option><option value="contradicted">근거가 반박</option><option value="insufficient">근거 부족</option></select></label>
 <label>이 과제를 검증할 때 저널을 사용했습니까? <select id="journalUse"><option value="">선택하세요</option><option value="yes">사용함</option><option value="no">사용하지 않음</option></select></label>
-<label>확인한 값과 이유 <textarea id="reason" rows="3"></textarea></label></fieldset>
+<label>확인한 값과 이유 <textarea id="reason" rows="3" aria-describedby="reason-note"></textarea></label><small id="reason-note">여기에는 값과 판정 근거를 적어 주세요. 사용 도구는 별도 항목에서 응답합니다.</small></fieldset>
 <div class="actions"><button id="submit" class="primary">완료 기록</button><button id="withdraw">중도 종료</button></div></section>
 <section class="panel" id="ended" hidden><h2>측정 기록</h2><p id="end-summary"></p><button id="download">참여 기록 JSON 저장</button><button id="next">새 과제</button></section>
 <p id="status" role="status"></p><p id="storage-status" class="note" role="status" hidden></p></main></body></html>

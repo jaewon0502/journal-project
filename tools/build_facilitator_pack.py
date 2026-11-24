@@ -32,7 +32,8 @@ START = """<!doctype html>
 <li><a href="field-summary.html">현장 집계 화면 열기</a> → ‘진행자 기준 파일’에서 이 압축 안의
 <code>채점표/예비비/coordinator-key.json</code> 또는 <code>채점표/고용/coordinator-key.json</code>을 고릅니다.
 ‘참여 JSON 또는 이전 집계 JSON 불러오기’에서 돌아온 <code>field-….json</code>을 열고 ‘현업 참여’ 기록을 보세요.</li>
-<li>제출한 표·행·열을 원자료에서 직접 대조해 근거 위치를 채점하고, 시간과 판정 품질을 함께 확인하세요.
+<li>가능하면 두 방식의 답안을 한꺼번에 불러오세요. 참여 코드와 배정이 가려진 상태에서 제출한 표·행·열을 원자료와 대조해 채점합니다.
+‘배정과 결과 보기’를 누르면 시간과 판정 품질이 나타납니다. 수정하려면 ‘배정 가리고 채점하기’를 누르세요.
 ‘판정과 집계 기록 저장’으로 보관한 <code>field-grades-….json</code>은 다음에 같은 화면에서 다시 열 수 있습니다.</li></ol></section>
 </main></body></html>
 """
