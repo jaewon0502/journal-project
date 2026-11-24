@@ -50,6 +50,7 @@
         message('global-status', '다른 탭에서 기록이 바뀌었습니다. 현재 기록을 JSON으로 내려받은 뒤 이 탭을 다시 여세요.', true);
         return;
       }
+      if (session?.state === 'running' && liveStart !== null) bankTime();
       const json = JSON.stringify({records, invitations, session});
       localStorage.setItem(storeKey, json);
       storageVersion = json;
@@ -603,8 +604,22 @@
     if (session?.state === 'running') { event.preventDefault(); event.returnValue = ''; }
   });
   window.addEventListener('pagehide', () => {
-    if (session?.state === 'running' && liveStart !== null) { bankTime(); persist(); }
+    if (session?.state !== 'running' || liveStart === null) return;
+    bankTime();
+    session.state = 'interrupted';
+    liveStart = null;
+    persist();
+  });
+  window.addEventListener('pageshow', event => {
+    if (event.persisted && session?.state === 'interrupted') renderParticipant();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && session?.state === 'running') persist();
   });
   window.addEventListener('hashchange',route);
-  setInterval(updateTime, 1000); route();
+  setInterval(() => {
+    updateTime();
+    if (session?.state === 'running' && liveStart !== null && clock() - liveStart >= 15000) persist();
+  }, 1000);
+  route();
 })();

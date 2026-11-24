@@ -259,6 +259,39 @@ test('쉰 시간을 알 수 없어도 남은 답을 제출하고 닫힌 시간�
   assert.equal(last.workspace().session.partialTime, false);
 });
 
+test('브라우저가 이전 페이지를 메모리에서 복원해도 떠나 있던 시간을 자동 합산하지 않는다', t => {
+  for (const paused of [false, true]) {
+    const p = page(t, '#participate'); p.enroll(1); p.el('begin-trial').click();
+    p.advance(600);
+    if (paused) p.el('pause-trial').click();
+    p.w.dispatchEvent(new p.w.PageTransitionEvent('pagehide', {persisted:true}));
+    p.advance(60000);
+    p.w.dispatchEvent(new p.w.PageTransitionEvent('pageshow', {persisted:true}));
+    assert.equal(p.el('recovery').hidden, paused);
+    assert.equal(p.el('pause-pane').hidden, !paused);
+    p.el(paused ? 'resume-trial' : 'resume-partial').click();
+    p.advance(300); p.answer();
+    const trial = p.workspace().records[0].trials[0];
+    assert.equal(trial.elapsedMs, paused ? 900 : null);
+    assert.equal(trial.observedMs, paused ? undefined : 900);
+  }
+});
+
+test('강제 종료로 떠나는 이벤트를 받지 못해도 마지막 답안 저장 시점까지 직접 잰 시간을 복구한다', t => {
+  const p = page(t, '#participate'); p.enroll(1); p.el('begin-trial').click();
+  p.advance(45000); p.el('reason').value = '본문과 표를 대조하는 중';
+  p.el('reason').dispatchEvent(new p.w.Event('input', {bubbles:true}));
+  const saved = p.workspace();
+  assert.equal(saved.session.activeMs, 45000);
+  const q = page(t, '#participate', undefined, saved);
+  q.el('resume-partial').click();
+  assert.equal(q.el('reason').value, '본문과 표를 대조하는 중');
+  q.advance(300); q.answer();
+  const trial = q.workspace().records[0].trials[0];
+  assert.equal(trial.elapsedMs, null);
+  assert.equal(trial.observedMs, 45300);
+});
+
 test('배포본은 코드 입력 후에만 본인 기록을 복원하고 연구자·다른 편집자의 상태를 섞지 않는다', t => {
   const key = n => 'journal-editor-study-participant-v1/J1-' + n + '-E0000000000000001';
   const pilot = page(t, '', undefined, undefined, true);
