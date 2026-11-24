@@ -15,7 +15,7 @@
 
   function missingState(view, work) {
     if (view.rows.some(row => row.receipt) || view.assessment.bias.items.some(item => item.rating)) return null;
-    const draft = rubric.restoreDraft(view, view.sources, work.articleAssessmentDraft);
+    const draft = rubric.restoreDraft(view, view.sources, work.articleAssessmentDraft, work.articleAssessment);
     const biasDraft = Object.values(draft?.entries ?? {}).some(entry => entry.previous ||
       rubric.draftFields.some(field => entry[field].trim()));
     if (biasDraft || view.rows.some(row => row.draftPending)) return 'draft';
@@ -74,6 +74,7 @@
   function summarizeScores(dimensions) {
     let paired = 0, disagreed = 0, stableSeverityDifferences = 0;
     let missingScores = 0, naScores = 0, pendingImportant = 0;
+    const revised = {rated:0, important:0, withoutBaseline:0};
     // Rows and columns count how many of the two editors marked an important
     // distortion in the original and revised versions of the same item.
     const matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
@@ -84,6 +85,13 @@
         if (level === 'na') naScores++;
       }
       const a = change(first.before, first.after), b = change(second.before, second.after);
+      if (Number.isInteger(first.after) && Number.isInteger(second.after)) {
+        revised.rated++;
+        if (first.after >= 2 && second.after >= 2) {
+          revised.important++;
+          if (a === 'unpaired' || b === 'unpaired') revised.withoutBaseline++;
+        }
+      }
       if (a === 'unpaired' || b === 'unpaired') {
         if (first.before >= 2 && second.before >= 2) pendingImportant++;
         continue;
@@ -102,7 +110,7 @@
       }
     }
     return {total: dimensions.length, paired, unpaired: dimensions.length - paired, disagreed, stableSeverityDifferences,
-      missingScores, naScores, pendingImportant, severity: {matrix, oppositeSteps, withinBandOppositeSteps},
+      missingScores, naScores, pendingImportant, revised, severity: {matrix, oppositeSteps, withinBandOppositeSteps},
       improved: ratio(matrix[2][0], matrix[2].reduce((sum, n) => sum + n, 0)),
       worsened: ratio(matrix[0][2], matrix[0].reduce((sum, n) => sum + n, 0))};
   }

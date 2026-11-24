@@ -20,7 +20,7 @@
 
   function makeRecord(joint, key) {
     const {dimensions, facts, factMatches, factContext} = agreement.recordFields(joint, key);
-    return readRecord({format, version: 4, demo: key.demo, before: edition(key.mapping.before),
+    return readRecord({format, version: 5, demo: key.demo, before: edition(key.mapping.before),
       after: edition(key.mapping.after), dimensions, facts, factMatches, factContext});
   }
 
@@ -90,8 +90,8 @@
     const keys = ['format', 'version', 'demo', 'before', 'after', 'dimensions'];
     if (version >= 2) keys.push('facts');
     if (version >= 3) keys.push('factMatches');
-    if (version === 4) keys.push('factContext');
-    if (![1, 2, 3, 4].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    if (version >= 4) keys.push('factContext');
+    if (![1, 2, 3, 4, 5].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
     const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
@@ -124,7 +124,7 @@
       result.facts = {before: readFactRows(record.facts.before), after: readFactRows(record.facts.after)};
     }
     if (version >= 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
-    if (version === 4) result.factContext = readFactContext(record.factContext, result.facts, result.factMatches);
+    if (version >= 4) result.factContext = readFactContext(record.factContext, result.facts, result.factMatches);
     return result;
   }
 
@@ -139,10 +139,10 @@
   // roles, each editor's complete rating profile, and fact observations in passage order.
   function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (![2, 3, 4].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    if (![2, 3, 4, 5].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
     const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
     if (version >= 3) fields.push(record.factMatches);
-    if (version === 4) fields.push(record.factContext);
+    if (version >= 4) fields.push(record.factContext);
     return engine.digestValue(fields);
   }
 
@@ -176,7 +176,7 @@
           if (prior.version >= 3 && record.version >= 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
             throw recordError([previous.index, index], '같은 기사 판본의 원본·수정본 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          if (prior.version === 4 && record.version === 4 && JSON.stringify(prior.factContext) !== JSON.stringify(record.factContext)) {
+          if (prior.version >= 4 && record.version >= 4 && JSON.stringify(prior.factContext) !== JSON.stringify(record.factContext)) {
             throw recordError([previous.index, index], '같은 기사 판본의 핵심 주장 표시 또는 전체 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
           if (record.version > prior.version) {

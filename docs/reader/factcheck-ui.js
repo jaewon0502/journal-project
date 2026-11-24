@@ -397,8 +397,13 @@
       rows.append(part);
     }
   }
-  function refresh(keepForm = false) {
+  function refresh(keepForm = false, standardsDraft = null) {
     result = workspace.activeReport(article, sources, receipts, drafts);
+    if (standardsDraft) {
+      // Adding another source leaves the existing citations intact. Carry only the
+      // unfinished comparison to the new catalogue, with no previous score to reinstate.
+      articleAssessmentDraft.entries.standards = {...standardsDraft, addedSourceBinding:rubric.bind(result)};
+    }
     demo = demo || sources.some(isMock);
     byId('workspace').hidden = false;
     byId('demo-notice').hidden = !demo;
@@ -585,6 +590,7 @@
       // input as an unconfirmed draft instead of blanking the sentence.
       const kept = new Set(engine.prepare(article, next, receipts).rows.filter(r => r.receipt || r.priorDecision).map(r => r.id));
       const moved = engine.report(article, sources, receipts).rows.filter(r => (r.receipt || r.priorDecision) && !kept.has(r.id));
+      const comparison = !editingId && rubric.restoreDraft(result, sources, articleAssessmentDraft)?.entries.standards;
       sources = next;
       for (const row of moved) drafts.set(row.id, {...draftFrom(drafts.get(row.id) || row.receipt || row.priorDecision), sourceEdit: true});
       receipts = receipts.filter(r => !moved.some(row => row.id === r.rowId));
@@ -595,7 +601,7 @@
       for (const draft of drafts.values()) { draft.acknowledged = false; draft.correctionChecked = false; draft.contentChecked = false; }
       dirty = true;
       clearSourceForm(source);
-      refresh();
+      refresh(false, comparison && !comparison.previous ? comparison : null);
       if (rowDraft) {
         byId('sources-panel').open = false;
         byId('verdict').focus();
@@ -1233,6 +1239,11 @@
       if (r.compareQuote) lines.push('비교 구절' + location(r.compareRowId) + ' · ' + r.compareQuote);
       lines.push('원자료 · ' + sourceSummary(source), citationAddress(source), '자료 구절 · ' + r.sourceQuote, '판단 이유 · ' + r.reason);
       if (source.originUrl) lines.push('최초 원문 · ' + source.originUrl);
+      if (r.compareSourceId) {
+        const other = sources.find(s => s.id === r.compareSourceId);
+        lines.push('둘째 구절의 원자료 · ' + sourceSummary(other), citationAddress(other), '둘째 자료 구절 · ' + r.compareSourceQuote);
+        if (other.originUrl) lines.push('둘째 자료 최초 원문 · ' + other.originUrl);
+      }
       if (r.impact) lines.push('독자가 다르게 받아들일 내용 · ' + r.impact);
       if (r.direction) lines.push('검토자가 기록한 영향 방향 · ' + r.direction);
     }

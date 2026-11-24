@@ -3,6 +3,7 @@
 (function (root) {
   'use strict';
 
+  const engine = typeof module === 'object' && module.exports ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const version = 'journal-article-rubric-v1';
   const severityLabels = ['뚜렷한 문제를 찾지 못함', '국소적 강조', '중요한 왜곡', '핵심 결론 왜곡'];
   const dimensions = [
@@ -98,7 +99,43 @@
     return row.positions.every(position => disjoint(position.start + offset, other));
   }
 
-  function ratingFor(dimension, rating, report, sources) {
+  const passageText = value => value.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
+
+  function sameSourceLocation(sources, a, b) {
+    if (a.id === b.id) return true;
+    if (!engine.sameSourceDocument(sources, a, b)) return false;
+    const page = s => s.pdfPage || engine.sourceTarget(s)?.page || '';
+    const firstPage = page(a), secondPage = page(b);
+    if (firstPage && secondPage && String(firstPage) !== String(secondPage)) return false;
+    return passageText(a.locator) === passageText(b.locator);
+  }
+
+  function comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote) {
+    const firstClaim = passageText(quote), secondClaim = passageText(compareQuote);
+    if (!firstClaim || !secondClaim || firstClaim === secondClaim) {
+      throw new Error('기사에서 비교할 주체나 주장이 각각 드러나는 두 구절을 옮기세요.');
+    }
+    const other = sources.find(s => s.id === rating.compareSourceId);
+    const otherQuote = string(rating.compareSourceQuote);
+    if (!other || !otherQuote || !other.excerpt.includes(otherQuote)) {
+      throw new Error('둘째 기사 구절의 근거가 있는 원자료와 해당 발췌문 속 구절을 입력하세요.');
+    }
+    const left = passageText(sourceQuote), right = passageText(otherQuote);
+    if (!left || !right) throw new Error('각 주장의 근거를 확인할 수 있는 자료 구절을 옮기세요.');
+    if (sameSourceLocation(sources, source, other)) {
+      // The same document may cover both parties. A copied or overlapping passage at
+      // one location does not supply two citations, even through another catalogue ID.
+      const texts = [source.excerpt, other.excerpt].map(passageText);
+      const common = texts.filter(t => t.includes(left) && t.includes(right));
+      if (left.includes(right) || right.includes(left) || (common.length && !common.some(t =>
+        t.indexOf(left) + left.length <= t.lastIndexOf(right) || t.indexOf(right) + right.length <= t.lastIndexOf(left)))) {
+        throw new Error('같은 자료 위치에서는 두 주장의 근거가 각각 드러나는 겹치지 않는 구절을 옮기세요.');
+      }
+    }
+    return {compareSourceId: other.id, compareSourceQuote: otherQuote};
+  }
+
+  function ratingFor(dimension, rating, report, sources, legacyDraft = false) {
     const reason = string(rating?.reason);
     if (!object(rating) || !reason) throw new Error(dimension.title + '의 판정 이유를 적으세요.');
     if (rating.level === 'na' && dimension.allowNA) return {level: 'na', reason};
@@ -118,7 +155,9 @@
     if (needsComparison && (typeof compareRowId !== 'string' || !secondAnchor(report, row, quote, compareQuote, compareRowId))) {
       throw new Error(dimension.title + '에서 비교한 다른 기사 구절을 위치가 분명하고 첫 구절과 겹치지 않게 옮기세요.');
     }
-    return {level, rowId: row.id, quote, sourceId: source.id, sourceQuote, reason, impact, compareQuote, compareRowId,
+    const secondSource = dimension.id === 'standards' && !legacyDraft
+      ? comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote) : {};
+    return {level, rowId: row.id, quote, sourceId: source.id, sourceQuote, reason, impact, compareQuote, compareRowId, ...secondSource,
       direction: level > 0 ? string(rating.direction) : ''};
   }
 
@@ -228,31 +267,54 @@
     return {accuracy: accuracyFor(report, saved?.coreRowIds ?? []), bias: biasFor(saved?.ratings ?? {}), saved, stale};
   }
 
-  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'reason', 'impact', 'direction'];
+  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'compareSourceId', 'compareSourceQuote', 'reason', 'impact', 'direction'];
   function copyFields(raw) {
     return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
   }
-  function restoreDraft(report, sources, raw) {
-    if (!raw || typeof raw !== 'object' || !matches(raw.binding, report) || !raw.entries || typeof raw.entries !== 'object') return null;
+  function legacyStandardsDraft(report, sources, rating) {
+    if (!Number.isInteger(rating?.level) || 'compareSourceId' in rating || 'compareSourceQuote' in rating) return null;
+    try {
+      return copyFields(ratingFor(dimensions.find(d => d.id === 'standards'), rating, report, sources, true));
+    } catch (_) { return null; }
+  }
+  function restoreDraft(report, sources, raw, saved = null) {
+    const valid = raw && matches(raw.binding, report);
     const entries = {};
     for (const dim of dimensions) {
-      const d = raw.entries[dim.id];
+      const d = object(raw?.entries) && raw.entries[dim.id];
       if (!d || typeof d !== 'object' || fields.some(k => d[k] != null && typeof d[k] !== 'string')) continue;
+      if (!valid && !(dim.id === 'standards' && !d.previous && typeof d.addedSourceBinding === 'string'
+          && matches(d.addedSourceBinding, report))) continue;
       const clean = copyFields(d);
       if (!['', '0', '1', '2', '3', ...(dim.allowNA ? ['na'] : [])].includes(clean.level)) continue;
       if (clean.rowId && !report.rows.some(row => row.id === clean.rowId)) continue;
       if (clean.sourceId && !sources.some(s => s.id === clean.sourceId)) continue;
+      if (clean.compareSourceId && !sources.some(s => s.id === clean.compareSourceId)) continue;
       if (clean.compareRowId && !report.rows.some(row => row.id === clean.compareRowId)) continue;
       if (d.previous) {
         try {
           const checked = save(report, sources, {coreRowIds: [], ratings: {[dim.id]: d.previous}});
           clean.previous = checked.ratings[dim.id];
-        } catch (_) { /* An unvalidated prior entry cannot be restored as a finding. */ }
+        } catch (_) {
+          if (dim.id === 'standards') clean.legacyPrevious = legacyStandardsDraft(report, sources, d.previous);
+        }
+      }
+      if (dim.id === 'standards' && d.legacyPrevious && !clean.previous) {
+        const prior = {...d.legacyPrevious, level: Number(d.legacyPrevious.level)};
+        delete prior.compareSourceId; delete prior.compareSourceQuote;
+        clean.legacyPrevious = legacyStandardsDraft(report, sources, prior);
       }
       entries[dim.id] = clean;
     }
+    if (saved?.version === version && saved.coreBinding === bindCore(report) && matches(saved.binding, report)) {
+      const legacy = legacyStandardsDraft(report, sources, saved.ratings?.standards);
+      if (legacy) {
+        if (!entries.standards) entries.standards = {...legacy, legacyPrevious: legacy};
+        else if (!entries.standards.previous) entries.standards.legacyPrevious ??= legacy;
+      }
+    }
     if (!Object.keys(entries).length) return null;
-    return {binding: bind(report), activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
+    return {binding: bind(report), activeId: Object.hasOwn(entries, raw?.activeId) ? raw.activeId : '', entries};
   }
 
   const api = Object.freeze({version, severityLabels, dimensions, bind, matches, save, evaluate, draftFields: fields, copyFields, restoreDraft});

@@ -43,7 +43,7 @@ globalThis.JournalRevisionSeriesExample = [
     name: "도서관 운영 연습 기사",
     evidenceExample: "library",
     record: {
-      format: "journal-revision-series-record", version: 4, demo: true,
+      format: "journal-revision-series-record", version: 5, demo: true,
       factMatches: [[1, null]],
       factContext: {beforeCore: [0, 0, 0], afterCore: [0, 0, 0], matches: [[2, 2]]},
       before: {

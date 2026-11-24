@@ -361,3 +361,27 @@ test('편향 개선 점수가 같아도 원본 핵심 사실 유지와 충돌 �
   assert.match(p.get('series-core-audit').textContent, /대조할 수 있는 기사 0건.*이전 형식으로 저장한 개선 기사 1건/);
   assert.doesNotMatch(p.get('series-core-audit').textContent, /0%|0\/0|충돌 표시가 있는 구절 0개/);
 });
+
+test('공통 개선 100%여도 수정본에서 확인된 중요한 왜곡과 원본 평가가 빠진 항목의 근거를 연다', async t => {
+  const p = page(t);
+  const scores = [[2,0,3,1],[null,2,'na',3],[0,1,0,null],[2,null,3,2]];
+  const legacy = record('1','2',scores);
+  const current = {...legacy, version:5, facts:{before:[{outcome:'pending', flag:'none'}],after:[{outcome:'pending', flag:'none'}]},
+    factMatches:[], factContext:{beforeCore:[0],afterCore:[0],matches:[]}};
+  p.select(file('구판',legacy),file('새 기사 요약',current));
+  await flushed();
+  assert.match(p.get('series-improved').textContent,/100%1\/1/);
+  assert.match(p.get('series-severity').textContent,/수정본에서 두 사람 모두 중요한 왜곡으로 평가한 항목 1\/2개/);
+  const unresolved = p.get('series-revised-unpaired');
+  assert.equal(unresolved.querySelectorAll('li').length,1);
+  assert.match(unresolved.textContent,/첫 편집자 미평가 → 2단계 · 둘째 편집자 해당 없음 → 3단계/);
+  assert.match(unresolved.querySelector('a').href,/&focus=bias-framing$/);
+  assert.ok(unresolved.querySelector('a').textContent.includes('새 기사 요약'));
+  const onlyMissing = record('3','4',[[null,null,null,null],['na',2,null,3],[null,null,null,null],[null,null,null,null]]);
+  p.select(file('원본 미평가',onlyMissing));
+  await flushed();
+  assert.equal(p.get('series-severity-change'),null);
+  assert.match(p.get('series-worsened').textContent,/산출 대기/);
+  assert.match(p.get('series-revised-unpaired').textContent,/원본 미평가.*미평가 → 3단계/);
+  assert.equal(p.get('series-revised-unpaired').querySelector('a'),null);
+});

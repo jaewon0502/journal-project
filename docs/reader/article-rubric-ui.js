@@ -4,7 +4,7 @@
 
   const api = root.JournalArticleRubric;
   const lastBinding = new WeakMap();
-  const {draftFields: fields, copyFields, restoreDraft} = api;
+  const {copyFields, restoreDraft} = api;
   const text = (tag, value, cls) => {
     const el = document.createElement(tag);
     if (value !== undefined) el.textContent = value;
@@ -56,7 +56,7 @@
     const binding = api.bind(report);
     const open = new Set([...container.querySelectorAll('details[data-section][open]')].map(d => d.dataset.section));
     const sameContext = lastBinding.get(container) === binding;
-    const draft = restoreDraft(report, sources, rawDraft) || {binding, activeId: '', entries: {}};
+    const draft = restoreDraft(report, sources, rawDraft, saved) || {binding, activeId: '', entries: {}};
     let review = api.evaluate(report, sources, saved);
     let assessment = review.saved;
     lastBinding.set(container, binding);
@@ -141,8 +141,9 @@
     }
     function stage(id, value) {
       const previous = assessment?.ratings?.[id] || draft.entries[id]?.previous;
+      const legacyPrevious = draft.entries[id]?.legacyPrevious;
       if (assessment?.ratings?.[id] && !replaceRating(id, null)) return false;
-      draft.entries[id] = {...copyFields(value), ...(previous ? {previous} : {})};
+      draft.entries[id] = {...copyFields(value), ...(previous ? {previous} : {}), ...(legacyPrevious ? {legacyPrevious} : {})};
       draft.activeId = id;
       writeDraft();
       updateDimension(id);
@@ -153,7 +154,9 @@
       const state = editors.get(id);
       if (!state) return;
       const r = assessment?.ratings?.[id];
-      state.badge.textContent = draft.entries[id] ? '작성 중 · 집계 제외' : r ? scoreName(r.level) : '미평가';
+      const entry = draft.entries[id];
+      const needsEvidence = id === 'standards' && /^[0-3]$/.test(entry?.level) && !entry.compareSourceQuote.trim();
+      state.badge.textContent = needsEvidence ? '둘째 근거 필요 · 미평가' : entry ? '작성 중 · 집계 제외' : r ? scoreName(r.level) : '미평가';
     }
     function showDimension(dim) {
       const section = disclosure('', 'dim-' + dim.id);
@@ -162,6 +165,8 @@
       heading.append(text('strong', dim.title), document.createTextNode(' '), badge);
       section.append(text('p', dim.question, 'rub-note'));
       if (dim.id === 'omission') section.append(text('p', '보도 당시에 확인할 수 있었던 자료와 대조하세요. 이후에 처음 밝혀진 사실은 그때의 누락 근거로 쓰기 어렵습니다.', 'rub-note'));
+      const standards = dim.id === 'standards';
+      if (standards) section.append(text('p', '0~3단계 모두 두 주장의 근거가 필요합니다. 같은 원자료라면 각 주장을 다룬 대목을 고르세요. 자료 미제출을 근거로 쓸 때는 대상과 기간을 확인할 수 있는 명부나 회신을 인용하세요. 한쪽 근거를 아직 찾지 못했다면 미평가로 두세요.', 'rub-note'));
       const scale = disclosure('단계별 판단 기준', 'scale-' + dim.id);
       const levels = text('ol', undefined, 'rub-scale');
       levels.start = 0;
@@ -186,16 +191,23 @@
           }
           if (savedRating.sourceId) {
             const s = sourceById.get(savedRating.sourceId);
-            entries.push(['대조한 근거 · ' + sourceLabel(s), savedRating.sourceQuote]);
+            entries.push([(standards ? '첫째 구절의 근거 · ' : '대조한 근거 · ') + sourceLabel(s), savedRating.sourceQuote, s]);
+          }
+          if (savedRating.compareSourceId) {
+            const s = sourceById.get(savedRating.compareSourceId);
+            entries.push(['둘째 구절의 근거 · ' + sourceLabel(s), savedRating.compareSourceQuote, s]);
           }
           entries.push(['판단 이유', savedRating.reason]);
           if (savedRating.impact) entries.push(['독자 해석에 미치는 영향', savedRating.impact]);
           if (savedRating.direction) entries.push(['표현의 영향을 받는 대상', savedRating.direction]);
           const list = text('dl', undefined, 'rub-evidence');
-          for (const [key, value] of entries) list.append(text('dt', key), text('dd', value));
+          for (const [key, value, source] of entries) {
+            const dd = text('dd', value);
+            const link = sourceLink(source);
+            if (link) dd.append(document.createTextNode(' '), link);
+            list.append(text('dt', key), dd);
+          }
           body.append(list);
-          const citation = sourceLink(sourceById.get(savedRating.sourceId));
-          if (citation) body.append(citation);
           body.append(btn('이 판단 수정', () => {
             if (!stage(dim.id, savedRating)) return;
             feedback.textContent = ''; show();
@@ -225,15 +237,24 @@
         const sourceOptions = [['', '대조할 원자료 선택'], ...sources.map(s => [s.id, sourceLabel(s)])];
         controls.sourceId = select(sourceOptions);
         controls.sourceQuote = area();
+        if (standards) {
+          controls.compareSourceId = select(sourceOptions);
+          controls.compareSourceQuote = area();
+        }
         controls.reason = area(); controls.impact = area(); controls.direction = text('input');
-        for (const key of fields) controls[key].value = pending?.[key] || '';
+        for (const [key, input] of Object.entries(controls)) input.value = pending?.[key] || '';
         controls.level.dataset.dimension = dim.id;
         const articleGroup = text('div');
         const citation = text('div', undefined, 'rub-link');
+        const comparisonCitation = text('div', undefined, 'rub-link');
         const compare = text('div');
         compare.append(field('비교할 다른 구간 불러오기', controls.compareRowId), field('비교할 기사 구절 (두 위치가 겹치지 않게 선택)', controls.compareQuote));
-        articleGroup.append(field('대조할 기사 구간', controls.rowId), field('평가에 사용한 기사 구절', controls.quote), compare,
-          field('원자료와 확인 위치', controls.sourceId), citation, field('대조한 원자료 구절', controls.sourceQuote));
+        articleGroup.append(field('대조할 기사 구간', controls.rowId), field('평가에 사용한 기사 구절', controls.quote));
+        if (!standards) articleGroup.append(compare);
+        articleGroup.append(field(standards ? '첫째 구절의 원자료와 확인 위치' : '원자료와 확인 위치', controls.sourceId),
+          citation, field(standards ? '첫째 주장과 대조한 자료 구절' : '대조한 원자료 구절', controls.sourceQuote));
+        if (standards) articleGroup.append(compare, field('둘째 구절의 원자료와 확인 위치', controls.compareSourceId),
+          comparisonCitation, field('둘째 주장과 대조한 자료 구절', controls.compareSourceQuote));
         if (!sources.length) articleGroup.append(text('p','단계를 기록하려면 위 원자료 관리에서 대조할 문서를 추가하세요.', 'rub-note'));
         const reasonLabel = field('판단 이유', controls.reason);
         const impactLabel = field('이 차이가 독자의 해석에 미치는 영향', controls.impact);
@@ -244,15 +265,22 @@
         const cancel = btn('작성 취소', () => {
           const d = draft.entries[dim.id];
           if (d?.previous && !replaceRating(dim.id, d.previous)) return;
-          delete draft.entries[dim.id]; draft.activeId = ''; writeDraft();
-          feedback.textContent = d?.previous ? '이전 판단을 복원했습니다.' : '작성 중인 입력을 비웠습니다.';
+          if (d?.legacyPrevious) draft.entries[dim.id] = {...d.legacyPrevious, legacyPrevious: d.legacyPrevious};
+          else delete draft.entries[dim.id];
+          draft.activeId = ''; writeDraft();
+          feedback.textContent = d?.legacyPrevious ? '둘째 근거를 추가할 이전 판단으로 돌아갔습니다.' : d?.previous ? '이전 판단을 복원했습니다.' : '작성 중인 입력을 비웠습니다.';
           show(); biasSummary();
           body.querySelector('select, button')?.focus();
         });
         actions.append(save, cancel);
+        if (pending?.legacyPrevious) actions.append(btn('이전 판단 초안 삭제', () => {
+          if (!root.confirm('이전 단계와 구절, 판단 이유를 초안에서 삭제할까요?')) return;
+          delete draft.entries[dim.id]; draft.activeId = ''; writeDraft();
+          feedback.textContent = '이전 판단 초안을 삭제했습니다.'; show(); biasSummary();
+        }));
         form.append(field('판정 단계', controls.level), articleGroup, reasonLabel, impactLabel, directionLabel, actions);
         body.append(form);
-        const rawValues = () => Object.fromEntries(fields.map(k => [k, controls[k].value]));
+        const rawValues = () => Object.fromEntries(Object.entries(controls).map(([key, input]) => [key, input.value]));
         function applicability() {
           const level = controls.level.value;
           const numeric = ['0','1','2','3'].includes(level);
@@ -260,6 +288,10 @@
           articleGroup.hidden = !numeric;
           const link = sourceLink(sourceById.get(controls.sourceId.value));
           citation.replaceChildren(...(link ? [link] : []));
+          if (standards) {
+            const otherLink = sourceLink(sourceById.get(controls.compareSourceId.value));
+            comparisonCitation.replaceChildren(...(otherLink ? [otherLink] : []));
+          }
           compare.hidden = !numeric || !['framing','standards'].includes(dim.id);
           reasonLabel.hidden = level === '';
           impactLabel.hidden = !positive;
@@ -271,6 +303,7 @@
           if (event.target === controls.rowId) controls.quote.value = rowById.get(controls.rowId.value)?.row.text || '';
           if (event.target === controls.compareRowId) controls.compareQuote.value = rowById.get(controls.compareRowId.value)?.row.text || '';
           if (event.target === controls.sourceId) controls.sourceQuote.value = sourceById.get(controls.sourceId.value)?.excerpt || '';
+          if (event.target === controls.compareSourceId) controls.compareSourceQuote.value = sourceById.get(controls.compareSourceId.value)?.excerpt || '';
           stage(dim.id, rawValues()); applicability(); feedback.textContent = '';
         }
         for (const control of Object.values(controls)) {
@@ -284,6 +317,7 @@
           const rating = numeric ? {
             level: Number(raw.level), rowId: raw.rowId, quote: raw.quote, sourceId:raw.sourceId,
             sourceQuote:raw.sourceQuote, reason:raw.reason,
+            ...(standards ? {compareSourceId:raw.compareSourceId, compareSourceQuote:raw.compareSourceQuote} : {}),
             impact: raw.level === '0' ? '' : raw.impact,
             compareRowId: compare.hidden ? '' : raw.compareRowId,
             compareQuote: compare.hidden ? '' : raw.compareQuote,

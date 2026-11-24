@@ -7,6 +7,7 @@ const {compare, comparedFacts} = require('../docs/reader/revision-agreement.js')
 const {summarize, validRow, auditFacts} = require('../docs/reader/revision-facts.js');
 const rubric = require('../docs/reader/article-rubric.js');
 const series = require('../docs/reader/revision-series.js');
+const retention = require('../docs/reader/retention-case.js');
 
 const sources = [
   {id:'minutes', title:'회의록', url:'https://assembly.example/minutes', version:'확정본',
@@ -24,17 +25,17 @@ const attribution = contentStatus => ({status:'attribution', contentStatus, cont
 const fact = (outcome, flag = 'none') => ({outcome, flag});
 const ratio = (numerator, denominator) => ({numerator, denominator, pct:denominator ? 100 * numerator / denominator : null});
 
-function manuscript(rows) {
+function manuscript(rows, catalog) {
   const article = rows.map(([text]) => text).join('\n');
-  return {format:workspace.schema, article, articleDraft:article, sources, demo:true, receipts:[], rowDrafts:[],
+  return {format:workspace.schema, article, articleDraft:article, sources:catalog, demo:true, receipts:[], rowDrafts:[],
     sourceDraft:{id:null, fields:Object.fromEntries(workspace.sourceFields.map(key => [key, '']))}};
 }
 
 // Exercise the public distribution and recovery paths. Each row has a passage followed by each editor's decision.
-async function assess(before, after = [['수정본의 확인이 남았다.', null, null]], edit = () => {}) {
+async function assess(before, after = [['수정본의 확인이 남았다.', null, null]], edit = () => {}, catalog = sources) {
   const reviews = [];
   for (let editor = 0; editor < 2; editor++) {
-    const {key, packets} = await blind.prepare(manuscript(before), manuscript(after));
+    const {key, packets} = await blind.prepare(manuscript(before, catalog), manuscript(after, catalog));
     for (const [role, rows] of Object.entries({before, after})) {
       const work = packets[key.mapping[role].slot];
       const report = engine.report(work.article, work.sources);
@@ -214,4 +215,94 @@ test('예비비 사례의 배포 파일로 양쪽에 같은 검토 기록을 회
     assert.deepEqual(result.coverage, ratio(0,6));
   }
   assert.deepEqual([summarize(facts.before).articleFlagged, summarize(facts.after).articleFlagged], [2,0]);
+});
+
+test('전년에 비해 늘어난 회계가 달라지면 두 판본이 각각 사실이어도 핵심 사실을 수동 대조한다', async t => {
+  const fixture = require('../experiments/evidence-retrieval-transfer/fiscal-tables/fixture.json');
+  const table = fixture.documents.settlement.lines, source = fixture.sources.settlementReport;
+  const catalog = [2, 3].map(i => ({id:'row-' + i, title:source.title, url:source.url, version:source.published,
+    locator:'인쇄본 4쪽 ' + table[i].split('\t')[0] + ' 행', excerpt:[table[0], table[i]].join('\n')}));
+  function rows(account, decisionSource, last) {
+    const decision = {status:'fact', sourceIds:[decisionSource]};
+    return [[account + '의 2024회계연도 결산이다.'], ['국회예산정책처 표에서 전년과 비교했다.'],
+      ['해당 회계의 지출은 전년보다 늘었다.', decision, decision], ['비교 기준은 결산액이다.'], [last, 'fact', 'fact']];
+  }
+  const before = rows('일반회계', 'source-1', '2024회계연도 일반회계 결산액은 344.5조 원이었다.');
+  const after = rows('특별회계', 'source-2', '일반회계의 2024회계연도 결산 지출액은 344.5조 원이었다.');
+  const {reviews, joint} = await assess(before, after, (work, role) => {
+    const observed = engine.report(work.article, work.sources, work.receipts);
+    const row = observed.rows[2], ref = work.sources[role === 'before' ? 0 : 1];
+    work.articleAssessment = rubric.save(observed, work.sources, {coreRowIds:[row.id], ratings:{
+      wording:{level:role === 'before' ? 2 : 0, rowId:row.id, quote:row.text, sourceId:ref.id, sourceQuote:ref.excerpt,
+        reason:'결산표의 전년 대비 열을 대조했다.', impact:'어떤 회계에서 지출이 늘었는지에 영향을 준다.'}
+    }});
+  }, catalog);
+  const record = series.makeRecord(joint, reviews[0].key);
+  assert.deepEqual(record.factMatches, [[2,null],[4,null]]);
+  assert.deepEqual(record.facts.before[2], fact('supported'));
+  assert.deepEqual(record.facts.after[2], fact('supported'));
+  const {facts, articles} = series.summarize([JSON.parse(JSON.stringify(record))]);
+  assert.equal(articles[0].sourceChanged, false);
+  assert.equal(facts.audit.improvedArticles, 1);
+  assert.deepEqual(facts.audit.core, {total:1, retained:0, unmatched:1, changed:0});
+  const changed = {before:2, after:2, status:'changed', reason:'자료에서 가리키는 대상이 일반회계에서 특별회계로 바뀌었다.'};
+  assert.deepEqual(retention.summarize(record, [changed]), {total:2, autoRetained:0, manualRetained:0, changed:1, notFound:0, open:1});
+  const items = reviews.flatMap((review, editor) => ['key','before','after'].map(role => ({name:editor + '-' + role + '.json', data:review[role]})));
+  const fresh = await retention.create(record, items, [changed]);
+  assert.deepEqual(retention.verify(fresh, record), [changed]);
+
+  // Recreate the historical archive identity for these six files under the immediate-neighbor matcher.
+  const historical = {...structuredClone(record), version:4};
+  historical.factMatches[0][1] = 2;
+  historical.factContext.matches.unshift([2,2]);
+  const kept = {before:4, after:4, status:'retained', reason:'일반회계 결산액 344.5조 원을 대조했다.'};
+  const reviewId = series.reviewId(historical);
+  const archive = {...fresh, version:2, reviewId, notes:[kept], checksum:engine.digestValue([
+    fresh.format, 2, reviewId, fresh.evidenceDigest, [[4,4,'retained',kept.reason]]])};
+  const stored = retention.read(archive);
+  assert.deepEqual(stored.notes, [kept]);
+  const recovered = await blind.resolveBundle(stored.items);
+  const rebuilt = series.makeRecord(compare(...recovered), recovered[0].key);
+  assert.deepEqual(rebuilt, record);
+  assert.throws(() => retention.verify(archive, rebuilt), error => error.code === 'legacy-review-changed');
+  assert.throws(() => retention.summarize(historical, stored.notes));
+  assert.equal(retention.summarize(rebuilt, []).open, 2);
+  await assert.rejects(() => retention.create(historical, items, stored.notes), /다시 계산한 평가/);
+
+  await t.test('이전 요약 링크에서 대조 파일 하나를 열면 여섯 파일로 다시 계산하고 예전 수기 판정을 별도로 표시한다', async t => {
+    const fs = require('node:fs'), path = require('node:path'), {JSDOM} = require('jsdom');
+    const reader = path.join(__dirname, '../docs/reader');
+    const dom = new JSDOM(fs.readFileSync(path.join(reader, 'article-compare.html'), 'utf8'), {
+      url:'file:///reader/article-compare.html#review=' + archive.reviewId + '&focus=retention', runScripts:'outside-only'});
+    t.after(() => dom.window.close());
+    const window = dom.window, document = window.document;
+    window.TextEncoder = TextEncoder;
+    Object.defineProperty(window, 'crypto', {value:require('node:crypto').webcrypto});
+    for (const script of document.querySelectorAll('script[src]')) window.eval(fs.readFileSync(path.join(reader, script.getAttribute('src')), 'utf8'));
+    const picker = document.querySelector('#blind-bundle-files');
+    Object.defineProperty(picker, 'files', {value:[{name:'종전-대조.json', text:async () => JSON.stringify(archive)}]});
+    picker.dispatchEvent(new window.Event('change'));
+    await t.waitFor(() => assert.match(document.querySelector('#review-target-status').textContent, /작업 파일 6개를 열어 현재 기준으로 다시 계산/));
+    const facts = document.querySelector('#joint-facts'), output = document.querySelector('#output');
+    assert.equal(document.querySelector('#result').hidden, false);
+    assert.match(facts.querySelector('[data-retention-summary]').textContent, /자동 대응으로 확인 0개.*진행자가 유지 확인 0개.*검토 남음 2개/);
+    assert.equal(facts.querySelector('[data-retention-before="2"] [data-retention-state]').value, '');
+    assert.equal(facts.querySelector('[data-retention-before="4"] [data-retention-reason]').value, '');
+    const prior = [...output.querySelectorAll('details')].find(group => group.firstElementChild.textContent.includes('이전 기준으로 기록한 사후 판단'));
+    assert.ok(prior);
+    assert.ok(prior.textContent.includes(kept.reason));
+    assert.ok(!facts.contains(prior));
+    const recovery = [...output.querySelectorAll('details')].find(group => group.firstElementChild.textContent.includes('대응표 2개 꺼내기'));
+    const buttons = recovery.querySelectorAll('button');
+    assert.equal(buttons.length, 6);
+    let blob, filename;
+    window.Blob = Blob;
+    window.URL.createObjectURL = data => { blob = data; return 'blob:extracted'; };
+    window.URL.revokeObjectURL = () => {};
+    window.HTMLAnchorElement.prototype.click = function () { filename = this.download; };
+    buttons[1].click();
+    assert.equal(filename, archive.items[1].name);
+    assert.deepEqual(JSON.parse(await blob.text()), archive.items[1].data);
+    assert.doesNotMatch(document.querySelector('#review-target-status').textContent, /요약과 일치/);
+  });
 });

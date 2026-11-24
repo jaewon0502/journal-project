@@ -773,7 +773,7 @@ test('격차가 줄면서 검증 일치율이 하락한 사례는 집계 카드�
   }
   assert.ok(!detail.textContent.includes('화면에 표시하지 않을 개인 메모'));
   assert.doesNotMatch(detail.textContent, /E[0-9a-f]{16}/i);
-  assert.deepEqual([...detail.querySelectorAll('tbody tr')].map(tr=>[...tr.cells].map(td=>td.textContent)), [
+  assert.deepEqual([...detail.querySelector('.scroll').querySelectorAll('tbody tr')].map(tr=>[...tr.cells].map(td=>td.textContent)), [
     ['보수 성향 표기 · 원자료','100% (1/1)','100% (1/1)','100% (1/1)','근거와 충돌 1/1'],
     ['보수 성향 표기 · 저널','0% (0/1)','0% (0/1)','0% (0/1)','근거로 지지됨 1/1'],
     ['진보 성향 표기 · 원자료','0% (0/1)','0% (0/1)','0% (0/1)','근거로 지지됨 1/1'],
@@ -816,8 +816,47 @@ test('판정 일치율이 같고 대표 근거 일치율만 내려간 기사에�
   for (const value of [chosen.title, chosen.version, chosen.locator, chosen.excerpt]) assert.ok(alternatives.textContent.includes(value));
   assert.match(alternatives.textContent, /원자료 방식 1\/2 · 저널 방식 1\/2/);
   assert.match(alternatives.textContent, /지정한 자료 없음.*원자료 방식 0\/2 · 저널 방식 1\/2/);
+  assert.deepEqual([...box.querySelector('.case-source-choices tbody tr:last-child').cells].map(cell => cell.textContent),
+    ['지정한 자료 없음', '0/1', '0/1', '0/1', '1/1']);
   assert.ok(!alternatives.textContent.includes(unused.title) && !alternatives.textContent.includes(key.title));
   assert.equal(p.el('cue-case-transit').querySelector('.case-alternatives'), null);
+});
+
+test('같은 자료 선택 합계에서도 표기별로 서로 다른 문서를 고른 기사를 찾아 건수를 대조한다', async t => {
+  for (const split of [false, true]) {
+    const p = page(t);
+    p.el('issue-codes').click();
+    p.el('issue-codes').click();
+    const files = p.workspace().invitations.map(inv => {
+      const record = completedRecord(inv.ordinal, inv.id);
+      for (const trial of record.trials) {
+        const gold = p.w.JournalStudyCases.get(trial.caseId, trial.variant);
+        trial.verdict = gold.expectedVerdict;
+        if (trial.caseId !== 'repair') continue;
+        const choseRequest = split && trial.method === 'journal' ? trial.variant === 'A' : inv.ordinal <= 4;
+        trial.sourceIds = [choseRequest ? 'doc-1' : 'doc-2'];
+      }
+      return JSON.stringify(record);
+    });
+    await importFiles(p, files);
+    const article = p.el('cue-case-repair'), summary = article.querySelector('summary');
+    assert.ok(summary.textContent.includes('사실 채택률 격차 0%p → 0%p · 자료 선택 격차 0%p → ' + (split ? '100' : '0') + '%p'));
+    summary.click();
+    const detail = article.querySelector('.case-source-choices');
+    detail.querySelector('summary').click();
+    assert.ok(detail.open);
+    assert.deepEqual([...detail.querySelectorAll('thead th')].map(cell => cell.textContent),
+      ['선택한 자료', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보']);
+    assert.deepEqual([...detail.querySelectorAll('tbody tr')].map(tr => [...tr.cells].map(cell => cell.textContent)), [
+      ['예산 요구서', '1/2', '1/2', split ? '2/2' : '1/2', split ? '0/2' : '1/2'],
+      ['예산안 부속 설명서', '1/2', '1/2', split ? '0/2' : '1/2', split ? '2/2' : '1/2'],
+      ['의결 예산 비교표 (기준 근거)', '0/2', '0/2', '0/2', '0/2'],
+      ['지정한 자료 없음', '0/2', '0/2', '0/2', '0/2']
+    ]);
+    for (const source of article.querySelectorAll('.case-alternatives .source')) {
+      assert.match(source.textContent, /원자료 방식 2\/4 · 저널 방식 2\/4/);
+    }
+  }
 });
 
 test('전체 품질이 같아도 기사 표기에 따라 엇갈린 근거 선택과 잘못된 사실 채택을 보여 준다', async t => {

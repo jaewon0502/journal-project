@@ -91,6 +91,30 @@
     panel.append(element('h4', '같은 항목에서 본 중요한 왜곡'),
       element('p', '두 편집자가 원본과 수정본을 모두 채점한 ' + report.paired + '/' + report.total +
         '개 기사·항목을 비교했습니다. 중요한 왜곡은 2~3단계입니다.'));
+    if (report.revised.rated) panel.append(element('p', '수정본에서 두 사람 모두 중요한 왜곡으로 평가한 항목 ' +
+      report.revised.important + '/' + report.revised.rated + '개 (수정본에 두 사람 모두 점수를 매긴 항목 기준)'));
+    if (report.revised.withoutBaseline) {
+      const details = element('details');
+      details.id = 'series-revised-unpaired';
+      details.append(element('summary', '원본 평가가 부족한 수정본의 중요한 왜곡 ' + report.revised.withoutBaseline + '개'),
+        element('p', '수정본에서는 두 사람 모두 2~3단계로 봤습니다. 원본의 근거를 확인해야 왜곡이 언제 생겼는지 판단할 수 있습니다.'));
+      const list = element('ul');
+      const level = value => Number.isInteger(value) ? value + '단계' : value === 'na' ? '해당 없음' : '미평가';
+      for (const entry of sources.values()) {
+        for (const {id, title} of report.dimensions) {
+          const d = entry.record.dimensions.find(axis => axis.id === id);
+          if (!window.JournalRevisionAgreement.summarizeScores([d]).revised.withoutBaseline) continue;
+          const item = element('li');
+          if (entry.record.version >= 2 && !entry.summaryOnlyExample) item.append(evidenceLink(entry, title, '&focus=bias-' + id));
+          else item.append(element('strong', entry.name + ' · ' + title));
+          item.append(element('p', '첫 편집자 ' + level(d.first.before) + ' → ' + level(d.first.after) +
+            ' · 둘째 편집자 ' + level(d.second.before) + ' → ' + level(d.second.after)));
+          list.append(item);
+        }
+      }
+      details.append(list);
+      panel.append(details);
+    }
     if (!report.paired) {
       panel.append(element('p', '비교할 수 있는 항목이 생기면 변화가 표시됩니다.'), rates);
       return panel;
@@ -321,6 +345,11 @@
     summary.append(element('h3', '중요한 왜곡의 변화'),
       element('p', (builtIn ? '예시 파일 ' : '선택한 파일 ') + files.length + '개 · 고유 기사 ' + report.articleCount + '건 · 중복 제외 ' + report.duplicateCount + '개'),
       severityPanel(report, sources, grid));
+    const historical = [...sources.values()].filter(entry => entry.record.version < 5 &&
+      (entry.record.factMatches?.some(([, match]) => match !== null) || entry.record.dimensions.some(d =>
+        d.id === 'standards' && [d.first, d.second].some(r => Number.isInteger(r.before) || Number.isInteger(r.after)))));
+    if (historical.length) summary.append(element('p', '이전 기준으로 저장한 기사 ' + historical.length +
+      '건의 검증 기준 점수 또는 구절 대응이 포함됐습니다. 양쪽 당사자의 근거와 “해당 사업”이 가리키는 대상을 현행 기준으로 대조하려면 원래 작업 파일을 다시 열어 요약을 저장하세요.', 'note'));
     summary.append(element('p', '원본과 수정본에 등록된 원자료 묶음이 달라진 기사 ' + report.changedSources + '건', report.changedSources ? 'warn' : 'note'));
     if (report.changedSources) {
       summary.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources + '건만 보면 공통 개선율은 ' + rateText(report.unchangedEvidenceImprovement) + '입니다.'));

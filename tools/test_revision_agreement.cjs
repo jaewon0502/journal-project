@@ -12,7 +12,7 @@ const {compare, recordFields, summarizeScores} = require('../docs/reader/revisio
 
 function work(article, version) {
   const source = {id:'budget', title:'예산표', url:'https://office.example/budget', version,
-    locator:'1쪽 확정액', excerpt:'사업비 10억 원'};
+    locator:'1쪽 예산표', excerpt:'1차 추정액 20억 원. 확정 사업비 10억 원.'};
   return {format:workspace.schema, article, articleDraft:article, sources:[source], demo:false, rowDrafts:[], receipts:[],
     sourceDraft:{id:null, fields:Object.fromEntries(workspace.sourceFields.map(k => [k, '']))}};
 }
@@ -26,7 +26,8 @@ function rate(work, levels, coreIndexes = []) {
   const ratings = Object.fromEntries(Object.entries(levels).map(([id, level]) => [id, level === 'na'
     ? {level, reason:'이 기사에는 비교할 두 주체가 없다.'}
     : {level, rowId:row.id, quote:row.text, compareRowId:other.id, compareQuote:other.text, sourceId:source.id,
-      sourceQuote:source.excerpt, reason:'예산표와 기사 서술을 대조했다.', impact:'독자가 확정액을 다르게 이해한다.'}]));
+      sourceQuote:source.excerpt, reason:'예산표와 기사 서술을 대조했다.', impact:'독자가 확정액을 다르게 이해한다.',
+      ...(id === 'standards' ? {sourceQuote:'1차 추정액 20억 원', compareSourceId:source.id, compareSourceQuote:'확정 사업비 10억 원'} : {})}]));
   work.articleAssessment = rubric.save(report, work.sources, {coreRowIds:coreIndexes.map(i => report.rows[i].id), ratings});
 }
 

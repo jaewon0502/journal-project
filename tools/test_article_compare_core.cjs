@@ -25,6 +25,7 @@ function snapshot({article = base, states = [], levels = {}, core = [], sources:
     ratings[dimension] = level === 'na' ? {level, reason: '이 기사에 비교할 두 주체가 없다.'} : {
       level, rowId: rows[0].id, quote: rows[0].text, compareRowId: rows[1].id, compareQuote: rows[1].text,
       sourceId: 'doc', sourceQuote: '시범 구역은 한 곳이다.', reason: '자료와 대조했다.',
+      ...(dimension === 'standards' ? {compareSourceId: 'doc', compareSourceQuote: '전국 시행 실적은 조사하지 않았다.'} : {}),
       impact: '독자가 조사 대상을 다르게 이해한다.'
     };
   }
@@ -215,6 +216,22 @@ test('각자 다른 절을 부분 확인하거나 보류한 경우에는 미결 
     assert.equal(r.facts.disagreements[0].openScopeDifference, true);
   }
   assert.equal(compare(partial, snapshot({article}), 'reviewers').facts.disagreements.length, 0);
+});
+
+test('앞의 대상을 가리키는 구절은 선행 문맥을 비교하고 독립적인 구절은 도입부가 바뀌어도 추적한다', () => {
+  function article(intro, claim, tail = '붙임은 한 쪽이다.') {
+    return [intro, '확정 자료가 공개됐다.', claim, '기간은 한 해다.', tail].join('\n');
+  }
+  for (const [claim, referencesEarlier] of [
+    ['이 사업의 예산이 늘었다.', true], ['그 회계의 지출이 줄었다.', true], ['감사원은 같은 사업의 지출을 확인했다.', true],
+    ['그는 3일 회의에 출석했다.', true], ['2024년 특별회계 지출은 78.6조 원이었다.', false],
+    ['지급액은 정부안과 같은 30억 원이었다.', false]
+  ]) {
+    const original = snapshot({article:article('원래 기사 도입이다.', claim), states:[null,null,'fact']});
+    const compareClaim = revised => compare(original, snapshot({article:revised, states:[null,null,'fact']}), 'revision').originalSupported[0];
+    assert.equal(compareClaim(article('달라진 다른 도입이다.', claim)).revisedFullySupported, !referencesEarlier, claim);
+    assert.equal(compareClaim(article('원래 기사 도입이다.', claim, '붙임이 두 쪽으로 바뀌었다.')).revisedFullySupported, true, claim);
+  }
 });
 
 test('수정 전 충돌 구절은 다른 사실로 대체해 판정 수가 같아도 추적 대상에 남는다', () => {

@@ -79,3 +79,15 @@ test('여러 버전이 섞여도 가장 자세한 기록 한 건을 사용하고
     }
   }
 });
+
+test('새 평가 요약에서 이전 방식으로 본 점수와 구절 대응을 식별하고 호환되는 과거 링크를 보존한다', () => {
+  require('../docs/reader/revision-series-example.js');
+  const current = structuredClone(globalThis.JournalRevisionSeriesExample.find(r => r.record.version === 5).record);
+  const old = {...current, version:4};
+  assert.notEqual(reviewId(old),reviewId(current));
+  assert.equal(reviewId(old),reviewId(current,4));
+  assert.equal(summarize([old,current]).duplicateCount,1);
+  const different = structuredClone(current);
+  different.factContext.afterCore[0] = 2;
+  assert.throws(() => summarize([old,different]), /핵심 주장 표시/);
+});

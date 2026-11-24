@@ -894,7 +894,7 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
-  assert.equal(record.version, 4);
+  assert.equal(record.version, 5);
   assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
   assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
   assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});
@@ -912,4 +912,33 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   assert.equal(p.el('agreement-export'), null);
   assert.equal(p.el('agreement-held').hidden, true);
   assert.equal(p.el('result').hidden, true);
+});
+
+test('이전 대조 기록에 한쪽 근거로 매긴 단계만 남아 있어도 원래 작업 파일을 꺼내 보완한다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const engine = require('../docs/reader/factcheck-engine.js');
+  const rubric = require('../docs/reader/article-rubric.js');
+  const inputs = await example.files();
+  for (const {data:w} of inputs) {
+    if (!w.blindReview) continue;
+    w.receipts = [];
+    const r = engine.report(w.article,w.sources), [a,b] = r.rows, source = w.sources[0];
+    w.articleAssessment = rubric.save(r,w.sources,{coreRowIds:[],ratings:{}});
+    w.articleAssessment.ratings.standards = {level:2,rowId:a.id,quote:a.text,sourceId:source.id,
+      sourceQuote:source.excerpt,reason:'양측에 같은 검증을 요구했는지 확인한다.',impact:'증거의 세기를 다르게 읽을 수 있다.',
+      compareQuote:b.text,compareRowId:b.id,direction:''};
+  }
+  // Produced by the v2 archive writer at e6ed223 from these four original ratings.
+  const archive = {format:'journal-retention-case', version:2, items:inputs.map(({name,data})=>({name,data})),notes:[],
+    reviewId:'428a1a9c5a488f960ce494cc273b847bbb512abcbc5245daf3c1b0f50385eaee',
+    evidenceDigest:'4570341f60613759f74b3cb47fe90fefa7078dc450f6b2ca2926326d376fccd5',
+    checksum:'3219fbd4a886a8a578c348ae8695c7ffb596ece0314a94e36b036cc15afc9829'};
+  const p = page(t);
+  p.select('blind-bundle-files','구판 보관 기록.json',JSON.stringify(archive));
+  await t.waitFor(()=>assert.equal(p.el('result').hidden,false));
+  assert.match(p.el('blind-bundle-status').textContent,/작업 파일 6개/);
+  assert.match(p.el('missing-returns').textContent,/확인할 파일 4개/);
+  assert.equal(p.el('agreement-export'),null);
+  const files = [...p.el('output').querySelectorAll('details')].find(s=>s.firstElementChild.textContent.includes('대응표 2개 꺼내기'));
+  assert.deepEqual([...files.querySelectorAll('button')].map(b=>b.textContent),archive.items.map(i=>i.name+' 저장'));
 });

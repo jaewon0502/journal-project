@@ -18,7 +18,7 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
   const inputs = await example.files(), record = await summary(inputs);
   const saved = await cases.create(record, inputs.map(i => ({...i, name:'로컬/기사/' + i.name})), [kept]);
   const opened = cases.read(JSON.parse(JSON.stringify(saved)));
-  assert.equal(saved.version, 2);
+  assert.equal(saved.version, 3);
   assert.deepEqual(opened.items, inputs.map(({name, data}) => ({name, data})));
   assert.equal(opened.reviewId, series.reviewId(record));
   assert.ok(saved.items.every(i => !Object.hasOwn(i, 'raw') && !i.name.includes('/')));
@@ -37,25 +37,29 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
   assert.equal(saved.notes[0].reason, kept.reason);
 });
 
-test('기존 v3 요약으로 저장했던 진행자 파일은 여섯 파일로 복원하고 다시 저장하면 v4 전체 판정을 담는다', async () => {
+test('예전 v1·v2 진행자 파일은 같은 판정을 복원하고 새 파일은 여섯 원자료로 계산한 v5 요약에 묶는다', async () => {
   const items = (await example.files()).map(({name, data}) => ({name, data}));
   // Generated with the released v3 writer and the deterministic six-file library exercise.
-  const archive = {format:'journal-retention-case', version:1, items, notes:[kept],
-    reviewId:'d84450c81cbaf6819e0fbdcf7429c585d2e26c6d9d3a3b68a940cada59811b59',
-    evidenceDigest:'0c7287d7171a677583dbc7264db7bead549d3c3035513bcf3598b52c3c3fae92',
-    checksum:'0f5d1623bb44c2a2d31f83eca7897029097b55d99b73d07d05994cbb8a1f1def'};
-  const opened = cases.read(JSON.parse(JSON.stringify(archive)));
-  const rebuilt = await summary(opened.items);
-  assert.equal(rebuilt.version, 4);
-  assert.deepEqual(cases.verify(archive, rebuilt), [kept]);
-  const legacy = {...rebuilt, version:3};
-  delete legacy.factContext;
-  const upgraded = await cases.create(legacy, opened.items, opened.notes);
-  assert.equal(upgraded.version, 2);
-  assert.equal(upgraded.reviewId, series.reviewId(rebuilt, 4));
-  assert.notEqual(upgraded.reviewId, archive.reviewId);
-  assert.deepEqual(cases.verify(upgraded, rebuilt), [kept]);
-  assert.throws(() => cases.verify(upgraded, legacy));
+  for (const [version, reviewId, checksum] of [
+    [1, 'd84450c81cbaf6819e0fbdcf7429c585d2e26c6d9d3a3b68a940cada59811b59', '0f5d1623bb44c2a2d31f83eca7897029097b55d99b73d07d05994cbb8a1f1def'],
+    [2, 'fcb545af96902982e2798cd4a91654254b9efb40e59dce06c82097d76be928e4', 'c245137d7222f6d10f834115c3e16cf95e092d1786f9bbaead9dc53c0e0b5461']
+  ]) {
+    const archive = {format:'journal-retention-case', version, items, notes:[kept], reviewId, checksum,
+      evidenceDigest:'0c7287d7171a677583dbc7264db7bead549d3c3035513bcf3598b52c3c3fae92'};
+    const opened = cases.read(JSON.parse(JSON.stringify(archive)));
+    const rebuilt = await summary(opened.items);
+    assert.equal(rebuilt.version, 5);
+    assert.deepEqual(cases.verify(archive, rebuilt), [kept]);
+    const legacy = {...rebuilt, version:version + 2};
+    if (version === 1) delete legacy.factContext;
+    assert.throws(() => cases.verify(archive, legacy), /현재 기준/);
+    const upgraded = await cases.create(legacy, opened.items, opened.notes);
+    assert.equal(upgraded.version, 3);
+    assert.equal(upgraded.reviewId, series.reviewId(rebuilt, 5));
+    assert.notEqual(upgraded.reviewId, archive.reviewId);
+    assert.deepEqual(cases.verify(upgraded, rebuilt), [kept]);
+    assert.throws(() => cases.verify(upgraded, legacy));
+  }
 });
 
 test('식별값은 파일 이름·순서와 JSON 키 순서에 의존하지 않고 자료·판정 이유·수기 기록 변경을 감지한다', async () => {

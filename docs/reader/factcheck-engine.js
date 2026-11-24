@@ -620,6 +620,9 @@
   function excerptIdentity(source) {
     return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
   }
+  function sameSourceDocument(sources, a, b) {
+    return relatedDocuments({items: sources}, [a]).has(originAddress(b.url));
+  }
   const forecast = /(?:될|할|늘|오를|내릴|줄|높아질|낮아질|늘어날|감소할|증가할|이길|패할|거둘|받을|넘을|이어질|커질)\s*(?:것|전망|예정|계획|가능성)|예상(?:된|한|했)|전망(?:된|한|했)/u;
   const relativeQuantity = /절반|반값|반액|과반|(?:\d+|[일이삼사오육칠팔구십백천만]+)분의\s*(?:\d+|[일이삼사오육칠팔구십백천만]+)|(?<![가-힣])(?:한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[일이삼사오육칠팔구십백천만]+)\s*배(?=$|[\s\p{P}]|가|나|는|를|만|로|라|인|였|이|에|씩|다|일|임|입|의|보다|와)/u;
   function speechScope(text) {
@@ -849,7 +852,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, digestValue: digest});
+  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, sameSourceDocument, digestValue: digest});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);

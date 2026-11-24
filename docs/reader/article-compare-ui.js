@@ -201,7 +201,8 @@
     if (!r) { div.append(note('저장된 단계가 없습니다.')); return div; }
     if (r.quote) div.append(ratingPassage(s, '기사 구절', r.quote, r.rowId));
     if (r.compareQuote) div.append(ratingPassage(s, '기사의 비교 구절', r.compareQuote, r.compareRowId));
-    if (r.sourceQuote) div.append(sourceReference(s, r.sourceId, '원자료'), element('blockquote', r.sourceQuote));
+    if (r.sourceQuote) div.append(sourceReference(s, r.sourceId, r.compareSourceQuote ? '첫 구절의 원자료' : '원자료'), element('blockquote', r.sourceQuote));
+    if (r.compareSourceQuote) div.append(sourceReference(s, r.compareSourceId, '비교 구절의 원자료'), element('blockquote', r.compareSourceQuote));
     div.append(element('p', '판단 이유 · ' + r.reason));
     if (r.impact) div.append(element('p', '독자 판단에 미치는 영향 · ' + r.impact));
     if (r.direction) div.append(note('기록한 영향 방향 · ' + r.direction));
@@ -519,9 +520,11 @@
     }
     panel.append(group);
     if (trace.unmatched) {
-      const fullText = detail('대응 구절을 찾기 위해 수정본 전문 보기');
-      fullText.append(element('blockquote', editors[0].snapshots[1].article));
-      panel.append(fullText);
+      for (const [i, name] of ['원본', '수정본'].entries()) {
+        const fullText = detail('대응 구절을 찾기 위해 ' + name + ' 전문 보기');
+        fullText.append(element('blockquote', editors[0].snapshots[i].article));
+        panel.append(fullText);
+      }
     }
   }
   function jointFactPanel(joint, editors, record, notes = []) {
@@ -616,6 +619,10 @@
     const panel = element('div');
     panel.id = 'joint-severity';
     panel.append(element('h4', '같은 항목에서 두 편집자가 본 왜곡 단계'));
+    if (joint.revised.rated) panel.append(element('p', '수정본에서 두 사람이 모두 중요한 왜곡으로 평가한 항목 ' +
+      joint.revised.important + '/' + joint.revised.rated + '개 (수정본에 두 사람 모두 점수를 매긴 항목 기준)'));
+    if (joint.revised.withoutBaseline) panel.append(note('이 중 ' + joint.revised.withoutBaseline +
+      '개는 원본의 평가가 부족해 언제 생긴 왜곡인지 확인이 필요합니다. 아래 항목을 펼쳐 두 사람이 기록한 근거를 대조하세요.'));
     if (!joint.paired) {
       panel.append(note('비교 대기 · 두 편집자가 원본과 수정본에 모두 단계를 매긴 항목이 없습니다.'));
       return panel;
@@ -851,7 +858,7 @@
     const record = reopened?.record ?? window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
     const series = window.JournalRevisionSeries;
     const oldestVersion = reviewTarget.retention ? 3 : 2;
-    const versions = [4, 3, 2].filter(version => version <= record.version && version >= oldestVersion);
+    const versions = [5, 4, 3, 2].filter(version => version <= record.version && version >= oldestVersion);
     if (!versions.some(version => series.reviewId(record, version) === reviewTarget.id)) {
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
@@ -878,6 +885,29 @@
     if (row) openReviewRow(row);
     else focusReviewGroup(group, reviewTarget.retention && !!reopened);
   }
+  function showRecoveredArchive(archive, items, reviews, joint, record) {
+    if (reviewTarget && reviewTarget.id !== archive.reviewId) throw new Error('집계에서 선택한 요약과 일치하지 않습니다.');
+    show(reviews[1].snapshots, false, reviews[1], reviews[0], {joint, record, notes:[]});
+    const recoveryFiles = detail('기사 작업 파일 4개와 대응표 2개 꺼내기');
+    recoveryFiles.append(note('보완할 작업 파일을 저장해 기사 팩트체크에서 여세요. 대응표는 진행자가 보관합니다.'));
+    for (const item of items) {
+      const save = element('button', item.name + ' 저장');
+      save.type = 'button';
+      save.addEventListener('click', () => downloadJson(item.data, item.name));
+      recoveryFiles.append(save);
+    }
+    byId('output').prepend(recoveryFiles);
+    if (archive.notes.length) {
+      const previous = detail('이전 기준으로 기록한 사후 판단 ' + archive.notes.length + '개 보기');
+      for (const entry of archive.notes) {
+        const state = {retained:'유지 확인', changed:'내용 변경', notFound:'대응 구절을 찾지 못함', open:'검토 중'}[entry.status];
+        previous.append(element('p', '원본 ' + (entry.before + 1) + '번 · ' + state + ' · ' + entry.reason));
+      }
+      byId('output').prepend(previous);
+    }
+    blindStatus(reviewTarget ? 'review-target-status' : 'blind-bundle-status',
+      '이전 대조 기록의 작업 파일 6개를 열어 현재 기준으로 다시 계산했습니다. 당시 사후 판단은 별도로 보관됩니다.');
+  }
   async function openReviewFiles(items, current, archive) {
     if (current !== recovery) return;
     const reviews = await window.JournalBlindRevision.resolveBundle(items);
@@ -889,8 +919,17 @@
     let reopened;
     if (archive) {
       const joint = window.JournalRevisionAgreement.compare(...reviews);
+      if (joint.missingReturns.length && archive.version < 3) {
+        showRecoveredArchive(archive, items, reviews, joint, null);
+        return;
+      }
       const record = window.JournalRevisionSeries.makeRecord(joint, reviews[0].key);
-      reopened = {joint, record, notes:window.JournalRetentionCase.verify(archive, record)};
+      try { reopened = {joint, record, notes:window.JournalRetentionCase.verify(archive, record)}; }
+      catch (error) {
+        if (error.code !== 'legacy-review-changed') throw error;
+        showRecoveredArchive(archive, items, reviews, joint, record);
+        return;
+      }
     }
     if (reviewTarget) {
       showTargetEvidence(reviews, reopened);

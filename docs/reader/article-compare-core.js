@@ -107,6 +107,9 @@
   function rowFingerprint(row) {
     return JSON.stringify([row.text, row.context, row.positions.length]);
   }
+  // In "정부안과 같은 금액", 같은 has a comparison in the clause. In "같은 사업", its referent may be several sentences back.
+  const referenceModifier = /(?<![\p{L}\p{N}])(?:이|그|해당|이런|그런|이러한|그러한|(?<![과와]\s)같은)\s+\p{L}/u;
+  const referencePronoun = /(?<![\p{L}\p{N}])(?:그녀|그|이|이들|그들|이곳|그곳|이것|그것)(?:은|는|이|가|의|을|를|도|에서|에게)(?!\p{L})/u;
   function uniqueRows(rows, keyFor = rowFingerprint) {
     const index = new Map();
     for (const row of rows) {
@@ -120,13 +123,19 @@
   // whose wording and immediate context identify one row in each edition.
   function matchRevisionRows(before, after) {
     if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
+    let commonPrefix = 0;
+    while (before.article[commonPrefix] === after.article[commonPrefix]) commonPrefix++;
     const original = uniqueRows(before.rows), revised = uniqueRows(after.rows);
     const matches = new Map();
     for (const row of before.rows) {
       if (row.positions.length !== 1) continue;
       const key = rowFingerprint(row);
       const target = revised.get(key);
-      if (original.get(key) === row.id && target != null) matches.set(row.id, target);
+      if (original.get(key) !== row.id || target == null) continue;
+      // A matching window cannot establish the referent after an earlier edit or a move.
+      const priorTextChanged = row.positions[0].start > commonPrefix || row.id !== target;
+      if (priorTextChanged && (referenceModifier.test(row.text) || referencePronoun.test(row.text))) continue;
+      matches.set(row.id, target);
     }
     return matches;
   }

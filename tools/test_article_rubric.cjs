@@ -146,6 +146,61 @@ test('같은 제목·리드도 기사 안의 두 위치가 다를 때만 대조�
   assert.equal(rubric.evaluate(r,sources,old).bias.assessed,1);
 });
 
+test('당사자별 검증 기준은 0~3단계 모두 두 기사 구절과 양측의 원자료 구절이 있어야 집계한다', () => {
+  const article = '가당의 3억 원 지출은 결산서로 확인됐다.\n나당이 3억 원을 썼다는 주장은 아직 확인되지 않았다.';
+  const a = '가당의 확정 지출액은 3억 원이다.', b = '나당은 올해 결산서를 제출하지 않았다.';
+  const src = {id:'ledger', url:'https://example.org/ledger.pdf#page=1', version:'확정', locator:'제출 현황', excerpt:a + ' ' + b};
+  function assess(catalog, level, extra = {}) {
+    const r = factcheck.report(article, catalog), [left, right] = r.rows;
+    const rating = {level, rowId:left.id, quote:left.text, compareRowId:right.id, compareQuote:right.text,
+      sourceId:src.id, sourceQuote:a, reason:'두 당에 적용된 확인 절차를 대조했다.', impact:'나당의 지출액도 확인됐다고 읽게 한다.', ...extra};
+    const saved = rubric.save(r, catalog, {coreRowIds:[], ratings:{standards:rating}});
+    return rubric.evaluate(r, catalog, saved).bias;
+  }
+  for (const level of [0,1,2,3]) {
+    assert.throws(() => assess([{...src, excerpt:a}], level), /둘째 기사 구절의 근거/);
+    assert.equal(assess([src], level, {compareSourceId:src.id, compareSourceQuote:b}).maxLevel, level);
+  }
+  for (const otherQuote of [a, '확정 지출액', '확정 지출액은 3억 원이다. 나당은']) {
+    const copy = {...src, id:'another-id', url:'https://www.example.org/ledger.pdf?utm_source=news#page=1'};
+    assert.throws(() => assess([src,copy], 3, {compareSourceId:copy.id, compareSourceQuote:otherQuote}), /겹치지 않는/);
+  }
+  const repost = {...src, id:'repost', url:'https://archive.example.org/ledger', originUrl:src.url};
+  const indirect = {...src, id:'second-copy', url:'https://paper.example.org/report', originUrl:repost.url};
+  assert.throws(() => assess([src,repost,indirect], 2, {compareSourceId:indirect.id, compareSourceQuote:a}), /겹치지 않는/);
+  assert.throws(() => assess([src], 3, {compareSourceId:src.id, compareSourceQuote:'등록되지 않은 회신'}), /발췌문/);
+  const duplicate = factcheck.report(article.split('\n')[0] + '\n' + article.split('\n')[0], [src]);
+  const [row] = duplicate.rows;
+  assert.throws(() => rubric.save(duplicate, [src], {coreRowIds:[], ratings:{standards:{level:0,rowId:row.id,quote:row.text,
+    compareRowId:duplicate.rows.at(-1).id,compareQuote:row.text,sourceId:src.id,sourceQuote:a,compareSourceId:src.id,compareSourceQuote:b,reason:'대조했다.'}}}), /주체나 주장/);
+  const left = {...src, title:'가당 공문 회신', excerpt:'미제출', locator:'제출 현황'};
+  for (const other of [{...left, id:'other', title:'나당 공문 회신', locator:'나당 제출 현황'},
+    {...left, id:'other', title:'나당 공문 회신', url:'https://example.org/ledger.pdf#page=2'},
+    {...left, id:'other', title:'나당 공문 회신', url:'https://example.org/party-b-reply.pdf'}]) {
+    assert.equal(assess([left, other], 1, {sourceQuote:'미제출', compareSourceId:other.id, compareSourceQuote:'미제출'}).maxLevel, 1);
+  }
+});
+
+test('이전 당사자별 점수는 재검토 초안으로 열리고 핵심 지정과 나머지 기준은 집계에 남는다', () => {
+  const r = state(), first = r.rows[0], other = r.rows[1];
+  const legacy = entry(first, 3, {compareRowId:other.id, compareQuote:other.text, direction:'당사자에게 불리'});
+  const saved = form(r, {wording:entry(first, 1)}, [first.id]);
+  saved.ratings.standards = legacy;
+  const firstOpen = workspace.review(r, sources, saved, null);
+  assert.deepEqual([firstOpen.assessment.bias.assessed, firstOpen.assessment.bias.maxLevel, firstOpen.assessment.bias.unknown], [1,1,3]);
+  assert.deepEqual(firstOpen.assessment.accuracy.coreRowIds, [first.id]);
+  assert.equal(firstOpen.dropped, true);
+  const secondOpen = workspace.review(r, sources, firstOpen.assessment.saved, firstOpen.draft);
+  const recovered = secondOpen.draft.entries.standards;
+  assert.deepEqual(recovered, {...rubric.copyFields(legacy), legacyPrevious:rubric.copyFields(legacy)});
+  const existing = {binding:saved.binding, entries:{standards:{...recovered, reason:'저장 전 작성한 새 이유'}}};
+  const editing = workspace.review(r, sources, saved, existing);
+  assert.equal(editing.draft.entries.standards.reason, '저장 전 작성한 새 이유');
+  assert.deepEqual(editing.draft.entries.standards.legacyPrevious, recovered.legacyPrevious);
+  assert.deepEqual(workspace.review(r, sources, editing.assessment.saved, editing.draft).draft, editing.draft);
+  assert.equal(workspace.review(state(article+'\n새 소식이다.'), sources, saved, null).draft, null);
+});
+
 test('같은 판단을 다시 기록하거나 기록 전 문장에 입력해도 기사 평가는 무효가 되지 않는다', () => {
   const r = state(article, [['fact']]);
   const saved = form(r, {omission: entry(r.rows[0], 0)});

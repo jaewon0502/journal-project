@@ -117,7 +117,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   assert.deepEqual(saved, makeRecord(joint, two.key));
   const wire = JSON.stringify(saved);
   const expected = withMatches(withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]), []);
-  expected.version = 4;
+  expected.version = 5;
   expected.factContext = {beforeCore:[0], afterCore:[0], matches:[]};
   for (const role of ['before', 'after']) {
     expected[role] = {articleSha256: one.key.mapping[role].articleSha256, sourcesSha256: one.key.mapping[role].sourcesSha256};
@@ -128,7 +128,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
     assert.equal(wire.includes(privateValue), false, privateValue);
   }
   const report = summarize([JSON.parse(wire)]);
-  for (const metric of ['paired', 'total', 'unpaired', 'disagreed', 'stableSeverityDifferences', 'improved', 'worsened', 'severity']) {
+  for (const metric of ['paired', 'total', 'unpaired', 'disagreed', 'stableSeverityDifferences', 'improved', 'worsened', 'severity', 'revised']) {
     assert.deepEqual(report[metric], joint[metric]);
   }
   const reversed = makeRecord(agreement.compare(two, one), two.key);

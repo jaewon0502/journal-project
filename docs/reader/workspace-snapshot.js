@@ -74,7 +74,7 @@
 
   function review(report, sources, saved, rawDraft) {
     let assessment = rubric.evaluate(report, sources, saved);
-    const draft = rubric.restoreDraft(report, sources, rawDraft);
+    const draft = rubric.restoreDraft(report, sources, rawDraft, saved);
     const dropped = assessment.stale || (rawDraft != null && !draft);
     if (assessment.saved && draft) {
       // A workspace can contain an open edit as well as an older rating for the same dimension.

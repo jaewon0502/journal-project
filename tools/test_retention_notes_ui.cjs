@@ -13,9 +13,10 @@ function screen(t, notes = [], onDownload, noOriginal = false, additionalPassage
   w.JournalRetentionCase = core;
   w.eval(script);
   const side = digit => ({articleSha256:digit.repeat(64), sourcesSha256:'a'.repeat(64)});
-  const record = {format:'journal-revision-series-record', version:3, demo:true, before:side('1'), after:side('2'),
+  const record = {format:'journal-revision-series-record', version:5, demo:true, before:side('1'), after:side('2'),
     dimensions:['wording', 'framing', 'omission', 'standards'].map(id => ({id, first:{before:2, after:0}, second:{before:2, after:0}})),
-    facts:{before:['supported','supported','supported'], after:['supported','supported','pending']}, factMatches:[[0,null],[1,2],[2,1]]};
+    facts:{before:['supported','supported','supported'], after:['supported','supported','pending']}, factMatches:[[0,null],[1,2],[2,1]],
+    factContext:{beforeCore:[0,0,0], afterCore:Array(3 + additionalPassages.length).fill(0), matches:[[1,2],[2,1]]}};
   for (const role of ['before','after']) record.facts[role] = record.facts[role].map(outcome => ({outcome, flag:'none'}));
   record.facts.after.push(...additionalPassages.map(() => ({outcome:'supported', flag:'none'})));
   if (noOriginal) {

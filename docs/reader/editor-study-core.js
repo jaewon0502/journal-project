@@ -321,7 +321,15 @@
   function caseSourceChoices(caseId) {
     const {sources} = cases.get(caseId, 'A'); // Both cue labels use the same case documents.
     const choices = () => ({byId:Object.fromEntries(sources.map(s => [s.id, 0])), none:0, total:0});
-    return {manual:choices(), journal:choices()};
+    const arms = () => ({manual:choices(), journal:choices()});
+    return {...arms(), byVariant:{A:arms(), B:arms()}};
+  }
+
+  function sourceChoiceGap(a, b) {
+    // Only complete blocks are included, so both labels have the same positive denominator.
+    const distance = Object.keys(a.byId).reduce((sum, id) => sum + Math.abs(a.byId[id] - b.byId[id]),
+      Math.abs(a.none - b.none));
+    return 50 * distance / a.total;
   }
 
   function gradeTrial(trial) {
@@ -396,10 +404,12 @@
           cell.counts[t.verdict]++;
         }
         const detail = caseDetails.get(t.caseId);
-        const choices = detail.sourceChoices[t.method];
-        choices.total++;
-        if (t.sourceIds.length) choices.byId[t.sourceIds[0]]++;
-        else choices.none++;
+        const choices = detail.sourceChoices;
+        for (const arm of [choices[t.method], choices.byVariant[t.variant][t.method]]) {
+          arm.total++;
+          if (t.sourceIds.length) arm.byId[t.sourceIds[0]]++;
+          else arm.none++;
+        }
         const local = detail.quality;
         for (const q of [quality[t.method], quality.byVariant[t.variant][t.method], local[t.method], local.byVariant[t.variant][t.method]]) {
           q.total++;
@@ -416,6 +426,8 @@
       const detail = caseDetails.get(row.caseId);
       row.quality = detail.quality;
       row.sourceChoices = detail.sourceChoices;
+      const {A, B} = row.sourceChoices.byVariant;
+      row.sourceChoices.gapPp = Object.fromEntries(methods.map(method => [method, sourceChoiceGap(A[method], B[method])]));
       const manualGap = Math.abs(row.manual.A.endorsed - row.manual.B.endorsed);
       const journalGap = Math.abs(row.journal.A.endorsed - row.journal.B.endorsed);
       row.gapReductionPp = 100 * (manualGap - journalGap) / row.manual.A.total;

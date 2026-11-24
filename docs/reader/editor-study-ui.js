@@ -202,6 +202,25 @@
     part.append(node('strong', title), node('small', source.version + ' · ' + source.locator), node('p', source.excerpt, 'excerpt'));
     return part;
   }
+  function showSourceChoices(box, article, choices) {
+    const detail = node('details', undefined, 'case-source-choices');
+    detail.append(node('summary', '정당 표기별 자료 선택 건수'),
+      node('p', '자료 선택 격차에는 자료를 지정하지 않은 응답도 포함합니다. 보수·진보 표기에서 각 선택의 비율이 같으면 0%p, 겹치는 선택이 없으면 100%p입니다. 표기마다 다른 사람이 답하므로 응답 수를 함께 보세요.'));
+    const {A, B} = choices.byVariant;
+    const cells = [A.manual, B.manual, A.journal, B.journal];
+    const rows = article.sources.map(source => [
+      source.title + (article.expectedSourceIds.includes(source.id) ? ' (기준 근거)' : ''),
+      ...cells.map(cell => cell.byId[source.id] + '/' + cell.total)
+    ]);
+    rows.push(['지정한 자료 없음', ...cells.map(cell => cell.none + '/' + cell.total)]);
+    const wrap = node('div', undefined, 'scroll');
+    wrap.tabIndex = 0;
+    wrap.setAttribute('role', 'region');
+    wrap.setAttribute('aria-label', article.title + ' 표기·방식별 자료 선택 건수');
+    table(wrap, ['선택한 자료', '원자료 · 보수', '원자료 · 진보', '저널 · 보수', '저널 · 진보'], rows);
+    detail.append(wrap);
+    box.append(detail);
+  }
   function showAlternativeSources(box, article, choices) {
     const {manual, journal} = choices;
     const selected = article.sources.filter(s => !article.expectedSourceIds.includes(s.id) &&
@@ -230,8 +249,10 @@
       const a = cases.get(row.caseId, 'A'), b = cases.get(row.caseId, 'B');
       const box = node('details', undefined, 'case-evidence');
       box.id = 'cue-case-' + row.caseId;
-      const summary = node('summary', a.title + ' · 사실 채택률 격차 ' +
-        fmt(Math.abs(row.manual.signedGapPp)) + '%p → ' + fmt(Math.abs(row.journal.signedGapPp)) + '%p');
+      const gaps = row.sourceChoices.gapPp;
+      const summary = node('summary', a.title + ' (원자료 → 저널) · 사실 채택률 격차 ' +
+        fmt(Math.abs(row.manual.signedGapPp)) + '%p → ' + fmt(Math.abs(row.journal.signedGapPp)) + '%p · 자료 선택 격차 ' +
+        fmt(gaps.manual) + '%p → ' + fmt(gaps.journal) + '%p');
       box.append(summary);
       if (viewKind === 'demo') box.append(node('p', '가상 응답으로 계산한 예시입니다.', 'subtle'));
       if (row.qualityDrops.length) {
@@ -263,7 +284,9 @@
         }
       }
       table(wrap, ['기사 표기 · 방식', ...Object.values(criteria), '제출한 판정'], rows);
-      box.append(wrap, node('h3', '검토한 기사와 근거'), node('p', a.question),
+      box.append(wrap);
+      showSourceChoices(box, a, row.sourceChoices);
+      box.append(node('h3', '검토한 기사와 근거'), node('p', a.question),
         node('blockquote', a.article), node('blockquote', b.article), node('strong', '기준 판정 · ' + verdictLabels[a.expectedVerdict]));
       for (const source of a.sources.filter(s => a.expectedSourceIds.includes(s.id))) {
         box.append(caseSource(source, '대표 근거 · ' + source.title));

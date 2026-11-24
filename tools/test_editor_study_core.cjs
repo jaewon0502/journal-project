@@ -173,12 +173,52 @@ test('같은 문서 번호도 기사와 방식별로 집계하고 대표 근거�
   assert.deepEqual(budget.journal, {byId:{'doc-1':1,'doc-2':0,'doc-3':0}, none:1, total:2});
   assert.deepEqual(permits.manual, {byId:{'doc-1':0,'doc-2':0,'doc-3':0}, none:2, total:2});
   assert.deepEqual(permits.journal, {byId:{'doc-1':0,'doc-2':2,'doc-3':0}, none:0, total:2});
+  assert.deepEqual(budget.gapPp, {manual:0, journal:100});
+  assert.deepEqual(permits.gapPp, {manual:0, journal:0});
+  assert.equal(budget.byVariant.B.journal.none, 1);
   for (const row of rows) for (const method of ['manual','journal']) {
     const arm = row.sourceChoices[method], [anchor] = packets.get(row.caseId, 'A').expectedSourceIds;
     assert.equal(Object.values(arm.byId).reduce((sum, count) => sum + count, arm.none), arm.total);
     assert.equal(arm.total, row.quality[method].total);
     assert.equal(arm.byId[anchor], row.quality[method].citationCorrect);
+    for (const variant of ['A','B']) {
+      const cell = row.sourceChoices.byVariant[variant][method];
+      assert.equal(cell.total, row[method][variant].total);
+      assert.equal(Object.values(cell.byId).reduce((sum, count) => sum + count, cell.none), cell.total);
+      assert.equal(cell.byId[anchor], row.quality.byVariant[variant][method].citationCorrect);
+    }
   }
+});
+
+test('틀린 자료의 방식별 합계와 판정이 같아도 정당 표기에 따라 선택이 갈리면 분포 차이가 나타난다', () => {
+  function compare(splitBlocks) {
+    const records = Array.from({length:9}, (_, i) => observations(i + 1, t => {
+      if (t.caseId !== 'repair') return {};
+      const block = Math.floor(i / 4);
+      const split = t.method === 'journal' && block < splitBlocks;
+      const choseRequest = split ? t.variant === 'A' : block === 0;
+      return {sourceIds:[choseRequest ? 'doc-1' : 'doc-2']};
+    }));
+    const interrupted = records[0].trials[0];
+    interrupted.elapsedMs = null;
+    interrupted.observedMs = 100;
+    interrupted.phaseMs = null;
+    const result = study.analyze(records);
+    assert.equal(result.included, 8);
+    assert.equal(result.timing.included, 4);
+    return result.bias.cases.find(row => row.caseId === 'repair');
+  }
+  const balanced = compare(0), partlySplit = compare(1), split = compare(2);
+  for (const row of [partlySplit, split]) {
+    assert.deepEqual(row.quality, balanced.quality);
+    for (const method of ['manual','journal']) assert.deepEqual(row[method], balanced[method]);
+  }
+  for (const method of ['manual','journal']) assert.deepEqual(balanced.sourceChoices[method], split.sourceChoices[method]);
+  assert.deepEqual(balanced.sourceChoices.gapPp, {manual:0, journal:0});
+  assert.deepEqual(partlySplit.sourceChoices.gapPp, {manual:0, journal:50});
+  assert.deepEqual(split.sourceChoices.gapPp, {manual:0, journal:100});
+  assert.deepEqual(split.sourceChoices.byVariant.A.journal, {byId:{'doc-1':2,'doc-2':0,'doc-3':0}, none:0, total:2});
+  assert.deepEqual(split.sourceChoices.byVariant.B.journal, {byId:{'doc-1':0,'doc-2':2,'doc-3':0}, none:0, total:2});
 });
 
 test('세 묶음에서 같은 1표 차이는 비율 반올림 때문에 격차 감소로 처리되지 않는다', () => {

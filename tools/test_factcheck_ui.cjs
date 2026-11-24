@@ -351,6 +351,52 @@ test('반복된 제목과 본문을 대조한 위치, 평가 단계와 미결 �
   assert.match(await pending.snapshot(), /제목·도입부와 본문 · 작성 중 · 미평가/);
 });
 
+test('이전 당사자 비교를 미평가 초안으로 이어 열고 양쪽 근거를 보완해 JSON과 결과에 기록한다', async t => {
+  const page = open(t);
+  page.click('load-demo'); page.click('save-work');
+  const job = JSON.parse(await page.snapshot());
+  job.article = job.articleDraft = '가당은 지출 근거를 제출했다.\n나당은 지출 근거를 제출하지 않았다.';
+  const firstSource = {...job.sources[0], id:'record', excerpt:'가당은 3억 원 결산서를 제출했다.'};
+  const secondSource = {...job.sources[0], id:'source-2', title:'나당 접수 기록', locator:'나당 회신', excerpt:'나당은 해당 연도 결산서를 제출하지 않았다.'};
+  job.sources = [firstSource];
+  const r = page.w.JournalFactcheck.report(job.article, job.sources), [a,b] = r.rows;
+  job.articleAssessment = page.w.JournalArticleRubric.save(r, job.sources, {coreRowIds:[a.id], ratings:{}});
+  job.articleAssessment.ratings.standards = {level:2, rowId:a.id, quote:a.text, compareRowId:b.id, compareQuote:b.text,
+    sourceId:firstSource.id, sourceQuote:firstSource.excerpt, reason:'두 당의 자료 제출 현황을 대조했다.', impact:'나당 지출도 확인된 것으로 읽힌다.'};
+  await loadWorkspace(page, job);
+  const section = () => page.doc.querySelector('[data-section="dim-standards"]');
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  page.click('save-work');
+  const draft = JSON.parse(await page.snapshot());
+  assert.equal(draft.articleAssessment.ratings.standards, undefined);
+  assert.equal(draft.articleAssessmentDraft.entries.standards.reason, job.articleAssessment.ratings.standards.reason);
+  await loadWorkspace(page, draft);
+  section().querySelector('form').requestSubmit();
+  assert.match(section().querySelector('[role=status]').textContent, /둘째 기사 구절의 근거/);
+  for (const field of ['title','url','version','locator','excerpt']) page.set('source-'+field, secondSource[field]);
+  page.el('source-form').requestSubmit();
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  page.click('save-work');
+  const expanded = JSON.parse(await page.snapshot());
+  await loadWorkspace(page, expanded);
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  const formField = title => [...section().querySelectorAll('label')].find(l => l.firstChild.textContent === title).lastChild;
+  const source = formField('둘째 구절의 원자료와 확인 위치');
+  source.value = secondSource.id; source.dispatchEvent(new page.w.Event('change'));
+  assert.equal(formField('둘째 주장과 대조한 자료 구절').value, secondSource.excerpt);
+  section().querySelector('form').requestSubmit();
+  assert.match(section().textContent, /2단계 · 중요한 왜곡/);
+  page.click('save-work');
+  const approved = JSON.parse(await page.snapshot());
+  assert.equal(approved.articleAssessment.ratings.standards.compareSourceId, secondSource.id);
+  assert.equal(approved.articleAssessmentDraft, null);
+  await loadWorkspace(page, approved);
+  page.click('export-report');
+  const report = await page.snapshot();
+  assert.ok(report.includes(firstSource.excerpt));
+  assert.ok(report.includes('둘째 자료 구절 · ' + secondSource.excerpt));
+});
+
 function recordFirstFact(page) {
   const {doc, el, set, click} = page;
   click('load-demo');
