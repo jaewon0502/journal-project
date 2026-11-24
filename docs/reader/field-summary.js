@@ -5,6 +5,8 @@
   const format = 'journal-field-grades-v1',
     records = new Map();
   const anchors = new Map();
+  const blindRanks = new Map();
+  let showingResults = false;
   const labels = {
     manual: '평소 검증 도구',
     journal: '평소 검증 도구와 저널',
@@ -162,14 +164,28 @@
     const rows = selected(),
       dupe = repeatIds(),
       eligible = rows.filter((r) => !dupe.has(r.trial.id));
+    const pending = eligible.filter(({ trial, locationGrade, verdictGrade }) =>
+      trial.status === 'completed' && (!verdictGrade || (trial.found === 'found' && !locationGrade))).length;
     el('count').textContent =
       '불러온 ' +
       rows.length +
       '건 · 같은 참여 코드로 같은 사례나 기사를 다시 열어 요약에서 제외 ' +
       (rows.length - eligible.length) +
-      '건';
-    el('save').disabled = !rows.length;
+      '건 · 채점 대기 ' + pending + '건';
+    el('save').disabled = loading || !rows.length;
+    const toggle = el('toggle-results');
+    toggle.disabled = loading || !rows.length;
+    toggle.textContent = showingResults ? '배정 가리고 채점하기' : '배정과 결과 보기';
+    toggle.setAttribute('aria-expanded', String(showingResults));
+    el('results').hidden = !showingResults;
+    el('view-note').textContent = showingResults
+      ? '배정과 소요 시간을 보는 중입니다. 채점을 계속하려면 배정을 다시 가리세요.'
+      : '채점 중에는 참여 코드·배정 방식·소요 시간을 가립니다. 이미 본 배정은 화면을 다시 가려도 알 수 있습니다.';
     el('groups').replaceChildren();
+    if (!showingResults) {
+      el('comparisons').replaceChildren();
+      return;
+    }
     const groups = c.group(eligible.map(applied));
     showComparisons(groups);
     if (!groups.length) el('groups').append(node('p', '집계할 참여 기록이 없습니다.'));
@@ -248,7 +264,7 @@
       sel.add(new Option(txt, id));
     const view = applied(entry);
     sel.value = disabled && field === 'locationGrade' ? 'no' : view[field];
-    sel.disabled = disabled;
+    sel.disabled = disabled || showingResults;
     sel.onchange = () => {
       entry[field] = sel.value;
       unexported.add(entry.trial.kind);
@@ -263,12 +279,20 @@
       dupe = repeatIds();
     el('entries').replaceChildren();
     stats();
-    for (const entry of rows) {
+    if (!showingResults) rows.sort((a, b) => blindRanks.get(a.trial.id) - blindRanks.get(b.trial.id));
+    for (const [index, entry] of rows.entries()) {
       const t = entry.trial,
         d = node('article', '');
-      d.append(node('h3', t.participant + ' · ' + t.taskId + ' · ' + labels[t.method]), node('p', t.prompt));
-      if (dupe.has(t.id))
-        d.append(node('p', '같은 기사 사례에 반복 참여한 코드입니다. 연습·중도 종료를 포함해 시간과 품질 요약에서 제외했습니다.'));
+      const heading = showingResults ? t.participant + ' · ' + t.taskId + ' · ' + labels[t.method]
+        : '답안 ' + (index + 1) + ' · ' + t.taskId;
+      d.append(node('h3', heading), node('p', t.prompt));
+      if (dupe.has(t.id)) {
+        d.append(node('p', '같은 기사 사례에 반복 참여해 채점을 건너뜁니다. 연습·중도 종료를 포함해 시간과 품질 요약에서 제외했습니다.'));
+        if (!showingResults) {
+          el('entries').append(d);
+          continue;
+        }
+      }
       if (t.status === 'withdrawn') {
         d.append(node('p', '중도 종료'));
         el('entries').append(d);
@@ -438,6 +462,7 @@
       // A saved key establishes the same verdict for every response to this exact prompt.
       // An unkeyed location needs a fresh human check against that reference.
       const anchor = versions.get(trialTarget(entry.trial));
+      if (!blindRanks.has(id)) blindRanks.set(id, Math.random());
       records.set(id, !entry.basis && anchor ? bind(entry, anchor) : entry);
     }
   }
@@ -451,7 +476,8 @@
         const entries = [...tasks.values()];
         return {caseId:entries[0].caseId, articleUrl:entries[0].articleUrl, tasks:entries};
       });
-      const draft = {kind:el('kind').value, keys, entries:[...records.values()], unexported:[...unexported]};
+      const draft = {kind:el('kind').value, keys, entries:[...records.values()], unexported:[...unexported],
+        blindRanks:[...blindRanks]};
       sessionStorage.setItem(draftKey, JSON.stringify(draft));
       notice.textContent = '이 탭을 새로고침하면 채점을 복원합니다. 탭을 닫기 전 보관할 구분의 JSON을 저장하세요.';
     } catch {
@@ -469,6 +495,11 @@
           !Array.isArray(draft.unexported) || !draft.unexported.every(k => kinds.includes(k))) throw Error();
       for (const key of draft.keys) loadKey(key);
       mergeFiles([{format, entries:draft.entries}]);
+      // Older drafts have no display order. Import validation above generated fresh ranks for them.
+      if (Array.isArray(draft.blindRanks)) for (const pair of draft.blindRanks) {
+        if (Array.isArray(pair) && records.has(pair[0]) && Number.isFinite(pair[1]) && pair[1] >= 0 && pair[1] < 1)
+          blindRanks.set(pair[0], pair[1]);
+      }
       for (const kind of draft.unexported) unexported.add(kind);
       el('kind').value = draft.kind;
       showKeys();
@@ -477,6 +508,7 @@
     } catch {
       anchors.clear();
       records.clear();
+      blindRanks.clear();
       el('draft-status').textContent = '이 탭의 임시 집계를 열 수 없습니다. 저장한 집계 JSON을 불러오세요.';
     }
   }
@@ -489,10 +521,25 @@
   function loadingState(on) {
     loading = on;
     el('imports').disabled = on;
+    el('choose-imports').disabled = on;
     el('key-file').disabled = on;
+    el('choose-key').disabled = on;
+    el('kind').disabled = on;
     el('entries').inert = on;
     el('save').disabled = on || !selected().length;
+    el('toggle-results').disabled = on || !selected().length;
+    if (on && showingResults) {
+      showingResults = false;
+      render();
+    }
   }
+  el('choose-imports').onclick = () => el('imports').click();
+  el('choose-key').onclick = () => el('key-file').click();
+  el('toggle-results').onclick = () => {
+    if (loading || !selected().length) return;
+    showingResults = !showingResults;
+    render();
+  };
   el('key-file').onchange = async (e) => {
     if (loading) return;
     const f = e.target.files[0];
@@ -515,7 +562,7 @@
         (reset ? ' 근거 위치 ' + reset + '건을 다시 확인하세요.' : '');
       render();
     } catch (err) {
-      el('status').textContent = err.message;
+      el('status').textContent = err instanceof SyntaxError ? '진행자 기준 파일의 JSON 형식을 확인하세요.' : err.message;
     } finally {
       e.target.value = '';
       loadingState(false);
@@ -535,7 +582,8 @@
       el('status').textContent = '파일을 불러왔습니다.';
       render();
     } catch (err) {
-      el('status').textContent = '파일을 불러오지 못했습니다. ' + err.message;
+      el('status').textContent = '파일을 불러오지 못했습니다. ' +
+        (err instanceof SyntaxError ? 'JSON 형식을 확인하세요.' : err.message);
     } finally {
       loadingState(false);
     }
@@ -565,7 +613,7 @@
     persistDraft();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
-  el('kind').onchange = () => { render(); persistDraft(); };
+  el('kind').onchange = () => { showingResults = false; render(); persistDraft(); };
   restoreDraft();
   render();
 })();
