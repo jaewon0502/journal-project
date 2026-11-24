@@ -29,7 +29,7 @@ function snapshot({article = base, states = [], levels = {}, core = [], sources:
     };
   }
   const saved = rubric.save(report, catalog, {coreRowIds: core.map(i => rows[i].id), ratings});
-  return {article, rows, demo: true, sourceKey: rows[0].sourceKey, assessment: rubric.evaluate(report, catalog, saved)};
+  return {article, rows, sources:catalog, demo: true, sourceKey: rows[0].sourceKey, assessment: rubric.evaluate(report, catalog, saved)};
 }
 const ratio = (n, d) => ({numerator: n, denominator: d, pct: d ? 100 * n / d : null});
 
@@ -97,9 +97,12 @@ test('같은 판본의 독립 판정은 편향 단계와 사실 구간별로 계
   assert.deepEqual(r.facts.coreDifferences.map(f => [f.coreLeft, f.coreRight]), [[true, false], [false, true]]);
   assert.equal(r.facts.rows[2].sameJudgment, null);
   assert.equal(r.facts.rows[3].sameJudgment, null);
+  assert.equal(r.facts.evidenceCompared, 2);
+  assert.equal(r.facts.evidenceDifferences.length, 0);
   const blank = compare(snapshot(), snapshot(), 'reviewers');
   assert.deepEqual(blank.facts.agreement, ratio(0, 0));
   assert.equal(blank.facts.disagreements.length, 0);
+  assert.equal(compare(a, snapshot(), 'reviewers').facts.evidenceCompared, 0);
 });
 
 test('같은 구간에서 지지한 범위가 달라지면 일치로 집계하지 않는다', () => {
@@ -255,4 +258,20 @@ test('새로 등장한 정정 문구가 수정본 한 구간과 정확히 일치
   assert.equal(compare(beforeWithCorrection, revision, 'revision').originalConflicts[0].candidate, undefined);
   const twoProposals = snapshot({article: sourceText + '\n다른 예산은 15억 원이다.', states: [conflict, conflict]});
   assert.ok(compare(twoProposals, revision, 'revision').originalConflicts.every(entry => !entry.candidate));
+});
+
+test('같은 자료를 서로 다른 용도로 쓴 경우와 한쪽만 더 고른 근거를 구분한다', () => {
+  const catalog = [sources[0], {id:'budget', title:'예산 기록', url:'https://example.org/budget', version:'확정본',
+    locator:'표 5', excerpt:'예산은 19억 원으로 의결됐다.'}];
+  const article = '의원은 “예산은 20억 원이었다”고 말했다.\n표본은 한 곳이다.';
+  const quote = (speech, budget) => ({status:'attribution', sourceIds:[speech], contentStatus:'contradicted',
+    contentChecked:true, contentSourceIds:[budget], contentReason:'의결액을 대조했다.'});
+  const left = snapshot({article, sources:catalog, states:[quote('doc', 'budget'), 'fact']});
+  const right = snapshot({article, sources:catalog, states:[quote('budget', 'doc'), {status:'fact', sourceIds:['doc','budget']}]});
+  const {facts} = compare(left, right, 'reviewers');
+  assert.deepEqual(facts.agreement, ratio(2, 2));
+  assert.deepEqual(facts.evidenceDifferences.map(row => row.differentSources), [
+    [{role:'speech', left:['doc'], right:['budget']}, {role:'content', left:['budget'], right:['doc']}],
+    [{role:'source', left:[], right:['budget']}]
+  ]);
 });

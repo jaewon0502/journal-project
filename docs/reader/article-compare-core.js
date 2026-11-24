@@ -1,6 +1,7 @@
 /* Compare snapshots rebuilt by the workspace reader from validated article and review data. */
 (function (root) {
   'use strict';
+  const workspace = typeof module === 'object' && module.exports ? require('./workspace-snapshot.js') : root.JournalWorkspaceSnapshot;
 
   function ratio(numerator, denominator) {
     return {numerator, denominator, pct: denominator ? 100 * numerator / denominator : null};
@@ -30,13 +31,26 @@
     return {dimensions, bias};
   }
 
+  function sourceRoles(receipt, keyById) {
+    const refs = ids => new Map((ids ?? []).map(id => [keyById.get(id), id]));
+    const speech = receipt.status === 'attribution';
+    return {source:refs(speech ? [] : receipt.sourceIds), speech:refs(speech ? receipt.sourceIds : []),
+      content:refs(receipt.contentSourceIds)};
+  }
+
+  function exclusiveIds(selected, other) {
+    return [...selected].filter(([key]) => !other.has(key)).map(([, id]) => id);
+  }
+
   function reviewFacts(left, right) {
     const leftAccuracy = left.assessment.accuracy, rightAccuracy = right.assessment.accuracy;
     const leftCore = new Set(leftAccuracy.coreRowIds), rightCore = new Set(rightAccuracy.coreRowIds);
     const rightById = new Map(rightAccuracy.rows.map(row => [row.rowId, row]));
     const leftRows = new Map(left.rows.map(row => [row.id, row]));
     const rightRows = new Map(right.rows.map(row => [row.id, row]));
+    const sourceKeys = [left, right].map(s => new Map(s.sources.map(ref => [ref.id, workspace.sourceIdentity(ref)])));
     const isDecided = category => category === 'supported' || category === 'contradicted' || category === 'quotedConflict';
+    let evidenceCompared = 0;
     const rows = leftAccuracy.rows.map(a => {
       const b = rightById.get(a.rowId);
       if (!b) throw new Error('두 편집자가 같은 구간을 검토했는지 확인하고 작업 파일을 다시 여세요.');
@@ -48,9 +62,18 @@
       const leftRow = leftRows.get(a.rowId), rightRow = rightRows.get(b.rowId);
       const openScopeDifference = a.category === 'unresolved' && b.category === 'unresolved' && !sameScope
         && !!leftRow.receipt && !!rightRow.receipt && !leftRow.draftPending && !rightRow.draftPending;
+      const differentSources = [];
+      if (leftRow.receipt && rightRow.receipt) {
+        const chosen = sourceRoles(leftRow.receipt, sourceKeys[0]), other = sourceRoles(rightRow.receipt, sourceKeys[1]);
+        if (Object.values(chosen).some(refs => refs.size) || Object.values(other).some(refs => refs.size)) evidenceCompared++;
+        for (const [role, refs] of Object.entries(chosen)) {
+          const left = exclusiveIds(refs, other[role]), right = exclusiveIds(other[role], refs);
+          if (left.length || right.length) differentSources.push({role, left, right});
+        }
+      }
       return {rowId: a.rowId, text: leftRow.text, left: a.category, right: b.category, openScopeDifference,
         leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment,
-        coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId)};
+        coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId), differentSources};
     });
     const pairs = rows.filter(r => r.sameJudgment !== null);
     return {
@@ -60,6 +83,7 @@
       excluded: rows.filter(r => r.left === 'excluded' || r.right === 'excluded').length,
       bothExcluded: rows.filter(r => r.left === 'excluded' && r.right === 'excluded').length,
       disagreements: rows.filter(r => r.sameJudgment === false || r.left !== r.right || r.openScopeDifference),
+      evidenceCompared, evidenceDifferences: rows.filter(r => r.differentSources.length),
       coreDifferences: rows.filter(r => r.coreLeft !== r.coreRight)
     };
   }

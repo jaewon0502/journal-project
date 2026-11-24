@@ -105,6 +105,14 @@
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       reference.append(' · ', link);
+      if (target.localPage) reference.append(' · PDF 파일 ' + target.localPage + '쪽 직접 확인');
+      if (source.originUrl) {
+        const origin = element('a', '최초 문서 열기');
+        origin.href = source.originUrl;
+        origin.target = '_blank';
+        origin.rel = 'noopener noreferrer';
+        reference.append(' · ', origin);
+      }
     }
     return reference;
   }
@@ -201,21 +209,21 @@
     }
     return panel;
   }
+  function appendSource(div, snapshot, id, label) {
+    div.append(sourceReference(snapshot, id, label));
+    const source = snapshot.sources?.find(s => s.id === id);
+    if (source?.excerpt) div.append(element('blockquote', source.excerpt));
+  }
   function receiptEvidence(snapshot, rowId) {
     const r = snapshot.rows.find(item => item.id === rowId)?.receipt;
     const div = element('div');
     if (!r) return div;
     if (r.reason) div.append(element('p', '판단 이유 · ' + r.reason));
     if (r.correction) div.append(note('근거와 대조한 정정 문구'), element('blockquote', r.correction));
-    function appendSource(id, label) {
-      div.append(sourceReference(snapshot, id, label));
-      const source = snapshot.sources?.find(s => s.id === id);
-      if (source?.excerpt) div.append(element('blockquote', source.excerpt));
-    }
-    for (const sourceId of r.sourceIds || []) appendSource(sourceId, r.status === 'attribution' ? '원발언' : '원자료');
+    for (const sourceId of r.sourceIds || []) appendSource(div, snapshot, sourceId, r.status === 'attribution' ? '원발언' : '원자료');
     if (r.contentClaim) div.append(note('내용을 대조한 인용 구간'), element('blockquote', r.contentClaim));
     if (r.contentReason) div.append(element('p', '발언 내용 판단 · ' + r.contentReason));
-    for (const id of r.contentSourceIds || []) appendSource(id, '내용 근거');
+    for (const id of r.contentSourceIds || []) appendSource(div, snapshot, id, '내용 근거');
     return div;
   }
   function decisionEvidence(snapshot, decision, text, name) {
@@ -290,26 +298,40 @@
     const disputed = detail('판정 또는 확인 범위가 다른 구절 · ' + f.disagreements.length + '개');
     if (!f.disagreements.length) disputed.append(note(f.agreement.denominator
       ? '판정 또는 확인 범위의 차이가 발견되지 않았습니다.' : '두 사람이 모두 판정을 마친 사실 구간이 없습니다.'));
-    for (const row of f.disagreements) {
+    const labels = {source:'원자료', speech:'원발언', content:'내용 근거'};
+    function rowEvidence(row, compareSources = false) {
       const div = element('div', null, 'item');
       div.append(element('blockquote', row.text));
+      if (compareSources) div.append(note('선택이 다른 근거 · ' + row.differentSources.map(d => labels[d.role]).join(', ')));
       const pair = element('div', null, 'pair');
       [row.leftLabel, row.rightLabel].forEach((label, i) => {
         const side = element('div');
         side.append(element('h4', names()[i] + ' · ' + label));
         const scope = i ? row.rightScope : row.leftScope;
         if (scope && scope !== row.text) side.append(note('확인 범위 · ' + scope));
-        side.append(receiptEvidence(snapshots[i], row.rowId));
+        if (compareSources) {
+          for (const diff of row.differentSources) {
+            const ids = i ? diff.right : diff.left;
+            if (!ids.length) side.append(note(labels[diff.role] + ' · 이 편집자만 선택한 자료 없음'));
+            for (const id of ids) appendSource(side, snapshots[i], id, labels[diff.role]);
+          }
+        } else side.append(receiptEvidence(snapshots[i], row.rowId));
         pair.append(side);
       });
-      div.append(pair); disputed.append(div);
+      div.append(pair);
+      return div;
     }
+    for (const row of f.disagreements) disputed.append(rowEvidence(row));
+    const evidence = detail('선택한 근거가 다른 구절 · ' + f.evidenceDifferences.length + '개');
+    evidence.append(note('두 사람이 판단을 기록하고 한 사람 이상 근거를 선택한 ' + f.evidenceCompared +
+      '개 구절을 비교했습니다. 각 구절에는 같은 용도로 한 편집자만 선택한 자료와 발췌문을 표시합니다.'));
+    for (const row of f.evidenceDifferences) evidence.append(rowEvidence(row, true));
     const core = detail('핵심 주장 선정이 다른 구절 · ' + f.coreDifferences.length + '개');
     for (const r of f.coreDifferences) {
       core.append(element('blockquote', r.text), note((r.coreLeft ? '편집자 A' : '편집자 B') + '가 핵심 주장으로 지정했습니다.'));
     }
     if (!f.coreDifferences.length) core.append(note('핵심 주장 선정 차이가 없습니다.'));
-    panel.append(disputed, core);
+    panel.append(disputed, evidence, core);
     return panel;
   }
   function show(snapshots, synthetic) {

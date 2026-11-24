@@ -187,3 +187,62 @@ test('완료율이 그대로여도 사라진 원본 충돌 구절과 확인한 �
   assert.equal(original.querySelector('a').href, 'https://example.org/report.pdf#page=4');
   assert.match(p.el('output').textContent, /수정 전 충돌 구절 1개/);
 });
+
+test('두 편집자의 판정이 같아도 구절별로 선택한 자료와 발언·내용 근거를 비교한다', async t => {
+  const p = page(t);
+  const article = '올해 시범 예산은 20억 원이다.\n의원은 “예산은 20억 원이었다”고 말했다.\n의회는 예산을 의결했다.';
+  const sources = [
+    {id:'plan', title:'예비 예산표', url:'https://budget.example/plan.pdf', version:'예비본', locator:'표 2', pdfPage:'3', excerpt:'예비 심사액은 20억 원이다.'},
+    {id:'final', title:'최종 예산표', url:'https://budget.example/final.pdf', version:'확정본', locator:'표 4', pdfPage:'8', excerpt:'최종 의결액은 19억 원이다.'},
+    {id:'speech', title:'발언 속기록', url:'https://assembly.example/speech.pdf', version:'1판', locator:'의원 첫 발언', pdfPage:'2', excerpt:'의원은 예산이 20억 원이었다고 말했다.'},
+    {id:'audio', title:'토론 녹음', url:'https://audio.example/episode', originUrl:'https://studio.example/episode-1',
+      version:'1판', locator:'1분 30초', excerpt:'의원이 발언했다. 예산은 20억 원이었다.'}
+  ];
+  function saved(side, same) {
+    const file = workspace(article);
+    file.sources = sources.map(source => ({...source, id:side + source.id, title:side + ' ' + source.title}));
+    // The same physical PDF page can be recorded as a URL fragment or a separate field.
+    if (side === 'B') {
+      const source = file.sources[1];
+      source.url += '#page=' + source.pdfPage;
+      delete source.pdfPage;
+      file.sources.reverse();
+    }
+    const states = [
+      {status:'fact', sourceIds:[same ? 'plan' : 'final']},
+      {status:'attribution', sourceIds:[same ? 'speech' : 'audio'], contentSourceIds:[same ? 'final' : 'plan'],
+        contentStatus:'contradicted', contentChecked:true, contentReason:'발언 속 금액을 예산표와 대조했다.'},
+      {status:'fact', sourceIds:side === 'A' ? ['plan','final'] : ['final','plan']}
+    ];
+    file.receipts = engine.prepare(article, file.sources).rows.map((row, i) => {
+      const decision = states[i];
+      return engine.decide(row, {...decision, sourceIds:decision.sourceIds.map(id => side + id),
+        ...(decision.contentSourceIds ? {contentSourceIds:decision.contentSourceIds.map(id => side + id)} : {}),
+        acknowledged:true, reason:'자료를 대조했다.'}, file.sources);
+    });
+    return JSON.stringify(file);
+  }
+  p.reviewers();
+  p.load('left','편집자A.json', saved('A', true));
+  p.load('right','편집자B.json', saved('B', false));
+  await p.settled(); p.el('compare').click();
+  const output = p.el('output');
+  assert.match(output.textContent, /같은 범위와 판정으로 확인100%3 \/ 3개/);
+  assert.match(output.textContent, /판정 또는 확인 범위가 다른 구절 · 0개/);
+  const evidence = [...output.querySelectorAll('details')].find(d => d.querySelector('summary').textContent.includes('선택한 근거가 다른 구절'));
+  assert.ok(evidence, '같은 판정에서 갈린 근거도 확인할 수 있어야 한다.');
+  assert.match(evidence.querySelector('summary').textContent, /2개/);
+  assert.match(evidence.textContent, /근거를 선택한 3개 구절/);
+  const [budget, quote] = evidence.querySelectorAll('.item');
+  assert.match(budget.textContent, /원자료.*편집자 A.*예비 예산표.*표 2.*편집자 B.*최종 예산표.*표 4/);
+  assert.deepEqual([...budget.querySelectorAll('a')].map(a => a.href),
+    ['https://budget.example/plan.pdf#page=3','https://budget.example/final.pdf#page=8']);
+  assert.match(quote.textContent, /원발언.*내용 근거.*편집자 A.*원발언 · A 발언 속기록.*내용 근거 · A 최종 예산표.*편집자 B.*원발언 · B 토론 녹음.*내용 근거 · B 예비 예산표/);
+  assert.deepEqual([...quote.querySelectorAll('a')].map(a => a.href), [
+    'https://assembly.example/speech.pdf#page=2', 'https://budget.example/final.pdf#page=8',
+    'https://audio.example/episode', 'https://studio.example/episode-1', 'https://budget.example/plan.pdf#page=3'
+  ]);
+  p.load('right','같은 자료로 채점.json', saved('B', true));
+  await p.settled(); p.el('compare').click();
+  assert.match(output.textContent, /선택한 근거가 다른 구절 · 0개/);
+});

@@ -85,6 +85,15 @@
     return {assessment, draft, dropped};
   }
 
+  // Compare the cited version and passage independently of local IDs and display names.
+  function sourceIdentity(source) {
+    const target = engine.sourceTarget(source);
+    const url = new URL(source.url);
+    if (target?.page) url.hash = '';
+    return JSON.stringify([target?.page ? url.href : source.url, source.originUrl || '', source.version,
+      source.locator, source.excerpt, target?.page || source.pdfPage || '']);
+  }
+
   function read(w) {
     validateWork(w);
     if (!w.article.trim() || w.articleDraft !== w.article) {
@@ -95,14 +104,7 @@
     const report = activeReport(w.article, w.sources, receipts, drafts);
     if (!report.rows.length) throw new Error('비교할 기사 구간이 없습니다.');
     const checked = review(report, w.sources, w.articleAssessment, w.articleAssessmentDraft);
-    // Independently entered copies of the same source have different UI IDs and often different display names.
-    const sourceKey = JSON.stringify(w.sources.map(s => {
-      const target = engine.sourceTarget(s);
-      const url = new URL(s.url);
-      if (target?.page) url.hash = '';
-      return JSON.stringify([target?.page ? url.href : s.url, s.originUrl || '', s.version,
-        s.locator, s.excerpt, target?.page || s.pdfPage || '']);
-    }).sort());
+    const sourceKey = JSON.stringify(w.sources.map(sourceIdentity).sort());
     const editing = w.sources.find(s => s.id === w.sourceDraft.id);
     const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
     const baseline = editing || sourceDefaults(prefill);
@@ -111,7 +113,7 @@
       demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending};
   }
 
-  const api = Object.freeze({schema, sourceFields, sourceDefaults, isMock, validateWork, activeReport, draftChangesRecord, review, read});
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, isMock, validateWork, activeReport, draftChangesRecord, review, read});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;
 })(globalThis);
