@@ -42,7 +42,8 @@ START = """<!doctype html>
 <h3>수정 전후를 가리고 평가하려면</h3>
 <ol><li><a href="article-compare.html#blind-revision">판본을 가린 평가 준비</a>에서 수정 전 작업 파일을 왼쪽, 수정 후 파일을 오른쪽에 넣으세요. A·B 평가용 파일 두 개와 진행자용 대응표를 내려받으세요. 대응표는 진행자가 따로 보관하세요.</li>
 <li>편집자별 폴더에 세 파일을 저장하고, 각자에게는 자기 A·B 파일과 <a href="독립 기사 검토.zip" download>독립 기사 검토.zip</a>을 전달하세요. 두 번째 편집자는 ‘다음 편집자용 A·B 만들기’로 새 묶음을 배정하세요. 서로 의견을 나누기 전에 각자 두 결과 파일을 저장합니다.</li>
-<li>같은 편집자가 돌려준 두 파일과 대응표를 진행자 화면에 열고 ‘순서 복원하고 비교’를 누르세요. ‘첫 편집자 결과로 선택’을 누른 뒤 둘째 편집자의 두 파일과 대응표를 여세요. 두 사람 모두 개선됐다고 평가한 항목과 판단이 갈린 항목을 확인하고, 해당 기준을 펼쳐 선택한 기사 구절과 원자료를 대조하세요.</li></ol></section>
+<li>같은 편집자가 돌려준 두 파일과 대응표를 진행자 화면에 열고 ‘순서 복원하고 비교’를 누르세요. ‘첫 편집자 결과로 선택’을 누른 뒤 둘째 편집자의 두 파일과 대응표를 여세요. 두 사람 모두 개선됐다고 평가한 항목과 판단이 갈린 항목을 확인하고, 해당 기준을 펼쳐 선택한 기사 구절과 원자료를 대조하세요.</li>
+<li>‘기사별 평가 요약 저장’으로 기사마다 요약 한 개를 보관하세요. <a href="revision-series.html">여러 기사 개선율 집계</a>에서 요약들을 함께 열면 전체와 항목별 건수, 개선·악화율을 확인할 수 있습니다.</li></ol></section>
 </main></body></html>
 """
 
@@ -75,9 +76,9 @@ def packet_bytes():
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()
-    for name in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'article-compare.html'):
+    for name in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'article-compare.html', 'revision-series.html'):
         page = (READER / name).read_text()
-        if name == 'article-compare.html':
+        if name in ('article-compare.html', 'revision-series.html'):
             page = page.replace('<a href="../article-rubric.md">기사 평가 기준과 계산식</a>',
                                 '<a href="시작.html">진행자 시작 화면</a>')
         add_page(files, name, page)

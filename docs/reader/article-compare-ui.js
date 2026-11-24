@@ -413,6 +413,19 @@
         '개 · 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'));
     if (joint.stableSeverityDifferences) panel.append(note('두 사람 모두 유지로 보았지만 중요한 왜곡이 있는지에 대한 판단이 다른 항목 ' +
       joint.stableSeverityDifferences + '개'));
+    const record = window.JournalRevisionSeries.makeRecord(joint, current.key);
+    const save = element('button', '기사별 평가 요약 저장');
+    save.type = 'button';
+    save.id = 'agreement-export';
+    save.addEventListener('click', () => downloadJson(record, '기사평가-' + record.before.articleSha256.slice(0, 12) +
+      '-' + record.after.articleSha256.slice(0, 12) + '.json'));
+    const series = element('a', '여러 기사 집계 새 탭에서 열기');
+    series.href = 'revision-series.html';
+    series.target = '_blank';
+    series.rel = 'noopener';
+    const actions = element('div', null, 'actions');
+    actions.append(save, series);
+    panel.append(actions, note('집계용 요약에는 네 기준의 점수와 판본·원자료 식별값이 담깁니다. 구절과 판정 이유는 원래 작업 파일에서 다시 볼 수 있습니다.'));
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     for (const dimension of joint.dimensions) {
       const line = [dimension.first, dimension.second].map((d, i) =>
@@ -515,19 +528,21 @@
       if (current === generation) { preparing = false; updateInputs(); }
     }
   }
-  function downloadKitPart(part) {
-    if (!kit || mode() !== 'revision') return;
-    const key = part === 'key';
-    const data = key ? kit.key : kit.packets[part];
-    const code = kit.key.pairId.slice(0, 8);
+  function downloadJson(data, name) {
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}));
     const link = element('a');
     link.href = url;
-    link.download = (key ? '진행자전용-대응표-' + code : '검토-' + code + '-' + part) + '.json';
+    link.download = name;
     document.body.append(link);
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+  function downloadKitPart(part) {
+    if (!kit || mode() !== 'revision') return;
+    const key = part === 'key';
+    const code = kit.key.pairId.slice(0, 8);
+    downloadJson(key ? kit.key : kit.packets[part], (key ? '진행자전용-대응표-' + code : '검토-' + code + '-' + part) + '.json');
   }
   async function restoreKit() {
     if (byId('blind-resolve').disabled) return;

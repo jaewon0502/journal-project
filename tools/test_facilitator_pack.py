@@ -30,7 +30,7 @@ class FacilitatorPack(unittest.TestCase):
         with ZipFile(BytesIO(packet_bytes())) as archive:
             self.assertIsNone(archive.testzip())
             files = set(archive.namelist())
-            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'factcheck.html', 'article-compare.html'):
+            for page in ('시작.html', 'editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'factcheck.html', 'article-compare.html', 'revision-series.html'):
                 links = Dependencies()
                 links.feed(archive.read(page).decode())
                 self.assertLessEqual(links.local, files, page)
@@ -52,7 +52,7 @@ class FacilitatorPack(unittest.TestCase):
             start = Dependencies()
             guide = coordinator.read('시작.html').decode()
             start.feed(guide)
-            self.assertTrue({'독립 기사 검토.zip', 'article-compare.html', 'factcheck.html'} <= start.local)
+            self.assertTrue({'독립 기사 검토.zip', 'article-compare.html', 'revision-series.html', 'factcheck.html'} <= start.local)
             self.assertIn('href="article-compare.html#blind-revision"', guide)
             comparison = coordinator.read('article-compare.html').decode()
             self.assertIn('id="blind-revision"', comparison)
@@ -68,6 +68,8 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertEqual(set(reviewer.namelist()), {'factcheck.html'} | dependencies.local)
                 self.assertNotIn('blind-revision.js', reviewer.namelist())
                 self.assertNotIn('article-compare.html', reviewer.namelist())
+                self.assertTrue({'revision-series.html', 'revision-series.js', 'revision-series-ui.js',
+                                 'revision-series-example.js'}.isdisjoint(reviewer.namelist()))
                 self.assertTrue(all(name.endswith(('.js', '.css')) for name in dependencies.local))
                 for name in dependencies.local:
                     self.assertEqual(reviewer.read(name), (READER / name).read_bytes())
