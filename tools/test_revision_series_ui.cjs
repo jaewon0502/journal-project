@@ -45,6 +45,29 @@ function page(t) {
   return {get, select, empty, document: window.document};
 }
 const flushed = () => new Promise(resolve => setImmediate(resolve));
+const factCells = (section, key) => [...section.querySelectorAll('[data-fact-row="' + key + '"] td')].map(cell => cell.textContent);
+
+test('편향이 나아진 기사에 남은 사실 충돌·미결과 이전 요약의 자료 부재를 분리한다', async t => {
+  const p = page(t);
+  const current = {...one, version:2, facts:{
+    before:[{outcome:'contradicted',flag:'article'}, {outcome:'pending',flag:'none'}, {outcome:'excluded',flag:'none'}],
+    after:[{outcome:'supported',flag:'none'}, {outcome:'pending',flag:'quote'}, {outcome:'shared',flag:'article'}]
+  }};
+  p.select(file('종전.json', one), file('새 요약.json', current), file('다른 기사.json', two));
+  await flushed();
+  const section = p.get('series-facts');
+  assert.match(section.textContent, /사실 판정이 담긴 기사 1\/2건.*이전 형식 요약 1건/);
+  assert.match(section.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 1건.*새 요약.json · 수정본 충돌 표시 2개 구절/);
+  assert.match(section.textContent, /미결·판정 불일치·동일 판정 기록이 있는 기사 1건/);
+  assert.deepEqual(factCells(section, 'support'), ['0% (0/1)', '100% (1/1)']);
+  assert.deepEqual(factCells(section, 'coverage'), ['50% (1/2)', '33.3% (1/3)']);
+  assert.deepEqual(factCells(section, 'shared'), ['0개', '1개']);
+  assert.deepEqual(factCells(section, 'quoteFlagged'), ['0개', '1개']);
+  p.select(file('종전.json', one));
+  await flushed();
+  assert.match(p.get('series-facts').textContent, /사실 판정이 담긴 기사 0\/1건/);
+  assert.equal(p.get('series-facts').querySelector('table'), null);
+});
 
 test('기사별 분모를 합산하고 고유 기사, 중복, 빠진 판정, 자료 변경을 화면에서 구분한다', async t => {
   const p = page(t);
@@ -169,6 +192,17 @@ test('내장 예시와 직접 고른 기사 사이를 전환해도 한쪽 기록
   assert.match(p.get('series-improved').textContent, /75%3\/4개 항목/);
   assert.match(p.get('series-coverage').textContent, /네 판정이 모두 있는 항목 4\/8개/);
   assert.match(p.get('series-coverage').textContent, /개선·악화·유지 판단이 갈린 항목 1개/);
+  const facts = p.get('series-facts');
+  assert.match(facts.textContent, /사실 판정이 담긴 기사 2\/2건/);
+  assert.deepEqual(factCells(facts, 'support'), ['33.3% (1/3)', '100% (3/3)']);
+  assert.deepEqual(factCells(facts, 'coverage'), ['33.3% (3/9)', '33.3% (3/9)']);
+  assert.deepEqual(factCells(facts, 'articleFlagged'), ['2개', '0개']);
+  assert.deepEqual(factCells(facts, 'quoteFlagged'), ['1개', '1개']);
+  assert.match(facts.textContent, /편향 개선과 함께 수정본에 충돌 표시가 있는 기사 1건/);
+  assert.deepEqual([...facts.querySelectorAll('li')].map(item => item.textContent), ['도서관 운영 연습 기사 · 수정본 충돌 표시 1개 구절']);
+  const articles = [...p.get('series-articles').querySelectorAll('details')].map(item => item.textContent);
+  assert.match(articles[0], /출생 통계 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 0% \(0\/1\) → 100% \(1\/1\).*수정본 공동 판정 범위 16.7% \(1\/6\)/);
+  assert.match(articles[1], /도서관 운영 연습 기사.*두 판본의 원자료 묶음 같음.*두 편집자의 구절 전체 지지율 50% \(1\/2\) → 100% \(2\/2\).*수정본 공동 판정 범위 66.7% \(2\/3\)/);
   assert.doesNotMatch(p.get('series-articles').textContent, /직접 고른 기사/);
   p.select(actual);
   p.empty();
