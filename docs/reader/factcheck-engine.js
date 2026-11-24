@@ -202,9 +202,24 @@
   const allegation = /의혹|혐의|고발|의심|용의자|비리|횡령|뇌물/u;
   const allegationQualifier = /의혹|혐의|의심|용의자/u;
   const assessment = /무책임|무능|참담|포퓰리즘|실정|졸속|폭거|망국|독선|탁월|치적|훌륭|위대|쾌거|현명|어리석|정쟁|기만|최악|최선|폭주|선동|굴욕|퍼주기|악법|잘못된|바람직|정당한|부당|해야\s*한다/u;
+  // 정치+적, 상반기+만 and the legal term 부당이득금 each contain a different evaluative word.
+  // Mask only that occurrence so a separate judgment in the same sentence still needs review.
+  const neutralAssessmentOverlaps = /(?:정치|수치|가치|위치|자치|통치)적|(?:상반기|하반기|분기|학기|회기|임기|하기)만|부당이득|부당\s+이득(?:금|\s*반환)|시위대|실정법/gu;
+  function hasAssessment(text) {
+    return assessment.test(text.replace(neutralAssessmentOverlaps, ' '));
+  }
+  function endsInValueJudgment(quote) {
+    // A direct verdict such as "부당하다" or "치적이다" differs from a report that
+    // somebody reached that verdict ("부당하다고 판결했다").
+    const predicate = /(?:^|\s)([가-힣]+)[.!。！]?$/u.exec(quote.trim())?.[1];
+    if (!predicate) return false;
+    if (/^(?:무책임|무능|참담|탁월|훌륭|위대|현명|부당|바람직)(?:하다|합니다|했다|했습니다)$/u.test(predicate)) return true;
+    const noun = predicate.replace(/(?:이다|입니다|이었다|이었습니다|였다|였습니다|이에요|예요)$/u, '');
+    return assessment.exec(noun)?.[0] === noun;
+  }
   const quantitative = /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|년|월|일|표|석|점|회|곳)/u;
   const proceeding = /기소(?:했|됐|되었|유예)|무죄.{0,8}(?:선고|판결|확정)|유죄.{0,8}(?:선고|판결|확정)|공소.{0,4}제기|수사.{0,5}(?:착수|개시)|수사\s*중|불송치|불기소|구속영장.{0,8}(?:청구|발부|기각)/u;
-  const eventFact = /의결|가결|부결|표결|집행|통과|인상|인하|삭감|증액|감액|폐지|도입|인정했|선고|기소|체포|구속|증가|감소|늘렸|늘린|늘었|줄였|줄인|줄었|찬성했|반대했/;
+  const eventFact = /의결|가결|부결|표결|집행|통과|인상|인하|삭감|증액|감액|폐지|도입|인정했|선고|(?:판결|판시)(?:했|하였)|기소|체포|구속|증가|감소|늘렸|늘린|늘었|줄였|줄인|줄었|찬성했|반대했/;
   // A transcript cannot verify a narrator's independent assertion in a neighbouring clause.
   // Split only outside quotations, at a coordinated predicate followed by a new explicit subject.
   // In indirect speech ("A는 B가 X했고 C가 Y했다고 주장했다") the left clause belongs to the
@@ -263,10 +278,10 @@
   // A quotation ending like a sentence (“시장은 사퇴하라”는) or carrying an evaluation,
   // a figure, an event or an allegation is always speech.
   const nameQuote = /[“"]([^“”"\n]{1,30}[^다라요까죠\s.!?])[”"](?=(?:을|를|이|가|은|는|의|과|와|에|에서|으로|로|도)(?:[\s.,]|$))/gu;
-  const asTitle = (match, name) => [assessment, quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
+  const asTitle = (match, name) => hasAssessment(name) || [quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
   function triage(text) {
     const speech = attributed.test(text.replace(nameQuote, asTitle)), suspicion = allegation.test(text);
-    const number = quantitative.test(text), evaluation = assessment.test(text);
+    const number = quantitative.test(text), evaluation = hasAssessment(text);
     const mixed = evaluation && (number || eventFact.test(text));
     const hints = [];
     if (speech) hints.push('누가 누구에 대해 어떤 말을 했는지 원발언과 대조하세요. 발언 내용 자체의 사실성은 별도 쟁점입니다.');
@@ -497,7 +512,7 @@
     const allNonfactual = clauses.length > 0 && clauses.every(part => {
       if (allegation.test(part)) return false;
       if (forecast.test(part)) return true;
-      return assessment.test(part) && !quantitative.test(part) && !eventFact.test(part);
+      return hasAssessment(part) && !quantitative.test(part) && !eventFact.test(part);
     });
     // Narrator text outside the quotation ("의회가 3억 원을 삭감하자 시장은 “…”고 말했다")
     // can carry its own facts. The reporting tail attached to the closing quote and ending in
@@ -541,7 +556,7 @@
     // Ignore commas and periods inside numbers when looking for a second claim.
     const declarative = /(?:다|[았었였했됐]어요|이에요|예요)[.!。！]?$/u.test(assertion) || namedMeasurement.test(assertion)
       || (!quote && assertion.endsWith('아니라'));
-    if (!declarative || nonAssertion.test(assertion) || assessment.test(assertion)
+    if (!declarative || nonAssertion.test(assertion) || hasAssessment(assertion)
         || multipleClaims.test(assertion.replace(/(?<=\d)\.(?=\d)/gu, '')) || secondQuantity.test(assertion)) throw new Error(error);
     return quote ? assertion : original;
   }
@@ -568,6 +583,9 @@
     }
     const closing = Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"'));
     const speechAct = closing < 0 ? scopedText : scopedText.slice(closing + 1);
+    if (scope.quotes.length === 1 && reportEnding.test(speechAct.trim()) && endsInValueJudgment(scope.quotes[0])) {
+      throw new Error('화자의 가치 판단은 의견으로 기록하고, 함께 언급된 사실은 범위를 구분해 확인하세요.');
+    }
     if (/[?？]|겠(?:다|습니)|(?:인가요|일까요|나요|습니까)[.!]?$/u.test(content)
         || (closing >= 0 && /아니(?:라|었|냐)|사실이\s*아니/u.test(speechAct))
         || /(?:말한|주장한|발표한|발언한|밝힌)\s*(?:적|사실)(?:이|은)?\s*없|(?:말하|주장하|발표하|발언하|밝히)지\s*않|(?:부인했|물었|되물었|반문했|질문했|약속했)다/u.test(speechAct)) {
@@ -612,7 +630,7 @@
         if (fact.start < opinion.end && opinion.start < fact.end) throw new Error('사실과 평가 구절이 겹칩니다.');
         const gaps = outside(row.text, [fact, opinion].sort((a, b) => a.start - b.start));
         if (gaps.some(gap => gap.replace(/[\s\p{P}]/gu, '') !== '')) throw new Error('사실·평가 구절에 포함되지 않은 말이 있습니다. 두 구절에 포함하거나 부분 확인으로 남겨 주세요.');
-        if (assessment.test(decision.factSpan) && !assessment.test(decision.opinionSpan)
+        if (hasAssessment(decision.factSpan) && !hasAssessment(decision.opinionSpan)
           || !forecast.test(decision.opinionSpan) && (quantitative.test(decision.opinionSpan) || eventFact.test(decision.opinionSpan))) {
           throw new Error('평가로 표시한 구절에 확인할 사실이 있거나 사실과 평가 구절의 위치가 바뀌었습니다.');
         }

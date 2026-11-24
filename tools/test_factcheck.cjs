@@ -140,6 +140,77 @@ test('정책 비판과 확인 가능한 법적 절차는 보존하고, 부정어
   }
 });
 
+test('정치·법률 용어와 기간에 붙은 조사 안의 글자는 사실 판정을 막지 않는다', () => {
+  const factual = [
+    '선관위는 정치적 중립 의무 위반 신고 5건을 접수했다.',
+    '법원은 부당이득금 3억 원의 반환을 명령했다.',
+    '올해 상반기만 접수 건수가 10건이었다.',
+    '지난 분기만 접수 건수가 10건이었다.',
+    '조사원은 시위대 12명을 면담했다.',
+    '위원회는 실정법 2건을 검토했다.'
+  ];
+  for (const line of factual) {
+    const refs = [{...source, excerpt:line}];
+    const row = prepare(line, refs).rows[0];
+    assert.equal(row.status, 'pending');
+    assert.equal(report(line, refs, [decide(row, decision, refs)]).rows[0].status, 'fact', line);
+  }
+  for (const line of ['상반기만 3억 원을 투입한 사업은 시장의 치적이다.',
+    '정치적 중립 위반 신고 5건을 묵살한 것은 기만이다.', '법원의 부당이득금 3억 원 반환 명령은 부당하다.',
+    '기부금 3억 원을 받는 과정에서 대국민기만이 있었다.']) {
+    const row = prepare(line, sources).rows[0];
+    assert.ok(row.allowedStatuses.includes('mixed'), line);
+    assert.throws(() => decide(row, decision, sources), /사실 범위/u, line);
+  }
+});
+
+test('중립적 정치 용어가 있는 발언의 사실성을 별도 자료로 판단하고 종전의 잘못된 의견 처리를 다시 연다', () => {
+  const line = '위원장은 “정치적 중립 서약서가 접수됐다”고 말했다.';
+  const refs = [
+    {id:'s', url:'https://assembly.example/minutes', version:'확정본', locator:'1문답', excerpt:'위원장에게 한 질문과 답변 전문.'},
+    {id:'r', url:'https://council.example/report', version:'확정본', locator:'1행', excerpt:'담당 부서의 접수 현황이다.'}
+  ];
+  const row = prepare(line, refs).rows[0];
+  const say = {status:'attribution', reason:'속기록의 화자를 확인했다.', sourceIds:['s'], acknowledged:true,
+    contentChecked:true, contentReason:'발언의 범위를 확인했다.'};
+  assert.throws(() => decide(row, {...say, contentStatus:'opinion'}, refs));
+  for (const contentStatus of ['supported', 'contradicted']) {
+    const saved = decide(row, {...say, contentStatus, contentSourceIds:['r']}, refs);
+    assert.equal(report(line, refs, [saved]).rows[0].receipt.checksum, saved.checksum);
+    assert.throws(() => decide(row, {...say, contentStatus, contentSourceIds:['s']}, refs), /다른 원자료/u);
+  }
+  // fd1e34f treated the last two syllables of 정치적 as the noun 치적.
+  // Its previously accepted opinion receipt must now reopen for review.
+  const oldOpinion = {...say, protocol:'journal-review/1', rowId:row.id, binding:row.binding, articleBinding:row.articleBinding,
+    contentStatus:'opinion', recordedAt:'2026-11-25T00:00:00.000Z',
+    references:'e8da7f10850bed786cafe9abd58a32829e937cccc111ba3e4b6388a1edc088d8',
+    checksum:'48ec7326575f85dd59c14b5089678ee31fdfb6f064406aebb6a92e8a2a9f8769'};
+  assert.equal(report(line, refs, [oldOpinion]).rows[0].status, 'pending');
+  const oldSupport = {...oldOpinion, contentStatus:'supported', contentSourceIds:['r'],
+    references:'9cf4c54753a6c80a138294070b2c925c1376bdd9e8febfcca82fab8629d4ed65',
+    checksum:'4e28d0b58c7f6afef223661eb058d8dfc7717c3d918767ea44bdd92752d84c15'};
+  assert.equal(report(line, refs, [oldSupport]).rows[0].receipt.checksum, oldSupport.checksum);
+});
+
+test('인용한 화자의 가치 판단에는 의견을, 법원이 내린 판단에 대한 보도에는 독립 자료를 쓸 수 있다', () => {
+  const refs = [source, {...source, id:'court', url:'https://court.example/ruling', excerpt:'해고의 효력에 대한 재판부 판결문.'}];
+  const attributed = {...decision, status:'attribution', contentChecked:true, contentReason:'속기록의 발언 범위를 확인했다.'};
+  for (const quote of ['이 결정은 부당하다', '최대의 치적이다', '이 설명은 기만입니다', '무책임하다']) {
+    const [row] = prepare('위원장은 “' + quote + '”라고 말했다.', refs).rows;
+    assert.equal(decide(row, {...attributed, contentStatus:'opinion'}, refs).contentStatus, 'opinion');
+    for (const contentStatus of ['supported', 'contradicted']) {
+      assert.throws(() => decide(row, {...attributed, contentStatus, contentSourceIds:['court']}, refs), /가치 판단/, quote);
+    }
+  }
+  const [row] = prepare('위원장은 “법원은 해고가 부당하다고 판결했다”고 말했다.', refs).rows;
+  assert.throws(() => decide(row, {...attributed, contentStatus:'opinion'}, refs));
+  assert.equal(decide(row, {...attributed, contentStatus:'supported', contentSourceIds:['court']}, refs).contentStatus, 'supported');
+  const [action] = prepare('위원장은 “피고가 서류를 바꿔 피해자를 기만했다”고 말했다.', refs).rows;
+  assert.equal(decide(action, {...attributed, contentStatus:'supported', contentSourceIds:['court']}, refs).contentStatus, 'supported');
+  const [title] = prepare('위원장은 “치적”이라는 제목의 책 3권을 출간했다고 말했다.', refs).rows;
+  assert.equal(decide(title, {...attributed, contentStatus:'supported', contentSourceIds:['court']}, refs).contentStatus, 'supported');
+});
+
 test('수치가 있는 미래 전망은 결과 확인으로 올리지 않고, 발언에 섞인 과거 사실을 의견으로 닫지 않는다', () => {
   const status = {status: 'attribution', contentStatus: 'opinion', contentChecked: true, contentReason: '내년의 전망을 확인했다.'};
   const refs = [source, {...source, id: 'forecast', url: 'https://stats.example/forecast', excerpt: '내년도 물가 전망치 5%'}];
