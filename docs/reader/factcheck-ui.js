@@ -143,6 +143,7 @@
         byId('source-form-title').textContent = '원자료 수정';
         byId('source-save').textContent = '수정 적용';
         byId('source-cancel').hidden = false;
+        updateSourceDraftNote();
         byId('source-title').focus();
       }));
       catalog.append(part);
@@ -152,6 +153,24 @@
   function sourceDraftIsDirty() {
     const original = sources.find(source => source.id === editingId) || sourceBaseline;
     return sourceFields.some(field => byId('source-' + field).value !== (original[field] || ''));
+  }
+  function sourceDraftNote() {
+    if (!result || !sourceDraftIsDirty()) return '';
+    const source = sources.find(s => s.id === editingId);
+    if (!source) return '등록 전인 새 원자료가 있습니다. 이 결과는 이미 등록한 자료로 계산했습니다.';
+    const numbers = [];
+    result.rows.forEach((row, i) => {
+      const r = row.receipt;
+      if (r && (r.sourceIds.includes(source.id) || r.contentSourceIds?.includes(source.id))) numbers.push(i + 1);
+    });
+    return '원자료 ‘' + (source.title || source.id) + '’ 수정 중입니다. 이 결과에는 수정 전 판본을 사용했습니다.' +
+      (numbers.length ? ' 이 자료를 인용한 문장 번호는 ' + numbers.join(', ') + '입니다.' : '');
+  }
+  function updateSourceDraftNote() {
+    const note = sourceDraftNote();
+    const label = byId('source-draft-note');
+    if (label.textContent !== note) label.textContent = note;
+    byId('result-source-draft').hidden = !note;
   }
   function clearSourceTarget() {
     sourceForRow = null;
@@ -168,6 +187,7 @@
     byId('source-form-title').textContent = '원자료 추가';
     byId('source-save').textContent = '자료 추가';
     byId('source-cancel').hidden = true;
+    updateSourceDraftNote();
   }
   function decisionDraft() {
     return {
@@ -287,6 +307,20 @@
   function rowLabel(row) {
     return row.draftPending ? '판단 작성 중' : labels[row.status];
   }
+  function reviewRow(row) {
+    if (currentId === row.id) {
+      byId('row-heading').focus();
+      return;
+    }
+    if (!isOpen(row)) byId('row-filter').value = 'all';
+    currentId = row.id;
+    showQueue(true);
+  }
+  function reviewAction(row, number) {
+    const actions = node('div', undefined, 'actions compact');
+    actions.append(button(number + '번 문장 검토 열기', () => reviewRow(row)));
+    return actions;
+  }
   function showQueue(focus = false, keepForm = false) {
     const previousId = currentId;
     const list = byId('row-list');
@@ -296,10 +330,7 @@
     for (const row of visible) {
       const index = result.rows.indexOf(row);
       const item = node('li');
-      const pick = button('', () => {
-        currentId = row.id;
-        showQueue(true);
-      });
+      const pick = button('', () => reviewRow(row));
       pick.className = 'row-button';
       pick.setAttribute('aria-current', String(currentId === row.id));
       pick.append(node('strong', (index + 1) + ' · ' + rowLabel(row)), document.createTextNode(row.text.length > 60 ? row.text.slice(0, 60) + '…' : row.text));
@@ -350,6 +381,7 @@
           part.append(detail, sourceLink(s));
         }
       }
+      if (!studyFrame) part.append(reviewAction(row, index + 1));
       rows.append(part);
     }
   }
@@ -364,6 +396,7 @@
     if (!keepForm) showSources();
     showQueue(false, keepForm);
     showReport();
+    updateSourceDraftNote();
     renderArticleAssessment();
   }
   function renderArticleAssessment() {
@@ -372,7 +405,7 @@
       articleAssessment = value; dirty = true;
     }, articleAssessmentDraft, value => {
       articleAssessmentDraft = value; dirty = true;
-    });
+    }, reviewAction);
   }
   function openSourceTools(find) {
     byId('sources-panel').open = true;
@@ -574,6 +607,7 @@
       suggestedLocator = tableLocation;
     }
     excerpt.value = entry.text;
+    updateSourceDraftNote();
     message('source-status', '붙여넣은 글의 ' + entry.paragraph + '번째 문단을 옮겼습니다. ' +
       (tableLocation ? '원표의 제목·단위와 아래 위치가 이 행·열에 맞는지 확인하세요.' :
         '원본의 쪽·표·절 등 다시 찾을 수 있는 위치를 확인해 입력하세요.'));
@@ -829,6 +863,11 @@
       byId('source-pdfPage').value = '';
       message('source-status', '문서 주소를 바꿨습니다. 새 주소에서 확인한 PDF 쪽번호를 입력하세요.');
     }
+    updateSourceDraftNote();
+  });
+  byId('return-source-draft').addEventListener('click', () => {
+    byId('sources-panel').open = true;
+    byId('source-' + (editingId ? 'excerpt' : 'title')).focus();
   });
   byId('row-filter').addEventListener('change', () => showQueue());
   byId('source-search').addEventListener('input', filterSources);
@@ -1025,8 +1064,9 @@
     return lines;
   }
   byId('export-report').addEventListener('click', () => {
+    const sourceNote = sourceDraftNote();
     const lines = ['기사 팩트체크 검토 결과', demo ? '연습 기록 · 가상 기사 또는 모의 원자료 포함' : '검토자가 입력한 판단 기록',
-      resultScope(), coverageLimit, byId('counts').textContent, statusCounts().join(' · '), '', ...rubricReportLines()];
+      resultScope(), ...(sourceNote ? [sourceNote] : []), coverageLimit, byId('counts').textContent, statusCounts().join(' · '), '', ...rubricReportLines()];
     for (const [i, row] of result.rows.entries()) {
       lines.push((i + 1) + '. ' + rowLabel(row) + (row.positions.length > 1 ? ' · 원문 ' + row.positions.length + '곳' : ''), row.text);
       const r = row.receipt;

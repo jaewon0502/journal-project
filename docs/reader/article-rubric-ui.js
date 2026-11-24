@@ -51,7 +51,7 @@
   function scoreName(value) {
     return value === 'na' ? '해당 없음' : String(value) + '단계 · ' + api.severityLabels[value];
   }
-  function render(container, report, sources, saved, onChange, rawDraft, onDraft) {
+  function render(container, report, sources, saved, onChange, rawDraft, onDraft, reviewAction) {
     if (!container || !api) return;
     const binding = api.bind(report);
     const open = new Set([...container.querySelectorAll('details[data-section][open]')].map(d => d.dataset.section));
@@ -130,6 +130,7 @@
         bar.append(text('strong', '구간 ' + record.n + ' · ' + a.label), mark);
         li.append(bar, text('p', record.row.text, 'verbatim'));
         if (a.scope && a.scope !== record.row.text) li.append(text('small', (a.category === 'quotedConflict' ? '원자료와 충돌한 인용 구절 · ' : '원자료로 확인한 사실 구절 · ') + a.scope, 'rub-note'));
+        if (reviewAction) li.append(reviewAction(record.row, record.n));
         caseList.append(li);
       }
     }

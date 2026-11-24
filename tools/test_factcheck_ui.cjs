@@ -294,6 +294,41 @@ function recordFirstFact(page) {
   el('decision-form').requestSubmit();
 }
 
+test('수정 중인 근거의 판본과 인용 문장을 화면과 TXT에서 밝히고 초안 내용은 공개하지 않는다', async t => {
+  const p = open(t);
+  recordFirstFact(p);
+  p.el('source-list').querySelector('button').click();
+  const original = p.el('source-excerpt').value;
+  assert.equal(p.el('result-source-draft').hidden, true);
+  p.set('source-excerpt', '편집 중이라 전달하지 않을 정정 수치');
+  const warning = p.el('source-draft-note').textContent;
+  assert.equal(p.el('result-source-draft').hidden, false);
+  assert.match(warning, /수정 전 판본.*문장 번호는 1입니다/);
+  p.click('return-source-draft');
+  assert.equal(p.el('sources-panel').open, true);
+  assert.equal(p.doc.activeElement, p.el('source-excerpt'));
+  p.click('export-report');
+  const txt = await p.snapshot();
+  assert.ok(txt.includes(warning) && txt.includes(original));
+  assert.doesNotMatch(txt, /전달하지 않을 정정 수치/);
+  p.click('save-work');
+  const restored = open(t);
+  await loadWorkspace(restored, JSON.parse(await p.snapshot()));
+  assert.equal(restored.el('source-draft-note').textContent, warning);
+  restored.el('source-form').requestSubmit();
+  assert.equal(restored.el('result-source-draft').hidden, true);
+  assert.match(restored.el('report-rows').textContent, /판단 작성 중/);
+  p.set('source-excerpt', original);
+  assert.equal(p.el('result-source-draft').hidden, true);
+  p.click('source-cancel');
+  p.set('source-title', '새로 조사 중인 비공개 자료명');
+  assert.match(p.el('source-draft-note').textContent, /등록 전인 새 원자료/);
+  p.click('export-report');
+  assert.doesNotMatch(await p.snapshot(), /새로 조사 중인 비공개 자료명/);
+  p.set('source-title', '');
+  assert.equal(p.el('result-source-draft').hidden, true);
+});
+
 test('인용한 원자료를 수정하면 기록한 판단을 다시 확인할 초안으로 남긴다', async t => {
   const page = open(t);
   const {w, el, set, click, snapshot} = page;
@@ -1002,4 +1037,32 @@ test('조건이 붙은 통계는 원표 좌표를 직접 연 뒤에만 숫자를
   picker.querySelector('button').click();
   assert.equal(el('source-excerpt').value, line);
   assert.equal(el('source-locator').value, title + ' · ‘남부’ 행 · ‘2022년’ 열');
+});
+
+test('결과와 정확성 평가에서 같은 문구의 서로 다른 문장을 열고 다른 문장의 메모를 보존한다', t => {
+  const {doc, set, el, click} = open(t);
+  const repeated = '이 사업은 무책임한 선심성 정책이다.';
+  set('article', ['의회는 지난주 회의를 열었다.', repeated, '의회는 내년에 사업을 검토한다.', repeated].join('\n\n'));
+  el('article-form').requestSubmit();
+  const report = () => el('report-rows').querySelectorAll('.report-row');
+  const rubricRows = () => el('article-rubric').querySelectorAll('[data-section="accuracy"] li');
+  const jump = (row, n) => [...row.querySelectorAll('button')].find(b => b.textContent === n + '번 문장 검토 열기').click();
+  jump(report()[1], 2);
+  set('verdict', 'opinion'); set('reason', '가치판단을 나타내는 표현을 확인했다.');
+  click('acknowledged'); el('decision-form').requestSubmit();
+  assert.equal(el('row-filter').value, 'open');
+  jump(report()[3], 4);
+  set('reason', '뒤쪽에 반복된 문장의 근거를 찾는 중이다.');
+  jump(rubricRows()[1], 2);
+  assert.equal(el('row-filter').value, 'all');
+  assert.equal(doc.activeElement, el('row-heading'));
+  assert.match(el('row-heading').textContent, /^문장 2 ·/);
+  assert.equal(el('row-text').textContent, repeated);
+  assert.equal(el('reason').value, '가치판단을 나타내는 표현을 확인했다.');
+  jump(report()[3], 4);
+  assert.equal(el('row-filter').value, 'all');
+  assert.equal(doc.activeElement, el('row-heading'));
+  assert.match(el('row-heading').textContent, /^문장 4 ·/);
+  assert.equal(el('row-text').textContent, repeated);
+  assert.equal(el('reason').value, '뒤쪽에 반복된 문장의 근거를 찾는 중이다.');
 });
