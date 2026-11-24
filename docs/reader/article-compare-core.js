@@ -76,7 +76,7 @@
 
   function revisionDetails(left, right) {
     const sameArticle = left.article === right.article;
-    const leftById = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r.category]));
+    const originalDecisions = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const revisedDecisions = new Map(right.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const rightById = new Map(right.rows.map(r => [r.id, r]));
     const oldRows = sameArticle ? null : uniqueRows(left.rows);
@@ -88,30 +88,36 @@
     function matchingId(row, from, to) {
       if (sameArticle) return row.id;
       // An offset alone may now point at a rewritten claim. Each version must
-      // have exactly one row with this wording, surrounding text and repeat count.
+      // have one unambiguous occurrence of the wording in matching context.
+      if (row.positions.length !== 1) return null;
       const key = rowFingerprint(row);
       return from.get(key) === row.id ? to.get(key) : null;
     }
-    const conflicts = {newlyObserved: [], unmatched: [], persisting: []};
+    const groups = () => ({newlyObserved: [], unmatched: [], persisting: [], scopeChanged: []});
+    const conflicts = groups(), quotedConflicts = groups();
     for (const decision of right.assessment.accuracy.rows) {
-      if (decision.category !== 'contradicted') continue;
+      if (decision.category !== 'contradicted' && decision.category !== 'quotedConflict') continue;
       const row = rightById.get(decision.rowId);
-      const previous = leftById.get(matchingId(row, newRows, oldRows)) ?? null;
-      const entry = {rowId: row.id, text: row.text, previous};
-      if (previous === null) conflicts.unmatched.push(entry);
-      else if (previous === 'contradicted') conflicts.persisting.push(entry);
-      else conflicts.newlyObserved.push(entry);
+      const priorDecision = originalDecisions.get(matchingId(row, newRows, oldRows)) ?? null;
+      const entry = {rowId: row.id, text: row.text, previous: priorDecision?.category ?? null, priorDecision, revised: decision};
+      const inventory = decision.category === 'quotedConflict' ? quotedConflicts : conflicts;
+      if (!priorDecision) inventory.unmatched.push(entry);
+      else if (priorDecision.category === decision.category && priorDecision.scope === decision.scope) inventory.persisting.push(entry);
+      else if (priorDecision.category === 'contradicted' || priorDecision.category === 'quotedConflict') inventory.scopeChanged.push(entry);
+      else inventory.newlyObserved.push(entry);
     }
     const core = new Set(left.assessment.accuracy.coreRowIds);
-    const untracedCore = [], originalConflicts = [];
+    const untracedCore = [], originalConflicts = [], originalQuotedConflicts = [];
     for (const row of left.rows) {
-      const originalConflict = leftById.get(row.id) === 'contradicted';
+      const original = originalDecisions.get(row.id);
+      const category = original.category;
+      const originalConflict = category === 'contradicted' || category === 'quotedConflict';
       if (!originalConflict && !core.has(row.id)) continue;
       const revised = revisedDecisions.get(matchingId(row, oldRows, newRows)) ?? null;
       const entry = {rowId: row.id, text: row.text};
       if (!revised && core.has(row.id)) untracedCore.push(entry);
       if (originalConflict) {
-        const conflict = {...entry, revised};
+        const conflict = {...entry, original, revised};
         const correction = row.receipt?.correction?.trim();
         if (!revised && correction && proposedCorrections?.get(correction) === row.id && row.positions.length === 1
             && !left.article.includes(correction) && !right.article.includes(row.text)) {
@@ -119,10 +125,11 @@
           // Consecutive repetitions share a row, but still have more than one location.
           if (candidate?.positions.length === 1) conflict.candidate = {...revisedDecisions.get(candidate.id), text: candidate.text};
         }
-        originalConflicts.push(conflict);
+        if (category === 'quotedConflict') originalQuotedConflicts.push(conflict);
+        else originalConflicts.push(conflict);
       }
     }
-    return {conflicts, untracedCore, originalConflicts};
+    return {conflicts, quotedConflicts, untracedCore, originalConflicts, originalQuotedConflicts};
   }
 
   function compare(left, right, mode) {

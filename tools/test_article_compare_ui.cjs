@@ -103,7 +103,11 @@ test('인용 속 충돌을 원기사 오류에서 분리하고 독립 편집자�
   assert.match(output, /지지율산출 대기 \(0\/0\)산출 대기 \(0\/0\)/);
   assert.match(output, /판정 완료율0% \(0\/1\)100% \(1\/1\)/);
   assert.match(output, /인용 속 사실 주장 충돌 1개.*원발언 · 발언록.*내용 근거 · 확정 예산표/);
-  assert.match(output, /새로 충돌로 판정된 기존 구절 · 0개/);
+  assert.match(output, /수정 후 원자료와 충돌한 구절 0개/);
+  assert.match(output, /수정 후 인용 속 사실 주장 충돌 1개새로 충돌로 판정된 기존 구절 · 1개/);
+  const changed = [...p.el('output').querySelectorAll('details')].find(item => item.querySelector('summary').textContent.includes('새로 충돌로 판정된 기존 구절'));
+  assert.match(changed.textContent, /수정 전 · 발언 사실 확인 · 담긴 주장 미확인.*원발언 · 발언록.*수정 후 · 발언 귀속 확인 · 인용 속 사실 주장 충돌/);
+  assert.match(changed.textContent, /내용을 대조한 인용 구간예산은 20억 원이었다.*내용 근거 · 확정 예산표/);
   p.reviewers(); p.el('compare').click(); output = p.el('output').textContent;
   assert.match(output, /판정 또는 확인 범위가 다른 구절 · 1개/);
   assert.match(output, /담긴 주장 미확인.*인용 속 사실 주장 충돌/);

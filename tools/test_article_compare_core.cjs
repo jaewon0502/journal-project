@@ -7,8 +7,8 @@ const rubric = require('../docs/reader/article-rubric.js');
 const sources = [{id: 'doc', title: '시험 회의록', url: 'https://example.invalid/minutes',
   version: '1판', locator: '표 1', excerpt: '시범 구역은 한 곳이다. 전국 시행 실적은 조사하지 않았다.'}];
 const base = '급행 버스를 도입한다.\n표본은 한 곳이다.\n전국 실적은 아직 조사 중이다.\n이 결정은 무책임하다.';
-function snapshot({article = base, states = [], levels = {}, core = []} = {}) {
-  const first = engine.prepare(article, sources);
+function snapshot({article = base, states = [], levels = {}, core = [], sources: catalog = sources} = {}) {
+  const first = engine.prepare(article, catalog);
   const receipts = first.rows.flatMap((row, index) => {
     const state = states[index];
     if (state == null) return [];
@@ -16,9 +16,9 @@ function snapshot({article = base, states = [], levels = {}, core = []} = {}) {
     return [engine.decide(row, {
       reason: '구역과 수치를 확인했다.', sourceIds: decision.status === 'opinion' ? [] : ['doc'],
       acknowledged: true, ...decision
-    }, sources)];
+    }, catalog)];
   });
-  const report = engine.report(article, sources, receipts);
+  const report = engine.report(article, catalog, receipts);
   const rows = report.rows;
   const ratings = {};
   for (const [dimension, level] of Object.entries(levels)) {
@@ -28,8 +28,8 @@ function snapshot({article = base, states = [], levels = {}, core = []} = {}) {
       impact: '독자가 조사 대상을 다르게 이해한다.'
     };
   }
-  const saved = rubric.save(report, sources, {coreRowIds: core.map(i => rows[i].id), ratings});
-  return {article, rows, demo: true, sourceKey: rows[0].sourceKey, assessment: rubric.evaluate(report, sources, saved)};
+  const saved = rubric.save(report, catalog, {coreRowIds: core.map(i => rows[i].id), ratings});
+  return {article, rows, demo: true, sourceKey: rows[0].sourceKey, assessment: rubric.evaluate(report, catalog, saved)};
 }
 const ratio = (n, d) => ({numerator: n, denominator: d, pct: d ? 100 * n / d : null});
 
@@ -138,6 +138,39 @@ test('수정본 충돌은 양쪽에서 유일한 문구와 문맥까지 일치�
     states: [null, null, null, 'contradicted']}), 'revision').conflicts;
   assert.equal(ambiguous.newlyObserved.length, 0);
   assert.equal(ambiguous.unmatched.length, 1);
+  const repeatedRows = '앞 문장이다.\n같은 값이다.\n같은 값이다.\n뒤 문장이다.';
+  const old = snapshot({article:repeatedRows, states:[null, 'contradicted']});
+  const added = snapshot({article:repeatedRows + '\n보도 시점이다.', states:[null, 'contradicted']});
+  assert.equal(old.rows[1].positions.length, 2);
+  assert.equal(compare(old, old, 'revision').conflicts.persisting.length, 1);
+  assert.equal(compare(old, added, 'revision').conflicts.unmatched.length, 1);
+});
+
+test('두 판본에 인용 속 충돌이 한 건씩 있어도 이전 인용의 후속 판정과 새로 내용까지 확인한 발언을 구분한다', () => {
+  const first = '의원은 “예산은 20억 원이었다”고 말했다.';
+  const second = '시장도 “예산은 30억 원이었다”고 답했다.';
+  const article = first + '\n' + second;
+  const catalog = [sources[0], {id:'budget', title:'예산표', url:'https://budget.example/table', version:'확정본', locator:'표 1', excerpt:'사업 예산은 10억 원이었다.'}];
+  const speech = {status:'attribution', sourceIds:['doc']};
+  const conflict = {...speech, contentStatus:'contradicted', contentChecked:true, contentReason:'의결액 원표에서 해당 금액을 대조했다.', contentSourceIds:['budget']};
+  const pack = (states, text = article) => snapshot({article:text, states, sources:catalog});
+  const before = pack([conflict, speech]), after = pack([speech, conflict]);
+  const compared = compare(before, after, 'revision');
+  assert.deepEqual([compared.accuracy.left.quotedConflict, compared.accuracy.right.quotedConflict], [1,1]);
+  assert.deepEqual([compared.accuracy.left.contradicted, compared.accuracy.right.contradicted], [0,0]);
+  assert.equal(compared.originalQuotedConflicts[0].text, first);
+  assert.equal(compared.originalQuotedConflicts[0].revised.label, '발언 사실 확인 · 담긴 주장 미확인');
+  assert.equal(compared.quotedConflicts.newlyObserved[0].text, second);
+  assert.equal(compared.quotedConflicts.newlyObserved[0].priorDecision.label, '발언 사실 확인 · 담긴 주장 미확인');
+  assert.equal(compared.quotedConflicts.newlyObserved[0].revised.scope, '예산은 30억 원이었다');
+  assert.equal(compare(before, before, 'revision').quotedConflicts.persisting[0].text, first);
+  const rewritten = compare(before, pack([conflict], '의장은 “예산은 40억 원이었다”고 답했다.'), 'revision');
+  assert.equal(rewritten.quotedConflicts.unmatched.length, 1);
+  assert.equal(rewritten.originalQuotedConflicts[0].revised, null);
+  const narrative = pack(['contradicted', speech]);
+  assert.equal(compare(narrative, before, 'revision').quotedConflicts.scopeChanged[0].previous, 'contradicted');
+  assert.equal(compare(before, narrative, 'revision').conflicts.scopeChanged[0].previous, 'quotedConflict');
+  assert.equal(compare(before, narrative, 'revision').conflicts.persisting.length, 0);
 });
 
 test('원본 핵심 주장을 삭제하거나 다시 쓰면 편향 점수가 낮아져도 그 구절의 보존 여부를 별도로 남긴다', () => {
@@ -176,7 +209,7 @@ test('수정 전 충돌 구절은 다른 사실로 대체해 판정 수가 같�
   assert.equal(r.accuracy.left.adjudicated, r.accuracy.right.adjudicated);
   assert.equal(r.accuracy.right.accuracyPct, 100);
   assert.equal(r.untracedCore.length, 0);
-  assert.deepEqual(r.originalConflicts, [{rowId: left.rows[0].id, text: left.rows[0].text, revised: null}]);
+  assert.deepEqual(r.originalConflicts, [{rowId: left.rows[0].id, text: left.rows[0].text, original:left.assessment.accuracy.rows[0], revised: null}]);
 });
 
 test('원본 충돌의 후속 판정을 미결·의견·부분 범위까지 현재 구간의 실제 판정에서 읽는다', () => {

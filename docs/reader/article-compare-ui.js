@@ -10,7 +10,6 @@
   const percent = value => Number.isFinite(value) ? Number(value.toFixed(1)) + '%' : '산출 대기';
   const ratio = (n, d, value) => percent(value) + ' (' + n + '/' + d + ')';
   const level = v => v === 'na' ? '해당 없음' : Number.isInteger(v) ? v + '단계' : '미평가';
-  const categories = {supported: '근거 지지', contradicted: '근거 충돌', quotedConflict: '발언 귀속 확인 · 인용 속 사실 주장 충돌', unresolved: '미결', excluded: '분모 제외'};
   let showingExample = false;
   function element(tag, content, cls) {
     const node = document.createElement(tag);
@@ -178,6 +177,7 @@
     panel.append(table);
     if (c.accuracy.left.quotedConflict || c.accuracy.right.quotedConflict) {
       panel.append(note('발언 귀속을 확인하고 그 내용의 반증까지 기록한 구간은 판정 완료율에 포함하고, 기사 서술의 근거 지지율에서는 제외합니다.'));
+      if (c.mode === 'revision') return panel; // Both versions' quoted conflicts have a paired detail below.
       for (const [index, side] of ['left', 'right'].entries()) {
         const a = c.accuracy[side];
         const list = detail(names()[index] + ' · 인용 속 사실 주장 충돌 ' + a.quotedConflict + '개');
@@ -210,52 +210,67 @@
     for (const id of r.contentSourceIds || []) appendSource(id, '내용 근거');
     return div;
   }
-  function revisionFacts(c, snapshots) {
-    const panel = section('원자료와 충돌한 구절 대조');
-    if (c.originalConflicts.length) {
-      panel.append(element('h4', '수정 전 충돌 구절 ' + c.originalConflicts.length + '개'),
-        note('수정 후의 확인 범위와 근거를 대조하세요. 표현이나 주변 문장이 달라진 구절은 직접 확인해야 합니다.'));
-      for (const row of c.originalConflicts) {
-        const {revised} = row;
-        const item = detail((revised ? revised.label : '대응 구절 미확인') + ' · ' + row.text);
-        const pair = element('div', null, 'pair');
-        const before = receiptEvidence(snapshots[0], row.rowId);
-        before.prepend(element('h4', '수정 전 · 근거 충돌'));
-        const after = element('div');
-        after.append(element('h4', '수정 후 · ' + (revised?.label ?? '대응 구절 미확인')));
-        if (revised) {
-          if (revised.scope !== row.text) after.append(note('확인 범위'), element('blockquote', revised.scope));
-          after.append(receiptEvidence(snapshots[1], revised.rowId));
-        } else if (row.candidate) {
-          after.append(note('저장한 정정 문구와 일치하는 수정본 구절 · ' + row.candidate.label), element('blockquote', row.candidate.text));
-          if (row.candidate.scope !== row.candidate.text) {
-            after.append(note('확인 범위'), element('blockquote', row.candidate.scope));
-          }
-          after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
-        } else after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
-        pair.append(before, after);
-        item.append(pair);
-        panel.append(item);
-      }
+  function decisionEvidence(snapshot, decision, text, name) {
+    const side = element('div');
+    side.append(element('h4', name + ' · ' + (decision?.label ?? '대응 구절 미확인')));
+    if (!decision) return side;
+    if (snapshot.assessment.accuracy.coreRowIds.includes(decision.rowId)) side.append(element('strong', '핵심 주장'));
+    if (decision.scope !== text && decision.category !== 'quotedConflict') side.append(note('확인 범위'), element('blockquote', decision.scope));
+    side.append(receiptEvidence(snapshot, decision.rowId));
+    return side;
+  }
+  function originalConflictList(panel, snapshots, rows, quoted) {
+    panel.append(element('h4', (quoted ? '수정 전 인용 속 사실 주장 충돌 ' : '수정 전 충돌 구절 ') + rows.length + '개'));
+    for (const row of rows) {
+      const {revised} = row;
+      const item = detail((revised ? revised.label : '대응 구절 미확인') + ' · ' + row.text);
+      const pair = element('div', null, 'pair');
+      const before = decisionEvidence(snapshots[0], row.original, row.text, '수정 전');
+      const after = decisionEvidence(snapshots[1], revised, row.text, '수정 후');
+      if (!revised && row.candidate) {
+        after.append(note('저장한 정정 문구와 일치하는 수정본 구절 · ' + row.candidate.label), element('blockquote', row.candidate.text));
+        if (row.candidate.scope !== row.candidate.text) {
+          after.append(note('확인 범위'), element('blockquote', row.candidate.scope));
+        }
+        after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
+      } else if (!revised) after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
+      pair.append(before, after);
+      item.append(pair);
+      panel.append(item);
     }
-    panel.append(element('h4', '수정 후 원자료와 충돌한 구절'));
+  }
+  function revisedConflictList(panel, snapshots, inventory, title) {
     const groups = [
-      ['새로 충돌로 판정된 기존 구절', c.conflicts.newlyObserved],
-      ['원본과 짝을 확인할 수 없는 충돌 구절', c.conflicts.unmatched],
-      ['두 판본 모두 충돌한 구절', c.conflicts.persisting]
+      ['새로 충돌로 판정된 기존 구절', inventory.newlyObserved],
+      ['충돌로 판단한 범위가 달라진 구절', inventory.scopeChanged],
+      ['원본과 짝을 확인할 수 없는 충돌 구절', inventory.unmatched],
+      ['두 판본 모두 같은 범위에서 충돌한 구절', inventory.persisting]
     ];
-    panel.append(note('같은 구절의 판단이 바뀌었거나 대응할 원문을 찾지 못한 경우, 새 오류가 생겼는지는 직접 대조하세요.'));
-    for (const [title, rows] of groups) {
-      const group = detail(title + ' · ' + rows.length + '개');
-      if (!rows.length) group.append(note('해당 구절이 없습니다.'));
+    const count = groups.reduce((n, [, rows]) => n + rows.length, 0);
+    panel.append(element('h4', title + ' ' + count + '개'));
+    for (const [label, rows] of groups) {
+      if (!rows.length) continue;
+      const group = detail(label + ' · ' + rows.length + '개');
       for (const row of rows) {
         const div = element('div', null, 'item');
         div.append(element('blockquote', row.text));
-        if (row.previous) div.append(note('수정 전 판정 · ' + categories[row.previous]));
-        div.append(receiptEvidence(snapshots[1], row.rowId));
+        const pair = element('div', null, 'pair');
+        pair.append(decisionEvidence(snapshots[0], row.priorDecision, row.text, '수정 전'),
+          decisionEvidence(snapshots[1], row.revised, row.text, '수정 후'));
+        div.append(pair);
         group.append(div);
       }
       panel.append(group);
+    }
+  }
+  function revisionFacts(c, snapshots) {
+    const panel = section('원자료와 충돌한 구절 대조');
+    panel.append(note('같은 구절의 판정이 바뀌었거나 대응할 구절이 없으면, 새 오류가 생겼는지 원문과 자료를 대조하세요.'));
+    originalConflictList(panel, snapshots, c.originalConflicts, false);
+    revisedConflictList(panel, snapshots, c.conflicts, '수정 후 원자료와 충돌한 구절');
+    if (c.originalQuotedConflicts.length || c.accuracy.right.quotedConflict) {
+      originalConflictList(panel, snapshots, c.originalQuotedConflicts, true);
+      revisedConflictList(panel, snapshots, c.quotedConflicts, '수정 후 인용 속 사실 주장 충돌');
     }
     return panel;
   }
