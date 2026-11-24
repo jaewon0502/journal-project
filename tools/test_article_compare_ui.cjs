@@ -34,6 +34,20 @@ function page(t, hash = '') {
   return {w, el, load, select, selectFiles, reviewers, settled};
 }
 
+function captureDownload(t, view) {
+  let downloaded;
+  view.w.Blob = Blob;
+  view.w.URL.createObjectURL = value => { downloaded = value; return 'blob:local-file'; };
+  view.w.URL.revokeObjectURL = () => {};
+  view.w.HTMLAnchorElement.prototype.click = function () {};
+  return async button => {
+    downloaded = null;
+    button.click();
+    await t.waitFor(() => assert.ok(downloaded));
+    return JSON.parse(await downloaded.text());
+  };
+}
+
 test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 구절과 두 사람의 근거를 연다', async t => {
   const example = require('../docs/reader/revision-evidence-example.js');
   const blind = require('../docs/reader/blind-revision.js');
@@ -126,7 +140,7 @@ test('집계에서 지정한 편향 기준은 같은 판본과 익명 판정이 
   assert.equal(p.el('result').hidden, true);
 });
 
-test('같은 핵심 발언에 대응할 수정본 구절이 없으면 원본 위치와 두 판정의 실제 발언 근거, 수정본 전문을 연다', async t => {
+async function viewpointFixture() {
   const blind = require('../docs/reader/blind-revision.js');
   const agreement = require('../docs/reader/revision-agreement.js');
   const series = require('../docs/reader/revision-series.js');
@@ -152,6 +166,14 @@ test('같은 핵심 발언에 대응할 수정본 구절이 없으면 원본 위
   }
   const pair = await blind.resolveBundle(items);
   const record = series.makeRecord(agreement.compare(...pair), pair[0].key);
+  return {items, record, body, quote, revised};
+}
+
+test('같은 핵심 발언에 대응할 수정본 구절이 없으면 원본 위치와 두 판정의 실제 발언 근거, 수정본 전문을 연다', async t => {
+  const blind = require('../docs/reader/blind-revision.js');
+  const agreement = require('../docs/reader/revision-agreement.js');
+  const series = require('../docs/reader/revision-series.js');
+  const {items, record, body, quote, revised} = await viewpointFixture();
   assert.deepEqual(record.facts.before.map(r => r.outcome), ['supported', 'limited']);
   const link = id => '#review=' + id + '&focus=core-context';
   const p = page(t, link(series.reviewId(record)));
@@ -200,6 +222,35 @@ test('같은 핵심 발언에 대응할 수정본 구절이 없으면 원본 위
   await t.waitFor(() => assert.match(p.el('review-target-status').textContent, /다시 대조할 원본 핵심 구절이 없습니다/));
   assert.equal(p.el('result').hidden, true);
   assert.equal(p.el('output').textContent, '');
+});
+
+test('핵심 발언만 열어 판단을 저장해도 다른 화면의 사실 대조와 공개 점수는 보존된다', async t => {
+  const retention = require('../docs/reader/retention-case.js');
+  const series = require('../docs/reader/revision-series.js');
+  const {items, record} = await viewpointFixture();
+  const notes = [{before:0, after:0, status:'retained', reason:'두 판본이 같은 사업비 10억 원을 제시한다.'}];
+  const archive = await retention.create(record, items, notes);
+  const open = (view, value) => view.select('blind-bundle-files', '대조기록.json', JSON.stringify(value));
+  const focused = page(t, '#review=' + series.reviewId(record) + '&focus=core-context&example=quote');
+  assert.equal(focused.el('blind-bundle-picker').hidden, false);
+  open(focused, archive);
+  const output = focused.el('output');
+  await t.waitFor(() => assert.ok(output.querySelector('[data-core-context-state]')));
+  assert.equal(output.querySelector('.fact-retention'), null);
+  const reason = '비판한 의원 대신 다른 위원장의 지지 발언을 실었다.';
+  for (const [name, value, event] of [['state','changed','change'], ['target','2','input'], ['reason',reason,'input']]) {
+    const field = output.querySelector('[data-core-context-' + name + ']');
+    field.value = value;
+    field.dispatchEvent(new focused.w.Event(event, {bubbles:true}));
+  }
+  const saved = await captureDownload(t, focused)(output.querySelector('[data-retention-save]'));
+  assert.deepEqual(retention.verifyAll(saved, record), {notes, contextNotes:[{before:1, after:1, status:'changed', reason}]});
+  const fresh = page(t, '#blind-revision');
+  open(fresh, saved);
+  await t.waitFor(() => assert.ok(fresh.el('agreement-export')));
+  assert.equal(fresh.el('output').querySelector('[data-retention-reason]').value, notes[0].reason);
+  assert.match(fresh.el('output').querySelector('[data-core-context-summary]').textContent, /대조 완료 1.1개.*남은 구절 0개/);
+  assert.deepEqual(await captureDownload(t, fresh)(fresh.el('agreement-export')), record);
 });
 
 test('중요한 왜곡의 전후 개수를 같은 네 점수로 비교하고 경계 안에서 반대로 움직인 항목을 센다', async t => {
@@ -276,20 +327,7 @@ test('사후 대조한 개인 파일 하나로 이어 열고 두 편집자의 �
   const items = await example.files();
   p.selectFiles('blind-bundle-files', items.map(item => ({name:item.name, text:async () => item.raw})));
   await t.waitFor(() => assert.ok(p.el('agreement-export')));
-  function capture(view) {
-    let downloaded;
-    view.w.Blob = Blob;
-    view.w.URL.createObjectURL = value => { downloaded = value; return 'blob:local-file'; };
-    view.w.URL.revokeObjectURL = () => {};
-    view.w.HTMLAnchorElement.prototype.click = function () {};
-    return async button => {
-      downloaded = null;
-      button.click();
-      await t.waitFor(() => assert.ok(downloaded));
-      return JSON.parse(await downloaded.text());
-    };
-  }
-  const download = capture(p);
+  const download = captureDownload(t, p);
   const original = await download(p.el('agreement-export'));
   const row = p.el('joint-facts').querySelector('[data-retention-before="1"]');
   const reason = '두 판본 모두 조사한 도서관 100곳 중 20곳으로 같은 대상과 수치를 명시했다.';
@@ -311,7 +349,7 @@ test('사후 대조한 개인 파일 하나로 이어 열고 두 편집자의 �
   assert.match(summary.textContent, /자동 대응으로 확인 0개.*진행자가 유지 확인 1개.*검토 남음 0개/);
   assert.equal(fresh.w.document.activeElement, summary);
   assert.equal(fresh.el('joint-facts').querySelector('[data-retention-reason]').value, reason);
-  assert.deepEqual(await capture(fresh)(fresh.el('agreement-export')), original);
+  assert.deepEqual(await captureDownload(t, fresh)(fresh.el('agreement-export')), original);
   assert.equal(JSON.stringify(original).includes(reason), false);
 
   const linked = page(t, '#review=' + series.reviewId(original) + '&focus=retention');
@@ -970,7 +1008,7 @@ test('따로 배정한 두 편집자의 개선율이 각각 100%여도 개선된
   p.el('agreement-export').click();
   const record = JSON.parse(await exported.text());
   assert.equal(record.demo, true);
-  assert.equal(record.version, 5);
+  assert.equal(record.version, 6);
   assert.deepEqual(record.facts.before[0], {outcome:'contradicted', flag:'article'});
   assert.deepEqual(record.facts.after[0], {outcome:'disputed', flag:'article'});
   assert.deepEqual(record.facts.after.at(-1), {outcome:'disputed', flag:'none'});

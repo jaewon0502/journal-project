@@ -6,7 +6,7 @@
     quotedConflict:'인용 속 사실 주장 반박', disputed:'두 판정 불일치', pending:'미결', excluded:'두 사람 모두 의견', shared:'동일한 판정 기록'};
   let mounted = 0;
 
-  function mount({container, record, editors, notes = [], onSave, decisionEvidence}) {
+  function mount({container, record, editors, notes = [], contextForm, onSave, decisionEvidence}) {
     const doc = container.ownerDocument;
     const core = root.JournalRetentionCase;
     const revised = editors[0].snapshots[1].rows;
@@ -50,11 +50,14 @@
     feedback.dataset.retentionFeedback = '';
     feedback.id = instance + '-status';
     feedback.setAttribute('role', 'status');
-    box.append(el('h4', '진행자의 원본 사실 대조'), summary, save,
+    const group = container.querySelector('.fact-retention');
+    box.append(el('h4', contextForm ? '진행자의 구절 대조 기록' : '진행자의 원본 사실 대조'));
+    if (group) box.append(summary);
+    box.append(save,
       el('p', '개인 보관용 파일에 기사·원자료와 미적용 초안을 포함한 두 편집자의 작업 파일 4개, 진행자 대응표 2개, 사후 판단을 담습니다. 이 화면은 파일을 외부로 보내지 않습니다. 다운로드한 파일을 가진 사람은 기사와 초안을 읽을 수 있습니다.', 'note'),
       feedback);
-    const group = container.querySelector('.fact-retention');
-    if (group) group.before(box);
+    const firstGroup = group || container.querySelector('.core-context');
+    if (firstGroup) firstGroup.before(box);
     else container.append(box);
 
     function summarize(saved) {
@@ -257,13 +260,17 @@
       const revision = changes;
       save.disabled = true;
       try {
-        const entries = collect();
-        await onSave(entries);
+        // A focused view may show only the core quotations. Keep private fact
+        // notes from the archive even when that form is outside this view.
+        const entries = group ? collect() : notes;
+        const contexts = contextForm?.collect();
+        await onSave(entries, contexts);
         summarize(entries);
+        if (contextForm) contextForm.saved(contexts);
         if (changes === revision) {
           forms.forEach(form => rowMark(form, false));
           feedback.classList.remove('error');
-          feedback.textContent = '현재 사후 판단을 담은 개인 보관용 파일의 다운로드를 시작했습니다.';
+          feedback.textContent = '저장을 누른 시점의 판단을 담은 개인 보관용 파일의 다운로드를 시작했습니다.';
         }
       } catch (error) {
         feedback.classList.add('error');

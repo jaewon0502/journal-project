@@ -25,7 +25,8 @@ test('도서관 연습 파일 여섯 개는 다시 열어도 같은 기록과 �
   const filename = path.join(__dirname, '../docs/reader/revision-series-example.js');
   const fixtures = vm.runInNewContext(readFileSync(filename, 'utf8'));
   const library = fixtures.find(item => item.name === '도서관 운영 연습 기사');
-  assert.deepEqual(series.makeRecord(joint, first.key), JSON.parse(JSON.stringify(library.record)));
+  assert.deepEqual(series.makeLegacyMatchRecord(joint, first.key), JSON.parse(JSON.stringify(library.record)));
+  assert.equal(series.reviewId(series.makeRecord(joint, first.key), 5), series.reviewId(library.record));
   assert.deepEqual(series.makeRecord(joint, second.key), series.makeRecord(joint, first.key));
   assert.deepEqual(Array.from(fixtures, item => item.record.version), [3, 5]);
   const results = series.summarize(Array.from(fixtures, item => item.record));
@@ -61,7 +62,7 @@ test('편향 표현을 고쳤어도 원래 핵심 반대 발언이 이어지지 
   const reviews = await blind.resolveBundle(retention.read(archive).items);
   const joint = agreement.compare(...reviews);
   const rebuilt = series.makeRecord(joint, reviews[0].key);
-  assert.equal(series.reviewId(rebuilt), series.reviewId(record));
+  assert.equal(series.reviewId(rebuilt, 5), series.reviewId(record));
   assert.deepEqual(retention.verify(archive, rebuilt), []);
   assert.deepEqual(joint.missingReturns, []);
   const [article] = series.summarize([record]).articles;

@@ -6,7 +6,7 @@ const engine = require('../docs/reader/factcheck-engine.js');
 const rubric = require('../docs/reader/article-rubric.js');
 const blind = require('../docs/reader/blind-revision.js');
 const agreement = require('../docs/reader/revision-agreement.js');
-const {makeRecord, reviewId, summarize} = require('../docs/reader/revision-series.js');
+const {makeRecord, makeLegacyMatchRecord, reviewId, summarize} = require('../docs/reader/revision-series.js');
 
 const ratio = (numerator, denominator) => ({numerator, denominator, pct: denominator ? 100 * numerator / denominator : null});
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -117,7 +117,7 @@ test('두 대응표에서 같은 점수와 익명 사실 판정을 내보내고 
   assert.deepEqual(saved, makeRecord(joint, two.key));
   const wire = JSON.stringify(saved);
   const expected = withMatches(withFacts(record('example', [[2, 1, 3, 0]]), [fact('pending')], [fact('disputed', 'article')]), []);
-  expected.version = 5;
+  expected.version = 6;
   expected.factContext = {beforeCore:[0], afterCore:[0], matches:[]};
   for (const role of ['before', 'after']) {
     expected[role] = {articleSha256: one.key.mapping[role].articleSha256, sourcesSha256: one.key.mapping[role].sourcesSha256};
@@ -448,4 +448,42 @@ test('빈 선택과 모든 점수가 빠진 기사를 구별하고 분모가 없
     for (const k of ['improved', 'worsened', 'unchangedEvidenceImprovement']) assert.deepEqual(s[k], ratio(0, 0));
     assert.deepEqual(s.dimensions.map(d => d.improved.pct), [null, null, null, null]);
   }
+});
+
+test('발언자가 바뀐 단독 인용문의 현재 대응과 이전 요약 식별값을 같은 배포 묶음에서 각각 재현한다', async () => {
+  const original = ['야당 대변인의 서면 논평', '다음은 논평 전문이다.',
+    '“이번 예산안은 무책임하다.”', '“사업비는 10억 원이다.”', '논평 끝.'].join('\n');
+  const paper = article => ({...work(article), sources:[{id:'minutes',title:'가상 회의록',url:'https://minutes.example/report',
+    version:'초판', locator:'발언', excerpt:'이번 예산안은 무책임하다. 사업비는 10억 원이다.'}, ...work(article).sources]});
+  const reviews = [];
+  for (let person = 0; person < 2; person++) {
+    const {key, packets} = await blind.prepare(paper(original), paper(original.replace('야당', '여당')));
+    for (const copy of Object.values(packets)) {
+      const rows = engine.prepare(copy.article, copy.sources).rows;
+      copy.receipts = [2,3].map(index => engine.decide(rows[index], {acknowledged:true, sourceIds:[copy.sources[0].id],
+        reason:'편집자 ' + person + '의 독립 대조', status:'attribution', contentChecked:true,
+        ...(index===3 ? {contentStatus:'supported', contentSourceIds:[copy.sources[1].id], contentReason:'사업비는 예산표와 일치한다.'} :
+          {contentStatus:'opinion',contentReason:'인용한 평가의 발언 사실을 확인했다.'})}, copy.sources));
+      const report = engine.report(copy.article, copy.sources, copy.receipts);
+      copy.articleAssessment = rubric.save(report, copy.sources, {coreRowIds:[rows[2].id,rows[3].id],ratings:{}});
+    }
+    reviews.push({key, ...await blind.resolve(key,packets.A,packets.B)});
+  }
+  const joint = agreement.compare(...reviews);
+  const modern = makeRecord(joint,reviews[0].key), legacy = makeLegacyMatchRecord(joint,reviews[1].key);
+  assert.equal(modern.version,6);
+  assert.equal(legacy.version,5);
+  assert.deepEqual(legacy.factMatches,[[3,3]]);
+  assert.deepEqual(modern.factMatches,[[3,null]]);
+  assert.deepEqual(legacy.factContext.matches,[[2,2],[3,3],[4,4]]);
+  assert.deepEqual(modern.factContext.matches,[[4,4]]);
+  assert.deepEqual(summarize([legacy]).articles[0].coreContextReview,{total:1,unmatched:[]});
+  assert.deepEqual(summarize([modern]).articles[0].coreContextReview,{total:1,unmatched:[2]});
+  assert.notEqual(reviewId(modern,5), reviewId(legacy));
+  assert.equal(reviewId(modern,2), reviewId(legacy,2));
+  assert.throws(() => reviewId(legacy,6), /구절별/);
+  assert.throws(() => makeLegacyMatchRecord({...joint},reviews[0].key), /대응표/);
+  legacy.factMatches[0][1] = null;
+  legacy.factContext.matches[0][1] = 3;
+  assert.deepEqual(makeLegacyMatchRecord(joint,reviews[0].key).factContext.matches,[[2,2],[3,3],[4,4]]);
 });

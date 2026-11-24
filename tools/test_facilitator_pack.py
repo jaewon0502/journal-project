@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from io import BytesIO
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
@@ -75,10 +76,21 @@ class FacilitatorPack(unittest.TestCase):
         with ZipFile(BytesIO(packet_bytes())) as archive:
             for name, bundled in QUOTE_PRACTICE.items():
                 self.assertEqual(archive.read(bundled), (CASES / 'core-quote-revision' / name).read_bytes())
+            case = json.loads(archive.read(QUOTE_PRACTICE['coordinator-case.json']))
+            self.assertIn(f'#review={case["reviewId"]}&amp;focus=core-context&amp;example=quote',
+                          archive.read('시작.html').decode())
+            embedded = re.findall(r'<script id="quote-practice" type="application/json">(.*?)</script>',
+                                  archive.read('article-compare.html').decode(), re.S)
+            self.assertEqual([json.loads(data) for data in embedded], [case])
+            self.assertEqual(len(case['items']), 6)
+            self.assertTrue(all(item['data']['demo'] is True for item in case['items']))
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
                         self.assertTrue(set(QUOTE_PRACTICE.values()).isdisjoint(nested.namelist()))
+                        self.assertNotIn('core-context-notes-ui.js', nested.namelist())
+                        for page in (n for n in nested.namelist() if n.endswith('.html')):
+                            self.assertNotIn(b'id="quote-practice"', nested.read(page))
 
     def test_synthetic_rationales_are_only_in_the_coordinator_kit(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:

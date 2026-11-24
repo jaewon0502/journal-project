@@ -257,7 +257,7 @@ test('전년에 비해 늘어난 회계가 달라지면 두 판본이 각각 사
   historical.factContext.matches.unshift([2,2]);
   const kept = {before:4, after:4, status:'retained', reason:'일반회계 결산액 344.5조 원을 대조했다.'};
   const reviewId = series.reviewId(historical);
-  const archive = {...fresh, version:2, reviewId, notes:[kept], checksum:engine.digestValue([
+  const archive = {format:fresh.format, version:2, reviewId, evidenceDigest:fresh.evidenceDigest, items:fresh.items, notes:[kept], checksum:engine.digestValue([
     fresh.format, 2, reviewId, fresh.evidenceDigest, [[4,4,'retained',kept.reason]]])};
   const stored = retention.read(archive);
   assert.deepEqual(stored.notes, [kept]);

@@ -60,7 +60,8 @@ START = """<!doctype html>
 <li>‘기사별 평가 요약 저장’으로 기사마다 요약 한 개를 보관하세요. <a href="revision-series.html">여러 기사 개선율 집계</a>에서 편향 개선율과 공동 사실 판정 범위를 확인하세요. 수정본에 충돌 표시가 남았거나 원본에서 확인한 사실을 다시 대조해야 하면 해당 기사 이름을 누르세요. 작업 파일 4개와 대응표 2개를 열면 선택한 구절과 두 편집자의 근거가 나옵니다.</li>
 <li>‘같은 항목에서 본 중요한 왜곡’에서 원본과 수정본의 비율을 공통 개선율과 함께 확인하세요. 판단이 갈린 항목의 링크를 누르고 그 기사의 원래 파일을 열면, 해당 기준에 적은 두 편집자의 이유와 근거가 나옵니다.</li>
 <li>원본 사실이 수정본에도 남았는지 직접 대조했다면 구절별 판단과 이유를 넣고 ‘진행자용 대조 파일 저장’을 누르세요. 다음에는 ‘두 편집자의 결과 한꺼번에 열기’에서 이 파일 하나로 이어갑니다. 이 파일에는 두 편집자의 원자료·미적용 초안과 진행자 대응표가 모두 들어갑니다.</li></ol>
-<p><strong>가상 기사에서 사라진 반대 발언 찾기</strong> ·
+<p><a href="article-compare.html#review={{QUOTE_REVIEW}}&amp;focus=core-context&amp;example=quote"><strong>가상 기사에서 바뀐 핵심 발언 대조하기</strong></a> ·
+야당과 여당 의원의 발언을 대조하고 진행자 판단을 파일로 저장해 이어볼 수 있습니다. 집계 숫자부터 보려면
 <a href="revision-series.html">여러 기사 개선율 집계</a>에서 <code>연습 예시/핵심발언/기사별-요약.json</code>을 여세요.
 ‘대응을 찾지 못한 원본 핵심 구절 1개 대조’를 누르고 같은 폴더의 <code>진행자용-대조기록.json</code>을 열면 원래 발언과 수정본을 읽을 수 있습니다.</p></section>
 </main></body></html>
@@ -124,10 +125,14 @@ def packet_bytes():
     practice = field_practice_sample()
     # A data URL also downloads from a local file:// launch page in Chrome.
     start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii'))
-    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer), '시작.html': start.encode(),
+    files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer),
              'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice}
     for filename, destination in QUOTE_PRACTICE.items():
         files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()
+    case = json.loads(files[QUOTE_PRACTICE['coordinator-case.json']])
+    if len(case['items']) != 6 or not all(item['data'].get('demo') is True for item in case['items']):
+        raise ValueError('핵심 발언 연습에는 가상 기사 작업 파일과 가상 대응표만 넣으세요.')
+    files['시작.html'] = start.replace('{{QUOTE_REVIEW}}', case['reviewId']).encode()
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()
@@ -136,6 +141,9 @@ def packet_bytes():
         if name in ('article-compare.html', 'revision-series.html'):
             page = page.replace('<a href="../article-rubric.md">기사 평가 기준과 계산식</a>',
                                 '<a href="시작.html">진행자 시작 화면</a>')
+        if name == 'article-compare.html':
+            payload = json.dumps(case, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+            page = page.replace('</body>', f'<script id="quote-practice" type="application/json">{payload}</script></body>', 1)
         add_page(files, name, page)
     for case, folder in CASE_FOLDERS.items():
         files[f'채점표/{folder}/coordinator-key.json'] = (CASES / case / 'coordinator-key.json').read_bytes()

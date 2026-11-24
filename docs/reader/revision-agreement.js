@@ -134,11 +134,17 @@
   function comparedScores(joint, key) { return JSON.parse(savedComparison(joint, key).scores); }
   function comparedFacts(joint, key) { return JSON.parse(savedComparison(joint, key).facts); }
 
-  function recordFields(joint, key) {
+  function recordFields(joint, key, legacyMatches = false) {
     const saved = savedComparison(joint, key);
     if (!saved.completeReturns) throw new Error('각 편집자의 원본과 수정본 네 파일에 구절 판정이나 편향 평가를 하나 이상 기록한 뒤 요약을 저장하세요.');
-    return {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts),
+    const fields = {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts),
       factMatches: JSON.parse(saved.factMatches), factContext: JSON.parse(saved.factContext)};
+    if (legacyMatches && saved.withheld.length) {
+      const oldPairs = new Map(saved.withheld);
+      fields.factContext.matches = fields.factContext.matches.concat(saved.withheld.map(pair => [...pair])).sort((a, b) => a[0] - b[0]);
+      for (const pair of fields.factMatches) if (oldPairs.has(pair[0])) pair[1] = oldPairs.get(pair[0]);
+    }
+    return fields;
   }
 
   function compare(first, second) {
@@ -154,20 +160,22 @@
       id: d.id, title: d.title, first: transition(d.left, afterById.get(d.id).left), second: transition(d.right, afterById.get(d.id).right)
     }));
     const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
-    const matched = comparison.matchRevisionRows(before.view, after.view);
+    const legacyOnly = new Map();
+    const matched = comparison.matchRevisionRows(before.view, after.view, legacyOnly);
     const revisedIndexes = new Map(after.facts.rows.map((row, index) => [row.rowId, index]));
     const coreCount = row => Number(row.coreLeft) + Number(row.coreRight);
     const factContext = {beforeCore: before.facts.rows.map(coreCount), afterCore: after.facts.rows.map(coreCount), matches: []};
-    const factMatches = [];
+    const factMatches = [], withheld = [];
     for (const [index, row] of before.facts.rows.entries()) {
       const revised = revisedIndexes.get(matched.get(row.rowId)) ?? null;
+      if (legacyOnly.has(row.rowId)) withheld.push([index, revisedIndexes.get(legacyOnly.get(row.rowId))]);
       if (revised !== null) factContext.matches.push([index, revised]);
       if (facts.before[index].outcome === 'supported') factMatches.push([index, revised]);
     }
     const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, factMatches, factContext, missingReturns};
     const scores = ({before, after}) => ({before, after});
     compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], completeReturns: !missingReturns.length, facts: JSON.stringify(facts),
-      factMatches: JSON.stringify(factMatches), factContext: JSON.stringify(factContext),
+      factMatches: JSON.stringify(factMatches), factContext: JSON.stringify(factContext), withheld,
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }

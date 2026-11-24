@@ -1,6 +1,6 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {compare} = require('../docs/reader/article-compare-core.js');
+const {compare, matchRevisionRows} = require('../docs/reader/article-compare-core.js');
 const engine = require('../docs/reader/factcheck-engine.js');
 const rubric = require('../docs/reader/article-rubric.js');
 
@@ -33,6 +33,30 @@ function snapshot({article = base, states = [], levels = {}, core = [], sources:
   return {article, rows, sources:catalog, demo: true, sourceKey: rows[0].sourceKey, assessment: rubric.evaluate(report, catalog, saved)};
 }
 const ratio = (n, d) => ({numerator: n, denominator: d, pct: d ? 100 * n / d : null});
+
+test('단독 인용문의 문구가 같아도 바뀐 논평 제목·끝 서명은 다시 대조한다', () => {
+  const quote = '“이번 예산안은 무책임하다.”';
+  function paired(before, after, target = quote) {
+    const first = engine.prepare(before), second = engine.prepare(after);
+    const original = first.rows.find(row => row.text === target);
+    assert.ok(original);
+    return matchRevisionRows(first, second).has(original.id);
+  }
+  const heading = ['야당 대변인의 서면 논평', '다음은 논평 전문이다.', quote, '논평 끝.'].join('\n');
+  assert.equal(paired(heading, heading.replace('야당', '여당')), false);
+  const signed = ['논평 전문', quote, '논평 끝.', '— 야당 대변인'].join('\n');
+  assert.equal(paired(signed, signed.replace('야당','여당')), false);
+  const prefix = '표지 초안.\n안내문.\n';
+  const marker = prefix + '발언자 실명: 김지수 의원\n' + quote + '\n논평 끝.';
+  assert.equal(paired(marker, marker.replace('초안', '정정')), true);
+  assert.equal(paired(marker, marker.replace('김지수', '김지민')), false);
+  const relative = marker.replace('발언자 실명: 김지수', '발언자: 해당');
+  assert.equal(paired(relative, relative.replace('초안', '정정')), false);
+  assert.equal(paired(heading, heading), true);
+  const named = '야당 대변인은 “이번 예산안은 무책임하다”고 말했다.';
+  const full = prefix + named + '\n논평 끝.';
+  assert.equal(paired(full, full.replace('초안','정정'), named),true);
+});
 
 test('수정 후 해당 없음이나 미평가인 기존 왜곡은 개선율 옆에 남긴다', () => {
   const left = snapshot({levels: {wording: 3, framing: 2, omission: 2, standards: 2}});

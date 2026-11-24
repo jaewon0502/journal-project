@@ -18,11 +18,14 @@
     return {articleSha256: side.articleSha256, sourcesSha256: side.sourcesSha256};
   }
 
-  function makeRecord(joint, key) {
-    const {dimensions, facts, factMatches, factContext} = agreement.recordFields(joint, key);
-    return readRecord({format, version: 5, demo: key.demo, before: edition(key.mapping.before),
-      after: edition(key.mapping.after), dimensions, facts, factMatches, factContext});
+  function editionRecord(joint, key, version) {
+    const fields = agreement.recordFields(joint, key, version === 5);
+    return readRecord({format, version, demo: key.demo, before: edition(key.mapping.before),
+      after: edition(key.mapping.after), ...fields});
   }
+  const makeRecord = (joint, key) => editionRecord(joint, key, 6);
+  // Authenticate historical private files and links against the rule that produced them.
+  const makeLegacyMatchRecord = (joint, key) => editionRecord(joint, key, 5);
 
   function readFactRows(rows) {
     if (!Array.isArray(rows) || !rows.length) throw new Error('판본마다 사실 검토 구간이 하나 이상 필요합니다.');
@@ -91,7 +94,7 @@
     if (version >= 2) keys.push('facts');
     if (version >= 3) keys.push('factMatches');
     if (version >= 4) keys.push('factContext');
-    if (![1, 2, 3, 4, 5].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    if (![1, 2, 3, 4, 5, 6].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
     const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
@@ -139,7 +142,7 @@
   // roles, each editor's complete rating profile, and fact observations in passage order.
   function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (![2, 3, 4, 5].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    if (![2, 3, 4, 5, 6].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
     const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
     if (version >= 3) fields.push(record.factMatches);
     if (version >= 4) fields.push(record.factContext);
@@ -235,7 +238,7 @@
       ...summarizeScores(unique.flatMap(r => r.dimensions)), dimensions, articles, facts};
   }
 
-  const api = Object.freeze({makeRecord, reviewId, summarize});
+  const api = Object.freeze({makeRecord, makeLegacyMatchRecord, reviewId, summarize});
   if (useNode) module.exports = api;
   else root.JournalRevisionSeries = api;
 })(globalThis);
