@@ -600,11 +600,14 @@
     const parsed = new URL(url);
     const files = [];
     function normalizeFile(key, value) {
-      if (depth >= 4 || !/^(?:file|pdf|fileUrl|pdfUrl|docUrl|documentUrl)$/iu.test(key)
-          || !/^https?:\/\//iu.test(value)) return value;
+      if (depth >= 4 || !/^(?:file|pdf|fileUrl|pdfUrl|docUrl|documentUrl)$/iu.test(key)) return value;
+      // Viewers resolve path references against their own address. Plain IDs
+      // such as file=A still select a viewer document, not a sibling file.
+      const fileReference = /^(?:https?:\/\/|\/|\.\.?\/)|^[^?#:\\]+\.pdf(?:[?#]|$)/iu;
+      if (!fileReference.test(value)) return value;
       let file;
-      try { file = new URL(value); } catch (_) { return value; }
-      if (file.username || file.password) return value;
+      try { file = new URL(value, parsed); } catch (_) { return value; }
+      if (!['http:', 'https:'].includes(file.protocol) || file.username || file.password) return value;
       const address = originAddress(file, depth + 1);
       const normalized = 'https://' + address;
       files.push({address, selector:new URLSearchParams([[key, normalized]]).toString()});

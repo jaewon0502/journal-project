@@ -1,0 +1,87 @@
+{
+  "benchmark": "grain-scope-first-pass",
+  "frozenCommit": "1df5945bfeed5c38e14ff0519b4b8c567b86a5f0",
+  "article": {
+    "date": "2025-01-23",
+    "source": "뉴스핌",
+    "url": "https://ir.newspim.com/news/view/20250123000220",
+    "attribution": "The outlet reports on the same Statistics Korea survey; it is not independent statistical confirmation."
+  },
+  "source": {
+    "title": "2024년 양곡소비량조사 결과",
+    "issuer": "통계청",
+    "published": "2025-01-23",
+    "version": "2025-02-05 corrected unit on printed page 7",
+    "pdf": "https://mods.go.kr/boardDownload.es?bid=230&list_no=434881&seq=6",
+    "landing": "https://www.mods.go.kr/board.es?act=view&bid=230&list_no=434881&mid=a10301080900",
+    "physicalPages": 21,
+    "pdfSha256": "b8fde990442f32a971e1aac8fef254febcbc3a471fc73d6b742ffcca98e3af33",
+    "pdftotextLayoutSha256": "ada6ff3fe9f1b6f75871a375648d6bc0fb23afdd85fc38fec44b5dda3332ec7f",
+    "reportingPeriod": "2023-11-01/2024-10-31 (grain year 2024, PDF 21, paragraph 551)"
+  },
+  "locator": "1-based ordinal of each nonempty physical line in full pdftotext -layout output. Page numbering includes the cover.",
+  "protocol": "First search separately for each exact query and no extra article context, against the full official document. Do not credit a headline or year header alone. Score first/top-three directly qualifying printed rows, plus conditional pairs only if the submitted candidate actually groups all pair rows. Keep lexical-only navigation and auto-presented figures separate. Do not treat this outcome as a final article judgment.",
+  "cases": [
+    {
+      "id": "household",
+      "inputType": "paraphrase of the published household comparison, article timestamp resolves last year",
+      "query": "2024년 가구의 1인당 연간 쌀 소비량은 55.8kg으로 전년보다 1.1% 줄었다.",
+      "answer": "Household per-person annual rice 55.8 kg, YoY -1.1%; not all grains or daily grams.",
+      "directRows": [
+        49,
+        84
+      ],
+      "allowGroupedRows": [
+        [
+          91,
+          92
+        ],
+        [
+          94,
+          95,
+          96,
+          97,
+          99
+        ]
+      ],
+      "notes": "Physical p5 summary row 49 is under 2024 annual household summary. PDF 7 paragraph 84 contains both values; annual table 2-2 uses 2024 KG and percent (rows 94-99). 55.8 alone is partial for this compound comparison."
+    },
+    {
+      "id": "food-manufacturing",
+      "inputType": "verbatim sentence from the published news article; original scope error retained",
+      "query": "식료품 제조업 부문 쌀 소비량은 1년 전보다 6.9%(5만6242톤) 증가한 87만3363톤으로 집계됐다.",
+      "answer": "Food excluding beverages 584612 t, +4.8% (+26548 t); the article assigned combined food and beverage processing 873363 t/+6.9% to food alone. Correct handling returns food-specific evidence even if the numbers in the article disagree.",
+      "directRows": [
+        205,
+        216
+      ],
+      "allowGroupedRows": [
+        [
+          59,
+          60
+        ],
+        [
+          519,
+          520,
+          521,
+          522,
+          535,
+          536
+        ]
+      ],
+      "wrongScopeRows": [
+        58,
+        200,
+        215
+      ],
+      "notes": "Source p11 printed p7 rows 205, 216. Comparing amounts in rows 535-536 needs category headers including the food-only column and calculation of change. The article itself distinguishes the figures in its next sentence."
+    },
+    {
+      "id": "seoul-one-person",
+      "inputType": "synthetic counterexample narrowing geography and household size",
+      "query": "2024년 서울 1인 가구의 1인당 연간 쌀 소비량은 55.8kg이었다.",
+      "answer": "No such city and household-size estimate in these 21 pages. Aggregate household per-capita number and farm vs nonfarm strata are not this subgroup.",
+      "score": "Count automatic display of a value under the question-specific scope separately from lexical-only candidates. Strong coverage guard requires visible scope/insufficient-evidence warning or no result; ordinary lexical candidates with only generic verification messaging are not a strong coverage guard. Automatic decisions tracked separately."
+    }
+  ]
+}

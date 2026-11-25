@@ -82,6 +82,7 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <details id="search-context-options"><summary>기사에서 비교 대상·기간 보충</summary><label class="field" for="search-context">기사 제목이나 앞뒤 문장에 나온 지표·기간</label><textarea rows="2" id="search-context"></textarea><div class="actions"><button type="button" id="use-article-title" hidden>기사 첫 줄로 다시 찾기</button><button type="button" id="use-article-context" hidden>앞뒤 구절로 다시 찾기</button></div></details>
 <div class="actions"><button type="button" id="find-passages">근거 후보 찾기</button></div><p id="finder-status" class="message" role="status"></p><div id="finder-results"></div></details>
 <form id="source-form"><h3 id="source-form-title">원자료 추가</h3>
+<div id="pdf-source-options" hidden></div>
 <label class="field" for="source-title">자료 이름</label><input id="source-title" required placeholder="예산안 의결 회의록">
 <div class="split"><div><label class="field" for="source-url">확인한 문서 주소</label><input type="url" id="source-url" required placeholder="https://"></div><div><label class="field" for="source-version">판본 또는 기준일</label><input id="source-version" required placeholder="2026-09-03 정정본"></div></div>
 <label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="통계표 12, 서울특별시 행, 2023년 열, 인쇄 41쪽">

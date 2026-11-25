@@ -286,3 +286,185 @@ test('확인 쪽 적용 뒤 주소나 발췌를 변경하면 예전 파일 지�
   assert.equal(p.el('source-pdf-proposal').hidden,true);
   assert.equal((await savedWork(p)).sourceDraft.pdfSha256,undefined);
 });
+
+const commonFields = ['title', 'url', 'version', 'originUrl'];
+
+function pdfEdition(key, lines) {
+  const bytes = Buffer.from('%PDF-1.7\n' + key + '\n%%EOF');
+  const hash = createHash('sha256').update(bytes).digest('hex');
+  const json = JSON.stringify({format:'journal-pdf-text-v1', pdfName:'원자료.pdf', pdfSha256:hash, pages:lines});
+  return {bytes, hash, json, lines};
+}
+
+const editionA = pdfEdition('A', ['수목원 관찰 일지에는 느티나무가 등장한다.', '온실 관리 기록에는 동백나무가 등장한다.']);
+const editionB = pdfEdition('B', ['마을 축제에 풍물패가 참여했다.']);
+const infoA = {title:'수목원 기록', url:'https://agency.example/trees.pdf', version:'현장 조사판', originUrl:'https://archive.example/trees'};
+const infoB = {title:'축제 기록', url:'https://agency.example/music.pdf', version:'결산판', originUrl:'https://archive.example/music'};
+
+async function openEdition(p, edition) {
+  await p.upload('document-file', '원자료.json', edition.json, /쪽을 불러왔습니다/);
+  await p.upload('document-pdf', '원자료.pdf', edition.bytes, /연결 완료/);
+}
+
+function choosePassage(p, text) {
+  const cards = [...p.find(text).querySelectorAll('.source')];
+  const card = cards.find(item => item.querySelector('blockquote')?.textContent.trim() === text);
+  assert.ok(card, text);
+  const button = [...card.querySelectorAll('button')].find(b => b.textContent === '이 문단을 발췌문으로 사용');
+  button.click();
+  assert.equal(p.el('source-excerpt').value.trim(), text);
+}
+
+function commonInput(p) {
+  return Object.fromEntries(commonFields.map(k => [k, p.el('source-' + k).value]));
+}
+
+function enterCommon(p, info) {
+  for (const k of commonFields) p.type('source-' + k, info[k]);
+}
+
+function availableSources(p) {
+  return [...p.el('pdf-source-options').querySelectorAll('button[data-source-id]')]
+    .filter(button => !button.closest('[hidden]'));
+}
+
+function commitPdfPage(p) {
+  p.el('use-pdf-location').click();
+  p.el('source-save').click();
+}
+
+test('A와 B를 오가며 같은 PDF의 새 구절을 등록해도 이름·주소·판본과 실제 PDF 지문이 일치한다', async t => {
+  const p = editor(t);
+  await openEdition(p, editionA);
+  choosePassage(p, editionA.lines[0]);
+  enterCommon(p, infoA);
+  commitPdfPage(p);
+  choosePassage(p, editionA.lines[1]);
+  assert.deepEqual(commonInput(p), infoA);
+  assert.equal(p.el('source-pdfPage').value, '');
+  commitPdfPage(p);
+  await openEdition(p, editionB);
+  choosePassage(p, editionB.lines[0]);
+  assert.deepEqual(Object.values(commonInput(p)), ['', '', '', '']);
+  enterCommon(p, infoB);
+  commitPdfPage(p);
+  await openEdition(p, editionA);
+  p.el('go-find').click();
+  choosePassage(p, editionA.lines[1]);
+  assert.deepEqual(Object.values(commonInput(p)), ['', '', '', '']);
+  p.type('source-locator', '온실 관리 기록 두 번째 구절');
+  const choices = availableSources(p);
+  assert.equal(choices.length, 1);
+  choices[0].click();
+  assert.deepEqual(commonInput(p), infoA);
+  assert.equal(p.el('source-locator').value, '온실 관리 기록 두 번째 구절');
+  assert.equal(p.el('source-excerpt').value.trim(), editionA.lines[1]);
+  assert.equal(p.el('source-pdfPage').value, '');
+  assert.equal(p.el('source-save-link').hidden, false);
+  p.el('use-pdf-location').click();
+  p.el('source-save-link').click();
+  const w = await savedWork(p);
+  assert.deepEqual(w.sources.map(source => [source.title, source.url, source.version, source.originUrl, source.pdfPage, source.pdfSha256]),
+    [[infoA, '1', editionA], [infoA, '2', editionA], [infoB, '1', editionB], [infoA, '2', editionA]]
+      .map(([info, page, edition]) => [info.title, info.url, info.version, info.originUrl, page, edition.hash]));
+  assert.equal(w.sources[3].excerpt.trim(), editionA.lines[1]);
+  assert.equal(w.sources[3].locator, '온실 관리 기록 두 번째 구절');
+  assert.equal(w.receipts.length, 0);
+  assert.equal(p.el('verdict').value, '');
+});
+
+test('같은 PDF로 등록한 두 문서 정보를 명시적으로 고르고 직접 입력한 값을 취소하면 보존한다', async t => {
+  const p = editor(t);
+  const mirror = {...infoA, title:'기록관 보존본', url:'https://library.example/archive.pdf', version:'보존본'};
+  await openEdition(p, editionA);
+  choosePassage(p, editionA.lines[0]);
+  enterCommon(p, infoA);
+  commitPdfPage(p);
+  choosePassage(p, editionA.lines[1]);
+  enterCommon(p, mirror);
+  commitPdfPage(p);
+  await openEdition(p, editionB);
+  choosePassage(p, editionB.lines[0]);
+  enterCommon(p, infoB);
+  commitPdfPage(p);
+  await openEdition(p, editionA);
+  // Preserve even a single field the editor entered while the other fields still
+  // contain defaults from B. Selecting A explicitly may replace the group.
+  p.type('source-version', '별도 확인 중');
+  choosePassage(p, editionA.lines[1]);
+  assert.equal(p.el('source-version').value, '별도 확인 중');
+  const previous = commonInput(p);
+  const choices = availableSources(p);
+  assert.deepEqual(choices.map(b => b.dataset.sourceId).sort(), ['source-1', 'source-2']);
+  let confirmations = 0;
+  p.w.confirm = () => { confirmations++; return false; };
+  choices.find(b => b.dataset.sourceId === 'source-2').click();
+  assert.ok(confirmations > 0);
+  assert.deepEqual(commonInput(p), previous);
+  p.w.confirm = () => true;
+  availableSources(p).find(b => b.dataset.sourceId === 'source-2').click();
+  assert.deepEqual(commonInput(p), mirror);
+  commitPdfPage(p);
+  const w = await savedWork(p);
+  assert.equal(w.sources[3].url, mirror.url);
+  assert.equal(w.sources[3].pdfSha256, editionA.hash);
+  assert.equal(w.sources[3].excerpt.trim(), editionA.lines[1]);
+  assert.equal(w.receipts.length, 0);
+});
+
+test('동일 문서 주소·판본에 다른 PDF 지문을 등록할 때 재확인을 취소하면 기존 자료만 남는다', async t => {
+  const p = editor(t);
+  await openEdition(p, editionA);
+  choosePassage(p, editionA.lines[0]);
+  enterCommon(p, infoA);
+  commitPdfPage(p);
+  await openEdition(p, editionB);
+  choosePassage(p, editionB.lines[0]);
+  enterCommon(p, infoA);
+  let confirmations = 0;
+  p.w.confirm = () => { confirmations++; return false; };
+  commitPdfPage(p);
+  assert.ok(confirmations > 0);
+  assert.deepEqual((await savedWork(p)).sources.map(s => s.pdfSha256), [editionA.hash]);
+  assert.equal(p.el('source-excerpt').value.trim(), editionB.lines[0]);
+
+  p.w.confirm = () => true;
+  commitPdfPage(p);
+  assert.deepEqual((await savedWork(p)).sources.map(s => s.pdfSha256), [editionA.hash, editionB.hash]);
+
+  await p.upload('document-file', 'A.json', editionA.json, /쪽을 불러왔습니다/);
+  await p.upload('document-pdf', '잘못 연결한 A.pdf', editionB.bytes, /판본이 다릅니다/);
+  choosePassage(p, editionA.lines[0]);
+  assert.equal(p.el('source-pdf-proposal').hidden, true);
+  assert.deepEqual(availableSources(p), []);
+});
+
+test('다른 PDF로 돌아오면 직접 고친 문서 이름은 남고 직전의 자동 주소와 판본은 비워진다', async t => {
+  const p = editor(t);
+  await openEdition(p, editionA);
+  choosePassage(p, editionA.lines[0]);
+  enterCommon(p, infoA);
+  commitPdfPage(p);
+  await openEdition(p, editionB);
+  choosePassage(p, editionB.lines[0]);
+  enterCommon(p, infoB);
+  commitPdfPage(p);
+  p.type('source-title', '직접 적은 두 번째 인용');
+  await openEdition(p, editionA);
+  choosePassage(p, editionA.lines[1]);
+  assert.equal(p.el('source-title').value, '직접 적은 두 번째 인용');
+  assert.equal(p.el('source-url').value, '');
+  assert.equal(p.el('source-version').value, '');
+  assert.equal(p.el('source-originUrl').value, '');
+  assert.equal(p.el('source-save').form.checkValidity(), false);
+  p.w.confirm = () => false;
+  availableSources(p)[0].click();
+  assert.equal(p.el('source-url').value, '');
+  p.w.confirm = () => true;
+  availableSources(p)[0].click();
+  commitPdfPage(p);
+  const latest = (await savedWork(p)).sources.at(-1);
+  assert.equal(latest.url, infoA.url);
+  assert.equal(latest.pdfSha256, editionA.hash);
+  assert.equal(latest.pdfPage, '2');
+});

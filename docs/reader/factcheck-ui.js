@@ -232,8 +232,71 @@
   }
   let sourceBaseline = {}, prefillId = null, suggestedLocator = '';
   let pdfProposal = null, sourcePdfHash = '';
+  const documentFields = ['title', 'url', 'version', 'originUrl'];
+  const typedDocumentFields = new Set();
+  function documentFieldsMatch(values) {
+    return documentFields.every(key => byId('source-' + key).value === (values[key] || ''));
+  }
+  function fillDocumentFields(source) {
+    typedDocumentFields.clear();
+    prefillId = source?.id || null;
+    sourceBaseline = workspace.sourceDefaults(source);
+    for (const key of documentFields) byId('source-' + key).value = sourceBaseline[key];
+  }
+  function offerDocumentInfo(proposal) {
+    const area = byId('pdf-source-options');
+    area.replaceChildren();
+    area.hidden = true;
+    if (!proposal || editingId) return;
+    const inherited = sources.find(s => s.id === prefillId);
+    const candidates = new Map();
+    for (const source of sources) {
+      if (source.pdfSha256 !== proposal.hash) continue;
+      const info = workspace.sourceDefaults(source);
+      const key = JSON.stringify(info);
+      if (!candidates.has(key)) candidates.set(key, {source, info});
+    }
+    if (inherited?.pdfSha256 === proposal.hash && candidates.size === 1 && documentFieldsMatch(sourceBaseline)) return;
+    if (inherited && (inherited.pdfSha256 !== proposal.hash || candidates.size > 1)) {
+      for (const key of documentFields) {
+        const field = byId('source-' + key);
+        if (!typedDocumentFields.has(key) && field.value === sourceBaseline[key]) field.value = '';
+      }
+      prefillId = null;
+      sourceBaseline = workspace.sourceDefaults();
+      if (!candidates.size) {
+        area.append(node('p', '이 PDF의 자료 이름·주소·판본을 확인하세요. 이전 문서에서 자동으로 채운 값은 비웠습니다.', 'hint'));
+      }
+    }
+    if (candidates.size) {
+      area.append(node('p', '같은 PDF 파일로 등록한 문서 정보입니다. 이번에 확인한 주소와 판본을 선택하세요.'));
+      for (const {source, info} of candidates.values()) {
+        const item = node('div', undefined, 'source');
+        item.append(node('strong', info.title), node('p', info.url + ' · ' + info.version, 'meta'));
+        if (info.originUrl) item.append(node('p', '최초 원문 · ' + info.originUrl, 'meta'));
+        const use = button('이 문서 정보 사용', () => {
+          if (pdfProposal !== proposal || editingId) return;
+          if (!documentFieldsMatch({}) && !documentFieldsMatch(sourceBaseline) && !documentFieldsMatch(info) &&
+              !confirm('작성한 자료 이름·주소·판본·최초 원문 주소를 선택한 문서 정보로 바꿀까요?')) return;
+          fillDocumentFields(source);
+          dirty = true;
+          updateSourceDraftNote();
+          message('source-status', '‘' + info.title + '’의 문서 정보를 채웠습니다. 이번 발췌문의 위치를 원본과 대조하세요.');
+          byId('use-pdf-location').focus();
+        });
+        use.dataset.sourceId = source.id;
+        item.append(use);
+        area.append(item);
+      }
+    }
+    area.hidden = !area.childElementCount;
+  }
   function offerPdfLocation(proposal) {
     pdfProposal = proposal;
+    if (!proposal) {
+      byId('pdf-source-options').replaceChildren();
+      byId('pdf-source-options').hidden = true;
+    }
     byId('source-pdf-proposal').hidden = !proposal;
     if (!proposal) {
       byId('source-pdf-proposal-text').textContent = '';
@@ -300,10 +363,8 @@
     sourcePdfHash = '';
     setLocationReview(false);
     editingId = null;
-    prefillId = reuse.id || null;
-    sourceBaseline = workspace.sourceDefaults(reuse);
     byId('source-form').reset();
-    for (const [field, value] of Object.entries(sourceBaseline)) byId('source-' + field).value = value;
+    fillDocumentFields(reuse);
     byId('source-form-title').textContent = '원자료 추가';
     byId('source-save').textContent = '자료 추가';
     byId('source-cancel').hidden = true;
@@ -784,6 +845,18 @@
     const rowDraft = linkToRow ? {...drafts.get(currentId), ...decisionDraft()} : null;
     const next = editingId ? sources.map(s => s.id === editingId ? source : s) : [...sources, source];
     try {
+      const selectedHash = sourcePdfHash || pdfProposal?.hash;
+      if (selectedHash) {
+        const selected = workspace.sourceDefaults(source);
+        const conflict = sources.find(other => other.pdfSha256 && other.pdfSha256 !== selectedHash &&
+          other.version === selected.version && workspace.sourceDefaults(other).url === selected.url);
+        if (conflict && !confirm('같은 주소와 판본으로 등록한 ‘' + (conflict.title || conflict.id) +
+          '’의 PDF와 이번 파일이 다릅니다. 이 주소에서 두 판본을 직접 대조했고, 지금 입력한 문서 정보로 등록할까요?')) {
+          message('source-status', '등록을 보류했습니다. 이번 파일을 받은 주소와 판본을 확인하세요.');
+          byId('source-url').focus();
+          return;
+        }
+      }
       // Editing a cited source invalidates the receipts that cite it. Keep the reviewer's
       // input as an unconfirmed draft instead of blanking the sentence.
       const kept = new Set(engine.prepare(article, next, receipts).rows.filter(r => r.receipt || r.priorDecision).map(r => r.id));
@@ -829,7 +902,9 @@
     }
     excerpt.value = entry.text;
     sourcePdfHash = '';
-    offerPdfLocation(window.JournalDocumentFile?.excerptLocation(entry));
+    const proposal = window.JournalDocumentFile?.excerptLocation(entry);
+    offerPdfLocation(proposal);
+    offerDocumentInfo(proposal);
     setLocationReview(inheritsLocation);
     updateSourceDraftNote();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
@@ -875,6 +950,8 @@
     window.JournalSourceReader.rememberVerifiedPdf(hash, file);
     if (!byId('source-location-review').hidden) setLocationReview(true);
     byId('source-pdf-proposal').hidden = true;
+    byId('pdf-source-options').replaceChildren();
+    byId('pdf-source-options').hidden = true;
     dirty = true;
     updateSourceDraftNote();
     message('source-status', location + '을 입력했습니다. 이 자료를 등록하면 같은 PDF 판본을 다시 대조할 수 있습니다.');
@@ -1324,6 +1401,8 @@
   byId('source-form').addEventListener('input', event => {
     clearFieldCopy();
     dirty = true;
+    const documentField = event.target.id.replace(/^source-/u, '');
+    if (documentFields.includes(documentField)) typedDocumentFields.add(documentField);
     if (event.target.id === 'source-excerpt') offerPdfLocation(null);
     if (['source-excerpt','source-url','source-pdfPage'].includes(event.target.id) && sourcePdfHash) {
       sourcePdfHash = '';
@@ -1402,6 +1481,7 @@
       rowFilter: byId('row-filter').value,
       ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
+        ...(prefillId && typedDocumentFields.size && {typedDocumentFields:[...typedDocumentFields]}),
         ...(sourcePdfHash ? {pdfSha256:sourcePdfHash} : {}),
         ...(suggestedLocator ? {suggestedLocator} : {}),
         ...(!byId('source-location-review').hidden ? {locationReview: byId('source-location-checked').checked ? 'confirmed' : 'pending'} : {}),
@@ -1459,6 +1539,9 @@
       byId('row-filter').value = w.rowFilter === 'all' || legacyAll ? 'all' : 'open';
       const prefill = sources.find(s => s.id === w.sourceDraft.prefillId);
       clearSourceForm(prefill);
+      if (prefill && Array.isArray(w.sourceDraft.typedDocumentFields)) {
+        for (const key of documentFields) if (w.sourceDraft.typedDocumentFields.includes(key)) typedDocumentFields.add(key);
+      }
       const edit = sources.find(s => s.id === w.sourceDraft.id);
       if (edit) {
         editingId = edit.id;
