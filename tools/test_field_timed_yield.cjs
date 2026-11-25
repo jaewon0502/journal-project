@@ -295,3 +295,66 @@ test('판단 이유까지 확인한 성공 비용은 두 항목의 성공과 마
     i < 2 ? {...r, reasonGrade:'', trial:{...r.trial,kitVersion:'b'.repeat(64)}} : r)))[0].byVersion;
   assert.deepEqual(perKit.map(r => !!r.returnedCostWithReason), [false,true]);
 });
+
+test('예정 판본 명부를 보존하고 같은 참여자·기사에 다른 판본이나 과거 미상 배정을 덧씌우지 않는다', () => {
+  const hash = 'a'.repeat(64), old = slot('reader'), current = {...old,assignedKitVersion:hash};
+  const file = rows => ({format:core.assignmentFormat, assignments:rows});
+  assert.deepEqual(core.mergeAssignments([current], [file([current])]),[current]);
+  assert.deepEqual(core.mergeAssignments([old], [file([old])]),[old]);
+  for (const v of [null,undefined,'','A'.repeat(64),'a'.repeat(63),hash+'\n'])
+    assert.throws(()=>core.mergeAssignments([], [file([{...old,assignedKitVersion:v}])]),/배포본 ID/);
+  for (const other of [old,{...current,assignedKitVersion:'b'.repeat(64)}]) {
+    for (const [a,b] of [[other,current],[current,other]])
+      assert.throws(()=>core.mergeAssignments([a],[file([b])]),/예정 배포본/);
+  }
+  const returned = response(old,1000,{assignedKitVersion:hash});
+  assert.equal(Object.hasOwn(returned.trial,'assignedKitVersion'),false);
+});
+
+test('같은 예정 판본·과제·목표별로 원래 분모를 지키며 다른 판본의 만점 답안을 성공에 넣지 않는다', () => {
+  const planned = 'a'.repeat(64), other = 'b'.repeat(64);
+  const issue = (person,method,edition,extra={}) => slot(person,method,{assignedKitVersion:edition,...extra});
+  const rows = [issue(1,'manual',planned),issue(2,'journal',planned),issue(3,'manual',other),
+    issue(4,'journal',other),slot(5),issue(6,'journal',planned,{targetSeconds:121})];
+  const trials = [response(rows[0],5000,{found:'missing'}),response(rows[1],1000,{kitVersion:other},{reasonGrade:'yes'}),
+    response(rows[2],1000,{kitVersion:other},{reasonGrade:'yes'}),response(rows[3],120001,{kitVersion:other},{reasonGrade:'yes'}),
+    response(rows[4],1000,{kitVersion:planned},{reasonGrade:'yes'})];
+  const r = core.allocationReport(rows,trials,new Set());
+  assert.equal(r.unknownPlannedEdition,1);
+  assert.equal(r.editionDeadlineComparisons.length,3);
+  const [a,b,alone] = r.editionDeadlineComparisons;
+  assert.deepEqual([a.assignedKitVersion,a.targetSeconds,a.manual.assigned,a.journal.assigned],[planned,120,1,1]);
+  assert.deepEqual([a.manual.failedQuality,a.journal.verified,a.journal.unknown,a.journal.editions.differentVersion],[1,0,1,1]);
+  assert.deepEqual(a.difference,{low:0,high:100});
+  assert.deepEqual([b.assignedKitVersion,b.manual.verified,b.journal.overTime],[other,1,1]);
+  assert.deepEqual(b.difference,{low:-100,high:-100});
+  assert.equal(alone.difference,null);
+  assert.equal(alone.journal.editions.noReturn,1);
+  assert.equal(r.deadlineComparisons[0].withReason.journal.verified,1);
+});
+
+test('회신 없는 배정·기록 연결 충돌·판본 누락·이종 판본 재개와 동일 판본의 채점 대기를 분리한다', () => {
+  const planned = 'a'.repeat(64), other = 'b'.repeat(64);
+  const rows = Array.from({length:13},(_,i)=>slot(i,'manual',{assignedKitVersion:planned}));
+  const previous = {status:'withdrawn', recovered:true, kitVersion:null, startedKitVersion:planned};
+  const entries = [
+    response(rows[1],1000,{kitVersion:null}),
+    response(rows[2],1000,previous),
+    response(rows[3],1000,{kitVersion:other,found:'missing'}),
+    response(rows[4],5000,{status:'withdrawn'}),
+    response(rows[5],120000,{},{}),
+    response(rows[6],150000,{recovered:true},{reasonGrade:'yes'}),
+    response(rows[7],5000,{}, {reasonGrade:'no'}),
+    response(rows[8],1000,{taskId:'다른 과제'}),
+    response(rows[9],1000),response(rows[9],1000,{id:'두 번째'}),
+    response(rows[10],120000,{method:'journal'},{reasonGrade:'yes'}),
+    response(rows[11],5000,{status:'withdrawn',kitVersion:other}),
+    response(rows[12],5000,{recovered:true},{reasonGrade:'yes'})
+  ];
+  const r=core.allocationReport(rows,entries,new Set()).editionDeadlineComparisons[0].manual;
+  assert.deepEqual(r.editions,{matched:6,noReturn:1,unlinked:2,noObservedVersion:1,differentVersion:2,changedOnResume:1});
+  assert.deepEqual([r.assigned,r.verified,r.withdrawn,r.overTime,r.failedReason,r.unknown],[13,1,1,1,1,9]);
+  assert.equal(r.editions.matched + r.editions.noReturn + r.editions.unlinked + r.editions.noObservedVersion +
+    r.editions.differentVersion + r.editions.changedOnResume,r.assigned);
+  assert.doesNotMatch(JSON.stringify(r),/private-|trial-/);
+});

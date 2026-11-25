@@ -55,7 +55,7 @@ def html(name, method, tasks):
     return contents
 
 
-def packet_pair(case=DEFAULT_CASE):
+def versioned_packet_pair(case=DEFAULT_CASE):
     if Path(case).name != case:
         raise ValueError('사례 폴더 이름을 확인하세요.')
     raw = (CASES / case / 'blind-tasks.json').read_bytes()
@@ -88,7 +88,8 @@ def packet_pair(case=DEFAULT_CASE):
             version.update(f'{method}/{name}\0'.encode())
             version.update(sha256(data).digest())
         packets[method] = packet
-    meta = f'<meta name="journal-field-kit" content="{version.hexdigest()}">'.encode()
+    edition = version.hexdigest()
+    meta = f'<meta name="journal-field-kit" content="{edition}">'.encode()
     archives = {}
     for method, packet in packets.items():
         packet['field-review.html'] = packet['field-review.html'].replace(b'</head>', meta + b'</head>', 1)
@@ -99,6 +100,11 @@ def packet_pair(case=DEFAULT_CASE):
                 info.external_attr = 0o644 << 16
                 z.writestr(info, data, compress_type=ZIP_DEFLATED)
         archives[method] = buffer.getvalue()
+    return edition, archives
+
+
+def packet_pair(case=DEFAULT_CASE):
+    _, archives = versioned_packet_pair(case)
     return archives
 
 

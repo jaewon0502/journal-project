@@ -203,7 +203,7 @@
     el('invite-status').textContent = '배정 코드를 확인하는 중입니다.';
     try {
       const methods = [...el('method').options].map(option => option.value);
-      const row = await window.JournalFieldInvite.match(code, pack, methods);
+      const row = await window.JournalFieldInvite.match(code, pack, methods, kitVersion);
       if (inviteRevision !== revision) return;
       assignment = row;
       el('participant').value = row.participant;

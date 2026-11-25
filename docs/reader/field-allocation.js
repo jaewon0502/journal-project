@@ -38,6 +38,9 @@
     el('status').textContent = '';
     el('case-note').textContent = data ? data.title + ' · 과제 ' + data.tasks.length + '개' : '';
     if (!data) return;
+    const edition = core.kitVersion(catalog[picker.value]?.kitVersion);
+    el('case-note').textContent += edition ? ' · 예정 배포본 ' + edition.slice(0,12)
+      : ' · 별도 과제 파일에는 예정 배포본 ID가 없습니다.';
     for (const task of data.tasks) {
       const label = document.createElement('label'), input = document.createElement('input');
       label.textContent = task.id + ' · ' + task.prompt;
@@ -83,13 +86,16 @@
       const kitCell = tr.insertCell();
       const edition = catalog.find(({material}) => material.caseId === row.caseId && material.articleUrl === row.articleUrl &&
         material.tasks.some(task => task.id === row.taskId && task.prompt === row.prompt));
-      if (edition) {
+      if (edition && (!row.assignedKitVersion || row.assignedKitVersion === edition.kitVersion)) {
         const link = document.createElement('a');
         link.href = edition.files[row.method];
         link.download = '';
         link.textContent = edition.label + ' · ' + kit + ' ZIP';
         link.setAttribute('aria-label', row.participant + '에게 전달할 ' + link.textContent);
         kitCell.append(link);
+        if (!row.assignedKitVersion) kitCell.append(document.createTextNode(' · 명부에 예정 판본 없음'));
+      } else if (edition && row.assignedKitVersion) {
+        kitCell.textContent = kit + ' · 예정 배포본 ' + row.assignedKitVersion.slice(0,12) + '에서 ZIP을 받으세요.';
       } else {
         kitCell.textContent = kit + ' · participant-' + row.method + '.zip' +
           (catalog.length ? ' (이 배포본에 일치하는 과제 없음)' : '');
@@ -170,11 +176,13 @@
       targets.set(input.dataset.taskId, seconds);
     }
     const blockSize = tasks.length * 2;
+    const assignedKitVersion = core.kitVersion(catalog[picker.value]?.kitVersion);
     let block;
     const assignments = codes.map((participant, index) => {
       if (index % blockSize === 0) block = shuffledBlock(tasks);
       const {task, method} = block[index % blockSize];
       const assignment = {participant, caseId, articleUrl, taskId:task.id, prompt:task.prompt, method};
+      if (assignedKitVersion) assignment.assignedKitVersion = assignedKitVersion;
       if (targets.has(task.id)) assignment.targetSeconds = targets.get(task.id);
       return assignment;
     });

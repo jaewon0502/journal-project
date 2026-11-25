@@ -93,6 +93,10 @@
         (v.found === 'found' && (!url(v.documentUrl) || !text(v.locator))))
     )
       throw Error('제출 기록의 근거 위치와 판정을 확인하세요.');
+    if (Object.hasOwn(v, 'assignedKitVersion')) {
+      const {assignedKitVersion, ...trial} = v;
+      return trial;
+    }
     return v;
   }
   function newTimeTotals() {
@@ -339,6 +343,10 @@
       const assignment = Object.fromEntries(assignmentFields.map(k => [k, row[k]]));
       const targetSeconds = assignmentTarget(row);
       if (targetSeconds !== undefined) assignment.targetSeconds = targetSeconds;
+      if (Object.hasOwn(row, 'assignedKitVersion')) {
+        if (!kitVersion(row.assignedKitVersion)) throw Error('배정표의 예정 배포본 ID를 확인하세요.');
+        assignment.assignedKitVersion = row.assignedKitVersion;
+      }
       const article = articleIdentity(row.articleUrl);
       if (taskTargets) {
         const task = JSON.stringify([row.caseId, article, row.taskId, row.prompt]);
@@ -349,6 +357,8 @@
       const caseKey = JSON.stringify([row.participant, row.caseId]);
       const articleKey = JSON.stringify([row.participant, article]);
       const prior = byCase.get(caseKey) || byArticle.get(articleKey);
+      if (prior && prior.assignedKitVersion !== assignment.assignedKitVersion)
+        throw Error('같은 참여 코드와 기사의 예정 배포본이 서로 다르거나 한 명부에만 기록됐습니다. 원래 배정표를 확인하세요.');
       if (prior && (prior.targetSeconds !== targetSeconds || !assignmentFields.every(k => prior[k] === assignment[k])))
         throw Error('같은 참여 코드에 같은 사례나 기사의 서로 다른 배정이 있습니다. 원래 명부를 확인하세요.');
       byCase.set(caseKey, assignment);
@@ -398,14 +408,28 @@
     };
   }
 
+  function editionMatch(status, trial, planned) {
+    if (status === 'missing') return 'noReturn';
+    if (status !== 'completed' && status !== 'withdrawn') return 'unlinked';
+    if (Object.hasOwn(trial, 'startedKitVersion')) return 'changedOnResume';
+    const observed = kitVersion(trial.kitVersion);
+    if (!observed) return 'noObservedVersion';
+    return observed === planned ? 'matched' : 'differentVersion';
+  }
+
+  function editionArm() {
+    return {assigned:0, verified:0, failedQuality:0, failedReason:0, overTime:0, withdrawn:0, unknown:0,
+      editions:{matched:0, noReturn:0, unlinked:0, noObservedVersion:0, differentVersion:0, changedOnResume:0}};
+  }
+
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
   function allocationReport(assignments, records, repeated) {
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
     const armKey = a => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
     const byParticipant = new Map(), arms = new Map(), matched = [];
-    const deadlines = new Map();
+    const deadlines = new Map(), editionDeadlines = new Map();
     const deadlineArm = () => ({assigned:0, verified:0, failedQuality:0, overTime:0, withdrawn:0, unknown:0});
-    let outsideRoster = 0, unlinked = 0, deadlineAssigned = 0;
+    let outsideRoster = 0, unlinked = 0, deadlineAssigned = 0, unknownPlannedEdition = 0;
     for (const a of assignments) {
       if (!byParticipant.has(a.participant)) byParticipant.set(a.participant, []);
       byParticipant.get(a.participant).push({a, article:articleIdentity(a.articleUrl), related:[], ambiguous:false});
@@ -470,8 +494,22 @@
         counts.assigned++;
         counts[outcome]++;
         strict.assigned++;
-        strict[deadlineWithReason(outcome, status, related[0])]++;
+        const withReason = deadlineWithReason(outcome, status, related[0]);
+        strict[withReason]++;
         deadlineAssigned++;
+        const planned = kitVersion(a.assignedKitVersion);
+        if (!planned) {
+          unknownPlannedEdition++;
+        } else {
+          const editionKey = JSON.stringify([deadlineKey, planned]);
+          if (!editionDeadlines.has(editionKey)) editionDeadlines.set(editionKey,
+            {caseId, articleUrl, taskId, prompt, targetSeconds, assignedKitVersion:planned, manual:editionArm(), journal:editionArm()});
+          const edition = editionDeadlines.get(editionKey)[a.method];
+          const match = editionMatch(status, related[0]?.trial, planned);
+          edition.assigned++;
+          edition.editions[match]++;
+          edition[match === 'matched' ? withReason : 'unknown']++;
+        }
       }
     }
     const groups = group(matched);
@@ -497,8 +535,11 @@
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);
       comparison.withReason.difference = yieldDifference(comparison.withReason.manual, comparison.withReason.journal);
     }
+    for (const comparison of editionDeadlines.values())
+      comparison.difference = yieldDifference(comparison.manual, comparison.journal);
     return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()],
-      deadlineAssigned, deadlineComparisons:[...deadlines.values()]};
+      deadlineAssigned, deadlineComparisons:[...deadlines.values()], unknownPlannedEdition,
+      editionDeadlineComparisons:[...editionDeadlines.values()]};
   }
 
   const api = { phases, format, readCase, timer, tick, validate, validTimer, group, compareTimes, url, kitVersion,

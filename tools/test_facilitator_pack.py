@@ -74,6 +74,10 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertEqual(entry['material'], json.loads((CASES / case / 'blind-tasks.json').read_bytes()))
                 for method, contents in packet_pair(case).items():
                     self.assertEqual(archive.read(entry['files'][method]), contents)
+                    with ZipFile(BytesIO(contents)) as participant:
+                        meta = re.findall(r'<meta name="journal-field-kit" content="([a-f0-9]{64})">',
+                                          participant.read('field-review.html').decode())
+                        self.assertEqual(meta, [entry['kitVersion']])
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))

@@ -293,3 +293,44 @@ test('판단 이유를 실제 대조한 뒤 세 항목이 모두 맞은 답안 1
   assert.match(p.el('comparisons').querySelector('.returned-reason-cost').textContent,
     /확인된 성공 0건, 성공 여부 확인 대기 0건.*검증 성공이 0건/);
 });
+
+test('진행자만 예정 판본의 목표 내 검증 차이를 확인하고 기존 전체 배정·명부·채점 파일을 구별한다', async t => {
+  const a='a'.repeat(64), b='b'.repeat(64);
+  const m={...assignment('M','manual',120),assignedKitVersion:a};
+  const j={...assignment('J','journal',120),assignedKitVersion:a};
+  const legacy=assignment('L','journal',120);
+  const p=summary(t);
+  await p.upload('key-file',key);
+  await p.upload('roster-file',roster([m,j,legacy]));
+  // M and J are the only participants with an edition assigned in advance.
+  await p.upload('imports',submission(m,60000,{kitVersion:a,found:'missing'}),
+    submission(j,45000,{kitVersion:b}),submission(legacy,25000,{kitVersion:b}));
+  p.grade('J'); p.grade('J','판단 이유'); p.grade('L'); p.grade('L','판단 이유');
+  assert.equal(p.el('edition-deadlines').textContent,'');
+  assert.doesNotMatch(p.el('entries').textContent,/[ab]{64}|시간 내 검증 성공률|예정 배포본 ID/);
+  assert.equal(p.el('results').hidden,true);
+  p.toggle();
+  const area=p.el('edition-deadlines');
+  assert.match(area.textContent,/목표가 있는 배정 3건 중 예정 판본 확인 2건 · 명부에 예정 판본이 없는 배정 1건/);
+  assert.match(area.textContent,/예정 배포본 ID · a{64}/);
+  assert.match(area.textContent,/같은 판본에서 다른 방식으로 참여했어도 원래 배정한 방식에 집계/);
+  assert.match(area.textContent,/시간 내 검증 성공률 0.0% ~ 100.0% \(배정 1건\)/);
+  assert.match(area.textContent,/예정 판본 일치 0건 · 다른 판본 1건/);
+  assert.match(area.querySelector('strong').textContent,/0\.0%p ~ \+100\.0%p/);
+  assert.match(p.el('allocation-deadlines').querySelector('.deadline-with-reason strong').textContent,/\+100\.0%p$/);
+  const saved=await p.download('save-roster');
+  assert.deepEqual(saved,roster([m,j,legacy]));
+  const grades=await p.download('save');
+  assert.doesNotMatch(JSON.stringify(grades),/assignedKitVersion|targetSeconds/);
+  assert.equal(grades.entries.find(e=>e.trial.participant==='J').trial.kitVersion,b);
+  const visible=area.textContent;
+  p.toggle();
+  assert.equal(area.textContent,'');
+  const q=summary(t);
+  await q.upload('roster-file',saved); await q.upload('imports',grades); q.toggle();
+  assert.equal(q.el('edition-deadlines').textContent,visible);
+  const old=summary(t);
+  await old.upload('roster-file',roster([legacy])); old.toggle();
+  assert.match(old.el('edition-deadlines').textContent,/예정 판본을 기록한 배정이 없어/);
+  assert.equal(old.el('edition-deadlines').querySelector('article'),null);
+});

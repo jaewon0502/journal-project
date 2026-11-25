@@ -531,8 +531,16 @@
         node('p', '시간 내 성공 ' + arm.verified + '건 · 위치 또는 판정 불일치 ' + arm.failedQuality +
           '건' + (includeReason ? ' · 판단 이유 불일치 ' + arm.failedReason + '건' : '') + ' · 시간 초과 ' + arm.overTime +
           '건 · 중도 종료 ' + arm.withdrawn + '건 · 결과 미확인 ' + arm.unknown + '건'));
+      if (arm.editions) {
+        const e = arm.editions;
+        panel.append(node('p', '예정 판본 일치 ' + e.matched + '건 · 다른 판본 ' + e.differentVersion +
+          '건 · 회신 판본 미상 ' + e.noObservedVersion + '건 · 재개 시 판본 변경·미확인 ' + e.changedOnResume +
+          '건 · 미회신 ' + e.noReturn + '건 · 기사·과제 불일치 또는 배정 충돌 ' + e.unlinked + '건'));
+      }
     }
-    appendYieldDifference(panel, result.difference, '같은 과제와 목표 시간을 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
+    appendYieldDifference(panel, result.difference, result.assignedKitVersion
+      ? '같은 과제·예정 판본·목표 시간을 두 방식 모두에 배정하면 차이를 계산할 수 있습니다.'
+      : '같은 과제와 목표 시간을 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
     if (result.difference && (result.difference.high < 0 || result.difference.low > 0))
       panel.append(node('p', '목표 시간 내 성공률은 저널을 배정받은 집단에서 더 ' + (result.difference.high < 0 ? '낮습니다.' : '높습니다.')));
     return panel;
@@ -543,12 +551,14 @@
     el('deadline-coverage').textContent = '전체 배정 ' + assigned + '건 중 목표 시간을 미리 정한 배정 ' +
       count + '건 · 목표 시간 미지정 ' + (assigned - count) + '건.';
     const area = el('allocation-deadlines');
+    const editions = el('edition-deadlines');
     if (!count) {
       area.append(node('p', '사전 배정표에 목표 시간이 없어 이 비율을 계산할 수 없습니다.'));
+      editions.append(node('p', '목표 시간을 정한 배정이 없습니다.'));
       return;
     }
     area.append(node('p', '같은 기사와 과제에 같은 목표 시간을 배정받은 사람 전체가 각 방식의 분모입니다. 참여자가 목표 안에 제출한 답을 두 기준으로 봅니다. 두 번째 기준은 답에 적은 수치·대상·계산 등 판단 이유까지 진행자가 원자료와 대조해 일치로 채점해야 성공입니다. 시간은 참여자 기기에 기록된 활동 시간입니다.'),
-      node('p', '최솟값은 확인된 성공만, 최댓값은 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 시간 일부 누락으로 성공 여부가 달라질 수 있습니다. 기록된 시간만으로 목표를 넘겼으면 성공에서 제외합니다. 불일치와 시간 초과가 겹친 답안은 불일치로 한 번만 셉니다. 명부에는 배포본 ID가 없어 같은 과제와 목표의 여러 판본이 함께 집계될 수 있습니다.'));
+      node('p', '최솟값은 확인된 성공만, 최댓값은 미확인 건까지 성공으로 셉니다. 미회신, 채점 대기, 시간 일부 누락으로 성공 여부가 달라질 수 있습니다. 기록된 시간만으로 목표를 넘겼으면 성공에서 제외합니다. 불일치와 시간 초과가 겹친 답안은 불일치로 한 번만 셉니다. 이 지표는 같은 과제와 목표의 여러 배포본을 함께 집계합니다.'));
     for (const task of report.deadlineComparisons) {
       const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId + ' · 목표 ' + task.targetSeconds + '초');
       const criteria = node('div', '');
@@ -556,6 +566,18 @@
       criteria.append(deadlinePanel(task, false), deadlinePanel(task.withReason, true));
       card.append(criteria);
       area.append(card);
+    }
+    editions.append(node('p', '목표가 있는 배정 ' + count + '건 중 예정 판본 확인 ' +
+      (count - report.unknownPlannedEdition) + '건 · 명부에 예정 판본이 없는 배정 ' + report.unknownPlannedEdition + '건.'));
+    if (!report.editionDeadlineComparisons.length) {
+      editions.append(node('p', '예정 판본을 기록한 배정이 없어 판본별 성공률을 계산할 수 없습니다.'));
+      return;
+    }
+    editions.append(node('p', '각 판본에 원래 배정한 사람 모두가 분모입니다. 두 방식의 ZIP은 같은 판본 ID를 씁니다. 같은 판본에서 다른 방식으로 참여했어도 원래 배정한 방식에 집계합니다. 답안의 판본이 일치하고 세 항목과 시간이 확인된 경우를 성공으로 셉니다. 다른 판본·판본 미상·미회신은 결과 미확인으로 남겨 최솟값과 최댓값에 반영합니다.'));
+    for (const task of report.editionDeadlineComparisons) {
+      const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId + ' · 목표 ' + task.targetSeconds + '초');
+      card.append(node('p', '예정 배포본 ID · ' + task.assignedKitVersion), deadlinePanel(task, true));
+      editions.append(card);
     }
   }
   function showAllocations(report) {
@@ -643,6 +665,7 @@
     el('allocation-yield').replaceChildren();
     el('deadline-coverage').textContent = '';
     el('allocation-deadlines').replaceChildren();
+    el('edition-deadlines').replaceChildren();
     el('allocation-comparisons').replaceChildren();
     if (!showingResults) {
       el('comparisons').replaceChildren();

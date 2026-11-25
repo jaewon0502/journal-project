@@ -9,7 +9,7 @@ from tempfile import NamedTemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from build_editor_study_pack import packet_bytes as editor_participant_zip
-from build_field_participant_packs import Assets, CASES, READER, ROOT, html, packet_pair
+from build_field_participant_packs import Assets, CASES, READER, ROOT, html, versioned_packet_pair
 
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
@@ -34,7 +34,7 @@ START = """<!doctype html>
 <section class="box"><h2>실제 기사에서 원자료 찾기</h2>
 <ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>에서 검토할 기사를 선택하세요.
 과제별로 목표 활동 시간이 있으면 배정 전에 초 단위로 입력하세요. 참여 순서대로 익명 코드를 입력해 배정표를 만들고 배부 전에 JSON을 보관하세요.
-각 참여자의 행에서 ‘코드 복사’를 누르고 같은 행의 ZIP을 내려받아 함께 전달하세요. 같은 기사에 참여하는 두 방식의 ZIP은 이 화면에서 함께 받으세요.
+각 참여자의 행에서 ‘코드 복사’를 누르고 같은 행의 ZIP을 내려받아 함께 전달하세요. 내장 기사의 배정 코드는 이 배포본에서 해당 기사와 방식이 일치할 때 과제를 엽니다. 다른 판본을 받았다면 배정표를 만들 때 사용한 진행자 ZIP에서 다시 받으세요.
 <ul><li>예비비 기사 · <a href="참여 과제/예비비/예비비-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/예비비/예비비-저널.zip" download>저널 병행 ZIP</a></li>
 <li>고용 기사 · <a href="참여 과제/고용/고용-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/고용/고용-저널.zip" download>저널 병행 ZIP</a></li></ul></li>
 <li>참여자는 압축을 풀어 <code>field-review.html</code>을 열고 본인의 배정 코드를 확인합니다. 익명 코드와 과제 번호를 따로 받았다면 직접 입력합니다.
@@ -162,11 +162,12 @@ def packet_bytes():
         files[f'참여 과제/{folder}/blind-tasks.json'] = (CASES / case / 'blind-tasks.json').read_bytes()
         material = json.loads(files[f'참여 과제/{folder}/blind-tasks.json'])
         paths = {}
-        for method, data in packet_pair(case).items():
+        edition, pair = versioned_packet_pair(case)
+        for method, data in pair.items():
             label = '평소도구' if method == 'manual' else '저널'
             paths[method] = f'참여 과제/{folder}/{folder}-{label}.zip'
             files[paths[method]] = data
-        catalog.append({'label': folder, 'material': material, 'files': paths})
+        catalog.append({'label': folder, 'material': material, 'files': paths, 'kitVersion': edition})
     payload = json.dumps(catalog, ensure_ascii=False, separators=(',', ':')).replace('<', r'\u003c')
     files['field-allocation.html'] = files['field-allocation.html'].replace(b'</body>',
         f'<script id="allocation-catalog" type="application/json">{payload}</script></body>'.encode(), 1)

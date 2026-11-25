@@ -81,7 +81,8 @@ test('같은 익명 코드를 두 번 적거나 배정표 대신 과제 파일�
 test('내장 기사로 배정하고 기사·과제·방식이 일치하는 행에서만 참여 ZIP을 받는다', async t => {
   const budget = require('../experiments/cross-party-review/blind-tasks.json');
   const catalog = [budget, fixture].map((material,i) => ({
-    material, label: ['예비비','고용'][i], files:{manual:'packet'+i+'-manual.zip', journal:'packet'+i+'-journal.zip'}
+    material, label: ['예비비','고용'][i], kitVersion:String(i).repeat(64),
+    files:{manual:'packet'+i+'-manual.zip', journal:'packet'+i+'-journal.zip'}
   }));
   const p = open(t, catalog);
   assert.equal(p.el('bundled-picker').hidden,false);
@@ -94,6 +95,7 @@ test('내장 기사로 배정하고 기사·과제·방식이 일치하는 행�
   p.el('allocation-form').requestSubmit();
   const roster = await p.save();
   const links = pane => [...pane.el('allocations').rows].map(row=>row.cells[3].querySelector('a'));
+  assert.ok(roster.assignments.every(r=>r.assignedKitVersion === catalog[1].kitVersion));
   assert.deepEqual(links(p).map(a=>a.getAttribute('href')),roster.assignments.map(r=>catalog[1].files[r.method]));
   for (const a of links(p)) assert.ok(a.hasAttribute('download'));
   const old = structuredClone(roster);
@@ -107,6 +109,15 @@ test('내장 기사로 배정하고 기사·과제·방식이 일치하는 행�
   await loose.load('roster-file',roster);
   assert.ok(loose.el('bundled-picker').hidden);
   assert.ok(links(loose).every(a=>!a));
+  const otherEdition = open(t,catalog.map(entry=>({...entry,kitVersion:'f'.repeat(64)})));
+  await otherEdition.load('roster-file',roster);
+  assert.ok(links(otherEdition).every(a=>!a));
+  assert.match(otherEdition.el('allocations').textContent,/예정 배포본 111111111111에서 ZIP/);
+  const custom = open(t,catalog);
+  await custom.load('case-file',fixture);
+  custom.el('participant-codes').value = 'E1';
+  custom.el('allocation-form').requestSubmit();
+  assert.equal(Object.hasOwn((await custom.save()).assignments[0],'assignedKitVersion'),false);
 });
 
 test('과제 파일을 읽는 중 내장 기사를 선택하면 늦게 온 파일이 배정을 바꾸지 않는다', async t => {
