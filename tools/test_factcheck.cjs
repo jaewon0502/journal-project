@@ -10,6 +10,39 @@ const sources = [source];
 const decision = {status: 'fact', sourceIds: ['minutes'], acknowledged: true,
   reason: '안건 2의 의결 결과와 기사의 행위자·행위를 대조했다.'};
 
+test('정치 여론조사의 두 지지율과 격차의 통계적 해석을 각각 대조하도록 안내한다', () => {
+  const sample = '여론조사에서 가 후보는 42%, 나 후보는 40%였다.';
+  const observed = '표에 나온 값의 차이';
+  const inference = '격차의 신뢰구간이나 검정 결과';
+  const lastHints = article => prepare(article).rows.at(-1).hints.join(' ');
+  const order = '여론조사에서 가 후보는 42%, 나 후보는 40%로, 가 후보가 오차범위 밖에서 앞섰다.';
+  for (const article of [order, order.replace(/[가나](?= 후보)/gu, name => name === '가' ? '나' : '가'),
+    '정당 지지율에서 두 정당의 격차가 통계적으로 유의했다.',
+    sample + '\r\n두 후보의 격차는 오차 범위 안이었다.', sample + ' 오차범위 밖 우세였다.']) {
+    assert.ok(lastHints(article).includes(observed), article);
+    assert.ok(lastHints(article).includes(inference), article);
+  }
+  for (const article of [sample, '존스 후보와 커리지 후보의 공표 지지율 차이는 1.4%포인트다.',
+    '존스 후보와 커리지 후보의 지지율 격차가 1.4%p로 나타났다.']) {
+    assert.ok(lastHints(article).includes(observed), article);
+    assert.ok(!lastHints(article).includes(inference), article);
+  }
+  for (const article of [sample + ' 전체 조사의 표본오차는 95% 신뢰수준에서 ±3.1%p였다.',
+    sample + '\r\n\r\n오차범위 밖 우세였다.', '가 후보의 수도권과 충청권 지지율 차이가 통계적으로 유의했다.',
+    '결선 개표 결과 가 후보는 42%, 나 후보는 40%를 득표했다.',
+    '신약 후보물질 두 종류의 효능 차이가 통계적으로 유의했다.',
+    '여론조사에서 두 후보의 광고 인지도 차이는 통계적으로 유의했다.',
+    '여론조사에서 두 후보의 행사 참석률은 42%, 40%였다.',
+    sample + ' 두 후보의 광고 인지도 차이는 통계적으로 유의했다.',
+    '존스 후보와 커리지 후보의 지지율은 전주 대비 1.4%포인트 상승했다.',
+    '존스 후보와 커리지 후보의 지지율 격차는 1.4%p 줄었다.',
+    '존스 후보와 커리지 후보의 지지율 조사 표본오차는 ±1.4%포인트다.',
+    '여론조사에서 가 후보의 지지율은 전주 42%, 이번 주 가 후보의 지지율은 40%였다.',
+    '가 후보의 지지율은 전주 42%에서 40%로 떨어졌다. 격차는 오차범위 안이었다.']) {
+    assert.ok(!lastHints(article).includes(observed), article);
+  }
+});
+
 test('과거 연구의 한국어 문장 18개를 새 기사로 검토하면 저장 AI 판정이 승계되지 않는다', () => {
   assert.equal(archived.initial_sentences.length, 18);
   for (const item of archived.initial_sentences) {

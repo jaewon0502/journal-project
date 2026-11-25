@@ -307,14 +307,39 @@
   // a figure, an event or an allegation is always speech.
   const nameQuote = /[“"]([^“”"\n]{1,30}[^다라요까죠\s.!?])[”"](?=(?:을|를|이|가|은|는|의|과|와|에|에서|으로|로|도)(?:[\s.,]|$))/gu;
   const asTitle = (match, name) => hasAssessment(name) || [quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
-  function triage(text) {
+  const pollMeasure = /지지율|지지도|(?:후보|정당)\s*선호도/u;
+  const reportedPollGap = /(?:지지율|지지도|선호도)(?:의)?\s*(?:격차|차이)(?:는|가|은|이)?\s*\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)\s*(?:[pP]|포인트)(?=\s*(?:[.,!?。]|$|이?다|였|이었|입니다|로\s*(?:집계|조사|발표|나타)))/u;
+  const pollInference = /(?:표본\s*오차(?:\s*범위)?|오차\s*범위)(?:를|의|에서)?\s*(?:밖|안|이?[내외]|벗어|넘)|통계적(?:으로)?\s*유의(?:한|하|했|미|성)/u;
+  function hasPollPair(text) {
+    const support = pollMeasure.test(text);
+    if (support && /(?:두|양)\s*(?:후보|정당)|(?:후보|정당)\s*간|여야|양당/u.test(text)) return true;
+    if (!support && !/여론\s*조사|출구\s*조사/u.test(text)) return false;
+    const named = text.replace(/후보\s+([A-Z]\d*)(?![A-Za-z\d])/gu, '$1 후보');
+    const options = named.matchAll(/(?<![\p{L}\d])([가-힣A-Za-z\d]+\s+후보|여당|야당)(?:는|은|이|가|의|와|과|도)?(?=$|[\s.,，·])\s*(\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)(?!\s*(?:[pP]|포인트)))?/gu);
+    const names = new Set();
+    for (const [_, label, rate] of options) if (support || rate) names.add(label.replace(/\s+/gu, ''));
+    return names.size >= 2;
+  }
+  function pollReviewHint(text, previous) {
+    const interprets = pollInference.test(text);
+    const shares = text.match(/\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)(?!\s*(?:[pP]|포인트))/gu) || [];
+    if (!interprets && shares.length < 2 && !reportedPollGap.test(text)) return '';
+    // Use the preceding poll for a short follow-up about its gap, never across paragraphs.
+    const followUp = /^(?:(?:(?:두|양)\s*(?:후보|정당)(?:\s*간|의)?|이|그)\s*)?(?:격차|차이)|^오차\s*범위/u.test(text);
+    if (!hasPollPair(text) && !(interprets && followUp && hasPollPair(previous))) return '';
+    const observed = '조사표에서 두 비율의 조사 시점·응답자 집단·문항이 같은지 확인하고, 표에 나온 값의 차이를 퍼센트포인트(%p)로 대조하세요.';
+    return interprets ? observed + ' 우열을 통계적으로 판단한 표현은 두 비율 격차의 신뢰구간이나 검정 결과를 확인하세요. 조사 전체의 표본오차만으로는 판단할 수 없습니다.' : observed;
+  }
+  function triage(text, previous) {
     const speech = attributed.test(text.replace(nameQuote, asTitle)), suspicion = allegation.test(text);
     const number = quantitative.test(text), evaluation = hasAssessment(text);
     const mixed = evaluation && (number || eventFact.test(text));
     const hints = [];
     if (speech) hints.push('누가 누구에 대해 어떤 말을 했는지 원발언과 대조하세요. 발언 내용 자체의 사실성은 별도 쟁점입니다.');
     if (suspicion) hints.push('의혹 제기·수사·확정 판단의 단계, 당사자의 답변과 추가 근거를 확인하세요.');
-    if (number) hints.push('수치의 기간, 단위, 분모와 비교 기준을 확인하세요.');
+    const pollHint = pollReviewHint(text, previous);
+    if (pollHint) hints.push(pollHint);
+    else if (number) hints.push('수치의 기간, 단위, 분모와 비교 기준을 확인하세요.');
     if (evaluation) hints.push('평가·비판의 주체와 강도를 보존하고 확인할 사실이 함께 있는지 살펴보세요.');
     if (mixed) hints.push('같은 문장에 확인할 사실과 평가 표현이 있습니다. 확인한 구절을 지정하세요.');
     let allowedStatuses = [...states];
@@ -928,10 +953,11 @@
       const positions = group.map(({start, end}) => ({start, end}));
       const before = groups[i - 1]?.at(-1) ?? group[0];
       const after = groups[i + 1]?.[0] ?? group.at(-1);
+      const previous = i && !/\n[ \t]*\n/u.test(article.slice(before.end, start).replace(/\r\n?/gu, '\n')) ? before.text : '';
       const {candidates: sourceMatches, caution} = suggest(text, indexed);
       const row = {id: `unit-${start}`, text, positions, context: article.slice(before.start, after.end),
         articleBinding: digest([articleKey, positions]), priorDecision: null,
-        binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text), sourceMatches,
+        binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text, previous), sourceMatches,
         sourceCaution: (sourceMatches.length && sourceCaution(text, indexed)) || caution,
         sourceIds: sourceMatches.map(match => match.id), status: 'pending', receipt: null, reviewNote: ''};
       restore(row, decisions.get(row.id) ?? [], catalog);

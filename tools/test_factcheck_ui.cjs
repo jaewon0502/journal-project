@@ -212,6 +212,34 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   assert.equal(json.demo, true);
 });
 
+test('지지율을 직접 부분 확인해도 오차범위 밖 우세라는 해석은 작업 파일에서 미결로 남는다', async t => {
+  const p = open(t);
+  const observed = '여론조사에서 가 후보는 42%, 나 후보는 40%였고';
+  const claim = observed + ', 이 격차는 오차범위 밖이었다.';
+  p.set('article', claim);
+  p.el('article-form').requestSubmit();
+  const details = {title:'가상 조사 결과표', url:'https://poll.example/results', version:'발표본',
+    locator:'표 1, 전체 응답자 행', excerpt:'가 후보 42%, 나 후보 40%. 전체 표본오차 ±3.1%p.'};
+  for (const [key, value] of Object.entries(details)) p.set('source-' + key, value);
+  p.el('source-form').requestSubmit();
+  assert.match(p.el('row-hints').textContent, /격차의 신뢰구간이나 검정 결과/);
+  assert.equal(p.el('verdict').value, '');
+  assert.equal(p.el('row-sources').querySelectorAll('input:checked').length, 0);
+  p.el('row-sources').querySelector('input[value="source-1"]').click();
+  p.set('verdict', 'partial');
+  p.set('fact-span', observed);
+  p.set('reason', '표 1의 두 지지율을 확인했다. 격차 자체의 신뢰구간은 추가로 확인한다.');
+  p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  assert.equal(p.el('result-tag').textContent, '추가 확인 필요');
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.receipts.length, 1);
+  assert.equal(work.receipts[0].status, 'partial');
+  assert.equal(work.receipts[0].factSpan, observed);
+  assert.deepEqual(work.receipts[0].remainingSpans, [', 이 격차는 오차범위 밖이었다.']);
+});
+
 test('판단 저장 뒤 미검토 문장을 우선하고 보류 문장만 남으면 다음 항목을 연다', t => {
   const {doc, el, set, click} = open(t);
   const subjects = ['돌봄 사업', '교통 사업', '문화 사업', '주택 사업'];
