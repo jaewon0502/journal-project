@@ -469,7 +469,58 @@
     const ref = basis.reference;
     const gradingKey = JSON.stringify([basis.verdict, ref.document, ref.locator, ref.documentUrl || null,
       [...new Set(ref.acceptedDocuments || [])].sort(), [...new Set(ref.acceptedLocators || [])].sort()]);
-    return {ms, verified:correct && location === 'yes', expected:basis.verdict, adopted:trial.verdict === 'supported', gradingKey};
+    const verified = correct && location === 'yes';
+    const reason = checkedReasonGrade(trial, basis, slot.completed.reasonGrade);
+    return {ms, verified, expected:basis.verdict, adopted:trial.verdict === 'supported', gradingKey,
+      outcome:verified ? (reason || 'pending') : 'no', explanation:basis.explanation || '',
+      phases:trial.split ? trial.phaseMs : null};
+  }
+
+  function meanTimeDifference(manual, journal, count) {
+    const difference = manual - journal;
+    return {manualMeanMs:Number(manual) / count, journalMeanMs:Number(journal) / count,
+      savedMs:Number(difference) / count, savedPct:manual === 0n ? null : 100 * Number(difference) / Number(manual)};
+  }
+
+  // A difference between two successful tasks is interpretable only if the
+  // opposite article assignments remain balanced within that subset as well.
+  function successfulWork(cohorts) {
+    const result = {bothPassed:0, failedPairs:0, pendingPairs:0, changedStandards:0,
+      comparedEditors:0, phaseEditors:0, time:null, phaseTimes:null};
+    let manual = 0n, journal = 0n;
+    const byPhase = Object.fromEntries(phases.map(p => [p, {manual:0n, journal:0n}]));
+    const balanced = pairs => pairs.length && pairs.filter(pair => pair.direction === 0).length * 2 === pairs.length;
+    for (const pairs of cohorts) {
+      const explanations = [new Set(), new Set()];
+      const passed = [];
+      for (const pair of pairs) {
+        const {m, j, direction} = pair;
+        if (m.explanation) explanations[direction].add(m.explanation);
+        if (j.explanation) explanations[1 - direction].add(j.explanation);
+        if (m.outcome === 'no' || j.outcome === 'no') result.failedPairs++;
+        else if (m.outcome === 'pending' || j.outcome === 'pending') result.pendingPairs++;
+        else passed.push(pair);
+      }
+      result.bothPassed += passed.length;
+      if (explanations.some(values => values.size > 1)) {
+        result.changedStandards += passed.length;
+        continue;
+      }
+      if (!balanced(passed)) continue;
+      result.comparedEditors += passed.length;
+      for (const {m, j} of passed) { manual += m.ms; journal += j.ms; }
+      const measured = passed.filter(({m, j}) => m.phases && j.phases);
+      if (!balanced(measured)) continue;
+      result.phaseEditors += measured.length;
+      for (const {m, j} of measured) for (const phase of phases) {
+        byPhase[phase].manual += BigInt(m.phases[phase]);
+        byPhase[phase].journal += BigInt(j.phases[phase]);
+      }
+    }
+    if (result.comparedEditors) result.time = meanTimeDifference(manual, journal, result.comparedEditors);
+    if (result.phaseEditors) result.phaseTimes = Object.fromEntries(phases.map(phase => [phase,
+      meanTimeDifference(byPhase[phase].manual, byPhase[phase].journal, result.phaseEditors)]));
+    return result;
   }
 
   function editorCrossover(byParticipant, unexpectedReturns) {
@@ -497,13 +548,15 @@
       cohort.complete[direction]++;
       cohort.standards[direction].add(m.gradingKey);
       cohort.standards[1 - direction].add(j.gradingKey);
-      cohort.pairs.push({m, j});
+      cohort.pairs.push({m, j, direction});
     }
     let manualMs = 0n, journalMs = 0n;
+    const comparedCohorts = [];
     for (const {planned, complete, pairs, standards} of cohorts.values()) {
       // Different articles are compared within one editor. Keep the whole pair of tasks
       // only when both the roster and observed reviewers balance the opposite assignments.
       if (planned[0] !== planned[1] || complete[0] !== complete[1] || standards.some(keys => keys.size !== 1)) continue;
+      comparedCohorts.push(pairs);
       for (const {m, j} of pairs) {
         result.comparedEditors++;
         manualMs += m.ms;
@@ -523,12 +576,9 @@
       }
     }
     if (result.comparedEditors) {
-      result.manualMeanMs = Number(manualMs) / result.comparedEditors;
-      result.journalMeanMs = Number(journalMs) / result.comparedEditors;
-      const difference = manualMs - journalMs;
-      result.savedMs = Number(difference) / result.comparedEditors;
-      result.savedPct = manualMs === 0n ? null : 100 * Number(difference) / Number(manualMs);
+      Object.assign(result, meanTimeDifference(manualMs, journalMs, result.comparedEditors));
     }
+    result.successfulWork = successfulWork(comparedCohorts);
     return result;
   }
 

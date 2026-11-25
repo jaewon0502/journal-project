@@ -62,6 +62,7 @@ test('시간 목표가 없는 명부도 진행자 집계 화면에서 0%p와 이
   const {window} = new JSDOM(read('field-summary.html'), {url:'https://example.org/field-summary.html', runScripts:'outside-only'});
   t.after(() => window.close());
   window.eval(read('field-review-core.js'));
+  window.eval(read('field-time-report.js'));
   window.eval(read('field-summary.js'));
   const el = id => window.document.getElementById(id);
   async function upload(id, value) {

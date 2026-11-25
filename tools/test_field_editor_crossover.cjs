@@ -37,11 +37,54 @@ test('같은 기사별 평균과 성공률에서도 누가 빨라지면서 반�
   assert.deepEqual(first, second);
   assert.deepEqual(fastLost, {assignedEditors:4, pairedAssignments:4, completeEditors:4, comparedEditors:4,
     faster:2, sameTime:0, slower:2, fasterQuality:{fewer:2, same:0, more:0}, fasterUnsafe:{eligible:2, more:2},
-    manualMeanMs:60000, journalMeanMs:50000, savedMs:10000, savedPct:100/6});
+    manualMeanMs:60000, journalMeanMs:50000, savedMs:10000, savedPct:100/6,
+    successfulWork:{bothPassed:0, failedPairs:2, pendingPairs:2, changedStandards:0, comparedEditors:0,
+      phaseEditors:0, time:null, phaseTimes:null}});
   assert.deepEqual(slowLost, {...fastLost, fasterQuality:{fewer:0, same:2, more:0}, fasterUnsafe:{eligible:2, more:0}});
   for (const privateText of ['private-', 'synthetic-', 'https:', '가상']) assert.ok(!JSON.stringify(fastLost).includes(privateText));
   const reversed = fixture(); reversed.slots.reverse(); reversed.records.reverse();
   assert.deepEqual(get(reversed), fastLost);
+});
+
+function reasonSample(speed) {
+  const load = name => structuredClone(require('../experiments/field-reason-time/' + name + '.json'));
+  return {slots:load('synthetic-roster').assignments, records:load('synthetic-grades-' + speed + '-pass').entries,
+    repeated:new Set()};
+}
+
+test('전체 평균이 같은 두 현장 예시에서 양쪽 모두 이유까지 맞힌 편집자의 시간과 단계를 구분한다', () => {
+  for (const [speed, expected] of [['slow', -20000], ['fast', 80000]]) {
+    const result = get(reasonSample(speed)), success = result.successfulWork;
+    assert.equal(result.savedMs, 30000);
+    assert.deepEqual([success.bothPassed,success.failedPairs,success.pendingPairs,success.comparedEditors,success.phaseEditors], [2,2,0,2,2]);
+    assert.equal(success.time.savedMs, expected);
+    assert.equal(success.phaseTimes.search.savedMs + success.phaseTimes.locate.savedMs + success.phaseTimes.decide.savedMs, expected);
+    const reversed = reasonSample(speed);
+    reversed.slots.reverse(); reversed.records.reverse();
+    assert.deepEqual(get(reversed), result);
+  }
+});
+
+test('성공자와 단계별 기록에도 양방향 배정 균형이 필요하고 기준 설명 변경이나 이유 미채점은 절감으로 해석하지 않는다', () => {
+  const data = reasonSample('slow');
+  const firstSuccess = data.records.find(e => e.trial.method === 'journal' && e.reasonGrade === 'yes');
+  firstSuccess.trial.split = false;
+  let success = get(data).successfulWork;
+  assert.equal(success.comparedEditors, 2);
+  assert.equal(success.phaseTimes, null);
+  assert.equal(success.phaseEditors, 0);
+  const original = firstSuccess.basis.explanation;
+  firstSuccess.basis.explanation += ' 수정된 기준';
+  success = get(data).successfulWork;
+  assert.equal(success.changedStandards, 2);
+  assert.equal(success.time, null);
+  firstSuccess.basis.explanation = original;
+  firstSuccess.reasonGrade = '';
+  success = get(data).successfulWork;
+  assert.deepEqual([success.bothPassed, success.failedPairs, success.pendingPairs, success.comparedEditors], [1,2,1,0]);
+  assert.equal(success.time, null);
+  firstSuccess.locationGrade = 'no';
+  assert.equal(get(data).successfulWork.failedPairs, 3);
 });
 
 test('시간 차이와 판정·위치의 동시 성공을 각각 계산하고 다른 종류의 정답은 오승인 증가 분모에서 뺀다', () => {
@@ -147,6 +190,7 @@ test('교차 집계는 결과를 열었을 때만 인원수를 보여 주고 참
     const {window} = new JSDOM(reader('field-summary.html'), {runScripts:'outside-only', url:'https://example.org/field-summary.html'});
     t.after(() => window.close());
     window.eval(reader('field-review-core.js'));
+    window.eval(reader('field-time-report.js'));
     window.eval(reader('field-summary.js'));
     const el = id => window.document.getElementById(id);
     async function load(id, data) {
@@ -155,6 +199,11 @@ test('교차 집계는 결과를 열었을 때만 인원수를 보여 주고 참
       Object.defineProperty(target, 'files', {value:[file], configurable:true});
       await target.onchange({target});
     }
+    await load('roster-file', {format:field.assignmentFormat, assignments:slots, synthetic:true});
+    assert.match(el('roster-status').textContent, /모의 명부/);
+    await load('imports', {format:'journal-field-grades-v1', entries:records, synthetic:true});
+    assert.match(el('status').textContent, /가상으로 만든 현업형/);
+    assert.ok(!Object.keys(window.sessionStorage).some(key => window.sessionStorage.getItem(key).includes('private-')));
     await load('roster-file', {format:field.assignmentFormat, assignments:slots});
     await load('imports', {format:'journal-field-grades-v1', entries:records});
     const panel = el('editor-crossover');
@@ -165,6 +214,17 @@ test('교차 집계는 결과를 열었을 때만 인원수를 보여 주고 참
     assert.match(panel.textContent, new RegExp('하나 이상이 틀린 편집자 ' + (fastLost ? 2 : 0) + '명'));
     assert.match(panel.textContent, new RegExp('저널에서는 채택한 편집자 ' + (fastLost ? 2 : 0) + '명'));
     assert.ok(!panel.textContent.includes('private-'));
+    const leak = window.document.createElement('p');
+    leak.textContent = 'private-live-note';
+    panel.append(leak);
+    let blob;
+    window.URL.createObjectURL = value => { blob = value; return 'blob:local-example'; };
+    window.URL.revokeObjectURL = () => {};
+    window.HTMLAnchorElement.prototype.click = () => {};
+    panel.querySelector('button').click();
+    const html = await blob.text();
+    assert.match(html, /양쪽 모두 성공 0명/);
+    assert.doesNotMatch(html, /private-|synthetic-|https:|<script/i);
     el('toggle-results').click();
     assert.equal(panel.textContent, '');
   }

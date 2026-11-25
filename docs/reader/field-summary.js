@@ -199,16 +199,7 @@
   function applied(entry) {
     return { ...entry, expected: entry.basis?.verdict || '', anchor: entry.basis };
   }
-  const seconds = (n, count) => (count ? (n / count / 1000).toFixed(1) + '초' : '산출 대기');
-  function timeChangeText({ savedMs, savedPct }) {
-    const change = savedMs < 0 ? '더 걸림' : savedMs > 0 ? '절감' : '차이 없음';
-    const amount = Math.abs(savedMs);
-    const duration = amount > 0 && amount < 50 ? '0.1초 미만' : seconds(amount, 1);
-    if (savedPct === null) return duration + ' ' + change + ' (기준 시간 0초로 비율 산출 대기)';
-    const rate = Math.abs(savedPct);
-    const percent = rate > 0 && rate < 0.05 ? '0.1% 미만' : rate.toFixed(1) + '%';
-    return duration + ' ' + change + ' (' + percent + ')';
-  }
+  const {seconds, timeChangeText} = window.JournalFieldTimeReport;
   function kitCoverage(groups, count) {
     const versions = new Set();
     let unknown = 0;
@@ -639,28 +630,15 @@
   }
   function showEditorCrossover(data) {
     const area = el('editor-crossover');
-    area.append(node('h3', '같은 편집자의 시간과 검증 성공'));
-    if (!data.pairedAssignments) {
-      area.append(node('p', '두 기사에서 평소 도구와 저널을 한 번씩 쓰도록 배포본까지 사전 배정한 편집자가 없습니다.'));
-      return;
-    }
-    area.append(node('p', '명부 ' + data.assignedEditors + '명 중 두 기사에 서로 다른 방식을 배정한 편집자 ' + data.pairedAssignments +
-      '명 · 두 과제의 사용 방식·판본·시간·채점을 확인한 편집자 ' + data.completeEditors + '명 · 교차 배정 비교에 포함된 편집자 ' + data.comparedEditors + '명'));
-    if (!data.comparedEditors) {
-      area.append(node('p', '같은 두 과제에서 방식을 서로 바꾸어 배정하고, 양방향 배정 인원과 비교 가능한 응답 인원이 각각 같아야 결과를 볼 수 있습니다.'));
-      return;
-    }
-    area.append(node('p', '비교한 편집자의 과제당 평균 시간 · 평소 도구 ' + seconds(data.manualMeanMs, 1) +
-      ' · 저널 병행 ' + seconds(data.journalMeanMs, 1) + ' · ' + timeChangeText(data)),
-    node('p', '저널에서 빨라진 편집자 ' + data.faster + '명 · 시간이 같았던 편집자 ' + data.sameTime + '명 · 느려진 편집자 ' + data.slower + '명'));
-    if (data.faster) {
-      area.append(node('p', '빨라진 ' + data.faster + '명 중 평소 도구에서는 근거 위치와 판정이 모두 맞았고 저널에서는 둘 중 하나 이상이 틀린 편집자 ' +
-        data.fasterQuality.fewer + '명 · 성공 여부가 같았던 편집자 ' + data.fasterQuality.same + '명 · 저널에서만 성공한 편집자 ' + data.fasterQuality.more + '명'));
-      const unsafe = data.fasterUnsafe;
-      if (unsafe.eligible) area.append(node('p', '빨라진 사람 중 두 과제의 기준 판정이 모두 반박이거나 모두 근거 부족인 ' + unsafe.eligible +
-        '명에서, 평소 도구에서는 사실로 채택하지 않았으나 저널에서는 채택한 편집자 ' + unsafe.more + '명'));
-    }
-    area.append(node('p', '각 편집자가 서로 다른 기사를 검토했습니다. 시간 차이에는 과제 난이도와 검토 순서의 영향도 들어갈 수 있습니다.'));
+    window.JournalFieldTimeReport.renderEditorCrossover(data, area);
+    if (!data.comparedEditors) return;
+    const save = node('button', '같은 편집자의 시간 비교표 HTML 저장');
+    save.type = 'button';
+    save.onclick = () => {
+      downloadFile(new Blob([window.JournalFieldTimeReport.crossoverHtml(data)],
+        {type:'text/html;charset=utf-8'}), '현장-교차배정-시간비교.html');
+    };
+    area.append(save);
   }
 
   function showAllocations(report) {
@@ -986,6 +964,10 @@
     const next = new Map(records), conflicts = new Map();
     let differentClocks = false;
     for (const v of values) {
+      if (v?.synthetic === true && (v.kind === 'editor' || (v.format === format &&
+          Array.isArray(v.entries) && v.entries.some(entry => entry?.trial?.kind === 'editor')))) {
+        throw Error('가상으로 만든 현업형 답안입니다. 모의 시간 비교표에서 결과를 확인하세요.');
+      }
       const list = v.format === format ? v.entries : [{ trial: v, locationGrade: '', verdictGrade: '' }];
       if (!Array.isArray(list)) throw Error('집계 파일 형식을 확인하세요.');
       for (const item of list) {
@@ -1213,6 +1195,7 @@
     try {
       const values = [];
       for (const file of files) values.push(JSON.parse(await file.text()));
+      if (values.some(v => v?.synthetic === true)) throw Error('모의 명부입니다. 모의 시간 비교표에서 결과를 확인하세요.');
       assignments = c.mergeAssignments(assignments, values);
       el('roster-status').textContent = '현장 사전 배정표를 불러왔습니다. 현업 참여에서 배정과 결과를 열어 확인하세요.';
       try {

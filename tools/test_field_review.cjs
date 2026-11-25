@@ -83,6 +83,7 @@ function page(t, name, initialize) {
   initialize?.(window);
   window.confirm = () => true;
   window.eval(reader('field-review-core.js'));
+  if (window.document.querySelector('script[src="field-time-report.js"]')) window.eval(reader('field-time-report.js'));
   window.eval(reader(name + '.js'));
   const el = (id) => window.document.getElementById(id);
   async function upload(id, ...files) {

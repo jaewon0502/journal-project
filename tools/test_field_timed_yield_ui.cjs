@@ -29,6 +29,7 @@ function summary(t, previous) {
     for (const name of Object.keys(previous)) window.sessionStorage.setItem(name, previous.getItem(name));
   }
   window.eval(reader('field-review-core.js'));
+  window.eval(reader('field-time-report.js'));
   window.eval(reader('field-summary.js'));
   const el = id => window.document.getElementById(id);
   return {
