@@ -19,6 +19,7 @@ PARTY_LEDGER_SAMPLE = '연습 예시/정당별-결산표-이전-점수.json'
 DISPUTE_FILES = {'editor-a.json': '연습 예시/핵심지출/편집자-A.json', 'editor-b.json': '연습 예시/핵심지출/편집자-B.json'}
 BIAS_PRACTICE = {name: '연습 예시/편향인용/' + name for name in
                  ('aligned-summary.json', 'different-summary.json', 'aligned-case.json', 'different-case.json', 'preview.html')}
+SCORE_PRACTICE = {name: '연습 예시/단계차이/' + name for name in ('summary.json', 'coordinator-case.json')}
 QUOTE_PRACTICE = {
     'series-summary.json': '연습 예시/핵심발언/기사별-요약.json',
     'coordinator-case.json': '연습 예시/핵심발언/진행자용-대조기록.json'
@@ -63,10 +64,13 @@ START = """<!doctype html>
 <details><summary>PDF 원문에서 후보가 있는 쪽 열기</summary>
 <p>진행자가 원본 PDF와 같은 폴더에 <a href="prepare_pdf_source.py" download>검색 파일 변환 도구</a>를 저장합니다. Python 3.9 이상과 Poppler의 pdftotext가 있는 컴퓨터에서 <code>python3 prepare_pdf_source.py "원본.pdf"</code>를 실행하세요.</p>
 <p><a href="factcheck.html">기사 팩트체크</a>에서 검토 목록을 만들고 ‘원자료 관리 → 원자료 본문에서 근거 구간 찾기 → 파일에서 원자료 불러오기’를 엽니다. 생성된 <code>.journal-source.json</code>과 원본 PDF를 차례로 고르세요. 검색 결과의 PDF 쪽 링크를 누르면 그 자리에서 원문을 대조할 수 있습니다. 발췌문을 옮긴 뒤 자료 주소를 확인하고 ‘확인한 PDF 쪽 입력’을 누르면 다음 편집자도 같은 PDF 판본과 쪽에서 근거를 열 수 있습니다. 검색 파일에는 자료 전문이 들어갑니다.</p></details>
+<p>예비비 기사에서 특정 용도로 ‘2조 7천억 원을 썼다’는 설명을 검증할 때는 <a href="https://www.nabo.go.kr/board/file/down.do?fid=33316159#page=54">국회예산정책처 2019회계연도 결산의 사용명세별 표</a>를 여세요. PDF 54쪽의 26,901억 원은 여러 용도를 합친 지출액입니다. 세부 사업별 지출은 각 행과 지출액 열을 함께 읽으세요.</p>
 <p><a href="annual-rate-practice.html">고용률 0.1%를 확인하는 두 가지 근거</a>에서 공개 통계의 고용률 표와 인원 표를 차례로 대조할 수 있습니다. 진행자 연습 자료에는 문항의 해설이 들어 있습니다.</p>
 <p>전체 평균은 30초 줄었지만 두 방식에서 근거·판정·판단 이유가 모두 맞았던 편집자의 시간은 어땠을까요?
 <a href="연습 예시/검증성공-20초증가.html">20초 더 걸린 모의 사례</a>와
 <a href="연습 예시/검증성공-80초단축.html">80초 줄어든 모의 사례</a>에서 단계별 시간을 비교하세요.</p>
+<p><a href="연습 예시/빨라진-편집자의-판단이유.html">평균 30% 단축에서 빠른 두 사람이 실제로 제출한 모의 풀이 대조하기</a>.
+한 사례에서는 평소 도구로만 분모를 맞혔고 다른 사례에서는 저널로만 맞혔습니다.</p>
 <details id="deadline-example"><summary>목표 120초에서 검증 성공률이 뒤집히는 가상 예시</summary>
 <p>15세 이상 고용률을 검증하는 과제입니다. 평소 도구를 쓴 두 명은 100초와 121초에 위치·판정·이유를 모두 맞혔습니다.
 저널을 쓴 두 명은 각각 60초에 표와 판정을 맞혔지만, 판단 이유에는 15~64세 수치를 썼습니다.</p>
@@ -89,6 +93,9 @@ START = """<!doctype html>
 <li>‘기사별 평가 요약 저장’으로 기사마다 요약 한 개를 보관하세요. <a href="revision-series.html">여러 기사 개선율 집계</a>에서 편향 개선율과 공동 사실 판정 범위를 확인하세요. 수정본에 충돌 표시가 남았거나 원본에서 확인한 사실을 다시 대조해야 하면 해당 기사 이름을 누르세요. 작업 파일 4개와 대응표 2개를 열면 선택한 구절과 두 편집자의 근거가 나옵니다. 원본에서 두 사람이 반박한 구절은 정정 여부와 근거를 기록해 진행자 파일을 저장하세요. 여러 기사 화면의 ‘진행자가 대조한 정정 결과 집계’에 그 파일을 불러오면 정정 확인율과 대응 구절을 찾지 못한 건수를 따로 볼 수 있습니다.</li>
 <li>‘같은 항목에서 본 중요한 왜곡’에서 원본과 수정본의 비율을 공통 개선율과 함께 확인하세요. 판단이 갈린 항목의 링크를 누르고 그 기사의 원래 파일을 열면, 해당 기준에 적은 두 편집자의 이유와 근거가 나옵니다.</li>
 <li>원본 사실이 수정본에도 남았는지 직접 대조했다면 구절별 판단과 이유를 넣고 ‘진행자용 대조 파일 저장’을 누르세요. 다음에는 ‘두 편집자의 결과 한꺼번에 열기’에서 이 파일 하나로 이어갑니다. 이 파일에는 두 편집자의 원자료·미적용 초안과 진행자 대응표가 모두 들어갑니다.</li></ol>
+<h3>두 편집자가 다른 편향 점수를 매긴 구절</h3>
+<p><a href="article-compare.html#review={{SCORE_REVIEW}}&amp;focus=score-review&amp;example=score">모의 의회 기사에서 점수가 갈린 두 판본의 근거 열기</a>.
+원본에서 두 편집자는 같은 입장문을 읽고도 3점과 2점을 매겼습니다. 수정본에서 1점과 0점을 매긴 이유는 입장문과 회의록을 펼쳐 비교하세요.</p>
 <h3>편향 점수가 내려간 두 기사에서 원자료 대조하기</h3>
 <p><a href="연습 예시/편향인용/preview.html">가상 기사 두 편의 점수와 편집자가 고른 설문 구절 보기</a></p>
 <p>직접 집계하려면 <a href="revision-series.html">여러 기사 개선율 집계</a>에서 <code>연습 예시/편향인용</code> 폴더의
@@ -168,6 +175,7 @@ def packet_bytes():
              'participant-editor-study.zip': editor_zip, PRACTICE_SAMPLE: practice,
              PARTIAL_GRADING_SAMPLE: partial_grading,
              'annual-rate-practice.html': (READER / 'annual-rate-practice.html').read_bytes(),
+             '연습 예시/빨라진-편집자의-판단이유.html': (CASES / 'field-reason-time' / 'faster-reasons.html').read_bytes(),
              '연습 예시/검증성공-20초증가.html': (CASES / 'field-reason-time' / 'slow-pass.html').read_bytes(),
              '연습 예시/검증성공-80초단축.html': (CASES / 'field-reason-time' / 'fast-pass.html').read_bytes(),
              PARTY_LEDGER_SAMPLE: (CASES / 'party-ledger-review' / 'legacy-score.json').read_bytes(),
@@ -191,7 +199,14 @@ def packet_bytes():
     case = json.loads(files[QUOTE_PRACTICE['coordinator-case.json']])
     if len(case['items']) != 6 or not all(item['data'].get('demo') is True for item in case['items']):
         raise ValueError('핵심 발언 연습에는 가상 기사 작업 파일과 가상 대응표만 넣으세요.')
-    files['시작.html'] = start.replace('{{QUOTE_REVIEW}}', case['reviewId']).encode()
+    for filename, destination in SCORE_PRACTICE.items():
+        files[destination] = (CASES / 'bias-score-review' / filename).read_bytes()
+    score_case = json.loads(files[SCORE_PRACTICE['coordinator-case.json']])
+    score_summary = json.loads(files[SCORE_PRACTICE['summary.json']])
+    if score_summary.get('demo') is not True or len(score_case['items']) != 6 or not all(
+            item['data'].get('demo') is True for item in score_case['items']):
+        raise ValueError('단계 차이 연습에는 두 모의 편집자의 작업 파일과 대응표만 넣으세요.')
+    files['시작.html'] = start.replace('{{QUOTE_REVIEW}}', case['reviewId']).replace('{{SCORE_REVIEW}}', score_case['reviewId']).encode()
     files['factcheck.html'] = standalone.replace('</header>',
         '<nav aria-label="진행자 도구"><a href="article-compare.html">기사 평가 비교</a> · '
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()
@@ -204,7 +219,7 @@ def packet_bytes():
             page = page.replace('<a href="../article-rubric.md">상세 판정표와 집계식</a>',
                                 '<a href="시작.html">진행자 시작 화면</a>')
         if name == 'article-compare.html':
-            for element_id, data in [('quote-practice', case), ('core-dispute-practice', dispute)]:
+            for element_id, data in [('quote-practice', case), ('core-dispute-practice', dispute), ('bias-score-practice', score_case)]:
                 payload = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
                 page = page.replace('</body>', f'<script id="{element_id}" type="application/json">{payload}</script></body>', 1)
         add_page(files, name, page)

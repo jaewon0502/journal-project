@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import BIAS_PRACTICE, CASES, CASE_FOLDERS, DISPUTE_FILES, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
+from build_facilitator_pack import BIAS_PRACTICE, CASES, CASE_FOLDERS, DISPUTE_FILES, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, SCORE_PRACTICE, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -110,10 +110,17 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = {PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}
+            expected_json = {*SCORE_PRACTICE.values(), PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}
             expected_json.update(dest for name, dest in BIAS_PRACTICE.items() if name.endswith('.json'))
             for name, dest in BIAS_PRACTICE.items():
                 self.assertEqual(archive.read(dest), (CASES / 'bias-citation-audit' / name).read_bytes())
+            self.assertEqual(archive.read('연습 예시/빨라진-편집자의-판단이유.html'),
+                             (CASES / 'field-reason-time' / 'faster-reasons.html').read_bytes())
+            score_case = json.loads(archive.read(SCORE_PRACTICE['coordinator-case.json']))
+            self.assertIn(f"#review={score_case['reviewId']}&amp;focus=score-review&amp;example=score", archive.read('시작.html').decode())
+            [score] = re.findall(r'<script id="bias-score-practice" type="application/json">(.*?)</script>',
+                                 archive.read('article-compare.html').decode(), re.S)
+            self.assertEqual(json.loads(score), score_case)
             sample = json.loads(archive.read(PARTY_LEDGER_SAMPLE))
             self.assertIs(sample['demo'], True)
             self.assertEqual(sample['articleAssessment']['ratings']['standards']['level'], 3)
@@ -143,9 +150,10 @@ class FacilitatorPack(unittest.TestCase):
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
-                        self.assertTrue({PARTY_LEDGER_SAMPLE, *BIAS_PRACTICE.values(), *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
+                        self.assertTrue({'연습 예시/빨라진-편집자의-판단이유.html', *SCORE_PRACTICE.values(), PARTY_LEDGER_SAMPLE, *BIAS_PRACTICE.values(), *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
                         self.assertNotIn('core-context-notes-ui.js', nested.namelist())
                         for page in (n for n in nested.namelist() if n.endswith('.html')):
+                            self.assertNotIn(b'id="bias-score-practice"', nested.read(page))
                             self.assertNotIn(b'id="quote-practice"', nested.read(page))
                             self.assertNotIn(b'id="core-dispute-practice"', nested.read(page))
 

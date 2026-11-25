@@ -74,7 +74,7 @@ window.JournalFieldTimeReport = (() => {
         }
       } else area.append(node('p', '단계별 시간 미산출 · 두 방식의 단계별 기록이 있고 양방향 배정이 균형을 이루어야 합니다.'));
     }
-    area.append(node('p', '각 편집자가 서로 다른 기사를 검토했습니다. 시간 차이에는 과제 난이도와 검토 순서의 영향도 들어갈 수 있습니다.'));
+    area.append(node('p', '각 편집자가 서로 다른 기사를 검토했습니다. 회신에는 두 과제의 실제 시작 순서가 기록되지 않아 난이도와 순서의 영향을 분리할 수 없습니다.'));
   }
   function reportPage(title) {
     const doc = document.implementation.createHTMLDocument(title);
