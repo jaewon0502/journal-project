@@ -637,6 +637,57 @@ test('완료율이 그대로여도 사라진 원본 충돌 구절과 확인한 �
   assert.match(p.el('output').textContent, /수정 전 충돌 구절 1개/);
 });
 
+test('반복 오류 하나만 고친 뒤 같은 원문이 남은 정확한 위치와 각 수정본 판정만 대조한다', async t => {
+  const p = page(t);
+  const claim = '청년 고용률은 65.7%였다.';
+  const fixed = '청년 고용률은 62.7%였다.';
+  const intro = '상반기 수치다.', tail = '기준은 조사일이다.';
+  const quote = '의원은 “' + claim + '”라고 말했다.';
+  const source = {id:'table', title:'상반기 고용 통계', version:'확정본', locator:'표 4 청년 행', pdfPage:'8',
+    url:'https://stats.example/labour.pdf', excerpt:'상반기 청년 고용률은 62.7%로 집계됐다.'};
+  function save(lines, decisions) {
+    const file = workspace(lines.join('\n'));
+    file.sources = [source];
+    const {rows} = engine.prepare(file.article, file.sources);
+    file.receipts = decisions.map(([i, decision]) => engine.decide(rows[i], {...decision, sourceIds:['table'],
+      reason:'조사 기간과 표의 청년 행을 대조했다.', acknowledged:true}, file.sources));
+    return JSON.stringify(file);
+  }
+  const conflict = {status:'contradicted', correction:fixed, correctionChecked:true};
+  p.load('left', '원본.json', save([intro, claim, claim, quote, tail], [[1,conflict]]));
+  async function compareWith(lines, decisions, total) {
+    p.load('right', '수정본.json', save(lines, decisions));
+    await p.settled(); p.el('ack').click(); p.el('compare').click();
+    const output = p.el('output');
+    const list = output.querySelector('.wording-locations');
+    assert.ok(list);
+    assert.equal(list.firstChild.textContent, '수정본에서 같은 문구가 나온 위치 ' + total + '곳');
+    assert.match(list.closest('.pair').parentNode.firstChild.textContent, /대응 구절 미확인/);
+    assert.match(list.textContent, /판본 간 대응으로 집계하지 않습니다/);
+    list.closest('.pair').parentNode.open = true;
+    await t.waitFor(() => assert.equal(list.querySelectorAll('details').length, total));
+    return [...list.querySelectorAll('details')];
+  }
+  const [only] = await compareWith([intro, claim, fixed, quote, tail], [[2,{status:'fact'}]], 1);
+  assert.equal(only.open, true);
+  assert.match(p.el('output').textContent, /근거 지지율0% \(0\/1\)100% \(1\/1\)/);
+  assert.match(p.el('output').textContent, /판정 완료율25% \(1\/4\)20% \(1\/5\)/);
+  assert.equal(only.firstChild.textContent, '수정본 구간 2 · 같은 문구 1/1 · 미확인');
+  assert.equal(only.querySelector('mark').textContent, claim);
+  assert.match(only.querySelector('blockquote').textContent, /상반기 수치다.*65\.7%.*62\.7%/s);
+  assert.equal(only.querySelector('a'), null);
+  // Grouped occurrences and a separate whole row share the wording; the quoted substring is excluded.
+  const locations = await compareWith([intro, claim, claim, quote, claim, tail], [[1,conflict]], 3);
+  assert.deepEqual(locations.map(d => d.firstChild.textContent), [
+    '수정본 구간 2 · 같은 문구 1/3 · 원문이 근거와 충돌', '수정본 구간 2 · 같은 문구 2/3 · 원문이 근거와 충돌',
+    '수정본 구간 4 · 같은 문구 3/3 · 미확인']);
+  for (const d of locations) assert.equal(d.querySelector('mark').textContent, claim);
+  assert.notEqual(locations[0].querySelector('blockquote').textContent, locations[1].querySelector('blockquote').textContent);
+  assert.equal(locations[1].querySelector('a').href, source.url + '#page=8');
+  assert.ok(locations[1].textContent.includes(source.excerpt));
+  assert.equal(locations[2].querySelector('a'), null);
+});
+
 test('두 편집자의 판정이 같아도 구절별로 선택한 자료와 발언·내용 근거를 비교한다', async t => {
   const p = page(t);
   const article = '올해 시범 예산은 20억 원이다.\n의원은 “예산은 20억 원이었다”고 말했다.\n의회는 예산을 의결했다.';

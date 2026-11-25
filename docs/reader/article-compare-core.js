@@ -170,7 +170,13 @@
     const rightById = new Map(right.rows.map(r => [r.id, r]));
     const matched = matchRevisionRows(left, right);
     const priorIds = new Map(Array.from(matched, ([before, after]) => [after, before]));
-    const revisedWording = sameArticle ? null : uniqueRows(right.rows, row => row.text);
+    const revisedWording = new Map();
+    if (!sameArticle) {
+      for (const [index, row] of right.rows.entries()) {
+        if (!revisedWording.has(row.text)) revisedWording.set(row.text, []);
+        revisedWording.get(row.text).push(index);
+      }
+    }
     const proposedCorrections = sameArticle ? null : uniqueRows(
       left.rows.filter(row => row.receipt?.correction), row => row.receipt.correction.trim()
     );
@@ -203,10 +209,15 @@
       if (!revised && core.has(row.id)) untracedCore.push(entry);
       if (originalConflict) {
         const conflict = {...entry, original, revised};
+        // Locations for inspection only. Equal wording cannot establish a matched judgment.
+        if (!revised && category === 'contradicted' && revisedWording.has(row.text)) {
+          conflict.sameWordingRows = revisedWording.get(row.text);
+        }
         const correction = row.receipt?.correction?.trim();
         if (!revised && correction && proposedCorrections?.get(correction) === row.id && row.positions.length === 1
             && !left.article.includes(correction) && !right.article.includes(row.text)) {
-          const candidate = rightById.get(revisedWording.get(correction));
+          const indexes = revisedWording.get(correction);
+          const candidate = indexes?.length === 1 ? right.rows[indexes[0]] : null;
           // Consecutive repetitions share a row, but still have more than one location.
           if (candidate?.positions.length === 1) conflict.candidate = {...revisedDecisions.get(candidate.id), text: candidate.text};
         }

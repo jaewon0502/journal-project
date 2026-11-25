@@ -294,6 +294,27 @@ test('수정 전 충돌 구절은 다른 사실로 대체해 판정 수가 같�
   assert.deepEqual(r.originalConflicts, [{rowId: left.rows[0].id, text: left.rows[0].text, original:left.assessment.accuracy.rows[0], revised: null}]);
 });
 
+test('수정본의 같은 문구 위치는 부분 확인 범위나 원본 충돌의 대응 판정을 바꾸지 않는다', () => {
+  const checked = '시청은 시범 운영을 마쳤고';
+  const wording = checked + ', 사업비는 20억 원이다.';
+  const original = snapshot({article:['원래 도입이다.', wording].join('\n'), states:[null,'contradicted']});
+  const actual = snapshot({article:['수정한 도입이다.', wording, '의원은 “' + wording + '”라고 말했다.'].join('\n'),
+    states:[null,{status:'partial', factSpan:checked}]});
+  const compared = compare(original, actual, 'revision');
+  const [conflict] = compared.originalConflicts;
+  assert.deepEqual(conflict.sameWordingRows, [1]);
+  assert.equal(conflict.revised, null);
+  assert.equal(conflict.candidate, undefined);
+  assert.equal(compared.conflicts.persisting.length, 0);
+  assert.equal(compared.accuracy.right.adjudicated, 0);
+  const [index] = conflict.sameWordingRows;
+  assert.deepEqual([actual.assessment.accuracy.rows[index].label, actual.assessment.accuracy.rows[index].scope],
+    ['부분 확인 · 나머지 미확인', checked]);
+  assert.equal(compare(original, original, 'revision').originalConflicts[0].sameWordingRows, undefined);
+  const justQuote = snapshot({article:'의원은 “' + wording + '”라고 말했다.'});
+  assert.equal(compare(original, justQuote, 'revision').originalConflicts[0].sameWordingRows, undefined);
+});
+
 test('평가자가 핵심으로 고르지 않은 지지 구절도 두 판본의 실제 문구와 확인 범위를 대조한다', () => {
   const mixedText = '시청은 시범 운영을 마쳤고, 사업은 기대 이상이다.';
   const lines = ['첫 보도다.', mixedText, '조사 결과다.', '회의는 어제 열렸다.', '사업비는 10억 원이다.'];

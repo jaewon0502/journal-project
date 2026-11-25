@@ -346,6 +346,34 @@
     side.append(receiptEvidence(snapshot, decision.rowId));
     return side;
   }
+  function sameWordingDetails(snapshot, indexes, originalItem) {
+    const total = indexes.reduce((n, index) => n + snapshot.rows[index].positions.length, 0);
+    const title = '수정본에서 같은 문구가 나온 위치 ' + total + '곳';
+    const list = element('section', null, 'wording-locations');
+    originalItem.firstChild.append(element('small', title, 'joint-levels'));
+    list.append(element('h4', title), note('원본과 같은 주장을 하는지 앞뒤 문맥과 수정본의 판정 근거를 대조하세요. 이 위치들은 판본 간 대응으로 집계하지 않습니다.'));
+    function showLocations() {
+      if (!originalItem.open) return;
+      originalItem.removeEventListener('toggle', showLocations);
+      let n = 0;
+      for (const index of indexes) {
+        const {text, positions} = snapshot.rows[index];
+        const decision = snapshot.assessment.accuracy.rows[index];
+        for (const [i, pos] of positions.entries()) {
+          n++;
+          const item = detail('수정본 구간 ' + (index + 1) + ' · 같은 문구 ' + n + '/' + total + ' · ' + decision.label);
+          item.open = total === 1;
+          const before = positions[i - 1] ?? snapshot.rows[index - 1]?.positions.at(-1) ?? pos;
+          const after = positions[i + 1] ?? snapshot.rows[index + 1]?.positions[0] ?? pos;
+          item.append(markedContext(snapshot.article, before.start, after.end, [pos]),
+            decisionEvidence(snapshot, decision, text, '수정본의 현재 판정'));
+          list.append(item);
+        }
+      }
+    }
+    originalItem.addEventListener('toggle', showLocations);
+    return list;
+  }
   function originalConflictList(panel, snapshots, rows, quoted) {
     panel.append(element('h4', (quoted ? '수정 전 인용 속 사실 주장 충돌 ' : '수정 전 충돌 구절 ') + rows.length + '개'));
     for (const row of rows) {
@@ -360,6 +388,8 @@
           after.append(note('확인 범위'), element('blockquote', row.candidate.scope));
         }
         after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
+      } else if (row.sameWordingRows) {
+        after.append(sameWordingDetails(snapshots[1], row.sameWordingRows, item));
       } else if (!revised) after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
       pair.append(before, after);
       item.append(pair);
@@ -464,21 +494,25 @@
     clearResults();
     updateInputs();
   }
+  function markedContext(article, start, end, positions) {
+    const context = element('blockquote');
+    let cursor = start;
+    for (const pos of positions) {
+      context.append(document.createTextNode(article.slice(cursor, pos.start)), element('mark', article.slice(pos.start, pos.end)));
+      cursor = pos.end;
+    }
+    context.append(document.createTextNode(article.slice(cursor, end)));
+    return context;
+  }
   function markRepeatedPassage(item, snapshot, index, first, total) {
     const {article, rows} = snapshot;
     const positions = rows[index].positions;
     const last = first + positions.length - 1;
     item.firstChild.append(element('small', '같은 문구 ' + total + '곳 중 ' +
       (first === last ? first : first + '–' + last) + '번째 · 기사 검토 구절 ' + (index + 1), 'joint-levels'));
-    let cursor = rows[index - 1]?.positions.at(-1).start ?? positions[0].start;
+    const start = rows[index - 1]?.positions.at(-1).start ?? positions[0].start;
     const end = rows[index + 1]?.positions[0].end ?? positions.at(-1).end;
-    const context = element('blockquote');
-    for (const pos of positions) {
-      context.append(document.createTextNode(article.slice(cursor, pos.start)), element('mark', article.slice(pos.start, pos.end)));
-      cursor = pos.end;
-    }
-    context.append(document.createTextNode(article.slice(cursor, end)));
-    item.append(note('같은 문구가 나온 위치와 앞뒤 원문'), context);
+    item.append(note('같은 문구가 나온 위치와 앞뒤 원문'), markedContext(article, start, end, positions));
   }
   function jointRetention(panel, joint, editors) {
     const trace = window.JournalRevisionFacts.summarizeFactMatches(joint.factMatches, joint.facts.after);
