@@ -42,10 +42,13 @@ function page(t, hash = '', url = 'https://study.example/editor-study.html', pri
 }
 
 test('두 표기가 같은 오답에 모이는 가상 사례는 전체 일치율을 그대로 유지하고 실측과 분리된다', t => {
-  const p = page(t);
-  p.el('demo-view').click();
-  p.el('demo-example').value = 'agreement';
-  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  const p = page(t, '#demo-cue-agreement');
+  assert.equal(p.el('demo-example').value, 'agreement');
+  assert.equal(p.w.document.activeElement, p.el('cue-gap-quality-summary'));
+  const joint = p.el('cue-gap-quality-summary').textContent;
+  assert.match(joint,/가상 기록 · 정당 표기 격차가 줄어든 기사 2\/4건/);
+  assert.match(joint,/원자료가 반박하거나 근거가 부족한 기사는 2건.*근거 없는 사실 채택은 1\/2건에서 늘었고.*두 정당 표기 모두에서 늘어난 기사는 0\/2건/);
+  assert.match(joint,/판정과 대표 근거가 함께 맞은 비율이 낮아진 기사 1\/2건/);
   assert.match(p.el('data-notice').textContent, /가상 수치 예시/);
   assert.match(p.el('counts').textContent, /4과제 완료 4명/);
   const qualityRow = [...p.el('quality').querySelectorAll('tbody tr')].find(tr => tr.cells[0].textContent === '기준 판정 일치');
@@ -54,9 +57,14 @@ test('두 표기가 같은 오답에 모이는 가상 사례는 전체 일치율
   assert.deepEqual([cases.manualGapPp, cases.journalGapPp], [50, 0]);
   assert.deepEqual(Array.from(cases.cases.filter(c => c.qualityDrops.length), c => c.caseId), ['repair']);
   const alternatives = p.el('cue-case-repair').querySelector('.case-alternatives');
+  p.el('metrics').querySelector('button[aria-controls="cue-case-repair"]').click();
+  assert.equal(p.el('cue-case-repair').open,true);
+  assert.match(p.el('cue-case-repair').textContent,/근거 없는 사실 채택 50% \(1\/2\) → 100% \(2\/2\)/);
   assert.match(alternatives.textContent, /예산 요구서/);
   assert.match(alternatives.textContent, /원자료 방식 0\/2 · 저널 방식 1\/2/);
   p.el('real-view').click();
+  assert.equal(p.w.location.hash,'');
+  assert.match(p.el('cue-gap-quality-summary').textContent,/네 명이 네 과제를 모두 마치면/);
   assert.match(p.el('counts').textContent, /등록 0명/);
   assert.equal(p.el('quality').querySelector('tbody'), null);
 });
@@ -720,6 +728,85 @@ test('공유 요약은 사실 채택의 검증 결과를 전체와 시간 표본
   assert.match(p.el('timed-quality-table').textContent,/판정만 일치.*— \(0\/0\)— \(0\/0\)/);
   assert.equal(p.el('same-adoption-sample').hidden,true);
   assert.doesNotMatch(JSON.stringify(detail),/participantId|trials|reason|sourceIds|E[0-9A-F]{16}/);
+});
+
+test('격차 축소와 오승인 변화는 실제·동일판본·예정판본에 집계만 저장하고 가상 HTML은 따로 저장한다', async t => {
+  const kit = 'c'.repeat(64), p = page(t, '', undefined, undefined, false, kit);
+  const files = captureDownloads(p), names = [];
+  p.w.document.addEventListener('click', e => {
+    const a = e.target.closest('a[download]');
+    if (a) names.push(a.download);
+  });
+  const summary = async () => {
+    p.el('export-summary').click();
+    return JSON.parse(await files.at(-1).text());
+  };
+  const report = async () => {
+    p.el('export-study-report').click();
+    assert.match(files.at(-1).type,/^text\/html/);
+    return files.at(-1).text();
+  };
+  assert.equal(p.el('export-study-report').disabled,true);
+  assert.equal((await summary()).overall.partyLabelGapAndQuality,null);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(({ordinal,id}) => {
+    const r = completedRecord(ordinal,id);
+    for (const task of r.trials) {
+      const gold = p.w.JournalStudyCases.get(task.caseId,task.variant);
+      const unsafe = task.caseId === 'repair' && (task.method === 'journal' || task.variant === 'B');
+      Object.assign(task,{kitVersion:kit, verdict:unsafe ? 'supported' : gold.expectedVerdict, sourceIds:gold.expectedSourceIds});
+    }
+    return JSON.stringify(r);
+  });
+  await importFiles(p, records.slice(0,1));
+  assert.equal(p.el('export-study-report').disabled,false);
+  assert.match(await report(),/미산출/);
+  assert.equal((await summary()).overall.partyLabelGapAndQuality,null);
+  await importFiles(p, records.slice(1));
+  const expected = {cases:4,narrowed:1,narrowedUnsafeEligible:1,narrowedWithMoreUnsafe:1,
+    narrowedWithMoreUnsafeBothLabels:0,narrowedWithFewerVerified:1};
+  const result = await summary();
+  for (const value of [result.overall,result.observedEditions[0],result.assignedMatchedEditions[0]]) {
+    assert.deepEqual(value.partyLabelGapAndQuality,expected);
+  }
+  assert.match(p.el('cue-gap-quality-summary').textContent,/격차가 줄어든 기사 1\/4건/);
+  const actual = await report();
+  assert.equal(names.at(-1),'journal-editor-study-report.html');
+  assert.match(actual,new RegExp(kit));
+  assert.doesNotMatch(actual,/E[0-9a-f]{16}|격리된 집계 검증/);
+  p.el('demo-example').value = 'agreement';
+  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  assert.equal(p.el('export-summary').disabled,true);
+  const before = files.length;
+  p.el('export-summary').click();
+  assert.equal(files.length,before);
+  assert.equal(p.el('export-study-report').textContent,'가상 결과표 HTML 저장');
+  const demo = await report();
+  assert.equal(names.at(-1),'journal-editor-study-demo.html');
+  assert.match(demo,/가상/);
+  assert.doesNotMatch(demo,new RegExp(kit));
+  p.el('real-view').click();
+  assert.deepEqual((await summary()).overall.partyLabelGapAndQuality,expected);
+  assert.equal(await report(),actual);
+});
+
+test('사실로 확인된 기사에서만 격차가 줄면 오승인 대상이 없다고 표시한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const files = p.workspace().invitations.map(({id,ordinal}) => {
+    const r = completedRecord(ordinal,id);
+    for (const task of r.trials) {
+      const gold = p.w.JournalStudyCases.get(task.caseId, task.variant);
+      task.verdict = task.caseId === 'transit' && task.method === 'manual' && task.variant === 'B' ? 'insufficient' : gold.expectedVerdict;
+    }
+    return JSON.stringify(r);
+  });
+  await importFiles(p,files);
+  assert.match(p.el('cue-gap-quality-summary').textContent,/격차가 줄어든 기사 1\/4건.*오승인 변화를 비교할 대상이 없습니다.*낮아진 기사 0\/1건/);
+  p.el('demo-example').value = 'cue-reversals';
+  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('cue-gap-quality-summary').textContent,/격차가 줄어든 기사 0\/4건.*비교할 수 없습니다/);
+  assert.doesNotMatch(p.el('cue-gap-quality-summary').textContent,/0\/0|0%/);
 });
 
 test('같은 판본 표는 원래 네 명이 함께 사용한 자료로 시간·판정·정당 표기 격차를 계산한다', async t => {

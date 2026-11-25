@@ -46,6 +46,8 @@ class FacilitatorPack(unittest.TestCase):
                 [edition] = re.findall(r'<meta name="journal-editor-kit" content="([0-9a-f]{64})">', page)
             self.assertIn(f'<code>{edition}</code>', coordinator.read('시작.html').decode())
             dashboard = coordinator.read('editor-study.html').decode()
+            self.assertIn('editor-study-report.js', coordinator.namelist())
+            self.assertIn('id="export-study-report"', dashboard)
             stamp = f'<meta name="journal-editor-assigned-kit" content="{edition}">'
             self.assertEqual(dashboard.count(stamp), 1)
             self.assertEqual(dashboard.replace(stamp, ''), (READER / 'editor-study.html').read_text())

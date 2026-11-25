@@ -64,6 +64,7 @@ def participant_page():
         raise ValueError('참여 영역과 진행자 영역의 위치를 확인하세요.')
     page = head + '<section id="participant">' + tail
     page = page.replace('<link rel="stylesheet" href="editor-study-roster.css">\n', '')
+    page = page.replace('<script defer src="editor-study-report.js"></script>\n', '')
     page = page.replace('<html lang="ko">', '<html lang="ko" data-participant-kit>')
     page = re.sub(r'<header>.*?</header>', '<header><strong>Journal</strong><span>편집자 검토 과제</span></header>', page, count=1)
     page, count = re.subn(r'(<section id="enroll-box"[^>]*><h2>.*?</h2>)<p>.*?</p>', r'\1<p>진행자에게 받은 초대 코드를 입력하세요. 이어서 참여할 때도 같은 코드를 씁니다. 다른 기기로 옮길 때는 같은 코드로 등록한 뒤 과제를 시작하기 전에 본인의 이어하기 파일을 여세요.</p>', page, count=1)

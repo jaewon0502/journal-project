@@ -555,10 +555,23 @@
         expected.reversedCases++;
       }
       // Each method has the same two answers per complete block in this case.
-      row.qualityDrops = row.gapReductionPp > 0 ? ['correct','citationCorrect','qualityCorrect'].filter(
+      const narrowed = manualGap > journalGap;
+      row.qualityDrops = narrowed ? ['correct','citationCorrect','qualityCorrect'].filter(
         key => row.quality.journal[key] < row.quality.manual[key]) : [];
+      row.fewerVerifiedOnNarrowing = row.qualityDrops.includes('qualityCorrect');
+      row.moreUnsafeOnNarrowing = narrowed && row.quality.journal.unsafe > row.quality.manual.unsafe;
+      row.moreUnsafeBothLabelsOnNarrowing = row.moreUnsafeOnNarrowing && Object.values(row.quality.byVariant)
+        .every(variant => variant.journal.unsafe > variant.manual.unsafe);
     }
     bias.directionReversals = reversals;
+    const narrowedCases = bias.cases.filter(row => row.gapReductionPp > 0);
+    bias.gapAndQuality = {
+      cases:bias.cases.length, narrowed:narrowedCases.length,
+      narrowedUnsafeEligible:narrowedCases.filter(row => row.quality.manual.unsafeTotal > 0).length,
+      narrowedWithMoreUnsafe:narrowedCases.filter(row => row.moreUnsafeOnNarrowing).length,
+      narrowedWithFewerVerified:narrowedCases.filter(row => row.fewerVerifiedOnNarrowing).length,
+      narrowedWithMoreUnsafeBothLabels:narrowedCases.filter(row => row.moreUnsafeBothLabelsOnNarrowing).length
+    };
     bias.leaveOneBlockOut = null;
     if (blocks.size >= 2) {
       let minReductionPp = Infinity, maxReductionPp = -Infinity;

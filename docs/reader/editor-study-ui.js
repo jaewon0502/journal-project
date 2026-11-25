@@ -290,7 +290,24 @@
     const directionSummary = el('cue-direction-summary');
     directionSummary.textContent = bias ? (viewKind === 'demo' ? '가상 기록 · ' : '') + '원자료 방식과 저널 방식에서 사실 채택률이 더 높은 정당 표기가 바뀐 기사 ' +
       bias.directionReversals.reversedCases + '/' + bias.directionReversals.comparedCases + '건. 한 방식에서 두 표기의 채택률이 같으면 바뀐 건수에서 제외합니다.' : '';
-    if (!bias) return;
+    const joint = node('p');
+    joint.id = 'cue-gap-quality-summary';
+    joint.tabIndex = -1;
+    biasCard.append(joint);
+    if (!bias) {
+      joint.textContent = '네 명이 네 과제를 모두 마치면 격차가 줄어든 기사의 판정 품질을 비교합니다.';
+      return;
+    }
+    const g = bias.gapAndQuality;
+    joint.append(node('strong', (viewKind === 'demo' ? '가상 기록 · ' : '') + '정당 표기 격차가 줄어든 기사 ' + g.narrowed + '/' + g.cases + '건'));
+    if (g.narrowed) {
+      joint.append(node('small', g.narrowedUnsafeEligible
+        ? '이 중 원자료가 반박하거나 근거가 부족한 기사는 ' + g.narrowedUnsafeEligible + '건입니다. 근거 없는 사실 채택은 ' +
+          g.narrowedWithMoreUnsafe + '/' + g.narrowedUnsafeEligible + '건에서 늘었고, 두 정당 표기 모두에서 늘어난 기사는 ' +
+          g.narrowedWithMoreUnsafeBothLabels + '/' + g.narrowedUnsafeEligible + '건입니다.'
+        : '이 중 원자료가 반박하거나 근거가 부족한 기사가 없어 오승인 변화를 비교할 대상이 없습니다.'),
+        node('small', '판정과 대표 근거가 함께 맞은 비율이 낮아진 기사 ' + g.narrowedWithFewerVerified + '/' + g.narrowed + '건'));
+    } else joint.append(node('small', '격차가 줄어든 기사가 없어 그 안에서 오승인이나 검증 정확도 변화를 비교할 수 없습니다.'));
     if (bias.directionReversals.reversedCases) {
       const link = node('a', '채택률이 높은 표기가 바뀐 기사 ' + bias.directionReversals.reversedCases + '/' + bias.directionReversals.comparedCases + '건 보기');
       link.href = '#cue-direction-summary';
@@ -317,13 +334,17 @@
           box.append(node('p', label + ' 방식 · 보수 표기 ' + ratio(A.endorsed, A.total) + ' · 진보 표기 ' + ratio(B.endorsed, B.total)));
         }
       }
-      if (row.qualityDrops.length) {
+      if (row.qualityDrops.length || row.moreUnsafeOnNarrowing) {
         const changes = row.qualityDrops.map(key => criteria[key] + ' ' +
           ratio(row.quality.manual[key], row.quality.manual.total) + ' → ' + ratio(row.quality.journal[key], row.quality.journal.total));
+        if (row.moreUnsafeOnNarrowing) changes.unshift('근거 없는 사실 채택 ' +
+          ratio(row.quality.manual.unsafe, row.quality.manual.unsafeTotal) + ' → ' +
+          ratio(row.quality.journal.unsafe, row.quality.journal.unsafeTotal) +
+          (row.moreUnsafeBothLabelsOnNarrowing ? ' · 두 정당 표기 모두 증가' : ''));
         const changeNote = node('div', undefined, 'notice sample');
         const changeList = node('ul', undefined, 'case-changes');
         changeList.append(...changes.map(text => node('li', text)));
-        changeNote.append(node('strong', '두 표기를 합쳐 보았을 때 낮아진 지표'), changeList);
+        changeNote.append(node('strong', '격차가 줄어든 기사에서 악화된 검증 지표'), changeList);
         box.append(changeNote);
         const open = node('button', a.title + ' · 기준과 근거 확인');
         open.type = 'button';
@@ -357,7 +378,6 @@
       list.append(box);
     }
     if (warnings.childElementCount) {
-      warnings.prepend(node('p', '아래 기사에서는 표기별 사실 채택률 격차가 줄고, 검증 지표 중 하나 이상에서 일치율도 낮아졌습니다.'));
       biasCard.append(warnings);
     }
   }
@@ -598,6 +618,7 @@
       }
       return {manual:counts(group?.manual), journal:counts(group?.journal)};
     }
+    const joint = a.bias?.gapAndQuality;
     return {
       editors:{enrolled:a.enrolled, included:a.included, excluded:a.excluded, completeBlocks:a.completeBlocks},
       submittedTasks:a.recordedTrials, includedTasks:a.trialCount,
@@ -610,11 +631,15 @@
       unsupportedAcceptance:unsupportedAcceptance(a.quality),
       factAdoptions:{all:factAdoptions(a.quality), timed:factAdoptions(a.timedQuality)},
       partyLabelDirectionReversals:a.bias?.directionReversals ?? null,
+      partyLabelGapAndQuality:joint ? {cases:joint.cases, narrowed:joint.narrowed, narrowedUnsafeEligible:joint.narrowedUnsafeEligible,
+        narrowedWithMoreUnsafe:joint.narrowedWithMoreUnsafe, narrowedWithMoreUnsafeBothLabels:joint.narrowedWithMoreUnsafeBothLabels,
+        narrowedWithFewerVerified:joint.narrowedWithFewerVerified} : null,
       partyLabelAcceptanceGap:{manualPp:a.bias?.manualGapPp ?? null, journalPp:a.bias?.journalGapPp ?? null,
         reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
     };
   }
   const demoLinks = {
+    '#demo-cue-agreement':{example:'agreement', heading:'cue-gap-quality-summary'},
     '#demo-cue-reversals':{example:'cue-reversals', heading:'cue-direction-summary'},
     '#demo-adoptions':{example:'adoptions', heading:'fact-adoptions-title'},
     '#demo-unfinished-blocks':{example:'unfinished-blocks', heading:'individual-time-title'}
@@ -633,16 +658,28 @@
     el('edition-results').hidden = demo && el('demo-example').value !== 'editions';
     const observedEditions = el('edition-results').hidden ? [] : showEditions(sample, viewKind);
     const assigned = showAssignedEditions(confirmed, demo ? [] : invitations);
+    function sharedResults() {
+      const editionMetrics = editions => editions.map(({kitVersion, analysis}) => ({kitVersion, ...shareMetrics(analysis)}));
+      return {type:'journal-editor-study-summary-v1', protocol:core.protocol, kind:viewKind,
+        scope:demo ? '가상 응답으로 계산한 편집자 실험 예시입니다.' : '현업 참여자가 제공된 자료로 가상 기사 네 건을 검토한 파일럿. 격차는 기사에 붙인 정당 표기별 사실 채택률 차이입니다.',
+        unconfirmedEditors:demo ? 0 : records.length - confirmed.length, overall:{...shareMetrics(a), individualCompletionTiming:a.individualCompletionTiming},
+        assignedEditionCoverage:{rosterBlocks:assigned?.rosterBlocks ?? 0, matchedBlocks:assigned?.matchedBlocks ?? 0},
+        observedEditions:editionMetrics(observedEditions), assignedMatchedEditions:editionMetrics(assigned?.editions ?? [])};
+    }
     const saveSummary = el('export-summary');
     saveSummary.disabled = demo;
-    saveSummary.onclick = demo ? null : () => {
-      const editionMetrics = editions => editions.map(({kitVersion, analysis}) => ({kitVersion, ...shareMetrics(analysis)}));
-      download({type:'journal-editor-study-summary-v1', protocol:core.protocol, kind:'editor',
-        scope:'현업 참여자가 제공된 자료로 가상 기사 네 건을 검토한 파일럿. 격차는 기사에 붙인 정당 표기별 사실 채택률 차이입니다.',
-        unconfirmedEditors:records.length - confirmed.length, overall:{...shareMetrics(a), individualCompletionTiming:a.individualCompletionTiming},
-        assignedEditionCoverage:{rosterBlocks:assigned?.rosterBlocks ?? 0, matchedBlocks:assigned?.matchedBlocks ?? 0},
-        observedEditions:editionMetrics(observedEditions), assignedMatchedEditions:editionMetrics(assigned?.editions ?? [])},
-        'journal-editor-study-summary.json');
+    saveSummary.onclick = demo ? null : () => download(sharedResults(), 'journal-editor-study-summary.json');
+    const saveReport = el('export-study-report');
+    saveReport.textContent = demo ? '가상 결과표 HTML 저장' : '실측 결과표 HTML 저장';
+    saveReport.disabled = a.enrolled === 0;
+    saveReport.onclick = saveReport.disabled ? null : () => {
+      const html = globalThis.JournalStudyReport.html(sharedResults());
+      const url = URL.createObjectURL(new Blob([html], {type:'text/html;charset=utf-8'}));
+      const link = node('a');
+      link.href = url;
+      link.download = demo ? 'journal-editor-study-demo.html' : 'journal-editor-study-report.html';
+      document.body.append(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
     };
     el('demo-options').hidden = !demo;
     el('real-view').setAttribute('aria-pressed', String(!demo));

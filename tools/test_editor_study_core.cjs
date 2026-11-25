@@ -171,6 +171,8 @@ test('반대 방향 기사별 격차를 평균에서 상쇄하지 않고 악화�
 test('표기별 채택률 격차의 크기와 오승인율이 같아도 기사별 방향이 뒤바뀔 수 있다', () => {
   const {bias, quality} = study.analyze(study.cueReversalDemoRecords(), 'demo');
   assert.deepEqual([bias.manualGapPp,bias.journalGapPp,bias.reductionPp], [50,50,0]);
+  assert.deepEqual(bias.gapAndQuality, {cases:4, narrowed:0, narrowedUnsafeEligible:0,
+    narrowedWithMoreUnsafe:0, narrowedWithFewerVerified:0, narrowedWithMoreUnsafeBothLabels:0});
   assert.deepEqual(bias.directionReversals, {comparedCases:4,reversedCases:2,byExpectedVerdict:{
     supported:{comparedCases:2,reversedCases:0},contradicted:{comparedCases:1,reversedCases:1},insufficient:{comparedCases:1,reversedCases:1}}});
   assert.deepEqual(bias.cases.filter(row=>row.directionReversed).map(row=>[row.caseId,row.manual.signedGapPp,row.journal.signedGapPp]),
@@ -206,6 +208,12 @@ test('성향 표기별 정확도 합계가 같아도 같은 오답에 모인 사
   }
   const budget = result.bias.cases.find(row => row.caseId === 'repair');
   const permits = result.bias.cases.find(row => row.caseId === 'permits');
+  assert.deepEqual(result.bias.gapAndQuality, {cases:4, narrowed:2, narrowedUnsafeEligible:2,
+    narrowedWithMoreUnsafe:1, narrowedWithFewerVerified:1, narrowedWithMoreUnsafeBothLabels:0});
+  assert.deepEqual([budget.moreUnsafeOnNarrowing, budget.moreUnsafeBothLabelsOnNarrowing, budget.fewerVerifiedOnNarrowing],
+    [true, false, true]);
+  assert.deepEqual([permits.moreUnsafeOnNarrowing, permits.moreUnsafeBothLabelsOnNarrowing, permits.fewerVerifiedOnNarrowing],
+    [false, false, false]);
   assert.deepEqual([budget.gapReductionPp, permits.gapReductionPp], [100,100]);
   assert.deepEqual(budget.qualityDrops, ['correct','qualityCorrect']);
   assert.deepEqual(permits.qualityDrops, []);
@@ -229,6 +237,29 @@ test('판정과 근거 각각의 적중 수가 같아도 둘을 함께 맞힌 �
   assert.deepEqual(row.qualityDrops, ['qualityCorrect']);
   assert.equal(row.quality.manual.qualityCorrect, 1);
   assert.equal(row.quality.journal.qualityCorrect, 0);
+});
+
+test('격차가 좁아진 같은 기사에서 양쪽 표기의 오승인이 모두 늘었는지 따로 센다', () => {
+  const records = Array.from({length:8}, (_, i) => observations(i + 1, t => {
+    if (t.caseId === 'repair') {
+      const unsafe = t.method === 'journal' || (t.variant === 'A' && i < 4);
+      return unsafe ? {verdict:'supported'} : {};
+    }
+    if (t.caseId === 'transit' && (t.method === 'journal' || t.variant === 'B')) return {verdict:'insufficient'};
+    return {};
+  }));
+  const {bias} = study.analyze(records);
+  assert.deepEqual(bias.gapAndQuality, {cases:4, narrowed:2, narrowedUnsafeEligible:1,
+    narrowedWithMoreUnsafe:1, narrowedWithFewerVerified:2, narrowedWithMoreUnsafeBothLabels:1});
+  const repair = bias.cases.find(row => row.caseId === 'repair');
+  assert.equal(repair.moreUnsafeBothLabelsOnNarrowing, true);
+  assert.deepEqual(['A','B'].map(v => [repair.quality.byVariant[v].manual.unsafe, repair.quality.byVariant[v].journal.unsafe]),
+    [[1,2],[0,2]]);
+  const transit = bias.cases.find(row => row.caseId === 'transit');
+  assert.deepEqual([transit.quality.manual.unsafeTotal, transit.moreUnsafeOnNarrowing, transit.fewerVerifiedOnNarrowing],
+    [0, false, true]);
+  assert.deepEqual(study.analyze(records.slice(0,7)).bias.gapAndQuality, study.analyze(records.slice(0,4)).bias.gapAndQuality);
+  assert.equal(study.analyze(records.slice(0,3)).bias, null);
 });
 
 test('판정 적중이 그대로인 사례에서 대표 근거와 동시 일치 감소를 따로 집계한다', () => {
@@ -327,6 +358,8 @@ test('세 묶음에서 같은 1표 차이는 비율 반올림 때문에 격차 �
     assert.equal(row.journal[higherJournalLabel].endorsed, 3);
     assert.equal(row.gapReductionPp, 0);
     assert.deepEqual(row.qualityDrops, []);
+    assert.equal(row.moreUnsafeOnNarrowing, false);
+    assert.equal(row.moreUnsafeBothLabelsOnNarrowing, false);
   }
 });
 

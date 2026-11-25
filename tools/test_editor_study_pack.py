@@ -65,6 +65,7 @@ class EditorStudyPack(unittest.TestCase):
                 expected.update(scanner.names)
             self.assertEqual(names, expected)
             self.assertNotIn('editor-study-roster.css', names)
+            self.assertNotIn('editor-study-report.js', names)
             page = archive.read('editor-study.html').decode()
             self.assertIn('data-participant-kit', page)
             self.assertIn('id="invite-code" required', page)
