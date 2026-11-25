@@ -54,3 +54,42 @@ test('같은 숫자만 있는 표, 다른 지표·집단, 인용, 비교, 추가
   }
   assert.equal(search(document, q, {articleContext:'대기업 근로자만 집계했다.'}).wageBasis, undefined);
 });
+
+// MOEL's 2024-02-29 briefing gives the two 2023 rates in adjacent sentences.
+const nominal2023 = '2023년 연간 월평균 명목임금은 396만 6,000원으로 전년대비 2.5% 증가했습니다.';
+const real2023 = '실질임금은, 물가수준을 반영해서 실질임금은 계산해 본 결과 355만 4,000원으로 1.1% 감소한 것으로 나타났습니다.';
+const annual2023 = nominal2023 + ' ' + real2023;
+const claim2023 = (basis, rate, direction) => claim(basis, rate, direction).replace('2024년', '2023년 연간');
+
+test('2023년 임금 브리핑의 연속 두 문장에서 가격 기준과 증감 방향을 대조하고 원문을 그대로 제시한다', () => {
+  for (const [basis, rate, direction, otherOnly] of [
+    ['명목','1.1','감소',true], ['실질','2.5','증가',true],
+    ['명목','2.5','증가',false], ['실질','1.1','감소',false]
+  ]) {
+    const [hit] = search(annual2023, claim2023(basis,rate,direction)).passages;
+    assert.equal(hit.text, annual2023);
+    assert.equal(hit.paragraph, 1);
+    assert.match(hit.wageBasis.note, /명목임금 2\.5% 증가/);
+    assert.match(hit.wageBasis.note, /실질임금 1\.1% 감소/);
+    assert.equal(hit.wageBasis.note.includes('붙은 수치'), otherOnly);
+  }
+  const otherOrder = '2023년 연간 월평균 실질임금은 1.1% 감소했습니다. 명목임금은 2.5% 증가했습니다.';
+  assert.match(search(otherOrder, claim2023('실질','2.5','증가')).passages[0].wageBasis.note, /명목임금에 붙은 수치/);
+});
+
+test('연속된 연간 수치에 새 기간·지역·집단·전망·발언 또는 설명이 끼면 앞 문장의 범위를 넘겨 쓰지 않는다', () => {
+  const q = claim2023('실질','2.5','증가');
+  for (const source of [
+    nominal2023.replace('연간 ', '') + ' ' + real2023,
+    nominal2023 + '\n' + real2023,
+    nominal2023 + ' 12월 실질임금은 1.1% 감소했습니다.',
+    nominal2023 + ' 실질임금은 2022년 1.1% 감소했습니다.',
+    nominal2023 + ' 서울의 실질임금은 1.1% 감소했습니다.',
+    nominal2023 + ' 실질임금은 대기업에서 1.1% 감소했습니다.',
+    nominal2023 + ' 실질임금은 1.1% 감소할 것으로 예상됐습니다.',
+    nominal2023 + ' 노조는 “실질임금은 1.1% 감소했다”고 주장했습니다.',
+    nominal2023 + ' 실질임금은, 물가수준을 반영해서 명목임금은 계산해 본 결과 1.1% 감소했습니다.',
+    nominal2023 + ' 이제 지역별 수치입니다. ' + real2023,
+    annual2023 + ' 이상은 전망치입니다.'
+  ]) assert.ok(search(source,q).passages.every(hit => !hit.wageBasis),source);
+});

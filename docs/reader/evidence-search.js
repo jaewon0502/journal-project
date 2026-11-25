@@ -463,15 +463,18 @@
     return {passages,...message,householdScope:true,state:'ordinary',usedArticleContext:Boolean(context && context !== query.trim()),needsPublicationDate:false};
   }
 
-  // The annual wage briefing prints both price bases in one sentence. Keep
-  // the whole sentence as evidence, but bind each rate to its own subject.
+  // Annual wage briefings can give both price bases in one paragraph. Keep
+  // the paragraph verbatim, but bind each rate to its own subject.
   const wageMeasure = '(명목|실질)\\s*임금(?:은|이)?\\s*';
   const wageRate = '(?:전년\\s*(?:보다|대비|에\\s*비해)\\s*)?(\\d+(?:\\.\\d+)?)\\s*%\\s*(증가|감소)';
   const wageClaim = new RegExp('^((?:19|20)\\d{2})\\s*년\\s*(?:연간\\s*)?월\\s*평균\\s*' +
     wageMeasure + wageRate + '(?:했다|하였다|했습니다|하였습니다)\\.?$', 'u');
   const wageAmount = '(?:\\d[\\d,]*(?:만(?:\\s*\\d[\\d,]*)?)?\\s*원(?:으로|로)\\s*)?';
-  const wageClause = new RegExp('^' + wageMeasure + wageAmount + wageRate +
-    '(?:했|하였)(고|으며|다|습니다)\\.?$', 'u');
+  const wageClause = '^' + wageMeasure + wageAmount + wageRate;
+  const linkedWageClause = new RegExp(wageClause + '(?:했|하였)(?:고|으며)$', 'u');
+  const wageStatement = new RegExp(wageClause +
+    '(?:(?:했|하였)(?:다|습니다)|한\\s*것으로\\s*나타났(?:다|습니다))\\.?$', 'u');
+  const repeatedRealSubject = /^실질\s*임금은\s*,?\s*물가\s*수준을\s*반영(?:해(?:서)?|하여)\s*실질\s*임금(?:은|을)\s*계산(?:해\s*본|한)\s*결과\s*/u;
   const annualWageHeading = /^((?:19|20)\d{2})\s*년\s*연간(?:\s*임금(?:\s*[·ㆍ]\s*근로시간)?)?$/u;
 
   function wageBasisRows(text, query, context) {
@@ -483,13 +486,15 @@
     let sawPair = false;
     for (const [i, row] of rows.entries()) {
       const line = row.text.normalize('NFKC').trim();
-      const opening = /^(?:((?:19|20)\d{2})\s*년\s*)?(?:연간\s*)?월\s*평균\s*/u.exec(line);
+      const opening = /^(?:((?:19|20)\d{2})\s*년\s*)?(연간\s*)?월\s*평균\s*/u.exec(line);
       if (!opening) continue;
-      const halves = line.slice(opening[0].length).split(/,\s*(?=(?:월\s*평균\s*)?(?:명목|실질)\s*임금)/u);
-      if (halves.length !== 2) continue;
-      const [first, second] = halves.map(part => wageClause.exec(part.replace(/^월\s*평균\s*/u, '')));
-      if (!first || !second || first[1] === second[1] || !['고','으며'].includes(first[4]) ||
-          !['다','습니다'].includes(second[4])) continue;
+      const parts = line.slice(opening[0].length).split(/([,.])\s*(?=(?:월\s*평균\s*)?(?:명목|실질)\s*임금)/u);
+      if (parts.length !== 3) continue;
+      const [left, separator, right] = parts;
+      if (separator === '.' && !opening[2]) continue;
+      const first = (separator === '.' ? wageStatement : linkedWageClause).exec(left);
+      const second = wageStatement.exec(right.replace(/^월\s*평균\s*/u, '').replace(repeatedRealSubject, '실질임금은 '));
+      if (!first || !second || first[1] === second[1]) continue;
       sawPair = true;
       const prev = rows[i - 1];
       const heading = prev?.page === row.page && prev.lineIndex + 1 === row.lineIndex &&
