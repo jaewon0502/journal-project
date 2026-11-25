@@ -1187,6 +1187,33 @@ test('중량을 물었을 때 대금만 있는 표와 중량을 다른 단위로
   }
 });
 
+test('제출일 검토에서 사전 접수와 공개 일정의 구분을 보이고 선택한 원문을 펼친다', async t => {
+  const {article, sources} = require('../docs/reader/editor-study-cases.js').get('filing','A');
+  const p = open(t);
+  await loadWorkspace(p, {format:'journal-local-factcheck-v1', article, articleDraft:article, demo:true,
+    sources, receipts:[], rowDrafts:[], sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
+  const pick = id => p.el('row-sources').querySelector('input[value="' + id + '"]');
+  assert.equal(pick('doc-1').hasAttribute('aria-describedby'), false);
+  for (const [id, type] of [['doc-2',/사전 검토/], ['doc-3',/공개 일정/]]) {
+    const checkbox = pick(id), card = checkbox.closest('.source');
+    assert.match(p.el(checkbox.getAttribute('aria-describedby')).textContent, type);
+    assert.equal(card.querySelector('details').open, false);
+    checkbox.click();
+    assert.equal(card.querySelector('details').open, true);
+    assert.ok(card.querySelector('details').textContent.includes(sources.find(s=>s.id===id).excerpt));
+    checkbox.click();
+  }
+  pick('doc-1').click();
+  p.set('verdict','fact');
+  p.set('reason','최종 자료의 제출 기한과 실제 접수일을 대조했다.');
+  p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  p.click('save-work');
+  const file = JSON.parse(await p.snapshot());
+  assert.deepEqual(file.receipts[0].sourceIds,['doc-1']);
+  assert.doesNotMatch(JSON.stringify(file.receipts),/filing-source-note|공개 일정/);
+});
+
 test('결과를 뒷받침할 자료가 부족하면 후보를 닫아 두고 편집자가 직접 대조할 수 있다', async t => {
   const {claims, bundles} = require('../experiments/source-order-pilot/holdout.json');
   const claim = claims.find(c => c.type === 'unmeasured downstream outcome');

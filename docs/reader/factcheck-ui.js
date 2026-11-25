@@ -422,7 +422,7 @@
     const suggested = new Set(row.sourceIds || []);
     const ranks = new Map(row.sourceIds.map((id, i) => [id, i]));
     const sorted = [...sources].sort((a, b) => (ranks.get(a.id) ?? Infinity) - (ranks.get(b.id) ?? Infinity));
-    for (const source of sorted) {
+    for (const [index, source] of sorted.entries()) {
       const part = node('div', undefined, 'source');
       const label = node('label', undefined, 'source-line');
       const check = node('input');
@@ -435,7 +435,17 @@
       details.open = row.sourceCaution ? check.checked : source.id === row.sourceIds[0];
       details.append(node('summary', source.locator), sourceDetails(source, false));
       if (matches.has(source.id)) details.append(node('small', matches.get(source.id)));
-      part.append(label, sourceLink(source), details);
+      part.append(label);
+      const caution = engine.filingSourceCaution(row.text, source);
+      if (caution) {
+        const note = node('p', caution, 'hint');
+        note.id = 'filing-source-note-' + index;
+        check.setAttribute('aria-describedby', note.id);
+        part.append(note);
+        if (check.checked) details.open = true;
+        check.addEventListener('change', () => { if (check.checked) details.open = true; });
+      }
+      part.append(sourceLink(source), details);
       area.append(part);
     }
     filterSources();

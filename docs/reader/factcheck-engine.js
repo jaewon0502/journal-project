@@ -380,6 +380,44 @@
     if (observed.test(heading)) return 1;
     return claimStage(source.version);
   }
+  const reviewCopy = /사전\s*(?:검토|심사|제출|접수)|예비\s*(?:접수|심사|제출)|가접수|검토용|초안/u;
+  const releaseSchedule = /(?:공개|공시|게시|공표)(?:할|될|가|를)?\s*(?:예정|일정|계획)/u;
+  const recordedFiling = /(?:제출|접수)(?:했|하였|됐|되었|됨|[이가을를]?\s*(?:완료|마쳤)|한\s*사실을\s*확인)|(?:자료|서류|보고서|신청서|최종본)[^.!?\n]{0,50}\s냈(?:다|습니다)/u;
+  const datedReceipt = /(?:제출|접수)\s*(?:일(?:자|시)?|날짜)?\s*(?:\(확정\)\s*)?[:：]?\s*\d{1,4}(?:\s*(?:년|월|일)|[-./]\s*\d)/u;
+  const disputedRole = /아님|아닌|아니다|아니었|해당\s*없|일정\s*없|등재\s*오류/u;
+  function filingSourceCaution(articleText, source) {
+    if (!nonblank(articleText) || !source) return null;
+    const claim = articleText.trim();
+    const filing = /(?:제출|접수)(?:을|를|이|가)?\s*(?:완료)?(?:했|하였|됐|되었)(?:다|습니다)[.!。]?$/u;
+    const handedIn = /(?:자료|서류|보고서|신청서|정산서|최종본)[^.!?\n]{0,50}\s냈(?:다|습니다)[.!。]?$/u;
+    if ((!filing.test(claim) && !handedIn.test(claim)) ||
+        !/최종|정식|실제|기한|마감|늦게|지연|\d\s*(?:월|일)/u.test(claim) ||
+        reviewCopy.test(claim) || attributed.test(claim) || hasAssessment(claim) ||
+        /[‘’「『]|라면|다면|경우|아니라|않았|(?:[!?。！？]|(?<!\d)\.)\s*\S/u.test(claim)) return null;
+    const metadata = [source.title, source.locator, source.version].filter(value => nonblank(value) && !disputedRole.test(value));
+    const excerpt = typeof source.excerpt === 'string' ? source.excerpt : '';
+    const clauses = excerpt.split(/[,\n。;]|(?:[!?]|(?<!\d)\.)(?:\s|$)/u);
+    const pieces = [...metadata, ...clauses.filter(text => !disputedRole.test(text))];
+    const filingRecord = /접수|제출|요약본|파일|사본|냈다/u;
+    const early = pieces.some(text => reviewCopy.test(text) && filingRecord.test(text)) ||
+      (metadata.some(text => reviewCopy.test(text)) && filingRecord.test(excerpt));
+    const scheduled = pieces.some(text => releaseSchedule.test(text));
+    if (!early && !scheduled) return null;
+    // A ledger may give preliminary and final receipts together. A reference to a
+    // separate future filing is not an entry recording an actual filing.
+    const finalLedger = metadata.some(text => /(?:최종|정식|실제)[^.!?\n]{0,18}(?:접수|제출)\s*(?:대장|기록|확인증)/u.test(text));
+    const actual = clauses.some(text => {
+      const marker = text.search(/최종|실제|정식|본접수/u);
+      if (marker < 0 && !finalLedger) return false;
+      const entry = marker < 0 ? text : text.slice(marker);
+      return (recordedFiling.test(entry) || datedReceipt.test(entry)) && !reviewCopy.test(entry) && !attributed.test(entry) &&
+        !/예정|계획|예고|여부|확인\s*중|미접수|미제출|아직|않|주장|부인|사실무근|오류|취소|(?:접수|제출)\s*전/u.test(entry);
+    });
+    if (actual) return null;
+    return early
+      ? '사전 검토용 제출·접수에 관한 기록이 있습니다. 기사에서 다룬 자료의 제출 기한과 최종 접수일을 대조하세요.'
+      : '자료 공개 일정이 적혀 있습니다. 기사에서 다룬 자료의 제출 기한과 실제 접수일을 대조하세요.';
+  }
   function revisionStage(text) {
     const draft = /초안|초고|잠정|가안|초기본/u.test(text), final = /확정|최종|결정본/u.test(text);
     return draft === final ? 0 : draft ? -1 : 1;
@@ -974,7 +1012,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest});
+  const api = Object.freeze({prepare, decide, report: prepare, filingSourceCaution, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);
