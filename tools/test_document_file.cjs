@@ -259,7 +259,7 @@ test('발췌한 PDF 쪽을 주소와 대조해 적용하면 작업 파일과 독
   p.el('acknowledged').click(); p.el('decision-form').requestSubmit();
   const report = await downloadText(p,'export-report');
   assert.ok(report.includes('PDF SHA-256 · ' + checksum));
-  assert.ok(report.includes('https://agency.example/report.pdf#page=4&zoom=100'));
+  assert.ok(report.includes('https://agency.example/report.pdf#page=4&zoom=100\nPDF 파일 4쪽 · 원문이 내려받아지면 파일을 열어 이 쪽을 확인하세요.'));
   assert.ok(!report.includes('편집자용.pdf') && !report.includes('blob:local'));
 });
 

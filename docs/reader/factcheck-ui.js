@@ -118,9 +118,8 @@
   }
   function citationAddress(source) {
     const target = engine.sourceTarget(source);
-    let address = source.url;
-    if (target?.localPage) address = 'PDF 파일 ' + target.localPage + '쪽 직접 확인 · ' + target.href;
-    else if (target?.page) address = 'PDF 뷰어 ' + target.page + '쪽 · ' + target.href;
+    const page = target?.page || target?.localPage;
+    const address = page ? target.href + '\nPDF 파일 ' + page + '쪽 · 원문이 내려받아지면 파일을 열어 이 쪽을 확인하세요.' : source.url;
     return source.pdfSha256 ? address + '\nPDF SHA-256 · ' + source.pdfSha256 : address;
   }
   function sourceDetails(source, showLink = true) {
