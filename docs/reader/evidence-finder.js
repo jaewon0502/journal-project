@@ -446,6 +446,69 @@
     return matches.length === 1 ? matches[0] : {};
   }
 
+  // An industry table can locate the named subgroup even when the claim quotes
+  // its parent's figures. Never infer a cell from the merged year headings.
+  function industryTableTarget(rows, rawQuery) {
+    const compact = text => text.normalize('NFKC').replace(/\s+/gu, '');
+    const claim = compact(rawQuery);
+    if (!claim.includes('업')) return {};
+    const year = /^((?:19|20)\d{2})년/u.exec(claim);
+    const body = claim.slice(year?.[0].length || 0);
+    const matches = [];
+    for (const [i, caption] of rows.entries()) {
+      const title = /^\[표\d+\](?:업종|산업)별([가-힣]+)$/u.exec(compact(caption.text));
+      if (!title || !body.includes(title[1])) continue;
+      const headers = [];
+      let units, years, fields, dimension;
+      for (const header of rows.slice(i + 1, i + 5)) {
+        if (header.page !== caption.page) break;
+        const line = header.text.normalize('NFKC').trim();
+        const unitLine = /^\(?단위:([^()]+)\)?$/u.exec(compact(line));
+        const industry = /^(?:업\s*종|산\s*업)(?:\s+|$)/u.exec(line);
+        const cells = line.slice(industry?.[0].length || 0).trim().split(/\s+/u);
+        if (industry) dimension = true;
+        if (unitLine && !units) units = new Set(unitLine[1].split(','));
+        else if (!years && cells.every(c => yearColumn.test(c))) years = cells.map(c => c.replace(/년$/u, ''));
+        else if (!fields && cells.every(c => /^[가-힣]+$/u.test(c)) && cells.some(f => title[1].endsWith(f))) fields = cells;
+        else if (!industry || cells[0]) break;
+        headers.push(header);
+        if (units && years && fields && dimension) break;
+      }
+      if (!units || !years || !fields || !dimension || new Set(years).size !== years.length ||
+          (year && !years.includes(year[1]))) continue;
+      const cut = body.indexOf(title[1]);
+      const scope = body.slice(0, cut).replace(/(?:부문|분야)?(?:의|에서)?$/u, '');
+      if (!scope.endsWith('업')) continue;
+      const rest = body.slice(cut + title[1].length).replace(/^[은는이가]/u, '');
+      // Only a plain amount or annual change qualifies. Additional periods,
+      // regions, denominators and unsupported units leave a lexical search.
+      const change = /전년|1년전|증가|감소|줄었|늘었/u.test(rest);
+      if (rest.includes('%') && !change && !/[율률비]$|비중$/u.test(title[1])) continue;
+      if (change && (!fields.some(f => /^(?:증감률|증가율|감소율)$/u.test(f)) ||
+          (year && year[1] !== years.at(-1)))) continue;
+      let badUnit = false;
+      const tail = rest.replace(/(?:1년전|전년)(?:보다|대비)?/gu, '')
+        .replace(/[-+]?\d[\d,]*(?:\.\d+)?[십백천만억조]?(%p?|톤|kg|g|원|명|개|건|달러)?/giu, (_, unit) => {
+          if (unit && !units.has(unit)) badUnit = true;
+          return '';
+        }).replace(/(?:증가|감소)(?:한|했다|했나|했는가)?|늘었다|줄었다|(?:으로|로)?(?:집계됐다|나타났다)|이었다|였다|얼마(?:인가|였나)?|인가/gu, '');
+      if (badUnit || /[^().,?？。]/u.test(tail)) continue;
+
+      for (let j = i + 1 + headers.length; j < rows.length && rows[j].page === caption.page; j++) {
+        const row = rows[j];
+        // A detached interpunct occurs in some PDF category labels.
+        if (/^[․·]$/u.test(row.text.trim())) continue;
+        const cells = row.text.trim().split(/\s+/u);
+        const firstValue = cells.findIndex(c => gridNumber.test(c));
+        if (firstValue < 1 || cells.length - firstValue !== fields.length ||
+            !cells.slice(firstValue).every(c => gridNumber.test(c))) break;
+        const label = compact(cells.slice(0, firstValue).join(' ')).replace(/\(\d+\)$/u, '');
+        if (label === scope) matches.push({row, headings:[caption, ...headers]});
+      }
+    }
+    return matches.length === 1 ? matches[0] : {};
+  }
+
   // A detached publisher/audience tag is not a search term for an independent
   // factual subject. Keep it when the wording could ask about the outlet itself.
   function passageQuery(raw) {
@@ -457,7 +520,8 @@
     return /["'“”‘’「」『』]/u.test(body) || publication.test(body) || attribution.test(body) ? raw : body;
   }
 
-  function find(documentText, rawQuery, {includeContext = false, matrixCell = null, matrixNavigation = null, fiscalTargets = null} = {}) {
+  function find(documentText, rawQuery, {includeContext = false, matrixCell = null, matrixNavigation = null,
+      fiscalTargets = null, industryContext = '', passageFilter = null} = {}) {
     const periods = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
     const query = passageQuery(rawQuery);
     const wanted = [...terms(query)];
@@ -477,6 +541,8 @@
       target = annualTarget(annualExcerpt(rows), query, asked, asksUnits, namedMetrics);
       if (!target.row && !target.unavailable) target = groupedGridTarget(rows, query, namedMetrics);
       if (!target.row && !target.unavailable) target = measureGridTarget(rows, query, namedMetrics);
+      if (!target.row && !target.unavailable && (!industryContext || industryContext.trim() === query.trim()))
+        target = industryTableTarget(rows, query);
       if (target.unavailable) return [];
     }
     // A printed row and header can guide inspection even when the query adds
@@ -508,6 +574,7 @@
     const weight = key => 1 + Math.log(rows.length / frequencies.get(key));
     const scored = [];
     for (const row of rows) {
+      if (passageFilter && !passageFilter(row.text)) continue;
       const metricMatched = row.table?.metricTerms && [...row.table.metricTerms].some(field =>
         namedMetrics.some(key => key === field || (field.length >= 2 && key.endsWith(field))));
       const dateAndMetric = Boolean(asked && metricMatched && periods.matchesTablePeriod(asked, row.text));

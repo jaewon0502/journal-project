@@ -1197,7 +1197,7 @@
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
-    if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope) {
+    if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope && !lookup.householdScope) {
       for (const p of passages) if (!p.years && !p.annualRate && !p.changeRows && !p.labourYearRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
@@ -1322,7 +1322,7 @@
       } else if (passage.labourScope) {
         block.append(node('p', '원자료의 기간 · ' + passage.context[0].text.trim()));
         excerpt = citationRows([...passage.context, passage]);
-      } else if (!lookup.fiscalTable && !speaker) {
+      } else if (!lookup.fiscalTable && !speaker && !lookup.householdScope) {
         const annual = annualRows.get(passage);
         addColumnHints(block, text, query, passage, separateContext, annual);
         const metric = !separateContext && annual?.metric;

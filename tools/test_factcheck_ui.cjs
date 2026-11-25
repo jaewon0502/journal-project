@@ -1826,3 +1826,18 @@ test('장기 기록을 다루지 않는 표를 고르면 실제 연도와 근거
   set('document-query', '새 검토 문장');
   assert.equal(el('finder-results').childElementCount, 0);
 });
+
+test('서울 1인 가구 수치가 원문에 없으면 전체 평균을 접고 발췌와 판정을 편집자에게 남긴다', t => {
+  const {el, set, click} = open(t);
+  set('document-text','2024년 가구의 1인당 연간 쌀 소비량은 55.8kg이었다.');
+  set('document-query','2024년 서울 1인 가구의 1인당 연간 쌀 소비량은 55.8kg이었다.');
+  click('find-passages');
+  assert.match(el('finder-status').textContent,/서울 1인 가구.*따로 집계/);
+  const fallback = el('finder-results').firstElementChild;
+  assert.equal(fallback.tagName,'DETAILS');
+  assert.equal(fallback.open,false);
+  assert.match(fallback.querySelector('blockquote').textContent,/55.8kg/);
+  assert.doesNotMatch(fallback.textContent,/원문 값/);
+  assert.equal(el('source-excerpt').value,'');
+  assert.equal(el('verdict').value,'');
+});

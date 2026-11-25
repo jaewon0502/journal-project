@@ -416,6 +416,53 @@
     return {passages,gap,labourScope:true,state:'ordinary',usedArticleContext:false,needsPublicationDate:false};
   }
 
+  // A per-person average does not identify a household-size subgroup.
+  const householdSize = /(?<![\d.])\d+(?:\s*인?\s*[~∼–-]\s*\d+)?\s*인\s*(?:이상|이하|미만|초과)?\s*(?:가구|세대)/gu;
+  const metroAreas = ['서울','부산','대구','인천','광주','대전','울산','세종','경기','강원','충북','충남','전북','전남','경북','경남','제주'];
+  const metroName = new RegExp('(?<![가-힣])(' + metroAreas.join('|') +
+    ')(?:특별자치[도시]|특별시|광역시|도|시)?(?:에서는|에서|의|은|는)?(?![가-힣])','gu');
+  const provinces = {'충청북도':'충북','충청남도':'충남','전라북도':'전북','전북특별자치도':'전북',
+    '전라남도':'전남','경상북도':'경북','경상남도':'경남'};
+  function areaNames(text) {
+    const short = text.replace(/충청[남북]도|전라[남북]도|경상[남북]도|전북특별자치도/gu, name => provinces[name]);
+    const names = [...short.matchAll(metroName)].map(match => match[1]);
+    for (const m of short.matchAll(/(?<![가-힣])([가-힣]{1,7}(?:시|군|구))(?:에서는|에서|의|은|는)?(?![가-힣])/gu)) {
+      if (!/가구|인구|평균|도시|연구|시군구/u.test(m[1]) && !names.some(n => m[1].startsWith(n))) names.push(m[1]);
+    }
+    return [...new Set(names)];
+  }
+  const sizeKey = size => size.replace(/\s/gu,'').replace(/인?[∼~–-]/u,'~').replace(/세대$/u,'가구');
+  function householdScopeRows(text, query, context) {
+    const request = [query,context].filter(Boolean).join(' ').normalize('NFKC');
+    const sizes = [...new Set((request.match(householdSize) || []).map(sizeKey))];
+    if (!sizes.length || !/소비|지출|소득|가구\s*수|세대\s*수|평균|1인당|비율|비중|증감|얼마|몇|\d\s*(?:%|원|kg|명|톤)/iu.test(request)) return null;
+    const areas = areaNames(request);
+    const topics = ['쌀','지출','소득','소비량','비율','비중'].filter(word => request.includes(word));
+    const years = [...new Set(request.match(/(?:19|20)\d{2}(?=\s*년)/gu) || [])];
+    const wanted = [...areas, ...sizes.map(s => s.replace(/(가구)$/u,' $1'))].join(' ');
+    // Only surface direct candidates when the population, metric and a figure
+    // appear in the same clause. A split table can still be inspected by hand.
+    const direct = sizes.length === 1 && areas.length <= 1 && years.length <= 1 ? finder.find(text,query,{
+      includeContext:true, passageFilter: line => line.normalize('NFKC').split(/[;；。!?]|\.(?=\s|$)|,\s*(?=[가-힣])|(?:반면|그러나|하지만)\s*/u).some(clause => {
+        const groups = (clause.match(householdSize) || []).map(sizeKey);
+        const locations = areaNames(clause);
+        const printedYears = [...clause.matchAll(/((?:19|20)\d{2})\s*년/gu)].map(m => m[1]);
+        if (!groups.includes(sizes[0]) || groups.some(s => s !== sizes[0]) ||
+            areas.some(a => !locations.includes(a)) || locations.some(a => !areas.includes(a)) ||
+            topics.some(t => !clause.includes(t)) || years.some(y => !printedYears.includes(y)) || (years.length && printedYears.some(y => !years.includes(y))) ||
+            /전체\s*가구|전국\s*평균|제외|미집계|미제공|수록하지|제공하지|제공되지|집계되지|집계하지|별도\s*(?:통계|집계).{0,12}(?:없|않)/u.test(clause)) return false;
+        const values = clause.replace(householdSize,' ').replace(/\d+\s*(?:년|월|일|인당)/gu,' ');
+        return /\d+(?:[.,]\d+)*\s*(?:%|kg|g|톤|[천만억]*\s*원|가구|세대|명|건)/iu.test(values);
+      })
+    }) : [];
+    const passages = (direct.length ? direct : finder.find(text,query,{includeContext:true}))
+      .map(({paragraph,text,matched,context}) => ({paragraph,text,matched,context}));
+    const message = direct.length
+      ? {notice:'‘' + wanted + '’ 표기와 수치가 함께 있는 원문 후보입니다. 기간·단위와 어떤 집단의 수치인지 대조하세요.'}
+      : {gap:'‘' + wanted + '’의 수치를 같은 원문 구절에서 확인하지 못했습니다. 전체 가구의 1인당 평균과 구분해 해당 집단을 따로 집계한 표와 주석을 확인하세요.'};
+    return {passages,...message,householdScope:true,state:'ordinary',usedArticleContext:Boolean(context && context !== query.trim()),needsPublicationDate:false};
+  }
+
   function search(documentText, rawQuery, {articleContext = ''} = {}) {
     const query = finder.passageQuery(rawQuery);
     const context = articleContext.trim() === rawQuery.trim() ? query.trim() : articleContext.trim();
@@ -425,6 +472,8 @@
         ? attributed.notice + ' 추가한 기사 문맥의 시점과 조건도 원문에서 대조하세요.' : attributed.notice;
       return {...attributed, notice, state:'ordinary', transcript:true, usedArticleContext:false, needsPublicationDate:false};
     }
+    const household = householdScopeRows(documentText, query, context);
+    if (household) return household;
     const table = trend.find(documentText, query, {articleContext:context});
     if (table.state === 'partial-series') {
       return {passages:table.hits, state:table.state, usedArticleContext:table.usedArticleContext,
@@ -479,7 +528,7 @@
       const budget = !gap && table.state === 'ordinary' && !yearMatrix && (!context || context === query.trim()) &&
         fiscalProse(documentText, query.normalize('NFKC'));
       if (budget?.gap) gap = budget.gap;
-      passages = finder.find(documentText, query, {includeContext: true, matrixCell, matrixNavigation, fiscalTargets:budget?.targets});
+      passages = finder.find(documentText, query, {includeContext: true, matrixCell, matrixNavigation, fiscalTargets:budget?.targets, industryContext:context});
     }
     return {passages, gap, state: table.state, usedArticleContext: table.usedArticleContext,
       needsPublicationDate: table.needsPublicationDate, reason: table.reason,
