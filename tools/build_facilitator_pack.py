@@ -28,7 +28,7 @@ START = """<!doctype html>
 <section class="box"><h2>편집 시간과 정당 표기 효과</h2>
 <ol><li><a href="editor-study.html">편집자 집계 화면 열기</a> → ‘실제 편집자 기록’ → ‘참여 기록 가져오기’에서 별도로 보관한 초대명부를 먼저 여세요.
 첫 묶음의 기존 파일 이름은 <code>첫-4인-초대명부.json</code>입니다. 첫 명부가 없거나 기존 명부에 다음 네 명을 추가할 때는 ‘배정 묶음 발급’을 누르고 ‘모은 기록 내려받기’로 명부를 보관하세요.</li>
-<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>과 화면 순서대로 코드 하나씩을 네 명에게 전달하세요. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다.
+<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 새 코드를 발급하세요. 화면 순서대로 ‘코드 복사’를 누르고 같은 행의 ‘참여자 ZIP’과 함께 한 명씩 전달하세요. 새 코드는 지정한 판본을 열었을 때만 등록됩니다. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다. 이 폴더에 동봉된 자료는 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>에서 다시 받을 수 있습니다.
 <p>이 ZIP의 참여자 자료 식별값은 <code>{{EDITOR_KIT}}</code>입니다. 회신을 모은 뒤 ‘같은 참여자 자료를 사용한 묶음의 결과’에서 이 값과 일치하는 판본을 확인하세요.</p></li>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다. 시간 차이를 볼 때는 같은 편집자들의 기준 판정 일치율과 대표 근거 일치율도 확인하세요.</li></ol>
 <p><a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본’을 고르면 사례당 평균 시간과 검증 성공 한 건에 쓴 시간을 비교할 수 있습니다. 미완료 묶음이 있다면 ‘8명 · 32건 중 한 건 미제출’에서 마지막 답에 따라 정당 표기 격차가 얼마나 달라지는지 확인하세요.</p></section>
@@ -151,6 +151,9 @@ def packet_bytes():
         '<a href="시작.html">진행자 시작 화면</a></nav></header>', 1).encode()
     for name in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'article-compare.html', 'revision-series.html'):
         page = (READER / name).read_text()
+        if name == 'editor-study.html':
+            stamp = f'<meta name="journal-editor-assigned-kit" content="{editor_edition}">'
+            page = page.replace('</head>', stamp + '</head>', 1)
         if name in ('article-compare.html', 'revision-series.html'):
             page = page.replace('<a href="../article-rubric.md">상세 판정표와 집계식</a>',
                                 '<a href="시작.html">진행자 시작 화면</a>')

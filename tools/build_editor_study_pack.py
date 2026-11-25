@@ -44,7 +44,7 @@ def participant_core():
     core, marker, analysis = source.partition('  function blockRoster(records) {')
     if not marker or 'function demoRecords()' not in analysis or 'function mergeRecords(' not in core:
         raise ValueError('편집자용 코어와 진행자 집계 코드의 경계를 다시 확인하세요.')
-    return core + '  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion});\n});\n'
+    return core + '  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite});\n});\n'
 
 
 def participant_ui():
@@ -63,6 +63,7 @@ def participant_page():
     if not dashboard or not participant:
         raise ValueError('참여 영역과 진행자 영역의 위치를 확인하세요.')
     page = head + '<section id="participant">' + tail
+    page = page.replace('<link rel="stylesheet" href="editor-study-roster.css">\n', '')
     page = page.replace('<html lang="ko">', '<html lang="ko" data-participant-kit>')
     page = re.sub(r'<header>.*?</header>', '<header><strong>Journal</strong><span>편집자 검토 과제</span></header>', page, count=1)
     page, count = re.subn(r'(<section id="enroll-box"[^>]*><h2>.*?</h2>)<p>.*?</p>', r'\1<p>진행자에게 받은 초대 코드를 입력하세요. 이어서 참여할 때도 같은 코드를 씁니다. 다른 기기로 옮길 때는 같은 코드로 등록한 뒤 과제를 시작하기 전에 본인의 이어하기 파일을 여세요.</p>', page, count=1)
@@ -100,7 +101,10 @@ def versioned_packet():
         digest.update(sha256(contents).digest())
     edition = digest.hexdigest()
     stamp = f'<meta name="journal-editor-kit" content="{edition}">'.encode()
-    packet['editor-study.html'] = packet['editor-study.html'].replace(b'</head>', stamp + b'</head>', 1)
+    for page in ('editor-study.html', 'factcheck.html'):
+        if packet[page].count(b'</head>') != 1:
+            raise ValueError(f'{page}에 참여자 자료 판본을 표시할 위치를 확인하세요.')
+        packet[page] = packet[page].replace(b'</head>', stamp + b'</head>', 1)
     result = BytesIO()
     with ZipFile(result, 'w') as archive:
         for name, contents in sorted(packet.items()):

@@ -42,7 +42,7 @@ class EditorStudyPack(unittest.TestCase):
         with ZipFile(BytesIO(contents)) as archive:
             for name in sorted(archive.namelist()):
                 data = archive.read(name)
-                if name == 'editor-study.html':
+                if name in ('editor-study.html', 'factcheck.html'):
                     self.assertEqual(data.count(stamp), 1)
                     data = data.replace(stamp, b'')
                 digest.update(name.encode() + b'\0')
@@ -64,6 +64,7 @@ class EditorStudyPack(unittest.TestCase):
                 scanner.feed(archive.read(page).decode())
                 expected.update(scanner.names)
             self.assertEqual(names, expected)
+            self.assertNotIn('editor-study-roster.css', names)
             page = archive.read('editor-study.html').decode()
             self.assertIn('data-participant-kit', page)
             self.assertIn('id="invite-code" required', page)

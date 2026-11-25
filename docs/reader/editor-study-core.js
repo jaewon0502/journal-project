@@ -28,6 +28,15 @@
     return typeof value === 'string' && value.length === 64 && !/[^a-f0-9]/.test(value) ? value : null;
   }
 
+  function parseInvite(raw) {
+    if (typeof raw !== 'string') return null;
+    const match = /^(J[12])-([1-9]\d{0,8})-(E[0-9a-f]{16})(?:-([0-9a-f]{64}))?$/i.exec(raw.trim());
+    if (!match) return null;
+    const type = match[1].toUpperCase(), id = match[3].toUpperCase(), version = match[4]?.toLowerCase() ?? null;
+    if ((type === 'J2') !== !!version) return null;
+    return {ordinal:Number(match[2]), id, code:type + '-' + match[2] + '-' + id + (version ? '-' + version : ''), kitVersion:version};
+  }
+
   function checkedKit(observation) {
     if (!Object.hasOwn(observation, 'kitVersion')) return {};
     if (observation.kitVersion !== null && !kitVersion(observation.kitVersion))
@@ -296,33 +305,33 @@
   function missingAnswerBounds(records, blocks) {
     const registered = new Set(blocks.filter(block => block.enrolled === slots).map(block => block.block));
     if (!registered.size) return null;
+    const trials = records.filter(r => registered.has(Math.ceil(r.ordinal / slots))).flatMap(r => r.trials);
+    return {registeredBlocks:registered.size, ...answerBounds(registered.size, trials)};
+  }
+
+  function answerBounds(blockCount, trials) {
     const items = caseCells();
-    let submitted = 0;
-    for (const record of records) {
-      if (!registered.has(Math.ceil(record.ordinal / slots))) continue;
-      for (const trial of record.trials) {
-        const cell = items.get(trial.caseId)[trial.method][trial.variant];
-        cell.total++;
-        if (trial.verdict === 'supported') cell.counts.supported++;
-        submitted++;
-      }
+    for (const trial of trials) {
+      const cell = items.get(trial.caseId)[trial.method][trial.variant];
+      cell.total++;
+      if (trial.verdict === 'supported') cell.counts.supported++;
     }
     const total = {manual:{min:0, max:0}, journal:{min:0, max:0}};
     for (const item of items.values()) {
       for (const method of methods) {
         const {A, B} = item[method];
         const difference = A.counts.supported - B.counts.supported;
-        // Each registered block assigns one task per case, method and label.
-        const low = difference - (registered.size - B.total);
-        const high = difference + (registered.size - A.total);
+        // The four original assignments cover every case, method and party label once.
+        const low = difference - (blockCount - B.total);
+        const high = difference + (blockCount - A.total);
         total[method].min += Math.max(0, low, -high);
         total[method].max += Math.max(Math.abs(low), Math.abs(high));
       }
     }
     // Each missing answer belongs to just one cell, so both extremes are attainable.
-    const perLabel = cases.ids.length * registered.size;
+    const perLabel = cases.ids.length * blockCount;
     const assigned = perLabel * methods.length * 2;
-    return {registeredBlocks:registered.size, assigned, submitted, missing:assigned - submitted,
+    return {assigned, submitted:trials.length, missing:assigned - trials.length,
       minReductionPp:100 * (total.manual.min - total.journal.max) / perLabel,
       maxReductionPp:100 * (total.manual.max - total.journal.min) / perLabel};
   }
@@ -577,6 +586,82 @@
     return {blocks, editions};
   }
 
+  function analyzeAssignedEditions(input, invitations) {
+    const byOrdinal = new Map(), byId = new Map();
+    for (const row of invitations) {
+      const invite = parseInvite(row?.code);
+      if (!invite || invite.code !== row.code || invite.ordinal !== row.ordinal || invite.id !== row.id)
+        throw new Error('초대 코드와 명부의 배정 번호·참여 코드가 일치하는지 확인하세요.');
+      if ((byOrdinal.has(invite.ordinal) && byOrdinal.get(invite.ordinal).code !== invite.code) ||
+          (byId.has(invite.id) && byId.get(invite.id) !== invite.ordinal))
+        throw new Error('초대 명부의 같은 번호나 참여 코드에 서로 다른 배정이 있습니다.');
+      byOrdinal.set(invite.ordinal, invite);
+      byId.set(invite.id, invite.ordinal);
+    }
+    const records = checkedRecords(input.filter(r => r?.kind === 'editor' && byOrdinal.has(r.ordinal) &&
+      byOrdinal.get(r.ordinal).id === r.participantId), 'editor');
+    const returns = new Map(records.map(r => [r.ordinal,r]));
+    const blockNumbers = [...new Set([...byOrdinal.keys()].map(n=>Math.ceil(n / slots)))].sort((a,b)=>a-b);
+    const blocks = [], verified = [];
+    for (const block of blockNumbers) {
+      const members = [], versions = new Set();
+      let issued = 0, planned = 0, mismatched = 0, unknown = 0, missing = 0, submitted = 0;
+      for (let i = 1; i <= slots; i++) {
+        const ordinal = (block - 1) * slots + i, invite = byOrdinal.get(ordinal), record = returns.get(ordinal);
+        const version = invite?.kitVersion ?? null;
+        if (invite) issued++;
+        if (version) { planned++; versions.add(version); }
+        const trials = record?.trials || [];
+        const different = [], unstamped = [];
+        for (const t of trials) {
+          if (!version) continue;
+          if (!t.kitVersion) unstamped.push(t.position);
+          else if (t.kitVersion !== version) different.push({position:t.position, kitVersion:t.kitVersion});
+        }
+        const pending = slots - trials.length;
+        mismatched += different.length;
+        unknown += unstamped.length;
+        if (invite) missing += pending;
+        submitted += trials.length;
+        members.push({ordinal, issued:!!invite, kitVersion:version, returned:!!record, withdrawn:!!record?.withdrawn,
+          submitted:trials.length, different, unstamped});
+      }
+      let state;
+      if (!planned) state = 'unspecified';
+      else if (planned < slots) state = 'partlyAssigned';
+      else if (versions.size > 1) state = 'differentAssignments';
+      else if (mismatched) state = 'mismatch';
+      else if (missing) state = 'incomplete';
+      else if (unknown) state = 'unknown';
+      else state = 'verified';
+      const kit = versions.size === 1 ? [...versions][0] : null;
+      if (state === 'verified') verified.push(...members.map(m => returns.get(m.ordinal)));
+      blocks.push({block, state, kitVersion:kit, issued, planned, submitted, mismatched, unknown, missing, members});
+    }
+    // Only all sixteen matched submissions in their original assigned block enter this comparison.
+    return {blocks, editions:analyzeEditions(verified).editions, plannedBounds:assignedGapBounds(blocks, returns)};
+  }
+
+  function assignedGapBounds(blocks, returns) {
+    const byKit = new Map();
+    for (const block of blocks) {
+      if (block.planned !== slots || !block.kitVersion) continue;
+      const version = block.kitVersion;
+      if (!byKit.has(version)) byKit.set(version, {blockNumbers:[], trials:[]});
+      const group = byKit.get(version);
+      group.blockNumbers.push(block.block);
+      for (const member of block.members) {
+        const record = returns.get(member.ordinal);
+        if (record) group.trials.push(...record.trials.filter(t => t.kitVersion === version));
+      }
+    }
+    return [...byKit].map(([kitVersion, group]) => {
+      const bounds = answerBounds(group.blockNumbers.length, group.trials);
+      return {kitVersion, blockNumbers:group.blockNumbers, assigned:bounds.assigned, matched:bounds.submitted,
+        minReductionPp:bounds.minReductionPp, maxReductionPp:bounds.maxReductionPp};
+    });
+  }
+
   function demoRecords() {
     const negatives = cases.ids.filter(id => cases.get(id, 'A').expectedVerdict !== 'supported');
     return Array.from({length: 8}, (_, i) => {
@@ -666,6 +751,6 @@
     });
   }
 
-  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, analyze, analyzeEditions, demoRecords,
+  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
     partialTimeDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

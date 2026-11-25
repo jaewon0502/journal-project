@@ -5,7 +5,7 @@ const path = require('node:path');
 const {JSDOM, VirtualConsole} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
-function open(t, suffix = '') {
+function open(t, suffix = '', configureWindow) {
   const errors = [], blobs = [], filenames = [];
   const console = new VirtualConsole();
   console.on('jsdomError', error => errors.push(error.message));
@@ -13,6 +13,7 @@ function open(t, suffix = '') {
     url: 'https://journal.example/factcheck.html' + suffix, runScripts: 'outside-only', virtualConsole: console
   });
   const w = dom.window, doc = w.document;
+  if (configureWindow) configureWindow(w);
   w.TextEncoder = TextEncoder;
   w.confirm = () => true;
   w.URL.createObjectURL = blob => { blobs.push(blob); return 'blob:journal'; };
@@ -38,6 +39,36 @@ function open(t, suffix = '') {
   };
   return {w, doc, el, set, snapshot, filename: () => filenames.at(-1), click: id => el(id).click()};
 }
+
+test('판본이 있는 하위 화면은 구형 부모가 보낸 과제와 확인한 판본이 다른 과제를 열지 않는다', t => {
+  const edition = 'ab'.repeat(32), replies = [], delivered = [];
+  const host = {postMessage:(message, origin, transfer)=>replies.push({message,origin,transfer})};
+  let channel;
+  const p = open(t, '?study=1', w => {
+    Object.defineProperty(w, 'parent', {value:host});
+    const meta = w.document.createElement('meta'); meta.name = 'journal-editor-kit'; meta.content = edition; w.document.head.append(meta);
+    w.MessageChannel = class {
+      constructor() {
+        this.port1 = {postMessage:m=>delivered.push(m), close() {}}; this.port2 = {};
+        channel = this;
+      }
+    };
+  });
+  const send = data => {
+    const e = new p.w.Event('message');
+    Object.assign(e, {data,source:host,origin:p.w.location.origin}); p.w.dispatchEvent(e);
+  };
+  const task = {type:'journal-study-task', nonce:'case-1',article:'심의는 끝났다.',sources:[]};
+  send(task); assert.equal(p.el('article').value,''); assert.equal(replies.at(-1).message.type,'journal-study-error');
+  send({type:'journal-study-identify',challenge:'page-1'});
+  assert.equal(replies.at(-1).message.kitVersion,edition); assert.equal(replies.at(-1).message.challenge,'page-1');
+  assert.equal(replies.at(-1).transfer[0],channel.port2);
+  channel.port1.onmessage({data:task});
+  channel.port1.onmessage({data:{...task,kitVersion:'cd'.repeat(32)}});
+  assert.equal(p.el('article').value,''); assert.equal(delivered.length,0);
+  channel.port1.onmessage({data:{...task,kitVersion:edition}});
+  assert.equal(p.el('article').value,task.article); assert.equal(delivered.at(-1).type,'journal-study-loaded');
+});
 
 async function loadWorkspace(page, data, accept = true) {
   const {w, el} = page;

@@ -54,12 +54,17 @@
   let hasCommittedArticle = false;
   let fieldCopyResult = null;
   let studyNonce = null;
+  const studyKitMeta = document.querySelector('meta[name="journal-editor-kit"]');
+  const studyKit = studyKitMeta?.content.length === 64 && /^[a-f0-9]+$/.test(studyKitMeta.content) ? studyKitMeta.content : null;
+  let studyPort = null;
   // Local file pages have opaque origins. Only the actual parent frame receives replies.
   const localFile = location.protocol === 'file:';
   const expectedMessageOrigin = localFile ? 'null' : location.origin;
   const parentOrigin = localFile ? '*' : location.origin;
   function studyReply(type, fields = {}) {
-    window.parent.postMessage({type, nonce: studyNonce, ...fields}, parentOrigin);
+    const packet = {type, nonce:studyNonce, ...fields};
+    if (studyPort) studyPort.postMessage(packet);
+    else window.parent.postMessage(packet, parentOrigin);
   }
 
   function node(tag, text, cls) {
@@ -1579,10 +1584,9 @@
   });
   if (studyFrame) {
     document.documentElement.classList.add('study-frame');
-    window.addEventListener('message', event => {
-      if (event.source !== window.parent || event.origin !== expectedMessageOrigin) return;
-      const task = event.data;
+    function receiveTask(task) {
       if (!task || task.type !== 'journal-study-task' || typeof task.nonce !== 'string' || !task.nonce) return;
+      if (studyKitMeta ? !studyKit || !studyPort || task.kitVersion !== studyKit : task.kitVersion != null) return;
       if (studyNonce === task.nonce) {
         studyReply('journal-study-loaded');
         return;
@@ -1595,10 +1599,34 @@
         dirty = false;
         studyReply('journal-study-loaded');
       } catch (_) {
-        window.parent.postMessage({type: 'journal-study-error', nonce: task.nonce}, parentOrigin);
+        studyReply('journal-study-error', {nonce:task.nonce});
+      }
+    }
+    window.addEventListener('message', event => {
+      if (event.source !== window.parent || event.origin !== expectedMessageOrigin) return;
+      const request = event.data;
+      if (request?.type === 'journal-study-identify' && typeof request.challenge === 'string' && request.challenge) {
+        const ready = {type:'journal-study-ready', kitVersion:studyKit, challenge:request.challenge};
+        studyPort?.close(); studyPort = null;
+        if (!studyKit || !window.MessageChannel) return window.parent.postMessage(ready, parentOrigin);
+        // The port belongs to this document. Navigation reuses the frame's WindowProxy.
+        const channel = new MessageChannel();
+        studyPort = channel.port1;
+        const port = studyPort;
+        port.onmessage = message => { if (studyPort === port) receiveTask(message.data); };
+        window.parent.postMessage(ready, parentOrigin, [channel.port2]);
+      } else if (!studyKitMeta) receiveTask(request);
+      else if (request?.type === 'journal-study-task' && typeof request.nonce === 'string') {
+        window.parent.postMessage({type:'journal-study-error', nonce:request.nonce}, parentOrigin);
       }
     });
-    studyReply('journal-study-ready');
+    window.addEventListener('pagehide', () => {
+      if (studyPort) {
+        studyReply('journal-study-closing');
+        studyPort.close(); studyPort = null;
+      }
+    });
+    studyReply('journal-study-ready', {kitVersion:studyKit});
   }
   window.addEventListener('beforeunload', event => {
     if (dirty && !studyFrame) { event.preventDefault(); event.returnValue = ''; }

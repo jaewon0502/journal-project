@@ -7,10 +7,14 @@ const path = require('node:path');
 const {JSDOM} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
-function page(t, hash = '', url = 'https://study.example/editor-study.html', prior, participantKit = false) {
+function page(t, hash = '', url = 'https://study.example/editor-study.html', prior, participantKit = false, assignedKit) {
   const dom = new JSDOM(fs.readFileSync(path.join(folder, 'editor-study.html'), 'utf8'), {url: url + hash, runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window;
+  if (assignedKit !== undefined) {
+    const meta = w.document.createElement('meta');
+    meta.name = 'journal-editor-assigned-kit'; meta.content = assignedKit; w.document.head.append(meta);
+  }
   if (participantKit) {
     w.document.documentElement.setAttribute('data-participant-kit', '');
     w.document.getElementById('dashboard').remove();
@@ -198,6 +202,47 @@ function captureDownloads(p) {
   p.w.document.addEventListener('click', event => { if (event.target.closest('a[download]')) event.preventDefault(); });
   return blobs;
 }
+
+test('판본이 있는 과제는 확인한 문서 전용 연결로만 보내고 다른 판본·구형 화면 재개 시 기록을 보존하며 멈춘다', async t => {
+  const edition = 'ab'.repeat(32);
+  for (const wrong of ['cd'.repeat(32), undefined]) {
+    const p = page(t, '', undefined, undefined, edition);
+    p.el('invite-code').value = 'J2-3-E0000000000000001-' + edition;
+    p.el('qualified').checked = true; p.el('enroll').requestSubmit(); p.el('begin-trial').click();
+    const frame = p.w.document.querySelector('iframe'), globalMessages = [], tasks = [];
+    frame.contentWindow.postMessage = m => {globalMessages.push(m);};
+    const send = (data, ports=[]) => {
+      const event = new p.w.MessageEvent('message', {source:frame.contentWindow, origin:p.w.location.origin, data});
+      Object.defineProperty(event, 'ports', {value:ports});
+      p.w.dispatchEvent(event);
+    };
+    frame.dispatchEvent(new p.w.Event('load'));
+    const challenge = globalMessages.at(-1).challenge;
+    assert.equal(globalMessages.at(-1).type, 'journal-study-identify');
+    send({type:'journal-study-ready', kitVersion:edition});
+    const port = {postMessage:m=>tasks.push(m), close() {}};
+    send({type:'journal-study-ready', challenge, kitVersion:edition}, [port]);
+    assert.equal(tasks.length, 1); assert.equal(tasks[0].kitVersion, edition);
+    const receipt = {type:'journal-study-used', nonce:tasks[0].nonce, status:'held', sourceIds:['doc-2'], reason:'A에서 확인한 근거'};
+    send(receipt); port.onmessage({data:receipt}); assert.equal(p.el('reason').value,'');
+    port.onmessage({data:{type:'journal-study-loaded',nonce:tasks[0].nonce}});
+    port.onmessage({data:receipt}); assert.equal(p.el('reason').value,receipt.reason);
+    p.advance(1000); p.el('pause-trial').click(); p.el('resume-trial').click();
+    p.el('answer').requestSubmit(); assert.match(p.el('answer-status').textContent,/위 저널 화면/);
+    frame.dispatchEvent(new p.w.Event('load'));
+    send({type:'journal-study-ready', challenge, kitVersion:edition}, [port]);
+    port.onmessage({data:{...receipt,reason:'이전 창에서 뒤늦게 온 메시지'}});
+    assert.equal(p.el('reason').value,receipt.reason); assert.equal(tasks.length,1);
+    send({type:'journal-study-ready', kitVersion:wrong});
+    assert.equal(p.el('pause-pane').hidden,false); assert.match(p.el('session-status').textContent,/원래 참여자 ZIP을 별도 폴더/);
+    assert.ok(globalMessages.every(m=>!('article' in m) && !('sources' in m)));
+    p.advance(60000); const downloads = captureDownloads(p);
+    p.el('export-resume').click(); const saved = JSON.parse(await downloads[0].text());
+    assert.equal(saved.record.trials.length,0); assert.equal(saved.session.activeMs,1000);
+    assert.equal(saved.session.used,true); assert.equal(saved.session.reason,receipt.reason);
+    assert.equal(saved.session.state,'paused');
+  }
+});
 async function importFiles(p, texts) {
   const input = p.el('import-files');
   const files = texts.map((text, i) => new p.w.File([text], 'study-' + i + '.json', {type: 'application/json'}));
@@ -210,6 +255,89 @@ async function importFiles(p, texts) {
   await done;
 }
 const issuedCodes = p => [...p.el('invites').querySelectorAll('tbody tr')].map(tr => tr.cells[1].textContent);
+
+test('진행자는 같은 행의 배정 코드와 ZIP을 복사하고 복사가 제한되면 코드 전체를 선택한다', async t => {
+  const current = 'cd'.repeat(32), previous = 'ab'.repeat(32);
+  const p = page(t, '', undefined, undefined, false, current);
+  const priorCode = 'J2-1-E0000000000000001-' + previous;
+  p.el('roster-code').value = priorCode;
+  p.el('recover-roster').requestSubmit();
+  p.el('issue-codes').click();
+  const rows = [...p.el('invites').querySelectorAll('tbody tr')];
+  assert.equal(rows.length, 5);
+  assert.equal(rows[0].querySelector('a'), null);
+  assert.match(rows[0].cells[3].textContent, /abababababab.*발급한 진행자 폴더/);
+  let copied;
+  Object.defineProperty(p.w.navigator, 'clipboard', {value:{writeText:async code => {copied = code;}}});
+  rows[1].querySelector('button').click();
+  await t.waitFor(() => assert.match(p.el('import-status').textContent, /복사했습니다/));
+  assert.equal(copied, rows[1].querySelector('code').textContent);
+  assert.ok(copied.endsWith(current));
+  assert.equal(rows[1].querySelector('a[download]').getAttribute('href'), 'participant-editor-study.zip');
+  p.w.navigator.clipboard.writeText = async () => { throw new Error('denied'); };
+  rows[3].querySelector('button').click();
+  await t.waitFor(() => assert.match(p.el('import-status').textContent, /코드 전체를 선택/));
+  assert.equal(p.w.getSelection().toString(), rows[3].querySelector('code').textContent);
+});
+
+test('J2는 지정한 참가자 ZIP에서만 등록하고, 재개와 응답 저장 중에도 처음 발급한 코드를 유지한다', async t => {
+  const a = 'ab'.repeat(32), b = 'cd'.repeat(32);
+  const coordinator = page(t, '', undefined, undefined, false, a);
+  coordinator.el('issue-codes').click();
+  const roster = coordinator.workspace().invitations;
+  assert.equal(roster.length, 4);
+  for (const row of roster) assert.equal(row.code, 'J2-' + row.ordinal + '-' + row.id + '-' + a);
+  const row = roster.find(inv => inv.ordinal === 1);
+  function enter(p) {
+    p.el('qualified').checked = true; p.el('invite-code').value = ' ' + row.code.toUpperCase() + ' ';
+    p.el('enroll').requestSubmit();
+  }
+  for (const [kit,stamp] of [[b,a], [true,a], [false,a], [false,undefined]]) {
+    const wrong = page(t, '#participate', undefined, undefined, kit, stamp); enter(wrong);
+    assert.match(wrong.el('enroll-status').textContent, /코드와 함께 보낸 ZIP/);
+    assert.equal(wrong.el('stimulus-article').textContent, '');
+    assert.equal(wrong.el('run').hidden, true); assert.equal(wrong.w.localStorage.length, 0);
+  }
+  const valid = page(t, '', undefined, undefined, a); enter(valid);
+  const key = 'journal-editor-study-participant-v1/' + row.code;
+  valid.el('begin-trial').click(); valid.advance(1000); valid.el('pause-trial').click();
+  const blobs = captureDownloads(valid); valid.el('export-resume').click();
+  assert.ok(valid.el('transfer-status').textContent.includes(row.code));
+  const checkpoint = JSON.parse(await blobs.at(-1).text());
+  const next = page(t, '', undefined, undefined, a); enter(next); await restoreParticipant(next, checkpoint);
+  next.el('resume-trial').click(); next.advance(1000); next.answer();
+  const saved = captureDownloads(next); next.el('export-one').click();
+  const response = JSON.parse(await saved.at(-1).text());
+  assert.equal(response.participantId, row.id); assert.equal(response.trials[0].kitVersion, a);
+  assert.deepEqual(JSON.parse(next.w.localStorage.getItem(key)).records, [response]);
+});
+
+test('묶음의 기존 판본을 보존하고 같은 배정의 J1·J2 또는 서로 다른 J2 명부를 합치지 않는다', async t => {
+  const a = 'ab'.repeat(32), b = 'cd'.repeat(32), id = 'E123456789ABCDEF0';
+  const legacy = 'J1-1-' + id, current = 'J2-1-' + id + '-' + a, other = 'J2-1-' + id + '-' + b;
+  for (const [prior, from] of [[legacy,5], [other,5], [current,2]]) {
+    const p = page(t, '', undefined, undefined, false, a);
+    p.el('roster-code').value = prior.toLowerCase(); p.el('recover-roster').requestSubmit();
+    const existing = p.workspace().invitations;
+    assert.deepEqual(existing,[{ordinal:1,id,code:prior}]);
+    for (const conflict of [legacy, current, other].filter(c => c !== prior)) {
+      p.el('roster-code').value = conflict; p.el('recover-roster').requestSubmit();
+      assert.match(p.el('import-status').textContent, /초대 코드 판본이 다릅니다/);
+      const backup = {type:'journal-editor-study-collection-v1',records:[],invitations:[{ordinal:1,id,code:conflict}]};
+      await importFiles(p, [JSON.stringify(backup)]);
+      assert.deepEqual(p.workspace().invitations,existing);
+      assert.match(p.el('import-status').textContent, /초대 코드 판본이 다릅니다/);
+    }
+    p.el('issue-codes').click();
+    const issued = p.workspace().invitations.slice(1);
+    assert.equal(issued.length, from === 5 ? 4 : 3);
+    assert.deepEqual(issued.map(inv => inv.ordinal).sort((x,y)=>x-y), Array.from({length:issued.length}, (_,i)=>from+i));
+    assert.ok(issued.every(inv => inv.code === 'J2-' + inv.ordinal + '-' + inv.id + '-' + a));
+  }
+  const broken = page(t, '', undefined, undefined, false, 'broken');
+  broken.el('issue-codes').click(); assert.match(broken.el('import-status').textContent, /배포본을 다시/);
+  assert.equal(broken.workspace(),null);
+});
 
 test('참여 등록 화면에서 집계로 갈 수 없고, 참여를 닫으면 빈 등록 화면으로 돌아간다', t => {
   const p = page(t, '#participate');

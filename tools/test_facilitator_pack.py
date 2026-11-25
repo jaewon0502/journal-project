@@ -45,6 +45,11 @@ class FacilitatorPack(unittest.TestCase):
                 page = kit.read('editor-study.html').decode()
                 [edition] = re.findall(r'<meta name="journal-editor-kit" content="([0-9a-f]{64})">', page)
             self.assertIn(f'<code>{edition}</code>', coordinator.read('시작.html').decode())
+            dashboard = coordinator.read('editor-study.html').decode()
+            stamp = f'<meta name="journal-editor-assigned-kit" content="{edition}">'
+            self.assertEqual(dashboard.count(stamp), 1)
+            self.assertEqual(dashboard.replace(stamp, ''), (READER / 'editor-study.html').read_text())
+            self.assertNotIn('journal-editor-assigned-kit', page)
             for case, folder in CASE_FOLDERS.items():
                 pair = packet_pair(case)
                 expected[f'참여 과제/{folder}/{folder}-평소도구.zip'] = pair['manual']
@@ -65,7 +70,7 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertLessEqual(links.local, files, page)
                 if page in ('article-compare.html', 'revision-series.html'):
                     self.assertTrue({'revision-facts.js', 'revision-facts-view.js'} <= links.local, page)
-            for page in ('editor-study.html', 'field-summary.html', 'field-review.html'):
+            for page in ('field-summary.html', 'field-review.html'):
                 self.assertEqual(archive.read(page), (READER / page).read_bytes())
             allocation = archive.read('field-allocation.html').decode()
             catalog_tag = r'<script id="allocation-catalog" type="application/json">(.*?)</script>'
