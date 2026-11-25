@@ -11,6 +11,20 @@
     if (values.includes('different')) return 'different';
     return values.every(value => value === 'aligned') ? 'aligned' : 'unresolved';
   }
+  // A single edition can be compared even if the other edition is missing a score.
+  function scoreDifferences(dimensions) {
+    let rated = 0;
+    const differences = [];
+    for (const {id, first, second} of dimensions) {
+      for (const role of ['before','after']) {
+        const left = first[role], right = second[role];
+        if (!Number.isInteger(left) || !Number.isInteger(right)) continue;
+        rated++;
+        if (left !== right) differences.push({id, role, left, right});
+      }
+    }
+    return {total:dimensions.length * 2, rated, differences};
+  }
   function article(joint, snapshots) {
     const counts = {aligned:0, different:0, unresolved:0};
     const rows = joint.dimensions.map(dimension => {
@@ -43,7 +57,7 @@
     });
     return {...result, ...checked};
   }
-  const api = Object.freeze({article, audit});
+  const api = Object.freeze({article, audit, scoreDifferences});
   if (node) module.exports = api;
   else root.JournalRevisionBiasAudit = api;
 })(globalThis);

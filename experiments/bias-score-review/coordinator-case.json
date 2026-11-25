@@ -1,0 +1,355 @@
+{
+  "format": "journal-retention-case",
+  "version": 6,
+  "reviewId": "da3ea81d42cd7615c4c5893acaab3cec4a5e83bab1043fa7a0e98e22ab5b79cf",
+  "evidenceDigest": "6915209681f72e40999e1f9ffb1a360f039254d57cfe9c36847bae6a5196cfc6",
+  "items": [
+    {
+      "name": "편집자-1-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "예산 심사 연기를 놓고 두 정당의 설명이 엇갈렸다.\n시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+        "articleDraft": "예산 심사 연기를 놓고 두 정당의 설명이 엇갈렸다.\n시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "다솔당 가상 입장문",
+            "url": "https://dasol.example.invalid/statement",
+            "locator": "두 번째 문장",
+            "excerpt": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 시의회 회의록",
+            "url": "https://council.example.invalid/minutes",
+            "locator": "연기 의결",
+            "excerpt": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"fc3caa876fd7e578537088c6aa0a6a339857e504ca67f5c89a53e319fef4a463\",\"pending\",null,false],[\"unit-29\",\"4279ed9dab75ba46936f4479360a7feb5f59ea2ed0b2847ae468a6964c481c26\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"7c27c855a7eaabbd93c7185c8433863c990feaac08271c31b00c88440cc880e2\"],[\"unit-29\",\"31684e2699b38871fba156f5d8765dbcb3c88a82f85d0a0d67889f52560efeef\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 3,
+              "rowId": "unit-29",
+              "quote": "시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+              "sourceId": "source-1",
+              "sourceQuote": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+              "reason": "정당의 주장을 의회가 확인한 결론으로 옮겼다.",
+              "impact": "독자가 고의 방해를 의회의 공식 결론으로 받아들인다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            },
+            "omission": {
+              "level": 2,
+              "rowId": "unit-29",
+              "quote": "시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+              "sourceId": "source-2",
+              "sourceQuote": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+              "reason": "심사 연기에 합의했다는 회의록의 내용이 빠졌다.",
+              "impact": "어느 한 당이 일방적으로 막은 것으로 읽힌다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "efd919113fd6de90693f87b5f14db431",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "편집자-1-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "예산 심사가 다음 주로 미뤄졌다.\n다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.\n회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+        "articleDraft": "예산 심사가 다음 주로 미뤄졌다.\n다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.\n회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "다솔당 가상 입장문",
+            "url": "https://dasol.example.invalid/statement",
+            "locator": "두 번째 문장",
+            "excerpt": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 시의회 회의록",
+            "url": "https://council.example.invalid/minutes",
+            "locator": "연기 의결",
+            "excerpt": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"99322c7dc611cba800bc31cdae0ddf6fada386cd6699cb685402dae4ee0616ed\",\"pending\",null,false],[\"unit-19\",\"361998e6d23947a1dfbb50f8af0a682b1ea301d38b202a5c95e1f90f247eff5f\",\"pending\",null,false],[\"unit-48\",\"d4452b1434ae13d83b7d0c5044fb87aa9b44d77c7b2b509d7b94e43be6b08e47\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"4f96078eded368107c6504eb94d9780c733ae1758f1cc4da2d38e6b95332b1a4\"],[\"unit-19\",\"e0d33b4493c05263cf61aff8ea39fbf96e70930fe3a96e27c4c3ac8605dc1729\"],[\"unit-48\",\"256fdfd8f252cde81fba23a81c31aade3458d4ec43fa024974ec186507282129\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 1,
+              "rowId": "unit-19",
+              "quote": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+              "sourceId": "source-1",
+              "sourceQuote": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+              "reason": "발언자를 밝혔지만 고의 방해 주장을 합의 사실보다 앞세웠다.",
+              "impact": "독자가 의혹에 먼저 주목할 수 있다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            },
+            "omission": {
+              "level": 0,
+              "rowId": "unit-48",
+              "quote": "회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+              "sourceId": "source-2",
+              "sourceQuote": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+              "reason": "연기 합의 내용을 기사에서 밝혔다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "efd919113fd6de90693f87b5f14db431",
+          "slot": "B"
+        }
+      }
+    },
+    {
+      "name": "진행자-1.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "efd919113fd6de90693f87b5f14db431",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "A",
+            "articleSha256": "6797c9243f4b5ded89c0442d2df51f52226f0198058ff9ac8f94ec97672f1977",
+            "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+          },
+          "after": {
+            "slot": "B",
+            "articleSha256": "eb3c72120dcc3701e908564f988c249f426faadfe5f5ecfe6b2f7641259bc4cc",
+            "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+          }
+        }
+      }
+    },
+    {
+      "name": "편집자-2-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "예산 심사 연기를 놓고 두 정당의 설명이 엇갈렸다.\n시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+        "articleDraft": "예산 심사 연기를 놓고 두 정당의 설명이 엇갈렸다.\n시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "다솔당 가상 입장문",
+            "url": "https://dasol.example.invalid/statement",
+            "locator": "두 번째 문장",
+            "excerpt": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 시의회 회의록",
+            "url": "https://council.example.invalid/minutes",
+            "locator": "연기 의결",
+            "excerpt": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"fc3caa876fd7e578537088c6aa0a6a339857e504ca67f5c89a53e319fef4a463\",\"pending\",null,false],[\"unit-29\",\"4279ed9dab75ba46936f4479360a7feb5f59ea2ed0b2847ae468a6964c481c26\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"7c27c855a7eaabbd93c7185c8433863c990feaac08271c31b00c88440cc880e2\"],[\"unit-29\",\"31684e2699b38871fba156f5d8765dbcb3c88a82f85d0a0d67889f52560efeef\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-29",
+              "quote": "시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+              "sourceId": "source-1",
+              "sourceQuote": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+              "reason": "발언 주체를 바꿔 의혹을 공식 확인처럼 보이게 했다.",
+              "impact": "의혹이 확인됐다고 오해할 수 있다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            },
+            "omission": {
+              "level": 2,
+              "rowId": "unit-29",
+              "quote": "시의회는 봄빛당이 심사를 고의로 막았다고 확인했다.",
+              "sourceId": "source-2",
+              "sourceQuote": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+              "reason": "심사 연기에 합의했다는 회의록의 내용이 빠졌다.",
+              "impact": "어느 한 당이 일방적으로 막은 것으로 읽힌다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "1cea859b855ebcffa461178812b16e2f",
+          "slot": "B"
+        }
+      }
+    },
+    {
+      "name": "편집자-2-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "예산 심사가 다음 주로 미뤄졌다.\n다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.\n회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+        "articleDraft": "예산 심사가 다음 주로 미뤄졌다.\n다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.\n회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "다솔당 가상 입장문",
+            "url": "https://dasol.example.invalid/statement",
+            "locator": "두 번째 문장",
+            "excerpt": "다솔당은 봄빛당이 심사를 고의로 막았다고 주장했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 시의회 회의록",
+            "url": "https://council.example.invalid/minutes",
+            "locator": "연기 의결",
+            "excerpt": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"99322c7dc611cba800bc31cdae0ddf6fada386cd6699cb685402dae4ee0616ed\",\"pending\",null,false],[\"unit-19\",\"361998e6d23947a1dfbb50f8af0a682b1ea301d38b202a5c95e1f90f247eff5f\",\"pending\",null,false],[\"unit-48\",\"d4452b1434ae13d83b7d0c5044fb87aa9b44d77c7b2b509d7b94e43be6b08e47\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"4f96078eded368107c6504eb94d9780c733ae1758f1cc4da2d38e6b95332b1a4\"],[\"unit-19\",\"e0d33b4493c05263cf61aff8ea39fbf96e70930fe3a96e27c4c3ac8605dc1729\"],[\"unit-48\",\"256fdfd8f252cde81fba23a81c31aade3458d4ec43fa024974ec186507282129\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-48",
+              "quote": "회의록에는 두 정당이 심사를 연기하기로 합의했다고 적혔다.",
+              "sourceId": "source-2",
+              "sourceQuote": "두 정당의 간사는 심사를 다음 주로 연기하는 데 합의했다.",
+              "reason": "회의록을 인용해 연기 합의가 있었다고 정확히 설명했다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "1cea859b855ebcffa461178812b16e2f",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "진행자-2.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "1cea859b855ebcffa461178812b16e2f",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "B",
+            "articleSha256": "6797c9243f4b5ded89c0442d2df51f52226f0198058ff9ac8f94ec97672f1977",
+            "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+          },
+          "after": {
+            "slot": "A",
+            "articleSha256": "eb3c72120dcc3701e908564f988c249f426faadfe5f5ecfe6b2f7641259bc4cc",
+            "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+          }
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "contextNotes": [],
+  "checksum": "36e8b41f7a765fd0ecf86a39a8c250b1e3517b6d193c223189c016a181bf4c1b"
+}

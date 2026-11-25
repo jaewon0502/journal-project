@@ -135,6 +135,32 @@
     return area;
   }
 
+  function scoreReview(sources, dimensions) {
+    const box = element('details', null, 'case');
+    box.id = 'series-score-review';
+    const list = element('ul');
+    let rated = 0, total = 0;
+    for (const entry of sources.values()) {
+      const scores = window.JournalRevisionBiasAudit.scoreDifferences(entry.record.dimensions);
+      rated += scores.rated;
+      total += scores.total;
+      for (const {id, role, left, right} of scores.differences) {
+        const title = dimensions.find(d => d.id === id).title;
+        const label = (role === 'before' ? '원본' : '수정본') + ' · ' + title + ' · ' + level(left) + ' / ' + level(right);
+        const item = element('li');
+        if (entry.record.version >= 9 && !entry.summaryOnlyExample) item.append(evidenceLink(entry, label, '&focus=bias-' + id + '-' + role));
+        else item.textContent = entry.name + ' · ' + label + ' (점수만 확인 가능)';
+        list.append(item);
+      }
+    }
+    const tally = rated ? list.children.length + '/' + rated + '개' : '비교할 판본·항목 없음';
+    box.append(element('summary', '같은 판본에서 두 편집자의 단계가 다른 항목 · ' + tally),
+      element('p', '전체 ' + total + '개 판본·항목 중 양쪽이 채점한 ' + rated + '개를 비교했습니다. 미평가 또는 해당 없음 ' +
+        (total - rated) + '개는 단계 차이의 분모에서 빠집니다.'));
+    if (list.children.length) box.append(element('p', '원본과 수정본을 따로 셉니다. 현재 형식의 기사 요약은 해당 판본의 인용과 판단 이유로 연결됩니다.'), list);
+    return box;
+  }
+
   function severityPanel(report, sources, rates) {
     const panel = element('section');
     panel.id = 'series-severity';
@@ -545,7 +571,7 @@
       metric('series-worsened', '두 편집자 공통 악화율', report.worsened, report.worseningEligibleArticles, '0~1단계', '2~3단계'));
     summary.append(element('h3', '중요한 왜곡의 변화'),
       element('p', (builtIn ? '예시 파일 ' : '선택한 파일 ') + files.length + '개 · 고유 기사 ' + report.articleCount + '건 · 중복 제외 ' + report.duplicateCount + '개'),
-      severityPanel(report, sources, grid));
+      severityPanel(report, sources, grid), scoreReview(sources, report.dimensions));
     if (report.improved.numerator && !builtIn) {
       summary.append(element('p', '두 편집자가 개선으로 본 ' + report.improved.numerator +
         '개 항목의 실제 기사·원자료 구절은 진행자 기록을 열면 확인할 수 있습니다.'),
