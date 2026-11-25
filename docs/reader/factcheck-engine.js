@@ -659,9 +659,45 @@
     }
     return related;
   }
-  function excerptIdentity(source) {
-    return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
+  const wholeQuote = /^(?:“([^“”"‘’']+)”|"([^“”"‘’']+)"|‘([^“”"‘’']+)’|'([^“”"‘’']+)')$/u;
+  function quotedBody(text) {
+    return wholeQuote.exec(text)?.slice(1).find(Boolean);
   }
+  function sentenceEnd(text) {
+    return text.trim().replace(/(?<![.。])[.。]$|(?<=[다요죠네])[!！]$/u, '').trimEnd();
+  }
+  function excerptIdentity(text) {
+    // Keep measurement notation and letter case (1.5 vs 15, mW vs MW).
+    // Whitespace between digits may also divide two distinct table cells.
+    const normalized = text.normalize('NFC').replace(/[！-～]/gu, ch => String.fromCharCode(ch.charCodeAt(0) - 0xfee0));
+    const sentence = sentenceEnd(normalized);
+    return sentenceEnd(quotedBody(sentence) ?? sentence).replace(/(?<=[가-힣]),(?=\s*[가-힣])/gu, '')
+      .replace(/\s+/gu, ' ').replace(/(?<!\p{N}) | (?!\p{N})/gu, '');
+  }
+  const namedSpeaker = String.raw`([\p{L}][\p{L}\p{N}]*(?:[ \t]+[\p{L}][\p{L}\p{N}]*){0,2})`;
+  const transcriptLine = new RegExp('^' + namedSpeaker + ' *[:：] *(.+)$', 'u');
+  const reportedLine = new RegExp('^' + namedSpeaker + '(?:은|는|이|가)\\s+(.+?)(?:이?라고|고|이?라며|며)\\s*' +
+    '(?:했다|말했다|밝혔다|답했다|대답했다|발표했다|주장했다|설명했다|강조했다|덧붙였다|반박했다|전했다)$', 'u');
+  function speechTurn(line, transcript, ledger) {
+    const label = transcriptLine.exec(line);
+    const frame = label || reportedLine.exec(sentenceEnd(line));
+    if (!frame) return null;
+    const body = sentenceEnd(frame[2]), quote = quotedBody(body);
+    // "위원장: 1.5억 원" can be a table row, not a transcript.
+    if (label && (ledger || (!transcript && !/[다요죠네][.!?。！？]?$/u.test(quote ?? body)))) return null;
+    if (!quote && (!label || /[“”"‘’']/u.test(body))) return null;
+    const words = excerptIdentity(quote ?? body);
+    return words ? frame[1].normalize('NFC').replace(/[ \t]+/gu, ' ') + '\n' + words : null;
+  }
+  function speechTurns(source) {
+    const lines = source.excerpt.trim().split(/\r\n|[\r\n\u2028\u2029]/u).map(s => s.trim()).filter(Boolean);
+    const heading = lines.length > 1 && !/[:：“”"‘’']/u.test(lines[0]) && /(?:록|전문|명세서|표|명부|대장|원장)$/u.test(lines[0]) ? lines[0] : '';
+    const where = (source.title || '') + ' ' + source.locator + ' ' + heading;
+    const transcript = /속기록|회의록|녹취록|발언록|문답록|발언\s*원문|인터뷰\s*전문/u.test(where);
+    const ledger = /명세서|집계표|결산표|통계표|정산표|명부|(?:급여|등록|지급)\s*대장|(?:회계|거래|총계정)\s*원장|표\s*\d+\s*행/u.test(where);
+    return lines.map(line => speechTurn(line, transcript, ledger));
+  }
+  const repeatedSpeechNote = '같은 화자 표기의 발언만 다시 전한 발췌입니다. 발언 내용을 확인할 명부·결산표·현장 기록 등 다른 원자료를 선택하세요.';
   function sameSourceDocument(sources, a, b) {
     return relatedDocuments({items: sources}, [a]).has(originAddress(b.url));
   }
@@ -766,10 +802,10 @@
     if (!Array.isArray(ids) || !ids.length || ids.some(id => !catalog.items.has(id)) || new Set(ids).size !== ids.length) throw new Error('발언의 내용 자체를 확인한 별도의 원자료를 선택하세요.');
     const speech = speechIds.map(id => catalog.items.get(id));
     const speechDocuments = relatedDocuments(catalog, speech);
-    const speechExcerpts = new Set(speech.map(excerptIdentity));
+    const speechExcerpts = new Set(speech.map(source => excerptIdentity(source.excerpt)));
     for (const id of ids) {
       const source = catalog.items.get(id);
-      if (speechDocuments.has(originAddress(source.url)) || speechExcerpts.has(excerptIdentity(source))) {
+      if (speechDocuments.has(originAddress(source.url)) || speechExcerpts.has(excerptIdentity(source.excerpt))) {
         throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서, 그 문서를 재인용한 자료, 같은 발췌문은 발언 내용의 독립 근거가 될 수 없습니다.');
       }
     }
@@ -817,10 +853,21 @@
     const references = digest(linked.map(id => catalog.items.get(id)));
     return {protocol, rowId: row.id, articleBinding: row.articleBinding, binding, references, recordedAt, ...fields};
   }
+  function repeatsSpeech(fields, catalog) {
+    if (fields.status !== 'attribution' || !fields.contentSourceIds?.length) return false;
+    // A transcript may include headings and procedural notes. On the content side, every
+    // line must be an identified turn before ruling out independently reported evidence.
+    const known = new Set(fields.sourceIds.flatMap(id => speechTurns(catalog.items.get(id))).filter(Boolean));
+    return known.size > 0 && fields.contentSourceIds.some(id => {
+      const turns = speechTurns(catalog.items.get(id));
+      return turns.length > 0 && turns.every(turn => known.has(turn));
+    });
+  }
   function decide(row, decision, sources = []) {
     const catalog = sourceCatalog(sources);
     if (!row || catalog.key !== row.sourceKey) throw new Error('근거가 달라졌습니다. 현재 자료로 항목을 다시 열어 주세요.');
     const fields = decisionFields(row, decision, catalog);
+    if (repeatsSpeech(fields, catalog)) throw new Error(repeatedSpeechNote);
     const body = receiptBody(row, fields, new Date().toISOString(), catalog);
     return {...body, checksum: digest(body)};
   }
@@ -840,8 +887,15 @@
       const fields = decisionFields(row, saved, catalog);
       const body = receiptBody(row, fields, saved.recordedAt, catalog, saved.binding);
       if (saved.references !== body.references || digest(body) !== saved.checksum) throw new Error();
+      if (repeatsSpeech(fields, catalog)) {
+        // The historical decision passed its integrity checks. Only its attribution inputs are reusable.
+        row.reviewNote = '원발언 자료와 귀속 판단 이유만 초안으로 불러왔습니다. ' + repeatedSpeechNote;
+        if (saved.binding !== row.binding) row.reviewNote += ' 자료 목록도 달라졌습니다. 추가·변경된 자료를 확인하세요.';
+        row.attributionDraft = {status:fields.status, sourceIds:fields.sourceIds, reason:fields.reason};
+        return;
+      }
       if (saved.binding !== row.binding) {
-        row.reviewNote = '기사와 인용 근거는 그대로지만 자료 목록이 달라졌습니다. 추가·변경된 근거를 확인한 뒤 다시 판단하세요.';
+        row.reviewNote = '이전 판단을 초안으로 불러왔습니다. 원문과 인용한 자료는 같지만 자료 목록이 달라졌습니다. 추가 근거나 반증을 확인한 뒤 다시 기록하세요.';
         row.priorDecision = {...body, checksum: saved.checksum};
         return;
       }

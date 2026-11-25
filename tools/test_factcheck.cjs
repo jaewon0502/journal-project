@@ -238,6 +238,101 @@ test('문서 식별 쿼리는 유지하며 전재·추적 주소·같은 발췌�
     {originUrl: transcript.url}, {excerpt: transcript.excerpt}]) assert.throws(() => check({...audit, ...changed}));
 });
 
+test('같은 화자의 발언만 옮긴 전재는 독립 자료가 따로 있어도 내용 근거로 포함할 수 없다', () => {
+  const words = '지난해 사업 참여자는 50명이었다';
+  const article = '위원장은 “' + words + '”고 말했다.';
+  const source = (id, domain, excerpt) => ({id,url:'https://' + domain + '/record',version:'확정본',locator:'2면',excerpt});
+  const speech = source('speech','council.example','위원장: ' + words + '.');
+  const copy = source('copy','press.example','위원장은 “' + words + '”고 밝혔다.');
+  const ledger = source('ledger','audit.example','서명 확인 명부 합계 50명.');
+  const decision = {status:'attribution',sourceIds:['speech'],reason:'회의 속기록과 발언자를 대조했다.',acknowledged:true,
+    contentStatus:'supported',contentChecked:true,contentReason:'기사에서 같은 수치를 보았다.',contentSourceIds:['copy']};
+  const check = (original, candidate, fields = {}) => {
+    const refs = [original,candidate,ledger];
+    return decide(prepare(article,refs).rows[0], {...decision,...fields}, refs);
+  };
+  for (const original of [speech,{...speech,excerpt:article},{...speech,excerpt:'간사: 심사를 시작합니다.\n' + speech.excerpt}]) {
+    for (const state of ['supported','contradicted']) {
+      assert.throws(() => check(original,copy,{contentStatus:state}), /같은 화자/);
+      assert.throws(() => check(original,copy,{contentStatus:state,contentSourceIds:['ledger','copy']}), /같은 화자/);
+    }
+  }
+  for (const excerpt of ['감사관은 “' + words + '”고 밝혔다.', '위원장은 “사업 참여자는 50명이었다”고 밝혔다.',
+    '위원장은 “지난해 사업 참여자는 50명이 아니었다”고 밝혔다.',
+    '위원장은 “' + words + '”고 밝히지 않았다.', copy.excerpt + ' 별도로 서명 기록도 대조했다.',
+    copy.excerpt + '\n감사 결과 · 명부 50명', '등록 명부\n' + words]) {
+    assert.equal(check(speech,{...copy,excerpt}).contentStatus,'supported',excerpt);
+  }
+  assert.equal(check({...speech,excerpt:'회의록에서 발언을 확인했다.'},copy).contentStatus,'supported');
+  assert.equal(check({...speech,excerpt:'김 위원장: ' + words},{...copy,excerpt:'박 위원장은 “' + words + '”고 밝혔다.'}).contentStatus,'supported');
+  for (const excerpt of ['위원장은 “' + words + '”라고 답했다.', '위원장은 “' + words + '”고 했다.',
+    '위원장이 “' + words + '”라며 설명했다.',
+    '위원장: “' + words + '”.']) {
+    assert.throws(() => check(speech,{...copy,excerpt}),/같은 화자/);
+  }
+  for (const heading of ['제3차 위원회 속기록','10시 12분 개의','제3차 위원회 속기록\n10시 12분 개의']) {
+    const transcript = {...speech,excerpt:heading + '\n' + speech.excerpt};
+    assert.throws(() => check(transcript,copy),/같은 화자/);
+    assert.equal(check(transcript,{...copy,excerpt:copy.excerpt + '\n출석부 서명 합계 50명.'}).contentStatus,'supported');
+  }
+  assert.equal(check({...speech,excerpt:'직책별 지급액 확정 명세서\n' + speech.excerpt},copy).contentStatus,'supported');
+  const stated = {...speech,excerpt:'위원장은 “1.5억 원”이라고 밝혔다.'};
+  const amount = {...copy,excerpt:'위원장: 1.5억 원'};
+  assert.equal(check(stated,amount).contentStatus,'supported');
+  assert.equal(check(stated,{...amount,title:'직책별 지급액 확정 명세서',locator:'직책별 지급액 표 2행'}).contentStatus,'supported');
+  assert.throws(() => check(stated,{...amount,title:'위원장 발언 속기록'}),/같은 화자/);
+  assert.equal(check(speech,copy,{contentSourceIds:['ledger']}).contentStatus,'supported');
+  // Receipt saved by f9c9150 before the excerpt-only reprint check, with no origin URL.
+  const [old] = require('./fixtures/reprinted-speech-work.json').receipts;
+  for (const refs of [[speech,copy], [speech,copy,ledger]]) {
+    const result = report(article,refs,[old]);
+    const row = result.rows[0];
+    assert.deepEqual([result.complete, result.pendingCount, result.attributedCount, result.contentSupportedCount, row.status],
+      [false, 1, 0, 0, 'pending']);
+    assert.deepEqual(row.attributionDraft,{status:'attribution', sourceIds:['speech'], reason:decision.reason});
+    assert.equal(row.priorDecision,null);
+    assert.equal(row.receipt,null);
+    assert.match(row.reviewNote,/명부·결산표·현장 기록/);
+    assert.equal(row.reviewNote.includes('자료 목록도 달라졌습니다'),refs.includes(ledger));
+    assert.throws(() => decide(row,row.attributionDraft,refs),/직접 확인/);
+    assert.throws(() => decide(row,{...old,skipRepeatCheck:true},refs),/같은 화자/);
+  }
+  for (const [text, refs, saved] of [[article,[speech,copy],[{...old,checksum:'0'.repeat(64)}]],
+    [article,[speech,copy],[{...old,reason:'수정된 귀속 판단'}]],
+    [article,[speech,copy],[{...old,contentReason:'수정된 내용 판단'}]],
+    [article,[speech,copy],[{...old,recordedAt:'날짜 미상'}]],
+    [article,[speech,copy],[old,old]], [article,[speech], [old]],
+    [article,[{...speech,version:'수정판'},copy],[old]],
+    [article,[speech,{...copy,locator:'3면'}],[old]],
+    [article,[speech,{...copy,originUrl:speech.url}],[old]],
+    [article.replace('50명','35명'),[speech,copy],[old]]]) {
+    const row = report(text,refs,saved).rows[0];
+    assert.equal(row.attributionDraft,undefined);
+    assert.equal(row.priorDecision,null);
+    assert.equal(row.receipt,null);
+    assert.equal(row.status,'pending');
+  }
+});
+
+test('독립 자료의 반대 수치를 구별하고 띄어쓰기·전각 표기만 달라진 발췌는 같은 인용으로 처리한다', () => {
+  const article = '의원은 “지난해 집행액은 1.5억 원이었다”고 말했다.';
+  const judgment = {...decision,status:'attribution',sourceIds:['s'],contentStatus:'contradicted',contentChecked:true,
+    contentReason:'두 원자료의 측정값을 직접 대조했다.',contentSourceIds:['audit']};
+  const check = (left, right) => {
+    const refs = [{...source,id:'s',excerpt:left},{...source,id:'audit',url:'https://audit.example/ledger',excerpt:right}];
+    return decide(prepare(article,refs).rows[0],judgment,refs);
+  };
+  for (const [left,right] of [['1.5억 원','15억 원'],['-5%','5%'],['+5%','-5%'],['5%','5'],['5~7명','57명'],
+    ['5/7','57'],['1 5','15'],['1,500','1500'],['50명이었다?','50명이었다.'],['5!','5'],['10²','102'],['8mW','8MW']]) {
+    assert.equal(check('확정 수치 ' + left,'확정 수치 ' + right).contentStatus,'contradicted',left);
+  }
+  assert.throws(() => check('지난해 집행액은 １．５억 원이었다.','지난해 집행액은 1.5억 원 이었다'),/다른 원자료/);
+  for (const copy of ['“지난해 참가자는 50명이었다.”','“지난해 참가자는 50명이었다”.',
+    '지난해, 참가자는 50명이었다!', '지난해 참가자는 50 명이었다']) {
+    assert.throws(() => check('지난해 참가자는 50명이었다.',copy),/다른 원자료/);
+  }
+});
+
 test('같은 뷰어의 문서 주소를 구분하고 페이지·서명·추적값이 다른 같은 문서는 독립 근거에서 제외한다', () => {
   const article = '의원은 “집행액은 20억 원이었다”고 말했다.';
   const base = 'https://archive.example/reader';

@@ -446,6 +446,16 @@
       if (el.classList.contains('source')) el.hidden = !el.textContent.toLocaleLowerCase().includes(query);
     }
   }
+  function priorNote(row, draft) {
+    let note = row.reviewNote || (row.receipt ? '같은 원문과 원자료로 기록한 기존 판단입니다. 변경하려면 새로 확인해 기록하세요.' : '');
+    if (draft?.afterEdit) note = draft.sourceEdit
+      ? '인용한 원자료를 수정해 이전 판단을 초안으로 옮겼습니다. 수정한 자료를 다시 대조한 뒤 기록하세요.'
+      : '원문 수정 전의 판단을 초안으로 옮겼습니다. 이 구간과 주변 문맥은 같으며, 현재 기사를 대조한 뒤 다시 기록해야 합니다.';
+    if (draft?.speechRecovery === 'attribution') note = '원발언 자료와 귀속 판단 이유만 초안으로 불러왔습니다. 발언 속 사실은 명부·결산표·현장 기록 등 다른 원자료로 확인하세요.';
+    if (draft?.speechRecovery === 'edited') note = '같은 발언을 다시 인용한 이전 내용 판정은 제외했습니다. 작성 중인 판단을 대조한 뒤 다시 기록하세요.';
+    if (draft?.speechCatalogChanged) note += ' 자료 목록도 달라졌습니다. 추가·변경된 자료를 확인하세요.';
+    return note;
+  }
   function showCase() {
     const row = currentRow();
     if (sourceForRow && sourceForRow === row?.articleBinding) targetSourceTo(row);
@@ -463,13 +473,9 @@
     byId('finder-results').replaceChildren();
     message('finder-status', '');
     byId('row-hints').replaceChildren(...row.hints.map(hint => node('li', hint)));
-    byId('prior-note').textContent = row.reviewNote || (row.receipt ? '같은 원문과 원자료로 기록한 기존 판단입니다. 변경하려면 새로 확인해 기록하세요.' : '');
     const savedDraft = drafts.get(row.id);
-    const values = savedDraft || row.receipt || row.priorDecision || {};
-    if (row.priorDecision && !row.receipt) byId('prior-note').textContent = '이전 판단을 초안으로 불러왔습니다. 원문과 인용한 자료는 같지만 자료 목록이 달라졌습니다. 추가 근거나 반증을 확인한 뒤 다시 기록하세요.';
-    if (savedDraft?.afterEdit) byId('prior-note').textContent = savedDraft.sourceEdit
-      ? '인용한 원자료를 수정해 이전 판단을 초안으로 옮겼습니다. 수정한 자료를 다시 대조한 뒤 기록하세요.'
-      : '원문 수정 전의 판단을 초안으로 옮겼습니다. 이 구간과 주변 문맥은 같으며, 현재 기사를 대조한 뒤 다시 기록해야 합니다.';
+    const values = savedDraft || row.receipt || row.priorDecision || row.attributionDraft || {};
+    byId('prior-note').textContent = priorNote(row, savedDraft);
     for (const option of byId('verdict').options) {
       option.disabled = !!option.value && !row.allowedStatuses.includes(option.value);
     }
@@ -538,7 +544,7 @@
     else if (currentRow()) {
       const row = currentRow();
       byId('row-heading').textContent = '문장 ' + (result.rows.indexOf(row) + 1) + ' · ' + rowLabel(row);
-      byId('prior-note').textContent = row.reviewNote;
+      byId('prior-note').textContent = priorNote(row, drafts.get(row.id));
     }
     if (focus && currentId) byId('row-heading').focus();
   }
@@ -785,6 +791,11 @@
       contentReason: d.contentReason || '', acknowledged: false, correctionChecked: false, contentChecked: false,
       afterEdit
     };
+  }
+  function speechRecovery(draft, kind = draft?.speechRecovery) {
+    return ['attribution','edited'].includes(kind)
+      ? {speechRecovery:kind, ...(draft?.speechCatalogChanged === true && {speechCatalogChanged:true})}
+      : {};
   }
 
   byId('article-form').addEventListener('submit', event => {
@@ -1470,7 +1481,8 @@
     if (!['correction-checked','acknowledged'].includes(event.target.id)) byId('correction-checked').checked = false;
     if (currentId) {
       const previousDraft = drafts.get(currentId);
-      drafts.set(currentId, {...decisionDraft(), afterEdit: previousDraft?.afterEdit === true, ...(previousDraft?.sourceEdit ? {sourceEdit: true} : {})});
+      drafts.set(currentId, {...decisionDraft(), afterEdit: previousDraft?.afterEdit === true, ...(previousDraft?.sourceEdit ? {sourceEdit: true} : {}),
+        ...speechRecovery(previousDraft, previousDraft?.speechRecovery && 'edited')});
       const prior = receipts.find(r => r.rowId === currentId);
       if (!!currentRow().draftPending !== !!workspace.draftChangesRecord(drafts.get(currentId), prior)) refresh(true);
     }
@@ -1554,15 +1566,36 @@
     // A returned blind file may carry extra metadata on evidence, decisions or drafts.
     // Restore only the fields understood by the editor, including for a malformed tag.
     const catalog = blindFile || !trust ? w.sources.map(workspace.sourceInput) : w.sources;
+    // Recover attribution inputs as drafts. A superseded content verdict cannot be exported as a receipt.
+    const attributionDrafts = checked.rows.filter(row => row.attributionDraft);
     if (blindFile) keep = checked.rows.map(row => row.receipt || row.priorDecision).filter(Boolean);
+    else {
+      const migrated = new Set(attributionDrafts.map(row => row.id));
+      keep = keep.filter(receipt => !migrated.has(receipt.rowId));
+    }
     resetWork(text, catalog, keep, w.demo || catalog.some(isMock), tag, !!w.article.trim());
     if (trust) {
       const validIds = new Set(result.rows.map(r => r.id));
       drafts = new Map(w.rowDrafts.filter(d => validIds.has(d.rowId)).map(({rowId, data}) => {
-        const restored = blindFile ? {...draftFrom(data, data.afterEdit === true), sourceEdit: data.sourceEdit === true}
+        const restored = blindFile ? {...draftFrom(data, data.afterEdit === true), sourceEdit: data.sourceEdit === true, ...speechRecovery(data)}
           : {...data, acknowledged: false, correctionChecked: false, contentChecked: false};
         return [rowId, restored];
       }));
+      const previous = new Map(w.receipts.filter(Boolean).map(receipt => [receipt.rowId, receipt]));
+      for (const row of attributionDrafts) {
+        const draft = drafts.get(row.id);
+        const old = previous.get(row.id);
+        // Keep the editor's unfinished replacement. A cached copy of the obsolete content
+        // decision still needs clearing, even when the editor changed just the attribution reason.
+        const notice = {speechCatalogChanged:old.binding !== row.binding};
+        if (draft && (draft.status !== 'attribution' || workspace.draftChangesRecord(
+          {...draft, afterEdit:false, reason:old.reason, sourceIds:old.sourceIds}, old))) {
+          drafts.set(row.id, {...draft, ...speechRecovery(notice,'edited')});
+          continue;
+        }
+        const attribution = draft || row.attributionDraft;
+        drafts.set(row.id, {...draftFrom({status:'attribution', reason:attribution.reason, sourceIds:attribution.sourceIds}, false), ...speechRecovery(notice,'attribution')});
+      }
       currentId = validIds.has(w.currentId) ? w.currentId : null;
       const selected = currentRow();
       // Older work files saved the row but not the filter. A completed row

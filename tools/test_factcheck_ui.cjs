@@ -251,6 +251,85 @@ test('판단 저장 뒤 미검토 문장을 우선하고 보류 문장만 남으
   assert.match(el('counts').textContent, /추가 확인 1개/);
 });
 
+test('과거 재인용 판정을 열면 원발언만 초안에 남고 저장 파일과 보고서에 내용 승인이 남지 않는다', async t => {
+  const archived = require('./fixtures/reprinted-speech-work.json');
+  const [old] = archived.receipts;
+  const ledger = {id:'ledger',url:'https://audit.example/record',version:'확정본',locator:'1면',excerpt:'서명한 참여자 50명.'};
+  const expanded = [...archived.sources,ledger];
+  for (const extra of [{},{blindReview:{pairId:'a'.repeat(32),slot:'A'}}]) {
+    const p = open(t);
+    const cached = {rowId:old.rowId,data:{...old,factSpan:'',opinionSpan:''}};
+    await loadWorkspace(p,{...archived,...extra,sources:expanded,rowDrafts:[cached]});
+    const checked = id => [...p.el(id).querySelectorAll('input:checked')].map(e => e.value);
+    const assertPending = () => {
+      assert.equal(p.el('verdict').value,'attribution');
+      assert.equal(p.el('reason').value,old.reason);
+      assert.deepEqual(checked('row-sources'),['speech']);
+      assert.equal(p.el('content-status').value,'unverified');
+      assert.equal(p.el('content-reason').value,'');
+      assert.deepEqual(checked('content-sources'),[]);
+      assert.equal(p.el('acknowledged').checked,false);
+      assert.equal(p.el('content-checked').checked,false);
+      assert.match(p.el('prior-note').textContent,/원발언 자료.+초안/);
+      assert.match(p.el('prior-note').textContent,/자료 목록도 달라졌습니다/);
+      assert.match(p.el('counts').textContent,/추가 확인 1개/);
+      assert.equal(p.el('result-tag').textContent,'추가 확인 필요');
+    };
+    assertPending();
+    p.click('export-report');
+    const text = await p.snapshot();
+    assert.match(text,/근거 지지 0 · 반박 0 · 인용 속 사실 주장 충돌 0 · 미결 1/);
+    assert.ok(!text.includes(old.contentReason) && !text.includes(old.reason));
+    p.click('save-work');
+    const work = JSON.parse(await p.snapshot());
+    assert.deepEqual(work.receipts,[]);
+    assert.deepEqual(work.rowDrafts[0].data.contentSourceIds,[]);
+    assert.ok(!JSON.stringify(work).includes(old.contentReason));
+    assert.equal(p.w.JournalWorkspaceSnapshot.read(work).assessment.accuracy.adjudicated,0);
+    await loadWorkspace(p,work);
+    assertPending();
+    p.el('decision-form').requestSubmit();
+    assert.equal(p.el('acknowledged').validity.valueMissing,true);
+    p.click('save-work');
+    assert.deepEqual(JSON.parse(await p.snapshot()).receipts,[]);
+    p.click('acknowledged');
+    p.el('decision-form').requestSubmit();
+    p.click('save-work');
+    const [fresh] = JSON.parse(await p.snapshot()).receipts;
+    assert.equal(fresh.contentStatus,'unverified');
+    assert.equal(fresh.reason,old.reason);
+    assert.equal(fresh.contentSourceIds,undefined);
+    await loadWorkspace(p,{...archived,...extra,receipts:[fresh],sources:[...expanded,{...ledger,id:'amendment',excerpt:'후속 정정 공지'}]});
+    assert.match(p.el('prior-note').textContent,/이전 판단을 초안.+자료 목록이 달라졌습니다/);
+    assert.doesNotMatch(p.el('prior-note').textContent,/재인용|귀속 판단 이유만/);
+    const working = {...cached.data,contentSourceIds:['ledger'],contentReason:'서명한 50명을 셌다.'};
+    await loadWorkspace(p,{...archived,...extra,sources:[...archived.sources,ledger],rowDrafts:[{rowId:old.rowId,data:working}]});
+    assert.equal(p.el('content-status').value,'supported');
+    assert.equal(p.el('content-reason').value,working.contentReason);
+    assert.deepEqual(checked('content-sources'),['ledger']);
+    assert.equal(p.el('content-checked').checked,false);
+    assert.equal(p.el('acknowledged').checked,false);
+    assert.doesNotMatch(p.el('prior-note').textContent,/귀속 판단 이유만/);
+    assert.match(p.el('prior-note').textContent,/이전 내용 판정은 제외.+자료 목록도 달라졌습니다/);
+    p.click('export-report');
+    assert.ok(!(await p.snapshot()).includes(working.contentReason));
+    p.click('save-work');
+    const unfinished = JSON.parse(await p.snapshot());
+    assert.deepEqual(unfinished.receipts,[]);
+    assert.deepEqual(unfinished.rowDrafts[0].data.contentSourceIds,['ledger']);
+    await loadWorkspace(p,unfinished);
+    assert.match(p.el('prior-note').textContent,/이전 내용 판정은 제외.+자료 목록도 달라졌습니다/);
+  }
+  for (const [w,trust] of [[archived,false],[{...archived,receipts:[{...old,checksum:'changed'}]},true],
+    [{...archived,sources:[archived.sources[0],{...archived.sources[1],version:'변경판'}]},true]]) {
+    const p = open(t);
+    await loadWorkspace(p,w,trust);
+    assert.equal(p.el('verdict').value,'');
+    assert.equal(p.el('reason').value,'');
+    assert.equal(p.el('row-sources').querySelectorAll('input:checked').length,0);
+  }
+});
+
 test('참석자 수를 확인해도 기자가 덧붙인 사업비 주장은 결과 파일에서 미결로 남는다', async t => {
   const p = open(t);
   p.set('article', '사업비가 2배 증가한 가운데 위원장은 “참여자는 50명”이라고 말했다.');
