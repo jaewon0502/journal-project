@@ -42,6 +42,40 @@
     el.append(text('summary', label));
     return el;
   }
+  // Keep source coordinates in the original excerpt. The stored evidence is
+  // still the editor's exact quotation; choosing a line never records a score.
+  function sourceLinePicker(title, quote) {
+    const choices = select([]);
+    const label = field(title, choices);
+    label.hidden = true;
+    let previousSource;
+    function sync(source) {
+      if (previousSource !== source) {
+        previousSource = source;
+        const placeholder = new Option('행을 선택하세요', '');
+        placeholder.disabled = true;
+        choices.replaceChildren(placeholder);
+        const lines = (source?.excerpt || '').split(/\r\n|[\n\r\u2028\u2029]/u).map(line => line.trim());
+        const seen = new Set(), duplicates = new Set();
+        for (const line of lines) {
+          if (seen.has(line)) duplicates.add(line);
+          seen.add(line);
+        }
+        if (lines.filter(Boolean).length > 1) lines.forEach((line, i) => {
+          if (line && !duplicates.has(line)) choices.add(new Option((i + 1) + '행 · ' + line, line));
+        });
+        label.hidden = choices.length < 2;
+      }
+      choices.value = quote.value;
+      if (choices.selectedIndex < 0) choices.selectedIndex = 0;
+    }
+    choices.addEventListener('change', () => {
+      if (!choices.value) return;
+      quote.value = choices.value;
+      quote.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+    return {label,sync};
+  }
   function sourceLabel(s) {
     return [s.title || s.id, s.version, s.locator].filter(Boolean).join(' · ');
   }
@@ -187,7 +221,9 @@
       const r = assessment?.ratings?.[id];
       const entry = draft.entries[id];
       const needsEvidence = id === 'standards' && /^[0-3]$/.test(entry?.level) && !entry.compareSourceQuote.trim();
-      state.badge.textContent = needsEvidence ? '둘째 근거 필요 · 미평가' : entry ? '작성 중 · 집계 제외' : r ? scoreName(r.level) : '미평가';
+      const priorOverlap = id === 'standards' && entry?.legacyPrevious?.compareSourceQuote;
+      state.badge.textContent = needsEvidence ? '둘째 근거 필요 · 미평가' : priorOverlap ? '이전 근거 겹침 · 재확인 중' :
+        entry ? '작성 중 · 집계 제외' : r ? scoreName(r.level) : '미평가';
     }
     function showDimension(dim) {
       const section = disclosure('', 'dim-' + dim.id);
@@ -210,17 +246,19 @@
         const pending = draft.entries[dim.id];
         updateDimension(dim.id);
         body.replaceChildren();
+        if (standards && pending?.legacyPrevious?.compareSourceQuote)
+          body.append(text('p', '이전 점수는 집계에서 제외했습니다. 등록한 두 인용이 같은 위치에서 겹칠 수 있습니다. 각 주장의 행이나 구절을 다시 확인하세요.', 'callout'));
         if (savedRating && !pending) {
           const entries = [];
           if (savedRating.rowId) entries.push(['기사 구절 · 구간 ' + rowById.get(savedRating.rowId)?.n, savedRating.quote]);
-          if (savedRating.compareQuote) {
-            const n = rowById.get(savedRating.compareRowId)?.n;
-            entries.push([n ? '비교 구절 · 구간 ' + n : '비교 구절', savedRating.compareQuote]);
-          }
+          const compareNumber = rowById.get(savedRating.compareRowId)?.n;
+          const comparison = [compareNumber ? '비교 구절 · 구간 ' + compareNumber : '비교 구절', savedRating.compareQuote];
+          if (savedRating.compareQuote && !standards) entries.push(comparison);
           if (savedRating.sourceId) {
             const s = sourceById.get(savedRating.sourceId);
             entries.push([(standards ? '첫째 구절의 근거 · ' : '대조한 근거 · ') + sourceLabel(s), savedRating.sourceQuote, s]);
           }
+          if (savedRating.compareQuote && standards) entries.push(comparison);
           if (savedRating.compareSourceId) {
             const s = sourceById.get(savedRating.compareSourceId);
             entries.push(['둘째 구절의 근거 · ' + sourceLabel(s), savedRating.compareSourceQuote, s]);
@@ -281,8 +319,10 @@
         if (!standards) articleGroup.append(compare);
         articleGroup.append(field(standards ? '첫째 구절의 원자료와 확인 위치' : '원자료와 확인 위치', controls.sourceId),
           citation, field(standards ? '첫째 주장과 대조한 자료 구절' : '대조한 원자료 구절', controls.sourceQuote));
-        if (standards) articleGroup.append(compare, field('둘째 구절의 원자료와 확인 위치', controls.compareSourceId),
-          comparisonCitation, field('둘째 주장과 대조한 자료 구절', controls.compareSourceQuote));
+        const firstRows = standards && sourceLinePicker('첫째 근거로 인용할 원자료 행', controls.sourceQuote);
+        const secondRows = standards && sourceLinePicker('둘째 근거로 인용할 원자료 행', controls.compareSourceQuote);
+        if (standards) articleGroup.append(firstRows.label, compare, field('둘째 구절의 원자료와 확인 위치', controls.compareSourceId),
+          comparisonCitation, field('둘째 주장과 대조한 자료 구절', controls.compareSourceQuote), secondRows.label);
         if (!sources.length) articleGroup.append(text('p','단계를 기록하려면 위 원자료 관리에서 대조할 문서를 추가하세요.', 'rub-note'));
         const reasonLabel = field('판단 이유', controls.reason);
         const impactLabel = field('이 차이가 독자의 해석에 미치는 영향', controls.impact);
@@ -296,7 +336,7 @@
           if (d?.legacyPrevious) draft.entries[dim.id] = {...d.legacyPrevious, legacyPrevious: d.legacyPrevious};
           else delete draft.entries[dim.id];
           draft.activeId = ''; writeDraft();
-          feedback.textContent = d?.legacyPrevious ? '둘째 근거를 추가할 이전 판단으로 돌아갔습니다.' : d?.previous ? '이전 판단을 복원했습니다.' : '작성 중인 입력을 비웠습니다.';
+          feedback.textContent = d?.legacyPrevious ? '두 근거를 다시 대조할 이전 판단 초안으로 돌아갔습니다.' : d?.previous ? '이전 판단을 복원했습니다.' : '작성 중인 입력을 비웠습니다.';
           show(); biasSummary();
           body.querySelector('select, button')?.focus();
         });
@@ -317,6 +357,8 @@
           const link = sourceLink(sourceById.get(controls.sourceId.value));
           citation.replaceChildren(...(link ? [link] : []));
           if (standards) {
+            firstRows.sync(sourceById.get(controls.sourceId.value));
+            secondRows.sync(sourceById.get(controls.compareSourceId.value));
             const otherLink = sourceLink(sourceById.get(controls.compareSourceId.value));
             comparisonCitation.replaceChildren(...(otherLink ? [otherLink] : []));
           }

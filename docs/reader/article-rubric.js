@@ -110,6 +110,38 @@
     return passageText(a.locator) === passageText(b.locator);
   }
 
+  // This is the only newly invalid legacy score that kept both original citations.
+  class SplitClipOverlap extends Error {}
+
+  // Align the suffix of one registered clip with the prefix of another in linear time.
+  function joinedClipOverlap(first, second, left, right) {
+    const length = Math.min(first.length, second.length);
+    const minimum = 8;
+    if (length < minimum || !first.includes(second.slice(0, minimum), first.length - length)) return false;
+    const prefix = new Uint32Array(length);
+    for (let i = 1, n = 0; i < length; i++) {
+      while (n && second[n] !== second[i]) n = prefix[n - 1];
+      if (second[n] === second[i]) n++;
+      prefix[i] = n;
+    }
+    let width = 0;
+    for (let i = first.length - length; i < first.length; i++) {
+      while (width && second[width] !== first[i]) width = prefix[width - 1];
+      if (second[width] === first[i]) width++;
+    }
+    const offset = first.length - width;
+    // Only the intersection common to every possible placement of each selected
+    // quote is relevant. The clips may share context while their quotes are separate.
+    const start = Math.max(first.lastIndexOf(left), offset + second.lastIndexOf(right));
+    const end = Math.min(first.indexOf(left) + left.length, offset + second.indexOf(right) + right.length);
+    if (end - start < minimum) return false;
+    // Bare dates, figures and units may repeat in distinct table rows.
+    const quoteIntersection = first.slice(start, end);
+    if (/^\d+\p{L}*$/u.test(quoteIntersection)) return false;
+    const shared = quoteIntersection.replace(/\d+(?:[십백천만억조]*(?:원|달러|유로)|개월|년도?|월|일|명|건|회|개|톤|%p?|kg|g)?/giu, ' ');
+    return /\p{L}{2,}/u.test(shared);
+  }
+
   function comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote) {
     const firstClaim = passageText(quote), secondClaim = passageText(compareQuote);
     if (!firstClaim || !secondClaim || firstClaim === secondClaim) {
@@ -127,6 +159,10 @@
       // one location does not supply two citations, even through another catalogue ID.
       const texts = [source.excerpt, other.excerpt].map(passageText);
       const common = texts.filter(t => t.includes(left) && t.includes(right));
+      if (!common.length && (joinedClipOverlap(texts[0], texts[1], left, right) ||
+          joinedClipOverlap(texts[1], texts[0], right, left))) {
+        throw new SplitClipOverlap('같은 위치에서 등록한 두 발췌의 인용이 겹칠 수 있습니다. 두 주장이 함께 나온 원문을 등록하고 겹치지 않는 두 구절을 고르거나, 각 행의 확인 위치를 구분하세요.');
+      }
       if (left.includes(right) || right.includes(left) || (common.length && !common.some(t =>
         t.indexOf(left) + left.length <= t.lastIndexOf(right) || t.indexOf(right) + right.length <= t.lastIndexOf(left)))) {
         throw new Error('같은 자료 위치에서는 두 주장의 근거가 각각 드러나는 겹치지 않는 구절을 옮기세요.');
@@ -279,11 +315,18 @@
   function copyFields(raw) {
     return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
   }
-  function legacyStandardsDraft(report, sources, rating) {
-    if (!Number.isInteger(rating?.level) || 'compareSourceId' in rating || 'compareSourceQuote' in rating) return null;
+  function priorStandardsDraft(report, sources, rating) {
+    if (!Number.isInteger(rating?.level)) return null;
+    const singleSource = !('compareSourceId' in rating || 'compareSourceQuote' in rating);
+    if (!singleSource && rating.sourceId === rating.compareSourceId) return null;
     try {
-      return copyFields(ratingFor(dimensions.find(d => d.id === 'standards'), rating, report, sources, true));
-    } catch (_) { return null; }
+      const dim = dimensions.find(d => d.id === 'standards');
+      const checked = ratingFor(dim, rating, report, sources, singleSource);
+      return singleSource ? copyFields(checked) : null;
+    } catch (error) {
+      if (!(error instanceof SplitClipOverlap)) return null;
+      return copyFields({...rating, impact:rating.level ? string(rating.impact) : '', direction:rating.level ? string(rating.direction) : ''});
+    }
   }
   function restoreDraft(report, sources, raw, saved = null) {
     const valid = raw && matches(raw.binding, report);
@@ -304,18 +347,22 @@
           const checked = save(report, sources, {coreRowIds: [], ratings: {[dim.id]: d.previous}});
           clean.previous = checked.ratings[dim.id];
         } catch (_) {
-          if (dim.id === 'standards') clean.legacyPrevious = legacyStandardsDraft(report, sources, d.previous);
+          if (dim.id === 'standards') clean.legacyPrevious = priorStandardsDraft(report, sources, d.previous);
         }
       }
       if (dim.id === 'standards' && d.legacyPrevious && !clean.previous) {
         const prior = {...d.legacyPrevious, level: Number(d.legacyPrevious.level)};
-        delete prior.compareSourceId; delete prior.compareSourceQuote;
-        clean.legacyPrevious = legacyStandardsDraft(report, sources, prior);
+        // Earlier one-source drafts serialized these absent fields as empty strings.
+        if (!prior.compareSourceId && !prior.compareSourceQuote) {
+          delete prior.compareSourceId;
+          delete prior.compareSourceQuote;
+        }
+        clean.legacyPrevious = priorStandardsDraft(report, sources, prior);
       }
       entries[dim.id] = clean;
     }
     if (saved?.version === version && saved.coreBinding === bindCore(report) && matches(saved.binding, report)) {
-      const legacy = legacyStandardsDraft(report, sources, saved.ratings?.standards);
+      const legacy = priorStandardsDraft(report, sources, saved.ratings?.standards);
       if (legacy) {
         if (!entries.standards) entries.standards = {...legacy, legacyPrevious: legacy};
         else if (!entries.standards.previous) entries.standards.legacyPrevious ??= legacy;

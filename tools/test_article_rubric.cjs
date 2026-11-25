@@ -307,3 +307,60 @@ test('충돌 판정을 다시 작성하는 동안에는 미확인 시절 편향 
   assert.equal(rubric.evaluate(editing, sources, confirmed).bias.assessed, 0);
   assert.equal(rubric.evaluate(live([conflict], []), sources, confirmed).bias.maxLevel, 2);
 });
+
+test('같은 표 위치에서 한 당의 행을 나눈 두 발췌는 서로 다른 근거로 저장하거나 복원하지 않는다', () => {
+  const article = '가당은 예산 3억 원을 집행했다.\n나당은 예산 3억 원을 집행했다고 주장했다.';
+  const first = {id:'first',title:'2025 결산',url:'https://example.org/ledger.pdf',pdfPage:'7',version:'확정',
+    locator:'표 3 첫째 행',excerpt:'가당의 결산 · 2025년 지급액 3억 원'};
+  const second = {...first,id:'second',excerpt:'2025년 지급액 3억 원은 9월에 집행됐다.'};
+  function fixture(a, b, {left = a.excerpt, right = b.excerpt, level = 3} = {}) {
+    const sources = a.id === b.id ? [a] : [a,b];
+    const report = factcheck.report(article,sources);
+    const [claim,compare] = report.rows;
+    const rating = {level,rowId:claim.id,quote:claim.text,compareRowId:compare.id,compareQuote:compare.text,
+      sourceId:a.id,sourceQuote:left,compareSourceId:b.id,compareSourceQuote:right,
+      reason:'결산 기준과 기사에 쓰인 단정 표현을 두 당에 대해 대조했다.',impact:'나당의 지출만 미확인으로 읽힐 수 있다.'};
+    return {sources,report,rating,save:() => rubric.save(report,sources,{coreRowIds:[],ratings:{standards:rating}})};
+  }
+  for (const level of [0,1,2,3]) {
+    assert.throws(fixture(first,second,{level}).save,/두 발췌의 인용이 겹칠 수/);
+    assert.throws(fixture(second,first,{level}).save,/두 발췌의 인용이 겹칠 수/);
+  }
+  const old = fixture(first,second);
+  const stored = rubric.save(old.report,old.sources,{coreRowIds:[old.report.rows[0].id],ratings:{}});
+  stored.ratings.standards = old.rating;
+  const restored = workspace.review(old.report,old.sources,stored,null);
+  assert.ok(restored.dropped);
+  assert.deepEqual(restored.assessment.accuracy.coreRowIds,[old.report.rows[0].id]);
+  assert.equal(restored.assessment.bias.assessed,0);
+
+  const recovered = restored.draft.entries.standards;
+  assert.deepEqual(recovered.legacyPrevious,rubric.copyFields(old.rating));
+  assert.deepEqual(recovered,{...rubric.copyFields(old.rating),legacyPrevious:rubric.copyFields(old.rating)});
+  assert.deepEqual(workspace.review(old.report,old.sources,restored.assessment.saved,restored.draft).draft,restored.draft);
+  const editing = {binding:stored.binding,activeId:'standards',entries:{standards:{...recovered,reason:'편집 중인 새 이유'}}};
+  const reopened = workspace.review(old.report,old.sources,stored,editing);
+  assert.equal(reopened.draft.entries.standards.reason,'편집 중인 새 이유');
+  assert.deepEqual(reopened.draft.entries.standards.legacyPrevious,recovered.legacyPrevious);
+  assert.equal(workspace.review(old.report,old.sources,restored.assessment.saved,null).draft,null);
+  for (const invalid of [{sourceQuote:'없는 인용'}, {compareSourceId:'없는 id'}, {reason:''}, {impact:''}, {rowId:'없는 문장'}]) {
+    const damaged = {...stored,ratings:{standards:{...old.rating,...invalid}}};
+    assert.equal(workspace.review(old.report,old.sources,damaged,null).draft,null);
+  }
+  const differentArticle = factcheck.report(article + ' 추가 보도.',old.sources);
+  assert.equal(workspace.review(differentArticle,old.sources,stored,null).draft,null);
+
+  const a = {...first,excerpt:'가당 의결액은 3억 원. 다음은 각 당의 결산 기준.'};
+  const b = {...second,excerpt:'다음은 각 당의 결산 기준. 나당 집행액은 3억 원.'};
+  assert.equal(fixture(a,b,{left:'가당 의결액은 3억 원',right:'나당 집행액은 3억 원'}).save().ratings.standards.level,3);
+  const full = {...first,excerpt:'가당 의결액은 3억 원. 나당 집행액은 3억 원.'};
+  assert.equal(fixture(full,full,{left:'가당 의결액은 3억 원',right:'나당 집행액은 3억 원'}).save().ratings.standards.level,3);
+  for (const boundary of ['3억 원','300,000,000원','1,000,000킬로그램','2025년 11월 25일', '※ 표 3']) {
+    const prev = {...first,excerpt:'가당이 대조한 첫째 행 ' + boundary};
+    const next = {...second,excerpt:boundary + ' 나당이 대조한 둘째 행'};
+    assert.equal(fixture(prev,next).save().ratings.standards.level,3);
+  }
+  for (const changed of [{locator:'표 3 둘째 행'},{pdfPage:'8'}]) {
+    assert.equal(fixture(first,{...second,...changed}).save().ratings.standards.level,3);
+  }
+});

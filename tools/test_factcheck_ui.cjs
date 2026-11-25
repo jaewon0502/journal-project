@@ -1943,3 +1943,47 @@ test('다른 문장에서 발췌 교체나 수기 수정을 하면 이전 문장
     assert.deepEqual(work.receipts,[]);
   }
 });
+
+test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개하고 반복되거나 빈 행을 선택하지 않는다', async t => {
+  const p = open(t);
+  const source = {id:'ledger',title:'지출표',url:'https://example.org/ledger',version:'확정',
+    locator:'표 3',excerpt:'단위: 원\n\n가당  인쇄비 480만 원\n합계\n나당  인쇄비 480만 원\n합계'};
+  const article = '가당은 인쇄비를 지급했다.\n나당은 인쇄비를 지급했다고 밝혔다.';
+  await loadWorkspace(p,{format:'journal-local-factcheck-v1', article, articleDraft:article, demo:false, sources:[source], receipts:[], rowDrafts:[],
+    sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
+  function form(page) {
+    const panel = page.doc.querySelector('[data-section="dim-standards"]');
+    const field = name => [...panel.querySelectorAll('label')].find(l => l.firstElementChild?.textContent === name).lastElementChild;
+    const set = (name,value) => { const el = field(name); el.value = value; el.dispatchEvent(new page.w.Event(el.tagName === 'SELECT' ? 'change' : 'input',{bubbles:true})); };
+    return {panel,field,set};
+  }
+  let {panel,field,set} = form(p);
+  const rowIds = p.w.JournalFactcheck.report(article,[source]).rows.map(row => row.id);
+  set('판정 단계','2');
+  set('대조할 기사 구간',rowIds[0]);
+  set('비교할 다른 구간 불러오기',rowIds[1]);
+  set('첫째 구절의 원자료와 확인 위치','ledger');
+  set('둘째 구절의 원자료와 확인 위치','ledger');
+  const first = '첫째 근거로 인용할 원자료 행', second = '둘째 근거로 인용할 원자료 행';
+  assert.deepEqual([...field(first).options].slice(1).map(o => o.text),['1행 · 단위: 원','3행 · 가당 인쇄비 480만 원','5행 · 나당 인쇄비 480만 원']);
+  set(first,'가당  인쇄비 480만 원');
+  assert.equal(field('둘째 주장과 대조한 자료 구절').value,source.excerpt);
+  set(second,'나당  인쇄비 480만 원');
+  set('판단 이유','같은 결산표에서 두 당 지급을 모두 확인했다.');set('이 차이가 독자의 해석에 미치는 영향','한쪽의 지출만 미확인으로 읽힐 수 있다.');
+  p.click('save-work'); const draft=JSON.parse(await p.snapshot());
+  assert.equal(draft.articleAssessment?.ratings?.standards,undefined);
+  const resumed=open(t);await loadWorkspace(resumed,draft);
+  ({panel,field,set}=form(resumed));
+  assert.equal(field(first).value,'가당  인쇄비 480만 원');
+  assert.equal(field(second).value,'나당  인쇄비 480만 원');
+  set('둘째 주장과 대조한 자료 구절','나당  인쇄비');
+  assert.equal(field(second).value,'');
+  set(second,'나당  인쇄비 480만 원');
+  panel.querySelector('form').requestSubmit();
+  resumed.click('save-work'); const rating=JSON.parse(await resumed.snapshot()).articleAssessment.ratings.standards;
+  assert.equal(rating.level,2);
+  assert.equal(rating.sourceQuote,'가당  인쇄비 480만 원');
+  assert.equal(rating.compareSourceQuote,'나당  인쇄비 480만 원');
+  assert.deepEqual([...panel.querySelectorAll('.rub-evidence dt')].slice(0,4).map(dt => dt.textContent.split(' · ')[0]),
+    ['기사 구절','첫째 구절의 근거','비교 구절','둘째 구절의 근거']);
+});
