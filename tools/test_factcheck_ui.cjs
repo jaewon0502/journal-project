@@ -1622,8 +1622,7 @@ test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가�
   assert.ok((await resumed.snapshot()).includes('원표와 대조함'));
 });
 
-test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에 원표의 머리글과 연간 행, 분모 주석을 함께 남긴다', async t => {
-  const p = open(t);
+function employmentOverviewFixture() {
   const headers = ['1. 전체 경제활동인구 총괄', '                                                                          (단위: 천명)',
     '               15세 이상 인구                           경제활동 고용률', '                                                                     1)',
     '                                                                          실업률2)', '                     경 제 활 동 인 구          비 경 제 참 가 율',
@@ -1635,6 +1634,12 @@ test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에
   const definition = '주: 1) 취업자/15세이상인구×100';
   const document = [...headers, otherYear, earlier, later, quarter, definition, '   2) 실업자/경제활동인구×100, (        )내는 계절조정 실업률'];
   const expected = [...headers, '[…]', earlier, later, '[…]', definition].join('\n');
+  return {document, expected, definition, quarter};
+}
+
+test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에 원표의 머리글과 연간 행, 분모 주석을 함께 남긴다', async t => {
+  const p = open(t);
+  const {document, expected, definition, quarter} = employmentOverviewFixture();
   const question = '2024년 연간 15세 이상 고용률은 2023년보다 얼마나 올랐나?';
   p.set('article',question); p.el('article-form').requestSubmit(); p.click('go-find');
   p.set('document-text',document.join('\n')); p.set('document-query',question); p.click('find-passages');
@@ -1656,6 +1661,20 @@ test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에
   p.click('source-save-link'); p.click('save-work');
   const saved = JSON.parse(await p.snapshot());
   assert.equal(saved.sources[0].excerpt,expected); assert.equal(saved.sources[0].locator,location); assert.equal(saved.receipts.length,0);
+});
+
+test('두 쪽의 원문 발췌만 제공하면 고용률 카드에서 인원표를 연결하지 않는다', t => {
+  const p = open(t);
+  const {document} = employmentOverviewFixture();
+  const rates = ['2024년 연간 고용동향','’23년  ’24년','취 업 자(천명)  28,416  28,576',
+    '15세이상 고용률(%)  62.6  62.7','(전년대비 증감, %p)  (0.5) (0.1)'];
+  const query = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+  p.set('article',query); p.el('article-form').requestSubmit(); p.click('go-find');
+  p.set('document-text',[...rates,'\f',...document].join('\n')); p.click('find-passages');
+  const card = p.el('finder-results').querySelector('.annual-rate');
+  assert.match(card.textContent,/약 0\.16%/);
+  assert.equal(card.querySelector('.annual-counts'),null);
+  assert.equal(p.el('source-excerpt').value,''); assert.equal(p.el('verdict').value,'');
 });
 
 test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치를 볼 수 있고 판정은 편집자가 한다', t => {

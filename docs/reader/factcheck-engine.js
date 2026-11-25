@@ -25,7 +25,9 @@
   const rotate = (value, count) => (value >>> count) | (value << (32 - count));
   function digest(value) {
     // JSON escaping preserves lone UTF-16 surrogates, which TextEncoder alone replaces.
-    const raw = JSON.stringify(value);
+    return sha256Text(JSON.stringify(value));
+  }
+  function sha256Text(raw) {
     const bytes = new TextEncoder().encode(raw);
     const buffer = new Uint8Array(Math.ceil((bytes.length + 9) / 64) * 64);
     buffer.set(bytes);
@@ -1012,7 +1014,7 @@
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, filingSourceCaution, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest});
+  const api = Object.freeze({prepare, decide, report: prepare, filingSourceCaution, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest, sha256Text});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);

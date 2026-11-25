@@ -301,15 +301,25 @@
     const tail = subject && rest.slice(subject[0].length);
     const supported = !separateContext && current === previous + 1 && age && !subject.groups.ageLabel &&
       subject.groups.metric === '고용률' && !/전월|전년/u.test(tail) && !tail.replace(rateTailTerms,'');
+    const passages = labourOverview(text, previous, current, supported ? age : '');
+    if (!passages) return null;
+    return {passages,state:'ordinary',usedArticleContext:false,needsPublicationDate:false,
+      gap:passages.length ? null : '같은 대상의 연간 두 행과 고용률 분모 각주를 한 표에서 특정하지 못했습니다. 원표의 기간·대상·열을 확인하세요.',
+      ...(passages.length && {notice:'두 해의 연간 행과 고용률 분모 각주를 찾았습니다. 고용률 열에서 두 표시값의 차이(%p)와 상대 변화율(%)을 구별하세요.'})};
+  }
+
+  function labourOverview(text, previous, current, age, requirePageOpening = false) {
     const caption = /^(?:\d+[.)]|표\d+)?전체경제활동인구총괄$/u;
-    let table = null, paragraph = 0, titles = 0, hit = null;
+    let table = null, paragraph = 0, titles = 0, hit = null, pageOpening = true;
     for (const raw of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
-      if (raw.includes('\f')) table = null;
+      if (raw.includes('\f')) { table = null; pageOpening = true; }
       if (!raw.trim()) continue;
       const row = {paragraph:++paragraph,text:raw}, line = compactLabour(raw);
+      const firstOnPage = pageOpening;
+      pageOpening = false;
       if (caption.test(line)) {
         titles++;
-        table = supported ? {header:[row],years:new Map(),width:0,subannual:false} : null;
+        table = age && (!requirePageOpening || firstOnPage) ? {header:[row],years:new Map(),width:0,subannual:false} : null;
         continue;
       }
       if (!table) continue;
@@ -337,7 +347,7 @@
         table.subannual = true;
         continue;
       }
-      const definition = /^(?:주(?:석)?[:：]?)?\d+[)]취업자(?:수)?\/([^/]+)인구[×x*]100[.]?$/iu.exec(line);
+      const definition = /^(?:주(?:석)?[:：]?)?(\d+)[)]취업자(?:수)?\/([^/]+)인구[×x*]100[.]?$/iu.exec(line);
       const header = table.header.slice(1).map(r => compactLabour(r.text)).join('');
       const earlier = table.years.get(previous), later = table.years.get(current);
       const percentColumns = (header.match(/\(%\)/gu) || []).length;
@@ -346,7 +356,7 @@
       // the labour force, unemployed and inactive, followed by percentage columns.
       const expectedWidth = 3 + percentColumns + Number(header.replace('비경제활동인구','').includes('경제활동인구')) +
         Number(header.includes('비경제')) + Number(header.includes('실업자'));
-      if (definition?.[1] === age && header.includes(age+'인구') && header.includes('고용률') &&
+      if (definition?.[2] === age && header.includes(age+'인구') && header.includes('고용률' + definition[1] + ')') &&
           percentColumns && table.width === expectedWidth && header.includes('취업자') &&
           earlier && later && Math.abs(later.paragraph - earlier.paragraph) === 1) {
         hit = {...later,matched:[String(current)],context:[...table.header,earlier,row],
@@ -354,11 +364,51 @@
       }
       table = null;
     }
-    if (!titles) return null;
-    const passages = titles === 1 && hit ? [hit] : [];
-    return {passages,state:'ordinary',usedArticleContext:false,needsPublicationDate:false,
-      gap:passages.length ? null : '같은 대상의 연간 두 행과 고용률 분모 각주를 한 표에서 특정하지 못했습니다. 원표의 기간·대상·열을 확인하세요.',
-      ...(passages.length && {notice:'두 해의 연간 행과 고용률 분모 각주를 찾았습니다. 고용률 열에서 두 표시값의 차이(%p)와 상대 변화율(%)을 구별하세요.'})};
+    return titles ? (titles === 1 && hit ? [hit] : []) : null;
+  }
+
+  // Only this nested layout identifies fields 1, 3 and 7 in each annual row.
+  // The same years must also match the printed employed series and rate series.
+  const overviewHeaders = ['1.전체경제활동인구총괄','(단위:천명)','15세이상인구경제활동고용률','1)',
+    '실업률2)','경제활동인구비경제참가율','취업자실업자활동인구(%)(%)(%)'];
+  // Cross-page count calculations are validated only for this complete release
+  // (2024 annual employment, Poppler -layout). A similar-looking table can be
+  // provisional, regional or from a later release with the same rounded rates.
+  const labourLayoutSha256 = 'c49ed71c04e00adc0f3ecff89fe9a5fd646f403870b5e6eb0b18e0d2673ad53b';
+  const labourPdfSha256 = '69325b4d227fc0cbe62e1ff6e26d59eccbeb35cbd0d40a1b15f7b5bbe0ed1a93';
+  function annualCountEvidence(text, passage, pdfSha256) {
+    const rate = passage.annualRate;
+    if (rate?.requestedUnit !== '%' || rate.population !== '15세이상' || rate.measure !== '고용률') return null;
+    if (!text.includes('\f') || (pdfSha256 && pdfSha256 !== labourPdfSha256)) return null;
+    // document-file joins the PDF page strings with LF+FF+LF. Its original
+    // pdftotext stream has FF between pages and one final FF.
+    const layout = text.endsWith('\f') ? text : text.replaceAll('\n\f\n','\f') + '\f';
+    const engine = node ? require('./factcheck-engine.js') : root.JournalFactcheck;
+    if (engine?.sha256Text?.(layout) !== labourLayoutSha256) return null;
+    const [overview] = labourOverview(text, rate.previous.year, rate.current.year, rate.population, true) || [];
+    if (!overview) return null;
+    const headers = overview.context.slice(0,-2);
+    if (headers.length !== overviewHeaders.length ||
+        !headers.every((row,i) => compactLabour(row.text) === overviewHeaders[i])) return null;
+    const lines = text.split(/\r\n|[\n\r\u2028\u2029]/u).filter(line => line.trim());
+    const employedSeries = /^취\s*업\s*자\s*\(천명\)\s+(.+)$/u.exec(lines[rate.headerParagraph]?.trim());
+    if (!employedSeries) return null;
+    const employedCells = employedSeries[1].split(/\s+/u);
+    const integer = /^(?:\d{1,3}(?:,\d{3})+|\d{1,3})$/u;
+    if (employedCells.length !== passage.years.length || !employedCells.every(cell => integer.test(cell))) return null;
+    const annual = [overview.context.at(-2), overview];
+    const counts = [];
+    for (const [index, level] of [rate.previous,rate.current].entries()) {
+      const cells = annual[index].text.trim().split(/\s+/u);
+      if (cells.length !== 9 || !cells.slice(1,6).every(cell => integer.test(cell)) ||
+          !cells.slice(6).every(cell => /^\d{1,3}\.\d$/u.test(cell)) || cells[7] !== level.value ||
+          cells[3] !== employedCells[passage.years.indexOf(level.year)]) return null;
+      const employed = Number(cells[3].replaceAll(',','')), population = Number(cells[1].replaceAll(',',''));
+      if (!Number.isSafeInteger(population) || employed < 1 || employed >= population ||
+          (100 * employed / population).toFixed(1) !== level.value) return null;
+      counts.push({year:level.year, employed, population});
+    }
+    return {counts, rows:[...headers,...annual,overview.context.at(-1)]};
   }
 
   function labourSummary(text, question, separateContext) {
@@ -521,7 +571,7 @@
       state:'ordinary', usedArticleContext:false, needsPublicationDate:false, wageBasis:true};
   }
 
-  function search(documentText, rawQuery, {articleContext = ''} = {}) {
+  function search(documentText, rawQuery, {articleContext = '', pdfSha256} = {}) {
     const query = finder.passageQuery(rawQuery);
     const context = articleContext.trim() === rawQuery.trim() ? query.trim() : articleContext.trim();
     const attributed = transcript.lookup(documentText, query);
@@ -579,6 +629,10 @@
     let gap = dated ? dated.gap || null : coverageNotice(documentText, query);
     const yearMatrix = table.state === 'ordinary' ? columns.parseYearMatrix(documentText) : null;
     let passages = dated ? dated.passages : table.hits;
+    if (passages.length === 1 && passages[0].annualRate) {
+      const supporting = annualCountEvidence(documentText, passages[0], pdfSha256);
+      if (supporting) passages = [{...passages[0], annualCounts:supporting}];
+    }
     if (!dated && table.state !== 'candidates') {
       // The cell resolver checks only the query. Additional article context
       // may restrict the population or period beyond what this row describes.

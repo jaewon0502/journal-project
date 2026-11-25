@@ -2,6 +2,7 @@
 const assert = require('node:assert/strict');
 const {createHash} = require('node:crypto');
 const {readFileSync} = require('node:fs');
+const {search} = require('../../docs/reader/evidence-search.js');
 const gold = require('./transfer-gold.json');
 
 function replay(bytes) {
@@ -57,6 +58,45 @@ function replay(bytes) {
       maxRate:100 * (employed + 0.5) / (population - 0.5)};
   }
   const before = annual(2023,11), after = annual(2024,12);
+  // The editor must resolve both source locations from this full layout.
+  const text = bytes.toString('utf8');
+  const question = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+  const {passages} = search(text,question);
+  assert.equal(passages.length,1);
+  assert.equal(passages[0].text.trim(),line(32,38));
+  const supporting = passages[0].annualCounts;
+  for (let year = 2021; year <= 2024; year++) {
+    const q = year + '년 연간 15세 이상 고용률은 ' + (year - 1) + '년보다 상대 0.1% 증가했다.';
+    const prior = annual(year - 1, 8 + year - 1 - 2020), current = annual(year, 8 + year - 2020);
+    assert.deepEqual(search(text, q).passages[0]?.annualCounts?.counts,
+      [prior, current].map(v => ({year:v.year, employed:v.employedThousands, population:v.populationThousands})));
+  }
+  assert.deepEqual(supporting?.counts,[before,after].map(value => ({
+    year:value.year, employed:value.employedThousands, population:value.populationThousands
+  })));
+  assert.deepEqual(supporting.rows.map(row => row.text.trim()),[1,2,3,4,5,6,7,11,12,55].map(n => line(42,n)));
+  const journalSourceText = text.slice(0,-1).split('\f').join('\n\f\n');
+  assert.deepEqual(search(journalSourceText,question,{pdfSha256:gold.pdfSha256}).passages[0].annualCounts.counts,supporting.counts);
+  assert.equal(search(journalSourceText,question,{pdfSha256:'0'.repeat(64)}).passages[0].annualCounts,undefined);
+  for (const q of [question.replace('15세 이상','15~64세'),question.replace('연간','12월'),
+    question.replace('연간','연간 여성'),question.replace('2023년','2022년'),question.replace('고용률','실업률')]) {
+    assert.ok(search(text,q).passages.every(hit => !hit.annualCounts),q);
+  }
+  assert.ok(search(text,question,{articleContext:'서울 여성 조사'}).passages.every(hit => !hit.annualCounts));
+
+  const originalPage = pages[41].join('\n'), note = line(42,55);
+  const changedPages = [
+    originalPage.replace(note,'주: 3) 취업자/15세이상인구×100\n   1) 취업자/생산가능인구×100'),
+    '2025년 3월 고용동향\n서울특별시\n소급 개정 통계표(잠정)\n\f' + originalPage.replace('45,570','45,610'),
+    originalPage.replace(note,note + '\n   3) 이 표의 2024년 연간 값은 잠정치이며 본문은 확정치임.')
+  ];
+  for (const changed of changedPages) {
+    const altered = text.replace(originalPage,() => changed);
+    assert.notEqual(altered,text);
+    const [candidate] = search(altered,question,{pdfSha256:gold.pdfSha256}).passages;
+    assert.equal(candidate.annualRate.current.value,'62.7');
+    assert.equal(candidate.annualCounts,undefined);
+  }
   const relative = (oldValue, newValue) => 100 * (newValue - oldValue) / oldValue;
   function interval(min, max) {
     return {lowerPct:Math.floor(min * 1e6) / 1e6, upperPct:Math.ceil(max * 1e6) / 1e6,

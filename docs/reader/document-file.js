@@ -146,5 +146,5 @@
       if (request === pdfRequest) status.textContent = error.message;
     }
   });
-  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo, excerptLocation});
+  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo, excerptLocation, get pdfSha256() { return current?.hash; }});
 })(globalThis);

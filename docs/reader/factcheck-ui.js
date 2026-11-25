@@ -1227,6 +1227,32 @@
       button('머리글과 두 변경일을 발췌', () => useExcerpt(excerpt, location)));
     return card;
   }
+  function annualCountSource(evidence) {
+    const {counts:[previous,current], rows} = evidence;
+    const section = node('section', undefined, 'annual-counts');
+    section.append(node('h4', '취업자 수와 15세 이상 인구로 다시 계산하기'));
+    const rate = ({employed,population}) => employed / population;
+    const relative = (before,after) => (after / before - 1) * 100;
+    const countLabel = n => n.toLocaleString('ko-KR') + '천 명';
+    for (const entry of [previous,current]) {
+      section.append(node('p', entry.year + '년 · 취업자 ' + countLabel(entry.employed) + ' ÷ 15세 이상 인구 ' +
+        countLabel(entry.population) + ' × 100 = 약 ' + (rate(entry) * 100).toFixed(3) + '%'));
+    }
+    const low = ({employed,population}) => (employed - 0.5) / (population + 0.5);
+    const high = ({employed,population}) => (employed + 0.5) / (population - 0.5);
+    section.append(node('p', '두 해의 인원으로 계산한 상대 변화율은 약 ' +
+      relative(rate(previous),rate(current)).toFixed(5) + '%입니다.'),
+      node('p', '각 인원이 가장 가까운 천 명으로 반올림됐다고 가정하면 상대 변화율은 약 ' +
+        relative(high(previous),low(current)).toFixed(5) + '%~' + relative(low(previous),high(current)).toFixed(5) +
+        '%입니다. 이 범위에는 표본오차가 포함되지 않습니다.'));
+    const snippet = citationRows(rows);
+    const location = rows[0].text.trim() + ' · ' + previous.year + '년·' + current.year +
+      '년 연간 행 · 취업자·15세 이상 인구 열(천 명) · 고용률 분모 각주';
+    section.append(node('blockquote', snippet.text, 'verbatim'));
+    window.JournalDocumentFile?.appendPageInfo(section, rows[0].paragraph);
+    section.append(button('두 해의 인원과 분모 각주를 근거로 사용', () => useExcerpt(snippet, location)));
+    return section;
+  }
   function annualRateCard(passage) {
     const {population, measure, previous, current, change} = passage.annualRate;
     const label = population.replace(/세(이상|이하)/u, '세 $1') + ' ' + measure;
@@ -1262,13 +1288,16 @@
         calculation.append(node('p', '각 비율이 표시 자릿수에서 반올림됐다면 두 표시값만으로 가능한 상대 변화율의 범위는 약 ' +
           Number(lower.toFixed(2)) + '%~' + Number(upper.toFixed(2)) + '%입니다.'));
       }
-      calculation.append(node('p', '반올림 전 비율로 계산한 상대 변화율은 달라질 수 있습니다. 기사 수치가 맞는지 판정하려면 더 정밀한 비율이나 두 해의 분자와 분모를 대조하세요.'));
+      calculation.append(node('p', passage.annualCounts ? '아래 인원표에서 두 해의 취업자 수와 15세 이상 인구를 대조할 수 있습니다.' :
+        '반올림 전 비율로 계산한 상대 변화율은 달라질 수 있습니다. 기사 수치가 맞는지 판정하려면 더 정밀한 비율이나 두 해의 분자와 분모를 대조하세요.'));
     } else calculation.append(node('p', '이전 해의 비율이 0%여서 상대 변화율을 계산할 수 없습니다.'));
     const entries = [...passage.context, passage];
     const snippet = citationRows(entries);
     const cited = change ? '연도 머리글과 두 행' : '연도 머리글과 비율 행';
     card.append(calculation, node('p', '붙여넣은 본문에서 발췌할 ' + cited), node('blockquote', snippet.text, 'verbatim'),
       button(cited + '을 근거로 사용', () => useExcerpt(snippet, location)));
+    window.JournalDocumentFile?.appendPageInfo(card, passage.paragraph);
+    if (passage.annualCounts) card.append(annualCountSource(passage.annualCounts));
     return card;
   }
   function findPassages() {
@@ -1279,7 +1308,7 @@
     if (!text.trim() || !query) return message('finder-status', '원자료 본문과 찾을 표현을 입력하세요.', true);
     const articleContext = byId('search-context').value.trim();
     const separateContext = articleContext && articleContext !== query;
-    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext});
+    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext, pdfSha256:window.JournalDocumentFile?.pdfSha256});
     const passages = lookup.passages;
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
@@ -1334,7 +1363,7 @@
     for (const passage of passages) {
       if (passage.changeRows || passage.annualRate) {
         const card = passage.changeRows ? priorChangeCard(passage) : annualRateCard(passage);
-        window.JournalDocumentFile?.appendPageInfo(card, passage.paragraph);
+        if (passage.changeRows) window.JournalDocumentFile?.appendPageInfo(card, passage.paragraph);
         results.append(card);
         continue;
       }

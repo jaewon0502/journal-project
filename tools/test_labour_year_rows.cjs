@@ -41,7 +41,19 @@ test('두 연도·연간 기간·대상·같은 쪽 표의 구조와 분모를 �
   abstains(doc,question,{articleContext:'서울의 남성으로 범위를 좁혔다.'});
   for (const bad of [doc.replace(footnote,''),doc.replace(footnote,'\f'+footnote),
     doc.replace(footnote,footnote.replace('15세이상인구','경제활동인구')),
+    doc.replace(footnote,footnote.replace('1)','3)')+'\n   1) 취업자/생산가능인구×100'),
     doc.replace(earlier,''),doc.replace(current,quarter),doc.replace(current,current+'\n'+current),
     doc.replace(earlier,earlier.replace('   64.3','')).replace(current,current.replace('   64.5','')),
     doc.replace(header[2],'여성 '+header[2]),doc+'\n'+doc]) abstains(bad);
+});
+
+const rateTable = ['2024년 연간 고용동향','’23년  ’24년','취 업 자(천명)  28,416  28,576',
+  '15～64세 고용률(%)  69.2  69.5','15세이상 고용률(%)  62.6  62.7',
+  '(전년대비 증감, %p)  (0.5) (0.1)'].join('\n');
+const relative = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+const full = rateTable + '\n\f\n' + doc;
+test('완전한 발행물 없이 두 표의 수치와 열만 일치하면 다른 쪽의 인원표를 연결하지 않는다', () => {
+  const [hit] = search(full,relative).passages;
+  assert.equal(hit.annualRate.current.value,'62.7');
+  assert.equal(hit.annualCounts,undefined);
 });
