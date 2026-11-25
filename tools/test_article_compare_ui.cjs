@@ -1250,3 +1250,146 @@ test('이전 대조 기록에 한쪽 근거로 매긴 단계만 남아 있어도
   const files = [...p.el('output').querySelectorAll('details')].find(s=>s.firstElementChild.textContent.includes('대응표 2개 꺼내기'));
   assert.deepEqual([...files.querySelectorAll('button')].map(b=>b.textContent),archive.items.map(i=>i.name+' 저장'));
 });
+
+test('두 편집자의 기사 오류를 정정·대응 미확인으로 따로 대조하고 진행자 파일에 보관한다', async t => {
+  const example = require('../docs/reader/revision-evidence-example.js');
+  const series = require('../docs/reader/revision-series.js');
+  const items = await example.files();
+  const full = page(t, '#blind-revision');
+  full.selectFiles('blind-bundle-files', items.map(item => ({name:item.name, text:async () => item.raw})));
+  await t.waitFor(() => assert.ok(full.el('agreement-export')));
+  const exportFull = captureDownload(t, full);
+  const publicSummary = await exportFull(full.el('agreement-export'));
+  const focus = '#review=' + series.reviewId(publicSummary) + '&focus=corrections';
+  const edit = (view, control, value) => {
+    control.value = value;
+    control.dispatchEvent(new view.w.Event(control.tagName === 'SELECT' ? 'change' : 'input', {bubbles:true}));
+  };
+  const form = view => {
+    const group = view.el('output').querySelector('.claim-corrections');
+    const row = group.querySelector('[data-correction-before="0"]');
+    assert.equal(group.querySelectorAll('[data-correction-before]').length, 1);
+    return {row, group, summary:group.querySelector('[data-correction-summary]'),
+      state:row.querySelector('[data-correction-state]'), target:row.querySelector('[data-correction-target]'),
+      reason:row.querySelector('[data-correction-reason]'), preview:row.querySelector('[data-correction-preview]'),
+      save:view.el('output').querySelector('[data-retention-save]')};
+  };
+  const input = original => [{name:'진행자용.json', text:async () => JSON.stringify(original)}];
+  const a = form(full);
+  assert.match(a.row.textContent,/첫 편집자.*둘째 편집자/s);
+  assert.match(a.row.textContent,/100개 도서관 중 20곳/);
+  assert.match(a.summary.textContent, /정정 확인 0\/1개.*대응 구절을 찾지 못함 0개.*검토 남음 1개/);
+  const originalFact = full.el('joint-facts').querySelector('[data-retention-before="1"]');
+  edit(full, originalFact.querySelector('[data-retention-state]'), 'open');
+  edit(full, originalFact.querySelector('[data-retention-reason]'), '둘째 구절의 시설 수를 다시 확인한다.');
+  edit(full, a.state, 'persists'); edit(full, a.target, '1'); edit(full, a.reason, '가상 조사표를 대조했다.');
+  a.save.click();
+  await t.waitFor(() => assert.equal(full.w.document.activeElement, a.target));
+  assert.match(a.row.textContent, /두 편집자가 기사 서술을 반박한 수정본 구절/);
+  edit(full, a.state, 'corrected'); edit(full, a.target, '3');
+  a.save.click();
+  await t.waitFor(() => assert.match(a.row.textContent,/두 편집자가 구절 전체를 지지한 수정본 구절/));
+  edit(full, a.target, '1');
+  assert.match(a.preview.textContent, /첫 편집자.*표 1.*둘째 편집자/s);
+  const reason = '시립도서관 100곳 중 연장한 20곳을 가상 조사표 1에서 대조했다.';
+  edit(full, a.reason, reason);
+  assert.match(a.row.querySelector('summary').textContent, /저장 전/);
+  assert.match(a.summary.textContent, /정정 확인 0\/1개/);
+  const corrected = await exportFull(a.save);
+  assert.deepEqual(corrected.correctionNotes, [{before:0, after:0, status:'corrected', reason}]);
+  assert.match(a.summary.textContent, /정정 확인 1\/1개.*검토 남음 0개/);
+  assert.deepEqual(await exportFull(full.el('agreement-export')), publicSummary);
+  assert.ok(!JSON.stringify(publicSummary).includes(reason));
+  const focused = page(t, focus);
+  focused.selectFiles('blind-bundle-files', input(corrected));
+  await t.waitFor(() => assert.match(focused.el('review-target-status').textContent, /복원/));
+  const f = form(focused);
+  assert.equal(focused.w.document.activeElement, f.summary);
+  assert.equal(f.state.value, 'corrected'); assert.equal(f.reason.value, reason);
+  edit(focused, f.target, '2');
+  assert.equal(f.state.value, '', '다른 수정본 구절을 고르면 저장한 정정 판단은 다시 선택한다.');
+  assert.equal(f.reason.value, reason, '작성한 이유는 초안으로 남긴다.');
+  f.save.click();
+  await t.waitFor(() => assert.equal(focused.w.document.activeElement, f.state));
+  edit(focused, f.state, 'absent');
+  assert.equal(f.target.value, ''); assert.equal(f.target.disabled, true);
+  const why = '모의 대조. 수정본 전문과 제목을 읽고 대응 주장을 찾지 못했다고 기록했다.';
+  edit(focused, f.reason, why);
+  const other = await captureDownload(t, focused)(f.save);
+  assert.deepEqual(other.notes, corrected.notes);
+  assert.deepEqual(other.contextNotes, corrected.contextNotes);
+  assert.deepEqual(other.correctionNotes, [{before:0, after:null, status:'absent', reason:why}]);
+  assert.match(f.summary.textContent, /정정 확인 0\/1개.*대응 구절을 찾지 못함 1개/);
+  const reload = page(t, '#blind-revision');
+  reload.selectFiles('blind-bundle-files', input(other));
+  await t.waitFor(() => assert.ok(reload.el('agreement-export')));
+  assert.equal(form(reload).state.value, 'absent');
+  const practice = page(t, focus + '&example=library');
+  await t.waitFor(() => assert.ok(practice.el('output').querySelector('.claim-corrections')));
+  const demo = form(practice);
+  assert.equal(demo.row.open, true);
+  assert.equal(practice.w.document.activeElement, demo.row.querySelector('summary'));
+});
+
+test('저장한 정정 문구와 일치하는 유일한 수정본 구절을 한 번에 열고 진행자 판단은 따로 받는다', async t => {
+  const fixed = '올해 사업비는 10억 원이다.';
+  const original = '올해 사업비는 15억 원이다.';
+  const second = '내년 사업비는 20억 원이다.';
+  async function show(before, after, corrections, revisedStatus = 'fact') {
+    const p = page(t, '#blind-revision');
+    const work = lines => ({...workspace(lines.join('\n')), sources:[{id:'table', title:'가상 시의 예산표',
+      url:'https://example.invalid/table', version:'초판', locator:'표 1', excerpt:'올해 사업비는 10억 원이다.'}]});
+    const files = [];
+    for (let i = 0; i < 2; i++) {
+      const {key, packets} = await p.w.JournalBlindRevision.prepare(work(before), work(after));
+      for (const role of ['before','after']) {
+        const payload = packets[key.mapping[role].slot];
+        const rows = engine.prepare(payload.article, payload.sources).rows;
+        payload.receipts = rows.map((row, n) => {
+          const correction = role === 'before' ? corrections[i][n] : null;
+          return engine.decide(row, {status:role === 'before' ? 'contradicted' : revisedStatus,
+            acknowledged:true, sourceIds:[payload.sources[0].id], reason:(i + 1) + '번째 편집자가 표 1을 확인했다.',
+            ...(correction ? {correction, correctionChecked:true} : {})}, payload.sources);
+        });
+      }
+      for (const [index, data] of [key, packets.A, packets.B].entries())
+        files.push({name:'작업-' + i + '-' + index + '.json', text:async () => JSON.stringify(data)});
+    }
+    p.selectFiles('blind-bundle-files', files);
+    await t.waitFor(() => assert.ok(p.el('agreement-export')));
+    return p;
+  }
+  const a = await show([original], [fixed], [[fixed], [fixed]]);
+  const box = a.el('joint-facts'), candidates = box.querySelectorAll('[data-correction-candidate]');
+  assert.equal(candidates.length, 1);
+  const row = box.querySelector('[data-correction-before="0"]'), state = row.querySelector('[data-correction-state]');
+  const target = row.querySelector('[data-correction-target]'), reason = row.querySelector('[data-correction-reason]');
+  assert.match(row.textContent, /첫 편집자·둘째 편집자의 근거 대조 정정 문구/);
+  assert.equal(target.value, '');
+  row.open = true;
+  candidates[0].click();
+  assert.equal(target.value, '1');
+  assert.equal(state.value, '');
+  assert.equal(reason.value, '');
+  const preview = row.querySelector('[data-correction-preview]');
+  assert.equal(a.w.document.activeElement, preview);
+  assert.match(preview.textContent, /올해 사업비는 10억 원이다.*가상 시의 예산표/s);
+  box.querySelector('[data-retention-save]').click();
+  await t.waitFor(() => assert.equal(a.w.document.activeElement, state));
+  state.value = 'corrected';
+  state.dispatchEvent(new a.w.Event('change'));
+  box.querySelector('[data-retention-save]').click();
+  await t.waitFor(() => assert.equal(a.w.document.activeElement, reason));
+  assert.match(box.querySelector('[data-correction-summary]').textContent,/정정 확인 0\/1개/);
+  const one = await show([original], [fixed], [[fixed], []]);
+  const singleProposal = one.el('joint-facts').querySelector('[data-correction-candidate]');
+  assert.match(singleProposal.previousElementSibling.textContent,/^(첫 편집자|둘째 편집자)의 근거 대조 정정 문구/);
+  for (const [before, after, suggested] of [
+    [[original], [fixed, fixed], [[fixed],[fixed]]],
+    [[original], ['확정한 ' + fixed], [[fixed],[fixed]]],
+    [[original,second], [fixed], [[fixed,null],[null,fixed]]]
+  ]) {
+    const other = await show(before, after, suggested);
+    assert.equal(other.el('joint-facts').querySelectorAll('[data-correction-candidate]').length, 0);
+  }
+});

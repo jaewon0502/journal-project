@@ -571,21 +571,97 @@
       }
     }
   }
+  function correctionEvidence(editors, edition, index) {
+    const snapshot = editors[0].snapshots[edition], row = snapshot.rows[index];
+    const fragment = document.createDocumentFragment();
+    fragment.append(ratingPassage(snapshot, edition ? '수정본 기사' : '원본 기사', row.text, row.id));
+    const decisions = element('div', null, 'pair');
+    for (const [i, editor] of editors.entries()) {
+      const side = editor.snapshots[edition];
+      decisions.append(decisionEvidence(side, side.assessment.accuracy.rows[index], row.text, editorNames[i]));
+    }
+    fragment.append(decisions);
+    return fragment;
+  }
+  function suggestedCorrections(editors, revision) {
+    const targetIndexes = new Map(revision.rows.map((r, i) => [r.id, i]));
+    const byTarget = new Map();
+    for (const [editorIndex, editor] of editors.entries()) {
+      if (!editor.snapshots[0].rows.some(row => row.receipt?.correctionChecked)) continue;
+      // Reuse the independent comparison's whole-row, unique-location and prior-wording checks.
+      const comparison = window.JournalArticleCompare.compare(...editor.snapshots, 'revision');
+      for (const conflict of comparison.originalConflicts) {
+        if (!conflict.candidate) continue;
+        const after = targetIndexes.get(conflict.candidate.rowId);
+        if (!byTarget.has(after)) byTarget.set(after, new Map());
+        const origins = byTarget.get(after);
+        if (!origins.has(conflict.rowId)) origins.set(conflict.rowId, []);
+        origins.get(conflict.rowId).push(editorNames[editorIndex]);
+      }
+    }
+    const result = new Map();
+    for (const [after, origins] of byTarget) {
+      if (origins.size !== 1) continue;
+      const [[rowId, names]] = origins;
+      if (!result.has(rowId)) result.set(rowId, []);
+      result.get(rowId).push({after, names});
+    }
+    return result;
+  }
+  function correctionDetails(record, editors) {
+    const originals = record.facts.before.flatMap((r, i) => r.outcome === 'contradicted' ? [i] : []);
+    if (!originals.length) return null;
+    const group = detail('두 편집자가 반박한 원본 주장 · 정정 여부 대조 ' + originals.length + '개');
+    group.classList.add('claim-corrections');
+    group.append(note('원본과 수정본의 주체·기간·내용을 비교한 뒤 두 편집자가 확인한 근거를 읽으세요. 정정 판단은 진행자가 대응 구절과 이유를 저장하면 집계됩니다.'));
+    if (record.before.sourcesSha256 !== record.after.sourcesSha256) {
+      group.append(note('수정 전후 원자료 묶음이 달라졌습니다. 어떤 기사 서술이나 앞뒤 문맥을 고쳤는지 확인하세요. 원자료만 바뀌어 판단이 달라졌다면 대조 후 미확인으로 남기세요.'));
+    }
+    const [original, revision] = editors[0].snapshots;
+    const matches = new Map(record.factContext.matches);
+    const suggestions = suggestedCorrections(editors, revision);
+    for (const before of originals) {
+      const item = detail('원본 ' + (before + 1) + '번 · ' + original.rows[before].text);
+      item.dataset.correctionBefore = before;
+      item.append(correctionEvidence(editors, 0, before));
+      const after = matches.get(before);
+      if (after !== undefined) item.append(note('문구와 문맥으로 연결된 수정본 후보 · ' + (after + 1) + '번. 이 연결만으로 정정 여부를 판단할 수 없습니다.'));
+      for (const candidate of suggestions.get(original.rows[before].id) || []) {
+        const button = element('button', (candidate.after + 1) + '번 대조 · ' + revision.rows[candidate.after].text);
+        button.type = 'button';
+        button.dataset.correctionCandidate = String(candidate.after);
+        item.append(note(candidate.names.join('·') + '의 근거 대조 정정 문구와 일치하는 구절'), button);
+      }
+      group.append(item);
+    }
+    const fullText = detail('대응 구절을 찾기 위해 수정본 전문 보기');
+    fullText.append(element('blockquote', revision.article));
+    group.append(fullText);
+    return group;
+  }
   const contextForms = new WeakMap();
   function mountReviewNotes(panel, editors, record, reopened) {
     const group = panel.querySelector('.core-context');
-    if (!record || (!group && !panel.querySelector('.fact-retention'))) return;
+    const corrections = panel.querySelector('.claim-corrections');
+    if (!record || (!group && !corrections && !panel.querySelector('.fact-retention'))) return;
     let contextForm;
     if (group) {
       contextForm = window.JournalCoreContextNotesUI.mount({container:group, record, editors,
         notes:reopened?.contextNotes || [], ratingPassage});
       contextForms.set(group, contextForm);
     }
+    let correctionForm;
+    if (corrections) {
+      correctionForm = window.JournalCoreContextNotesUI.mount({container:corrections, record, editors,
+        notes:reopened?.correctionNotes ?? [], correctionEvidence:(edition, row) => correctionEvidence(editors, edition, row)});
+      contextForms.set(corrections, correctionForm);
+    }
     window.JournalRetentionNotesUI.mount({container:panel, record, editors, notes:reopened?.notes || [],
-      contextForm, decisionEvidence,
-      async onSave(entries, contexts) {
+      contextForm, correctionForm, decisionEvidence,
+      async onSave(entries, contexts, correctionEntries) {
         const items = editors.flatMap(editor => [editor.keyFile, ...editor.ordered]);
-        const saved = await window.JournalRetentionCase.create(record, items, entries, contexts ?? reopened?.contextNotes ?? []);
+        const saved = await window.JournalRetentionCase.create(record, items, entries, contexts ?? reopened?.contextNotes ?? [],
+          correctionEntries ?? reopened?.correctionNotes ?? []);
         downloadJson(saved, '진행자용-대조기록-' + record.before.articleSha256.slice(0, 12) + '.json');
       }});
   }
@@ -601,6 +677,8 @@
     jointRetention(panel, joint, editors);
     const coreContext = unmatchedCoreDetails(joint, editors);
     if (coreContext) panel.append(coreContext);
+    const corrections = record && correctionDetails(record, editors);
+    if (corrections) panel.append(corrections);
     mountReviewNotes(panel, editors, record, reopened);
     panel.append(window.JournalRevisionFactsView(before, after));
     const originalRows = new Map(joint.factContext.matches.map(([before, after]) => [after, before]));
@@ -868,12 +946,17 @@
       message(sample ? '가상 비교 결과를 열었습니다.' : '작업 파일 비교를 마쳤습니다.');
       const factGroup = byId('joint-facts')?.querySelector('.fact-retention');
       const coreGroup = byId('joint-facts')?.querySelector('.core-context');
-      if (reopened && factGroup?.querySelector('[data-retention-pending="true"]')) {
+      const corrections = byId('joint-facts')?.querySelector('.claim-corrections');
+      if (reopened?.correctionNotes?.length && corrections && contextForms.has(corrections)) {
+        contextForms.get(corrections).focusNext();
+      } else if (reopened && factGroup?.querySelector('[data-retention-pending="true"]')) {
         focusReviewGroup(factGroup, true);
       } else if (reopened && coreGroup && contextForms.has(coreGroup)) {
         contextForms.get(coreGroup).focusNext();
       } else if (reopened && factGroup) {
         focusReviewGroup(factGroup, true);
+      } else if (reopened && corrections && contextForms.has(corrections)) {
+        contextForms.get(corrections).focusNext();
       } else {
         byId('result-title').focus();
         byId('result').scrollIntoView?.({block: 'start'});
@@ -1026,6 +1109,13 @@
       row = jointDimensionDetails(dimension, reviews);
       panel.append(note('단계는 집계한 요약과 대조했습니다. 발췌문과 판단 이유는 지금 연 작업 파일에서 읽었습니다.'), row);
       title = dimension.title + ' · 수정 전후 판정 근거';
+    } else if (reviewTarget.corrections) {
+      group = correctionDetails(record, reviews);
+      if (!group) throw new Error('선택한 요약에는 두 편집자가 기사 서술을 함께 반박한 원본 구절이 없습니다.');
+      title = '원본 주장의 오류를 바로잡았는지 대조';
+      panel = section('두 편집자의 반박 근거와 수정본 정정 판단');
+      panel.append(group);
+      mountReviewNotes(panel, reviews, record, reopened);
     } else if (reviewTarget.coreContext) {
       group = unmatchedCoreDetails(joint, reviews);
       if (!group) throw new Error('선택한 요약에는 수정본과 다시 대조할 원본 핵심 구절이 없습니다.');
@@ -1050,13 +1140,13 @@
       : ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.'));
     if (row) openReviewRow(row);
     else if (quoteResult) quoteResult.focus();
-    else if (reopened && reviewTarget.coreContext) contextForms.get(group).focusNext();
+    else if (reviewTarget.corrections || (reopened && reviewTarget.coreContext)) contextForms.get(group).focusNext();
     else focusReviewGroup(group, reviewTarget.retention && !!reopened);
   }
   function showRecoveredArchive(archive, items, reviews, joint, record) {
     if (reviewTarget && reviewTarget.id !== archive.reviewId &&
         (!record || !targetMatch(record, joint, reviews[0].key))) throw new Error('집계에서 선택한 요약과 일치하지 않습니다.');
-    if (record && (reviewTarget?.quoteCheck || reviewTarget?.numericCheck || reviewTarget?.coreContext)) showTargetEvidence(reviews);
+    if (record && (reviewTarget?.quoteCheck || reviewTarget?.numericCheck || reviewTarget?.coreContext || reviewTarget?.corrections)) showTargetEvidence(reviews);
     else show(reviews[1].snapshots, false, reviews[1], reviews[0], {joint, record, notes:[]});
     const recoveryFiles = detail('기사 작업 파일 4개와 대응표 2개 꺼내기');
     recoveryFiles.append(note('보완할 작업 파일을 저장해 기사 팩트체크에서 여세요. 대응표는 진행자가 보관합니다.'));
@@ -1261,11 +1351,11 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|core-context|quote-check|numeric-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
+      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|corrections|core-context|quote-check|numeric-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
       const packagedQuote = byId('quote-practice');
-      reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', coreContext:match?.[2] === 'core-context',
+      reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', corrections:match?.[2] === 'corrections', coreContext:match?.[2] === 'core-context',
         quoteCheck:match?.[2] === 'quote-check', numericCheck:match?.[2] === 'numeric-check', axis:match?.[3], example:match?.[4] === 'quote' && !packagedQuote ? null : match?.[4]};
-      resumeExample.hidden = !(reviewTarget.example && (reviewTarget.retention || reviewTarget.coreContext));
+      resumeExample.hidden = !(reviewTarget.example && (reviewTarget.retention || reviewTarget.coreContext || reviewTarget.corrections));
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;
       if (!match) {

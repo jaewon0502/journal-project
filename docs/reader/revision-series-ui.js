@@ -379,6 +379,91 @@
     return panel;
   }
 
+  function correctionAuditControls(publicRecords, demo) {
+    const box = element('details', null, 'case');
+    box.id = 'series-correction-audit';
+    const label = element('label', '진행자용 대조 기록 JSON');
+    const files = element('input');
+    files.type = 'file'; files.multiple = true; files.accept = '.json,application/json';
+    files.id = 'series-correction-archives'; label.htmlFor = files.id;
+    const notice = element('p', '', 'status'), results = element('div');
+    notice.setAttribute('role', 'status');
+    results.id = 'series-correction-verified';
+    box.append(element('summary', '진행자가 대조한 정정 결과 집계'),
+      element('p', '현재 기준의 기사별 요약을 선택한 뒤 같은 기사의 진행자용 대조 기록을 여세요. 이 브라우저에서 원래 작업 파일과 두 판본의 판단을 다시 확인합니다.'),
+      label, files, notice, results);
+    let generation = 0;
+    files.addEventListener('change', async () => {
+      const turn = ++generation, chosen = Array.from(files.files);
+      results.replaceChildren();
+      notice.classList.remove('error');
+      notice.textContent = chosen.length ? '원자료와 저장한 판단을 대조하고 있습니다.' : '';
+      if (!chosen.length) return;
+      try {
+        const archives = await Promise.all(chosen.map(readJSON));
+        const audit = await window.JournalCorrectionSeriesAudit.audit(publicRecords, archives);
+        if (turn !== generation || !box.isConnected) return;
+        const {total, corrected, persists, absent, unresolved, pending} = audit.totals;
+        const percentCorrected = total ? 100 * corrected / total : null;
+        const rate = percentCorrected === null ? '산출 대기' : Number(percentCorrected.toFixed(1)) + '% (' + corrected + '/' + total + '개)';
+        results.append(element('h4', '원본 오류 중 정정을 확인한 비율 · ' + rate),
+          element('p', '정정 확인 ' + corrected + '개 · 같은 오류 지속 ' + persists + '개 · 수정본에서 찾지 못함 ' + absent +
+            '개 · 판단 유보 ' + unresolved + '개 · 검토 대기 ' + pending + '개'),
+          element('p', '검토 대기 중 진행자 기록을 불러오지 않은 기사 ' + audit.missingArchiveArticles + '건의 원본 오류 ' +
+            audit.missingArchiveOriginals + '개도 분모에 포함됩니다. 수정본에서 찾지 못한 구절은 정정 건수에 넣지 않습니다.', 'note'));
+        if (audit.olderArticles) results.append(element('p', '이전 형식에만 있는 기사 ' + audit.olderArticles +
+          '건은 정정률에서 제외했습니다. 이전 요약에 기록된 원본 공동 반박 ' + audit.olderKnownOriginals + '개 · 구절 판정 자료가 없는 기사 ' +
+          audit.olderWithoutFacts + '건입니다. 작업 파일을 열어 현재 기준으로 요약을 저장하면 포함할 수 있습니다.', 'note'));
+        const save = element('button', '숫자만 담은 정정 집계 저장');
+        save.type = 'button';
+        save.addEventListener('click', () => {
+          const share = {format:'journal-correction-counts-v1', demo, ...audit,
+            correctionRate:{numerator:corrected, denominator:total, percent:percentCorrected}};
+          const blob = new Blob([JSON.stringify(share, null, 2)], {type:'application/json'});
+          const url = URL.createObjectURL(blob), link = element('a');
+          link.href = url; link.download = (demo ? '모의-' : '') + '원본오류-정정집계.json';
+          document.body.append(link); link.click(); link.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+        results.append(save);
+        notice.textContent = '진행자 기록 ' + audit.checkedArchives + '건을 검증했습니다.' +
+          (audit.duplicateArchives ? ' 같은 기록 ' + audit.duplicateArchives + '개는 한 번만 셌습니다.' : '');
+      } catch (error) {
+        if (turn !== generation || !box.isConnected) return;
+        notice.textContent = error.message;
+        notice.classList.add('error');
+      }
+    });
+    return box;
+  }
+
+  function originalErrorsPanel(report, sources, builtIn) {
+    const panel = document.createDocumentFragment();
+    const affected = report.articles.filter(article => article.facts?.before.contradicted > 0);
+    if (!affected.length) return panel;
+    const section = element('section', null, 'panel');
+    section.id = 'series-original-errors';
+    const remaining = affected.reduce((sum, article) => sum + article.facts.after.contradicted, 0);
+    section.append(element('h3', '원본에서 확인한 오류가 어떻게 바뀌었나'),
+      element('p', '두 편집자가 기사 자체의 주장을 원자료로 반박한 구절 · 기사 ' + affected.length +
+        '건의 원본 ' + report.facts.before.contradicted + '개, 같은 기사들의 수정본 ' + remaining + '개'),
+      element('p', '수정본의 오류 수가 줄어도 원래 주장을 고쳤는지, 해당 내용을 뺐는지는 두 판본을 대조해야 합니다. 진행자용 대조 기록이나 편집자 작업 파일 4개와 대응표 2개를 열어 구절별로 확인하세요.', 'note'));
+    const list = element('ul');
+    for (const article of affected) {
+      const entry = sources.get(article.before.articleSha256);
+      const count = '원본 오류 ' + article.facts.before.contradicted + '개 대조';
+      const item = element('li');
+      item.append(entry.summaryOnlyExample ? element('span', entry.name + ' · ' + count + ' (요약만 제공)') :
+        evidenceLink(entry, count, '&focus=corrections'));
+      list.append(item);
+    }
+    section.append(list);
+    if (!builtIn && affected.some(article => article.matchVersion === 8)) {
+      section.append(correctionAuditControls([...sources.values()].map(entry => entry.record), report.demo));
+    }
+    panel.append(section);
+    return panel;
+  }
   function articleList(articles, sources) {
     const panel = element('section', null, 'panel');
     panel.id = 'series-articles';
@@ -464,12 +549,12 @@
     if (report.changedSources) {
       summary.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources + '건만 보면 공통 개선율은 ' + rateText(report.unchangedEvidenceImprovement) + '입니다.'));
     }
-    output.replaceChildren(summary, factPanel(report, sources, builtIn), coverage(report), axisTable(report.dimensions), articleList(report.articles, sources));
+    output.replaceChildren(summary, factPanel(report, sources, builtIn), originalErrorsPanel(report, sources, builtIn), coverage(report), axisTable(report.dimensions), articleList(report.articles, sources));
     byId('result').hidden = false;
     return report;
   }
 
-  async function readRecord(file) {
+  async function readJSON(file) {
     let raw;
     try {
       raw = typeof file.text === 'function' ? await file.text() : await new Promise((resolve, reject) => {
@@ -484,6 +569,11 @@
     let data;
     try { data = JSON.parse(raw); }
     catch { throw new Error(fileName(file) + ' 파일에서 JSON을 읽지 못했습니다.'); }
+    return data;
+  }
+
+  async function readRecord(file) {
+    const data = await readJSON(file);
     if (data?.format === 'journal-retention-case') {
       throw new Error(fileName(file) + ' 파일은 진행자용 대조 기록입니다. 기사 평가 비교에서 다시 열고, 여기에는 ‘기사별 평가 요약 저장’으로 받은 파일을 선택하세요.');
     }

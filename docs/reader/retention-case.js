@@ -41,7 +41,11 @@
     return digest(hashes.sort());
   }
 
-  function cleanNotes(notes, pending = 'open', absent = 'notFound') {
+  const retentionRules = {pending:'open', absent:'notFound', linked:['retained', 'changed']};
+  const contextRules = {...retentionRules, pending:'pending', absent:'absent'};
+  const correctionRules = {pending:'pending', absent:'absent', linked:['corrected', 'persists'], optional:['unresolved']};
+
+  function cleanNotes(notes, {pending, absent, linked, optional = []} = retentionRules) {
     if (!Array.isArray(notes)) throw new Error('구절별 대조 기록 목록을 확인하세요.');
     const seen = new Set();
     return Array.from(notes, note => {
@@ -49,8 +53,8 @@
       const {before, after, status, reason} = note;
       if (!Number.isSafeInteger(before) || before < 0 || seen.has(before)) throw new Error('원본 구절 번호가 잘못되었거나 겹칩니다.');
       seen.add(before);
-      if (![pending, 'retained', 'changed', absent].includes(status) || (after !== null && (!Number.isSafeInteger(after) || after < 0)) ||
-          (status === absent && after !== null) || (['retained', 'changed'].includes(status) && after === null)) {
+      if (![pending, absent, ...linked, ...optional].includes(status) || (after !== null && (!Number.isSafeInteger(after) || after < 0)) ||
+          (status === absent && after !== null) || (linked.includes(status) && after === null)) {
         throw new Error('대조 판단에 맞는 수정본 구절을 선택하세요.');
       }
       if (typeof reason !== 'string' || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/u.test(reason) ||
@@ -84,7 +88,7 @@
 
   function checkedContextNotes(record, notes, unmatched = facts.coreContextReview(record.facts, record.factContext).unmatched) {
     const eligible = new Set(unmatched);
-    const clean = cleanNotes(notes, 'pending', 'absent');
+    const clean = cleanNotes(notes, contextRules);
     for (const {before, after} of clean) {
       if (!eligible.has(before)) throw new Error('수정본 대응이 확인되지 않은 원본 핵심 구절만 추가 대조할 수 있습니다.');
       if (after !== null && after >= record.facts.after.length) throw new Error('수정본에 있는 구절 번호를 선택하세요.');
@@ -97,14 +101,38 @@
     return checkedContextNotes(record, notes);
   }
 
-  function noteChecksum(version, reviewId, evidenceDigest, notes, contextNotes) {
+  function checkedCorrectionNotes(record, notes) {
+    const clean = cleanNotes(notes, correctionRules);
+    for (const {before, after, status} of clean) {
+      if (record.facts.before[before]?.outcome !== 'contradicted') {
+        throw new Error('두 편집자가 기사 자체의 주장과 원자료의 충돌을 확인한 원본 구절을 선택하세요.');
+      }
+      if (after !== null && after >= record.facts.after.length) throw new Error('수정본에 있는 구절 번호를 선택하세요.');
+      const revised = record.facts.after[after]?.outcome;
+      if (status === 'corrected' && revised !== 'supported') {
+        throw new Error('정정을 확인하려면 두 편집자가 구절 전체를 근거로 지지한 수정본 구절을 선택하세요.');
+      }
+      if (status === 'persists' && revised !== 'contradicted') {
+        throw new Error('같은 오류가 남았는지 확인하려면 두 편집자가 원자료와 충돌한다고 판정한 수정본 구절을 선택하세요.');
+      }
+    }
+    return clean;
+  }
+
+  function validateCorrectionNotes(record, notes) {
+    series.reviewId(record, 8);
+    return checkedCorrectionNotes(record, notes);
+  }
+
+  function noteChecksum(version, reviewId, evidenceDigest, notes, contextNotes, correctionNotes) {
     const fields = n => [n.before, n.after, n.status, n.reason];
     const payload = [format, version, reviewId, evidenceDigest, notes.map(fields)];
     if (version >= 4) payload.push(contextNotes.map(fields));
+    if (version >= 7) payload.push(correctionNotes.map(fields));
     return digest(payload);
   }
 
-  async function create(record, items, notes, contextNotes = []) {
+  async function create(record, items, notes, contextNotes = [], correctionNotes = []) {
     const inputVersion = record?.version;
     if (![3, 4, 5, 6, 7, 8].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
     const inputId = series.reviewId(record, inputVersion);
@@ -114,40 +142,46 @@
     const rebuilt = series.makeRecord(agreement.compare(...reviews), reviews[0].key);
     const historicalId = new Map(rebuilt.priorReviewIds).get(inputVersion);
     if ((historicalId ?? series.reviewId(rebuilt, inputVersion)) !== inputId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
-    if (historicalId && (notes?.length || contextNotes?.length)) {
+    if (historicalId && (notes?.length || contextNotes?.length || correctionNotes?.length)) {
       throw new Error('이전 구절 대응에서 작성한 판단은 현재 기준의 기사 요약에서 다시 대조한 뒤 저장하세요.');
     }
     // Only bind notes to the current comparison rebuilt from all six original inputs.
     const saved = checkedNotes(rebuilt, notes);
     const context = checkedContextNotes(rebuilt, contextNotes);
     if (context.length && inputVersion < 4) throw new Error('핵심 구절 대응을 포함한 기사 요약에서 대조 기록을 저장하세요.');
-    const version = 6;
+    const corrections = checkedCorrectionNotes(rebuilt, correctionNotes);
+    if (corrections.length && inputVersion !== 8) throw new Error('원본 오류 대조는 현재 기준의 기사 요약에서 저장하세요.');
+    // Public v8 remains unchanged. Use the extended private format only when it carries this new judgment.
+    const version = corrections.length ? 7 : 6;
     const reviewId = series.reviewId(rebuilt);
     const evidenceDigest = evidenceId(embedded);
     return {format, version, reviewId, evidenceDigest, items:embedded, notes:saved, contextNotes:context,
-      checksum:noteChecksum(version, reviewId, evidenceDigest, saved, context)};
+      ...(version >= 7 ? {correctionNotes:corrections} : {}),
+      checksum:noteChecksum(version, reviewId, evidenceDigest, saved, context, corrections)};
   }
 
   function read(data) {
     const keys = ['format', 'version', 'reviewId', 'evidenceDigest', 'items', 'notes', 'checksum'];
     if (data?.version >= 4) keys.push('contextNotes');
-    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4, 5, 6].includes(data.version) ||
+    if (data?.version >= 7) keys.push('correctionNotes');
+    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4, 5, 6, 7].includes(data.version) ||
         ![data.reviewId, data.evidenceDigest, data.checksum].every(s => typeof s === 'string' && /^[0-9a-f]{64}$/u.test(s))) {
       throw new Error('진행자가 저장한 구절 대조 기록 파일을 선택하세요.');
     }
     const items = copyItems(data.items, true), notes = cleanNotes(data.notes);
-    const contextNotes = data.version >= 4 ? cleanNotes(data.contextNotes, 'pending', 'absent') : [];
+    const contextNotes = data.version >= 4 ? cleanNotes(data.contextNotes, contextRules) : [];
+    const correctionNotes = data.version >= 7 ? cleanNotes(data.correctionNotes, correctionRules) : [];
     if (evidenceId(items) !== data.evidenceDigest) throw new Error('저장한 대조 기록의 작업 파일이나 대응표 내용이 달라졌습니다.');
-    if (noteChecksum(data.version, data.reviewId, data.evidenceDigest, notes, contextNotes) !== data.checksum) throw new Error('저장한 대조 기록의 판단이나 식별값이 달라졌습니다.');
-    return {items, notes, contextNotes, reviewId:data.reviewId};
+    if (noteChecksum(data.version, data.reviewId, data.evidenceDigest, notes, contextNotes, correctionNotes) !== data.checksum) throw new Error('저장한 대조 기록의 판단이나 식별값이 달라졌습니다.');
+    return {items, notes, contextNotes, ...(data.version >= 7 ? {correctionNotes} : {}), reviewId:data.reviewId};
   }
 
   // Pass the summary rebuilt by the normal blind assignment resolver when reopening.
   function verifyAll(data, record) {
     const saved = read(data);
     if (record?.version !== 8) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
-    // A private archive binds its original inputs and the public summary two versions ahead.
-    const summaryVersion = data.version + 2;
+    // Private v6 and v7 both bind the public v8 comparison.
+    const summaryVersion = data.version === 7 ? 8 : data.version + 2;
     // Even a valid current projection must not masquerade as the original historical comparison.
     const projection = series.reviewId(record, summaryVersion);
     if (new Map(record.priorReviewIds).has(summaryVersion) || projection !== saved.reviewId) {
@@ -155,7 +189,8 @@
       if (data.version < 6) error.code = 'legacy-review-changed';
       throw error;
     }
-    return {notes:checkedNotes(record, saved.notes), contextNotes:checkedContextNotes(record, saved.contextNotes)};
+    return {notes:checkedNotes(record, saved.notes), contextNotes:checkedContextNotes(record, saved.contextNotes),
+      ...(data.version >= 7 ? {correctionNotes:checkedCorrectionNotes(record, saved.correctionNotes)} : {})};
   }
 
   function verify(data, record) {
@@ -198,8 +233,20 @@
     return result;
   }
 
+  function summarizeCorrections(record, notes) {
+    const saved = validateCorrectionNotes(record, notes);
+    const total = record.facts.before.filter(row => row.outcome === 'contradicted').length;
+    const result = {total, corrected:0, persists:0, absent:0, unresolved:0, pending:total};
+    for (const {status} of saved) {
+      if (status === 'pending') continue;
+      result[status]++;
+      result.pending--;
+    }
+    return result;
+  }
+
   const api = Object.freeze({format, create, read, verify, verifyAll, verifyLegacyMatchNotes,
-    validateNotes, validateContextNotes, summarize, summarizeContext});
+    validateNotes, validateContextNotes, validateCorrectionNotes, summarize, summarizeContext, summarizeCorrections});
   if (useNode) module.exports = api;
   else root.JournalRetentionCase = api;
 })(globalThis);

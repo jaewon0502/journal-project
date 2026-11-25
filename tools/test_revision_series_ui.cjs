@@ -492,3 +492,71 @@ test('미완료 예시와 기존 예시, 파일 전환 때 선택한 점수와 �
   assert.equal(partial.getAttribute('aria-expanded'),'false');
   assert.ok(p.get('series-clear').disabled);
 });
+
+test('원본 공동 반박에서 시작해 해당 기사의 진짜 검토 기록으로 이동하고 정정률은 추정하지 않는다', async t => {
+  const p = page(t);
+  const error = {outcome:'contradicted',flag:'article'}, supported = {outcome:'supported',flag:'none'};
+  const citation = {outcome:'quotedConflict',flag:'quote'};
+  const first = {...one, version:2, facts:{before:[error,error,citation],after:[supported]}};
+  const other = {...two, version:2, facts:{before:[citation,{outcome:'disputed',flag:'article'}],after:[error]}};
+  p.select(file('기사 A.json',first),file('중복.json',first),file('기사 B.json',other));
+  await t.waitFor(() => assert.ok(p.get('series-original-errors')));
+  const section = p.get('series-original-errors');
+  assert.match(section.textContent,/기사 1건의 원본 2개, 같은 기사들의 수정본 0개/);
+  const links = [...section.querySelectorAll('a')];
+  assert.equal(links.length,1);
+  assert.equal(links[0].hash,'#review='+require('../docs/reader/revision-series.js').reviewId(first)+'&focus=corrections');
+  assert.ok(!section.textContent.includes('%'));
+  p.select(file('기사 B.json',other));
+  await t.waitFor(() => assert.equal(p.get('series-original-errors'),null));
+  p.get('series-example').click();
+  const demo = p.get('series-original-errors');
+  assert.match(demo.textContent,/요약만 제공/);
+  assert.equal(demo.querySelectorAll('a').length,1);
+  assert.match(demo.querySelector('a').hash,/&focus=corrections&example=library$/);
+});
+
+test('진행자 기록으로 확인한 정정 건수만 내보내고 잘못된 파일을 고르면 이전 결과를 지운다', async t => {
+  const p = page(t), w = p.document.defaultView;
+  Object.defineProperty(w,'crypto',{value:require('node:crypto').webcrypto});
+  const files = await require('../docs/reader/revision-evidence-example.js').files();
+  const pair = await require('../docs/reader/blind-revision.js').resolveBundle(files);
+  const record = require('../docs/reader/revision-series.js').makeRecord(
+    require('../docs/reader/revision-agreement.js').compare(...pair),pair[0].key);
+  const archive = await require('../docs/reader/retention-case.js').create(record,files,[],[],[
+    {before:0,after:0,status:'corrected',reason:'가상 조사표에서 조사한 100곳과 운영을 연장한 20곳을 대조했다.'}
+  ]);
+  p.select(file('기사 요약.json',record));
+  await t.waitFor(() => assert.ok(p.get('series-correction-archives')));
+  const input = p.get('series-correction-archives'), result = p.get('series-correction-verified');
+  const notice = p.get('series-correction-audit').querySelector('[role="status"]');
+  function pick(files) {
+    Object.defineProperty(input,'files',{value:files,configurable:true});
+    input.dispatchEvent(new w.Event('change'));
+  }
+  pick([file('개인 기록.json',archive)]);
+  await t.waitFor(() => assert.match(result.textContent,/100% \(1\/1개\)/));
+  let shared;
+  w.Blob = Blob;
+  w.URL.createObjectURL = blob => { shared = blob; return 'blob:count-summary'; };
+  w.URL.revokeObjectURL = () => {};
+  w.HTMLAnchorElement.prototype.click = () => {};
+  result.querySelector('button').click();
+  const serialized = await shared.text(), data = JSON.parse(serialized);
+  assert.equal(data.format,'journal-correction-counts-v1');
+  assert.equal(data.demo,true);
+  assert.deepEqual(data.totals,{total:1,corrected:1,persists:0,absent:0,unresolved:0,pending:0});
+  assert.deepEqual(data.correctionRate,{numerator:1,denominator:1,percent:100});
+  for (const sensitive of ['가상 조사표',archive.reviewId,archive.evidenceDigest,'개인 기록.json']) {
+    assert.ok(!serialized.includes(sensitive));
+  }
+  let release;
+  const slow = new Promise(resolve => { release = resolve; });
+  pick([{name:'늦은 파일',text:()=>slow}]);
+  pick([file('잘못 선택한 기사 요약.json',record)]);
+  await t.waitFor(() => assert.ok(notice.classList.contains('error')));
+  release(JSON.stringify(archive));
+  await flushed();
+  assert.equal(result.textContent,'');
+  assert.equal(result.querySelector('button'),null);
+});
