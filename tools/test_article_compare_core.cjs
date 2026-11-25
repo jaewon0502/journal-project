@@ -375,8 +375,15 @@ test('새로 등장한 정정 문구가 수정본 한 구간과 정확히 일치
   assert.equal(row.revised, null);
   assert.equal(row.candidate.text, correction);
   assert.equal(row.candidate.label, '미확인');
-  // Even if offsets happen to match, a nearby old value, repeated replacement or existing quote is ambiguous.
-  for (const article of [sourceText + '\n' + correction, correction + '\n' + correction, correction + '\n\n' + correction,
+  const revisedWithBoth = snapshot({article:sourceText + '\n' + correction, states:[null,'fact']});
+  const [both] = compare(source, revisedWithBoth, 'revision').originalConflicts;
+  assert.equal(both.revised, null);
+  assert.deepEqual(both.sameWordingRows, [0]);
+  assert.equal(both.candidate.rowId, revisedWithBoth.rows[1].id);
+  assert.equal(both.candidate.label, '원자료 지지');
+  // Neither a quotation substring nor a repeated replacement identifies a single revised passage.
+  for (const article of ['그는 “' + sourceText + '”라고 말했다.\n' + correction,
+    correction + '\n' + correction, correction + '\n\n' + correction, sourceText + '\n' + correction + '\n' + correction,
     '그는 “' + correction + '”라고 말했다.']) {
     const [entry] = compare(source, snapshot({article}), 'revision').originalConflicts;
     assert.equal(entry.candidate, undefined);

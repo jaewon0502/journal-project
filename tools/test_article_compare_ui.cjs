@@ -670,6 +670,11 @@ test('반복 오류 하나만 고친 뒤 같은 원문이 남은 정확한 위�
   }
   const [only] = await compareWith([intro, claim, fixed, quote, tail], [[2,{status:'fact'}]], 1);
   assert.equal(only.open, true);
+  const after = only.closest('.pair').lastChild;
+  assert.match(after.textContent, /정정 문구와 일치하는 수정본 구절 · 원자료 지지/);
+  assert.match(after.querySelector('.rating-passage').textContent, /수정본 · 구간 3 · 앞뒤 문맥/);
+  assert.deepEqual([...after.querySelectorAll('mark')].map(mark => mark.textContent), [fixed, claim]);
+  assert.equal(after.querySelector('a').href, source.url + '#page=8');
   assert.match(p.el('output').textContent, /근거 지지율0% \(0\/1\)100% \(1\/1\)/);
   assert.match(p.el('output').textContent, /판정 완료율25% \(1\/4\)20% \(1\/5\)/);
   assert.equal(only.firstChild.textContent, '수정본 구간 2 · 같은 문구 1/1 · 미확인');

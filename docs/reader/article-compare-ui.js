@@ -386,14 +386,16 @@
       const before = decisionEvidence(snapshots[0], row.original, row.text, '수정 전');
       const after = decisionEvidence(snapshots[1], revised, row.text, '수정 후');
       if (!revised && row.candidate) {
-        after.append(note('저장한 정정 문구와 일치하는 수정본 구절 · ' + row.candidate.label), element('blockquote', row.candidate.text));
+        after.append(note('저장한 정정 문구와 일치하는 수정본 구절 · ' + row.candidate.label),
+          ratingPassage(snapshots[1], '수정본', row.candidate.text, row.candidate.rowId));
         if (row.candidate.scope !== row.candidate.text) {
           after.append(note('확인 범위'), element('blockquote', row.candidate.scope));
         }
         after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
-      } else if (row.sameWordingRows) {
+      }
+      if (row.sameWordingRows) {
         after.append(sameWordingDetails(snapshots[1], row.sameWordingRows, item, quoted));
-      } else if (!revised) after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
+      } else if (!revised && !row.candidate) after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
       pair.append(before, after);
       item.append(pair);
       panel.append(item);

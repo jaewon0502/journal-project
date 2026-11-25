@@ -214,8 +214,8 @@
           conflict.sameWordingRows = revisedWording.get(row.text);
         }
         const correction = row.receipt?.correction?.trim();
-        if (!revised && correction && proposedCorrections?.get(correction) === row.id && row.positions.length === 1
-            && !left.article.includes(correction) && !right.article.includes(row.text)) {
+        if (!revised && correction && proposedCorrections?.get(correction) === row.id && !left.article.includes(correction)
+            && (conflict.sameWordingRows || (row.positions.length === 1 && !right.article.includes(row.text)))) {
           const indexes = revisedWording.get(correction);
           const candidate = indexes?.length === 1 ? right.rows[indexes[0]] : null;
           // Consecutive repetitions share a row, but still have more than one location.
