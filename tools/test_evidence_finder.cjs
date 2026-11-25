@@ -50,6 +50,30 @@ test('같은 금액의 다른 통화보다 질문한 매출의 원화 문단을 
   assert.equal(find(scales.join('\n'), q)[0].paragraph, 5);
 });
 
+test('복합 금액에서 지표·연도·통화가 맞는 문단을 찾으며 반대 수치도 맨 앞에 둔다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  const currencies = ['원','달러','유로','엔'];
+  for (const [currency, printed] of [['원','120백만'], ['원','110백만'], ['달러','110백만'], ['엔','1억 1천만']]) {
+    const source = currencies.filter(c => c !== currency).map(c => '2025년 매출은 1억 2천만 ' + c + '이었다.');
+    source.push('2024년 매출은 1억 2천만 ' + currency + '이었다.',
+      '2025년 매출은 제자리였다. 영업비용은 1억 2천만 ' + currency + '이었다.',
+      '2025년 매출은 ' + printed + ' ' + currency + '이었다.');
+    const result = search(source.join('\n'), '2025년 매출은 1억 2천만 ' + currency + '이었나?');
+    assert.deepEqual([result.passages[0].paragraph, result.passages[0].text], [6, source[5]]);
+  }
+});
+
+test('금액 범위·여러 금액·잘못된 단위 순서를 한 통화 질문으로 해석하지 않는다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  for (const reading of ['1억~2천만', '1억 - 2천만', '1 -2천만', '1억에서 2천만', '1억 2천만 원부터 3억', '1억 원과 2천만',
+    '1만 2억', '1억 2억', '1,20억 2천만', '1억'.repeat(1200) + ' 2천만']) {
+    const source = ['달러','유로','엔'].map(c => '2025년 매출은 ' + reading + ' ' + c + '이었다.');
+    source.push('2025년 매출은 110백만 원이었다.');
+    const result = search(source.join('\n'), '2025년 매출은 ' + reading + ' 원이었나?');
+    assert.notEqual(result.passages[0]?.paragraph, 4, reading.slice(0,40));
+  }
+});
+
 test('세대와 인원 등 서로 다른 단위를 구분하고 다른 항목의 수치로 해당 문단을 우대하지 않는다', () => {
   const q = '2025년 지원 가구는 300가구였다.';
   const source = ['2025년 지원 가구는 300명으로 집계했다. 인근 조사 대상은 300가구였다.',

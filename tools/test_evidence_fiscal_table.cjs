@@ -37,7 +37,8 @@ test('report the table value even when the question quotes a neighboring number'
   assert.deepEqual(hit.context.map(r => [r.paragraph,r.text]),[[1,lines[0]],[2,lines[1]]]);
   assert.deepEqual(hit.matched,[]);
   assert.deepEqual(hit.fiscalCell,{rowLabel:'총지출',heading:'2024년 결산(C)',year:'2024',stage:'spent',
-    column:4,headerParagraph:2,value:'638.0',unit:'조 원'});
+    column:4,headerParagraph:2,value:'638.0',unit:'조 원',
+    amountComparison:{claimText:'656.6조 원',claimWon:'656600000000000',cellWon:'638000000000000',same:false}});
   for (const [year,stage,amount] of [['2023','결산액','610.7'],['2024','예산','656.6'],
     ['2024','예산 대비 증감액','-18.6']])
     assert.equal(cell(lines,year + '년 총지출의 ' + stage + '은 얼마인가?').fiscalCell.value,amount);
@@ -283,4 +284,63 @@ test('집행률의 단위는 원표에서 확인하고 금액·퍼센트포인�
   }
   const grouped = ['항목\t2023년\t\t2024년\t','\t결산(조원)\t집행률(%)\t결산(조원)\t집행률(%)','총지출\t19\t95\t18\t90'];
   assert.equal(cell(grouped,q).fiscalCell.value,'90');
+});
+
+test('연도·항목·단계로 찾은 결산 셀에서만 기사 복합 금액과 표의 단위를 원 단위로 대조한다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  const lines = ['단위: 백만 원','구분\t2023년 결산\t2024년 예산\t2024년 결산',
+    '시설 지원\t12\t12\t120', '시설 정비\t120\t120\t12'];
+  const check = (amount, expected, same) => {
+    const result = search(asText(lines), '2024년 시설 지원 결산액은 ' + amount + '인가?');
+    assert.equal(result.gap,null,amount);
+    const [hit] = result.passages;
+    assert.deepEqual([hit.paragraph,hit.text,hit.fiscalCell.heading,hit.fiscalCell.column,hit.fiscalCell.value,hit.fiscalCell.unit],
+      [3,lines[2],'2024년 결산',4,'120','백만 원']);
+    assert.deepEqual(hit.fiscalCell.amountComparison, {claimText:amount,claimWon:expected,cellWon:'120000000',same});
+  };
+  for (const amount of ['1억 2천만 원','1억2천만원','1.20억 원','120백만 원','120,000,000원','１억　２천만 원']) {
+    check(amount, '120000000',true);
+  }
+  check('12백만 원','12000000',false);
+  check('−1억 2천만 원','-120000000',false);
+  check('1억 2천만 1원','120000001',false);
+});
+
+test('정수 원화의 소수 배율·음수·큰 값은 반올림하지 않고 원표의 인쇄값을 남긴다', () => {
+  for (const [claimText,unit,printed,won] of [
+    ['0.12조 원','억원','1,200','120000000000'], ['1,200억원','조 원','0.1200','120000000000'],
+    ['+1.50억 원','천 원','150,000.00','150000000'], ['-1억 2천만 원','백만 원','−120.0','-120000000'],
+    ['123,456조 7,891억 2천만 301원','원','123456789120000301','123456789120000301'],
+    ['0.000001백만 원','원','1','1'], ['-0원','천 원','0','0']]) {
+    const hit = cell(['단위: '+unit,'구분\t2024년 결산','총지출\t'+printed], '2024년 총지출 결산액은 '+claimText+'인가?');
+    assert.equal(hit.fiscalCell.value,printed);
+    assert.deepEqual(hit.fiscalCell.amountComparison,{claimText,claimWon:won,cellWon:won,same:true});
+  }
+});
+
+test('모호한 금액·부호·주석이나 항목 이름 속 금액을 원화 비교값으로 쓰지 않는다', () => {
+  const header = '항목\t2024년 결산';
+  const rows = ['단위: 백만 원',header,'시설 지원\t120'];
+  const question = amount => '2024년 시설 지원 결산액은 '+amount+'인가?';
+  function noComparison(lines, q) {
+    const result = lookup(asText(lines),q);
+    assert.ok(!result?.passages.some(hit => hit.fiscalCell?.amountComparison),q);
+  }
+  for (const ambiguous of ['120백만 원 이상','약 120백만 원','120백만 원 안팎','120~130백만 원','120백만 원에서 130백만 원',
+    '1억 120백만 원','2천만 1억 원','1억 2억 원','1.5억 2천만 원','1억 원, 2천만 원','120백만 달러',
+    '1억 달러 2천만 원','△120백만 원','− 120백만 원','1,20백만 원','.5억 원','5억원금','10²백만 원','1.25원','얼마','120백만']) {
+    noComparison(rows,question(ambiguous));
+  }
+  for (const lines of [[header,rows[2]],['단위: 백만 원, 달러',header,rows[2]], [...rows,'주: 연간 누계 제외'],
+    ['단위: 원',header,'시설 지원\t1.25'], ['단위: 백만 원',header,'시설 지원\t△120'],
+    ['단위: 백만 원',header,'시설 지원\t12⁰'], ['단위: 원',header,'시설 지원\t'+'1'.repeat(101)]]) {
+    noComparison(lines,question('1억 2천만 원'));
+  }
+  const named = cell(['단위: 백만 원',header,'1억 원 지원\t120'],'2024년 1억 원 지원의 결산액은 얼마인가?');
+  assert.equal(named.fiscalCell.value,'120');
+  assert.equal(named.fiscalCell.amountComparison,undefined);
+  const normalizedName = cell(['단위: 백만 원',header,'㈜중앙\t120'],'2024년 ㈜중앙 결산액은 １억　２천만 원인가?');
+  assert.deepEqual(normalizedName.fiscalCell.amountComparison,
+    {claimText:'１억　２천만 원',claimWon:'120000000',cellWon:'120000000',same:true});
+  unresolved(rows,question('2천만 1억 원'));
 });

@@ -35,7 +35,12 @@
 
   // In prose, the same digits can count households, people or cases. Bind the
   // printed unit to its amount and preceding subject within the same clause.
-  const amount = /(?<![\d.+−△▲▼-])(?<!\d,)[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:\s*([십백천만억조]+))?\s*((?:%|퍼센트)\s*(?:포인트|p)|퍼센트|%|가구|명|건|개|원|달러|유로|엔)/giu;
+  const digits = String.raw`(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?`;
+  const magnitude = '(?:[십백천]?[만억조]|[십백천])';
+  const amount = new RegExp(String.raw`(?<![\d.+−△▲▼-])(?<!\d,)([+−-]?${digits}(?:[ \t]*${magnitude}[ \t]*${digits}){0,5})[ \t]*(?:(${magnitude})[ \t]*)?((?:%|퍼센트)[ \t]*(?:포인트|p)|퍼센트|%|가구|명|건|개|원|달러|유로|엔)`, 'giu');
+  const scaleOrder = {'십':1, '백':2, '천':3, '만':4, '억':8, '조':12};
+  const scaleRank = scale => scaleOrder[scale.at(-1)] + (scale.length === 2 ? scaleOrder[scale[0]] : 0);
+  const currencies = new Set(['원','달러','유로','엔']);
   const amountEnding = /^(?:$|[^\p{L}\p{N}/]|으로|에서|까지|부터|였|입니다|입니까|이다|인가|이었|이고|이며|이라고|라는|[의은는을를이가로에와과도만다](?![\p{L}\p{N}]))/u;
   const amountModifiers = /^(?:모두|각각|합계|대략|정확히|가량|약|총)$/u;
   function proseAmounts(text) {
@@ -46,11 +51,25 @@
       const prefix = normalized.slice(start, m.index);
       start = m.index + m[0].length;
       if (!amountEnding.test(normalized.slice(start)) || /\d\s*[십백천만억조]+\s*$/u.test(prefix)) continue;
+      const unit = m[3].toLowerCase().replace(/\s+/gu,'').replace('퍼센트','%').replace('포인트','p');
+      let scale = m[2];
+      if (/[십백천만억조]/u.test(m[1])) {
+        // A compound expression carries one currency, across successively smaller
+        // scales. A compound has no single printed scale to favor over another.
+        if (!currencies.has(unit) || m[1].length > 128) continue;
+        const ranks = m[1].match(/[십백천만억조]+/gu).map(scaleRank);
+        ranks.push(scale ? scaleRank(scale) : 0);
+        if (ranks.some((value, i) => i && value >= ranks[i - 1])) continue;
+        scale = null;
+      }
+      if (currencies.has(unit) &&
+          (/[~∼–—±/−+-]\s*$|[\d십백천만억조](?:부터|에서)\s*$/u.test(prefix) ||
+           (/^[+−-]/u.test(m[1]) && /\d[ \t]*$/u.test(prefix)) ||
+           /^\s*(?:[~∼–—±/-]|부터|에서)\s*[+\d−-]/u.test(normalized.slice(start)))) continue;
       const clause = prefix.split(/[,;:。.!?\n\r|]/u).at(-1);
       const subject = [...terms(clause).keys()].filter(key => /^\p{L}+$/u.test(key) && !amountModifiers.test(key)).slice(-3);
-      const unit = m[2].toLowerCase().replace(/\s+/gu,'').replace('퍼센트','%').replace('포인트','p');
       const years = [...clause.matchAll(/(?<!\d)((?:19|20)\d{2})\s*년/gu)].map(match => match[1]);
-      readings.push({subject, unit, scale:m[1], years});
+      readings.push({subject, unit, scale, years});
     }
     return readings;
   }
@@ -62,7 +81,7 @@
       if ((year && found.years.length && !found.years.includes(year)) ||
           found.unit !== requested.unit || found.subject.at(-1) !== requested.subject.at(-1) ||
           !requested.subject.every(word => found.subject.includes(word))) continue;
-      best = Math.max(best, found.scale === requested.scale ? 2 : 1);
+      best = Math.max(best, requested.scale !== null && found.scale === requested.scale ? 2 : 1);
     }
     return best;
   }

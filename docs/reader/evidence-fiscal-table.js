@@ -6,14 +6,16 @@
   const compact = value => value.normalize('NFKC').replace(/\s+/gu, '');
   const yearPrefix = /^((?:19|20)\d{2})(?:회계연도|년도|년)?/u;
   const yearOnly = /^((?:19|20)\d{2})(?:회계연도|년도|년)?$/u;
-  const currency = /^(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?원$/u;
+  const moneyNumber = String.raw`(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?`;
+  const moneyScale = '(?:(?:십|백|천)?[만억조]|[십백천])';
+  const currency = new RegExp('^' + moneyScale + '?원$', 'u');
   const stub = /^(?:구분|항목|사업|사업명|세목|회계구분)$/u;
   const nonAmount = /(?:집행률|집행율|비중|비율|증감률|증감율|구성비|%|퍼센트)/u;
   const percent = /^(?:%|퍼센트)$/u;
   const rateBasis = '본예산|당초예산|예산현액|예산액|최종예산|추경예산';
   const rateTerms = new RegExp('(?:(' + rateBasis + ')(?:대비|기준|(?:을|를)?기준으로(?:한)?))?(?:예산)?집행[률율]', 'u');
   const rateSuffix = new RegExp('^(?:예산)?집행[률율]\\((' + rateBasis + ')(?:대비|기준)\\)$', 'u');
-  const number = /^([+−△▲▼-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)(.*)$/u;
+  const number = new RegExp('^([+−△▲▼-]?' + moneyNumber + ')(.*)$', 'u');
   const gaps = {
     layout:'표의 행과 열을 맞출 수 없습니다. 표 하나의 연도·단계 머리글과 금액 행을 함께 확인하세요.',
     scope:'질문의 항목과 범위가 일치하는 행을 찾지 못했습니다. 사업명·회계 구분과 추가 조건을 원표에서 확인하세요.',
@@ -110,7 +112,52 @@
     while (filler.lastIndex < value.length) if (!filler.exec(value)) return false;
     return true;
   }
-  const claimedAmount = /[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:(?:십|백|천)?(?:만|억|조)|십|백|천)?\s*원/gu;
+  const moneyTerm = moneyNumber + '[ \\t]*' + moneyScale;
+  const claimedAmount = new RegExp('(?<![\\d.,+−△▲▼-])[+−-]?(?:' + moneyTerm + '[ \\t]*){0,15}' +
+    moneyNumber + '(?:[ \\t]*' + moneyScale + ')?[ \\t]*원','gu');
+  const component = new RegExp('(' + moneyNumber + ')(?:[ \\t]*(' + moneyScale + '))?[ \\t]*','uy');
+  const exponents = {십:1, 백:2, 천:3, 만:4, 억:8, 조:12};
+  const exponent = scale => [...scale].reduce((power, c) => power + exponents[c], 0);
+  // Keep character offsets when reading fullwidth numbers. Other compatibility
+  // glyphs such as superscripts or circled digits have no monetary meaning here.
+  const moneyGlyphs = text => text.replace(/[！-～]/gu, c => String.fromCharCode(c.charCodeAt(0) - 0xfee0)).replace(/　/gu,' ');
+
+  function integerWon(numberText, power) {
+    if (numberText.length > 64) return null;
+    const [whole, decimal = ''] = numberText.replace(/,/gu,'').split('.');
+    const fraction = decimal.replace(/0+$/u,'');
+    if (fraction.length > power) return null;
+    return BigInt(whole + fraction) * 10n ** BigInt(power - fraction.length);
+  }
+
+  function claimedWon(amount) {
+    const body = amount.replace(/^[+−-]/u,'').slice(0,-1).trimEnd();
+    let total = 0n, lastPower = null;
+    component.lastIndex = 0;
+    while (component.lastIndex < body.length) {
+      const match = component.exec(body);
+      if (!match) return null;
+      const power = exponent(match[2] || '');
+      const value = integerWon(match[1], power);
+      // Each successive amount must fit strictly below the preceding scale.
+      // A decimal is unambiguous only on the final component.
+      if (value === null || (lastPower !== null && (power >= lastPower || value >= 10n ** BigInt(lastPower))) ||
+          (component.lastIndex < body.length && match[1].includes('.'))) return null;
+      total += value;
+      lastPower = power;
+    }
+    return /^[−-]/u.test(amount) ? -total : total;
+  }
+
+  function compareAmount(claim, parsed, unit, rowMatch) {
+    if (!claim || !parsed.numeric || /^[△▲▼]/u.test(parsed.numeric) ||
+        (claim.start < rowMatch.index + rowMatch[0].length && claim.end > rowMatch.index)) return null;
+    const digits = parsed.numeric.replace(/^[+−-]/u,'');
+    const printed = integerWon(digits, exponent(compact(unit).slice(0,-1)));
+    if (printed === null) return null;
+    const cell = /^[−-]/u.test(parsed.numeric) ? -printed : printed;
+    return {claimText:claim.text, claimWon:claim.won.toString(), cellWon:cell.toString(), same:claim.won === cell};
+  }
   const claimedRate = /[+−-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:%|퍼센트)/gu;
   function question(text) {
     const q = text.normalize('NFKC');
@@ -137,6 +184,18 @@
     else if (!stage && !fiscal.stages(q + ' 예산').size && /예산(?:액)?(?:[은는이가의을?]|$)/u.test(terms)) stage = 'budget';
     const years = [...q.matchAll(questionYear)];
     const amounts = [...q.matchAll(claimedAmount)];
+    let moneyClaim = null, invalidCompound = false;
+    if (amounts.length === 1) {
+      const [match] = amounts;
+      const won = claimedWon(match[0]);
+      invalidCompound = won === null && /[십백천만억조][ \t]*\d/u.test(match[0]);
+      // Obtain the original spelling from text, even when the project name was
+      // compatibility-normalized to match a row. Never turn e.g. 10² into 102.
+      const printed = text === q ? match : [...moneyGlyphs(text).matchAll(claimedAmount)].find(raw =>
+        raw[0] === match[0] && text.slice(0,raw.index).normalize('NFKC').length === match.index);
+      if (won !== null && printed) moneyClaim = {text:text.slice(printed.index,printed.index + printed[0].length),
+        won, start:match.index, end:match.index + match[0].length};
+    }
     const rateSupported = amounts.length === 0 && [...q.matchAll(claimedRate)].length <= 1 &&
       !/%\s*p|퍼센트\s*포인트|%\s*포인트|증감|증가|감소|상승|하락|차이|변화/iu.test(q);
     function remainder(value) {
@@ -150,8 +209,8 @@
       // Free-standing words made of the same syllables can be place names.
       return rest.replace(/\u0000(?:(?:에서는|에서도|에는|에도|에서|으로|[은는가의를를에로]|이(?!었|라|다|에)))?/gu,'');
     }
-    return {q, terms, stage, stageConflict, basis:rate?.[1], year:years.length === 1 && years[0][1],
-      supported:rate ? rateSupported : amounts.length <= 1 && !nonAmount.test(q), rest:remainder(q), remainder};
+    return {q, terms, stage, stageConflict, moneyClaim, basis:rate?.[1], year:years.length === 1 && years[0][1],
+      supported:rate ? rateSupported : amounts.length <= 1 && !invalidCompound && !nonAmount.test(q), rest:remainder(q), remainder};
   }
 
   function rowQuestion(query) {
@@ -163,10 +222,10 @@
 
   function scoped(ask) {
     if (!ask?.stage || ask.stageConflict || !ask.year || !ask.supported || onlyFiller(ask.rest)) return null;
-    return {year:ask.year, stage:ask.stage, matches(label, projectColumn = false) {
-      if (typeof label !== 'string' || !/\p{L}/u.test(label)) return false;
+    function matchingLabel(label, projectColumn = false) {
+      if (typeof label !== 'string' || !/\p{L}/u.test(label)) return null;
       const words = label.normalize('NFKC').trim().split(/\s+/u);
-      if (!ask.terms.includes(words.join(''))) return false;
+      if (!ask.terms.includes(words.join(''))) return null;
       const name = words.map(w => w.replace(/[.*+?^${}()|[\]\\]/gu,'\\$&')).join('\\s*');
       const suffix = projectColumn ? '(?:\\s*사업)?' : '';
       // Detect the printed name in the original words, before removing stage vocabulary.
@@ -176,10 +235,11 @@
         '(?:에서는|에는|에도|에서|으로|[은는이가의를를에로])?(?![\\p{L}\\p{N}])','gu');
       for (const m of ask.q.matchAll(pattern)) {
         const outside = ask.q.slice(0,m.index) + '\u0000' + ask.q.slice(m.index + m[0].length);
-        if (stageWording[ask.stage].test(compact(outside)) && onlyFiller(ask.remainder(outside))) return true;
+        if (stageWording[ask.stage].test(compact(outside)) && onlyFiller(ask.remainder(outside))) return m;
       }
-      return false;
-    }};
+      return null;
+    }
+    return {year:ask.year, stage:ask.stage, matchingLabel, matches:(label, projectColumn) => !!matchingLabel(label, projectColumn)};
   }
 
   function legend(line) {
@@ -295,11 +355,12 @@
 
   function valueOf(raw) {
     if (!raw || /^[-—–…]$/u.test(raw)) return {missing:true};
-    const parts = number.exec(raw.normalize('NFKC').trim());
+    const normalized = raw.normalize('NFKC').trim();
+    const parts = number.exec(normalized);
     if (!parts) return null;
     const unit = parts[2].trim();
     if (unit && !currency.test(compact(unit)) && !/^(?:%|%p|퍼센트)$/iu.test(unit)) return null;
-    return {unit};
+    return {unit, numeric:moneyGlyphs(raw).trim() === normalized ? parts[1] : null};
   }
 
   function headerRows(rows, start) {
@@ -382,7 +443,8 @@
           !values.every(Boolean) || values.every(value => value.missing)) return unresolved('layout');
       if (header.vertical && rowYear !== ask.year) continue;
       yearPresent = true;
-      if (!target.matches(rowLabel,header.projectColumn)) continue;
+      const rowMatch = target.matchingLabel(rowLabel,header.projectColumn);
+      if (!rowMatch) continue;
       if (selected) return unresolved('duplicateRow');
       const value = data.cells[column.index];
       const parsed = values[column.index - header.offset];
@@ -395,8 +457,9 @@
         (!unitLine?.options || unitLine.options.some(u => unitKey(u) === unitKey(units[0])));
       const position = {heading:column.raw, value, column:column.index + 1, rowLabel,
         headerParagraph:rows[header.last].paragraph, year:ask.year, stage:ask.stage, ...(column.basis ? {basis:column.basis} : {})};
+      const amountComparison = hasUnit && !isRate && compareAmount(ask.moneyClaim, parsed, units[0], rowMatch);
       selected = {...row, matched:[], context:rows.slice(0,header.last + 1),
-        ...(hasUnit ? {fiscalCell:{...position,unit:units[0]}} : {fiscalNavigation:position})};
+        ...(hasUnit ? {fiscalCell:{...position,unit:units[0], ...(amountComparison && {amountComparison})}} : {fiscalNavigation:position})};
     }
     if (!selected) return unresolved(yearPresent ? 'scope' : 'year');
     const unitGap = isRate ? gaps.rateUnits : '해당 행과 열은 찾았지만 금액 단위를 특정할 수 없습니다. 원표의 단위와 주석을 확인하세요.';

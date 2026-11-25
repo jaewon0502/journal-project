@@ -1316,6 +1316,14 @@
         block.append(node('p', window.JournalEvidenceFiscal.label(fiscal.stage) + ' · ' + coordinate),
           node('p', '원문 표기 ' + fiscal.value + ' · 단위 ' + fiscal.unit + ' · 머리글 ' + fiscal.headerParagraph + '문단', 'verbatim'),
           node('p', '원본에서 이 표가 실린 쪽과 머리글·단위를 대조하세요.'));
+        if (fiscal.amountComparison) {
+          const {claimText, claimWon, cellWon, same} = fiscal.amountComparison;
+          const won = value => BigInt(value).toLocaleString('ko-KR') + '원';
+          const comparison = same
+            ? '질문의 ‘' + claimText + '’과 표에 인쇄된 값은 모두 ' + won(cellWon) + '입니다.'
+            : '질문의 ‘' + claimText + '’은 ' + won(claimWon) + ', 표에 인쇄된 값은 ' + won(cellWon) + '입니다. 원표의 반올림 자릿수와 주석을 확인하세요.';
+          block.append(node('p', comparison, 'amount-comparison'));
+        }
         if (fiscal.stage === 'executionRate') {
           block.append(node('p', fiscal.basis ? '원표에 적힌 집행률의 분모 · ' + fiscal.basis :
             '이 열에는 집행률의 분모가 적혀 있지 않습니다. 어떤 예산액을 기준으로 했는지 원표 주석을 확인하세요.'));

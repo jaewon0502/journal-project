@@ -41,6 +41,32 @@ function openFinder(t) {
   return {w, doc, el, set, find};
 }
 
+test('복합 원화 금액을 비교하고 근거에는 원자료의 단위·열·값만 옮긴다', t => {
+  const {el, find} = openFinder(t);
+  const head = '구분\t2023년 결산\t2024년 결산';
+  const line = '도서관\t108\t120';
+  const text = ['단위: 백만 원',head,line].join('\n');
+  const search = amount => find(text,'2024년 도서관 결산액은 ' + amount + '인가?').querySelector('.source');
+  const equal = search('1억 2천만 원');
+  assert.match(equal.querySelector('.amount-comparison').textContent,/‘1억 2천만 원’.*모두 120,000,000원/);
+  const different = search('1억 800만 원');
+  assert.match(different.querySelector('.amount-comparison').textContent,/108,000,000원.*120,000,000원.*반올림/);
+  different.querySelector(':scope > button').click();
+  assert.equal(el('source-excerpt').value,text);
+  assert.match(el('source-locator').value,/도서관.*2024년 결산.*백만 원/);
+  assert.equal(el('verdict').value,'');
+  assert.equal(find(text.replace('단위: 백만 원\n',''),'2024년 도서관 결산액은 1억 2천만 원인가?').querySelector('.amount-comparison'),null);
+});
+
+test('공개 결산표의 다른 연도 금액을 질문해도 일반회계의 해당 연도 열을 보여 준다', t => {
+  const {find} = openFinder(t);
+  const sheet = require('../experiments/evidence-retrieval-transfer/fiscal-tables/fixture.json').documents.settlement;
+  const pasted = ['(단위: 조원)',...sheet.lines].join('\n');
+  const card = find(pasted,'2024년 일반회계 결산액은 343조 5천억 원인가?').querySelector('.source');
+  assert.match(card.querySelector('.amount-comparison').textContent,/343,500,000,000,000원.*344,500,000,000,000원/);
+  assert.match(card.textContent,/2024년 결산\(C\)/);
+});
+
 test('재정표에서 질문의 숫자와 다른 결산 열을 보여 주고 선택한 행과 원래 열·단위를 함께 옮긴다', t => {
   const {el, find, doc} = openFinder(t);
   const report = el('report-rows').textContent, sources = el('source-list').textContent;
