@@ -52,6 +52,8 @@ test('빈 실측의 분모는 0이고 효과는 미측정이며 가상 예시를
   const summary = await p.save();
   assert.equal(summary.overall.editors.enrolled, 0);
   assert.equal(summary.overall.time.tasks, 0);
+  assert.deepEqual(summary.overall.time.verifiedTrials, {
+    manual:{verified:null,tasks:0},journal:{verified:null,tasks:0}});
   assert.equal(summary.overall.time.reductionPct, null);
   assert.equal(summary.overall.partyLabelDirectionReversals, null);
   assert.deepEqual(summary.overall.verdictAndEvidence.manual, {tasks:0,verified:null,verifiedPct:null});
@@ -83,7 +85,8 @@ test('요약과 대시보드의 시간·집단 격차·완주 및 정확도 분�
   const safe = {accepted:0,eligible:4,pct:0};
   assert.deepEqual(overall.unsupportedAcceptance, {manual:safe,journal:safe,changePp:0,increased:false});
   assert.deepEqual(overall.time, {editors:4,tasks:16,manualMeanSeconds:60,journalMeanSeconds:30,reductionPct:50,
-    manualSecondsPerVerified:60,journalSecondsPerVerified:null,unsupportedAcceptance:overall.unsupportedAcceptance});
+    manualSecondsPerVerified:60,journalSecondsPerVerified:null,
+    verifiedTrials:{manual:{verified:8,tasks:8},journal:{verified:0,tasks:8}},unsupportedAcceptance:overall.unsupportedAcceptance});
   assert.deepEqual(Array.from(p.el('metrics').querySelectorAll('.value'), el => el.textContent),
     [overall.time.reductionPct + '%', overall.partyLabelAcceptanceGap.reductionPp + '%p']);
   assert.deepEqual(overall.partyLabelAcceptanceGap,{manualPp:0,journalPp:0,reductionPp:0,relativeReductionPct:null});
@@ -132,6 +135,26 @@ test('동시 일치율이 같은 두 방식의 오승인과 시간이 온전히 
   assert.deepEqual(first.unsupportedAcceptance,timed);
   assert.deepEqual(first.verdictAndEvidence.manual, {tasks:8,verified:6,verifiedPct:75});
   assert.deepEqual(first.verdictAndEvidence.journal,first.verdictAndEvidence.manual);
+});
+
+test('성공 한 건당 시간에는 온전히 시간을 기록한 과제만 들어가고 전체 품질 분모는 따로 보관한다', async t => {
+  const roster = Array.from({length:8}, (_,i) => invitation(i+1));
+  const records = roster.map(invite => completed(invite, {
+    partialTime:invite.ordinal === 5,
+    answer(task, item) {
+      const verified = task.method === 'manual' || invite.ordinal > 4;
+      return {verdict:item.expectedVerdict, sourceIds:verified ? item.expectedSourceIds : []};
+    }
+  }));
+  const summary = await dashboard(t,records,roster).save();
+  for (const view of [summary.overall, summary.observedEditions[0], summary.assignedMatchedEditions[0]]) {
+    assert.equal(view.time.tasks,16);
+    assert.equal(view.includedTasks,32);
+    assert.deepEqual(view.time.verifiedTrials,{manual:{verified:8,tasks:8},journal:{verified:0,tasks:8}});
+    assert.equal(view.time.manualSecondsPerVerified,60);
+    assert.equal(view.time.journalSecondsPerVerified,null);
+    assert.deepEqual(view.verdictAndEvidence.journal,{tasks:16,verified:8,verifiedPct:50});
+  }
 });
 
 test('전체와 해당 판본에서 정당 표기 채택의 방향이 뒤집힌 기사 수만 공유한다', async t => {

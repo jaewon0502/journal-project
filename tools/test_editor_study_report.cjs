@@ -7,7 +7,8 @@ function studySummary() {
   return {
     editors:{enrolled:8,included:8,completeBlocks:2}, includedTasks:32,
     time:{editors:4,tasks:16,manualMeanSeconds:40,journalMeanSeconds:32,reductionPct:20,
-      manualSecondsPerVerified:60,journalSecondsPerVerified:64},
+      manualSecondsPerVerified:80,journalSecondsPerVerified:64,
+      verifiedTrials:{manual:{verified:4,tasks:8},journal:{verified:4,tasks:8}}},
     verdictAndEvidence:{manual:{verified:10,tasks:16},journal:{verified:12,tasks:16}},
     unsupportedAcceptance:{manual:{accepted:4,eligible:8},journal:{accepted:4,eligible:8}},
     partyLabelAcceptanceGap:{manualPp:50,journalPp:25,reductionPp:25},
@@ -52,4 +53,19 @@ test('주 시간 분석 밖의 개인 완주자까지 보면 더 느린 편집�
     directions:{faster:4,slower:6,unchanged:0,unknown:0}};
   const html = report.html({kind:'demo',overall:{...studySummary(),individualCompletionTiming}});
   assert.match(html,/완주 10명 중 시간이 단축된 사람 4명, 증가한 사람 6명/);
+});
+
+test('성공당 시간에는 그 시간 표본의 성공 건수를 사용한다', () => {
+  const overall = studySummary();
+  overall.time.manualSecondsPerVerified = null;
+  overall.time.verifiedTrials.manual.verified = 0;
+  overall.verdictAndEvidence.manual.verified = 8;
+  const dom = new JSDOM(report.html({kind:'demo',overall}));
+  try {
+    const rows = [...dom.window.document.querySelectorAll('tbody tr')];
+    const timed = rows.find(r=>r.cells[0].textContent==='검증 성공 한 건당 투입 시간');
+    const all = rows.find(r=>r.cells[0].textContent.includes('전체 판정 표본'));
+    assert.equal(timed.cells[1].textContent,'미산출성공 0/8건');
+    assert.equal(all.cells[1].textContent,'8/16 (50%)');
+  } finally {dom.window.close();}
 });

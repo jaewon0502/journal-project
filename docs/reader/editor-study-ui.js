@@ -594,6 +594,10 @@
       return {tasks:arm?.total ?? 0, verified:arm?.qualityCorrect ?? null,
         verifiedPct:arm?.total ? 100 * arm.qualityCorrect / arm.total : null};
     }
+    function timedVerified(method) {
+      const arm = a.timedQuality?.[method];
+      return {verified:arm?.verified ?? null, tasks:arm?.total ?? 0};
+    }
     function unsupportedAcceptance(group) {
       function counts(arm) {
         const eligible = arm?.unsafeTotal ?? 0;
@@ -626,6 +630,7 @@
         journalMeanSeconds:a.time?.journalSeconds ?? null, reductionPct:a.time?.reductionPct ?? null,
         manualSecondsPerVerified:a.timedQuality?.manual.secondsPerVerified ?? null,
         journalSecondsPerVerified:a.timedQuality?.journal.secondsPerVerified ?? null,
+        verifiedTrials:{manual:timedVerified('manual'), journal:timedVerified('journal')},
         unsupportedAcceptance:unsupportedAcceptance(a.timedQuality)},
       verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
       unsupportedAcceptance:unsupportedAcceptance(a.quality),

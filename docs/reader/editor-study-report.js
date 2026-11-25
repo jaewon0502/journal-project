@@ -40,10 +40,17 @@
     const headline = '<div class="highlights"><div>과제당 검토 시간<strong>' +
       change(time.reductionPct,'%','단축','증가') + '</strong></div><div>정당 표기 간 사실 채택률 격차<strong>' +
       change(gap.reductionPp,'%p','감소','증가') + '</strong></div></div>';
+    function perSuccess(seconds, arm) {
+      let sample = '해당 표본의 성공 건수 미기록';
+      if (arm?.tasks === 0) sample = '시간 표본 없음';
+      else if (count(arm?.tasks) && count(arm.verified)) sample = '성공 ' + ratio(arm.verified,arm.tasks) + '건';
+      return measure(seconds,'초') + '<br><small>' + sample + '</small>';
+    }
     const rows =
       row('과제당 평균 검토 시간', measure(time.manualMeanSeconds,'초'), measure(time.journalMeanSeconds,'초')) +
-      row('검증 성공 한 건당 투입 시간', measure(time.manualSecondsPerVerified,'초'), measure(time.journalSecondsPerVerified,'초')) +
-      row('판정과 대표 근거 동시 일치', fractionAndRate(quality.manual.verified, quality.manual.tasks),
+      row('검증 성공 한 건당 투입 시간', perSuccess(time.manualSecondsPerVerified,time.verifiedTrials?.manual),
+        perSuccess(time.journalSecondsPerVerified,time.verifiedTrials?.journal)) +
+      row('전체 판정 표본의 판정·대표 근거 동시 일치', fractionAndRate(quality.manual.verified, quality.manual.tasks),
         fractionAndRate(quality.journal.verified, quality.journal.tasks)) +
       row('반박·근거 부족 주장을 사실로 채택', fractionAndRate(unsafe.manual.accepted, unsafe.manual.eligible),
         fractionAndRate(unsafe.journal.accepted, unsafe.journal.eligible)) +
