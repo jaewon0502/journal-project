@@ -151,7 +151,7 @@
 
   function rateQuestion(question, articleContext) {
     const query = normalizeRate(question);
-    const relative = /상대\s*(?:변화율|증가율|감소율)/u;
+    const relative = /상대\s*(?:변화율|증가율|감소율)|상대(?:적으로)?\s*(?=\d+(?:\.\d+)?\s*(?:%|퍼센트))/u;
     const relativeRate = relative.test(query), points = /(?:%|퍼센트)\s*(?:포인트|p)/iu.test(query);
     if (relativeRate === points) return null;
     const requestedUnit = relativeRate ? '%' : '%p';
@@ -186,14 +186,17 @@
   function comparableRates(text, ask) {
     let paragraph = 0, annualYear = null, sectionYear = null, header = null, waitingRate = null, newPage = true;
     const hits = [];
-    let matchingRows = 0;
+    let matchingRows = 0, levelOnly = null, pageTitle = null, levelTitle = null;
     const title = /^(?:[<〈]\s*)?((?:19|20)\d{2})\s*년\s*연간\s*(?:고용동향|고용통계|고용률|실업률|경제활동참가율|통계)(?:\s*\(요약\))?\s*[>〉]?$/u;
     const continuation = /^(?:[가-하]|\d+)\.\s*(?:취업자\s*(?:동향|및\s*고용률)|실업자\s*(?:동향|및\s*실업률)|경제활동참가율)$/u;
     const caption = /^(?:[<〈]\s*(?:고용률|실업률|경제활동참가율)(?:\s*추이)?\s*[>〉]|[（(]?단\s*위\s*[:：]\s*[%pP,\s]+[)）]?)$/u;
     const level = /^(\d{1,3}\s*(?:세\s*(?:이상|이하)|[~∼–-]\s*\d{1,3}\s*세))\s*(고용률|실업률|경제활동참가율)\s*\(\s*%\s*\)\s+(.+)$/u;
     const change = /^\(\s*전년\s*대비\s*증감\s*,\s*%\s*p\s*\)\s+(.+)$/iu;
     for (const raw of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
-      if (raw.includes('\f')) { header = waitingRate = null; newPage = true; }
+      if (raw.includes('\f')) {
+        if (waitingRate) levelOnly = waitingRate;
+        header = waitingRate = pageTitle = null; newPage = true;
+      }
       if (!raw.trim()) continue;
       const row = {paragraph:++paragraph, text:raw}, line = normalizeRate(raw.trim());
       const heading = title.exec(line);
@@ -202,7 +205,7 @@
         annualYear = sectionYear;
       }
       newPage = false;
-      if (heading) { sectionYear = annualYear = +heading[1]; header = waitingRate = null; continue; }
+      if (heading) { sectionYear = annualYear = +heading[1]; pageTitle = row; header = waitingRate = null; continue; }
       if (!annualYear) continue;
       const years = yearHeader(line, annualYear);
       if (years) {
@@ -221,18 +224,25 @@
         const numbers = delta[1].replace(/\(\s*([+−△-]?\d+(?:\.\d+)?)\s*\)/gu, '$1').split(/\s+/u);
         if (numbers.length === header.years.length && numbers.every(v => /^[+−△-]?\d+(?:\.\d+)?$/u.test(v))) {
           const at = header.current;
-          hits.push({...waitingRate.row, matched:[ask.population, ask.measure], context:[header.row, row], years:header.years,
-            annualRate:{population:ask.population, measure:ask.measure, requestedUnit:ask.requestedUnit, headerParagraph:header.row.paragraph, changeParagraph:row.paragraph,
-              previous:{year:ask.previous, value:waitingRate.values[header.previous]},
-              current:{year:ask.current, value:waitingRate.values[at]}, change:{year:ask.current, value:numbers[at], unit:'%p'}}});
+          hits.push({...waitingRate, context:[header.row, row], annualRate:{...waitingRate.annualRate,
+            changeParagraph:row.paragraph, change:{year:ask.current, value:numbers[at], unit:'%p'}}});
         }
       }
-      waitingRate = null;
       const rate = level.exec(line);
+      // The previous population's row ended without a printed change. A new
+      // named rate row or end of input is different from an unreadable change row.
+      if (rate && waitingRate) levelOnly = waitingRate;
+      waitingRate = null;
       if (rate && compact(rate[1]) === ask.population && rate[2] === ask.measure) {
         matchingRows++;
         const values = rate[3].split(/\s+/u);
-        if (values.length === header.years.length && values.every(v => /^\d+(?:\.\d+)?$/u.test(v) && +v <= 100)) waitingRate = {row, values};
+        if (values.length === header.years.length && values.every(v => /^\d+(?:\.\d+)?$/u.test(v) && +v <= 100)) {
+          levelTitle = pageTitle;
+          waitingRate = {...row, matched:[ask.population,ask.measure], context:[header.row], years:header.years,
+            annualRate:{population:ask.population, measure:ask.measure, requestedUnit:ask.requestedUnit,
+              headerParagraph:header.row.paragraph, previous:{year:ask.previous,value:values[header.previous]},
+              current:{year:ask.current,value:values[header.current]}}};
+        }
       }
       // The employment table also prints a count series before its rate series.
       // Unrelated rows and new captions cannot carry this header forward.
@@ -244,7 +254,11 @@
       }
     }
     // The same scope may occur in multiple sections. Do not choose between differing series.
-    return matchingRows === 1 && hits.length === 1 ? hits : [];
+    if (matchingRows !== 1) return [];
+    if (hits.length) return hits;
+    const levels = waitingRate || levelOnly;
+    if (ask.requestedUnit !== '%' || !levels) return [];
+    return [{...levels, context:levelTitle ? [levelTitle, ...levels.context] : levels.context}];
   }
 
   function statedYears(text) {

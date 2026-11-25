@@ -34,6 +34,24 @@ class Dependencies(HTMLParser):
 
 
 class FacilitatorPack(unittest.TestCase):
+    def test_rate_practice_ships_with_verified_counts_only_in_coordinator_kit(self):
+        with ZipFile(BytesIO(packet_bytes())) as archive:
+            name = 'annual-rate-practice.html'
+            self.assertIn(name, archive.read('시작.html').decode())
+            page = archive.read(name).decode()
+            links = Dependencies()
+            links.feed(page)
+            self.assertLessEqual(links.local, set(archive.namelist()))
+            record = json.loads((CASES / 'labour-field-review' / 'rate-counts-result.json').read_text())
+            for row in record['observations']:
+                for key in ('populationThousands', 'employedThousands'):
+                    self.assertIn(f'{row[key]:,}', page)
+            self.assertIn(f"{record['relativeFromCountDisplays']['estimatePct']:.5f}%", page)
+            for packet in ('독립 기사 검토.zip', 'participant-editor-study.zip',
+                           '참여 과제/고용/고용-평소도구.zip', '참여 과제/고용/고용-저널.zip'):
+                with ZipFile(BytesIO(archive.read(packet))) as participant:
+                    self.assertNotIn(name, participant.namelist())
+
     def test_linked_participant_kits_match_the_standalone_distributions(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:
             links = Dependencies()

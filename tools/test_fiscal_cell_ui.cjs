@@ -309,6 +309,30 @@ test('두 해의 고용률과 공표 증감을 따로 읽고 연령대에 맞는
   assert.doesNotMatch(zero.textContent, /Infinity|NaN/);
 });
 
+test('표시 고용률로 계산한 값과 반올림 범위를 보여 주고 발췌와 편집자 판정은 분리한다', t => {
+  const {el, find} = openFinder(t);
+  const years = '          ’23년    ’24년';
+  const age64 = ' 15～64세  고용률(%)     69.2    69.5';
+  const age15 = ' 15세이상  고용률(%)    62.6    62.7';
+  const source = ['2024년 연간 고용동향',years,age64,age15].join('\n');
+  const ask = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+  const card = find(source,ask).querySelector('.annual-rate');
+  assert.ok(card.querySelector('details').open);
+  assert.match(card.textContent,/두 표시값의 차이 0\.1%p/);
+  assert.match(card.textContent,/약 0\.16%/);
+  assert.match(card.textContent,/반올림됐다면.*약 0%~0\.32%/);
+  assert.doesNotMatch(card.textContent,/원표 표기|사실로 확인|반박됨/);
+  card.querySelector('button').click();
+  assert.equal(el('source-excerpt').value,['2024년 연간 고용동향',years,'[…]',age15].join('\n'));
+  assert.doesNotMatch(el('source-locator').value,/증감/);
+  assert.equal(el('verdict').value,'');
+  const lower = find(source.replace('62.7','62.5'),ask).querySelector('.annual-rate');
+  assert.match(lower.textContent,/두 표시값의 차이 -0\.1%p.*약 -0\.16%/);
+  const zero = find(source.replace('62.6','0.0'),ask).querySelector('.annual-rate');
+  assert.match(zero.textContent,/0%여서 상대 변화율을 계산할 수 없습니다/);
+  assert.doesNotMatch(zero.textContent,/가능한 상대 변화율의 범위|Infinity|NaN/);
+});
+
 test('한 사업의 집행률 두 개를 원표 분모로 구분하고 발췌문에 열 이름을 함께 저장한다', t => {
   const {el, find, w} = openFinder(t);
   const titles = '회계연도\t사업명\t본예산(억원)\t예산현액(억원)\t집행액(억원)\t본예산 대비 집행률(%)\t집행률(예산현액 기준)(%)';

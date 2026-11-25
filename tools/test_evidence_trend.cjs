@@ -140,6 +140,26 @@ test('인접하지 않은 연도, 다른 분모와 월·지역·성별 한정 �
   assert.equal(annualHit(labourTable, rateQuery, '2022년'), undefined);
 });
 
+test('상대 변화율은 공표 증감 행이 없어도 같은 연간 비율 행과 지정한 두 열로 대조한다', () => {
+  // Frozen p.32 rows, as when only the year header and the two level rows are copied.
+  const levels = labourTable.filter(row => !row.includes('증감, %p'));
+  const question = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+  const hit = annualHit(levels,question);
+  assert.deepEqual([hit.previous,hit.current],[{year:2023,value:'62.6'},{year:2024,value:'62.7'}]);
+  assert.equal(hit.change,undefined);
+  assert.deepEqual(find(levels.join('\n'),question).hits[0].context.map(r => r.text),[labourTable[0],labourTable[3]]);
+  assert.equal(annualHit(levels,question.replace('15세 이상','15~64세')).previous.value,'69.2');
+  assert.equal(annualHit(labourTable,question).change.value,'0.1');
+  for (const q of [rateQuery,question.replace('상대 ',''),question.replace('연간','12월'),
+    question.replace('15세 이상','여성 15세 이상'),question.replace('2023년','2021년')]) {
+    assert.equal(annualHit(levels,q),undefined,q);
+  }
+  for (const malformed of [levels.concat(levels.at(-1)),levels.concat('(전년대비 증감, %p) (0.1)'),
+    levels.map(line => line.replace('62.6    62.7','62.6    -'))]) {
+    assert.equal(annualHit(malformed,question),undefined);
+  }
+});
+
 test('연간 표제·명시된 연도·정확한 행 개수·원문 단위를 확인하고 다른 표의 행은 연결하지 않는다', () => {
   const source = labourTable.join('\n'), ask = text => find(text, rateQuery).hits;
   for (const altered of [

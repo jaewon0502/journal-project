@@ -1230,15 +1230,22 @@
   function annualRateCard(passage) {
     const {population, measure, previous, current, change} = passage.annualRate;
     const label = population.replace(/세(이상|이하)/u, '세 $1') + ' ' + measure;
-    const location = label + ' 행 · ' + previous.year + '년·' + current.year + '년 열 · 전년대비 증감(%p) 행';
+    const location = (change ? '' : '연간 ') + label + ' 행 · ' + previous.year + '년·' + current.year + '년 열' +
+      (change ? ' · 전년대비 증감(%p) 행' : '');
     const card = node('div', undefined, 'source annual-rate');
+    const base = Number(previous.value), end = Number(current.value);
+    const digits = value => value.split('.')[1]?.length || 0;
+    const places = Math.max(digits(previous.value), digits(current.value));
     card.append(node('strong', label),
-      node('p', previous.year + '년 ' + previous.value + '% → ' + current.year + '년 ' + current.value + '%'),
-      node('p', current.year + '년 전년 대비 증감 · 원표 표기 ' + change.value + '%p'));
+      node('p', previous.year + '년 ' + previous.value + '% → ' + current.year + '년 ' + current.value + '%'));
+    if (change) card.append(node('p', current.year + '년 전년 대비 증감 · 원표 표기 ' + change.value + '%p'));
+    else {
+      const difference = places <= 12 ? Number((end - base).toFixed(places)) : '(' + current.value + ' − ' + previous.value + ')';
+      card.append(node('p', '두 표시값의 차이 ' + difference + '%p. 이 발췌에는 공표 증감 행이 없습니다.'));
+    }
     const calculation = node('details');
     calculation.open = passage.annualRate.requestedUnit === '%';
     calculation.append(node('summary', '두 표시값으로 계산한 상대 변화율'));
-    const base = Number(previous.value), end = Number(current.value);
     if (base > 0) {
       const pct = 100 * (end - base) / base;
       const value = Math.abs(pct) > 0 && Math.abs(pct) < 0.005
@@ -1246,11 +1253,22 @@
         : '약 ' + pct.toLocaleString('ko-KR', {maximumFractionDigits:2}) + '%';
       calculation.append(node('p', '(' + current.value + ' − ' + previous.value + ') ÷ ' + previous.value +
         ' × 100 = ' + value + '. 원표에 표시된 자릿수로 계산했습니다.'));
+      if (!change && places <= 12) {
+        // Conditional on rounding each percentage to the nearest displayed
+        // place. These limits use only the two levels, without sampling error.
+        const prevHalf = 0.5 * 10 ** -digits(previous.value), nextHalf = 0.5 * 10 ** -digits(current.value);
+        const lower = (Math.max(0, end - nextHalf) / Math.min(100, base + prevHalf) - 1) * 100;
+        const upper = (Math.min(100, end + nextHalf) / (base - prevHalf) - 1) * 100;
+        calculation.append(node('p', '각 비율이 표시 자릿수에서 반올림됐다면 두 표시값만으로 가능한 상대 변화율의 범위는 약 ' +
+          Number(lower.toFixed(2)) + '%~' + Number(upper.toFixed(2)) + '%입니다.'));
+      }
+      calculation.append(node('p', '반올림 전 비율로 계산한 상대 변화율은 달라질 수 있습니다. 기사 수치가 맞는지 판정하려면 더 정밀한 비율이나 두 해의 분자와 분모를 대조하세요.'));
     } else calculation.append(node('p', '이전 해의 비율이 0%여서 상대 변화율을 계산할 수 없습니다.'));
     const entries = [...passage.context, passage];
     const snippet = citationRows(entries);
-    card.append(calculation, node('p', '붙여넣은 본문에서 발췌할 연도 머리글과 두 행'), node('blockquote', snippet.text, 'verbatim'),
-      button('연도 머리글과 두 행을 근거로 사용', () => useExcerpt(snippet, location)));
+    const cited = change ? '연도 머리글과 두 행' : '연도 머리글과 비율 행';
+    card.append(calculation, node('p', '붙여넣은 본문에서 발췌할 ' + cited), node('blockquote', snippet.text, 'verbatim'),
+      button(cited + '을 근거로 사용', () => useExcerpt(snippet, location)));
     return card;
   }
   function findPassages() {
