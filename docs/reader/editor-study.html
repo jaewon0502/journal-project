@@ -24,7 +24,8 @@
 <p id="data-notice" class="notice"></p>
 <div id="demo-options" hidden><label for="demo-example">살펴볼 가상 기록</label><select id="demo-example">
 <option value="complete">8명 · 모든 과제의 시간 기록</option><option value="partial">12명 · 두 과제의 시간 일부 누락</option><option value="agreement">4명 · 두 표기에서 같은 오답을 고른 사례</option><option value="missing">8명 · 32건 중 한 건 미제출</option>
-<option value="editions">8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본</option></select></div>
+<option value="editions">8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본</option>
+<option value="adoptions">4명 · 오승인은 같은데 반박된 주장을 더 많이 채택한 사례</option></select></div>
 <div class="statline" id="counts"></div>
 <section class="box" id="withdrawal-work" hidden><h2>제출 전에 중단한 과제</h2><p id="withdrawal-counts"></p><div class="scroll" id="withdrawal-table"></div><p class="subtle">시간은 중단한 과제에서 타이머로 확인한 구간의 합계입니다. 실행 중 창이 닫혔다면 확인 가능한 구간만 더합니다. 이 과제는 방식별 평균과 판정 비교에서 제외합니다.</p></section>
 <div id="metrics" class="metricgrid"></div>
@@ -45,12 +46,16 @@
 <p class="subtle">네 명 모두 답안을 제출한 묶음에서 편집자마다 방식별 두 과제의 합계를 비교합니다. 타이머가 중단된 과제도 기록된 구간이 상대 방식의 전체 시간보다 길면 어느 쪽이 더 오래 걸렸는지 알 수 있습니다. 빠진 시간이 얼마나 긴지는 알 수 없어 절감률 계산에는 기존의 완전한 시간 기록만 씁니다.</p></section>
 <section class="box" aria-labelledby="timed-quality-title"><h2 id="timed-quality-title">검증 결과별 시간과 성공 1건당 총투입 시간</h2>
 <p id="timed-quality-sample"></p><p id="timed-quality-warning" class="notice sample" hidden></p>
+<p id="same-adoption-sample" hidden>이 편집자들의 <a href="#fact-adoptions-title">사실 채택과 원자료 일치율</a>을 확인할 수 있습니다.</p>
 <div class="scroll" id="timed-quality-table" role="region" aria-label="방식별 시간과 판정 품질 비교표" tabindex="0"></div><p class="subtle">결과별 평균은 해당 방식에서 성공하거나 실패한 제출 과제 한 건씩에 같은 비중을 줍니다. 방식에 따라 각 결과에 포함된 기사와 편집자가 다를 수 있습니다.</p><p id="timed-quality-change" hidden></p><p id="timed-quality-editors" hidden></p>
 </section>
 <section class="box"><h2>제공된 원자료 검토 시간</h2><p id="phase-counts"></p><div class="scroll" id="phase-table"></div>
 <details id="phase-pairs"><summary>편집자별 단계 시간</summary><div class="scroll" id="phase-pair-table"></div></details>
 <p class="subtle">원자료를 처음 찾아 확보하는 시간은 <a href="field-review.html">실제 기사 검토</a>에서 따로 잽니다.</p></section>
 <section class="box"><h2>완료한 편집자 묶음 전체의 판정 품질</h2><p>답안을 모두 제출한 묶음은 시간이 일부 빠졌어도 여기에 포함합니다.</p><p id="quality-warning" class="notice sample" hidden></p><div class="scroll" id="quality"></div>
+<h3 id="fact-adoptions-title" tabindex="-1">사실 채택과 원자료 일치율</h3>
+<p>첫 두 행은 편집자가 사실로 채택한 응답을 분모로 씁니다. 아래 두 행은 기준 판정이 각각 ‘반박’인 과제와 ‘근거 불충분’인 과제에서 사실로 채택한 비율입니다.</p>
+<div class="scroll" id="adoption-quality" role="region" aria-labelledby="fact-adoptions-title" tabindex="0"></div>
 <h3>가상 기사에 붙인 성향 표기별 결과</h3><p>근거 없는 사실 채택률은 기준 판정이 ‘근거로 지지됨’ 이외인 과제에서 계산합니다. 나머지 비율의 분모는 해당 표기와 방식으로 완료한 분석 대상 과제 수입니다.</p><div class="scroll" id="quality-by-variant"></div></section>
 <section class="box" id="case-quality" aria-labelledby="case-quality-heading" hidden><h2 id="case-quality-heading">기사별 정당 표기 격차와 검증 정확도</h2><p>각 모의 기사의 두 표기를 서로 다른 편집자에게 배정합니다. 기사를 펼치면 실제로 고른 판정과 실험의 기준 자료를 대조할 수 있습니다. 각 칸의 분모는 해당 방식과 표기로 기사를 검토한 응답 수입니다.</p><div id="case-quality-list"></div></section>
 <details class="box"><summary>정당 표기별 판정 분포와 사례별 응답 수</summary><p id="distribution-gap"></p><p>같은 기사와 근거를 본 두 집단의 응답을 비교합니다. 사례별로 네 판정의 응답률 차이를 절댓값으로 더한 뒤 절반을 취해 평균냅니다. 두 집단의 분포가 같으면 0%p, 어느 판정도 겹치지 않으면 100%p입니다. 표의 각 칸은 해당 판정 건수 / 전체 응답 수입니다.</p><div class="scroll" id="cells"></div></details>

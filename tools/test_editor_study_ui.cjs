@@ -61,6 +61,63 @@ test('두 표기가 같은 오답에 모이는 가상 사례는 전체 일치율
   assert.equal(p.el('quality').querySelector('tbody'), null);
 });
 
+test('오승인 합계가 같아도 반박된 주장 채택의 증가를 예시의 전체·시간 표본에서 확인한다', t => {
+  const p = page(t);
+  p.el('demo-view').click();
+  const selector = p.el('demo-example');
+  selector.value = 'adoptions';
+  selector.dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('data-notice').textContent, /가상 수치 예시/);
+  assert.match(p.el('metrics').textContent, /시간 절감률50%/);
+  assert.match(p.el('quality').textContent, /근거 없는 사실 채택50% \(2\/4\)50% \(2\/4\)/);
+  assert.deepEqual([...p.el('adoption-quality').querySelectorAll('tbody tr')].map(row => [...row.cells].map(cell => cell.textContent)), [
+    ['사실 채택 중 판정·대표 근거 모두 일치','66.7% (4/6)','66.7% (4/6)'],
+    ['사실 채택 중 판정만 일치 (근거가 다르거나 미지정)','0% (0/6)','0% (0/6)'],
+    ['원자료가 반박한 과제 중 사실 채택','0% (0/2)','100% (2/2)'],
+    ['근거가 불충분한 과제 중 사실 채택','100% (2/2)','0% (0/2)']
+  ]);
+  for (const id of ['quality-warning','timed-quality-warning']) {
+    assert.equal(p.el(id).hidden,false);
+    assert.match(p.el(id).textContent,/원자료가 반박한 과제의 사실 채택률 100%p 상승 \(0\/2 → 2\/2\)/);
+  }
+  assert.equal(p.el('same-adoption-sample').hidden,false);
+  assert.equal(p.el('export-summary').disabled,true);
+  p.el('real-view').click();
+  assert.equal(p.el('adoption-quality').querySelector('tbody'),null);
+  assert.equal(p.el('same-adoption-sample').hidden,true);
+});
+
+test('오승인 예시 링크는 해당 표를 열고, 직접 전환하거나 진행 중인 참여자가 열면 현재 선택을 따른다', t => {
+  const link = '#demo-adoptions';
+  for (const choice of ['real','partial']) {
+    const p = page(t,link);
+    assert.equal(p.el('demo-example').value,'adoptions');
+    assert.equal(p.w.document.activeElement,p.el('fact-adoptions-title'));
+    assert.match(p.el('fact-adoptions-title').textContent,/가상 기록/);
+    assert.match(p.el('adoption-quality').textContent,/원자료가 반박한 과제 중 사실 채택0% \(0\/2\)100% \(2\/2\)/);
+    if (choice === 'real') {
+      p.el('real-view').click();
+      assert.ok(p.el('demo-options').hidden);
+      assert.doesNotMatch(p.el('fact-adoptions-title').textContent,/가상 기록/);
+    } else {
+      p.el('demo-example').value = choice;
+      p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+      assert.match(p.el('counts').textContent,/등록 12명/);
+      assert.equal(p.el('demo-example').value,'partial');
+    }
+    assert.equal(p.w.location.hash,'');
+  }
+  const started = page(t,'#participate');
+  started.enroll(1); started.el('begin-trial').click();
+  const returning = page(t,link,undefined,started.workspace());
+  assert.equal(returning.el('participant').hidden,false);
+  assert.equal(returning.el('dashboard').hidden,true);
+  assert.equal(returning.el('adoption-quality').querySelector('tbody'),null);
+  const kit = page(t,link,undefined,undefined,true);
+  assert.equal(kit.el('participant').hidden,false);
+  assert.equal(kit.el('adoption-quality'),null);
+});
+
 test('진행자는 시간 누락 예시에서 4명과 12명의 결과를 대조하고 개인 실측으로 돌아갈 수 있다', t => {
   const p = page(t);
   const options = p.el('demo-options'), selector = p.el('demo-example'), coverage = p.el('timing-coverage');
@@ -604,6 +661,50 @@ function completedRecord(ordinal, id) {
   return record;
 }
 
+test('공유 요약은 사실 채택의 검증 결과를 전체와 시간 표본의 실제 분모로 내보낸다', async t => {
+  const p = page(t);
+  const files = captureDownloads(p);
+  async function summary() {
+    p.el('export-summary').click();
+    return JSON.parse(await files.at(-1).text()).overall.factAdoptions;
+  }
+  const empty = await summary();
+  assert.equal(empty.all.manual.total,0);
+  assert.equal(empty.all.manual.verified,null);
+  assert.deepEqual(empty.all.manual.contradicted,{accepted:null,eligible:0,pct:null});
+  assert.deepEqual(empty.timed,empty.all);
+  p.el('issue-codes').click(); p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const r = completedRecord(inv.ordinal,inv.id);
+    for (const trial of r.trials) {
+      const gold = p.w.JournalStudyCases.get(trial.caseId,trial.variant);
+      trial.verdict = 'insufficient';
+      trial.sourceIds = gold.expectedSourceIds.slice();
+      if (inv.ordinal > 4 && trial.method === 'journal') {
+        trial.verdict = 'supported';
+        if (trial.caseId === 'transit') trial.sourceIds = [];
+      }
+    }
+    if (inv.ordinal === 5) Object.assign(r.trials[0],{elapsedMs:null,observedMs:5000});
+    return r;
+  });
+  await importFiles(p,records.map(r => JSON.stringify(r)));
+  const detail = await summary();
+  assert.deepEqual(detail.all.journal,{
+    total:8, verified:2, otherSource:2, verifiedPct:25, otherSourcePct:25,
+    contradicted:{accepted:2,eligible:4,pct:50}, insufficient:{accepted:2,eligible:4,pct:50}
+  });
+  assert.deepEqual(detail.timed.journal,{
+    total:0, verified:0, otherSource:0, verifiedPct:null, otherSourcePct:null,
+    contradicted:{accepted:0,eligible:2,pct:0}, insufficient:{accepted:0,eligible:2,pct:0}
+  });
+  assert.deepEqual(detail.timed.manual,detail.timed.journal);
+  assert.match(p.el('adoption-quality').textContent,/판정만 일치.*— \(0\/0\)25% \(2\/8\)/);
+  assert.match(p.el('timed-quality-table').textContent,/판정만 일치.*— \(0\/0\)— \(0\/0\)/);
+  assert.equal(p.el('same-adoption-sample').hidden,true);
+  assert.doesNotMatch(JSON.stringify(detail),/participantId|trials|reason|sourceIds|E[0-9A-F]{16}/);
+});
+
 test('같은 판본 표는 원래 네 명이 함께 사용한 자료로 시간·판정·정당 표기 격차를 계산한다', async t => {
   const p = page(t), kits = ['a'.repeat(64), 'b'.repeat(64)];
   for (let i = 0; i < 4; i++) p.el('issue-codes').click();
@@ -707,7 +808,9 @@ test('시간이 절반으로 줄어도 같은 편집자들의 성공률 하락�
   assert.deepEqual(rows().map(row => row.slice(1)), [
     ['960초','480초'], ['100% (8/8)','50% (4/8)'], ['100% (8/8)','0% (0/8)'],
     ['100% (8/8)','0% (0/8)'], ['0% (0/4)','100% (4/4)'], ['120초','산출 불가 (성공 0건)'],
-    ['120초 (8건)','산출 불가 (0건)'], ['산출 불가 (0건)','60초 (8건)']
+    ['120초 (8건)','산출 불가 (0건)'], ['산출 불가 (0건)','60초 (8건)'],
+    ['100% (4/4)','0% (0/8)'], ['0% (0/4)','50% (4/8)'],
+    ['0% (0/2)','100% (2/2)'], ['0% (0/2)','100% (2/2)']
   ]);
   assert.equal(p.el('timed-quality-warning').hidden, false);
   assert.match(p.el('timed-quality-warning').textContent, /판정·근거 동시 일치율 100%p 하락.*근거 없는 사실 채택률 100%p 상승/);

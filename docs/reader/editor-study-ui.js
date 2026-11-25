@@ -357,6 +357,30 @@
     }
     el('timing-coverage-range').textContent = c ? '이 ' + c.total + '명 중 검토 시간이 줄어든 인원은 ' + range + '입니다.' : '';
   }
+  const unsupportedTypes = [
+    ['contradicted', '원자료가 반박한 과제'],
+    ['insufficient', '근거가 불충분한 과제']
+  ];
+  function adoptionRows(group) {
+    if (!group) return [];
+    const arms = [group.manual.adoptions, group.journal.adoptions];
+    return [
+      ['사실 채택 중 판정·대표 근거 모두 일치', ...arms.map(v => ratio(v.verified, v.total))],
+      ['사실 채택 중 판정만 일치 (근거가 다르거나 미지정)', ...arms.map(v => ratio(v.otherSource, v.total))],
+      ...unsupportedTypes.map(([key, label]) => [label + ' 중 사실 채택', ...arms.map(v => ratio(v[key].accepted, v[key].eligible))])
+    ];
+  }
+  function adoptionWarnings(group) {
+    const warnings = [];
+    for (const [key, label] of unsupportedTypes) {
+      const m = group.manual.adoptions[key], j = group.journal.adoptions[key];
+      if (!m.eligible || !j.eligible) continue;
+      const rise = 100 * (j.accepted / j.eligible - m.accepted / m.eligible);
+      if (rise > 0) warnings.push(label + '의 사실 채택률 ' + fmt(rise) + '%p 상승 (' +
+        m.accepted + '/' + m.eligible + ' → ' + j.accepted + '/' + j.eligible + ')');
+    }
+    return warnings;
+  }
   function showTimedQuality(a) {
     const q = a.timedQuality;
     el('timed-quality-sample').textContent = '판정 비교에 포함된 ' + a.included + '명 중 시간까지 기록된 4인 묶음의 ' +
@@ -382,6 +406,8 @@
         const rise = 100 * (q.journal.unsafe / q.journal.unsafeTotal - q.manual.unsafe / q.manual.unsafeTotal);
         if (rise > 0) warnings.push('근거 없는 사실 채택률 ' + fmt(rise) + '%p 상승');
       }
+      warnings.push(...adoptionWarnings(q));
+      if (a.timing.included !== a.included) rows.push(...adoptionRows(q));
       const d = q.perVerified;
       if (d.savedSeconds === null) change = '한쪽 이상에서 검증 성공이 0건이어서 성공 1건당 총투입 시간 차이를 계산할 수 없습니다.';
       else if (d.savedSeconds === 0) change = '두 방식의 검증 성공 1건당 총투입 시간이 같습니다.';
@@ -400,6 +426,7 @@
     warning.hidden = !warnings.length;
     warning.textContent = warnings.length ? '시간을 비교한 ' + a.timing.included + '명이 저널을 썼을 때 원자료 대비 ' + warnings.join(', ') + '.' : '';
     table('timed-quality-table', ['지표', '원자료', '저널'], rows, '네 명 모두 시간을 기록한 묶음이 생기면 결과가 표시됩니다.');
+    el('same-adoption-sample').hidden = !q || a.timing.included !== a.included;
     el('timed-quality-change').hidden = !q;
     el('timed-quality-change').textContent = change;
     el('timed-quality-editors').hidden = !q;
@@ -532,6 +559,20 @@
         ? 100 * (journal.accepted / journal.eligible - manual.accepted / manual.eligible) : null;
       return {manual, journal, changePp, increased:changePp === null ? null : changePp > 0};
     }
+    function factAdoptions(group) {
+      function counts(arm) {
+        const v = arm?.adoptions;
+        const share = (count, total) => total ? 100 * count / total : null;
+        const byType = type => {
+          const count = v?.[type];
+          return {accepted:count?.accepted ?? null, eligible:count?.eligible ?? 0, pct:share(count?.accepted, count?.eligible)};
+        };
+        return {total:v?.total ?? 0, verified:v?.verified ?? null, otherSource:v?.otherSource ?? null,
+          verifiedPct:share(v?.verified, v?.total), otherSourcePct:share(v?.otherSource, v?.total),
+          contradicted:byType('contradicted'), insufficient:byType('insufficient')};
+      }
+      return {manual:counts(group?.manual), journal:counts(group?.journal)};
+    }
     return {
       editors:{enrolled:a.enrolled, included:a.included, excluded:a.excluded, completeBlocks:a.completeBlocks},
       submittedTasks:a.recordedTrials, includedTasks:a.trialCount,
@@ -542,6 +583,7 @@
         unsupportedAcceptance:unsupportedAcceptance(a.timedQuality)},
       verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
       unsupportedAcceptance:unsupportedAcceptance(a.quality),
+      factAdoptions:{all:factAdoptions(a.quality), timed:factAdoptions(a.timedQuality)},
       partyLabelAcceptanceGap:{manualPp:a.bias?.manualGapPp ?? null, journalPp:a.bias?.journalGapPp ?? null,
         reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
     };
@@ -552,7 +594,7 @@
     let sample = confirmed;
     if (demo) {
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
-        agreement:core.cueAgreementDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords};
+        agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
@@ -692,6 +734,7 @@
       if (accuracy < 0) warnings.push('기준 판정 일치율 ' + fmt(-accuracy) + '%p 하락');
       if (joint < 0) warnings.push('판정·근거 동시 일치율 ' + fmt(-joint) + '%p 하락');
       if (unsafe > 0) warnings.push('근거 없는 사실 채택률 ' + fmt(unsafe) + '%p 상승');
+      warnings.push(...adoptionWarnings(q));
       for (const [variant, group] of Object.entries(q.byVariant)) {
         const label = variantLabels[variant];
         const labelJoint = pointChange(group, 'qualityCorrect', 'total'), labelUnsafe = pointChange(group, 'unsafe', 'unsafeTotal');
@@ -716,6 +759,8 @@
       ['판정과 근거 모두 일치', ...[q.manual, q.journal].map(v => ratio(v.qualityCorrect, v.total))]
     ] : [];
     table('quality', ['지표', '원자료', '저널'], qualityRows, '집계할 기준 판정이 없습니다.');
+    el('fact-adoptions-title').textContent = demo ? '가상 기록 · 사실 채택과 원자료 일치율' : '사실 채택과 원자료 일치율';
+    table('adoption-quality', ['지표', '원자료', '저널'], adoptionRows(q), '모든 과제를 마친 4인 묶음이 생기면 표시합니다.');
     table('quality-by-variant', ['기사 표기 · 방식', '판정과 근거 모두 일치', '기준과 다른 판정', '대표 근거 불일치', '근거 없는 사실 채택'],
       qualityByVariant, '완성된 4인 묶음에서 기사 표기별 판정과 근거 선택을 집계합니다.');
     const dist = b?.distribution;
@@ -1151,7 +1196,15 @@
     if (!participantOnly) el('dashboard').hidden = participant;
     if (participant) renderParticipant();
   // coordinator-only:begin
-    else showDashboard();
+    else {
+      const linkedExample = location.hash === '#demo-adoptions';
+      if (linkedExample) {
+        viewKind = 'demo';
+        el('demo-example').value = 'adoptions';
+      }
+      showDashboard();
+      if (linkedExample) el('fact-adoptions-title').focus();
+    }
   // coordinator-only:end
   }
   el('enroll').onsubmit = enroll;
@@ -1188,9 +1241,16 @@
         message('import-status','확인한 배정을 명부에 반영했습니다. 보관된 기록이 있으면 함께 집계합니다.');
       } catch (err) { message('import-status', err.message, true); }
     };
-    el('real-view').onclick = () => { viewKind = 'editor'; showDashboard(); };
-    el('demo-view').onclick = () => { viewKind = 'demo'; showDashboard(); };
-    el('demo-example').onchange = showDashboard;
+    function chooseView(kind) {
+      viewKind = kind;
+      // A manual choice supersedes the example link, including on reload.
+      if (location.hash === '#demo-adoptions' && (kind !== 'demo' || el('demo-example').value !== 'adoptions')) {
+        history.replaceState(null, '', location.href.split('#')[0]);
+      }
+      showDashboard();
+    }
+    el('real-view').onclick = () => chooseView('editor');
+    el('demo-view').onclick = el('demo-example').onchange = () => chooseView('demo');
     el('issue-codes').onclick = issueCodes;
     el('export-all').onclick = () => {
       if (records.length || invitations.length) download({type:collectionType,records,invitations},'journal-editor-study-collection.json');

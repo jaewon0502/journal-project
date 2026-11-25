@@ -395,8 +395,12 @@
       reductionPct:endorsementDifferences.manual ? 100 * reduction / endorsementDifferences.manual : null, cases:caseRates};
   }
 
+  function emptyAdoptions() {
+    return {total:0, verified:0, otherSource:0, contradicted:{accepted:0, eligible:0}, insufficient:{accepted:0, eligible:0}};
+  }
+
   function emptyQuality() {
-    return {correct: 0, total: 0, unsafe: 0, unsafeTotal: 0, citationCorrect: 0, qualityCorrect: 0};
+    return {correct: 0, total: 0, unsafe: 0, unsafeTotal: 0, citationCorrect: 0, qualityCorrect: 0, adoptions:emptyAdoptions()};
   }
 
   function qualityGroups() {
@@ -420,17 +424,34 @@
 
   function gradeTrial(trial) {
     const gold = cases.get(trial.caseId, trial.variant);
-    const correct = trial.verdict === gold.expectedVerdict;
+    const expectedVerdict = gold.expectedVerdict;
+    if (!['supported', 'contradicted', 'insufficient'].includes(expectedVerdict)) {
+      throw new Error('이 실험의 기준 판정에 맞게 사실 채택의 집계 항목을 확인하세요.');
+    }
+    const correct = trial.verdict === expectedVerdict;
     const sourceCorrect = trial.sourceIds.length === 1 && gold.expectedSourceIds.includes(trial.sourceIds[0]);
-    const unsafeEligible = gold.expectedVerdict !== 'supported';
+    const adopted = trial.verdict === 'supported';
+    const unsafeEligible = expectedVerdict !== 'supported';
     return {correct, sourceCorrect, verified:correct && sourceCorrect, unsafeEligible,
-      unsafe:unsafeEligible && trial.verdict === 'supported'};
+      unsafe:unsafeEligible && adopted, expectedVerdict, adopted};
+  }
+
+  function countAdoption(counts, grade) {
+    if (grade.unsafeEligible) {
+      const bucket = counts[grade.expectedVerdict];
+      bucket.eligible++;
+      if (grade.adopted) bucket.accepted++;
+    }
+    if (!grade.adopted) return;
+    counts.total++;
+    if (grade.verified) counts.verified++;
+    else if (grade.correct) counts.otherSource++;
   }
 
   function timedQualityStats(records) {
     if (!records.length) return null;
     const arms = Object.fromEntries(methods.map(method => [method,
-      {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null}]));
+      {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null, adoptions:emptyAdoptions()}]));
     const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
     const fasterJournalSuccessCounts = [0, 0, 0];
     const totalMs = {manual:0n, journal:0n}, verifiedMs = {manual:0n, journal:0n};
@@ -450,6 +471,7 @@
         }
         if (grade.unsafeEligible) arm.unsafeTotal++;
         if (grade.unsafe) arm.unsafe++;
+        countAdoption(arm.adoptions, grade);
       }
       for (const method of methods) totalMs[method] += elapsedMs[method];
       // Each editor completed two tasks per method. Compare unrounded durations.
@@ -509,6 +531,7 @@
           if (grade.verified) q.qualityCorrect++;
           if (grade.unsafeEligible) q.unsafeTotal++;
           if (grade.unsafe) q.unsafe++;
+          countAdoption(q.adoptions, grade);
         }
       }
     }
@@ -722,6 +745,20 @@
     });
   }
 
+  function adoptionDemoRecords() {
+    return Array.from({length:slots}, (_, i) => {
+      let record = createRecord('demo-adoption-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const journal = task.method === 'journal';
+        const gold = cases.get(task.caseId, task.variant);
+        const wrong = task.caseId === (journal ? 'repair' : 'permits');
+        record = addTrial(record, {elapsedMs:journal ? 60000 : 120000, verdict:wrong ? 'supported' : gold.expectedVerdict,
+          sourceIds:gold.expectedSourceIds, journalUsed:journal, reason:'두 방식에서 서로 다른 주장을 잘못 채택한 모의 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
   function cueAgreementDemoRecords() {
     return Array.from({length:slots}, (_, i) => {
       let record = createRecord('demo-cue-' + (i + 1), i + 1, 'demo', false);
@@ -775,5 +812,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

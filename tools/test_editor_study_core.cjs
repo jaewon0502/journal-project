@@ -62,12 +62,43 @@ test('예시 여덟 명의 분모, 시간, 편향 지표, 잘못된 사실 확�
   assert.deepEqual([r.completeBlocks, r.enrolled, r.included, r.trialCount, r.excluded], [2,8,8,32,0]);
   assert.deepEqual([r.time.manualSeconds,r.time.journalSeconds,r.time.savedSeconds,r.time.reductionPct], [120,90,30,25]);
   assert.deepEqual([r.bias.manualGapPp,r.bias.journalGapPp,r.bias.reductionPp,r.bias.reductionPct], [50,25,25,50]);
-  assert.deepEqual(r.quality.manual,{correct:12,total:16,unsafe:4,unsafeTotal:8,citationCorrect:16,qualityCorrect:12});
-  assert.deepEqual(r.quality.journal,{correct:14,total:16,unsafe:2,unsafeTotal:8,citationCorrect:16,qualityCorrect:14});
+  assert.deepEqual(r.quality.manual,{correct:12,total:16,unsafe:4,unsafeTotal:8,citationCorrect:16,qualityCorrect:12,
+    adoptions:{total:12,verified:8,otherSource:0,contradicted:{accepted:2,eligible:4},insufficient:{accepted:2,eligible:4}}});
+  assert.deepEqual(r.quality.journal,{correct:14,total:16,unsafe:2,unsafeTotal:8,citationCorrect:16,qualityCorrect:14,
+    adoptions:{total:10,verified:8,otherSource:0,contradicted:{accepted:1,eligible:4},insufficient:{accepted:1,eligible:4}}});
   for (const item of r.bias.cases) {
     assert.equal(item.manual.A.total, 2);
     assert.equal(item.journal.B.total, 2);
   }
+});
+
+test('모의 채택에서 정답률과 오승인율이 같아도 두 방식이 서로 다른 오류를 낸다', () => {
+  const records = study.adoptionDemoRecords();
+  assert.equal(study.analyze(records).quality, null);
+  const r = study.analyze(records, 'demo');
+  assert.deepEqual([r.included, r.time.manualSeconds, r.time.journalSeconds, r.time.reductionPct], [4,120,60,50]);
+  assert.deepEqual([r.bias.manualGapPp,r.bias.journalGapPp], [0,0]);
+  for (const method of ['manual','journal']) {
+    const q = r.quality[method], a = q.adoptions;
+    assert.deepEqual([q.correct,q.total,q.unsafe,q.unsafeTotal,a.verified,a.total,a.otherSource], [6,8,2,4,4,6,0]);
+    assert.deepEqual(a, r.timedQuality[method].adoptions);
+    assert.deepEqual([a.contradicted.eligible,a.insufficient.eligible], [2,2]);
+  }
+  assert.deepEqual([r.quality.manual.adoptions.contradicted.accepted, r.quality.journal.adoptions.contradicted.accepted], [0,2]);
+  assert.deepEqual([r.quality.manual.adoptions.insufficient.accepted, r.quality.journal.adoptions.insufficient.accepted], [2,0]);
+});
+
+test('채택된 응답이 없거나 맞는 주장을 다른 근거로 채택한 경우 분모와 근거를 구분한다', () => {
+  const records = [1,2,3,4].map(i => observations(i, (task, gold) => {
+    if (task.method === 'manual') return {verdict:'opinion', sourceIds:[]};
+    const other = gold.sources.find(s => !gold.expectedSourceIds.includes(s.id)).id;
+    return {verdict:'supported', sourceIds:task.variant === 'A' ? [other] : []};
+  }));
+  const q = study.analyze(records).quality;
+  assert.deepEqual(q.manual.adoptions, {total:0,verified:0,otherSource:0,
+    contradicted:{accepted:0,eligible:2},insufficient:{accepted:0,eligible:2}});
+  assert.deepEqual(q.journal.adoptions, {total:8,verified:0,otherSource:4,
+    contradicted:{accepted:2,eligible:2},insufficient:{accepted:2,eligible:2}});
 });
 
 test('등록한 8명의 답 31건과 마지막 가능한 네 판정에서 격차 변화의 두 끝값을 재현한다', () => {
@@ -146,7 +177,10 @@ test('성향 표기별 정확도 합계가 같아도 같은 오답에 모인 사
   const result = study.analyze([...records, observations(5)]);
   assert.equal(result.bias.reductionPp, 50);
   for (const group of [result.quality, ...Object.values(result.quality.byVariant)]) {
-    assert.deepEqual(group.journal, group.manual);
+    const {adoptions:manual, ...manualTotals} = group.manual;
+    const {adoptions:journal, ...journalTotals} = group.journal;
+    assert.deepEqual(journalTotals, manualTotals);
+    assert.equal(journal.total, manual.total);
   }
   const budget = result.bias.cases.find(row => row.caseId === 'repair');
   const permits = result.bias.cases.find(row => row.caseId === 'permits');
@@ -377,11 +411,14 @@ test('전체 정답 수가 같아도 시간을 잰 묶음에서 실패한 검토
   const result = study.analyze(records);
   assert.equal(result.timing.included, 4);
   assert.deepEqual([result.quality.manual.qualityCorrect, result.quality.journal.qualityCorrect], [10,10]);
+  assert.deepEqual([result.quality.journal.adoptions.contradicted.eligible, result.quality.journal.adoptions.insufficient.eligible], [4,4]);
   assert.equal(result.time.reductionPct, 50);
   assert.deepEqual(result.timedQuality, {
     manual:{total:8, correct:8, citationCorrect:8, verified:8, unsafe:0, unsafeTotal:4, elapsedMs:80000,
+      adoptions:{total:4,verified:4,otherSource:0,contradicted:{accepted:0,eligible:2},insufficient:{accepted:0,eligible:2}},
       secondsPerVerified:10, meanVerifiedSeconds:10, meanFailedSeconds:null},
     journal:{total:8, correct:5, citationCorrect:5, verified:2, unsafe:3, unsafeTotal:4, elapsedMs:40000,
+      adoptions:{total:7,verified:1,otherSource:3,contradicted:{accepted:1,eligible:2},insufficient:{accepted:2,eligible:2}},
       secondsPerVerified:20, meanVerifiedSeconds:5, meanFailedSeconds:5},
     perVerified:{savedSeconds:-10, reductionPct:-100},
     faster:{total:4, fewerVerified:3, sameVerified:1, moreVerified:0}, fasterJournalSuccessCounts:[3,0,1]
@@ -513,8 +550,14 @@ test('전체 동시 일치율이 같아도 어느 기사 표기에서 근거를 
   assert.deepEqual([A.manual.qualityCorrect, A.journal.qualityCorrect, B.manual.qualityCorrect, B.journal.qualityCorrect], [4,0,0,4]);
   assert.deepEqual([B.manual.correct, B.manual.citationCorrect, B.manual.unsafe, B.manual.unsafeTotal, B.manual.total], [2,0,2,2,4]);
   for (const method of ['manual','journal']) {
-    for (const key of Object.keys(r.quality[method])) {
+    for (const key of ['total','correct','citationCorrect','qualityCorrect','unsafe','unsafeTotal']) {
       assert.equal(A[method][key] + B[method][key], r.quality[method][key]);
+    }
+    const a = A[method].adoptions, b = B[method].adoptions, all = r.quality[method].adoptions;
+    for (const key of ['total','verified','otherSource']) assert.equal(a[key] + b[key], all[key]);
+    for (const key of ['contradicted','insufficient']) {
+      assert.equal(a[key].accepted + b[key].accepted, all[key].accepted);
+      assert.equal(a[key].eligible + b[key].eligible, all[key].eligible);
     }
   }
   // A record from an incomplete later block cannot change a label's denominator.
