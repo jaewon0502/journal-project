@@ -422,6 +422,7 @@
     table('edition-block-table', ['배정 묶음', '제출한 과제의 판본'], blocks.map(b => [
       b.block + '번', states[b.state] + (b.kitVersion ? ' · ' + (kind === 'demo' ? '가상 자료 A' : b.kitVersion.slice(0, 12)) : '')
     ]), '');
+    return editions;
   }
   function appendEditionResults(container, editions, kind) {
     for (const {kitVersion, blockNumbers, analysis} of editions) {
@@ -510,7 +511,28 @@
       });
       table(grid, ['배정 번호', '예정 판본', '제출', '확인 결과'], rows);
     }
-    return {planned:total('planned'), different:total('mismatched'), unknown:total('unknown')};
+    return {planned:total('planned'), different:total('mismatched'), unknown:total('unknown'),
+      rosterBlocks:blocks.length, matchedBlocks:eligible, editions};
+  }
+
+  // Project aggregate fields explicitly. The full analysis also contains editor pairs and block membership.
+  function shareMetrics(a) {
+    function quality(method) {
+      const arm = a.quality?.[method];
+      return {tasks:arm?.total ?? 0, verified:arm?.qualityCorrect ?? null,
+        verifiedPct:arm?.total ? 100 * arm.qualityCorrect / arm.total : null};
+    }
+    return {
+      editors:{enrolled:a.enrolled, included:a.included, excluded:a.excluded, completeBlocks:a.completeBlocks},
+      submittedTasks:a.recordedTrials, includedTasks:a.trialCount,
+      time:{editors:a.timing.included, tasks:a.timing.trialCount, manualMeanSeconds:a.time?.manualSeconds ?? null,
+        journalMeanSeconds:a.time?.journalSeconds ?? null, reductionPct:a.time?.reductionPct ?? null,
+        manualSecondsPerVerified:a.timedQuality?.manual.secondsPerVerified ?? null,
+        journalSecondsPerVerified:a.timedQuality?.journal.secondsPerVerified ?? null},
+      verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
+      partyLabelAcceptanceGap:{manualPp:a.bias?.manualGapPp ?? null, journalPp:a.bias?.journalGapPp ?? null,
+        reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
+    };
   }
   function showDashboard() {
     const demo = viewKind === 'demo';
@@ -523,8 +545,19 @@
     }
     const a = core.analyze(sample, viewKind);
     el('edition-results').hidden = demo && el('demo-example').value !== 'editions';
-    if (!el('edition-results').hidden) showEditions(sample, viewKind);
+    const observedEditions = el('edition-results').hidden ? [] : showEditions(sample, viewKind);
     const assigned = showAssignedEditions(confirmed, demo ? [] : invitations);
+    const saveSummary = el('export-summary');
+    saveSummary.disabled = demo;
+    saveSummary.onclick = demo ? null : () => {
+      const editionMetrics = editions => editions.map(({kitVersion, analysis}) => ({kitVersion, ...shareMetrics(analysis)}));
+      download({type:'journal-editor-study-summary-v1', protocol:core.protocol, kind:'editor',
+        scope:'현업 참여자가 제공된 자료로 가상 기사 네 건을 검토한 파일럿. 격차는 기사에 붙인 정당 표기별 사실 채택률 차이입니다.',
+        unconfirmedEditors:records.length - confirmed.length, overall:shareMetrics(a),
+        assignedEditionCoverage:{rosterBlocks:assigned?.rosterBlocks ?? 0, matchedBlocks:assigned?.matchedBlocks ?? 0},
+        observedEditions:editionMetrics(observedEditions), assignedMatchedEditions:editionMetrics(assigned?.editions ?? [])},
+        'journal-editor-study-summary.json');
+    };
     el('demo-options').hidden = !demo;
     el('real-view').setAttribute('aria-pressed', String(!demo));
     el('demo-view').setAttribute('aria-pressed', String(demo));
