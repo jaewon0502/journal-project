@@ -1841,3 +1841,105 @@ test('서울 1인 가구 수치가 원문에 없으면 전체 평균을 접고 �
   assert.equal(el('source-excerpt').value,'');
   assert.equal(el('verdict').value,'');
 });
+
+test('한 번 기록해 다음 미검토 문장의 근거를 찾되 두 번째 판단·발췌를 미리 선택하지 않는다', async t => {
+  const p = open(t);
+  const lines = ['공사비가 8억 원으로 늘었다.', '조사 참여자는 42명이다.'];
+  p.set('article', lines.join('\n'));
+  p.el('article-form').requestSubmit();
+  const action = p.el('save-find-next');
+  assert.equal(action.hidden,true);
+  p.set('document-text',lines.join('\n'));
+  assert.equal(action.hidden,false);
+  p.set('verdict','held');
+  p.set('reason','계약 변경에 관한 추가 자료를 요청한다.');
+  action.click();
+  assert.equal(p.el('row-text').textContent,lines[0]);
+  assert.equal(p.el('finder-results').childElementCount,0);
+  p.click('acknowledged');
+  action.click();
+  assert.equal(p.el('row-text').textContent,lines[1]);
+  assert.equal(p.el('document-query').value,lines[1]);
+  assert.equal(p.el('finder-results').querySelector('blockquote').textContent,lines[1]);
+  assert.equal(p.doc.activeElement,p.el('find-passages'));
+  assert.equal(p.el('verdict').value,'');
+  assert.equal(p.el('source-excerpt').value,'');
+  assert.equal(action.hidden,true);
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.receipts.length,1);
+  assert.equal(work.sources.length,0);
+});
+
+test('미등록 발췌는 다른 문장의 자료로 옮길 때만 확인하고, 취소 후 이어 열어도 원래 문장에 남는다', async t => {
+  const p = open(t);
+  const original = '예산은 50억 원이었다.';
+  p.set('article',[original,'참여 인원은 70명이었다.',original].join('\n\n'));
+  p.el('article-form').requestSubmit();
+  p.set('document-text','예산 50억 원\n참여 인원 70명');
+  const select = (page,i) => page.el('row-list').children[i].querySelector('button').click();
+  select(p,2);
+  p.click('go-find');
+  for (const [k,v] of Object.entries({title:'예산서',url:'https://council.example/budget',version:'확정판',locator:'표 3',excerpt:original})) p.set('source-'+k,v);
+  let questions = 0;
+  p.w.confirm = () => { questions++; return false; };
+  p.click('go-find');
+  assert.equal(questions,0);
+  select(p,1);
+  assert.equal(p.el('save-find-next').hidden,true);
+  p.click('go-find');
+  assert.equal(questions,1);
+  assert.equal(p.el('source-save-link').hidden,true);
+  assert.equal(p.el('source-excerpt').value,original);
+  assert.match(p.el('finder-results').querySelector('blockquote').textContent,/70명/);
+  assert.equal(p.el('row-sources').querySelector('input:checked'),null);
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.sources.length,0);
+  const restored = open(t);
+  await loadWorkspace(restored,work);
+  assert.equal(restored.el('source-save-link').hidden,true);
+  select(restored,0);
+  assert.equal(restored.el('source-save-link').hidden,true);
+  select(restored,2);
+  assert.equal(restored.el('source-save-link').hidden,false);
+  assert.match(restored.el('source-save-link').textContent,/3번/);
+  assert.equal(restored.el('source-excerpt').value,original);
+  p.w.confirm = () => true;
+  p.click('go-add-source');
+  p.click('source-save-link');
+  assert.equal(p.el('row-sources').querySelectorAll('input:checked').length,1);
+  assert.equal(p.el('verdict').value,'');
+});
+
+test('다른 문장에서 발췌 교체나 수기 수정을 하면 이전 문장의 연결 대상도 해제된다', async t => {
+  for (const replaceFromCandidate of [true,false]) {
+    const p = open(t);
+    const first = '올해 예산은 5억 원이다.';
+    const second = '참여자는 모두 70명이다.';
+    p.set('article',[first,second].join('\n'));
+    p.el('article-form').requestSubmit();
+    p.click('go-find');
+    p.set('document-text',[first,second].join('\n'));
+    p.set('source-excerpt',first);
+    p.el('row-list').children[1].querySelector('button').click();
+    p.w.confirm = () => false;
+    p.click('go-find');
+    assert.equal(p.el('source-save-link').hidden,true);
+    if (replaceFromCandidate) {
+      p.w.confirm = () => true;
+      const pick = [...p.el('finder-results').querySelectorAll('button')].find(button => button.textContent.includes('발췌'));
+      pick.click();
+    } else {
+      p.set('source-excerpt',second);
+    }
+    assert.equal(p.el('source-excerpt').value,second);
+    p.el('row-list').firstElementChild.querySelector('button').click();
+    assert.equal(p.el('source-save-link').hidden,true);
+    p.click('save-work');
+    const work = JSON.parse(await p.snapshot());
+    assert.equal(work.sourceDraft.targetBinding,null);
+    assert.equal(work.sourceDraft.fields.excerpt,second);
+    assert.deepEqual(work.receipts,[]);
+  }
+});

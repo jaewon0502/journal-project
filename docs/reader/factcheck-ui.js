@@ -280,7 +280,7 @@
               !confirm('작성한 자료 이름·주소·판본·최초 원문 주소를 선택한 문서 정보로 바꿀까요?')) return;
           fillDocumentFields(source);
           dirty = true;
-          updateSourceDraftNote();
+          sourceDraftEdited();
           message('source-status', '‘' + info.title + '’의 문서 정보를 채웠습니다. 이번 발췌문의 위치를 원본과 대조하세요.');
           byId('use-pdf-location').focus();
         });
@@ -340,11 +340,20 @@
     return '원자료 ‘' + (source.title || source.id) + '’ 수정 중입니다. 이 결과에는 수정 전 판본을 사용했습니다.' +
       (numbers.length ? ' 이 자료를 인용한 문장 번호는 ' + numbers.join(', ') + '입니다.' : '');
   }
+  function updateNextSearch() {
+    byId('save-find-next').hidden = !currentId || !byId('document-text').value.trim() || !!editingId ||
+      sourceDraftIsDirty() || !result?.rows.some(row => row.id !== currentId && row.status === 'pending');
+  }
   function updateSourceDraftNote() {
+    updateNextSearch();
     const note = sourceDraftNote();
     const label = byId('source-draft-note');
     if (label.textContent !== note) label.textContent = note;
     byId('result-source-draft').hidden = !note;
+  }
+  function sourceDraftEdited() {
+    if (sourceForRow && sourceForRow !== currentRow()?.articleBinding) clearSourceTarget();
+    updateSourceDraftNote();
   }
   function clearSourceTarget() {
     sourceForRow = null;
@@ -436,7 +445,10 @@
   }
   function showCase() {
     const row = currentRow();
-    if (sourceForRow !== row?.articleBinding) clearSourceTarget();
+    if (sourceForRow && sourceForRow === row?.articleBinding) targetSourceTo(row);
+    else if (sourceDraftIsDirty()) byId('source-save-link').hidden = true;
+    else clearSourceTarget();
+    updateNextSearch();
     byId('case').hidden = !row;
     if (!row) return;
     const index = result.rows.indexOf(row);
@@ -677,7 +689,16 @@
       message('source-status', '새 원자료를 추가합니다.');
     }
     const row = currentRow();
-    if (row) targetSourceTo(row);
+    if (row) {
+      const target = result.rows.indexOf(row) + 1;
+      if (!sourceDraftIsDirty() || row.articleBinding === sourceForRow ||
+          confirm('작성 중인 원자료 초안을 ' + target + '번 문장의 대조 자료로 연결할까요? 취소하면 초안을 그대로 유지합니다.')) {
+        targetSourceTo(row);
+      } else {
+        byId('source-save-link').hidden = true;
+        message('source-status', '원자료 초안을 유지했습니다. ' + target + '번 문장과 연결하지 않았습니다.');
+      }
+    }
     if (find) {
       byId('finder').open = true;
       byId('document-query').value = row?.text || '';
@@ -906,7 +927,7 @@
     offerPdfLocation(proposal);
     offerDocumentInfo(proposal);
     setLocationReview(inheritsLocation);
-    updateSourceDraftNote();
+    sourceDraftEdited();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
       ? entry.startParagraph + '~' + entry.paragraph : entry.paragraph;
     message('source-status', '붙여넣은 글의 ' + span + '번째 문단' +
@@ -953,7 +974,7 @@
     byId('pdf-source-options').replaceChildren();
     byId('pdf-source-options').hidden = true;
     dirty = true;
-    updateSourceDraftNote();
+    sourceDraftEdited();
     message('source-status', location + '을 입력했습니다. 이 자료를 등록하면 같은 PDF 판본을 다시 대조할 수 있습니다.');
     locator.focus();
   });
@@ -1393,7 +1414,10 @@
   }
   byId('find-passages').addEventListener('click', findPassages);
   for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
-    if (id === 'document-text') offerPdfLocation(null);
+    if (id === 'document-text') {
+      offerPdfLocation(null);
+      updateNextSearch();
+    }
     if (id === 'document-query') clearSearchContext();
     byId('finder-results').replaceChildren();
     message('finder-status', '');
@@ -1426,7 +1450,7 @@
     if (!byId('source-location-review').hidden && ['source-url', 'source-version', 'source-pdfPage', 'source-locator', 'source-excerpt'].includes(event.target.id)) {
       setLocationReview(true);
     }
-    updateSourceDraftNote();
+    sourceDraftEdited();
   });
   byId('return-source-draft').addEventListener('click', () => {
     byId('sources-panel').open = true;
@@ -1453,6 +1477,7 @@
     const row = currentRow();
     if (!row) return;
     try {
+      const findNext = event.submitter === byId('save-find-next') && !byId('save-find-next').hidden;
       const receipt = engine.decide(row, decisionDraft(), sources);
       receipts = receipts.filter(r => r && r.rowId !== row.id).concat(receipt);
       drafts.delete(row.id);
@@ -1468,7 +1493,11 @@
       if (studyFrame && studyNonce) {
         studyReply('journal-study-used', {status: receipt.status, sourceIds: receipt.sourceIds, reason: receipt.reason});
       }
-      (currentId ? byId('row-heading') : byId('row-filter')).focus();
+      if (findNext && pending && currentId === pending.id && byId('document-text').value.trim() && !editingId && !sourceDraftIsDirty()) {
+        openSourceTools(true);
+      } else {
+        (currentId ? byId('row-heading') : byId('row-filter')).focus();
+      }
     } catch (err) { message('review-status', err.message, true); }
   });
   function sourceFormData() {
@@ -1560,6 +1589,11 @@
       if (w.article === w.articleDraft && sourceDraftIsDirty()) {
         const sameTarget = target && target.id === w.currentId && target.articleBinding === w.sourceDraft.targetBinding && w.sourceDraft.id == null;
         if (sameTarget) targetSourceTo(target);
+        else if (target?.id === w.currentId && w.sourceDraft.id == null &&
+                 result.rows.some(row => row.articleBinding === w.sourceDraft.targetBinding)) {
+          // Preserve a parked draft's original sentence without offering it on the selected one.
+          sourceForRow = w.sourceDraft.targetBinding;
+        }
         const catalogDraft = w.sourceDraft.targetBinding === null && (w.sourceDraft.id == null || edit);
         byId('sources-panel').open = w.sourceDraft.panelOpen === true && !!(sameTarget || catalogDraft);
       }

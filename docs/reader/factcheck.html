@@ -106,7 +106,7 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <div id="content-details" hidden><label class="field" for="content-reason">내용 판단 이유</label><textarea id="content-reason" rows="2"></textarea><label class="check-line"><input type="checkbox" id="content-checked"><span id="content-ack"></span></label></div></fieldset>
 <div id="correction-part" hidden><label class="field" for="correction">수정 문구 (선택)</label><textarea rows="2" id="correction" placeholder="근거와 대조한 대체 문장"></textarea><label class="check-line"><input type="checkbox" id="correction-checked"><span>수정 문구도 원자료와 대조해 확인했습니다.</span></label></div>
 <label class="check-line"><input type="checkbox" id="acknowledged" required><span id="ack-text">문장의 범위와 판단 이유를 확인했습니다.</span></label>
-<div class="actions"><button type="submit" class="primary">판단 기록</button></div></form></section></div>
+<div class="actions"><button type="submit" class="primary">판단 기록</button><button type="submit" id="save-find-next" hidden>기록하고 다음 미검토 문장의 근거 찾기</button></div></form></section></div>
 <p class="message" id="review-status" role="status"></p></section>
 <section class="panel" id="article-rubric" aria-label="기사 정확성과 편향 평가"></section>
 <section class="panel" id="result-panel"><div class="mast"><h2>검토 결과</h2><span id="result-tag" class="count"></span></div>
