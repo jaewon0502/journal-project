@@ -876,6 +876,7 @@
   }
   function mergeFiles(values) {
     const next = new Map(records), conflicts = new Map();
+    let differentClocks = false;
     for (const v of values) {
       const list = v.format === format ? v.entries : [{ trial: v, locationGrade: '', verdictGrade: '' }];
       if (!Array.isArray(list)) throw Error('집계 파일 형식을 확인하세요.');
@@ -918,7 +919,7 @@
         if (prev) {
           if (prev.gradingTime && row.gradingTime &&
               JSON.stringify(prev.gradingTime) !== JSON.stringify(row.gradingTime)) {
-            throw Error('같은 답안의 진행자 시간 기록이 서로 다릅니다. 별도의 집계 탭에서 사용할 측정본 하나를 여세요.');
+            differentClocks = true;
           }
           const timed = row.gradingTime ? row : prev;
           const other = timed === row ? prev : row;
@@ -951,9 +952,13 @@
         next.set(trial.id, row);
       }
     }
-    if (conflicts.size) {
-      const error = Error('같은 기록의 채점 결과가 다릅니다. 해당 항목을 원자료와 대조한 뒤 사용할 채점본을 불러오세요.');
-      error.gradeConflicts = [...conflicts.values()];
+    if (conflicts.size || differentClocks) {
+      const notices = [];
+      if (conflicts.size) notices.push('같은 기록의 채점 결과가 다릅니다. 아래 항목을 원자료와 대조해 최종 채점을 확인하세요.');
+      if (differentClocks) notices.push('같은 답안의 진행자 시간 기록이 서로 다릅니다. 각 측정본을 별도의 집계 탭에서 확인하세요.');
+      notices.push(records.size ? '이번 파일은 반영하지 않았습니다. 결과를 열면 기존 집계만 보입니다.' : '이번 파일은 모두 반영하지 않았습니다.');
+      const error = Error(notices.join(' '));
+      if (conflicts.size) error.gradeConflicts = [...conflicts.values()];
       throw error;
     }
     const versions = new Map();

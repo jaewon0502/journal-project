@@ -102,6 +102,41 @@ test('두 편집 역할의 시간을 따로 측정한 뒤 원배정·기록상 �
   assert.match(legacy.person(),/진행자 전체 시간 0\/1건/);
 });
 
+test('독립 채점 시계가 달라도 같은 기준에서 갈린 근거 위치와 판단 이유를 익명으로 알린다', async t => {
+  const trials = [trial(1,'manual',60000), trial(2,'journal',40000)];
+  async function independentGrade(lastScore, duration) {
+    const p = page(t);
+    await p.upload('key-file',key);
+    await p.upload('imports',...trials);
+    for (const n of [1,2]) {
+      p.click(n,'측정 시작');
+      p.wait(duration);
+      p.grade(n,'근거 위치',n === 1 ? 'yes' : lastScore);
+      p.grade(n,'판단 이유',n === 1 ? 'yes' : lastScore);
+      p.click(n,'채점 시간 확정');
+    }
+    return p.save();
+  }
+  const a = await independentGrade('yes',5000), b = await independentGrade('no',9000);
+  for (const files of [[a,b],[b,a]]) {
+    const fresh = page(t);
+    await fresh.upload('imports',...files);
+    const status = fresh.el('status');
+    assert.match(status.textContent,/채점 결과가 다릅니다.*진행자 시간 기록이 서로 다릅니다.*모두 반영하지 않았습니다/);
+    assert.equal(status.querySelectorAll('li').length,1);
+    const dispute = status.querySelector('li').textContent;
+    assert.ok(dispute.includes(trials[1].locator) && dispute.includes(trials[1].reason));
+    assert.match(dispute,/채점 차이 · 근거 위치, 판단 이유/);
+    assert.doesNotMatch(status.textContent,/PRIVATE-PERSON|private-id|표의 위치 1|평소 검증 도구|5000|9000/);
+    assert.equal(fresh.el('entries').children.length,0);
+  }
+  const prior = page(t);
+  await prior.upload('imports',a);
+  await prior.upload('imports',b);
+  assert.match(prior.el('status').textContent,/기존 집계만 보입니다/);
+  assert.deepEqual(await prior.save(),a);
+});
+
 test('답안을 바꾸거나 탭을 닫으면 멈추고 비정상 복원은 확인된 구간만 남긴다', async t => {
   const p = page(t);
   await p.upload('key-file',key);
