@@ -168,6 +168,28 @@ test('반대 방향 기사별 격차를 평균에서 상쇄하지 않고 악화�
   assert.deepEqual(r.bias.cases.map(item => item.journal.signedGapPp), [100,-100,100,-100]);
 });
 
+test('표기별 채택률 격차의 크기와 오승인율이 같아도 기사별 방향이 뒤바뀔 수 있다', () => {
+  const {bias, quality} = study.analyze(study.cueReversalDemoRecords(), 'demo');
+  assert.deepEqual([bias.manualGapPp,bias.journalGapPp,bias.reductionPp], [50,50,0]);
+  assert.deepEqual(bias.directionReversals, {comparedCases:4,reversedCases:2,byExpectedVerdict:{
+    supported:{comparedCases:2,reversedCases:0},contradicted:{comparedCases:1,reversedCases:1},insufficient:{comparedCases:1,reversedCases:1}}});
+  assert.deepEqual(bias.cases.filter(row=>row.directionReversed).map(row=>[row.caseId,row.manual.signedGapPp,row.journal.signedGapPp]),
+    [['repair',100,-100],['permits',-100,100]]);
+  for (const group of Object.values(quality.byVariant)) {
+    assert.deepEqual([group.manual.unsafe, group.manual.unsafeTotal, group.journal.unsafe, group.journal.unsafeTotal], [1,2,1,2]);
+  }
+  const records = [1,2,3,4].map(i=>observations(i, t=>{
+    const adopted = t.caseId === 'transit' ? t.variant === (t.method === 'manual' ? 'A' : 'B')
+      : t.caseId === 'filing' ? t.variant === 'A'
+      : t.variant === 'A' && t.method === (t.caseId === 'repair' ? 'manual' : 'journal');
+    return {verdict:adopted ? 'supported' : 'insufficient'};
+  }));
+  const ties = study.analyze(records).bias;
+  assert.deepEqual(ties.cases.filter(row=>row.directionReversed).map(row=>row.caseId), ['transit']);
+  assert.deepEqual(ties.directionReversals.byExpectedVerdict.supported, {comparedCases:2,reversedCases:1});
+  assert.equal(study.analyze(records.slice(0,3)).bias, null);
+});
+
 test('성향 표기별 정확도 합계가 같아도 같은 오답에 모인 사례를 구분한다', () => {
   const records = [1,2,3,4].map(i => observations(i, t => {
     const wrongBudget = t.caseId === 'repair' && (t.method === 'journal' || t.variant === 'A');

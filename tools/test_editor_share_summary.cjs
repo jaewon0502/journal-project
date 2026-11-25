@@ -53,6 +53,7 @@ test('빈 실측의 분모는 0이고 효과는 미측정이며 가상 예시를
   assert.equal(summary.overall.editors.enrolled, 0);
   assert.equal(summary.overall.time.tasks, 0);
   assert.equal(summary.overall.time.reductionPct, null);
+  assert.equal(summary.overall.partyLabelDirectionReversals, null);
   assert.deepEqual(summary.overall.verdictAndEvidence.manual, {tasks:0,verified:null,verifiedPct:null});
   const unmeasured = {accepted:null,eligible:0,pct:null};
   assert.deepEqual(summary.overall.unsupportedAcceptance, {manual:unmeasured,journal:unmeasured,changePp:null,increased:null});
@@ -131,6 +132,23 @@ test('동시 일치율이 같은 두 방식의 오승인과 시간이 온전히 
   assert.deepEqual(first.unsupportedAcceptance,timed);
   assert.deepEqual(first.verdictAndEvidence.manual, {tasks:8,verified:6,verifiedPct:75});
   assert.deepEqual(first.verdictAndEvidence.journal,first.verdictAndEvidence.manual);
+});
+
+test('전체와 해당 판본에서 정당 표기 채택의 방향이 뒤집힌 기사 수만 공유한다', async t => {
+  const roster = [1,2,3,4].map(invitation);
+  const records = roster.map(invite=>completed(invite, {answer(task,item) {
+    const journal = task.method === 'journal';
+    const accepted = task.caseId === 'repair' && task.variant === (journal ? 'B' : 'A')
+      || task.caseId === 'permits' && task.variant === (journal ? 'A' : 'B');
+    return {verdict:accepted ? 'supported' : item.expectedVerdict,sourceIds:item.expectedSourceIds};
+  }}));
+  const summary = await dashboard(t,records,roster).save();
+  for (const view of [summary.overall,summary.observedEditions[0],summary.assignedMatchedEditions[0]]) {
+    assert.deepEqual(view.partyLabelAcceptanceGap, {manualPp:50,journalPp:50,reductionPp:0,relativeReductionPct:0});
+    assert.deepEqual(view.partyLabelDirectionReversals, {comparedCases:4,reversedCases:2,byExpectedVerdict:{
+      supported:{comparedCases:2,reversedCases:0},contradicted:{comparedCases:1,reversedCases:1},insufficient:{comparedCases:1,reversedCases:1}}});
+  }
+  assert.doesNotMatch(JSON.stringify(summary), /"caseId"|"repair"|"permits"|"participantId"/);
 });
 
 test('부족한 시간·다른 배정 판본·미완성 묶음을 수치 0으로 바꾸지 않는다', async t => {

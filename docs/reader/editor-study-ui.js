@@ -287,7 +287,15 @@
     const list = el('case-quality-list');
     list.replaceChildren();
     el('case-quality').hidden = !bias;
+    const directionSummary = el('cue-direction-summary');
+    directionSummary.textContent = bias ? (viewKind === 'demo' ? '가상 기록 · ' : '') + '원자료 방식과 저널 방식에서 사실 채택률이 더 높은 정당 표기가 바뀐 기사 ' +
+      bias.directionReversals.reversedCases + '/' + bias.directionReversals.comparedCases + '건. 한 방식에서 두 표기의 채택률이 같으면 바뀐 건수에서 제외합니다.' : '';
     if (!bias) return;
+    if (bias.directionReversals.reversedCases) {
+      const link = node('a', '채택률이 높은 표기가 바뀐 기사 ' + bias.directionReversals.reversedCases + '/' + bias.directionReversals.comparedCases + '건 보기');
+      link.href = '#cue-direction-summary';
+      biasCard.append(link);
+    }
     const criteria = {correct:'기준 판정 일치', citationCorrect:'대표 근거 일치', qualityCorrect:'판정·근거 동시 일치'};
     const warnings = node('div', undefined, 'case-cautions');
     for (const row of bias.cases) {
@@ -295,11 +303,20 @@
       const box = node('details', undefined, 'case-evidence');
       box.id = 'cue-case-' + row.caseId;
       const gaps = row.sourceChoices.gapPp;
+      const higherLabel = cell => variantLabels[cell.signedGapPp > 0 ? 'A' : 'B'];
+      const direction = row.directionReversed ? ' · 채택률이 높은 표기 ' + higherLabel(row.manual) + ' → ' + higherLabel(row.journal) : '';
       const summary = node('summary', a.title + ' (원자료 → 저널) · 사실 채택률 격차 ' +
         fmt(Math.abs(row.manual.signedGapPp)) + '%p → ' + fmt(Math.abs(row.journal.signedGapPp)) + '%p · 자료 선택 격차 ' +
-        fmt(gaps.manual) + '%p → ' + fmt(gaps.journal) + '%p');
+        fmt(gaps.manual) + '%p → ' + fmt(gaps.journal) + '%p' + direction);
       box.append(summary);
       if (viewKind === 'demo') box.append(node('p', '가상 응답으로 계산한 예시입니다.', 'subtle'));
+      if (row.directionReversed) {
+        box.append(node('strong', '사실 채택 · 기준 판정은 ' + verdictLabels[a.expectedVerdict]));
+        for (const [key, label] of [['manual','원자료'],['journal','저널']]) {
+          const {A, B} = row[key];
+          box.append(node('p', label + ' 방식 · 보수 표기 ' + ratio(A.endorsed, A.total) + ' · 진보 표기 ' + ratio(B.endorsed, B.total)));
+        }
+      }
       if (row.qualityDrops.length) {
         const changes = row.qualityDrops.map(key => criteria[key] + ' ' +
           ratio(row.quality.manual[key], row.quality.manual.total) + ' → ' + ratio(row.quality.journal[key], row.quality.journal.total));
@@ -592,11 +609,13 @@
       verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
       unsupportedAcceptance:unsupportedAcceptance(a.quality),
       factAdoptions:{all:factAdoptions(a.quality), timed:factAdoptions(a.timedQuality)},
+      partyLabelDirectionReversals:a.bias?.directionReversals ?? null,
       partyLabelAcceptanceGap:{manualPp:a.bias?.manualGapPp ?? null, journalPp:a.bias?.journalGapPp ?? null,
         reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
     };
   }
   const demoLinks = {
+    '#demo-cue-reversals':{example:'cue-reversals', heading:'cue-direction-summary'},
     '#demo-adoptions':{example:'adoptions', heading:'fact-adoptions-title'},
     '#demo-unfinished-blocks':{example:'unfinished-blocks', heading:'individual-time-title'}
   };
@@ -607,7 +626,7 @@
     if (demo) {
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
         agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords,
-        'unfinished-blocks':core.unfinishedBlockDemoRecords};
+        'unfinished-blocks':core.unfinishedBlockDemoRecords, 'cue-reversals':core.cueReversalDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);

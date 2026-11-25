@@ -87,6 +87,23 @@ test('오승인 합계가 같아도 반박된 주장 채택의 증가를 예시�
   assert.equal(p.el('same-adoption-sample').hidden,true);
 });
 
+test('채택 방향이 바뀐 두 기사를 표시하고 모의 보기에서 실측으로 돌아오면 표를 지운다', t => {
+  const p = page(t, '#demo-cue-reversals');
+  assert.equal(p.el('demo-example').value, 'cue-reversals');
+  assert.match(p.el('cue-direction-summary').textContent, /가상 기록.*바뀐 기사 2\/4건/);
+  const repair = p.el('cue-case-repair'), permits = p.el('cue-case-permits');
+  assert.match(repair.querySelector('summary').textContent, /보수 성향 표기 → 진보 성향 표기/);
+  assert.match(permits.querySelector('summary').textContent, /진보 성향 표기 → 보수 성향 표기/);
+  assert.match(repair.textContent, /사실 채택 · 기준 판정은 근거와 충돌/);
+  assert.match(repair.textContent, /원자료 방식 · 보수 표기 100% \(1\/1\) · 진보 표기 0% \(0\/1\)/);
+  assert.match(repair.textContent, /저널 방식 · 보수 표기 0% \(0\/1\) · 진보 표기 100% \(1\/1\)/);
+  assert.doesNotMatch(p.el('cue-case-transit').querySelector('summary').textContent, /채택률이 높은 표기/);
+  assert.ok(p.el('metrics').querySelector('a[href="#cue-direction-summary"]'));
+  p.el('real-view').click();
+  assert.equal(p.el('cue-direction-summary').textContent, '');
+  assert.ok(p.el('case-quality').hidden);
+});
+
 test('오승인 예시 링크는 해당 표를 열고, 직접 전환하거나 진행 중인 참여자가 열면 현재 선택을 따른다', t => {
   const link = '#demo-adoptions';
   for (const choice of ['real','partial']) {

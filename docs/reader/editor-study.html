@@ -26,6 +26,7 @@
 <option value="complete">8명 · 모든 과제의 시간 기록</option><option value="partial">12명 · 두 과제의 시간 일부 누락</option><option value="agreement">4명 · 두 표기에서 같은 오답을 고른 사례</option><option value="missing">8명 · 32건 중 한 건 미제출</option>
 <option value="editions">8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본</option>
 <option value="unfinished-blocks">12명 · 두 명이 중단하고 열 명이 끝낸 사례</option>
+<option value="cue-reversals">4명 · 격차가 같아도 더 많이 채택한 정당 표기가 바뀐 사례</option>
 <option value="adoptions">4명 · 오승인은 같은데 반박된 주장을 더 많이 채택한 사례</option></select></div>
 <div class="statline" id="counts"></div>
 <section class="box" id="withdrawal-work" hidden><h2>제출 전에 중단한 과제</h2><p id="withdrawal-counts"></p><div class="scroll" id="withdrawal-table"></div><p class="subtle">시간은 중단한 과제에서 타이머로 확인한 구간의 합계입니다. 실행 중 창이 닫혔다면 확인 가능한 구간만 더합니다. 이 과제는 방식별 평균과 판정 비교에서 제외합니다.</p></section>
@@ -61,7 +62,7 @@
 <p>첫 두 행은 편집자가 사실로 채택한 응답을 분모로 씁니다. 아래 두 행은 기준 판정이 각각 ‘반박’인 과제와 ‘근거 불충분’인 과제에서 사실로 채택한 비율입니다.</p>
 <div class="scroll" id="adoption-quality" role="region" aria-labelledby="fact-adoptions-title" tabindex="0"></div>
 <h3>가상 기사에 붙인 성향 표기별 결과</h3><p>근거 없는 사실 채택률은 기준 판정이 ‘근거로 지지됨’ 이외인 과제에서 계산합니다. 나머지 비율의 분모는 해당 표기와 방식으로 완료한 분석 대상 과제 수입니다.</p><div class="scroll" id="quality-by-variant"></div></section>
-<section class="box" id="case-quality" aria-labelledby="case-quality-heading" hidden><h2 id="case-quality-heading">기사별 정당 표기 격차와 검증 정확도</h2><p>각 모의 기사의 두 표기를 서로 다른 편집자에게 배정합니다. 기사를 펼치면 실제로 고른 판정과 실험의 기준 자료를 대조할 수 있습니다. 각 칸의 분모는 해당 방식과 표기로 기사를 검토한 응답 수입니다.</p><div id="case-quality-list"></div></section>
+<section class="box" id="case-quality" aria-labelledby="case-quality-heading" hidden><h2 id="case-quality-heading">기사별 정당 표기 격차와 검증 정확도</h2><p id="cue-direction-summary" tabindex="-1"></p><p>각 모의 기사의 두 표기를 서로 다른 편집자에게 배정합니다. 기사를 펼치면 실제로 고른 판정과 실험의 기준 자료를 대조할 수 있습니다. 각 칸의 분모는 해당 방식과 표기로 기사를 검토한 응답 수입니다.</p><div id="case-quality-list"></div></section>
 <details class="box"><summary>정당 표기별 판정 분포와 사례별 응답 수</summary><p id="distribution-gap"></p><p>같은 기사와 근거를 본 두 집단의 응답을 비교합니다. 사례별로 네 판정의 응답률 차이를 절댓값으로 더한 뒤 절반을 취해 평균냅니다. 두 집단의 분포가 같으면 0%p, 어느 판정도 겹치지 않으면 100%p입니다. 표의 각 칸은 해당 판정 건수 / 전체 응답 수입니다.</p><div class="scroll" id="cells"></div></details>
 <details class="box"><summary>분석에 포함된 배정 묶음</summary><p>연구자가 미리 배정한 연속 4명을 한 묶음으로 봅니다. 네 참여자가 모두 네 사례를 끝내야 비교합니다.</p><div class="scroll" id="blocks"></div></details>
 <details class="box"><summary>지표 계산과 해석</summary><p>시간은 편집자마다 각 방식에서 2건의 평균을 구한 뒤 참여자에게 같은 가중치를 주어 평균냅니다. 절감률은 두 방식의 평균 시간 차이를 원자료 방식의 평균으로 나눈 값입니다.</p><p>정당 단서 차이는 사례별로 보수·진보 성향 표지 간 사실 채택률 차이의 절댓값을 구한 뒤 네 사례를 평균냅니다. 절대 감소는 %p, 상대 감소는 원자료 방식의 차이를 분모로 한 %입니다. 원자료 방식의 차이가 0이면 상대 감소를 계산할 수 없습니다.</p><p>각 사례·방식·표기당 1명이면 한 사람의 판단만 달라도 격차가 크게 바뀝니다. 소수 편집자가 답한 가상 사례의 집계에는 우연한 응답 차이도 반영됩니다. 일반 기사에서의 정치적 편향이나 개인의 성향을 이 수치로 판단할 수 없습니다.</p></details>

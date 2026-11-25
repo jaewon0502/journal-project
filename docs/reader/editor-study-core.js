@@ -536,6 +536,8 @@
       }
     }
     const bias = pooledBias(items);
+    const reversals = {comparedCases:bias.cases.length, reversedCases:0, byExpectedVerdict:
+      Object.fromEntries(['supported','contradicted','insufficient'].map(label => [label, {comparedCases:0, reversedCases:0}]))};
     for (const row of bias.cases) {
       const detail = caseDetails.get(row.caseId);
       row.quality = detail.quality;
@@ -545,10 +547,18 @@
       const manualGap = Math.abs(row.manual.A.endorsed - row.manual.B.endorsed);
       const journalGap = Math.abs(row.journal.A.endorsed - row.journal.B.endorsed);
       row.gapReductionPp = 100 * (manualGap - journalGap) / row.manual.A.total;
+      const expected = reversals.byExpectedVerdict[cases.get(row.caseId, 'A').expectedVerdict];
+      expected.comparedCases++;
+      row.directionReversed = row.manual.signedGapPp * row.journal.signedGapPp < 0;
+      if (row.directionReversed) {
+        reversals.reversedCases++;
+        expected.reversedCases++;
+      }
       // Each method has the same two answers per complete block in this case.
       row.qualityDrops = row.gapReductionPp > 0 ? ['correct','citationCorrect','qualityCorrect'].filter(
         key => row.quality.journal[key] < row.quality.manual[key]) : [];
     }
+    bias.directionReversals = reversals;
     bias.leaveOneBlockOut = null;
     if (blocks.size >= 2) {
       let minReductionPp = Infinity, maxReductionPp = -Infinity;
@@ -773,6 +783,20 @@
         : record);
   }
 
+  function cueReversalDemoRecords() {
+    return Array.from({length:slots}, (_, i) => {
+      let record = createRecord('demo-reversal-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const gold = cases.get(task.caseId, task.variant), journal = task.method === 'journal';
+        const falseAcceptance = task.caseId === 'repair' && task.variant === (journal ? 'B' : 'A')
+          || task.caseId === 'permits' && task.variant === (journal ? 'A' : 'B');
+        record = addTrial(record, {elapsedMs:60000, verdict:falseAcceptance ? 'supported' : gold.expectedVerdict,
+          sourceIds:gold.expectedSourceIds, journalUsed:journal, reason:'같은 주장의 표기별 사실 채택 방향을 비교하는 가상 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
   function cueAgreementDemoRecords() {
     return Array.from({length:slots}, (_, i) => {
       let record = createRecord('demo-cue-' + (i + 1), i + 1, 'demo', false);
@@ -826,5 +850,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, unfinishedBlockDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, unfinishedBlockDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });
