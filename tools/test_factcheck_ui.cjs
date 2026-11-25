@@ -5,12 +5,12 @@ const path = require('node:path');
 const {JSDOM, VirtualConsole} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
-function open(t) {
+function open(t, suffix = '') {
   const errors = [], blobs = [], filenames = [];
   const console = new VirtualConsole();
   console.on('jsdomError', error => errors.push(error.message));
   const dom = new JSDOM(readFileSync(path.join(folder, 'factcheck.html'), 'utf8'), {
-    url: 'https://journal.example/factcheck.html', runScripts: 'outside-only', virtualConsole: console
+    url: 'https://journal.example/factcheck.html' + suffix, runScripts: 'outside-only', virtualConsole: console
   });
   const w = dom.window, doc = w.document;
   w.TextEncoder = TextEncoder;
@@ -63,6 +63,36 @@ async function loadWorkspace(page, data, accept = true) {
   input.dispatchEvent(new w.Event('change'));
   await loaded;
 }
+
+test('첫 화면과 기준 바로가기에서 채점에 쓰는 네 축의 16단계를 읽고 안내만 인쇄한다', t => {
+  const p = open(t, '#rubric-guide');
+  const guide = p.el('rubric-guide');
+  assert.equal(guide.open, true);
+  assert.equal(p.el('workspace').hidden, true);
+  const definitions = p.w.JournalArticleRubric.dimensions;
+  const scales = [...guide.querySelectorAll('.guide-axis')];
+  assert.equal(scales.length, 4);
+  for (const [i, item] of scales.entries()) {
+    const dim = definitions[i];
+    assert.equal(item.querySelector('h3').textContent, dim.title);
+    assert.equal(item.querySelector('p').textContent, dim.question);
+    assert.equal(item.querySelector('ol').start, 0);
+    assert.deepEqual([...item.querySelectorAll('li')].map(li => li.textContent), Array.from(dim.levels));
+  }
+  assert.match(guide.textContent, /지지 ÷ \(지지 \+ 원문 충돌\)/);
+  assert.match(guide.textContent, /완료 ÷ \(완료 \+ 미결\)/);
+  assert.match(guide.textContent, /인용 속 사실 주장과 독립 원자료의 충돌/);
+  assert.equal(guide.querySelector('a[href$=".md"]'), null);
+  let prints = 0;
+  p.w.print = () => { assert.ok(p.doc.documentElement.classList.contains('print-rubric')); prints++; };
+  p.click('print-rubric');
+  assert.equal(prints, 1);
+  p.w.dispatchEvent(new p.w.Event('afterprint'));
+  assert.ok(!p.doc.documentElement.classList.contains('print-rubric'));
+  const study = open(t, '?study=1#rubric-guide');
+  assert.equal(study.el('rubric-guide').hidden, true);
+  assert.equal(study.el('rubric-guide-scales').childElementCount, 0);
+});
 
 test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장이 결과와 작업 파일에 구분된다', async t => {
   const {el, click, doc, set, snapshot} = open(t);
@@ -159,6 +189,39 @@ test('참석자 수를 확인해도 기자가 덧붙인 사업비 주장은 결�
   assert.match(exported, /검증 범위 50% \(1\/2\)/);
   assert.match(exported, /1\. 미검토\n사업비가 2배 증가한 가운데/);
   assert.match(exported, /내용 근거 · 참석자 명부/);
+});
+
+test('핵심을 지정하지 않은 기사도 지지율 100%에서 문장 전체와 발언·사실 구절만 확인한 개수를 화면과 TXT에 밝힌다', async t => {
+  const p = open(t);
+  const engine = p.w.JournalFactcheck;
+  const sources = [{id:'minutes', title:'시의회 회의록', url:'https://council.example/minutes', locator:'1쪽', version:'확정본',
+    excerpt:'시의회는 예산 3억 원을 의결했다. 의원은 “참담하다”고 말했다.'}];
+  const fact = '시의회가 3억 원을 의결한 것은';
+  const opinion = '무책임한 결정이다.';
+  const article = fact + ' ' + opinion + '\n의원은 “참담하다”고 말했다.';
+  async function read(text, decisions) {
+    const {rows} = engine.prepare(text, sources);
+    const receipts = decisions.map((d, i) => engine.decide(rows[i], {
+      ...d, sourceIds:['minutes'], acknowledged:true, reason:'회의록에서 해당 구절을 확인했다.'
+    }, sources));
+    await loadWorkspace(p, {format:'journal-local-factcheck-v1', article:text, articleDraft:text, sources, receipts,
+      rowDrafts:[], demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}});
+    return p.el('article-rubric').textContent;
+  }
+  const scoped = [{status:'mixed', factSpan:fact, opinionSpan:opinion},
+    {status:'attribution', contentStatus:'opinion', contentChecked:true, contentReason:'의원의 평가를 인용했다.'}];
+  const both = /구간 전체의 사실 확인 0개, 사실과 평가가 섞여 사실 구절만 확인 1개, 의견·전망을 인용해 발언 사실만 확인 1개/;
+  assert.match(await read(article, scoped), both);
+  p.click('export-report');
+  const exported = await p.snapshot();
+  assert.match(exported, /근거 일치율 100% \(2\/2\)/);
+  assert.match(exported, /검증 범위 100% \(2\/2\)/);
+  assert.match(exported, both);
+  const withFact = article + '\n시의회는 예산 3억 원을 의결했다.\n교육 사업은 내년에 시작한다.';
+  const summary = await read(withFact, [...scoped, {status:'fact'}]);
+  assert.match(summary, /미확인 1개가 남아 있습니다/);
+  assert.match(summary, /근거가 지지한 3개 구간의 확인 범위는 구간 전체의 사실 확인 1개/);
+  assert.doesNotMatch(await read('시의회는 예산 3억 원을 의결했다.', [{status:'fact'}]), /발언 사실만 확인|사실 구절만 확인/);
 });
 
 test('당시 결산표가 인용 내용과 충돌하면 편집 화면·TXT·재개 파일에 귀속과 반증을 함께 남긴다', async t => {

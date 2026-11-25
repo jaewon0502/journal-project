@@ -52,8 +52,6 @@ def html(name, method, tasks):
                                   ('평소 검증 도구' if method == 'manual' else '평소 검증 도구와 저널') +
                                   '</option></select>', contents, count=1, flags=re.S)
         assert count == 1
-    else:
-        contents = re.sub(r'<a href="../article-rubric.md">[^<]*</a>', '', contents)
     return contents
 
 

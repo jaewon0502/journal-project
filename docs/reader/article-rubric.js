@@ -207,8 +207,9 @@
     const selected = key => rows.filter(row => core.has(row.rowId) && row.category === key).map(row => row.rowId);
     const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved'), coreExcluded = selected('excluded');
     const coreQuotedConflict = selected('quotedConflict');
-    const coreLimited = report.rows.filter((row, index) => core.has(row.id) && rows[index].category === 'supported'
-      && (row.status === 'mixed' || (row.status === 'attribution' && row.receipt.contentStatus === 'opinion'))).map(row => row.id);
+    const limited = report.rows.filter((row, index) => rows[index].category === 'supported'
+      && (row.status === 'mixed' || (row.status === 'attribution' && row.receipt.contentStatus === 'opinion')));
+    const coreLimited = limited.filter(row => core.has(row.id)).map(row => row.id);
     const summary = [];
     if (coreContradicted.length) summary.push('지정한 핵심 항목 ' + coreContradicted.length + '개가 원자료와 충돌합니다.');
     if (coreQuotedConflict.length) summary.push('지정한 핵심 항목 중 ' + coreQuotedConflict.length + '개에서 발언 귀속을 확인했고, 인용 속 사실 주장은 독립 원자료와 충돌했습니다.');
@@ -219,6 +220,13 @@
     else if (!adjudicated) summary.push('기사 서술에 대해 지지·충돌 판정을 마친 항목이 없어 근거 지지율을 계산할 수 없습니다.');
     else if (unresolved) summary.push('미확인 ' + unresolved + '개가 남아 있습니다. 지지율은 판정을 마친 ' + adjudicated + '개에만 적용됩니다.');
     else summary.push('판정을 마친 ' + adjudicated + '개 중 원자료가 지지한 항목은 ' + supported + '개입니다.');
+    if (limited.length) {
+      const mixed = limited.filter(row => row.status === 'mixed').length;
+      const scopeCounts = ['구간 전체의 사실 확인 ' + (supported - limited.length) + '개'];
+      if (mixed) scopeCounts.push('사실과 평가가 섞여 사실 구절만 확인 ' + mixed + '개');
+      if (limited.length > mixed) scopeCounts.push('의견·전망을 인용해 발언 사실만 확인 ' + (limited.length - mixed) + '개');
+      summary.push('근거가 지지한 ' + supported + '개 구간의 확인 범위는 ' + scopeCounts.join(', ') + '입니다.');
+    }
     if (quotedConflict) summary.push('인용 속 사실 주장 충돌 ' + quotedConflict + '건은 근거 지지율의 분모에서 제외하고 판정 완료율에 포함했습니다.');
     if (total && !core.size) summary.push('제목·핵심 결론으로 지정한 항목은 없습니다.');
     return {supported, contradicted, quotedConflict, unresolved, excluded: count('excluded'), adjudicated, reviewed, total,

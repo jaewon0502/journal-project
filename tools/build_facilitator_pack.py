@@ -150,7 +150,7 @@ def packet_bytes():
     for name in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html', 'article-compare.html', 'revision-series.html'):
         page = (READER / name).read_text()
         if name in ('article-compare.html', 'revision-series.html'):
-            page = page.replace('<a href="../article-rubric.md">기사 평가 기준과 계산식</a>',
+            page = page.replace('<a href="../article-rubric.md">상세 판정표와 집계식</a>',
                                 '<a href="시작.html">진행자 시작 화면</a>')
         if name == 'article-compare.html':
             payload = json.dumps(case, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')

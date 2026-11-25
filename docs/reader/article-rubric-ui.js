@@ -51,6 +51,37 @@
   function scoreName(value) {
     return value === 'na' ? '해당 없음' : String(value) + '단계 · ' + api.severityLabels[value];
   }
+  function scaleList(dim) {
+    const levels = text('ol', undefined, 'rub-scale');
+    levels.start = 0;
+    for (const desc of dim.levels) levels.append(text('li', desc));
+    return levels;
+  }
+  function showGuide() {
+    const guide = document.getElementById('rubric-guide');
+    if (!guide) return;
+    if (new URLSearchParams(root.location.search).get('study') === '1') {
+      guide.hidden = true;
+      return;
+    }
+    const scales = document.getElementById('rubric-guide-scales');
+    scales.append(text('p', api.severityLabels.map((_, i) => scoreName(i)).join(' / ')));
+    for (const dim of api.dimensions) {
+      const axis = text('section', undefined, 'guide-axis');
+      axis.append(text('h3', dim.title), text('p', dim.question), scaleList(dim));
+      scales.append(axis);
+    }
+    function openLinkedGuide() {
+      if (root.location.hash === '#rubric-guide') guide.open = true;
+    }
+    openLinkedGuide();
+    root.addEventListener('hashchange', openLinkedGuide);
+    document.getElementById('print-rubric').addEventListener('click', () => {
+      document.documentElement.classList.add('print-rubric');
+      root.print();
+    });
+    root.addEventListener('afterprint', () => document.documentElement.classList.remove('print-rubric'));
+  }
   function render(container, report, sources, saved, onChange, rawDraft, onDraft, reviewAction) {
     if (!container || !api) return;
     const binding = api.bind(report);
@@ -168,10 +199,7 @@
       const standards = dim.id === 'standards';
       if (standards) section.append(text('p', '0~3단계 모두 두 주장의 근거가 필요합니다. 같은 원자료라면 각 주장을 다룬 대목을 고르세요. 자료 미제출을 근거로 쓸 때는 대상과 기간을 확인할 수 있는 명부나 회신을 인용하세요. 한쪽 근거를 아직 찾지 못했다면 미평가로 두세요.', 'rub-note'));
       const scale = disclosure('단계별 판단 기준', 'scale-' + dim.id);
-      const levels = text('ol', undefined, 'rub-scale');
-      levels.start = 0;
-      for (const desc of dim.levels) levels.append(text('li', desc));
-      scale.append(levels); section.append(scale);
+      scale.append(scaleList(dim)); section.append(scale);
       const body = text('div', undefined, 'rub-body');
       const feedback = text('p', '', 'rub-feedback');
       feedback.setAttribute('role', 'status');
@@ -354,4 +382,5 @@
     }
   }
   root.JournalArticleRubricUI = Object.freeze({render, restoreDraft});
+  showGuide();
 })(globalThis);
