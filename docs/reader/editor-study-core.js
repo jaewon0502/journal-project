@@ -578,7 +578,7 @@
     const partialTrials = sample.flatMap(r => r.trials.filter(t => t.elapsedMs === null));
     const partialBlocks = new Set(sample.filter(r => r.trials.some(t => t.elapsedMs === null)).map(r => Math.ceil(r.ordinal / slots)));
     const timedSample = sample.filter(r => !partialBlocks.has(Math.ceil(r.ordinal / slots)));
-    const completed = records.filter(r => r.trials.length === slots).length;
+    const completedRecords = records.filter(r => r.trials.length === slots), completed = completedRecords.length;
     const withdrawn = records.filter(r => r.withdrawn);
     const withdrawalWork = {betweenTasks:0, unknown:0, byMethod:Object.fromEntries(methods.map(m => [m, {tasks:0, elapsedMs:0, partial:0}]))};
     for (const record of withdrawn) {
@@ -599,6 +599,13 @@
     counts.timing = {included:timedSample.length, trialCount:timedSample.length * slots, partialTrials:partialTrials.length,
       observedMs:partialTrials.reduce((sum, t) => sum + t.observedMs, 0)};
     counts.timingCoverage = timingCoverage(sample);
+    // Each personal comparison still requires both assignments in both methods.
+    // Other members' nonresponse does not erase this editor's observed direction.
+    counts.individualCompletionTiming = {
+      registeredEditors:records.length, completedEditors:completed, unfinishedEditors:records.length - completed,
+      outsideCompleteBlocks:completed - sample.length,
+      directions:completed === sample.length ? counts.timingCoverage : timingCoverage(completedRecords)
+    };
     counts.missingAnswerBounds = missingAnswerBounds(records, blocks);
     counts.phases = phaseStats(timedSample);
     counts.timedQuality = timedQualityStats(timedSample);
@@ -759,6 +766,13 @@
     });
   }
 
+  function unfinishedBlockDemoRecords() {
+    return partialTimeDemoRecords().map(record =>
+      record.ordinal === 8 || record.ordinal === 12
+        ? {...record, trials:record.trials.slice(0, 3), withdrawn:true, withdrawalTask:null}
+        : record);
+  }
+
   function cueAgreementDemoRecords() {
     return Array.from({length:slots}, (_, i) => {
       let record = createRecord('demo-cue-' + (i + 1), i + 1, 'demo', false);
@@ -812,5 +826,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, unfinishedBlockDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

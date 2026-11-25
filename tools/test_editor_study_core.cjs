@@ -678,6 +678,25 @@ test('중단 과제에서 확인한 시간과 미확인 기록은 완성 묶음�
   for (const k of ['time','phases','quality','bias','trialCount','recordedTrials']) assert.deepEqual(after[k], before[k]);
 });
 
+test('묶음 안에서 둘이 중단해도 네 과제를 마친 각 편집자의 관측 방향은 남는다', () => {
+  const records = study.unfinishedBlockDemoRecords();
+  const a = study.analyze([...records, records[0]], 'demo');
+  assert.equal(a.time.reductionPct, 50);
+  assert.equal(a.timing.included, 4);
+  assert.equal(a.timingCoverage.total, 4);
+  assert.deepEqual(a.individualCompletionTiming, {
+    registeredEditors:12, completedEditors:10, unfinishedEditors:2, outsideCompleteBlocks:6,
+    directions:{total:10, faster:4, slower:6, unchanged:0, unknown:0, possibleFaster:4}
+  });
+  const alone = study.analyze(records.slice(4, 7),'demo');
+  assert.equal(alone.time, null);
+  assert.equal(alone.individualCompletionTiming.outsideCompleteBlocks, 3);
+  assert.equal(alone.individualCompletionTiming.directions.slower, 3);
+  const none = study.analyze([records[7]],'demo');
+  assert.equal(none.individualCompletionTiming.directions, null);
+  assert.equal(none.individualCompletionTiming.unfinishedEditors, 1);
+});
+
 test('한 사람의 큰 절감이 과반 편집자의 증가를 가려도 개인별 중앙값과 인원은 방향을 보존한다', () => {
   const journal = [10000, 110000, 120000, 130000];
   const records = [1,2,3,4].map(ordinal => observations(ordinal, task => ({

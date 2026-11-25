@@ -344,18 +344,26 @@
       biasCard.append(warnings);
     }
   }
+  function fasterRange(c) {
+    const low = fmt(100 * c.faster / c.total), high = fmt(100 * c.possibleFaster / c.total);
+    return c.faster === c.possibleFaster ? c.faster + '명 (' + low + '%)' :
+      c.faster + '~' + c.possibleFaster + '명 (' + low + '~' + high + '%)';
+  }
   function showTimingCoverage(a) {
     const c = a.timing.partialTrials ? a.timingCoverage : null;
     el('timing-coverage').hidden = !c;
     el('timing-coverage-summary').textContent = c ? '네 명 모두 과제를 마친 묶음의 ' + c.total + '명 중 단축 ' + c.faster +
       '명 · 동일 ' + c.unchanged + '명 · 증가 ' + c.slower + '명 · 미확정 ' + c.unknown + '명' : '';
-    let range = '';
-    if (c) {
-      const low = fmt(100 * c.faster / c.total), high = fmt(100 * c.possibleFaster / c.total);
-      range = c.faster === c.possibleFaster ? c.faster + '명 (' + low + '%)' :
-        c.faster + '~' + c.possibleFaster + '명 (' + low + '~' + high + '%)';
-    }
-    el('timing-coverage-range').textContent = c ? '이 ' + c.total + '명 중 검토 시간이 줄어든 인원은 ' + range + '입니다.' : '';
+    el('timing-coverage-range').textContent = c ? '이 ' + c.total + '명 중 검토 시간이 줄어든 인원은 ' + fasterRange(c) + '입니다.' : '';
+    const individual = a.individualCompletionTiming, all = individual.outsideCompleteBlocks ? individual.directions : null;
+    el('individual-time').hidden = !all;
+    el('individual-time-title').textContent = (a.kind === 'demo' ? '가상 기록 · ' : '') + '네 과제를 마친 편집자의 검토 시간 변화';
+    el('individual-time-sample').textContent = all ? '등록 ' + individual.registeredEditors + '명 중 개인 완료 ' + all.total +
+      '명, 미완료 ' + individual.unfinishedEditors + '명입니다. 완료자 중 ' + individual.outsideCompleteBlocks +
+      '명은 네 명의 완료 기록이 다 모이지 않은 묶음에 속합니다. 상단 평균 시간 비교에는 ' + a.timing.included + '명이 포함됐습니다.' : '';
+    el('individual-time-directions').textContent = all ? '저널을 썼을 때 단축 ' + all.faster + '명 · 동일 ' + all.unchanged +
+      '명 · 증가 ' + all.slower + '명 · 미확정 ' + all.unknown + '명' : '';
+    el('individual-time-range').textContent = all ? '개인 완료 ' + all.total + '명 중 검토 시간이 줄어든 인원은 ' + fasterRange(all) + '입니다.' : '';
   }
   const unsupportedTypes = [
     ['contradicted', '원자료가 반박한 과제'],
@@ -588,13 +596,18 @@
         reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
     };
   }
+  const demoLinks = {
+    '#demo-adoptions':{example:'adoptions', heading:'fact-adoptions-title'},
+    '#demo-unfinished-blocks':{example:'unfinished-blocks', heading:'individual-time-title'}
+  };
   function showDashboard() {
     const demo = viewKind === 'demo';
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
     let sample = confirmed;
     if (demo) {
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
-        agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords};
+        agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords,
+        'unfinished-blocks':core.unfinishedBlockDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
@@ -607,7 +620,7 @@
       const editionMetrics = editions => editions.map(({kitVersion, analysis}) => ({kitVersion, ...shareMetrics(analysis)}));
       download({type:'journal-editor-study-summary-v1', protocol:core.protocol, kind:'editor',
         scope:'현업 참여자가 제공된 자료로 가상 기사 네 건을 검토한 파일럿. 격차는 기사에 붙인 정당 표기별 사실 채택률 차이입니다.',
-        unconfirmedEditors:records.length - confirmed.length, overall:shareMetrics(a),
+        unconfirmedEditors:records.length - confirmed.length, overall:{...shareMetrics(a), individualCompletionTiming:a.individualCompletionTiming},
         assignedEditionCoverage:{rosterBlocks:assigned?.rosterBlocks ?? 0, matchedBlocks:assigned?.matchedBlocks ?? 0},
         observedEditions:editionMetrics(observedEditions), assignedMatchedEditions:editionMetrics(assigned?.editions ?? [])},
         'journal-editor-study-summary.json');
@@ -1197,13 +1210,13 @@
     if (participant) renderParticipant();
   // coordinator-only:begin
     else {
-      const linkedExample = location.hash === '#demo-adoptions';
+      const linkedExample = demoLinks[location.hash];
       if (linkedExample) {
         viewKind = 'demo';
-        el('demo-example').value = 'adoptions';
+        el('demo-example').value = linkedExample.example;
       }
       showDashboard();
-      if (linkedExample) el('fact-adoptions-title').focus();
+      if (linkedExample) el(linkedExample.heading).focus();
     }
   // coordinator-only:end
   }
@@ -1244,7 +1257,8 @@
     function chooseView(kind) {
       viewKind = kind;
       // A manual choice supersedes the example link, including on reload.
-      if (location.hash === '#demo-adoptions' && (kind !== 'demo' || el('demo-example').value !== 'adoptions')) {
+      const linkedExample = demoLinks[location.hash];
+      if (linkedExample && (kind !== 'demo' || el('demo-example').value !== linkedExample.example)) {
         history.replaceState(null, '', location.href.split('#')[0]);
       }
       showDashboard();

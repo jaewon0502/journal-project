@@ -1104,6 +1104,45 @@ test('포함한 묶음에 따라 평균 시간이 늘거나 줄면 절감률 바
   assert.match(card(), /시간이 줄었는지 늘었는지가 달라집니다/);
 });
 
+test('미완성 묶음의 개인 완료자는 가상 예시와 명부 확인 실측에서 따로 집계한다', async t => {
+  const p = page(t,'#demo-unfinished-blocks');
+  const panel = p.el('individual-time');
+  assert.equal(p.el('demo-example').value,'unfinished-blocks');
+  assert.equal(p.w.document.activeElement,p.el('individual-time-title'));
+  assert.equal(panel.hidden,false);
+  assert.match(p.el('individual-time-title').textContent,/가상 기록/);
+  assert.match(panel.textContent,/등록 12명 중 개인 완료 10명, 미완료 2명/);
+  assert.match(panel.textContent,/단축 4명 · 동일 0명 · 증가 6명 · 미확정 0명/);
+  assert.match(panel.textContent,/10명 중 검토 시간이 줄어든 인원은 4명 \(40%\)/);
+  assert.match(p.el('metrics').textContent,/시간 절감률50%/);
+  assert.equal(p.el('export-summary').disabled,true);
+  p.el('real-view').click();
+  assert.equal(p.w.location.hash,'');
+  assert.equal(panel.hidden,true);
+  assert.equal(p.el('individual-time-directions').textContent,'');
+  p.el('issue-codes').click();
+  const files = p.workspace().invitations.slice(0,2).map(inv=>completedRecord(inv.ordinal,inv.id));
+  Object.assign(files[1].trials.find(t=>t.method==='journal'),{elapsedMs:null,observedMs:10});
+  const outside = completedRecord(8,'E0000000000000008');
+  await importFiles(p,[...files.map(r=>JSON.stringify(r)),JSON.stringify({type:'journal-editor-study-collection-v1',records:[outside]})]);
+  assert.equal(panel.hidden,false);
+  assert.doesNotMatch(panel.textContent,/가상 기록/);
+  assert.match(panel.textContent,/등록 2명 중 개인 완료 2명, 미완료 0명/);
+  assert.match(panel.textContent,/상단 평균 시간 비교에는 0명/);
+  assert.match(panel.textContent,/단축 1명 · 동일 0명 · 증가 0명 · 미확정 1명/);
+  assert.match(panel.textContent,/1~2명 \(50~100%\)/);
+  const downloads = captureDownloads(p);
+  p.el('export-summary').click();
+  const saved = JSON.parse(await downloads.at(-1).text());
+  assert.equal(saved.unconfirmedEditors,1);
+  assert.equal(saved.overall.time.reductionPct,null);
+  assert.deepEqual(saved.overall.individualCompletionTiming,{
+    registeredEditors:2, completedEditors:2, unfinishedEditors:0, outsideCompleteBlocks:2,
+    directions:{total:2,faster:1,slower:0,unchanged:0,unknown:1,possibleFaster:2}
+  });
+  assert.ok(!JSON.stringify(saved).includes(files[0].participantId));
+});
+
 test('중단한 타이머가 있으면 완성한 묶음 전체의 시간 단축 가능 범위를 따로 표시한다', async t => {
   const p = page(t);
   for (let block = 0; block < 3; block++) p.el('issue-codes').click();
