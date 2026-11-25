@@ -118,6 +118,34 @@
   const reportedQuotation = /^(?:“[^”]+”|"[^"]+"|‘[^’]+’|'[^']+'|「[^」]+」|『[^』]+』|«[^»]+»)\s*(?:이?라고|고|이?라며|며|이?라면서|면서)\s*[가-힣]+다[.!?…。！？]*$/u;
   // Require an explicit name field; an ordinary '발언자: 해당 의원' label can still refer back to the heading.
   const namedSpeaker = /^(?:발언자|화자)\s+실명\s*[:：]\s*[가-힣]{2,5}\s+(?:의원|시장|장관|위원장|대변인|대표|기자)$/u;
+  // In indirect speech the subject of the quoted assertion can be quite different
+  // from the person reporting it. Only an explicit speaker can supply that identity.
+  const directQuote = /(?:“[^”]+”|"[^"]+"|‘[^’]+’|'[^']+'|「[^」]+」|『[^』]+』|«[^»]+»)/u;
+  const reportParticle = /(?:다거나|라거나|다면서|라면서|다며|라며|다고|라고|냐고|자고|고|며|면서)\s*/gu;
+  const speechPredicate = /(?:말(?:했|한)|밝혔|전했|답했|덧붙였|(?:강조|주장|설명|지적|반박|해명|촉구|대답|답변|평가|경고|부인|언급|발표|역설|비판|요구|호소|반문|토로|반발|비난|질타)했)다[.!?…。！？]*$/u;
+  const speakerNoun = /(?:의원|대변인|위원장|시장|장관|대표|기자|담당자|관계자|국장|교수|차관|대통령|씨|정부|위원회|시청|교육청|협회|노조|정당|여당|야당)(?:께서는|께서|은|는|이|가)(?=\s)/u;
+  function unanchoredReport(text) {
+    const speech = speechPredicate.exec(text);
+    if (!speech) return false;
+    const opening = directQuote.exec(text);
+    if (opening) {
+      const prefix = text.slice(0, opening.index).trimEnd();
+      const frame = text.slice(opening.index + opening[0].length);
+      // A speaker before the quote takes precedence over reporting adverbs.
+      if (speakerNoun.test(prefix + ' ') || /(?:께서|께서는)$/u.test(prefix)) return false;
+      // A named topic before a direct quote need not carry a job title ("한빛은행은").
+      // Time, location and instrumental phrases still leave the speaker unstated.
+      if (/\p{L}(?:은|는)$/u.test(prefix) && !/(?:에|에서|으로|로|까지|부터|당시|반면)는$/u.test(prefix)) return false;
+      return /^(?:이?라고|고|이?라며|며|이?라면서|면서)\s*/u.test(frame.trimStart()) && !speakerNoun.test(frame);
+    }
+    const particle = Array.from(text.slice(0, speech.index).matchAll(reportParticle)).at(-1);
+    if (!particle || speakerNoun.test(text.slice(particle.index + particle[0].length))) return false;
+    // A topic-marked speaker introducing a separate embedded subject is explicit.
+    // A lone subject in "김 의원이 반대했다고 주장했다" belongs to the embedded claim.
+    const clause = text.slice(0, particle.index);
+    const subject = speakerNoun.exec(clause);
+    return !subject || !/(?:은|는|이|가)\s/u.test(clause.slice(subject.index + subject[0].length));
+  }
   function uniqueRows(rows, keyFor = rowFingerprint) {
     const index = new Map();
     for (const row of rows) {
@@ -174,7 +202,7 @@
 
   // Row IDs encode offsets. Across different editions, link only a single location
   // whose wording and immediate context identify one row in each edition.
-  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6, withheldFromV7) {
+  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6, withheldFromV7, withheldFromV8) {
     if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
     let commonPrefix = 0;
     while (before.article[commonPrefix] === after.article[commonPrefix]) commonPrefix++;
@@ -192,23 +220,25 @@
       // A matching window cannot establish the referent after an earlier edit or a move.
       const priorTextChanged = row.positions[0].start > commonPrefix || row.id !== target;
       if (priorTextChanged && (referenceModifier.test(row.text) || referencePronoun.test(row.text))) continue;
-      const detached = detachedQuotation.test(row.text);
-      if (detached || reportedQuotation.test(row.text)) {
-        const previous = before.rows[index - 1];
-        const anchored = previous?.positions.length === 1 && namedSpeaker.test(previous.text) &&
-          previous.positions[0].start >= before.article.length - commonSuffix;
-        if (!anchored) {
-          // For reading existing coordinator archives only. The current comparison always withholds this pair.
-          withheldFromV5?.set(row.id, target);
-          if (!detached) withheldFromV6?.set(row.id, target);
-          continue;
-        }
+      const detached = detachedQuotation.test(row.text), reported = reportedQuotation.test(row.text);
+      const needsSpeaker = detached || reported || unanchoredReport(row.text);
+      const previous = before.rows[index - 1];
+      const anchored = needsSpeaker && previous?.positions.length === 1 && namedSpeaker.test(previous.text) &&
+        previous.positions[0].start >= before.article.length - commonSuffix;
+      if ((detached || reported) && !anchored) {
+        withheldFromV5?.set(row.id, target);
+        if (!detached) withheldFromV6?.set(row.id, target);
+        continue;
       }
       if (priorScopes.get(row.id) !== revisedScopes.get(target)) {
-        // All three earlier versions reached this pair after their quotation and reference rules.
         withheldFromV5?.set(row.id, target);
         withheldFromV6?.set(row.id, target);
         withheldFromV7?.set(row.id, target);
+        continue;
+      }
+      if (needsSpeaker && !anchored) {
+        // v8 already excluded changed statistical headings, but still paired this speech.
+        for (const old of [withheldFromV5, withheldFromV6, withheldFromV7, withheldFromV8]) old?.set(row.id, target);
         continue;
       }
       matches.set(row.id, target);

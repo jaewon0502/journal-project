@@ -37,7 +37,8 @@ test('모의 도서관 기사 제목의 오류는 진행자가 대응을 확인�
   const legacy = await retention.create(record, items, [kept]);
   assert.equal(legacy.version, 6);
   assert.deepEqual(retention.verifyAll(legacy, record), {notes:[kept],contextNotes:[]});
-  await assert.rejects(retention.create({...record,version:7},items,[],[],[corrected]), /현재 기준/);
+  const {biasEvidenceSha256, ...oldFields} = record;
+  await assert.rejects(retention.create({...oldFields,version:7},items,[],[],[corrected]), /현재 기준/);
 });
 
 test('핵심 발언의 맥락과 원본 기사 주장의 정정을 같은 여섯 파일에서 서로 다른 기록으로 검증한다', async () => {

@@ -17,6 +17,8 @@ PRACTICE_SAMPLE = '연습 예시/고용률-판단이유-가상응답.json'
 PARTIAL_GRADING_SAMPLE = '연습 예시/채점시간-일부누락-가상응답.json'
 PARTY_LEDGER_SAMPLE = '연습 예시/정당별-결산표-이전-점수.json'
 DISPUTE_FILES = {'editor-a.json': '연습 예시/핵심지출/편집자-A.json', 'editor-b.json': '연습 예시/핵심지출/편집자-B.json'}
+BIAS_PRACTICE = {name: '연습 예시/편향인용/' + name for name in
+                 ('aligned-summary.json', 'different-summary.json', 'aligned-case.json', 'different-case.json', 'preview.html')}
 QUOTE_PRACTICE = {
     'series-summary.json': '연습 예시/핵심발언/기사별-요약.json',
     'coordinator-case.json': '연습 예시/핵심발언/진행자용-대조기록.json'
@@ -87,6 +89,11 @@ START = """<!doctype html>
 <li>‘기사별 평가 요약 저장’으로 기사마다 요약 한 개를 보관하세요. <a href="revision-series.html">여러 기사 개선율 집계</a>에서 편향 개선율과 공동 사실 판정 범위를 확인하세요. 수정본에 충돌 표시가 남았거나 원본에서 확인한 사실을 다시 대조해야 하면 해당 기사 이름을 누르세요. 작업 파일 4개와 대응표 2개를 열면 선택한 구절과 두 편집자의 근거가 나옵니다. 원본에서 두 사람이 반박한 구절은 정정 여부와 근거를 기록해 진행자 파일을 저장하세요. 여러 기사 화면의 ‘진행자가 대조한 정정 결과 집계’에 그 파일을 불러오면 정정 확인율과 대응 구절을 찾지 못한 건수를 따로 볼 수 있습니다.</li>
 <li>‘같은 항목에서 본 중요한 왜곡’에서 원본과 수정본의 비율을 공통 개선율과 함께 확인하세요. 판단이 갈린 항목의 링크를 누르고 그 기사의 원래 파일을 열면, 해당 기준에 적은 두 편집자의 이유와 근거가 나옵니다.</li>
 <li>원본 사실이 수정본에도 남았는지 직접 대조했다면 구절별 판단과 이유를 넣고 ‘진행자용 대조 파일 저장’을 누르세요. 다음에는 ‘두 편집자의 결과 한꺼번에 열기’에서 이 파일 하나로 이어갑니다. 이 파일에는 두 편집자의 원자료·미적용 초안과 진행자 대응표가 모두 들어갑니다.</li></ol>
+<h3>편향 점수가 내려간 두 기사에서 원자료 대조하기</h3>
+<p><a href="연습 예시/편향인용/preview.html">가상 기사 두 편의 점수와 편집자가 고른 설문 구절 보기</a></p>
+<p>직접 집계하려면 <a href="revision-series.html">여러 기사 개선율 집계</a>에서 <code>연습 예시/편향인용</code> 폴더의
+<code>aligned-summary.json</code>과 <code>different-summary.json</code>을 함께 여세요. ‘개선 판정에 사용한 기사·원자료 인용 대조’를 펼치고
+같은 폴더의 <code>aligned-case.json</code>과 <code>different-case.json</code>을 선택하면 두 편집자가 어떤 근거를 대조했는지 집계됩니다.</p>
 <p><a href="article-compare.html#review={{QUOTE_REVIEW}}&amp;focus=core-context&amp;example=quote"><strong>가상 기사에서 바뀐 핵심 발언 대조하기</strong></a> ·
 야당과 여당 의원의 발언을 대조하고 진행자 판단을 파일로 저장해 이어볼 수 있습니다. 집계 숫자부터 보려면
 <a href="revision-series.html">여러 기사 개선율 집계</a>에서 <code>연습 예시/핵심발언/기사별-요약.json</code>을 여세요.
@@ -165,6 +172,15 @@ def packet_bytes():
              '연습 예시/검증성공-80초단축.html': (CASES / 'field-reason-time' / 'fast-pass.html').read_bytes(),
              PARTY_LEDGER_SAMPLE: (CASES / 'party-ledger-review' / 'legacy-score.json').read_bytes(),
              'prepare_pdf_source.py': (ROOT / 'tools' / 'prepare_pdf_source.py').read_bytes()}
+    for filename, destination in BIAS_PRACTICE.items():
+        data = (CASES / 'bias-citation-audit' / filename).read_bytes()
+        if filename.endswith('-case.json'):
+            items = json.loads(data)['items']
+            if len(items) != 6 or not all(item['data'].get('demo') is True for item in items):
+                raise ValueError('편향 인용 예시에는 가상 편집 기록만 넣으세요.')
+        elif filename.endswith('-summary.json') and json.loads(data)['demo'] is not True:
+            raise ValueError('편향 인용 예시에는 가상 기사 요약만 넣으세요.')
+        files[destination] = data
     for filename, destination in QUOTE_PRACTICE.items():
         files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()
     for filename, destination in DISPUTE_FILES.items():

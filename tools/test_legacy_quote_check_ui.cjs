@@ -173,7 +173,7 @@ test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모�
     }
     const downloaded = await p.downloadSummary();
     assert.deepEqual(downloaded, current);
-    assert.equal(downloaded.version, 8);
+    assert.equal(downloaded.version, 9);
     assert.equal(new Map(downloaded.factContext.matches).has(3), false);
     for (const text of [privateReason, quote, '비공개 논평 사본', '편집자 1의 논평 확인']) {
       assert.equal(JSON.stringify(downloaded).includes(text), false);
@@ -203,6 +203,6 @@ test('예전 연결이 여전히 유효한 연습 기사도 같은 링크에서 
   assert.match(count().textContent, /핵심 구절 0개$/);
   assert.equal(p.document.activeElement, count());
   const downloaded = await p.downloadSummary();
-  assert.equal(downloaded.version, 8);
+  assert.equal(downloaded.version, 9);
   assert.deepEqual(downloaded.factContext.matches, legacy.factContext.matches);
 });

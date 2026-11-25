@@ -781,12 +781,18 @@
     group.append(full);
     return group;
   }
-  function jointDimensionDetails(dimension, editors) {
+  function jointDimensionDetails(dimension, editors, evidenceRow) {
     const labels = {improved:'개선', worsened:'악화', high:'중요한 왜곡 유지', low:'0~1단계 유지', unpaired:'비교 보류'};
     const line = [dimension.first, dimension.second].map((d, i) =>
       editorNames[i] + ' ' + level(d.before) + ' → ' + level(d.after) + ' (' + labels[d.change] + ')');
     const item = detail(dimension.title);
     item.dataset.biasAxis = dimension.id;
+    if (!evidenceRow) evidenceRow = window.JournalRevisionBiasAudit.article({dimensions:[dimension]}, editors.map(e => e.snapshots)).rows[0];
+    const result = {aligned:'인용 위치 겹침', different:'서로 다른 인용', unresolved:'위치 비교 미확정'};
+    item.append(note('두 편집자의 기사·원자료 인용 · 원본 ' + result[evidenceRow.sameEdition[0]] +
+      ' · 수정본 ' + result[evidenceRow.sameEdition[1]]),
+    note('원본·수정본에서 선택한 원자료 인용 · 첫 편집자 ' + result[evidenceRow.sourcesAcross[0]] +
+      ' · 둘째 편집자 ' + result[evidenceRow.sourcesAcross[1]]));
     item.firstChild.append(element('small', line.join(' / '), 'joint-levels'));
     const pair = element('div', null, 'pair');
     editors.forEach((editor, i) => {
@@ -879,6 +885,7 @@
     grid.append(card('두 사람 모두 개선으로 판정', joint.improved, '두 사람 모두 원본을 2~3단계로 평가하고 수정본도 채점한 항목 중'),
       card('두 사람 모두 악화로 판정', joint.worsened, '두 사람 모두 원본을 0~1단계로 평가하고 수정본도 채점한 항목 중'));
     const editors = [priorReview, current];
+    const citationCheck = window.JournalRevisionBiasAudit.article(joint, editors.map(e => e.snapshots));
     panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid, jointImprovementRange(joint.improvementRange),
       note('네 판정이 모두 있는 항목 ' + joint.paired + '/' + joint.total + '개 · 비교할 단계가 부족한 항목 ' + joint.unpaired +
         '개 · 중요한 왜곡(2~3단계)의 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'), jointSeverity(joint));
@@ -918,7 +925,21 @@
     }
     actions.append(series);
     panel.append(actions, note('집계용 요약에는 편향 점수, 구절별 사실 판정과 충돌 표시, 원본과 수정본의 대응 구절 번호, 판본·원자료 식별값이 담깁니다. 기사 구절과 근거는 원래 작업 파일에 보관됩니다.'));
-    for (const dimension of joint.dimensions) panel.append(jointDimensionDetails(dimension, editors));
+    if (joint.improved.numerator) {
+      const counts = citationCheck.counts, box = section('개선 판정을 뒷받침한 인용 대조');
+      box.id = 'joint-bias-citations';
+      box.append(element('p', '두 사람이 개선으로 본 ' + joint.improved.numerator + '개 중 인용 위치가 네 차례 대조에서 모두 겹침 ' +
+        counts.aligned + '개 · 서로 다른 인용 확인 ' + counts.different + '개 · 위치 미확정 ' + counts.unresolved + '개'),
+        note('각 판본에서 두 편집자의 기사·원자료 구절을 비교하고, 편집자별로 수정 전후의 원자료 구절을 비교합니다. 같은 곳을 인용했어도 판단 이유는 다를 수 있습니다.'));
+      for (const row of citationCheck.rows.filter(r => r.improved)) {
+        const open = element('button', row.title + ' 인용 네 건 열기');
+        open.type = 'button';
+        open.addEventListener('click', () => openReviewRow(panel.querySelector('[data-bias-axis="' + row.id + '"]')));
+        box.append(open);
+      }
+      panel.append(box);
+    }
+    for (const [index, dimension] of joint.dimensions.entries()) panel.append(jointDimensionDetails(dimension, editors, citationCheck.rows[index]));
     panel.append(jointFactPanel(joint, editors, record, reopened), note('아래의 개별 편향 변화와 사실 확인 결과는 둘째 편집자가 제출한 두 판본의 기록입니다.'));
     return panel;
   }
@@ -1075,10 +1096,10 @@
   }
   function targetMatch(record, joint, key) {
     const min = reviewTarget.coreContext || reviewTarget.quoteCheck ? 4 :
-      reviewTarget.retention || reviewTarget.numericCheck ? 3 : 2;
+      reviewTarget.retention || reviewTarget.numericCheck || reviewTarget.speechCheck ? 3 : 2;
     const series = window.JournalRevisionSeries;
     if (series.reviewId(record) === reviewTarget.id) return record;
-    const historical = [7, 6, 5].map(version => series.makeLegacyMatchRecord(joint, key, version));
+    const historical = [8, 7, 6, 5].map(version => series.makeLegacyMatchRecord(joint, key, version));
     for (const prior of historical) {
       if (series.reviewId(prior) === reviewTarget.id) return prior;
     }
@@ -1105,22 +1126,26 @@
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
     let panel, group, row, title, quoteResult;
-    if (reviewTarget.quoteCheck || reviewTarget.numericCheck) {
-      const numeric = reviewTarget.numericCheck;
-      const v7 = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, 7);
-      const v7Links = new Map(v7.factContext.matches);
+    if (reviewTarget.quoteCheck || reviewTarget.numericCheck || reviewTarget.speechCheck) {
+      const numeric = reviewTarget.numericCheck, speech = reviewTarget.speechCheck;
+      const legacyLinks = version => new Map(window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, version).factContext.matches);
+      const v7Links = legacyLinks(7), v8Links = legacyLinks(8);
       const currentLinks = new Map(record.factContext.matches);
-      const removed = match.factContext.matches.filter(([before, after]) =>
-        (numeric ? v7Links.get(before) === after : v7Links.get(before) !== after) &&
-        (numeric || match.factContext.beforeCore[before] === 2 || match.facts.before[before].outcome === 'supported') && currentLinks.get(before) !== after);
+      const removed = match.factContext.matches.filter(([before, after]) => {
+        if (speech) return v8Links.get(before) === after && currentLinks.get(before) !== after;
+        if (numeric) return v7Links.get(before) === after && v8Links.get(before) !== after;
+        return v7Links.get(before) !== after && (match.factContext.beforeCore[before] === 2 || match.facts.before[before].outcome === 'supported');
+      });
       const coreCount = removed.filter(([before]) => match.factContext.beforeCore[before] === 2).length;
-      title = numeric ? '이전에 연결한 수치 구절의 조사 대상·단위 대조' : '이전에 연결한 구절의 인용 대응';
+      title = speech ? '문장 밖의 발언자를 다시 확인할 구절' : numeric ? '이전에 연결한 수치 구절의 조사 대상·단위 대조' : '이전에 연결한 구절의 인용 대응';
       panel = jointFactPanel(joint, reviews, record, reopened);
-      quoteResult = element('p', numeric ? '수치의 표제가 달라 자동 대응에서 뺀 원본 구절 ' + removed.length + '개' :
+      quoteResult = element('p', speech ? '발언자와 인용 범위를 확인하도록 자동 대응에서 뺀 원본 구절 ' + removed.length + '개' :
+        numeric ? '수치의 표제가 달라 자동 대응에서 뺀 원본 구절 ' + removed.length + '개' :
         '발언자 확인을 위해 자동 대응에서 뺀 원본 핵심 구절 ' + coreCount + '개' +
         (removed.length > coreCount ? ' · 그 밖의 공동 지지 구절 ' + (removed.length - coreCount) + '개' : ''));
       quoteResult.tabIndex = -1;
-      if (numeric) quoteResult.dataset.numericCheckCount = '';
+      if (speech) quoteResult.dataset.speechCheckCount = '';
+      else if (numeric) quoteResult.dataset.numericCheckCount = '';
       else quoteResult.dataset.quoteCheckCount = '';
       const save = element('button', '현재 기준의 기사별 평가 요약 저장');
       save.type = 'button';
@@ -1172,7 +1197,7 @@
   function showRecoveredArchive(archive, items, reviews, joint, record) {
     if (reviewTarget && reviewTarget.id !== archive.reviewId &&
         (!record || !targetMatch(record, joint, reviews[0].key))) throw new Error('집계에서 선택한 요약과 일치하지 않습니다.');
-    if (record && (reviewTarget?.quoteCheck || reviewTarget?.numericCheck || reviewTarget?.coreContext || reviewTarget?.corrections)) showTargetEvidence(reviews);
+    if (record && (reviewTarget?.quoteCheck || reviewTarget?.numericCheck || reviewTarget?.speechCheck || reviewTarget?.coreContext || reviewTarget?.corrections)) showTargetEvidence(reviews);
     else show(reviews[1].snapshots, false, reviews[1], reviews[0], {joint, record, notes:[]});
     const recoveryFiles = detail('기사 작업 파일 4개와 대응표 2개 꺼내기');
     recoveryFiles.append(note('보완할 작업 파일을 저장해 기사 팩트체크에서 여세요. 대응표는 진행자가 보관합니다.'));
@@ -1183,12 +1208,12 @@
       recoveryFiles.append(save);
     }
     byId('output').prepend(recoveryFiles);
-    for (const [heading, notes] of [['사후 판단', archive.notes], ['핵심 맥락 대조', archive.contextNotes ?? []]]) {
+    for (const [heading, notes] of [['사후 판단', archive.notes], ['핵심 맥락 대조', archive.contextNotes ?? []], ['정정 대조', archive.correctionNotes ?? []]]) {
       if (!notes.length) continue;
       const previous = detail('이전 기준으로 기록한 ' + heading + ' ' + notes.length + '개 보기');
       for (const entry of notes) {
         const state = {retained:'유지 확인', changed:'내용 변경', notFound:'대응 구절을 찾지 못함', absent:'대응 구절을 찾지 못함',
-          open:'검토 중', pending:'검토 중'}[entry.status];
+          corrected:'정정 확인', persists:'충돌 지속', unresolved:'판단 유보', open:'검토 중', pending:'검토 중'}[entry.status];
         previous.append(element('p', '원본 ' + (entry.before + 1) + '번' + (entry.after === null ? '' : ' · 수정본 ' + (entry.after + 1) + '번') +
           ' · ' + state + ' · ' + entry.reason));
       }
@@ -1217,7 +1242,7 @@
       catch (error) {
         if (error.code !== 'legacy-review-changed') throw error;
         if (archive.version >= 3) {
-          const historical = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, archive.version + 2);
+          const historical = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, Math.min(8,archive.version + 2));
           window.JournalRetentionCase.verifyLegacyMatchNotes(archive, historical);
         }
         showRecoveredArchive(archive, items, reviews, joint, record);
@@ -1411,10 +1436,10 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|corrections|core-context|quote-check|numeric-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
+      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|corrections|core-context|quote-check|numeric-check|speech-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
       const packagedQuote = byId('quote-practice');
       reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', corrections:match?.[2] === 'corrections', coreContext:match?.[2] === 'core-context',
-        quoteCheck:match?.[2] === 'quote-check', numericCheck:match?.[2] === 'numeric-check', axis:match?.[3], example:match?.[4] === 'quote' && !packagedQuote ? null : match?.[4]};
+        quoteCheck:match?.[2] === 'quote-check', numericCheck:match?.[2] === 'numeric-check', speechCheck:match?.[2] === 'speech-check', axis:match?.[3], example:match?.[4] === 'quote' && !packagedQuote ? null : match?.[4]};
       resumeExample.hidden = !(reviewTarget.example && (reviewTarget.retention || reviewTarget.coreContext || reviewTarget.corrections));
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;

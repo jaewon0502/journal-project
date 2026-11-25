@@ -16,9 +16,9 @@
   async function audit(records, archives = []) {
     if (!Array.isArray(archives)) throw new Error('진행자용 파일을 목록으로 선택하세요.');
     const report = series.summarize(records);
-    const selected = new Set(records.filter(record => record.version === 8).map(record => series.reviewId(record)));
-    const current = report.articles.filter(article => article.matchVersion === 8);
-    const older = report.articles.filter(article => article.matchVersion < 8);
+    const selected = new Set(records.filter(record => record.version === series.currentVersion).map(record => series.reviewId(record)));
+    const current = report.articles.filter(article => article.matchVersion === series.currentVersion);
+    const older = report.articles.filter(article => article.matchVersion < series.currentVersion);
     const countErrors = articles => articles.reduce((total, article) => total + (article.facts?.before.contradicted ?? 0), 0);
     const total = countErrors(current);
     const eligibleArticles = current.filter(article => article.facts.before.contradicted > 0).length;
@@ -26,7 +26,20 @@
     const result = {currentArticles:current.length, olderArticles:older.length, olderKnownOriginals:countErrors(older),
       olderWithoutFacts:older.filter(article => !article.facts).length, eligibleArticles, checkedArchives:0,
       duplicateArchives:0, missingArchiveArticles:eligibleArticles, missingArchiveOriginals:total, totals};
+    const checked = await inspectArchives(selected, archives, ({record, notes}) => {
+      const counts = retention.summarizeCorrections(record, notes.correctionNotes ?? []);
+      if (counts.total) result.missingArchiveArticles--;
+      result.missingArchiveOriginals -= counts.total;
+      for (const status of ['corrected', 'persists', 'absent', 'unresolved']) totals[status] += counts[status];
+      totals.pending -= counts.total - counts.pending;
+    });
+    return Object.assign(result, checked);
+  }
+
+  async function inspectArchives(selected, archives, observe) {
+    if (!Array.isArray(archives)) throw new Error('진행자용 파일을 목록으로 선택하세요.');
     const verified = new Map();
+    let duplicateArchives = 0;
     for (const [index, file] of archives.entries()) {
       if (![6, 7].includes(file?.version) || file.format !== retention.format) {
         throw fileError(index, '현재 기준으로 저장한 진행자용 원본 대조 기록을 선택하세요.');
@@ -47,29 +60,25 @@
           throw fileError(index, '같은 기사에 원자료 또는 대조 기록이 다른 진행자용 파일이 있습니다. 집계할 파일 하나를 선택하세요.');
         }
         // The same verified payload may use another filename or input order.
-        result.duplicateArchives++;
+        duplicateArchives++;
         continue;
       }
-      let counts;
       try {
         const pair = await blind.resolveBundle(archive.items);
-        const record = series.makeRecord(agreement.compare(...pair), pair[0].key);
+        const joint = agreement.compare(...pair);
+        const record = series.makeRecord(joint, pair[0].key);
+        if (series.reviewId(record) !== archive.reviewId) throw new Error('다시 계산한 기사 요약이 다릅니다.');
         const notes = retention.verifyAll(archive, record);
-        counts = retention.summarizeCorrections(record, notes.correctionNotes ?? []);
+        observe({record, notes, pair, joint});
       } catch {
         throw fileError(index, '여섯 원자료에서 다시 계산한 기사 요약과 사후 대조 판단을 확인할 수 없습니다.');
       }
       verified.set(archive.reviewId, {version:archive.version, evidenceDigest:archive.evidenceDigest, checksum:archive.checksum});
-      result.checkedArchives++;
-      if (counts.total) result.missingArchiveArticles--;
-      result.missingArchiveOriginals -= counts.total;
-      for (const status of ['corrected', 'persists', 'absent', 'unresolved']) totals[status] += counts[status];
-      totals.pending -= counts.total - counts.pending;
     }
-    return result;
+    return {checkedArchives:verified.size, duplicateArchives};
   }
 
-  const api = Object.freeze({audit});
+  const api = Object.freeze({audit, inspectArchives});
   if (useNode) module.exports = api;
   else root.JournalCorrectionSeriesAudit = api;
 })(globalThis);

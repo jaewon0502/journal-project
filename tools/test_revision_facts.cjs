@@ -253,6 +253,7 @@ test('전년에 비해 늘어난 회계가 달라지면 두 판본이 각각 사
 
   // Recreate the historical archive identity for these six files under the immediate-neighbor matcher.
   const historical = {...structuredClone(record), version:4};
+  delete historical.biasEvidenceSha256;
   historical.factMatches[0][1] = 2;
   historical.factContext.matches.unshift([2,2]);
   const kept = {before:4, after:4, status:'retained', reason:'일반회계 결산액 344.5조 원을 대조했다.'};

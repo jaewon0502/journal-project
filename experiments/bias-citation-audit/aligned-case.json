@@ -1,0 +1,287 @@
+{
+  "format": "journal-retention-case",
+  "version": 6,
+  "reviewId": "75b2137b0bfd1e1f149c61fc9716dbdc38b61a19ff7c9d9c4393ecbd2e0ce0cc",
+  "evidenceDigest": "d456677b7a85352424da4deab2f484850ad7e973d434617f60c570f5f41638ce",
+  "items": [
+    {
+      "name": "aligned-editor-1-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "5b76911e22d8a15056c15dbd68927de8",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "B",
+            "articleSha256": "4fced73b243293d9e746113355c6b106e99b9b66f16ab80fcce4a3506be4d3f1",
+            "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+          },
+          "after": {
+            "slot": "A",
+            "articleSha256": "a6f6324b2aae4ee3bc00ab397067257bc039aa7ae99f4a5ac8bb4efe9290bab6",
+            "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+          }
+        }
+      }
+    },
+    {
+      "name": "aligned-editor-1-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+        "articleDraft": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 여울시장 영업 상황 설문",
+            "url": "https://yeoul.example.invalid/sales",
+            "locator": "문항 2, 매출 감소 응답",
+            "excerpt": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"0696c6b89e947e58d94a0194c6750096e474d343d8e7deec5b2a77316b131adc\",\"pending\",null,false],[\"unit-42\",\"a73b9cb5fd1198bb737c91e56931e0b8e1c88d02508499496991e2f5fe520505\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"a2f08d01285c0b099b759f6506f35a3cbdc17623c3bfa1ce672ce1e61c2d8bc4\"],[\"unit-42\",\"89ff81864d13a0451f5114319c791a91853f5926e188350b34fedfcf4007c8a6\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-42",
+              "quote": "상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+              "sourceId": "source-1",
+              "sourceQuote": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+              "reason": "응답표에는 매출 감소를 선택한 사람 수만 있다. 기사에서 이를 엄살이라고 단정했다.",
+              "impact": "독자가 상인들이 매출 감소를 과장했다고 받아들일 수 있다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "5b76911e22d8a15056c15dbd68927de8",
+          "slot": "B"
+        }
+      }
+    },
+    {
+      "name": "aligned-editor-1-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다고 답했다.",
+        "articleDraft": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다고 답했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 여울시장 영업 상황 설문",
+            "url": "https://yeoul.example.invalid/sales",
+            "locator": "문항 2, 매출 감소 응답",
+            "excerpt": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"492512ef53d7452e3859d11bb1d66159eebcef4a4b7cff578a6d4eb98a5e8aa4\",\"pending\",null,false],[\"unit-42\",\"e9326de5bbbb26a178fe1f15cf02a4e2b18cbb0c3ec5bef1dbdd23cdaad5cd59\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"610086608bf97ee2ae1fd04e513629659ac80cb3d2dfc5ecaa452f70c4b6d83b\"],[\"unit-42\",\"603370e030da3b784df9189cf38f045b7ee8c924bb00dea565842813c80fb2c9\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-42",
+              "quote": "상인 12명은 매출이 줄었다고 답했다.",
+              "sourceId": "source-1",
+              "sourceQuote": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+              "reason": "엄살이라는 표현을 걷어 내고 12명이 어떤 답을 골랐는지 전했다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "5b76911e22d8a15056c15dbd68927de8",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "aligned-editor-2-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "1421e4e69b183836d14b1e827d62c392",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "A",
+            "articleSha256": "4fced73b243293d9e746113355c6b106e99b9b66f16ab80fcce4a3506be4d3f1",
+            "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+          },
+          "after": {
+            "slot": "B",
+            "articleSha256": "a6f6324b2aae4ee3bc00ab397067257bc039aa7ae99f4a5ac8bb4efe9290bab6",
+            "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+          }
+        }
+      }
+    },
+    {
+      "name": "aligned-editor-2-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+        "articleDraft": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 여울시장 영업 상황 설문",
+            "url": "https://yeoul.example.invalid/sales",
+            "locator": "문항 2, 매출 감소 응답",
+            "excerpt": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"0696c6b89e947e58d94a0194c6750096e474d343d8e7deec5b2a77316b131adc\",\"pending\",null,false],[\"unit-42\",\"a73b9cb5fd1198bb737c91e56931e0b8e1c88d02508499496991e2f5fe520505\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"a2f08d01285c0b099b759f6506f35a3cbdc17623c3bfa1ce672ce1e61c2d8bc4\"],[\"unit-42\",\"89ff81864d13a0451f5114319c791a91853f5926e188350b34fedfcf4007c8a6\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-42",
+              "quote": "상인 12명은 매출이 줄었다며 엄살을 부렸다.",
+              "sourceId": "source-1",
+              "sourceQuote": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+              "reason": "설문에는 상인들이 어려움을 부풀렸는지 묻는 문항이 없다. 엄살이라는 평가는 기자가 보탰다.",
+              "impact": "매출에 관한 자기 보고를 거짓 호소로 읽게 한다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "1421e4e69b183836d14b1e827d62c392",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "aligned-editor-2-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다고 답했다.",
+        "articleDraft": "가상 여울시장 상인 30명이 공사 기간의 영업 상황을 묻는 설문에 답했다.\n상인 12명은 매출이 줄었다고 답했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 여울시장 영업 상황 설문",
+            "url": "https://yeoul.example.invalid/sales",
+            "locator": "문항 2, 매출 감소 응답",
+            "excerpt": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"492512ef53d7452e3859d11bb1d66159eebcef4a4b7cff578a6d4eb98a5e8aa4\",\"pending\",null,false],[\"unit-42\",\"e9326de5bbbb26a178fe1f15cf02a4e2b18cbb0c3ec5bef1dbdd23cdaad5cd59\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"610086608bf97ee2ae1fd04e513629659ac80cb3d2dfc5ecaa452f70c4b6d83b\"],[\"unit-42\",\"603370e030da3b784df9189cf38f045b7ee8c924bb00dea565842813c80fb2c9\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-42",
+              "quote": "상인 12명은 매출이 줄었다고 답했다.",
+              "sourceId": "source-1",
+              "sourceQuote": "응답 상인 30명 중 12명이 공사 기간에 매출이 줄었다고 답했다.",
+              "reason": "매출이 줄었다는 판단을 응답자에게 돌렸고 그 진술에 대한 평가는 덧붙이지 않았다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "1421e4e69b183836d14b1e827d62c392",
+          "slot": "B"
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "contextNotes": [],
+  "checksum": "4e30555f520c9a2ad48c29fee323634a19d6700e5fc10d9ca919652a837c241d"
+}

@@ -40,6 +40,7 @@ const persists = {before:1,after:1,status:'persists',reason:'비공개 추가 �
 function historical(record, version, identity) {
   const r = {...record,version};
   delete r.priorReviewIds;
+  delete r.biasEvidenceSha256;
   if (version < 4) delete r.factContext;
   if (version < 3) delete r.factMatches;
   if (version < 2) delete r.facts;

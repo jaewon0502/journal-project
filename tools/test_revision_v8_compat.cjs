@@ -67,7 +67,7 @@ test('이전 연결은 당시 식별값으로만 중복을 확인하고 현행 �
   const v7 = prior[2];
   // Generated independently by the released v7 writer at 4a4c2c4.
   assert.equal(series.reviewId(v7), '78731c70a15468ce9eccbfb758018cf45ca65d38e73e00b4f7b3c60b7662480a');
-  assert.equal(current.version, 8);
+  assert.equal(current.version, 9);
   assert.deepEqual(v7.factMatches, [[2,2]]);
   assert.deepEqual(current.factMatches, [[2,null]]);
   assert.deepEqual(current.priorReviewIds, prior.map(record => [record.version, series.reviewId(record)]));
@@ -114,6 +114,7 @@ test('이전 요약의 수동 판단은 기준이 달라지면 현재 기사로 
   assert.equal(archive.reviewId, series.reviewId(current));
   const projected = {...current, version:7};
   delete projected.priorReviewIds;
+  delete projected.biasEvidenceSha256;
   await assert.rejects(retention.create(projected, items, []), /다시 계산한 평가/);
   const note = {before:2, after:2, status:'changed', reason:'조사 대상이 달라졌다.'};
   await assert.rejects(retention.create(prior, items, [note]), /다시 대조한 뒤/);
@@ -126,7 +127,7 @@ test('이전 요약의 수동 판단은 기준이 달라지면 현재 기사로 
   assert.throws(() => retention.verifyLegacyMatchNotes(falseArchive, prior), /일치하지/);
 });
 
-test('v7 공개 요약에서 원래 파일이나 당시 진행자 기록을 열어 변경된 수치 문맥을 확인하고 v8을 저장한다', async t => {
+test('v7 공개 요약에서 원래 파일이나 당시 진행자 기록을 열어 변경된 수치 문맥을 확인하고 현행 요약을 저장한다', async t => {
   const {joint, key, items} = await inputs();
   const current = series.makeRecord(joint, key);
   const prior = series.makeLegacyMatchRecord(joint, key, 7);

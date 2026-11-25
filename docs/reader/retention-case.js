@@ -134,7 +134,7 @@
 
   async function create(record, items, notes, contextNotes = [], correctionNotes = []) {
     const inputVersion = record?.version;
-    if (![3, 4, 5, 6, 7, 8].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
+    if (![3, 4, 5, 6, 7, 8, 9].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
     const inputId = series.reviewId(record, inputVersion);
     const embedded = copyItems(items, false);
     const reviews = await blind.resolveBundle(embedded);
@@ -150,8 +150,8 @@
     const context = checkedContextNotes(rebuilt, contextNotes);
     if (context.length && inputVersion < 4) throw new Error('핵심 구절 대응을 포함한 기사 요약에서 대조 기록을 저장하세요.');
     const corrections = checkedCorrectionNotes(rebuilt, correctionNotes);
-    if (corrections.length && inputVersion !== 8) throw new Error('원본 오류 대조는 현재 기준의 기사 요약에서 저장하세요.');
-    // Public v8 remains unchanged. Use the extended private format only when it carries this new judgment.
+    if (corrections.length && inputVersion < 8) throw new Error('원본 오류 대조는 현재 기준의 기사 요약에서 저장하세요.');
+    // The private schema describes its note fields. The digest identifies the public matching version.
     const version = corrections.length ? 7 : 6;
     const reviewId = series.reviewId(rebuilt);
     const evidenceDigest = evidenceId(embedded);
@@ -179,14 +179,15 @@
   // Pass the summary rebuilt by the normal blind assignment resolver when reopening.
   function verifyAll(data, record) {
     const saved = read(data);
-    if (record?.version !== 8) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
-    // Private v6 and v7 both bind the public v8 comparison.
-    const summaryVersion = data.version === 7 ? 8 : data.version + 2;
-    // Even a valid current projection must not masquerade as the original historical comparison.
-    const projection = series.reviewId(record, summaryVersion);
-    if (new Map(record.priorReviewIds).has(summaryVersion) || projection !== saved.reviewId) {
+    if (record?.version !== series.currentVersion) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
+    // Private v6 and v7 have the same note schemas across public v8 and v9.
+    // A historical v8 digest can reuse the current notes only if its links agree.
+    const summaryVersion = Math.min(data.version + 2, 8);
+    const historicalId = new Map(record.priorReviewIds).get(summaryVersion);
+    const matchesCurrent = data.version >= 6 && saved.reviewId === series.reviewId(record);
+    if (!matchesCurrent && (historicalId || series.reviewId(record, summaryVersion) !== saved.reviewId)) {
       const error = new Error('대조 기록과 다시 계산한 기사 요약이 일치하지 않습니다.');
-      if (data.version < 6) error.code = 'legacy-review-changed';
+      if (data.version < 6 || historicalId === saved.reviewId) error.code = 'legacy-review-changed';
       throw error;
     }
     return {notes:checkedNotes(record, saved.notes), contextNotes:checkedContextNotes(record, saved.contextNotes),
@@ -201,8 +202,9 @@
   // Historical judgments belong in their original version, outside the current review tally.
   function verifyLegacyMatchNotes(data, historical) {
     const saved = read(data);
-    if (![3, 4, 5].includes(data.version) || historical?.version !== data.version + 2 || series.reviewId(historical) !== saved.reviewId)
+    if (![3, 4, 5, 6, 7].includes(data.version) || historical?.version !== Math.min(8, data.version + 2) || series.reviewId(historical) !== saved.reviewId)
       throw new Error('이전 구절 대응으로 복원한 기사 요약과 대조 기록이 일치하지 않습니다.');
+    if (saved.correctionNotes) checkedCorrectionNotes(historical, saved.correctionNotes);
     checkedContextNotes(historical, saved.contextNotes);
     return checkedNotes(historical, saved.notes);
   }

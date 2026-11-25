@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, DISPUTE_FILES, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
+from build_facilitator_pack import BIAS_PRACTICE, CASES, CASE_FOLDERS, DISPUTE_FILES, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -111,6 +111,9 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
             expected_json = {PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}
+            expected_json.update(dest for name, dest in BIAS_PRACTICE.items() if name.endswith('.json'))
+            for name, dest in BIAS_PRACTICE.items():
+                self.assertEqual(archive.read(dest), (CASES / 'bias-citation-audit' / name).read_bytes())
             sample = json.loads(archive.read(PARTY_LEDGER_SAMPLE))
             self.assertIs(sample['demo'], True)
             self.assertEqual(sample['articleAssessment']['ratings']['standards']['level'], 3)
@@ -140,7 +143,7 @@ class FacilitatorPack(unittest.TestCase):
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
-                        self.assertTrue({PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
+                        self.assertTrue({PARTY_LEDGER_SAMPLE, *BIAS_PRACTICE.values(), *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
                         self.assertNotIn('core-context-notes-ui.js', nested.namelist())
                         for page in (n for n in nested.namelist() if n.endswith('.html')):
                             self.assertNotIn(b'id="quote-practice"', nested.read(page))

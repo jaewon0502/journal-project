@@ -1,0 +1,319 @@
+{
+  "format": "journal-retention-case",
+  "version": 6,
+  "reviewId": "fea84236e20013b1c974ddc5de3118744bdfde909d0e13bd111441e3a38bcb46",
+  "evidenceDigest": "2927443a18b5811bf24d6bba43dde1c61d5be983d0ec900b945c8da900e9ff50",
+  "items": [
+    {
+      "name": "different-editor-1-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "71a067e80c2bafb355bf0aaf92896932",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "B",
+            "articleSha256": "09d1f10b43ae833c2a4f67cca8cf08cdef70806a9cd3e736db025ea9c127513d",
+            "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+          },
+          "after": {
+            "slot": "A",
+            "articleSha256": "3b6e0c32026fd3b0e45497f45f173da4824e1b2804b29b1ebc720bb829dfb2b8",
+            "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+          }
+        }
+      }
+    },
+    {
+      "name": "different-editor-1-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 공사를 핑계로 가게를 닫았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다며 엄살을 부렸다.",
+        "articleDraft": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 공사를 핑계로 가게를 닫았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다며 엄살을 부렸다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 온들시장 상인 휴업 설문",
+            "url": "https://ondeul.example.invalid/shop-closures",
+            "locator": "문항 3, 휴업 사유",
+            "excerpt": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 온들시장 인근 주민 주거 설문",
+            "url": "https://ondeul.example.invalid/resident-moves",
+            "locator": "문항 4, 이사 의향",
+            "excerpt": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"9a0637510bc499b017d697120b7c459ae18c0131cd6233d2ba80bf224edbcf33\",\"pending\",null,false],[\"unit-43\",\"505037d27a6442e9e8236ddb8faad99b46a56dff496a754a97ebb757e512ef72\",\"pending\",null,false],[\"unit-77\",\"696b2597853d16042740d71bb8d23e9236ab780c3a236561129092358c08f6b7\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"a03679587b258da210b9871bf85d2d99584942aa5586055760f5135e07340433\"],[\"unit-43\",\"042dab267169d46c0c4f2c2cf54d654064836f4b49cf08f5283ccbd0f615f2d7\"],[\"unit-77\",\"19f3275d432e3c3a60f9a5ff72da3864371f02ef92cad4c864dc09348faa869d\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-43",
+              "quote": "상인 응답자 20명 중 6명은 공사를 핑계로 가게를 닫았다.",
+              "sourceId": "source-1",
+              "sourceQuote": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+              "reason": "상인 설문은 휴업 사유를 물었다. 공사가 핑계였는지는 조사하지 않았다.",
+              "impact": "상인이 휴업 이유를 꾸며 냈다고 읽히게 한다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "71a067e80c2bafb355bf0aaf92896932",
+          "slot": "B"
+        }
+      }
+    },
+    {
+      "name": "different-editor-1-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 휴업 사유로 공사를 꼽았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다고 답했다.",
+        "articleDraft": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 휴업 사유로 공사를 꼽았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다고 답했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 온들시장 상인 휴업 설문",
+            "url": "https://ondeul.example.invalid/shop-closures",
+            "locator": "문항 3, 휴업 사유",
+            "excerpt": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 온들시장 인근 주민 주거 설문",
+            "url": "https://ondeul.example.invalid/resident-moves",
+            "locator": "문항 4, 이사 의향",
+            "excerpt": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"25c04888e6a66fa507fb4ad907ea3482c4232f376df10b39c9b3b811ac6b1f54\",\"pending\",null,false],[\"unit-43\",\"d79ca0c3f6115337e353ffe26b4e5fbd7aae6dafc9c32c2978b4deab5f86b762\",\"pending\",null,false],[\"unit-76\",\"e4e223c44a0b1b1f9328e3054b3b84fa1f197eba87436d168ea5eb1e19735a08\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"99b800ce7f300b7432aaa6f7e616f13b98e733c0011ef84174f7496c4c5d71e7\"],[\"unit-43\",\"1f45728c95ca4738b0604cf8f6a45aec5ae0d295270e778114246d9f602fea19\"],[\"unit-76\",\"7792456d6c2ce60643ed213fd8786f6f98f73e6fb24a6c5d27528bf0d13f9b70\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-43",
+              "quote": "상인 응답자 20명 중 6명은 휴업 사유로 공사를 꼽았다.",
+              "sourceId": "source-1",
+              "sourceQuote": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+              "reason": "휴업 사유 문항에서 공사를 고른 상인 수를 그대로 옮겼다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "71a067e80c2bafb355bf0aaf92896932",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "different-editor-2-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "80323d6d32309e13ecdabf95eadd4844",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "A",
+            "articleSha256": "09d1f10b43ae833c2a4f67cca8cf08cdef70806a9cd3e736db025ea9c127513d",
+            "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+          },
+          "after": {
+            "slot": "B",
+            "articleSha256": "3b6e0c32026fd3b0e45497f45f173da4824e1b2804b29b1ebc720bb829dfb2b8",
+            "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+          }
+        }
+      }
+    },
+    {
+      "name": "different-editor-2-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 공사를 핑계로 가게를 닫았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다며 엄살을 부렸다.",
+        "articleDraft": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 공사를 핑계로 가게를 닫았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다며 엄살을 부렸다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 온들시장 상인 휴업 설문",
+            "url": "https://ondeul.example.invalid/shop-closures",
+            "locator": "문항 3, 휴업 사유",
+            "excerpt": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 온들시장 인근 주민 주거 설문",
+            "url": "https://ondeul.example.invalid/resident-moves",
+            "locator": "문항 4, 이사 의향",
+            "excerpt": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"9a0637510bc499b017d697120b7c459ae18c0131cd6233d2ba80bf224edbcf33\",\"pending\",null,false],[\"unit-43\",\"505037d27a6442e9e8236ddb8faad99b46a56dff496a754a97ebb757e512ef72\",\"pending\",null,false],[\"unit-77\",\"696b2597853d16042740d71bb8d23e9236ab780c3a236561129092358c08f6b7\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"a03679587b258da210b9871bf85d2d99584942aa5586055760f5135e07340433\"],[\"unit-43\",\"042dab267169d46c0c4f2c2cf54d654064836f4b49cf08f5283ccbd0f615f2d7\"],[\"unit-77\",\"19f3275d432e3c3a60f9a5ff72da3864371f02ef92cad4c864dc09348faa869d\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-77",
+              "quote": "주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다며 엄살을 부렸다.",
+              "sourceId": "source-2",
+              "sourceQuote": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+              "reason": "주민 설문에 적힌 이사 의향을 기사에서 엄살이라고 평가했다.",
+              "impact": "주민이 이사까지 생각한다는 답을 과장으로 여기게 한다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "80323d6d32309e13ecdabf95eadd4844",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "different-editor-2-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 휴업 사유로 공사를 꼽았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다고 답했다.",
+        "articleDraft": "가상 온들시장 공사 기간에 상인과 인근 주민을 대상으로 두 설문을 실시했다.\n상인 응답자 20명 중 6명은 휴업 사유로 공사를 꼽았다.\n주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다고 답했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 온들시장 상인 휴업 설문",
+            "url": "https://ondeul.example.invalid/shop-closures",
+            "locator": "문항 3, 휴업 사유",
+            "excerpt": "상인 응답자 20명 중 6명이 휴업 사유로 시장 공사를 선택했다.",
+            "version": "연습 1판"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 온들시장 인근 주민 주거 설문",
+            "url": "https://ondeul.example.invalid/resident-moves",
+            "locator": "문항 4, 이사 의향",
+            "excerpt": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+            "version": "연습 1판"
+          }
+        ],
+        "receipts": [],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"25c04888e6a66fa507fb4ad907ea3482c4232f376df10b39c9b3b811ac6b1f54\",\"pending\",null,false],[\"unit-43\",\"d79ca0c3f6115337e353ffe26b4e5fbd7aae6dafc9c32c2978b4deab5f86b762\",\"pending\",null,false],[\"unit-76\",\"e4e223c44a0b1b1f9328e3054b3b84fa1f197eba87436d168ea5eb1e19735a08\",\"pending\",null,false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"99b800ce7f300b7432aaa6f7e616f13b98e733c0011ef84174f7496c4c5d71e7\"],[\"unit-43\",\"1f45728c95ca4738b0604cf8f6a45aec5ae0d295270e778114246d9f602fea19\"],[\"unit-76\",\"7792456d6c2ce60643ed213fd8786f6f98f73e6fb24a6c5d27528bf0d13f9b70\"]]]",
+          "coreRowIds": [],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-76",
+              "quote": "주민 응답자 40명 중 8명은 소음 때문에 이사를 고려한다고 답했다.",
+              "sourceId": "source-2",
+              "sourceQuote": "주민 응답자 40명 중 8명이 공사 소음 때문에 이사를 고려한다고 답했다.",
+              "reason": "주민들이 밝힌 이사 의향과 그 이유만 전했다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "80323d6d32309e13ecdabf95eadd4844",
+          "slot": "B"
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "contextNotes": [],
+  "checksum": "a2e3d471a230954e4df772e6f9ad98db7c53e186986f037efc3048cfcc8466e0"
+}

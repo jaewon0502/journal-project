@@ -8,8 +8,8 @@
   const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const format = 'journal-revision-series-record';
   const {summarizeScores} = agreement;
-  const currentVersion = 8;
-  const replayVersions = [5, 6, 7];
+  const currentVersion = 9;
+  const replayVersions = [5, 6, 7, 8];
   const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
 
   function exactKeys(value, keys) {
@@ -23,17 +23,19 @@
 
   function editionRecord(joint, key, version) {
     const fields = agreement.recordFields(joint, key, version);
-    return readRecord({format, version, demo: key.demo, before: edition(key.mapping.before),
-      after: edition(key.mapping.after), ...fields});
-  }
-  function makeRecord(joint, key) {
-    const record = editionRecord(joint, key, currentVersion);
-    // Bind only historical projections that actually had additional links.
-    // A digest lets an imported older summary be compared without releasing text or notes.
-    const priorReviewIds = agreement.changedMatchVersions(joint, key).map(version =>
-      [version, reviewId(editionRecord(joint, key, version))]);
-    if (priorReviewIds.length) record.priorReviewIds = priorReviewIds;
+    const record = readRecord({format, version, demo:key.demo, before:edition(key.mapping.before),
+      after:edition(key.mapping.after), ...fields});
+    if (version >= 8) {
+      // v8 first bound older matching rules into its digest. Replay its original
+      // links and its own v5–v7 identities before computing a v8 archive ID.
+      const prior = agreement.changedMatchVersions(joint, key, version);
+      if (prior.length) record.priorReviewIds = prior.map(v => [v, reviewId(editionRecord(joint, key, v))]);
+    }
     return record;
+  }
+
+  function makeRecord(joint, key) {
+    return editionRecord(joint, key, currentVersion);
   }
   // Authenticate historical private files and links against the rule that produced them.
   function makeLegacyMatchRecord(joint, key, version = 5) {
@@ -108,9 +110,10 @@
     if (version >= 2) keys.push('facts');
     if (version >= 3) keys.push('factMatches');
     if (version >= 4) keys.push('factContext');
-    const hasPriorIds = version === currentVersion && Object.hasOwn(record, 'priorReviewIds');
+    if (version >= 9) keys.push('biasEvidenceSha256');
+    const hasPriorIds = version >= 8 && Object.hasOwn(record, 'priorReviewIds');
     if (hasPriorIds) keys.push('priorReviewIds');
-    if (![1, 2, 3, 4, 5, 6, 7, 8].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
     for (const side of [record.before, record.after]) {
@@ -143,11 +146,15 @@
     }
     if (version >= 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
     if (version >= 4) result.factContext = readFactContext(record.factContext, result.facts, result.factMatches);
+    if (version >= 9) {
+      if (!isDigest(record.biasEvidenceSha256)) throw new Error('편향 판단에 인용한 근거의 SHA-256 식별값을 확인하세요.');
+      result.biasEvidenceSha256 = record.biasEvidenceSha256;
+    }
     if (hasPriorIds) {
       let previous = 0;
       if (!Array.isArray(record.priorReviewIds) || !record.priorReviewIds.length) throw new Error('이전 요약 식별값 배열을 확인하세요.');
       result.priorReviewIds = Array.from(record.priorReviewIds, pair => {
-        if (!Array.isArray(pair) || pair.length !== 2 || !replayVersions.includes(pair[0]) || pair[0] <= previous || !isDigest(pair[1])) {
+        if (!Array.isArray(pair) || pair.length !== 2 || !replayVersions.includes(pair[0]) || pair[0] >= version || pair[0] <= previous || !isDigest(pair[1])) {
           throw new Error('이전 요약 버전과 식별값을 확인하세요.');
         }
         previous = pair[0];
@@ -168,11 +175,15 @@
   // roles, each editor's complete rating profile, and fact observations in passage order.
   function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (![2, 3, 4, 5, 6, 7, 8].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    if (![2, 3, 4, 5, 6, 7, 8, 9].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
     const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
     if (version >= 3) fields.push(record.factMatches);
     if (version >= 4) fields.push(record.factContext);
-    if (version === currentVersion && record.priorReviewIds) fields.push(record.priorReviewIds);
+    if (version >= 9) fields.push(record.biasEvidenceSha256);
+    if (version >= 8 && record.priorReviewIds) {
+      const prior = record.priorReviewIds.filter(([v]) => v < version);
+      if (prior.length) fields.push(prior);
+    }
     return engine.digestValue(fields);
   }
 
@@ -195,8 +206,10 @@
       demo = record.demo;
       return {index, record};
     });
-    // Check each older duplicate against its canonical v8 export, even if v8 was selected last.
-    parsed.sort((a, b) => Number(b.record.version === currentVersion) - Number(a.record.version === currentVersion));
+    // Compare historical IDs to the most recent writer available, regardless of file order.
+    // Earlier writers have no prior identities: keep their input order for file diagnostics.
+    const matchingVersion = entry => entry.record.version >= 8 ? entry.record.version : 0;
+    parsed.sort((a, b) => matchingVersion(b) - matchingVersion(a));
     for (const {index, record} of parsed) {
       const {before, after} = record;
       const previous = byManuscript.get(before.articleSha256) ?? byManuscript.get(after.articleSha256);
@@ -208,7 +221,10 @@
           if (prior.facts && record.facts && JSON.stringify(prior.facts) !== JSON.stringify(record.facts)) {
             throw recordError([previous.index, index], '같은 기사 판본의 사실 검토 판정이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          const replay = prior.version === currentVersion && replayVersions.includes(record.version);
+          if (prior.version >= 9 && record.version >= 9 && prior.biasEvidenceSha256 !== record.biasEvidenceSha256) {
+            throw recordError([previous.index, index], '같은 기사 판본과 점수에 서로 다른 편향 판정 인용 근거가 있습니다. 집계할 기록 하나만 선택하세요.');
+          }
+          const replay = prior.version >= 8 && prior.version > record.version && replayVersions.includes(record.version);
           if (replay) {
             const oldId = new Map(prior.priorReviewIds).get(record.version);
             const oldContext = record.factContext, currentContext = prior.factContext;
@@ -221,7 +237,7 @@
               throw recordError([previous.index, index], '같은 기사 판본이지만 이전 기준으로 재현한 구절 대응 및 핵심 주장 표시와 다릅니다.');
             }
           }
-          if (record.version === currentVersion && JSON.stringify(prior.priorReviewIds) !== JSON.stringify(record.priorReviewIds)) {
+          if (record.version >= 8 && record.version === prior.version && JSON.stringify(prior.priorReviewIds) !== JSON.stringify(record.priorReviewIds)) {
             throw recordError([previous.index, index], '같은 기사 판본의 이전 요약 식별값이 다릅니다.');
           }
           if (!replay && prior.version >= 3 && record.version >= 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
@@ -296,7 +312,7 @@
       ...summarizeScores(unique.flatMap(r => r.dimensions)), dimensions, articles, facts};
   }
 
-  const api = Object.freeze({makeRecord, makeLegacyMatchRecord, reviewId, summarize});
+  const api = Object.freeze({currentVersion, makeRecord, makeLegacyMatchRecord, reviewId, summarize});
   if (useNode) module.exports = api;
   else root.JournalRevisionSeries = api;
 })(globalThis);

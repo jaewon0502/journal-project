@@ -15,6 +15,11 @@ async function summary(items) {
 }
 const kept = {before:1, after:1, status:'retained', reason:'두 판본과 조사표에서 대상 시설 100곳과 운영 시간 연장 시설 20곳을 대조했다.'};
 
+function oldSummary(current, version) {
+  const {biasEvidenceSha256, ...fields} = current;
+  return {...fields, version};
+}
+
 test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자료·개별 판단과 사후 판단을 복원한다', async () => {
   const inputs = await example.files(), record = await summary(inputs);
   const saved = await cases.create(record, inputs.map(i => ({...i, name:'로컬/기사/' + i.name})), [kept]);
@@ -39,7 +44,7 @@ test('기존 여섯 파일에서 만든 진행자 대조 기록 하나로 원자
   assert.equal(saved.notes[0].reason, kept.reason);
 });
 
-test('예전 v1·v2 진행자 파일은 같은 판정을 복원하고 새 파일은 여섯 원자료로 계산한 v8 요약에 묶는다', async () => {
+test('예전 v1·v2 진행자 파일은 같은 판정을 복원하고 새 파일은 여섯 원자료로 계산한 현재 요약에 묶는다', async () => {
   const items = (await example.files()).map(({name, data}) => ({name, data}));
   // Generated with the released v3 writer and the deterministic six-file library exercise.
   for (const [version, reviewId, checksum] of [
@@ -50,15 +55,15 @@ test('예전 v1·v2 진행자 파일은 같은 판정을 복원하고 새 파일
       evidenceDigest:'0c7287d7171a677583dbc7264db7bead549d3c3035513bcf3598b52c3c3fae92'};
     const opened = cases.read(JSON.parse(JSON.stringify(archive)));
     const rebuilt = await summary(opened.items);
-    assert.equal(rebuilt.version, 8);
+    assert.equal(rebuilt.version, 9);
     assert.deepEqual(cases.verify(archive, rebuilt), [kept]);
     assert.deepEqual(cases.verifyAll(archive, rebuilt), {notes:[kept], contextNotes:[]});
-    const legacy = {...rebuilt, version:version + 2};
+    const legacy = oldSummary(rebuilt, version + 2);
     if (version === 1) delete legacy.factContext;
     assert.throws(() => cases.verify(archive, legacy), /현재 기준/);
     const upgraded = await cases.create(legacy, opened.items, opened.notes);
     assert.equal(upgraded.version, 6);
-    assert.equal(upgraded.reviewId, series.reviewId(rebuilt, 8));
+    assert.equal(upgraded.reviewId, series.reviewId(rebuilt, 9));
     assert.notEqual(upgraded.reviewId, archive.reviewId);
     assert.deepEqual(cases.verify(upgraded, rebuilt), [kept]);
     assert.throws(() => cases.verify(upgraded, legacy));
@@ -165,7 +170,7 @@ test('현장 형식의 자료와 연습 자료는 서로의 판단을 복원할 
   const saved = await cases.create(record, inputs, [note]);
   assert.deepEqual(cases.verify(saved, await summary(cases.read(saved).items)), [note]);
   await assert.rejects(() => cases.create(record, demo, []), /연습·실제/);
-  const old = {...record, version:2}; delete old.factMatches; delete old.factContext;
+  const old = oldSummary(record, 2); delete old.factMatches; delete old.factContext;
   assert.throws(() => cases.verify(saved, old));
   await assert.rejects(() => cases.create(old, inputs, []));
 });
@@ -206,11 +211,11 @@ test('입장 대조와 사실 대조를 한 진행자 파일에 보관하고 같
   const {items} = cases.read(prior);
   const original = await summary(items);
   assert.deepEqual(cases.verifyAll(prior, original), {notes:[],contextNotes:[]});
-  assert.deepEqual(cases.verifyLegacyMatchNotes(prior, {...original,version:5}), []);
+  assert.deepEqual(cases.verifyLegacyMatchNotes(prior, oldSummary(original, 5)), []);
   const otherMatches = structuredClone(original);
   otherMatches.factContext.matches.push([3,3]);
   assert.throws(() => cases.verifyAll(prior, otherMatches), err => err.code === 'legacy-review-changed');
-  assert.throws(() => cases.verifyLegacyMatchNotes(prior, {...otherMatches,version:5}), /일치하지/);
+  assert.throws(() => cases.verifyLegacyMatchNotes(prior, oldSummary(otherMatches, 5)), /일치하지/);
   for (const {data:work} of items) {
     if (work.receipts?.[2].status !== 'fact') continue;
     // Keep the revised budget fact open as well as the original opposition quote.
@@ -227,12 +232,12 @@ test('입장 대조와 사실 대조를 한 진행자 파일에 보관하고 같
   const copy = JSON.parse(JSON.stringify(saved)), parsed = cases.read(copy);
   assert.deepEqual(cases.verifyAll(copy, await summary(parsed.items)), {notes,contextNotes});
   assert.deepEqual(cases.verify(copy, record), notes);
-  assert.equal(saved.reviewId, series.reviewId(record, 8));
-  assert.throws(() => cases.verifyLegacyMatchNotes(saved, {...record,version:5}), /이전 구절 대응/);
-  assert.throws(() => cases.verifyLegacyMatchNotes(prior, {...record,version:5}), /이전 구절 대응/);
+  assert.equal(saved.reviewId, series.reviewId(record, 9));
+  assert.throws(() => cases.verifyLegacyMatchNotes(saved, oldSummary(record, 5)), /이전 구절 대응/);
+  assert.throws(() => cases.verifyLegacyMatchNotes(prior, oldSummary(record, 5)), /이전 구절 대응/);
   assert.throws(() => cases.verify(saved, original), /요약이 일치하지/);
   assert.throws(() => series.summarize([saved]));
-  const legacy = {...record, version:3};
+  const legacy = oldSummary(record, 3);
   delete legacy.factContext;
   await assert.rejects(cases.create(legacy, items, notes, contextNotes), /핵심 구절 대응/);
   for (const mutate of [

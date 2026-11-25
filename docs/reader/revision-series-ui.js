@@ -379,17 +379,17 @@
     return panel;
   }
 
-  function correctionAuditControls(publicRecords, demo) {
+  function archiveControls(kind, title, publicRecords, verify, renderResults) {
     const box = element('details', null, 'case');
-    box.id = 'series-correction-audit';
+    box.id = 'series-' + kind + '-audit';
     const label = element('label', '진행자용 대조 기록 JSON');
     const files = element('input');
     files.type = 'file'; files.multiple = true; files.accept = '.json,application/json';
-    files.id = 'series-correction-archives'; label.htmlFor = files.id;
+    files.id = 'series-' + kind + '-archives'; label.htmlFor = files.id;
     const notice = element('p', '', 'status'), results = element('div');
     notice.setAttribute('role', 'status');
-    results.id = 'series-correction-verified';
-    box.append(element('summary', '진행자가 대조한 정정 결과 집계'),
+    results.id = 'series-' + kind + '-verified';
+    box.append(element('summary', title),
       element('p', '현재 기준의 기사별 요약을 선택한 뒤 같은 기사의 진행자용 대조 기록을 여세요. 이 브라우저에서 원래 작업 파일과 두 판본의 판단을 다시 확인합니다.'),
       label, files, notice, results);
     let generation = 0;
@@ -401,8 +401,23 @@
       if (!chosen.length) return;
       try {
         const archives = await Promise.all(chosen.map(readJSON));
-        const audit = await window.JournalCorrectionSeriesAudit.audit(publicRecords, archives);
+        const audit = await verify(publicRecords, archives);
         if (turn !== generation || !box.isConnected) return;
+        renderResults(results, audit);
+        notice.textContent = '진행자 기록 ' + audit.checkedArchives + '건을 검증했습니다.' +
+          (audit.duplicateArchives ? ' 같은 기록 ' + audit.duplicateArchives + '개는 한 번만 셌습니다.' : '');
+      } catch (error) {
+        if (turn !== generation || !box.isConnected) return;
+        notice.textContent = error.message;
+        notice.classList.add('error');
+      }
+    });
+    return box;
+  }
+
+  function correctionAuditControls(publicRecords, demo) {
+    return archiveControls('correction', '진행자가 대조한 정정 결과 집계', publicRecords,
+      window.JournalCorrectionSeriesAudit.audit, (results, audit) => {
         const {total, corrected, persists, absent, unresolved, pending} = audit.totals;
         const percentCorrected = total ? 100 * corrected / total : null;
         const rate = percentCorrected === null ? '산출 대기' : Number(percentCorrected.toFixed(1)) + '% (' + corrected + '/' + total + '개)';
@@ -426,15 +441,27 @@
           setTimeout(() => URL.revokeObjectURL(url), 1000);
         });
         results.append(save);
-        notice.textContent = '진행자 기록 ' + audit.checkedArchives + '건을 검증했습니다.' +
-          (audit.duplicateArchives ? ' 같은 기록 ' + audit.duplicateArchives + '개는 한 번만 셌습니다.' : '');
-      } catch (error) {
-        if (turn !== generation || !box.isConnected) return;
-        notice.textContent = error.message;
-        notice.classList.add('error');
-      }
-    });
-    return box;
+      });
+  }
+  function biasAuditControls(publicRecords, demo) {
+    return archiveControls('bias', '개선 판정에 사용한 기사·원자료 인용 대조', publicRecords,
+      window.JournalRevisionBiasAudit.audit, (results, audit) => {
+        results.append(element('h4', '공통 개선 ' + audit.improved + '개 중 인용 위치가 네 대조에서 모두 겹친 항목 ' + audit.aligned + '개'),
+          element('p', '서로 다른 인용 확인 ' + audit.different + '개 · 인용 위치 미확정 ' + audit.unresolved +
+            '개 · 현재 기준의 진행자 기록 미대조 ' + audit.unopened + '개'),
+          element('p', '각 판본에서 두 편집자가 고른 기사와 원자료 구절, 각 편집자가 수정 전후에 고른 원자료 구절을 확인했습니다. 인용 위치가 겹치더라도 판단 이유는 각 평가를 열어 확인하세요.'));
+        const save = element('button', '숫자만 담은 인용 대조 결과 저장');
+        save.type = 'button';
+        save.onclick = () => {
+          const share = {format:'journal-bias-citation-counts-v1', demo, ...audit};
+          const blob = new Blob([JSON.stringify(share, null, 2)], {type:'application/json'});
+          const url = URL.createObjectURL(blob), link = element('a');
+          link.href = url; link.download = (demo ? '모의-' : '') + '편향-인용대조.json';
+          document.body.append(link); link.click(); link.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        };
+        results.append(save);
+      });
   }
 
   function originalErrorsPanel(report, sources, builtIn) {
@@ -458,7 +485,7 @@
       list.append(item);
     }
     section.append(list);
-    if (!builtIn && affected.some(article => article.matchVersion === 8)) {
+    if (!builtIn && affected.some(article => article.matchVersion === window.JournalRevisionSeries.currentVersion)) {
       section.append(correctionAuditControls([...sources.values()].map(entry => entry.record), report.demo));
     }
     panel.append(section);
@@ -519,6 +546,11 @@
     summary.append(element('h3', '중요한 왜곡의 변화'),
       element('p', (builtIn ? '예시 파일 ' : '선택한 파일 ') + files.length + '개 · 고유 기사 ' + report.articleCount + '건 · 중복 제외 ' + report.duplicateCount + '개'),
       severityPanel(report, sources, grid));
+    if (report.improved.numerator && !builtIn) {
+      summary.append(element('p', '두 편집자가 개선으로 본 ' + report.improved.numerator +
+        '개 항목의 실제 기사·원자료 구절은 진행자 기록을 열면 확인할 수 있습니다.'),
+        biasAuditControls([...sources.values()].map(entry => entry.record), report.demo));
+    }
     const historical = [...sources.values()].filter(entry => entry.record.version < 5 &&
       (entry.record.factMatches?.some(([, match]) => match !== null) || entry.record.dimensions.some(d =>
         d.id === 'standards' && [d.first, d.second].some(r => Number.isInteger(r.before) || Number.isInteger(r.after)))));
@@ -543,6 +575,17 @@
         element('p', '이전 요약은 조사 대상이나 단위가 바뀐 수치 문장을 연결했을 수 있습니다. 원래 작업 파일과 대응표로 다시 계산하면 현행 기준의 보존율을 확인할 수 있습니다.'));
       for (const entry of numericChecks) details.append(entry.summaryOnlyExample ? element('p', entry.name) :
         evidenceLink(entry, '수치 문맥 다시 확인', '&focus=numeric-check'));
+      summary.append(details);
+    }
+    const speechChecks = [...sources.values()].filter(({record}) => record.version >= 5 && record.version < 9 &&
+      record.factContext?.matches.length);
+    if (speechChecks.length) {
+      const details = element('details', null, 'case');
+      details.id = 'legacy-speech-check';
+      details.append(element('summary', '발언 주체를 다시 확인할 이전 요약 ' + speechChecks.length + '건'),
+        element('p', '이전 방식으로 연결한 구절이 있는 기사입니다. 원래 작업 파일을 열면, 문장 밖에서 발언 주체가 달라져 다시 살펴볼 구절을 확인할 수 있습니다.'));
+      for (const entry of speechChecks) details.append(entry.summaryOnlyExample ? element('p', entry.name) :
+        evidenceLink(entry, '발언 주체 다시 대조', '&focus=speech-check'));
       summary.append(details);
     }
     summary.append(element('p', '원본과 수정본에 등록된 원자료 묶음이 달라진 기사 ' + report.changedSources + '건', report.changedSources ? 'warn' : 'note'));
