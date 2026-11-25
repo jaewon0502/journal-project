@@ -665,7 +665,7 @@
     });
   }
 
-  const api = {find, tableAmbiguities, passageQuery};
+  const api = {find, tableAmbiguities, passageQuery, sourceRows};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceFinder = api;
 })(globalThis);

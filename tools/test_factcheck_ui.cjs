@@ -1949,6 +1949,22 @@ test('서울 1인 가구 수치가 원문에 없으면 전체 평균을 접고 �
   assert.equal(el('verdict').value,'');
 });
 
+test('임금 수치가 다른 기준에 붙은 경우 문단에서 비교하고 편집자가 고른 원문만 발췌한다', t => {
+  const {el, set, click} = open(t);
+  const excerpt = '2024년 연간 임금\n연간 월평균 명목임금은 2.9% 증가하였고, 실질임금은 0.5% 증가하였습니다.';
+  set('document-text',excerpt);
+  set('document-query','2024년 월평균 실질임금은 전년보다 2.9% 증가했다.');
+  click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  assert.match(card.textContent,/2\.9% 증가는 원문에서 명목임금에 붙은 수치/);
+  assert.equal(card.querySelector('blockquote').textContent,excerpt.split('\n')[1]);
+  assert.equal(el('source-excerpt').value,'');
+  assert.equal(el('verdict').value,'');
+  [...card.querySelectorAll('button')].find(b => b.textContent.includes('기간 표지와 구절')).click();
+  assert.equal(el('source-excerpt').value,excerpt);
+  assert.equal(el('verdict').value,'');
+});
+
 test('한 번 기록해 다음 미검토 문장의 근거를 찾되 두 번째 판단·발췌를 미리 선택하지 않는다', async t => {
   const p = open(t);
   const lines = ['공사비가 8억 원으로 늘었다.', '조사 참여자는 42명이다.'];

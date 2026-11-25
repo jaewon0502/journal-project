@@ -463,6 +463,59 @@
     return {passages,...message,householdScope:true,state:'ordinary',usedArticleContext:Boolean(context && context !== query.trim()),needsPublicationDate:false};
   }
 
+  // The annual wage briefing prints both price bases in one sentence. Keep
+  // the whole sentence as evidence, but bind each rate to its own subject.
+  const wageMeasure = '(명목|실질)\\s*임금(?:은|이)?\\s*';
+  const wageRate = '(?:전년\\s*(?:보다|대비|에\\s*비해)\\s*)?(\\d+(?:\\.\\d+)?)\\s*%\\s*(증가|감소)';
+  const wageClaim = new RegExp('^((?:19|20)\\d{2})\\s*년\\s*(?:연간\\s*)?월\\s*평균\\s*' +
+    wageMeasure + wageRate + '(?:했다|하였다|했습니다|하였습니다)\\.?$', 'u');
+  const wageAmount = '(?:\\d[\\d,]*(?:만(?:\\s*\\d[\\d,]*)?)?\\s*원(?:으로|로)\\s*)?';
+  const wageClause = new RegExp('^' + wageMeasure + wageAmount + wageRate +
+    '(?:했|하였)(고|으며|다|습니다)\\.?$', 'u');
+  const annualWageHeading = /^((?:19|20)\d{2})\s*년\s*연간(?:\s*임금(?:\s*[·ㆍ]\s*근로시간)?)?$/u;
+
+  function wageBasisRows(text, query, context) {
+    const claim = wageClaim.exec(query.normalize('NFKC').trim());
+    if (!claim || (context && context !== query.trim())) return null;
+    const [, year, basis, rate, direction] = claim;
+    const rows = finder.sourceRows(text);
+    const passages = [];
+    let sawPair = false;
+    for (const [i, row] of rows.entries()) {
+      const line = row.text.normalize('NFKC').trim();
+      const opening = /^(?:((?:19|20)\d{2})\s*년\s*)?(?:연간\s*)?월\s*평균\s*/u.exec(line);
+      if (!opening) continue;
+      const halves = line.slice(opening[0].length).split(/,\s*(?=(?:월\s*평균\s*)?(?:명목|실질)\s*임금)/u);
+      if (halves.length !== 2) continue;
+      const [first, second] = halves.map(part => wageClause.exec(part.replace(/^월\s*평균\s*/u, '')));
+      if (!first || !second || first[1] === second[1] || !['고','으며'].includes(first[4]) ||
+          !['다','습니다'].includes(second[4])) continue;
+      sawPair = true;
+      const prev = rows[i - 1];
+      const heading = prev?.page === row.page && prev.lineIndex + 1 === row.lineIndex &&
+        annualWageHeading.exec(prev.text.normalize('NFKC').trim());
+      if ((opening[1] || heading?.[1]) !== year || (heading && heading[1] !== year)) continue;
+      const [asked, other] = first[1] === basis ? [first, second] : [second, first];
+      const same = item => decimal(item[2]) === decimal(rate) && item[3] === direction;
+      const otherOnly = !same(asked) && same(other);
+      const description = item => item[1] + '임금 ' + item[2] + '% ' + item[3];
+      const note = year + '년 월평균 임금 증감률 · ' + description(asked) + ' / ' +
+        description(other) + (otherOnly ? '. 기사의 ' + rate + '% ' + direction +
+          '는 원문에서 ' + other[1] + '임금에 붙은 수치입니다.' : '');
+      const periodHeading = !opening[1] ? {paragraph:prev.paragraph, text:prev.text} : null;
+      const nearby = rows.slice(Math.max(0,i - 2), i + 3).filter(r => r !== row && r.page === row.page)
+        .map(({paragraph,text}) => ({paragraph,text}));
+      passages.push({paragraph:row.paragraph, text:row.text, context:nearby, matched:[],
+        wageBasis:{note, periodHeading}});
+      if (passages.length === 3) break;
+    }
+    if (!sawPair) return null;
+    return {passages:passages.length ? passages : finder.find(text, query, {includeContext:true}),
+      ...(passages.length ? {notice:'원문에 함께 적힌 명목·실질임금의 증감률입니다. 조사 대상과 전년 대비 기준을 원표에서 대조하세요.'} :
+        {gap:'명목·실질임금의 증감률을 함께 적은 구절이 있지만, 기사 연도의 연간 수치인지 확인할 수 없습니다. 발표일과 조사 기간을 구분해 원표의 기간을 확인하세요.'}),
+      state:'ordinary', usedArticleContext:false, needsPublicationDate:false, wageBasis:true};
+  }
+
   function search(documentText, rawQuery, {articleContext = ''} = {}) {
     const query = finder.passageQuery(rawQuery);
     const context = articleContext.trim() === rawQuery.trim() ? query.trim() : articleContext.trim();
@@ -474,6 +527,8 @@
     }
     const household = householdScopeRows(documentText, query, context);
     if (household) return household;
+    const wages = wageBasisRows(documentText, query, context);
+    if (wages) return wages;
     const table = trend.find(documentText, query, {articleContext:context});
     if (table.state === 'partial-series') {
       return {passages:table.hits, state:table.state, usedArticleContext:table.usedArticleContext,

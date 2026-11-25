@@ -1232,7 +1232,7 @@
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
-    if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope && !lookup.householdScope) {
+    if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope && !lookup.householdScope && !lookup.wageBasis) {
       for (const p of passages) if (!p.years && !p.annualRate && !p.changeRows && !p.labourYearRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
@@ -1365,7 +1365,13 @@
       } else if (passage.labourScope) {
         block.append(node('p', '원자료의 기간 · ' + passage.context[0].text.trim()));
         excerpt = citationRows([...passage.context, passage]);
-      } else if (!lookup.fiscalTable && !speaker && !lookup.householdScope) {
+      } else if (passage.wageBasis) {
+        block.append(node('p', passage.wageBasis.note, 'callout'));
+        if (passage.wageBasis.periodHeading) {
+          block.append(node('p', '붙여넣은 본문의 기간 표지 · ' + passage.wageBasis.periodHeading.text.trim()));
+          excerpt = citationRows([passage.wageBasis.periodHeading, passage]);
+        }
+      } else if (!lookup.fiscalTable && !speaker && !lookup.householdScope && !lookup.wageBasis) {
         const annual = annualRows.get(passage);
         addColumnHints(block, text, query, passage, separateContext, annual);
         const metric = !separateContext && annual?.metric;
@@ -1419,7 +1425,7 @@
           const label = '‘' + navigation.rowLabel + '’ 행의 ' + navigation.year + '년 열 직접 대조';
           block.append(button(label, () => browser.openAt(navigation.rowParagraph, navigation.year)));
         }
-        const label = passage.labourScope ? '기간 표지와 구절을 함께 발췌' :
+        const label = passage.labourScope || passage.wageBasis?.periodHeading ? '기간 표지와 구절을 함께 발췌' :
           includeSpeaker ? '발언자 표지부터 이 문단까지 발췌' : '이 문단을 발췌문으로 사용';
         block.append(button(label, () => useExcerpt(excerpt)));
         if (passage.wrappedOpening && excerpt === passage && !separateContext && !lookup.gap && lookup.state === 'ordinary') {
