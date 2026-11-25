@@ -193,6 +193,85 @@
     return {options:mixed ? units : []};
   }
 
+  // In an execution table the year can be centered vertically, even on a
+  // continuation of another column. Use the complete printed group for navigation.
+  function printedReserveRows(text, query) {
+    if (!/예비비/u.test(query) || !/예비비\s*집행\s*실적\s*\]/u.test(text)) return null;
+    const scope = /(?:일반|특별)\s*회계\s*예비비/u.exec(query)?.[0];
+    const metrics = [...query.matchAll(/지출\s*결정액|지출액/gu)];
+    if (!scope || !metrics.length) return null;
+    if (metrics.length > 1) {
+      const [first, next] = metrics;
+      const between = query.slice(first.index + first[0].length, next.index);
+      if (metrics.length !== 2 || compact(first[0]) === compact(next[0]) || !/^에서\s*(?:실제\s*)?$/u.test(between))
+        return unresolved('queryMeasure');
+      // '지출결정액에서 실제 지출액은 얼마인가' asks for the latter measure.
+      query = query.slice(0, first.index) + query.slice(next.index);
+    }
+    const metric = metrics.at(-1)[0];
+    // Only check the question's scope. A compound monetary amount occupies
+    // one place in its grammar; its value must never select the row.
+    const grammar = query.replace(metric, '지출액').replace(/\d[\d,]*\s*조\s*(?=\d[\d,]*\s*억\s*원)/gu, '')
+      // An opening total ('예비비 …원 중 실제 지출액') is separate from the requested row.
+      .replace(/(예비비)\s+(?:예산(?:액)?\s+)?\d[\d,.]*\s*[천만억조]?\s*원\s*중(?:에서)?\s+(?=(?:실제\s*)?지출액)/u, '$1 ');
+    const ask = rowQuestion(grammar);
+    if (!ask || !ask.matches(scope)) return metrics.length > 1 ? unresolved('queryMeasure') : null;
+    const rows = [], pageStarts = new Set();
+    for (const line of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
+      if (line.includes('\f')) pageStarts.add(rows.length + 1);
+      if (line.trim()) rows.push({text:line, paragraph:rows.length + 1});
+    }
+    const captions = rows.filter(row => /^\[\s*(?:최근\s*\d+\s*년\s*간\s*)?(?:일반|특별)\s*회계\s*예비비\s*집행\s*실적\s*\]$/u.test(row.text.trim()));
+    if (!captions.length) return null;
+    const matching = captions.filter(row => compact(row.text).includes(compact(scope)));
+    if (!matching.length) return unresolved('scope');
+    if (matching.length !== 1) return unresolved('duplicateRow');
+    const caption = matching[0], unitRow = rows[caption.paragraph];
+    const unit = unitRow && !pageStarts.has(unitRow.paragraph) && legend(unitRow.text)?.unit;
+    if (!unit || !currency.test(compact(unit))) return unresolved('notes');
+    const header = [caption, unitRow], groups = [], notes = [];
+    const yearRow = /^((?:19|20)\d{2})(?:년)?(?:\s+|$)/u;
+    const fiscalRow = /^(예산|지출결정액|지출액)\s+/u;
+    const digits = /^(?:\(?\d[\d,.]*\)?|[-–—])(?:\s+(?:\(?\d[\d,.]*\)?|[-–—]))*$/u;
+    for (let i = unitRow.paragraph; i < rows.length; i++) {
+      const row = rows[i], line = row.text.trim();
+      if (pageStarts.has(row.paragraph)) break;
+      if (/^주\s*\d*\s*[:：]/u.test(line)) { notes.push(row); continue; }
+      if (notes.length || /^(?:자료\s*[:：]|출처\s*[:：]|\[)/u.test(line)) break;
+      const year = yearRow.exec(line), remainder = year ? line.slice(year[0].length) : line;
+      const label = fiscalRow.exec(remainder);
+      if (label?.[1] === '예산') groups.push({rows:[], years:[], labels:[], labelColumn:row.text.indexOf('예산')});
+      const group = groups.at(-1);
+      if (!group) {
+        if (header.length >= 10 || year || !/[가-힣]/u.test(line)) return unresolved('layout');
+        header.push(row);
+        continue;
+      }
+      const values = label ? remainder.slice(label[0].length) : remainder;
+      if (!digits.test(values) && !(year && !values)) return unresolved('layout');
+      if (year && (label || row.text.indexOf(year[1]) < group.labelColumn)) group.years.push(year[1]);
+      if (label) group.labels.push({name:label[1], row});
+      group.rows.push(row);
+    }
+    const heading = compact(header.slice(2).map(row => row.text).join(' '));
+    if (!heading.includes('구분') || !heading.includes(compact(scope).replace('예비비','')) || !heading.includes('예비비'))
+      return unresolved('layout');
+    const found = groups.filter(group => group.years.includes(ask.year));
+    if (found.length !== 1) return unresolved(found.length ? 'duplicateRow' : 'year');
+    const [group] = found;
+    if (group.years.length !== 1 || group.labels.map(item => item.name).join('/') !== '예산/지출결정액/지출액')
+      return unresolved('layout');
+    const name = compact(metric), selected = group.labels.find(item => item.name === name).row;
+    const applicableNotes = notes.filter(row => {
+      const onlyYears = /^\s*주\s*\d*\s*[:：]\s*((?:(?:19|20)\d{2}년?\s*[·ㆍ,]\s*)*(?:19|20)\d{2}년)\s+(?:괄호|수치|금액)/u.exec(row.text);
+      return !onlyYears || onlyYears[1].includes(ask.year);
+    });
+    return {notice:scope + ' 집행 실적표에서 ' + ask.year + '년 ‘' + name + '’ 행을 찾았습니다. 이 표의 단위는 ' + unit +
+        '입니다. 금액은 원표에서 해당 열과 주석을 대조하세요.',
+      passages:[{...selected, matched:[name], context:[...header, ...group.rows.filter(row => row !== selected), ...applicableNotes],
+        fiscalNavigation:{rowLabel:ask.year + '년 ' + name, caption:caption.text.trim(), reserveGroup:true}}]};
+  }
+
   // Captions can qualify every amount in a table. Accept plain fiscal descriptions
   // only. Never borrow the caption's year, reporting stage or unit for a cell.
   function isCaption(line) {
@@ -367,7 +446,7 @@
       return {status:'compatible', value:cell.value, unit:cell.unit, ...(cell.basis && {basis:cell.basis})};
     };
   }
-  const api = {lookup,rowQuestion,registeredRateCell,registeredRateQuestion};
+  const api = {lookup,rowQuestion,printedReserveRows,registeredRateCell,registeredRateQuestion};
   if (node) module.exports = api;
   else root.JournalEvidenceFiscalTable = api;
 })(globalThis);

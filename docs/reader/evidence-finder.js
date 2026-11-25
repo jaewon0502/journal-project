@@ -106,9 +106,9 @@
   function sourceRows(text) {
     const rows = [];
     let page = 0;
-    for (const line of text.split(lineBreak)) {
+    for (const [lineIndex, line] of text.split(lineBreak).entries()) {
       if (line.includes('\f')) page++;
-      if (line.trim()) rows.push({paragraph: rows.length + 1, text: line, page});
+      if (line.trim()) rows.push({paragraph: rows.length + 1, text: line, page, lineIndex});
     }
     return rows;
   }
@@ -117,6 +117,26 @@
   const tableCaption = /^(?:\[(?:표\s*\d+\]|[^\]]+\]$)|[〈<]표\s*\d+|\d+\.\s+.+\d{4})/u;
   const contentsEntry = /[·.…]{2,}\s*\d*$/u;
   const tabularValues = /(?:^|\s)\(?[△−+-]?\d[\d,.]*%?\)?\s+\(?[△−+-]?\d[\d,.]*%?\)?(?=\s|$)/u;
+
+  // Some annual reports wrap one prose bullet directly after a headcount. The
+  // indented percentage finishes that count; a rate follows in the same sentence.
+  function wrappedRateOpening(query, row, prev) {
+    if (!prev || row.table || prev.table || row.page !== prev.page || row.lineIndex !== prev.lineIndex + 1 ||
+        /[\f\t|]/u.test(prev.text + row.text)) return null;
+    const open = /^( *)□\s+((?:19|20)\d{2})년\s+(\d{1,3})\s*세\s*(이상|이하)\s*(.+)$/u.exec(prev.text);
+    const headcount = /^(?:취업자|실업자|경제활동인구|인구)[는가]\s+\d[\d,만천백 ]*명(?:으로|로)\s+전년\s*대비\s+\d[\d,만천백 ]*명\s*$/u;
+    const next = /^( +)\([+−-]?\d+(?:\.\d+)?%\)\s*(?:증가|감소)(?:하였|했)(?:고|으며),\s*(.+)$/u.exec(row.text);
+    if (!open || !headcount.test(open[5]) || !next || next[1].length <= open[1].length) return null;
+    const rate = /^(고용률|실업률|경제활동참가율)[은는]\s*\d+(?:\.\d+)?%로\s+전년\s*대비\s+[+−-]?\d+(?:\.\d+)?%p\s+(?:상승|하락)(?:하였음|했음|하였다|했다)?[.]?\s*$/iu.exec(next[2]);
+    if (!rate) return null;
+
+    const claim = /^(?:((?:19|20)\d{2})\s*년\s*(?:연간\s*)?)?(\d{1,3})\s*세\s*(이상|이하)\s*(?:인구(?:의)?\s*)?(고용률|실업률|경제활동참가율)[은는이가]?\s*(.*)$/u.exec(query.trim());
+    if (!claim || (claim[1] && claim[1] !== open[2]) || claim[2] !== open[3] || claim[3] !== open[4] || claim[4] !== rate[1]) return null;
+    // Extra populations or periods after the metric can also narrow a claim.
+    const comparison = /^(?:로|퍼센트|포인트|퍼센트포인트|p|전년(?:보다|대비)?|지난해(?:보다|대비)?|대비|얼마(?:나|인가|였나)?|인가|(?:올랐|내렸|늘었|줄었|떨어졌|상승했|하락했|증가했|감소했|였|이었|입니|이)(?:다|나|습니다|습니까))$/iu;
+    if ((claim[5].match(/\p{L}+/gu) || []).some(word => !comparison.test(word))) return null;
+    return {paragraph:prev.paragraph, text:prev.text};
+  }
 
   // A table unit line is an explicit boundary in layout-preserving PDF text.
   // Keep its source rows so column names can be inspected even far down a table.
@@ -426,8 +446,20 @@
     return matches.length === 1 ? matches[0] : {};
   }
 
-  function find(documentText, query, {includeContext = false, matrixCell = null, matrixNavigation = null, fiscalTargets = null} = {}) {
+  // A detached publisher/audience tag is not a search term for an independent
+  // factual subject. Keep it when the wording could ask about the outlet itself.
+  function passageQuery(raw) {
+    const tag = /^\s*\[(?:(?:발행처|매체)\s*[:：]\s*)?(?:보수|중도|진보)\s*성향\s*(?:신문|매체|일간지|주간지|독자용)\][ \t]+/u;
+    const body = raw.replace(tag, '');
+    if (body === raw || body.startsWith('[') || !/(?:^|\s)[\p{L}\d]+\s+[\p{L}\d]+[은는이가](?=\s|[?,.])/u.test(body)) return raw;
+    const publication = /신문|언론|매체|기사|보도|사설|표제|제목|제호|이름|지면|기자|필자|편집|독자|구독|발행|발간|창간|매출|영업이익|순이익/u;
+    const attribution = /인용|발언|논평|주장|발표|반박|게재|밝[히힌혔]|전했|말했|말한|썼|(?:찬성|반대|지지|선호|응답|평가|비판|지적|강조|설명)(?:했|한|하나|하는)/u;
+    return /["'“”‘’「」『』]/u.test(body) || publication.test(body) || attribution.test(body) ? raw : body;
+  }
+
+  function find(documentText, rawQuery, {includeContext = false, matrixCell = null, matrixNavigation = null, fiscalTargets = null} = {}) {
     const periods = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
+    const query = passageQuery(rawQuery);
     const wanted = [...terms(query)];
     if (!wanted.length) return [];
     const rows = sourceRows(documentText);
@@ -534,6 +566,8 @@
       if (matrixCell?.rowParagraph === paragraph) hit.matrixCell = matrixCell;
       else if (matrixNavigation?.rowParagraph === paragraph) hit.matrixNavigation = matrixNavigation;
       if (includeContext) {
+        const opening = wrappedRateOpening(query, row, rows[paragraph - 2]);
+        if (opening) hit.wrappedOpening = opening;
         const adjacent = rows.slice(Math.max(0, paragraph - 3), paragraph + 2);
         const headings = row === target.row && target.headings ? target.headings : row.table?.headings || [];
         const context = new Set([...headings, ...adjacent]);
@@ -545,7 +579,7 @@
     });
   }
 
-  const api = {find, tableAmbiguities};
+  const api = {find, tableAmbiguities, passageQuery};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceFinder = api;
 })(globalThis);

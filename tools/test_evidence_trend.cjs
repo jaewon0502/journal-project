@@ -156,3 +156,29 @@ test('연간 표제·명시된 연도·정확한 행 개수·원문 단위를 �
     source + '\n' + source, source + '\n' + labourTable[8]
   ]) assert.deepEqual(ask(altered), [], altered);
 });
+
+test('장기 기록과 최근 증감을 함께 물으면 원표에서 찾은 기간과 빠진 연도를 구분한다', () => {
+  const q = '2021년에는 8만 명가량 늘어나며 2001년(9만 명) 이후 20년 만의 최대 폭을 기록했지만, 이후 2022년 4만 명으로 축소한 데 이어 올해 2만 명대로 떨어지는 등 2년 연속 증가 폭이 둔화했다.';
+  const options = {articleContext:'독서실 이용자'};
+  const result = find(report, q, options);
+  assert.equal(result.state, 'partial-series');
+  assert.deepEqual(result.hits.map(row => row.paragraph), [4]);
+  assert.deepEqual(result.hits[0].years, [2021, 2022, 2023]);
+  assert.deepEqual(result.hits[0].yearCoverage.missingYears, [2001]);
+  assert.equal(result.needsPublicationDate, true);
+  assert.equal(find(report, q).reason, 'missing-subject');
+  // A date also requested outside the historical record still requires its own column.
+  for (const context of ['2001년 독서실 이용자', '2026년 독서실 이용자', '청소년 독서실 이용자', '3월 독서실 이용자', '30대 독서실 이용자']) {
+    assert.equal(find(report, q, {articleContext:context}).hits.length, 0, context);
+  }
+  for (const title of ['< 수도권 서비스 이용 추이 >', '< 여성 서비스 이용 추이 >', '< 20대 서비스 이용 추이 >']) {
+    assert.deepEqual(find(report.replace('< 서비스 이용 추이 >', title), q, options).hits, [], title);
+  }
+  const percent = find(report, q, {articleContext:'독서실 이용자 증가 폭 99%'});
+  assert.deepEqual(percent.hits, []);
+  assert.equal(percent.reason, 'comparison-unit');
+  assert.equal(find(report, q.replace('2001년(', '2002년('), options).reason, 'record-period');
+  assert.deepEqual(find(report, '독서실 이용자 증가 폭은 2001~2023년 최대 폭을 기록했다.').hits, []);
+  assert.equal(find(report, q.replace('2만 명대', '2만 건대'), options).hits.length, 0);
+  assert.deepEqual(find(report, q.replace('2022년', '2021년'), options).hits, []);
+});

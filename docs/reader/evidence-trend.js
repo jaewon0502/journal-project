@@ -11,9 +11,19 @@
   const subannual = /분기|반기|누계|월별|월간|\d+\s*월/u;
   const neutral = /^(?:올해|금년|작년|지난해|내년|해당|전년도?|연간|연도|대비|비교|증감|증가|감소|상승|하락|반토막|절반|연속|수준|규모|가량|최대|최소|전체|총계|합계|폭|폭이|수|분|년|명|명대|천|만|억|조|원|건|가구|톤|대|등)$/u;
   const predicate = /^(?:그쳤|그친|났다|났습|됐다|됐습|떨어|줄었|줄어|줄던|늘었|늘어|낮아|둔화|가속|커졌|높아|기록했|나타났|부지|감소했|증가했|감소하|증가하)/u;
+  // Keep the year for coverage checks, separate from the name of the count series.
+  const historicalStart = /((?:19|20)\d{2})\s*년\s*(?:\([\d.,\s천백만억조명건원가구톤대]+\)\s*)?(?:이후|이래)\s*(?:(\d+)\s*년\s*만(?:의|에)\s*)?(?:최대|최소|최고|최저)/gu;
 
   function subject(text) {
-    const words = (text.normalize('NFKC').replace(/(증가|감소|상승|하락)\s*(폭|분)/gu, ' $1 $2 ').match(/[가-힣A-Za-z]+/gu) || [])
+    const names = text.normalize('NFKC')
+      .replace(historicalStart, ' ')
+      .replace(/(?<![가-힣A-Za-z])이후(?=\s+(?:19|20)\d{2}\s*년)/gu, ' ')
+      .replace(/((?:19|20)\d{2})년(?:에는|에도|에|은|는)/gu, '$1년 ')
+      .replace(/(\d\s*(?:천만|백만|천|백|만|억|조)?\s*(?:명|건|원|가구|톤|대))(?:가량|\s+넘게)(?=[\s,.!?]|$)/gu, '$1')
+      .replace(/전년도?(?:와|과)\s*(?:비교하면|비교해|견주면)(?=[\s,.!?]|$)/gu, ' ')
+      .replace(/(?:축소|확대)(?:한|된)\s*데\s*이어(?=[\s,.!?]|$)/gu, ' ')
+      .replace(/(증가|감소|상승|하락)\s*(폭|분)/gu, ' $1 $2 ');
+    const words = (names.match(/[가-힣A-Za-z]+/gu) || [])
       .map(w => w.replace(/(?:으로는|으로|에서|보다|은|는|을|를|이|가|에|로)$/u, ''));
     return [...new Set(words.filter(w => w.length > 1 && !neutral.test(w) && !predicate.test(w)))];
   }
@@ -237,6 +247,20 @@
     return matchingRows === 1 && hits.length === 1 ? hits : [];
   }
 
+  function statedYears(text) {
+    // Korean ranges often print 년 only after the second endpoint.
+    const years = /((?:19|20)\d{2})(?=\s*년|\s*(?:[~～∼–—-]|부터|에서)\s*(?:19|20)\d{2}\s*년)/gu;
+    return [...text.matchAll(years)].map(match => Number(match[1]));
+  }
+
+  function titleFitsMetric(title, metric) {
+    // A row labelled simply '이용자' can sit in a table whose caption supplies
+    // a city or a population. Keep unknown title words for ordinary source review.
+    const words = title.replace(/(?:19|20)\d{2}\s*년/gu, '').match(/[가-힣A-Za-z0-9]+/gu) || [];
+    const general = /^(?:연간|연도별|연도|서비스|이용|요약|지표|자료|통계|추이|현황|동향|고용동향|고용률|실업률|경제활동참가율|구분|표|전체|총계|합계)$/u;
+    return words.every(word => general.test(word) || metric.includes(word));
+  }
+
   function find(documentText, query, {articleContext = ''} = {}) {
     const combined = [query, articleContext].filter(Boolean).join(' ');
     const base = {hits: [], usedArticleContext: Boolean(articleContext.trim()), needsPublicationDate: dateWord.test(combined)};
@@ -245,21 +269,50 @@
       const hits = comparableRates(documentText, rate);
       if (hits.length) return {...base, state:'candidates', hits};
     }
-    if (!trendWords.test(query) || subannual.test(combined) || /%|퍼센트|증가율|감소율/u.test(query))
-      return {...base, state: 'ordinary'};
+    if (!trendWords.test(query) || subannual.test(combined)) return {...base, state:'ordinary'};
+    const ratio = /%|퍼센트|증가율|감소율/u;
+    if (ratio.test(query)) return {...base, state:'ordinary'};
+    if (ratio.test(articleContext)) return countAmounts(query).length
+      ? {...base, state:'needs-context', reason:'comparison-unit'} : {...base, state:'ordinary'};
     // A numeric age restriction cannot be discarded by the Korean word tokenizer.
     // Leave scoped subgroup searches to the ordinary finder until parsed exactly.
     if (/\d+\s*(?:세|대)(?=\s|[가-힣]|$)/u.test(combined)) return {...base, state: 'ordinary'};
     const metric = subject(combined).join('');
     if (!metric) return {...base, state: 'needs-context', reason: 'missing-subject'};
     const amounts = countAmounts(combined);
-    const years = [...combined.matchAll(/((?:19|20)\d{2})년/gu)].map(m => Number(m[1]));
+    const years = statedYears(combined);
+    const history = [...query.matchAll(historicalStart)];
+    const datedRecords = [];
+    for (const match of history) {
+      if (!match[2]) continue;
+      const recordYear = Number(match[1]) + Number(match[2]);
+      const preceding = query.slice(0, match.index);
+      const datedClause = /((?:19|20)\d{2})\s*년(?:에는|에도|에|은|는)\s*[^년.!?;\n]*$/u.exec(preceding);
+      if (datedClause && Number(datedClause[1]) !== recordYear)
+        return {...base, state:'needs-context', reason:'record-period'};
+      datedRecords.push(recordYear);
+    }
+    const spans = [...combined.matchAll(/(\d+)\s*년\s*만(?:의|에)\s*(?:최대|최소|최고|최저)/gu)]
+      .map(match => Number(match[1]));
     const consecutive = /(\d+)\s*년\s*연속/u.exec(combined);
     const minYears = consecutive ? Number(consecutive[1]) + 1 : /두\s*해\s*연속/u.test(combined) ? 3 : 2;
-    const candidates = annualRows(documentText).filter(item => item.identity === metric &&
+    const compatible = annualRows(documentText).filter(item => item.identity === metric &&
+      titleFitsMetric(item.header.period, metric) && titleFitsMetric(item.header.caption?.text || '', metric) &&
       item.header.years.length >= minYears &&
-      item.header.years.every((y, i, all) => i === 0 || y - all[i - 1] === 1) && years.every(year => item.header.years.includes(year)) &&
+      item.header.years.every((y, i, all) => i === 0 || y - all[i - 1] === 1) &&
       amounts.every(a => a.unit === item.unit));
+    let candidates = compatible.filter(({header}) => [...years, ...datedRecords].every(year => header.years.includes(year)) &&
+      spans.every(span => header.years.at(-1) - header.years[0] >= span));
+    let partial = false;
+    if (!candidates.length) {
+      const startYears = new Set(history.map(m => Number(m[1])));
+      const comparisonYears = [...new Set(statedYears(query.replace(historicalStart, ' ') + ' ' + articleContext))];
+      if (startYears.size && comparisonYears.length >= 2) {
+        candidates = compatible.filter(({header}) => [...comparisonYears, ...datedRecords].every(y => header.years.includes(y)) &&
+          [...startYears].every(y => y < header.years[0]));
+        partial = candidates.length > 0;
+      }
+    }
     if (!candidates.length) return {...base, state: 'needs-context', reason: 'no-series'};
     // Do not suppress an otherwise exact subject-year row for disagreeing with
     // the article's figures. Numeric overlap only orders eligible source rows.
@@ -270,8 +323,9 @@
     })).length;
     candidates.sort((a, b) => order(b) - order(a) || a.row.paragraph - b.row.paragraph);
     const hits = candidates.slice(0, 3).map(item => ({...item.row, matched: [item.identity],
-      context: item.context, years: item.header.years}));
-    return {...base, state: 'candidates', hits};
+      context: item.context, years: item.header.years,
+      ...(partial && {yearCoverage:{missingYears:[...new Set(years.filter(y => !item.header.years.includes(y)))]}})}));
+    return {...base, state: partial ? 'partial-series' : 'candidates', hits};
   }
 
   const api = {find};

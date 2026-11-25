@@ -1792,3 +1792,37 @@ test('당사자의 여러 발언에서 같은 주제와 정확한 수치를 나�
   if (earlier) assert.match(earlier.textContent, /일부 단어가 겹칩니다/);
   assert.equal(el('verdict').value, '');
 });
+
+test('장기 기록을 다루지 않는 표를 고르면 실제 연도와 근거 범위가 발췌 뒤에도 남는다', t => {
+  const {el, click, set} = open(t);
+  const title = '독서실 이용자 증가';
+  const claim = '2021년에는 8만 명 늘어나며 2001년 이후 20년 만의 최대 폭을 기록했지만, 이후 2022년 4만 명으로 축소한 데 이어 올해 2만 명대로 떨어지는 등 2년 연속 증가 폭이 둔화했다.';
+  const table = ['2023년 연간 통계', '< 독서실 서비스 >', '구분 2021년 2022년 2023년',
+    '독서실 이용자(만명, 전년대비증감)   8   4   2'].join('\n');
+  set('article', title + '\n' + claim);
+  el('article-form').requestSubmit();
+  [...el('row-list').querySelectorAll('button')].find(row => row.textContent.includes('2001')).click();
+  click('go-find');
+  set('document-text', table);
+  click('find-passages');
+  assert.equal(el('search-context').value, '');
+  assert.match(el('finder-status').textContent, /비교할 지표/);
+  click('use-article-title');
+  const card = el('finder-results').querySelector('.source');
+  assert.match(card.textContent, /2021~2023년/);
+  assert.match(card.textContent, /2001년부터 2020년까지.*추가 자료/);
+  assert.match(el('finder-status').textContent, /기사 발행일/);
+  const verdict = el('verdict').value;
+  [...card.querySelectorAll('button')].find(b => b.textContent.includes('표에 실린 기간만')).click();
+  assert.match(el('source-excerpt').value, /2021년 2022년 2023년/);
+  assert.match(el('source-excerpt').value, /이용자.*전년대비증감/);
+  assert.doesNotMatch(el('source-excerpt').value, /2001년/);
+  assert.match(el('source-locator').value, /2021~2023년.*2001년.*추가 자료/);
+  assert.equal(el('verdict').value, verdict);
+  set('search-context', '독서실 이용자 증가 폭 99%');
+  click('find-passages');
+  assert.match(el('finder-status').textContent, /수량의 증감.*비율.*단위/);
+  assert.ok(!el('finder-results').textContent.includes('표에 실린 기간만 발췌'));
+  set('document-query', '새 검토 문장');
+  assert.equal(el('finder-results').childElementCount, 0);
+});

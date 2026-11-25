@@ -416,15 +416,20 @@
     return {passages,gap,labourScope:true,state:'ordinary',usedArticleContext:false,needsPublicationDate:false};
   }
 
-  function search(documentText, query, {articleContext = ''} = {}) {
-    const context = articleContext.trim();
+  function search(documentText, rawQuery, {articleContext = ''} = {}) {
+    const query = finder.passageQuery(rawQuery);
+    const context = articleContext.trim() === rawQuery.trim() ? query.trim() : articleContext.trim();
     const attributed = transcript.lookup(documentText, query);
     if (attributed) {
       const notice = context && context !== query.trim()
         ? attributed.notice + ' 추가한 기사 문맥의 시점과 조건도 원문에서 대조하세요.' : attributed.notice;
       return {...attributed, notice, state:'ordinary', transcript:true, usedArticleContext:false, needsPublicationDate:false};
     }
-    const table = trend.find(documentText, query, {articleContext});
+    const table = trend.find(documentText, query, {articleContext:context});
+    if (table.state === 'partial-series') {
+      return {passages:table.hits, state:table.state, usedArticleContext:table.usedArticleContext,
+        needsPublicationDate:table.needsPublicationDate, notice:'최근 증감 행은 찾았습니다. 장기간의 최고·최저 기록을 확인하려면 표에 없는 연도의 자료도 대조하세요.'};
+    }
     if (table.state === 'ordinary') {
       const separate = context && context !== query.trim();
       const labour = labourSummary(documentText, query, separate);
@@ -437,7 +442,8 @@
       const years = statedYear && fiscal.years(query);
       const yearOnly = statedYear && (!years.size || (years.size === 1 && years.has(statedYear[1])));
       const asked = yearOnly && !years.size ? context + ' ' + query : query;
-      const result = fiscalTable.lookup(documentText, asked) || printedFiscalTable(documentText, asked);
+      const result = fiscalTable.lookup(documentText, asked) || fiscalTable.printedReserveRows(documentText, asked) ||
+        printedFiscalTable(documentText, asked);
       if (result) {
         let {passages, gap, notice} = result;
         if (separate && !yearOnly) {
@@ -446,7 +452,8 @@
           passages = passages.map(p => {
             const cell = p.fiscalCell || p.fiscalNavigation;
             return {text:p.text, paragraph:p.paragraph, matched:[], context:p.context,
-              fiscalNavigation:{rowLabel:cell.rowLabel, caption:cell.caption, reason:'context'}};
+              fiscalNavigation:{rowLabel:cell.rowLabel, caption:cell.caption, reason:'context',
+                ...(cell.reserveGroup && {reserveGroup:true})}};
           });
           gap = [gap, '추가한 기사 문맥의 조건이 이 표에 적용되는지 원표에서 확인하세요.'].filter(Boolean).join(' ');
         } else if (yearOnly) {

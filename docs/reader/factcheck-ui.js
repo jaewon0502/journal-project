@@ -1121,7 +1121,7 @@
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
     const annualRows = new Map();
     if (!lookup.fiscalTable && !lookup.transcript && !lookup.labourScope) {
-      for (const p of passages) if (!p.annualRate && !p.changeRows && !p.labourYearRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
+      for (const p of passages) if (!p.years && !p.annualRate && !p.changeRows && !p.labourYearRows) annualRows.set(p, window.JournalEvidenceColumns.inspectAnnualRow(text, query, p));
     }
     const notices = [];
     if ([...annualRows.values()].some(row => row?.scopeIssue === 'population'))
@@ -1129,13 +1129,18 @@
     if (lookup.notice) notices.push(lookup.notice);
     if (lookup.gap) notices.push(lookup.gap);
     if (lookup.state === 'needs-context') {
-      notices.push(lookup.reason === 'no-series'
-        ? '이 지표와 기간을 함께 비교할 수 있는 연간 표를 확인하지 못했습니다. 자료의 기간과 표 머리글을 확인하세요.'
-        : '비교할 지표와 기간을 특정하기 어렵습니다. 기사 제목이나 앞뒤 문장의 지표·기간을 보충하세요.');
+      const reasons = {
+        'record-period':'기사에 적힌 기록 연도와 “몇 년 만”이라는 기간이 서로 맞는지 확인하세요.',
+        'comparison-unit':'질문은 수량의 증감을 다루고 추가한 문맥에는 비율이 있습니다. 어느 단위를 비교할지 확인하세요.',
+        'no-series':'이 지표와 기간을 함께 비교할 수 있는 연간 표를 확인하지 못했습니다. 자료의 기간과 표 머리글을 확인하세요.'
+      };
+      notices.push(reasons[lookup.reason] || '비교할 지표와 기간을 특정하기 어렵습니다. 기사 제목이나 앞뒤 문장의 지표·기간을 보충하세요.');
       byId('search-context-options').open = true;
     } else if (lookup.state === 'candidates') {
       notices.push('비교할 기간과 지표가 나타난 표의 행 ' + passages.length + '개를 찾았습니다.' +
         (lookup.usedArticleContext ? ' 입력한 기사 문맥을 함께 사용했습니다.' : ''));
+    } else if (lookup.state === 'partial-series') {
+      if (lookup.usedArticleContext) notices.push('입력한 기사 문맥을 함께 사용했습니다.');
     } else if (!lookup.gap && !lookup.transcript) {
       notices.push(passages.length ? '확인할 원문 후보 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
     }
@@ -1209,17 +1214,34 @@
         const location = [guide.caption, coordinate].filter(Boolean).join(' · ');
         tableLocation = guide.column ? location + ' · 단위 확인 필요' : location;
         block.append(node('p', location));
+        if (guide.reserveGroup) {
+          excerpt = citationRows([...passage.context, passage]);
+          block.append(node('p', '같은 해의 예산·지출결정액·지출액과 표 머리글·단위를 함께 발췌합니다. 필요한 금액 열은 원표에서 확인하세요.'));
+        }
         if (guide.column) {
           block.append(node('p', '원문 표기 ' + guide.value + ' · 단위 미확인', 'verbatim'),
             node('p', '머리글 ' + guide.headerParagraph + '문단을 원본과 대조해 이 셀에 적용되는 단위를 확인하세요.'));
         } else if (guide.reason === 'context') {
           block.append(node('p', '이 행이 기사 문맥에서 지정한 범위를 따로 집계하는지 원표에서 확인하세요.'));
-        } else {
+        } else if (!guide.reserveGroup) {
           block.append(node('p', '붙여넣은 표에서 이 행의 열을 구분하기 어렵습니다. 원본에서 연도·예산 단계·단위를 대조하세요.'));
         }
       } else if (years) {
         excerpt = comparisonExcerpt;
         tableLocation = passage.context[0].text.trim() + ' · ' + years.previous + '년·' + years.current + '년 연간 행 · ' + years.measure + ' 열';
+      } else if (passage.years?.length) {
+        const period = passage.years[0] + '~' + passage.years.at(-1) + '년';
+        tableLocation = period + ' 연간 증감 행';
+        block.append(node('p', '원표에 실린 기간 · ' + period));
+        if (passage.yearCoverage) {
+          const firstMissing = Math.min(...passage.yearCoverage.missingYears);
+          const lastMissing = passage.years[0] - 1;
+          const missing = firstMissing === lastMissing ? firstMissing + '년' : firstMissing + '년부터 ' + lastMissing + '년까지';
+          const limit = missing + '의 기록은 추가 자료로 확인하세요.';
+          block.append(node('p', limit, 'callout'));
+          tableLocation += ' · ' + limit;
+        }
+        excerpt = citationRows([...passage.context, passage]);
       } else if (passage.labourScope) {
         block.append(node('p', '원자료의 기간 · ' + passage.context[0].text.trim()));
         excerpt = citationRows([...passage.context, passage]);
@@ -1266,7 +1288,8 @@
         block.append(preview);
       }
       if (tableLocation) {
-        const label = years ? '두 해의 행과 표 머리글·주석 발췌' :
+        const label = passage.yearCoverage ? '표에 실린 기간만 발췌' : years ? '두 해의 행과 표 머리글·주석 발췌' :
+          passage.fiscalNavigation?.reserveGroup ? '선택한 행과 같은 해의 표 문맥 발췌' :
           passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
         block.append(button(label, () => useExcerpt(excerpt, tableLocation)));
       } else {
@@ -1278,6 +1301,13 @@
         const label = passage.labourScope ? '기간 표지와 구절을 함께 발췌' :
           includeSpeaker ? '발언자 표지부터 이 문단까지 발췌' : '이 문단을 발췌문으로 사용';
         block.append(button(label, () => useExcerpt(excerpt)));
+        if (passage.wrappedOpening && excerpt === passage && !separateContext && !lookup.gap && lookup.state === 'ordinary') {
+          const together = citationRows([passage.wrappedOpening, passage]);
+          const preview = node('details');
+          preview.append(node('summary', '연도와 대상이 적힌 앞 문단 보기 (' + together.startParagraph + '~' + together.paragraph + '문단)'),
+            node('blockquote', together.text, 'verbatim'), button('이 두 문단을 함께 발췌', () => useExcerpt(together)));
+          block.append(preview);
+        }
       }
       (passage.fiscalNavigation ? area : results).append(block);
     }
