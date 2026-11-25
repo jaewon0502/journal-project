@@ -253,6 +253,82 @@
     return {options:mixed ? units : []};
   }
 
+  function physicalRows(text) {
+    const rows = [], pageStarts = new Set();
+    for (const line of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
+      if (line.includes('\f')) pageStarts.add(rows.length + 1);
+      if (line.trim()) rows.push({text:line, paragraph:rows.length + 1});
+    }
+    return {rows, pageStarts};
+  }
+
+  // A report may print the same annual amount under several headings. Only a
+  // breakdown by use can distinguish an individual purpose from the full year.
+  function printedReserveUses(text, query) {
+    if (!query.includes('예비비') || !/사용\s*명세별\s*집행\s*현황/u.test(text)) return null;
+    const money = '(?:' + moneyNumber + '\\s*[조억만]\\s*)?' + moneyNumber + '\\s*[십백천만억조]?\\s*원';
+    const use = '([가-힣A-Za-z0-9·][가-힣A-Za-z0-9· ]{1,44}?)에(?:서)?';
+    const ends = '\\s*' + money + '(?:을|를)?\\s*(?:썼|쓰였|사용했|사용하였|집행했|집행하였|지출했|지출하였)[가-힣]*[.!?。]?';
+    // A sentence may cite an earlier expenditure as an example for a separate policy position.
+    const example = /^(.{1,180}?(?:썼던|사용했던|집행했던|지출했던))\s+(?:사례|전례|경험)\s*(?:등을|를|을)\s+(?:들어|들며|들면서)\s+(.+)$/u.exec(query.trim());
+    const clause = example ? example[1] : query.trim();
+    const scoped = new RegExp('^((?:19|20)\\d{2})\\s*(?:회계연도|년도|년)\\s+(?:' +
+      use + '\\s+예비비(?:로)?|예비비\\s+(?:중\\s+)?' + use + ')' + ends + '$','u').exec(clause);
+    if (!scoped) return null;
+    const purpose = (scoped[2] || scoped[3]).trim();
+    if (/(?:[0-9]{4}년|회계|제외|이외|외에|이월|불용|결정액)/u.test(purpose)) return null;
+    const {rows, pageStarts} = physicalRows(text);
+    const title = '[' + scoped[1] + '회계연도예비비사용명세별집행현황]';
+    const matches = rows.filter(row => compact(row.text) === title);
+    if (matches.length !== 1) return null;
+    const [caption] = matches, unitRow = rows[caption.paragraph], header = rows[caption.paragraph + 1];
+    if (!unitRow || !header || pageStarts.has(unitRow.paragraph) || pageStarts.has(header.paragraph)) return null;
+    const unit = legend(unitRow.text)?.unit;
+    if (!unit || !currency.test(compact(unit))) return null;
+    const columns = header.text.trim().split(/\s{2,}|\t/u).map(compact);
+    const labels = ['지출결정액','지출액','이월액','잔액'];
+    if (columns.length !== 5 || columns[0] !== '사용명세' || !labels.every(label => columns.includes(label))) return null;
+    const entries = [], context = [caption, unitRow, header];
+    const amount = new RegExp('^(?:' + moneyNumber + '|\\(' + moneyNumber + '\\)|[-–—])$', 'u');
+    let ended = false;
+    for (const row of rows.slice(header.paragraph, header.paragraph + 70)) {
+      if (pageStarts.has(row.paragraph)) break;
+      const line = row.text.trim();
+      if (/^자료\s*[:：]/u.test(line)) { ended = true; break; }
+      context.push(row);
+      // In a vertically merged account label pdftotext may insert one standalone syllable.
+      if (/^[일반회계]$/u.test(line)) continue;
+      const itemPrefix = /^(?:[일반회계]\s{2,})?[-–]\s+/u;
+      const fields = line.replace(itemPrefix, '').split(/\s{2,}|\t/u);
+      if (fields.length !== columns.length || !fields.slice(1).every(cell => amount.test(cell))) return null;
+      entries.push({row,label:fields[0],fields,lineItem:itemPrefix.test(line)});
+    }
+    const totals = entries.filter(item => compact(item.label) === '합계');
+    if (!ended || totals.length !== 1 || totals[0] !== entries.at(-1) || !entries.some(item => item.lineItem)) return null;
+    const byPurpose = entries.filter(item => item.lineItem && compact(item.label) === compact(purpose));
+    if (byPurpose.length > 1) return null;
+    const selected = byPurpose[0] || totals[0];
+    const rowLabel = selected === totals[0] ? '합계' : selected.label;
+    const spentColumn = columns.indexOf('지출액');
+    const reserveUse = {rowLabel, caption:caption.text.trim(), purpose, matchedPurpose:Boolean(byPurpose.length),
+      spent:selected.fields[spentColumn], decided:selected.fields[columns.indexOf('지출결정액')], unit};
+    if (!byPurpose.length) reserveUse.exampleUses = entries.filter(item => item.lineItem).slice(0, 2)
+      .map(item => ({label:item.label, spent:item.fields[spentColumn]}));
+    if (example) {
+      // Select a single past claim automatically only when the rest is qualitative policy commentary.
+      const rest = example[2];
+      if (/[\d０-９]|예비비|예산|금액|지원금|지출|집행|썼|반박|부인|아니|없|않/u.test(rest) ||
+          !/(?:강조|설명|주장|당부)(?:한다|했다|하였다)[.!?。]?$/u.test(rest)) {
+        return {notice:'문장에 다른 판단이나 조건이 함께 있습니다. 대조할 지출 구절을 선택하세요.',
+          reserveUseChoice:clause, passages:[]};
+      }
+      reserveUse.clause = clause;
+    }
+    return {notice:byPurpose.length ? '같은 이름의 용도 행을 찾았습니다. 지출결정액과 실제 지출액을 구분하세요.' :
+      '요청한 용도와 이름이 같은 행을 찾지 못했습니다. 연간 합계가 그 용도에 쓰였는지는 결산 세부 내역에서 확인하세요.',
+      passages:[{...selected.row,matched:[],context:context.filter(row => row !== selected.row),reserveUse}]};
+  }
+
   // In an execution table the year can be centered vertically, even on a
   // continuation of another column. Use the complete printed group for navigation.
   function printedReserveRows(text, query) {
@@ -276,11 +352,7 @@
       .replace(/(예비비)\s+(?:예산(?:액)?\s+)?\d[\d,.]*\s*[천만억조]?\s*원\s*중(?:에서)?\s+(?=(?:실제\s*)?지출액)/u, '$1 ');
     const ask = rowQuestion(grammar);
     if (!ask || !ask.matches(scope)) return metrics.length > 1 ? unresolved('queryMeasure') : null;
-    const rows = [], pageStarts = new Set();
-    for (const line of text.split(/\r\n|[\n\r\u2028\u2029]/u)) {
-      if (line.includes('\f')) pageStarts.add(rows.length + 1);
-      if (line.trim()) rows.push({text:line, paragraph:rows.length + 1});
-    }
+    const {rows, pageStarts} = physicalRows(text);
     const captions = rows.filter(row => /^\[\s*(?:최근\s*\d+\s*년\s*간\s*)?(?:일반|특별)\s*회계\s*예비비\s*집행\s*실적\s*\]$/u.test(row.text.trim()));
     if (!captions.length) return null;
     const matching = captions.filter(row => compact(row.text).includes(compact(scope)));
@@ -532,7 +604,7 @@
       return {status:'compatible', value:cell.value, unit:cell.unit, ...(cell.basis && {basis:cell.basis})};
     };
   }
-  const api = {lookup,rowQuestion,printedReserveRows,registeredCell,registeredAmountQuestion,registeredRateCell,registeredRateQuestion};
+  const api = {lookup,rowQuestion,printedReserveRows,printedReserveUses,registeredCell,registeredAmountQuestion,registeredRateCell,registeredRateQuestion};
   if (node) module.exports = api;
   else root.JournalEvidenceFiscalTable = api;
 })(globalThis);

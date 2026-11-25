@@ -601,6 +601,10 @@
       const years = statedYear && fiscal.years(query);
       const yearOnly = statedYear && (!years.size || (years.size === 1 && years.has(statedYear[1])));
       const asked = yearOnly && !years.size ? context + ' ' + query : query;
+      if (!separate || yearOnly) {
+        const uses = fiscalTable.printedReserveUses(documentText, asked);
+        if (uses) return {...uses, state:'ordinary', usedArticleContext:Boolean(yearOnly), needsPublicationDate:false};
+      }
       const result = fiscalTable.lookup(documentText, asked) || fiscalTable.printedReserveRows(documentText, asked) ||
         printedFiscalTable(documentText, asked);
       if (result) {

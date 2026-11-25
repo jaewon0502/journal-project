@@ -1340,6 +1340,14 @@
     if (lookup.needsPublicationDate) notices.push('‘올해’처럼 상대적인 시점은 기사 발행일과 원표의 연도를 대조하세요.');
     if (ambiguities.length) notices.push('같은 번호의 표 제목이 여러 개 있습니다.');
     message('finder-status', notices.join(' '));
+    if (lookup.reserveUseChoice) {
+      const choice = button('이 지출 구절만 찾기 · ' + lookup.reserveUseChoice, () => {
+        byId('document-query').value = lookup.reserveUseChoice;
+        clearSearchContext();
+        findPassages();
+      });
+      area.append(choice);
+    }
     for (const item of ambiguities) {
       const block = node('div', undefined, 'callout');
       block.append(node('strong', '표 ' + item.number + ' · 서로 다른 제목 ' + item.headings.length + '개'));
@@ -1390,7 +1398,19 @@
       window.JournalDocumentFile?.appendPageInfo(block, passage.paragraph);
       const fiscal = passage.fiscalCell;
       let tableLocation = '';
-      if (fiscal) {
+      if (passage.reserveUse) {
+        const item = passage.reserveUse;
+        if (item.clause) block.append(node('p', '문장 중 원표로 대조한 구절 · ' + item.clause),
+          node('p', '뒤에 이어지는 정책 입장은 발표 원문에서 따로 확인하세요.'));
+        excerpt = citationRows([...passage.context, passage]);
+        tableLocation = item.caption + ' · ‘' + item.rowLabel + '’ 행 × 지출액 열 · 단위 ' + item.unit;
+        block.append(node('p', tableLocation),
+          node('p', '지출결정액 ' + item.decided + ' · 지출액 ' + item.spent + ' (' + item.unit + ')', 'verbatim'));
+        if (!item.matchedPurpose) {
+          block.append(node('p', '이 값은 용도별 표의 합계입니다. ‘' + item.purpose + '’에 쓴 금액은 이 행에서 확인할 수 없습니다.'),
+            node('p', '표에 따로 적힌 용도별 지출 예 · ' + item.exampleUses.map(row => row.label + ' ' + row.spent + item.unit).join(' · ')));
+        }
+      } else if (fiscal) {
         excerpt = citationRows([...passage.context, passage]);
         const coordinate = fiscalLocation(fiscal);
         tableLocation = coordinate + ' · 단위 ' + fiscal.unit;
@@ -1495,7 +1515,7 @@
         block.append(preview);
       }
       if (tableLocation) {
-        const label = passage.yearCoverage ? '표에 실린 기간만 발췌' : years ? '두 해의 행과 표 머리글·주석 발췌' :
+        const label = passage.reserveUse ? '용도별 지출과 전체 합계를 함께 발췌' : passage.yearCoverage ? '표에 실린 기간만 발췌' : years ? '두 해의 행과 표 머리글·주석 발췌' :
           passage.fiscalNavigation?.reserveGroup ? '선택한 행과 같은 해의 표 문맥 발췌' :
           fiscal && fiscal.stage !== 'executionRate' ? '금액 행과 표 머리글·단위 발췌' :
           passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
