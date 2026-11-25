@@ -484,6 +484,8 @@
     const claim = terms(text), matches = [], askedSlots = new Map();
     const stage = claimStage(text), revision = revisionStage(text), scope = sourceScope(text), basis = budgetBasis(text);
     const financial = !attributedClaim && fiscal.request(text);
+    const amountQuestion = !attributedClaim && fiscalTable.registeredAmountQuestion(text);
+    let excludedAmountCell = false;
     const wanted = financial && fiscalScope(text);
     const project = financial && fiscal.project(text);
     const subject = financial && !project && fiscalSubject(claim);
@@ -491,6 +493,15 @@
       ? Array.from(text.matchAll(/“([^”]+)”|"([^"]+)"/gu), m => m[1] || m[2]).filter(q => q.length >= 6) : [];
     for (const candidate of indexed) {
       const {source, words, heading} = candidate;
+      const amount = amountQuestion && amountQuestion(source);
+      if (amount) {
+        if (amount.status === 'compatible') {
+          const cell = amount.cell;
+          matches.push({id:source.id, score:0, scopeConflict:false, fiscalRank:3,
+            reason:'저장한 표의 ' + cell.heading + ' · 원문 표기 ' + cell.value + ' (단위 ' + cell.unit + ') · ' + source.locator});
+        } else excludedAmountCell = true;
+        continue;
+      }
       const exact = source.excerpt.includes(text) || (source.excerpt.length >= 6 && text.includes(source.excerpt));
       const common = [...claim].filter(word => words.has(word));
       if (!exact && !common.some(word => /\p{L}/u.test(word) && !/^\d/u.test(word) && !contextOnly.has(word))) continue;
@@ -528,7 +539,8 @@
     matches.sort((a, b) => Number(a.scopeConflict) - Number(b.scopeConflict) ||
       b.fiscalRank - a.fiscalRank || b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
     const candidates = matches.slice(0, 4).map(({id, reason}) => ({id, reason}));
-    const caution = financial && matches.length && !matches.some(match => match.fiscalRank === 2) ? fiscal.gap(financial) : null;
+    const caution = financial && matches.length && !matches.some(match => match.fiscalRank >= 2) ? fiscal.gap(financial)
+      : !matches.length && excludedAmountCell ? '등록한 표의 원문에서 이 연도·항목·예산 단계의 셀을 특정할 수 없습니다. 원표에서 열을 확인하세요.' : null;
     return {candidates, caution};
   }
 

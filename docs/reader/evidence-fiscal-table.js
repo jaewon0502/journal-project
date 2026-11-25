@@ -406,27 +406,50 @@
 
   // The editor stores the raw headers and row separately from this specific, editable locator.
   // Re-read the cited column before using it. Titles and arbitrary page references do not bind a number.
-  const rateLocator = /^(?:PDF [1-9]\d*쪽 · )?(?:((?:19|20)\d{2})년 · )?‘([^‘’\r\n]+)’ 행 · ‘([^‘’\r\n]+)’ 열 \(왼쪽에서 ([1-9]\d*)번째 열\) · 단위 (%|퍼센트)$/u;
+  const cellLocator = /^(?:PDF [1-9]\d*쪽 · )?(?:((?:19|20)\d{2})년 · )?‘([^‘’\r\n]+)’ 행 · ‘([^‘’\r\n]+)’ 열 \(왼쪽에서 ([1-9]\d*)번째 열\) · 단위 ([^\r\n]+)$/u;
+  const amountMeasures = {request:'부처 요구액', proposal:'정부안', approved:'국회 확정액',
+    spent:'결산액', budget:'예산액', difference:'예산 대비 증감액'};
   function archivedTable(excerpt) {
     const rows = excerpt.split(/\r\n|[\n\r\u2028\u2029]/u);
     // citationRows marks the gap between the complete headers and the selected row.
     if (rows.at(-2) === '[…]') rows.splice(-2,1);
     return rows.join('\n');
   }
-  function registeredRateCell(source) {
+  function registeredCell(source) {
     if (typeof source?.locator !== 'string' || typeof source.excerpt !== 'string') return null;
-    const position = rateLocator.exec(source.locator);
+    const position = cellLocator.exec(source.locator);
     if (!position) return null;
     const [, prefixYear, rowLabel, printed, column, unit] = position;
-    const rate = rateHeading(printed, prefixYear);
-    if (!rate?.year || rate.stage !== 'executionRate' || rate.unclearRate) return null;
-    const measure = (rate.basis ? rate.basis + ' 대비 ' : '') + '집행률';
-    const query = rate.year + '년 ' + rowLabel + '의 ' + measure + '은 얼마인가?';
+    const parsed = heading(printed, prefixYear);
+    if (!parsed?.year || parsed.unclearRate) return null;
+    const measure = parsed.stage === 'executionRate' && percent.test(compact(unit))
+      ? (parsed.basis ? parsed.basis + ' 대비 ' : '') + '집행률'
+      : currency.test(compact(unit)) && amountMeasures[parsed.stage];
+    if (!measure) return null;
+    const query = parsed.year + '년 ' + rowLabel + '의 ' + measure + '은 얼마인가?';
     const cell = lookup(archivedTable(source.excerpt),query)?.passages[0]?.fiscalCell;
     if (!cell || cell.rowLabel !== rowLabel || cell.heading !== printed ||
         cell.column !== Number(column) || cell.unit !== unit) return null;
-    return {rowLabel, heading:printed, column:cell.column, year:cell.year, value:cell.value,
-      unit, ...(cell.basis && {basis:cell.basis})};
+    return cell;
+  }
+  function registeredRateCell(source) {
+    const cell = registeredCell(source);
+    if (cell?.stage !== 'executionRate') return null;
+    const {rowLabel, heading, column, year, value, unit, basis} = cell;
+    return {rowLabel, heading, column, year, value, unit, ...(basis && {basis})};
+  }
+  function registeredAmountQuestion(text) {
+    const ask = rowQuestion(text);
+    if (!ask) return null;
+    return source => {
+      // Older single-row excerpts and free-form sources still use the ordinary search.
+      if (!cellLocator.test(source.locator) || !/[\n\r\u2028\u2029]/u.test(source.excerpt)) return null;
+      const selected = registeredCell(source);
+      if (!selected || ask.year !== selected.year || ask.stage !== selected.stage) return {status:'incompatible'};
+      const requested = lookup(archivedTable(source.excerpt),text)?.passages[0]?.fiscalCell;
+      return requested && requested.column === selected.column && requested.rowLabel === selected.rowLabel
+        ? {status:'compatible', cell:selected} : {status:'incompatible'};
+    };
   }
 
   function registeredRateQuestion(text) {
@@ -446,7 +469,7 @@
       return {status:'compatible', value:cell.value, unit:cell.unit, ...(cell.basis && {basis:cell.basis})};
     };
   }
-  const api = {lookup,rowQuestion,printedReserveRows,registeredRateCell,registeredRateQuestion};
+  const api = {lookup,rowQuestion,printedReserveRows,registeredCell,registeredAmountQuestion,registeredRateCell,registeredRateQuestion};
   if (node) module.exports = api;
   else root.JournalEvidenceFiscalTable = api;
 })(globalThis);

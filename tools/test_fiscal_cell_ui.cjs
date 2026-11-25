@@ -9,6 +9,7 @@ const header = '구분\t2023년 결산\t2024년 예산\t2024년 결산\t2024년 
 const total = '총지출\t610.7\t656.6\t638.0\t△18.6';
 const funds = '기금\t196.5\t218.4\t214.5\t△3.9';
 const table = ['단위: 조 원', header, total, funds].join('\n');
+const totalArchive = ['단위: 조 원', header, total].join('\n');
 const spent = '2024회계연도 총지출 결산액은 656.6조 원인가?';
 
 function openFinder(t) {
@@ -40,7 +41,7 @@ function openFinder(t) {
   return {w, doc, el, set, find};
 }
 
-test('재정표에서 질문의 숫자와 다른 결산 열을 보여 주고 선택한 행과 위치만 옮긴다', t => {
+test('재정표에서 질문의 숫자와 다른 결산 열을 보여 주고 선택한 행과 원래 열·단위를 함께 옮긴다', t => {
   const {el, find, doc} = openFinder(t);
   const report = el('report-rows').textContent, sources = el('source-list').textContent;
   const area = find(table, spent);
@@ -55,9 +56,9 @@ test('재정표에서 질문의 숫자와 다른 결산 열을 보여 주고 선
   assert.equal(el('source-locator').value, '');
 
   const button = card.querySelector(':scope > button');
-  assert.equal(button.textContent, '이 행을 발췌하고 표 위치 확인');
+  assert.equal(button.textContent, '금액 행과 표 머리글·단위 발췌');
   button.click();
-  assert.equal(el('source-excerpt').value, total);
+  assert.equal(el('source-excerpt').value, totalArchive);
   assert.equal(el('source-locator').value, '‘총지출’ 행 · ‘2024년 결산’ 열 (왼쪽에서 4번째 열) · 단위 조 원');
   assert.equal(doc.activeElement, el('source-locator'));
   assert.match(el('source-status').textContent, /원본에서 쪽번호/);
@@ -76,7 +77,7 @@ test('재검색에서 자동 위치를 바꾸기 전에 묻고 직접 쓴 쪽번
   budgetButton.click();
   assert.equal(prompts.length, 1);
   assert.equal(el('source-locator').value, first);
-  assert.equal(el('source-excerpt').value, total);
+  assert.equal(el('source-excerpt').value, totalArchive);
 
   w.confirm = () => true;
   budgetButton.click();
@@ -86,10 +87,10 @@ test('재검색에서 자동 위치를 바꾸기 전에 묻고 직접 쓴 쪽번
   const fundsButton = find(table, '2024년 기금 결산액은 얼마인가?').querySelector('.source > button');
   w.confirm = text => { assert.match(text, /직접 적은 위치는 유지/); return false; };
   fundsButton.click();
-  assert.equal(el('source-excerpt').value, total);
+  assert.equal(el('source-excerpt').value, totalArchive);
   w.confirm = () => true;
   fundsButton.click();
-  assert.equal(el('source-excerpt').value, funds);
+  assert.equal(el('source-excerpt').value, ['단위: 조 원', header, '[…]', funds].join('\n'));
   assert.equal(el('source-locator').value, manual);
   assert.equal(el('verdict').value, '');
 });
@@ -157,7 +158,7 @@ test('연도가 윗줄에 있는 머리글은 해당 연도와 아랫줄 열 기
   nearby.open = true;
   nearby.dispatchEvent(new w.Event('toggle'));
   nearby.querySelector('button').click();
-  assert.equal(el('source-excerpt').value, row);
+  assert.equal(el('source-excerpt').value, source);
   assert.equal(el('source-locator').value, '2024년 · ‘기금’ 행 · ‘결산(C)’ 열 (왼쪽에서 4번째 열) · 단위 억 원');
   const headerChoice = nearby.querySelector('li[value="3"] input');
   headerChoice.click();
@@ -186,7 +187,7 @@ test('원자료를 문장에 연결하고 작업 파일을 다시 열어도 행 
   const location = '‘총지출’ 행 · ‘2024년 결산’ 열 (왼쪽에서 4번째 열) · 단위 조 원';
   assert.equal(saved.sources.length, 1);
   assert.equal(saved.sources[0].locator, location);
-  assert.equal(saved.sources[0].excerpt, total);
+  assert.equal(saved.sources[0].excerpt, totalArchive);
 
   const reader = openFinder(t);
   reader.w.confirm = () => true;
@@ -201,8 +202,48 @@ test('원자료를 문장에 연결하고 작업 파일을 다시 열어도 행 
   input.dispatchEvent(new reader.w.Event('change'));
   assert.match(await opened, /작업 파일을 열었습니다/);
   assert.ok(reader.el('source-list').textContent.includes(location));
+  assert.match(reader.el('source-list').querySelector('.registered-amount').textContent,/결산 · 원문 표기 638\.0 \(단위 조 원\)/);
+  assert.equal(reader.el('source-list').querySelector('blockquote').textContent,totalArchive);
   assert.equal(reader.doc.querySelector('#row-sources input:checked').value, saved.sources[0].id);
   assert.equal(reader.el('verdict').value, '');
+});
+
+test('등록된 금액의 원문 셀을 다시 읽어 다른 연도·예산 단계의 같은 숫자를 제외한다', t => {
+  const {w} = openFinder(t);
+  const input = '2024년 총지출 결산액은 656.6조 원이었다.';
+  const source = (id, heading, column, excerpt = totalArchive) => ({
+    id, title:'총지출 재정 자료', url:'https://office.example/report.pdf', version:'확정본', excerpt,
+    locator:'PDF 32쪽 · ‘총지출’ 행 · ‘' + heading + '’ 열 (왼쪽에서 ' + column + '번째 열) · 단위 조 원'
+  });
+  const right = source('spent','2024년 결산',4), budget = source('budget','2024년 예산',3);
+  const old = source('previous','2023년 결산',2);
+  const analyze = sources => w.JournalFactcheck.prepare(input, sources).rows[0];
+  const good = analyze([budget,old,right]);
+  assert.deepEqual(Array.from(good.sourceIds), ['spent']);
+  assert.match(good.sourceMatches[0].reason,/원문 표기 638\.0/);
+  assert.equal(good.status,'pending');
+  for (const edited of [source('wrong-index','2024년 결산',3),
+    {...right, locator:right.locator.replace('단위 조 원','단위 억 원')},
+    {...right, excerpt:totalArchive.replace('2024년 예산','2024년 결산')},
+    {...right, excerpt:totalArchive.replace('638.0','—')}]) {
+    assert.equal(w.JournalEvidenceFiscalTable.registeredCell(edited),null);
+    assert.equal(analyze([edited]).sourceIds.length,0);
+  }
+  assert.equal(analyze([budget,old]).sourceIds.length,0);
+  const legacy = {...right,excerpt:total};
+  assert.equal(w.JournalEvidenceFiscalTable.registeredCell(legacy),null);
+  assert.equal(analyze([legacy]).sourceIds.length,1);
+  assert.doesNotMatch(analyze([legacy]).sourceMatches[0].reason,/원표의|원문 표기/);
+});
+
+test('긴 원표의 마지막 금액에는 머리글·생략 표시·선택 행만 저장한다', t => {
+  const {el,find,w} = openFinder(t);
+  const rows = Array.from({length:1200}, (_,i) => '사업' + i + '\t456.7\t638.0\t656.6\t△18.6');
+  const source = ['단위: 조 원',header,...rows,total].join('\n');
+  find(source,spent).querySelector('.source > button').click();
+  const excerpt = el('source-excerpt').value, locator = el('source-locator').value;
+  assert.equal(excerpt,['단위: 조 원',header,'[…]',total].join('\n'));
+  assert.equal(w.JournalEvidenceFiscalTable.registeredCell({excerpt,locator}).value,'638.0');
 });
 
 test('두 해의 고용률과 공표 증감을 따로 읽고 연령대에 맞는 원문만 다음 편집자에게 넘긴다', t => {

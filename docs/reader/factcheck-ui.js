@@ -146,11 +146,14 @@
     const section = node('div', undefined, 'source');
     section.append(node('p', sourceSummary(source), 'meta'));
     if (showLink) section.append(sourceLink(source));
-    const cell = window.JournalEvidenceFiscalTable.registeredRateCell(source);
-    if (cell) {
+    const cell = window.JournalEvidenceFiscalTable.registeredCell(source);
+    if (cell?.stage === 'executionRate') {
       const value = /(?:%|퍼센트)$/u.test(cell.value.normalize('NFKC').trim()) ? cell.value : cell.value + cell.unit;
       const basis = cell.basis ? cell.basis + ' 기준 집행률' : '집행률 (분모는 원표 주석 확인)';
       section.append(node('p', cell.year + '년 ' + cell.rowLabel + ' · ' + basis + ' ' + value, 'registered-rate'));
+    } else if (cell) {
+      section.append(node('p', cell.year + '년 ' + cell.rowLabel + ' · ' + cell.heading + ' · 원문 표기 ' +
+        cell.value + ' (단위 ' + cell.unit + ')', 'registered-amount'));
     }
     section.append(node('blockquote', source.excerpt));
     const local = window.JournalSourceReader.localControl(source);
@@ -1296,6 +1299,7 @@
       const fiscal = passage.fiscalCell;
       let tableLocation = '';
       if (fiscal) {
+        excerpt = citationRows([...passage.context, passage]);
         const coordinate = fiscalLocation(fiscal);
         tableLocation = coordinate + ' · 단위 ' + fiscal.unit;
         block.append(node('p', window.JournalEvidenceFiscal.label(fiscal.stage) + ' · ' + coordinate),
@@ -1304,7 +1308,6 @@
         if (fiscal.stage === 'executionRate') {
           block.append(node('p', fiscal.basis ? '원표에 적힌 집행률의 분모 · ' + fiscal.basis :
             '이 열에는 집행률의 분모가 적혀 있지 않습니다. 어떤 예산액을 기준으로 했는지 원표 주석을 확인하세요.'));
-          excerpt = citationRows([...passage.context, passage]);
         }
       } else if (passage.fiscalNavigation) {
         const guide = passage.fiscalNavigation;
@@ -1388,6 +1391,7 @@
       if (tableLocation) {
         const label = passage.yearCoverage ? '표에 실린 기간만 발췌' : years ? '두 해의 행과 표 머리글·주석 발췌' :
           passage.fiscalNavigation?.reserveGroup ? '선택한 행과 같은 해의 표 문맥 발췌' :
+          fiscal && fiscal.stage !== 'executionRate' ? '금액 행과 표 머리글·단위 발췌' :
           passage.fiscalNavigation ? '이 행을 발췌하고 원표 위치 확인' : '이 행을 발췌하고 표 위치 확인';
         block.append(button(label, () => useExcerpt(excerpt, tableLocation)));
       } else {
