@@ -127,9 +127,54 @@
     return index;
   }
 
+  // Only explicit, whole-line labels establish inherited scope. Keep independent
+  // fields distinct: a repeated unit does not replace an earlier population.
+  const dataField = /^(조사\s*대상|집계\s*대상|모집단|표본(?:\s*(?:수|크기|규모))?|분모|(?:집계\s*|표시\s*)?단위|(?:조사|집계|기준)\s*(?:기간|시점|연도|지역)|기준일|조사\s*기관|자료\s*출처|자료|출처|원자료)\s*[:：]\s*(.*)$/u;
+  const populationIntro = /^다음\s+(?:수치|통계)는\s+(.+?)(?:을|를)\s+대상으로\s+한다[.。]?$/u;
+  const tableStart = /^(?:\[표\s*\d+\](?:\s+.*)?|표\s*\d+(?:\s*[.:：．].*)?)$/u;
+  const tableEnd = /^(?:\[표\s*끝\]|표\s*끝)[.。]?$/u;
+  const metric = /(?:비율|고용률|실업률|응답률|지지율|증가율|감소율|평균|중앙값|합계|총액|인원|집계치|수치|건수|득표율|점유율|사례\s*수)/u;
+  function statisticalRow(text, inTable) {
+    const s = text.normalize('NFKC');
+    if (inTable && /\d/u.test(s)) return true;
+    if (metric.test(s) && /\d|높|낮|상승|하락|늘었|줄었|증가|감소/u.test(s)) return true;
+    if (/절반|과반|[\t|]\s*[+-]?\d/u.test(s)) return true;
+    return /\d[\d,.]*\s*(?:%|퍼센트|원|만|억|조|명|가구|건|개|배|점|톤|킬로|달러|유로|석|곳|표|위(?=였|다|[.\s]|$)|이?다(?=[.。\s]|$))/u.test(s)
+      || /^[+-]?\d[\d,.\s]*$/u.test(s);
+  }
+
+  function statisticalScopes(snapshot) {
+    const result = new Map(), fields = new Map();
+    let table = null, signature = '', index = 0;
+    for (const line of snapshot.article.matchAll(/[^\r\n]+/gu)) {
+      const text = line[0].trim().normalize('NFC').replace(/\s+/gu, ' ');
+      const field = dataField.exec(text), population = populationIntro.exec(text);
+      const start = tableStart.test(text), end = tableEnd.test(text);
+      if (start) table = new Map([['표', text]]);
+      else if (end) table = null;
+      else if (field || population) {
+        let key = field ? field[1].replace(/\s/gu, '') : '조사대상';
+        if (key === '자료출처') key = '출처';
+        const value = field ? field[2] : population[1];
+        (table ?? fields).set(key, key.endsWith('단위') ? value.replace(/([십백천만억조]) 원$/u, '$1원') : value);
+      }
+      if (start || end || field || population) {
+        // Table-local settings override the surrounding article only within that table.
+        const active = new Map([...fields, ...(table ?? [])]);
+        signature = active.size ? JSON.stringify([...active].sort(([a], [b]) => a.localeCompare(b))) : '';
+      }
+      const limit = line.index + line[0].length;
+      while (index < snapshot.rows.length && snapshot.rows[index].positions[0].start < limit) {
+        const row = snapshot.rows[index++];
+        if (signature && !start && !end && !field && !population && statisticalRow(row.text, table !== null)) result.set(row.id, signature);
+      }
+    }
+    return result;
+  }
+
   // Row IDs encode offsets. Across different editions, link only a single location
   // whose wording and immediate context identify one row in each edition.
-  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6) {
+  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6, withheldFromV7) {
     if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
     let commonPrefix = 0;
     while (before.article[commonPrefix] === after.article[commonPrefix]) commonPrefix++;
@@ -138,6 +183,7 @@
     while (commonSuffix < shortest && before.article.at(-1 - commonSuffix) === after.article.at(-1 - commonSuffix)) commonSuffix++;
     const original = uniqueRows(before.rows), revised = uniqueRows(after.rows);
     const matches = new Map();
+    const priorScopes = statisticalScopes(before), revisedScopes = statisticalScopes(after);
     for (const [index, row] of before.rows.entries()) {
       if (row.positions.length !== 1) continue;
       const key = rowFingerprint(row);
@@ -157,6 +203,13 @@
           if (!detached) withheldFromV6?.set(row.id, target);
           continue;
         }
+      }
+      if (priorScopes.get(row.id) !== revisedScopes.get(target)) {
+        // All three earlier versions reached this pair after their quotation and reference rules.
+        withheldFromV5?.set(row.id, target);
+        withheldFromV6?.set(row.id, target);
+        withheldFromV7?.set(row.id, target);
+        continue;
       }
       matches.set(row.id, target);
     }

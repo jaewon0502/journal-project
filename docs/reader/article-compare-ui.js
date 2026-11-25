@@ -965,18 +965,19 @@
     row.firstElementChild.scrollIntoView?.({block:'start'});
   }
   function targetMatch(record, joint, key) {
-    const min = reviewTarget.coreContext || reviewTarget.quoteCheck ? 4 : reviewTarget.retention ? 3 : 2;
+    const min = reviewTarget.coreContext || reviewTarget.quoteCheck ? 4 :
+      reviewTarget.retention || reviewTarget.numericCheck ? 3 : 2;
     const series = window.JournalRevisionSeries;
-    const matches = value => {
-      for (let version = value.version; version >= min; version--) {
-        if (series.reviewId(value, version) === reviewTarget.id) return true;
+    if (series.reviewId(record) === reviewTarget.id) return record;
+    const historical = [7, 6, 5].map(version => series.makeLegacyMatchRecord(joint, key, version));
+    for (const prior of historical) {
+      if (series.reviewId(prior) === reviewTarget.id) return prior;
+    }
+    // Pre-v5 links used fewer fields and did not name the passage-matching rule.
+    for (const candidate of [record, ...historical]) {
+      for (let version = 4; version >= min; version--) {
+        if (series.reviewId(candidate, version) === reviewTarget.id) return candidate;
       }
-      return false;
-    };
-    if (matches(record)) return record;
-    for (const version of [6, 5]) {
-      const historical = series.makeLegacyMatchRecord(joint, key, version);
-      if (matches(historical)) return historical;
     }
     return null;
   }
@@ -995,17 +996,23 @@
       throw new Error('집계에서 선택한 요약과 일치하지 않습니다. 같은 기사의 원본·수정본, 원자료와 당시 편집자 판정을 확인하세요.');
     }
     let panel, group, row, title, quoteResult;
-    if (reviewTarget.quoteCheck) {
+    if (reviewTarget.quoteCheck || reviewTarget.numericCheck) {
+      const numeric = reviewTarget.numericCheck;
+      const v7 = window.JournalRevisionSeries.makeLegacyMatchRecord(joint, reviews[0].key, 7);
+      const v7Links = new Map(v7.factContext.matches);
       const currentLinks = new Map(record.factContext.matches);
       const removed = match.factContext.matches.filter(([before, after]) =>
-        (match.factContext.beforeCore[before] === 2 || match.facts.before[before].outcome === 'supported') && currentLinks.get(before) !== after);
+        (numeric ? v7Links.get(before) === after : v7Links.get(before) !== after) &&
+        (numeric || match.factContext.beforeCore[before] === 2 || match.facts.before[before].outcome === 'supported') && currentLinks.get(before) !== after);
       const coreCount = removed.filter(([before]) => match.factContext.beforeCore[before] === 2).length;
-      title = '이전에 연결한 구절의 인용 대응';
+      title = numeric ? '이전에 연결한 수치 구절의 조사 대상·단위 대조' : '이전에 연결한 구절의 인용 대응';
       panel = jointFactPanel(joint, reviews, record, reopened);
-      quoteResult = element('p', '발언자 확인을 위해 자동 대응에서 뺀 원본 핵심 구절 ' + coreCount + '개' +
+      quoteResult = element('p', numeric ? '수치의 표제가 달라 자동 대응에서 뺀 원본 구절 ' + removed.length + '개' :
+        '발언자 확인을 위해 자동 대응에서 뺀 원본 핵심 구절 ' + coreCount + '개' +
         (removed.length > coreCount ? ' · 그 밖의 공동 지지 구절 ' + (removed.length - coreCount) + '개' : ''));
       quoteResult.tabIndex = -1;
-      quoteResult.dataset.quoteCheckCount = '';
+      if (numeric) quoteResult.dataset.numericCheckCount = '';
+      else quoteResult.dataset.quoteCheckCount = '';
       const save = element('button', '현재 기준의 기사별 평가 요약 저장');
       save.type = 'button';
       save.onclick = () => downloadJson(record, '기사평가-' + record.before.articleSha256.slice(0, 12) + '.json');
@@ -1039,7 +1046,7 @@
     const notice = reopened ? '저장한 진행자용 대조 기록을 복원했습니다.'
       : reviewTarget.example ? '연습용 판정 기록을 열었습니다.' : '선택한 파일에서 요약을 다시 계산했습니다.';
     blindStatus('review-target-status', notice + (match !== record
-      ? ' 이전 요약의 판본과 판정을 확인했습니다. 발언자가 본문 밖에 표시된 인용의 대응은 현재 기준으로 다시 계산했습니다.'
+      ? ' 이전 요약의 판본과 판정을 확인했습니다. 구절 대응은 현재 기준으로 다시 계산했습니다.'
       : ' 판본, 원자료 묶음과 익명 판정이 집계에 사용한 요약과 일치합니다.'));
     if (row) openReviewRow(row);
     else if (quoteResult) quoteResult.focus();
@@ -1049,7 +1056,7 @@
   function showRecoveredArchive(archive, items, reviews, joint, record) {
     if (reviewTarget && reviewTarget.id !== archive.reviewId &&
         (!record || !targetMatch(record, joint, reviews[0].key))) throw new Error('집계에서 선택한 요약과 일치하지 않습니다.');
-    if (record && (reviewTarget?.quoteCheck || reviewTarget?.coreContext)) showTargetEvidence(reviews);
+    if (record && (reviewTarget?.quoteCheck || reviewTarget?.numericCheck || reviewTarget?.coreContext)) showTargetEvidence(reviews);
     else show(reviews[1].snapshots, false, reviews[1], reviews[0], {joint, record, notes:[]});
     const recoveryFiles = detail('기사 작업 파일 4개와 대응표 2개 꺼내기');
     recoveryFiles.append(note('보완할 작업 파일을 저장해 기사 팩트체크에서 여세요. 대응표는 진행자가 보관합니다.'));
@@ -1254,10 +1261,10 @@
       }
     }
     if (requested) {
-      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|core-context|quote-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
+      const match = /^#review=([a-f0-9]{64})(?:&focus=(retention|core-context|quote-check|numeric-check|bias-(wording|framing|omission|standards)))?(?:&example=(library|quote))?$/.exec(location.hash);
       const packagedQuote = byId('quote-practice');
       reviewTarget = {id:match?.[1], retention:match?.[2] === 'retention', coreContext:match?.[2] === 'core-context',
-        quoteCheck:match?.[2] === 'quote-check', axis:match?.[3], example:match?.[4] === 'quote' && !packagedQuote ? null : match?.[4]};
+        quoteCheck:match?.[2] === 'quote-check', numericCheck:match?.[2] === 'numeric-check', axis:match?.[3], example:match?.[4] === 'quote' && !packagedQuote ? null : match?.[4]};
       resumeExample.hidden = !(reviewTarget.example && (reviewTarget.retention || reviewTarget.coreContext));
       byId('review-upload').append(picker);
       picker.hidden = !match || reviewTarget.example;

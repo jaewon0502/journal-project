@@ -106,18 +106,22 @@
 
   async function create(record, items, notes, contextNotes = []) {
     const inputVersion = record?.version;
-    if (![3, 4, 5, 6, 7].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
+    if (![3, 4, 5, 6, 7, 8].includes(inputVersion)) throw new Error('구절 대응 기록이 담긴 기사 요약을 선택하세요.');
     const inputId = series.reviewId(record, inputVersion);
     const embedded = copyItems(items, false);
     const reviews = await blind.resolveBundle(embedded);
     if (reviews[0].key.demo !== record.demo) throw new Error('대조 기록의 연습·실제 기사 구분이 다릅니다.');
     const rebuilt = series.makeRecord(agreement.compare(...reviews), reviews[0].key);
-    if (series.reviewId(rebuilt, inputVersion) !== inputId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
+    const historicalId = new Map(rebuilt.priorReviewIds).get(inputVersion);
+    if ((historicalId ?? series.reviewId(rebuilt, inputVersion)) !== inputId) throw new Error('작업 파일에서 다시 계산한 평가가 선택한 요약과 다릅니다.');
+    if (historicalId && (notes?.length || contextNotes?.length)) {
+      throw new Error('이전 구절 대응에서 작성한 판단은 현재 기준의 기사 요약에서 다시 대조한 뒤 저장하세요.');
+    }
     // Only bind notes to the current comparison rebuilt from all six original inputs.
     const saved = checkedNotes(rebuilt, notes);
     const context = checkedContextNotes(rebuilt, contextNotes);
     if (context.length && inputVersion < 4) throw new Error('핵심 구절 대응을 포함한 기사 요약에서 대조 기록을 저장하세요.');
-    const version = 5;
+    const version = 6;
     const reviewId = series.reviewId(rebuilt);
     const evidenceDigest = evidenceId(embedded);
     return {format, version, reviewId, evidenceDigest, items:embedded, notes:saved, contextNotes:context,
@@ -127,7 +131,7 @@
   function read(data) {
     const keys = ['format', 'version', 'reviewId', 'evidenceDigest', 'items', 'notes', 'checksum'];
     if (data?.version >= 4) keys.push('contextNotes');
-    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4, 5].includes(data.version) ||
+    if (!exactKeys(data, keys) || data.format !== format || ![1, 2, 3, 4, 5, 6].includes(data.version) ||
         ![data.reviewId, data.evidenceDigest, data.checksum].every(s => typeof s === 'string' && /^[0-9a-f]{64}$/u.test(s))) {
       throw new Error('진행자가 저장한 구절 대조 기록 파일을 선택하세요.');
     }
@@ -141,12 +145,14 @@
   // Pass the summary rebuilt by the normal blind assignment resolver when reopening.
   function verifyAll(data, record) {
     const saved = read(data);
-    if (record?.version !== 7) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
+    if (record?.version !== 8) throw new Error('작업 파일 여섯 개로 현재 기준의 기사 요약을 다시 계산하세요.');
     // A private archive binds its original inputs and the public summary two versions ahead.
     const summaryVersion = data.version + 2;
-    if (series.reviewId(record, summaryVersion) !== saved.reviewId) {
+    // Even a valid current projection must not masquerade as the original historical comparison.
+    const projection = series.reviewId(record, summaryVersion);
+    if (new Map(record.priorReviewIds).has(summaryVersion) || projection !== saved.reviewId) {
       const error = new Error('대조 기록과 다시 계산한 기사 요약이 일치하지 않습니다.');
-      if (data.version < 5) error.code = 'legacy-review-changed';
+      if (data.version < 6) error.code = 'legacy-review-changed';
       throw error;
     }
     return {notes:checkedNotes(record, saved.notes), contextNotes:checkedContextNotes(record, saved.contextNotes)};
@@ -160,7 +166,7 @@
   // Historical judgments belong in their original version, outside the current review tally.
   function verifyLegacyMatchNotes(data, historical) {
     const saved = read(data);
-    if (![3, 4].includes(data.version) || historical?.version !== data.version + 2 || series.reviewId(historical) !== saved.reviewId)
+    if (![3, 4, 5].includes(data.version) || historical?.version !== data.version + 2 || series.reviewId(historical) !== saved.reviewId)
       throw new Error('이전 구절 대응으로 복원한 기사 요약과 대조 기록이 일치하지 않습니다.');
     checkedContextNotes(historical, saved.contextNotes);
     return checkedNotes(historical, saved.notes);

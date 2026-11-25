@@ -319,7 +319,7 @@ test('네 회수본에서 계산한 범위와 순변화는 익명 요약의 판�
   const second = await assignment(1, [levels, {wording:1, standards:0}]);
   const joint = compare(first, second);
   const saved = series.makeRecord(joint, first.key);
-  assert.equal(saved.version, 7);
+  assert.equal(saved.version, 8);
   assert.ok(!Object.hasOwn(saved, 'improvementRange') && !Object.hasOwn(saved, 'netSeverityChange'));
   const result = series.summarize([JSON.parse(JSON.stringify(saved))]);
   assert.deepEqual(joint.improvementRange, {baseline:4, confirmed:1, ruledOut:1, unresolved:1,

@@ -152,12 +152,17 @@
   function comparedScores(joint, key) { return JSON.parse(savedComparison(joint, key).scores); }
   function comparedFacts(joint, key) { return JSON.parse(savedComparison(joint, key).facts); }
 
+  function changedMatchVersions(joint, key) {
+    const {withheldV5, withheldV6, withheldV7} = savedComparison(joint, key);
+    return [[5, withheldV5], [6, withheldV6], [7, withheldV7]].filter(([, pairs]) => pairs.length).map(([v]) => v);
+  }
+
   function recordFields(joint, key, version) {
     const saved = savedComparison(joint, key);
     if (!saved.completeReturns) throw new Error('각 편집자의 원본과 수정본 네 파일에 구절 판정이나 편향 평가를 하나 이상 기록한 뒤 요약을 저장하세요.');
     const fields = {dimensions: JSON.parse(saved.scores), facts: JSON.parse(saved.facts),
       factMatches: JSON.parse(saved.factMatches), factContext: JSON.parse(saved.factContext)};
-    const historical = version === 5 || version === true ? saved.withheldV5 : version === 6 ? saved.withheldV6 : null;
+    const historical = version === 5 || version === true ? saved.withheldV5 : version === 6 ? saved.withheldV6 : version === 7 ? saved.withheldV7 : null;
     if (historical?.length) {
       const oldPairs = new Map(historical);
       fields.factContext.matches = fields.factContext.matches.concat(historical.map(pair => [...pair])).sort((a, b) => a[0] - b[0]);
@@ -179,28 +184,29 @@
       id: d.id, title: d.title, first: transition(d.left, afterById.get(d.id).left), second: transition(d.right, afterById.get(d.id).right)
     }));
     const facts = {before: before.facts.rows.map(jointFact), after: after.facts.rows.map(jointFact)};
-    const legacyV5 = new Map(), legacyV6 = new Map();
-    const matched = comparison.matchRevisionRows(before.view, after.view, legacyV5, legacyV6);
+    const legacyV5 = new Map(), legacyV6 = new Map(), legacyV7 = new Map();
+    const matched = comparison.matchRevisionRows(before.view, after.view, legacyV5, legacyV6, legacyV7);
     const revisedIndexes = new Map(after.facts.rows.map((row, index) => [row.rowId, index]));
     const coreCount = row => Number(row.coreLeft) + Number(row.coreRight);
     const factContext = {beforeCore: before.facts.rows.map(coreCount), afterCore: after.facts.rows.map(coreCount), matches: []};
-    const factMatches = [], withheldV5 = [], withheldV6 = [];
+    const factMatches = [], withheldV5 = [], withheldV6 = [], withheldV7 = [];
     for (const [index, row] of before.facts.rows.entries()) {
       const revised = revisedIndexes.get(matched.get(row.rowId)) ?? null;
       if (legacyV5.has(row.rowId)) withheldV5.push([index, revisedIndexes.get(legacyV5.get(row.rowId))]);
       if (legacyV6.has(row.rowId)) withheldV6.push([index, revisedIndexes.get(legacyV6.get(row.rowId))]);
+      if (legacyV7.has(row.rowId)) withheldV7.push([index, revisedIndexes.get(legacyV7.get(row.rowId))]);
       if (revised !== null) factContext.matches.push([index, revised]);
       if (facts.before[index].outcome === 'supported') factMatches.push([index, revised]);
     }
     const result = {demo: first.key.demo, ...summarizeScores(dimensions), dimensions, facts, factMatches, factContext, missingReturns};
     const scores = ({before, after}) => ({before, after});
     compared.set(result, {keys: [keySignature(first.key), keySignature(second.key)], completeReturns: !missingReturns.length, facts: JSON.stringify(facts),
-      factMatches: JSON.stringify(factMatches), factContext: JSON.stringify(factContext), withheldV5, withheldV6,
+      factMatches: JSON.stringify(factMatches), factContext: JSON.stringify(factContext), withheldV5, withheldV6, withheldV7,
       scores: JSON.stringify(dimensions.map(d => ({id: d.id, first: scores(d.first), second: scores(d.second)})))});
     return result;
   }
 
-  const api = Object.freeze({compare, comparedScores, comparedFacts, recordFields, summarizeScores});
+  const api = Object.freeze({compare, comparedScores, comparedFacts, changedMatchVersions, recordFields, summarizeScores});
   if (useNode) module.exports = api;
   else root.JournalRevisionAgreement = api;
 })(globalThis);

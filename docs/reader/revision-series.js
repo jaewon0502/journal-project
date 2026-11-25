@@ -8,6 +8,9 @@
   const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const format = 'journal-revision-series-record';
   const {summarizeScores} = agreement;
+  const currentVersion = 8;
+  const replayVersions = [5, 6, 7];
+  const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
 
   function exactKeys(value, keys) {
     return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -23,10 +26,18 @@
     return readRecord({format, version, demo: key.demo, before: edition(key.mapping.before),
       after: edition(key.mapping.after), ...fields});
   }
-  const makeRecord = (joint, key) => editionRecord(joint, key, 7);
+  function makeRecord(joint, key) {
+    const record = editionRecord(joint, key, currentVersion);
+    // Bind only historical projections that actually had additional links.
+    // A digest lets an imported older summary be compared without releasing text or notes.
+    const priorReviewIds = agreement.changedMatchVersions(joint, key).map(version =>
+      [version, reviewId(editionRecord(joint, key, version))]);
+    if (priorReviewIds.length) record.priorReviewIds = priorReviewIds;
+    return record;
+  }
   // Authenticate historical private files and links against the rule that produced them.
   function makeLegacyMatchRecord(joint, key, version = 5) {
-    if (![5, 6].includes(version)) throw new Error('이전 구절 대응 버전을 확인하세요.');
+    if (!replayVersions.includes(version)) throw new Error('이전 구절 대응 버전을 확인하세요.');
     return editionRecord(joint, key, version);
   }
 
@@ -97,10 +108,11 @@
     if (version >= 2) keys.push('facts');
     if (version >= 3) keys.push('factMatches');
     if (version >= 4) keys.push('factContext');
-    if (![1, 2, 3, 4, 5, 6, 7].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
+    const hasPriorIds = version === currentVersion && Object.hasOwn(record, 'priorReviewIds');
+    if (hasPriorIds) keys.push('priorReviewIds');
+    if (![1, 2, 3, 4, 5, 6, 7, 8].includes(version) || !exactKeys(record, keys) || record.format !== format || typeof record.demo !== 'boolean') {
       throw new Error('기사별 공동 판정 기록의 형식과 버전을 확인하세요.');
     }
-    const isDigest = value => typeof value === 'string' && /^[0-9a-f]{64}$/u.test(value);
     for (const side of [record.before, record.after]) {
       if (!exactKeys(side, ['articleSha256', 'sourcesSha256']) || !isDigest(side.articleSha256) || !isDigest(side.sourcesSha256)) {
         throw new Error('기사 또는 원자료의 SHA-256 식별값이 잘못되었습니다.');
@@ -131,6 +143,17 @@
     }
     if (version >= 3) result.factMatches = readFactMatches(record.factMatches, result.facts);
     if (version >= 4) result.factContext = readFactContext(record.factContext, result.facts, result.factMatches);
+    if (hasPriorIds) {
+      let previous = 0;
+      if (!Array.isArray(record.priorReviewIds) || !record.priorReviewIds.length) throw new Error('이전 요약 식별값 배열을 확인하세요.');
+      result.priorReviewIds = Array.from(record.priorReviewIds, pair => {
+        if (!Array.isArray(pair) || pair.length !== 2 || !replayVersions.includes(pair[0]) || pair[0] <= previous || !isDigest(pair[1])) {
+          throw new Error('이전 요약 버전과 식별값을 확인하세요.');
+        }
+        previous = pair[0];
+        return [pair[0], pair[1]];
+      });
+    }
     return result;
   }
 
@@ -145,10 +168,11 @@
   // roles, each editor's complete rating profile, and fact observations in passage order.
   function reviewId(input, version = input?.version) {
     const record = readRecord(input);
-    if (![2, 3, 4, 5, 6, 7].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
+    if (![2, 3, 4, 5, 6, 7, 8].includes(version) || version > record.version) throw new Error('구절별 검토 상태가 담긴 기사 요약으로 근거를 다시 여세요.');
     const fields = [format, version, record.demo, record.before, record.after, ratingProfile(record), record.facts];
     if (version >= 3) fields.push(record.factMatches);
     if (version >= 4) fields.push(record.factContext);
+    if (version === currentVersion && record.priorReviewIds) fields.push(record.priorReviewIds);
     return engine.digestValue(fields);
   }
 
@@ -163,12 +187,17 @@
     if (!Array.isArray(records)) throw new Error('기사별 공동 판정 기록을 목록으로 선택하세요.');
     const entries = [], byManuscript = new Map();
     let demo = null, duplicateCount = 0;
-    for (const [index, input] of records.entries()) {
+    const parsed = Array.from(records, (input, index) => {
       let record;
       try { record = readRecord(input); }
       catch (error) { throw recordError([index], error.message); }
       if (demo !== null && demo !== record.demo) throw recordError([0, index], '연습 기록과 실제 기사 기록은 따로 집계하세요.');
       demo = record.demo;
+      return {index, record};
+    });
+    // Check each older duplicate against its canonical v8 export, even if v8 was selected last.
+    parsed.sort((a, b) => Number(b.record.version === currentVersion) - Number(a.record.version === currentVersion));
+    for (const {index, record} of parsed) {
       const {before, after} = record;
       const previous = byManuscript.get(before.articleSha256) ?? byManuscript.get(after.articleSha256);
       if (previous) {
@@ -179,28 +208,46 @@
           if (prior.facts && record.facts && JSON.stringify(prior.facts) !== JSON.stringify(record.facts)) {
             throw recordError([previous.index, index], '같은 기사 판본의 사실 검토 판정이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          if (prior.version >= 3 && record.version >= 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
+          const replay = prior.version === currentVersion && replayVersions.includes(record.version);
+          if (replay) {
+            const oldId = new Map(prior.priorReviewIds).get(record.version);
+            const oldContext = record.factContext, currentContext = prior.factContext;
+            const oldLinks = new Map(oldContext.matches);
+            const compatible = !oldId || (oldLinks.size > currentContext.matches.length &&
+              currentContext.matches.every(([from, to]) => oldLinks.get(from) === to) &&
+              JSON.stringify(oldContext.beforeCore) === JSON.stringify(currentContext.beforeCore) &&
+              JSON.stringify(oldContext.afterCore) === JSON.stringify(currentContext.afterCore));
+            if (!compatible || reviewId(record) !== (oldId ?? reviewId(prior, record.version))) {
+              throw recordError([previous.index, index], '같은 기사 판본이지만 이전 기준으로 재현한 구절 대응 및 핵심 주장 표시와 다릅니다.');
+            }
+          }
+          if (record.version === currentVersion && JSON.stringify(prior.priorReviewIds) !== JSON.stringify(record.priorReviewIds)) {
+            throw recordError([previous.index, index], '같은 기사 판본의 이전 요약 식별값이 다릅니다.');
+          }
+          if (!replay && prior.version >= 3 && record.version >= 3 && JSON.stringify(prior.factMatches) !== JSON.stringify(record.factMatches)) {
             throw recordError([previous.index, index], '같은 기사 판본의 원본·수정본 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
-          if (prior.version >= 4 && record.version >= 4 && JSON.stringify(prior.factContext) !== JSON.stringify(record.factContext)) {
+          if (!replay && prior.version >= 4 && record.version >= 4 && JSON.stringify(prior.factContext) !== JSON.stringify(record.factContext)) {
             throw recordError([previous.index, index], '같은 기사 판본의 핵심 주장 표시 또는 전체 구절 대응이 다릅니다. 집계할 기록 하나만 선택하세요.');
           }
           if (record.version > prior.version) {
             previous.index = index;
             previous.record = record;
           }
+          previous.firstIndex = Math.min(index, previous.firstIndex);
           duplicateCount++;
           continue;
         }
         throw recordError([previous.index, index], '기사 판본이 겹치지만 수정 순서, 원자료 또는 판정이 다릅니다. 집계할 기록 하나만 선택하세요.');
       }
-      const entry = {index, record};
+      const entry = {index, record, firstIndex:index};
       byManuscript.set(before.articleSha256, entry);
       byManuscript.set(after.articleSha256, entry);
       entries.push(entry);
     }
+    entries.sort((a, b) => a.firstIndex - b.firstIndex);
     const unique = entries.map(entry => entry.record);
-    const articles = unique.map(r => ({before: r.before, after: r.after,
+    const articles = unique.map(r => ({before: r.before, after: r.after, matchVersion: r.version,
       sourceChanged: r.before.sourcesSha256 !== r.after.sourcesSha256, ...summarizeScores(r.dimensions),
       facts: r.facts ? {before: factReview.summarize(r.facts.before), after: factReview.summarize(r.facts.after)} : null,
       coreContextReview: r.factContext ? factReview.coreContextReview(r.facts, r.factContext) : null,
@@ -212,19 +259,26 @@
     const unchangedScores = summarizeScores(unchanged.flatMap(r => r.dimensions));
     const withFacts = unique.filter(r => r.facts);
     const improvedArticles = articles.filter(a => a.improved.numerator > 0);
-    const improvedAudits = improvedArticles.map(a => a.factAudit).filter(audit => audit !== null);
-    const coreContexts = improvedArticles.map(a => a.coreContextReview).filter(Boolean);
+    const currentMatchesPresent = articles.some(a => a.matchVersion === currentVersion);
+    const priorArticles = improvedArticles.filter(a => a.matchVersion < currentVersion && a.factTrace);
+    const matchedCohort = currentMatchesPresent ? improvedArticles.filter(a => a.matchVersion === currentVersion) : improvedArticles;
+    const improvedAudits = matchedCohort.map(a => a.factAudit).filter(audit => audit !== null);
+    const coreContexts = matchedCohort.map(a => a.coreContextReview).filter(Boolean);
     const facts = {articleCount: withFacts.length, missingArticles: articles.length - withFacts.length,
       before: factReview.summarize(withFacts.flatMap(r => r.facts.before)),
       after: factReview.summarize(withFacts.flatMap(r => r.facts.after)),
       improvedArticles: improvedArticles.length,
+      matchBasis: currentMatchesPresent ? 'current' : 'historical',
+      priorMatchArticles: priorArticles.length,
+      priorAudit: currentMatchesPresent && priorArticles.length ? factReview.sumFactAudits(priorArticles.map(a => a.factAudit).filter(Boolean)) : null,
+      retentionComparableArticles: matchedCohort.filter(a => a.factTrace?.total > 0).length,
       coreContext: {
         total: coreContexts.reduce((sum, review) => sum + review.total, 0),
         unmatched: coreContexts.reduce((sum, review) => sum + review.unmatched.length, 0)
       },
-      audit: {improvedArticles: improvedAudits.length, missingImprovedArticles: improvedArticles.length - improvedAudits.length,
+      audit: {improvedArticles: improvedAudits.length, missingImprovedArticles: improvedArticles.filter(a => !a.factAudit).length,
         ...factReview.sumFactAudits(improvedAudits)},
-      improvedWithUnconfirmedRetention: improvedArticles.filter(a => a.factTrace && a.factTrace.retained < a.factTrace.total).length,
+      improvedWithUnconfirmedRetention: matchedCohort.filter(a => a.factTrace && a.factTrace.retained < a.factTrace.total).length,
       improvedWithoutTrace: improvedArticles.filter(a => !a.factTrace).length,
       improvedWithFewerFactRows: improvedArticles.filter(a => a.facts && a.facts.after.coverage.denominator < a.facts.before.coverage.denominator).length,
       improvedWithRevisedFlags: improvedArticles.filter(a => a.facts && a.facts.after.flagged > 0).length,

@@ -148,7 +148,7 @@ test('v6에서 유지로 집계한 비핵심 직접 인용의 발언자가 달�
   }
 });
 
-test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모두 바뀐 화자의 핵심 인용 하나만 열고 익명 v7 요약을 저장한다', async t => {
+test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모두 바뀐 화자의 핵심 인용 하나만 열고 익명 v8 요약을 저장한다', async t => {
   const {items, current, legacy, archive} = await reviewedEditions();
   const target = await seriesLink(t, legacy);
   const archiveFile = {name:'이전 진행자 기록.json',data:archive};
@@ -173,7 +173,7 @@ test('집계의 v5 링크에서 여섯 원자료와 구형 진행자 파일 모�
     }
     const downloaded = await p.downloadSummary();
     assert.deepEqual(downloaded, current);
-    assert.equal(downloaded.version, 7);
+    assert.equal(downloaded.version, 8);
     assert.equal(new Map(downloaded.factContext.matches).has(3), false);
     for (const text of [privateReason, quote, '비공개 논평 사본', '편집자 1의 논평 확인']) {
       assert.equal(JSON.stringify(downloaded).includes(text), false);
@@ -203,6 +203,6 @@ test('예전 연결이 여전히 유효한 연습 기사도 같은 링크에서 
   assert.match(count().textContent, /핵심 구절 0개$/);
   assert.equal(p.document.activeElement, count());
   const downloaded = await p.downloadSummary();
-  assert.equal(downloaded.version, 7);
+  assert.equal(downloaded.version, 8);
   assert.deepEqual(downloaded.factContext.matches, legacy.factContext.matches);
 });

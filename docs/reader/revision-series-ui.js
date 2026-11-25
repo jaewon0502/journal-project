@@ -232,7 +232,7 @@
     const part = document.createDocumentFragment();
     if (facts.improvedArticles) {
       const noOriginal = report.articles.filter(article => article.improved.numerator && article.factTrace?.total === 0).length;
-      const comparable = facts.improvedArticles - facts.improvedWithoutTrace - noOriginal;
+      const comparable = facts.retentionComparableArticles;
       if (comparable) part.append(element('p', '편향이 개선되고 원본 사실을 대조할 수 있는 기사 ' + comparable +
         '건 중 원본 사실의 전체 지지를 다시 확인해야 하는 기사 ' + facts.improvedWithUnconfirmedRetention + '건',
         facts.improvedWithUnconfirmedRetention ? 'warn' : 'note'));
@@ -302,6 +302,13 @@
     const audit = facts.audit;
     panel.append(element('h4', '편향이 개선된 기사에서 핵심 사실은 얼마나 유지됐나'),
       element('p', '편향이 한 항목 이상 개선된 ' + facts.improvedArticles + '건 중 핵심 표시와 판본 간 구절을 대조할 수 있는 기사 ' + audit.improvedArticles + '건'));
+    if (facts.priorMatchArticles) {
+      const label = facts.matchBasis === 'current' ? '현행 기준 보존율에서 제외한 이전 요약' : '이전 기준만으로 계산한 요약';
+      panel.append(element('p', label + ' ' + facts.priorMatchArticles +
+        '건. 익명 요약에는 수치가 가리키는 조사 대상·단위 등의 표제가 없어, 두 판본에서 같은 의미였는지 확인하려면 작업 파일과 대응표가 필요합니다.', 'warn'));
+      if (facts.matchBasis === 'current' && facts.priorAudit.core.total) panel.append(element('p',
+        '이전 기준으로 연결된 원본 핵심 사실 ' + facts.priorAudit.core.retained + '/' + facts.priorAudit.core.total + '개'));
+    }
     if (audit.improvedArticles) {
       panel.append(auditCounts(audit), element('p', '유지율의 분모는 두 편집자가 원본에서 모두 핵심으로 표시하고 구절 전체를 근거로 확인한 사실입니다. 같은 문구와 문맥을 연결했을 때 수정본에서도 두 사람이 전체를 확인한 구절을 셉니다.', 'note'));
       if (facts.coreContext.total) {
@@ -313,7 +320,7 @@
         if (facts.coreContext.unmatched) {
           const list = element('ul');
           for (const article of report.articles) {
-            if (!article.improved.numerator || !article.coreContextReview?.unmatched.length) continue;
+            if (!article.improved.numerator || !article.coreContextReview?.unmatched.length || (facts.matchBasis === 'current' && article.matchVersion < 8)) continue;
             const item = element('li');
             item.append(coreContextLink(article, sources.get(article.before.articleSha256)));
             list.append(item);
@@ -390,6 +397,8 @@
         item.append(element('p', '두 편집자의 구절 전체 지지율 ' + rateText(original.support) + ' → ' + rateText(revised.support)),
           element('p', '수정본 공동 판정 범위 ' + rateText(revised.coverage) + ' · 한 명 이상 충돌 표시 ' + revised.flagged + '개 구절'),
           element('p', '사실 확인 대상 ' + original.coverage.denominator + '개 → ' + revised.coverage.denominator + '개'));
+        if (article.matchVersion < 8 && article.factTrace) item.append(element('p',
+          '이전 기준으로 저장한 구절 대응입니다. 수치의 조사 대상이나 단위가 유지됐는지 원래 작업 파일로 다시 확인할 수 있습니다.', 'note'));
         if (article.factAudit) item.append(auditCounts(article.factAudit));
         if (article.coreContextReview?.unmatched.length) item.append(coreContextLink(article, sources.get(before)));
         const trace = article.factTrace;
@@ -438,6 +447,17 @@
       details.append(element('summary', '이전 방식으로 원본 구절을 연결한 기사 ' + earlierCore.length + '건'),
         element('p', '이전 요약에서는 인용문에 발언자가 없어도 같은 문구를 연결했을 수 있습니다. 기사 파일을 열어 발언자가 유지됐는지 확인하세요.'));
       for (const entry of earlierCore) details.append(evidenceLink(entry, '인용 대응 다시 확인', '&focus=quote-check'));
+      summary.append(details);
+    }
+    const numericChecks = [...sources.values()].filter(({record}) => record.version < 8 &&
+      (record.factContext?.matches.length || record.factMatches?.some(([, after]) => after !== null)));
+    if (numericChecks.length) {
+      const details = element('details', null, 'case');
+      details.id = 'legacy-numeric-check';
+      details.append(element('summary', '수치 문맥을 다시 확인할 이전 요약 ' + numericChecks.length + '건'),
+        element('p', '이전 요약은 조사 대상이나 단위가 바뀐 수치 문장을 연결했을 수 있습니다. 원래 작업 파일과 대응표로 다시 계산하면 현행 기준의 보존율을 확인할 수 있습니다.'));
+      for (const entry of numericChecks) details.append(entry.summaryOnlyExample ? element('p', entry.name) :
+        evidenceLink(entry, '수치 문맥 다시 확인', '&focus=numeric-check'));
       summary.append(details);
     }
     summary.append(element('p', '원본과 수정본에 등록된 원자료 묶음이 달라진 기사 ' + report.changedSources + '건', report.changedSources ? 'warn' : 'note'));
