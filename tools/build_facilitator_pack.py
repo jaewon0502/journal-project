@@ -32,9 +32,9 @@ START = """<!doctype html>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다. 시간 차이를 볼 때는 같은 편집자들의 기준 판정 일치율과 대표 근거 일치율도 확인하세요.</li></ol>
 <p>미완료 묶음이 있다면 ‘미제출 답에 따른 정당 표기 격차의 변화 범위’에서 이미 받은 답도 확인하세요. <a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 32건 중 한 건 미제출’을 고르면 마지막 답에 따라 가능한 결과를 볼 수 있습니다.</p></section>
 <section class="box"><h2>실제 기사에서 원자료 찾기</h2>
-<ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>을 열고 이 압축 안의 <code>참여 과제/예비비/blind-tasks.json</code> 또는 <code>참여 과제/고용/blind-tasks.json</code>을 고르세요.
+<ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>에서 검토할 기사를 선택하세요.
 과제별로 목표 활동 시간이 있으면 배정 전에 초 단위로 입력하세요. 참여 순서대로 익명 코드를 입력해 배정표를 만들고 배부 전에 JSON을 보관하세요.
-각 행의 ‘코드 복사’를 누르고, 아래에서 배정한 기사와 방식에 맞는 ZIP을 골라 코드와 함께 전달하세요. 같은 기사에 참여하는 두 방식의 ZIP은 이 화면에서 함께 받으세요.
+각 참여자의 행에서 ‘코드 복사’를 누르고 같은 행의 ZIP을 내려받아 함께 전달하세요. 같은 기사에 참여하는 두 방식의 ZIP은 이 화면에서 함께 받으세요.
 <ul><li>예비비 기사 · <a href="참여 과제/예비비/예비비-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/예비비/예비비-저널.zip" download>저널 병행 ZIP</a></li>
 <li>고용 기사 · <a href="참여 과제/고용/고용-평소도구.zip" download>평소 도구 ZIP</a> · <a href="참여 과제/고용/고용-저널.zip" download>저널 병행 ZIP</a></li></ul></li>
 <li>참여자는 압축을 풀어 <code>field-review.html</code>을 열고 본인의 배정 코드를 확인합니다. 익명 코드와 과제 번호를 따로 받았다면 직접 입력합니다.
@@ -156,12 +156,20 @@ def packet_bytes():
             payload = json.dumps(case, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
             page = page.replace('</body>', f'<script id="quote-practice" type="application/json">{payload}</script></body>', 1)
         add_page(files, name, page)
+    catalog = []
     for case, folder in CASE_FOLDERS.items():
         files[f'채점표/{folder}/coordinator-key.json'] = (CASES / case / 'coordinator-key.json').read_bytes()
         files[f'참여 과제/{folder}/blind-tasks.json'] = (CASES / case / 'blind-tasks.json').read_bytes()
+        material = json.loads(files[f'참여 과제/{folder}/blind-tasks.json'])
+        paths = {}
         for method, data in packet_pair(case).items():
             label = '평소도구' if method == 'manual' else '저널'
-            files[f'참여 과제/{folder}/{folder}-{label}.zip'] = data
+            paths[method] = f'참여 과제/{folder}/{folder}-{label}.zip'
+            files[paths[method]] = data
+        catalog.append({'label': folder, 'material': material, 'files': paths})
+    payload = json.dumps(catalog, ensure_ascii=False, separators=(',', ':')).replace('<', r'\u003c')
+    files['field-allocation.html'] = files['field-allocation.html'].replace(b'</body>',
+        f'<script id="allocation-catalog" type="application/json">{payload}</script></body>'.encode(), 1)
     return zip_bytes(files)
 
 

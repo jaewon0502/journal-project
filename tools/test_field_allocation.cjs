@@ -7,11 +7,18 @@ const {JSDOM} = require('jsdom');
 const reader = path.resolve(__dirname, '../docs/reader');
 const fixture = require('../experiments/labour-field-review/blind-tasks.json');
 
-function open(t) {
+function open(t, catalog) {
   const dom = new JSDOM(fs.readFileSync(path.join(reader, 'field-allocation.html'), 'utf8'),
     {url:'https://journal.example/field-allocation.html', runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window, doc = w.document, el = id => doc.getElementById(id);
+  if (catalog) {
+    const script = doc.createElement('script');
+    script.type = 'application/json';
+    script.id = 'allocation-catalog';
+    script.textContent = JSON.stringify(catalog);
+    doc.body.append(script);
+  }
   // This DOM supplies file objects directly; native picker validation runs in the packaged browser check.
   el('allocation-form').noValidate = true;
   w.TextEncoder = TextEncoder;
@@ -69,4 +76,51 @@ test('같은 익명 코드를 두 번 적거나 배정표 대신 과제 파일�
   await p.load('roster-file',fixture);
   assert.match(p.el('status').textContent,/배정표 JSON을 확인/);
   assert.equal(p.el('allocations').rows.length,0);
+});
+
+test('내장 기사로 배정하고 기사·과제·방식이 일치하는 행에서만 참여 ZIP을 받는다', async t => {
+  const budget = require('../experiments/cross-party-review/blind-tasks.json');
+  const catalog = [budget, fixture].map((material,i) => ({
+    material, label: ['예비비','고용'][i], files:{manual:'packet'+i+'-manual.zip', journal:'packet'+i+'-journal.zip'}
+  }));
+  const p = open(t, catalog);
+  assert.equal(p.el('bundled-picker').hidden,false);
+  const choose = i => { p.el('bundled-case').value = i; p.el('bundled-case').onchange(); };
+  choose('0'); assert.equal(p.el('target-inputs').children.length,2);
+  choose('1'); assert.equal(p.el('target-inputs').children.length,3);
+  assert.equal(p.el('case-file').required,false);
+  p.el('allocation-form').noValidate = false;
+  p.el('participant-codes').value = 'A\nB\nC\nD\nE\nF';
+  p.el('allocation-form').requestSubmit();
+  const roster = await p.save();
+  const links = pane => [...pane.el('allocations').rows].map(row=>row.cells[3].querySelector('a'));
+  assert.deepEqual(links(p).map(a=>a.getAttribute('href')),roster.assignments.map(r=>catalog[1].files[r.method]));
+  for (const a of links(p)) assert.ok(a.hasAttribute('download'));
+  const old = structuredClone(roster);
+  old.assignments[0].prompt += ' (이전 과제)';
+  old.assignments[1].articleUrl += '?edition=2';
+  const restored = open(t, catalog);
+  await restored.load('roster-file',old);
+  assert.deepEqual(links(restored).map(a=>a?.getAttribute('href') ?? null),
+    old.assignments.map((r,i)=>i<2 ? null : catalog[1].files[r.method]));
+  const loose = open(t);
+  await loose.load('roster-file',roster);
+  assert.ok(loose.el('bundled-picker').hidden);
+  assert.ok(links(loose).every(a=>!a));
+});
+
+test('과제 파일을 읽는 중 내장 기사를 선택하면 늦게 온 파일이 배정을 바꾸지 않는다', async t => {
+  const budget = require('../experiments/cross-party-review/blind-tasks.json');
+  const p = open(t,[{material:budget,label:'예비비',files:{manual:'m.zip',journal:'j.zip'}}]);
+  const wait = Promise.withResolvers();
+  Object.defineProperty(p.el('case-file'),'files',{value:[{text:()=>wait.promise}],configurable:true});
+  const reading = p.el('case-file').onchange();
+  p.el('bundled-case').value = '0'; p.el('bundled-case').onchange();
+  wait.resolve(JSON.stringify(fixture)); await reading;
+  assert.ok(p.el('case-note').textContent.includes(budget.title));
+  assert.equal(p.el('target-inputs').children.length,2);
+  await p.load('case-file',fixture);
+  assert.equal(p.el('bundled-case').value,'');
+  assert.equal(p.el('case-file').required,true);
+  assert.equal(p.el('target-inputs').children.length,3);
 });

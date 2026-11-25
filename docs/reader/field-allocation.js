@@ -20,34 +20,56 @@
     return block;
   }
 
-  el('case-file').onchange = async () => {
-    if (roster) return;
-    const file = el('case-file').files[0];
-    selectedCase = null;
-    el('generate').disabled = true;
-    el('targets').hidden = true;
+  const catalog = JSON.parse(el('allocation-catalog')?.textContent || '[]');
+  const picker = el('bundled-case'), fileInput = el('case-file');
+  for (const [i, entry] of catalog.entries()) picker.add(new Option(entry.material.title, String(i)));
+  el('bundled-picker').hidden = !catalog.length;
+  el('kit-setup').hidden = catalog.length > 0;
+  if (catalog.length) {
+    fileInput.labels[0].textContent = '또는 다른 참여자용 과제 파일 열기';
+    el('case-note').textContent = '기사를 선택하거나 별도로 보관한 과제 파일을 여세요.';
+  }
+
+  function selectCase(data) {
+    selectedCase = data;
+    el('generate').disabled = !data;
+    el('targets').hidden = !data;
     el('target-inputs').replaceChildren();
     el('status').textContent = '';
-    el('case-note').textContent = '';
+    el('case-note').textContent = data ? data.title + ' · 과제 ' + data.tasks.length + '개' : '';
+    if (!data) return;
+    for (const task of data.tasks) {
+      const label = document.createElement('label'), input = document.createElement('input');
+      label.textContent = task.id + ' · ' + task.prompt;
+      input.inputMode = 'numeric';
+      input.dataset.taskId = task.id;
+      input.setAttribute('aria-describedby', 'target-note');
+      label.append(input);
+      el('target-inputs').append(label);
+    }
+  }
+
+  picker.onchange = () => {
+    if (roster) return;
+    fileInput.value = '';
+    const entry = catalog[picker.value];
+    fileInput.required = !entry;
+    selectCase(entry?.material || null);
+  };
+
+  fileInput.onchange = async () => {
+    if (roster) return;
+    const file = fileInput.files[0];
+    picker.value = '';
+    fileInput.required = true;
+    selectCase(null);
     if (!file) return;
     try {
       const data = core.readCase(JSON.parse(await file.text()));
-      if (roster || el('case-file').files[0] !== file) return;
-      selectedCase = data;
-      el('case-note').textContent = data.title + ' · 과제 ' + data.tasks.length + '개';
-      for (const task of data.tasks) {
-        const label = document.createElement('label'), input = document.createElement('input');
-        label.textContent = task.id + ' · ' + task.prompt;
-        input.inputMode = 'numeric';
-        input.dataset.taskId = task.id;
-        input.setAttribute('aria-describedby', 'target-note');
-        label.append(input);
-        el('target-inputs').append(label);
-      }
-      el('targets').hidden = false;
-      el('generate').disabled = false;
+      if (!roster && picker.value === '' && fileInput.files[0] === file) selectCase(data);
     } catch {
-      if (el('case-file').files[0] === file) el('status').textContent = '참여자용 blind-tasks.json 파일을 확인하세요.';
+      if (!roster && picker.value === '' && fileInput.files[0] === file)
+        el('status').textContent = '참여자용 blind-tasks.json 파일을 확인하세요.';
     }
   };
 
@@ -57,8 +79,21 @@
     for (const row of assignments) {
       const tr = el('allocations').insertRow();
       const kit = row.method === 'manual' ? '평소 도구' : '저널 병행';
-      for (const value of [row.participant, row.caseId, row.taskId, kit + ' · participant-' + row.method + '.zip'])
-        tr.insertCell().textContent = value;
+      for (const value of [row.participant, row.caseId, row.taskId]) tr.insertCell().textContent = value;
+      const kitCell = tr.insertCell();
+      const edition = catalog.find(({material}) => material.caseId === row.caseId && material.articleUrl === row.articleUrl &&
+        material.tasks.some(task => task.id === row.taskId && task.prompt === row.prompt));
+      if (edition) {
+        const link = document.createElement('a');
+        link.href = edition.files[row.method];
+        link.download = '';
+        link.textContent = edition.label + ' · ' + kit + ' ZIP';
+        link.setAttribute('aria-label', row.participant + '에게 전달할 ' + link.textContent);
+        kitCell.append(link);
+      } else {
+        kitCell.textContent = kit + ' · participant-' + row.method + '.zip' +
+          (catalog.length ? ' (이 배포본에 일치하는 과제 없음)' : '');
+      }
       const cell = tr.insertCell();
       const copy = document.createElement('button'), field = document.createElement('input');
       copy.type = 'button';

@@ -61,8 +61,19 @@ class FacilitatorPack(unittest.TestCase):
                 self.assertLessEqual(links.local, files, page)
                 if page in ('article-compare.html', 'revision-series.html'):
                     self.assertTrue({'revision-facts.js', 'revision-facts-view.js'} <= links.local, page)
-            for page in ('editor-study.html', 'field-summary.html', 'field-allocation.html', 'field-review.html'):
+            for page in ('editor-study.html', 'field-summary.html', 'field-review.html'):
                 self.assertEqual(archive.read(page), (READER / page).read_bytes())
+            allocation = archive.read('field-allocation.html').decode()
+            catalog_tag = r'<script id="allocation-catalog" type="application/json">(.*?)</script>'
+            self.assertEqual(re.sub(catalog_tag, '', allocation, flags=re.S), (READER / 'field-allocation.html').read_text())
+            [catalog_text] = re.findall(catalog_tag, allocation, re.S)
+            catalog = json.loads(catalog_text)
+            self.assertEqual(len(catalog), len(CASE_FOLDERS))
+            for entry, (case, label) in zip(catalog, CASE_FOLDERS.items()):
+                self.assertEqual(entry['label'], label)
+                self.assertEqual(entry['material'], json.loads((CASES / case / 'blind-tasks.json').read_bytes()))
+                for method, contents in packet_pair(case).items():
+                    self.assertEqual(archive.read(entry['files'][method]), contents)
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
