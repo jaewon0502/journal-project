@@ -256,6 +256,44 @@ async function importFiles(p, texts) {
 }
 const issuedCodes = p => [...p.el('invites').querySelectorAll('tbody tr')].map(tr => tr.cells[1].textContent);
 
+test('여러 파일을 접수하다 실패하면 선택 순서와 복구 방법을 표시하고 기존 명부와 회신을 보존한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  const before = p.workspace(), invite = before.invitations[0];
+  const participant = completedRecord(invite.ordinal, invite.id);
+  const backup = JSON.stringify({type:'journal-editor-study-collection-v1', records:[], invitations:before.invitations});
+  const cases = [
+    ['{"incomplete":"private-report-content",private-report-content}', /JSON을 읽을 수 없습니다/],
+    [JSON.stringify({format:'journal-editor-study-resume',version:1}), /이어하기 파일/],
+    [JSON.stringify({type:'journal-editor-study-summary-v1',kind:'editor'}), /공유용 실측 요약/],
+    [JSON.stringify({kind:'demo'}), /실제 편집자용 참여 기록/],
+    [JSON.stringify({type:'journal-editor-study-collection-v1',records:[{}]}), /진행자 백업의 참여 기록/],
+  ];
+  for (const [raw, expected] of cases) {
+    await importFiles(p, [JSON.stringify(participant), raw, backup]);
+    const message = p.el('import-status').textContent;
+    assert.match(message, /선택한 2번째 파일/);
+    assert.match(message, expected);
+    assert.match(message, /내 참여 기록 내려받기/);
+    assert.doesNotMatch(message, /study-1\.json|private-report-content/);
+    assert.deepEqual(p.workspace(), before);
+  }
+  const conflicting = structuredClone(participant);
+  conflicting.trials[0].reason = '같은 회차에 남은 다른 판단 사유';
+  await importFiles(p, [JSON.stringify(participant), backup, JSON.stringify(conflicting)]);
+  assert.match(p.el('import-status').textContent, /선택한 3번째 파일/);
+  assert.doesNotMatch(p.el('import-status').textContent, /다른 판단 사유/);
+  assert.deepEqual(p.workspace(), before);
+
+  for (const files of [[JSON.stringify(participant), backup], [backup, JSON.stringify(participant)]]) {
+    const fresh = page(t);
+    await importFiles(fresh, files);
+    assert.match(fresh.el('import-status').textContent, /현재 등록 1명/);
+    assert.equal(fresh.workspace().invitations.length, 4);
+    assert.equal(fresh.workspace().records[0].trials.length, 4);
+  }
+});
+
 test('진행자는 같은 행의 배정 코드와 ZIP을 복사하고 복사가 제한되면 코드 전체를 선택한다', async t => {
   const current = 'cd'.repeat(32), previous = 'ab'.repeat(32);
   const p = page(t, '', undefined, undefined, false, current);

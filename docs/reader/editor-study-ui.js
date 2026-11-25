@@ -779,16 +779,68 @@
     return merged;
   }
   // coordinator-only:begin
-  function importRosters(groups) {
-    const pending = groups.map(group => mergeInvitations([], group)).filter(group => group.length);
+  function importError(number, detail) {
+    return new Error('선택한 ' + number + '번째 파일 · ' + detail);
+  }
+  async function readImport(file, number) {
+    const help = '참여자에게 ‘내 참여 기록 내려받기’로 저장한 JSON을 요청하세요.';
+    let raw, data;
+    try { raw = await file.text(); }
+    catch { throw importError(number, '파일을 읽을 수 없습니다. 원래 파일을 다시 선택하세요.'); }
+    try { data = JSON.parse(raw); }
+    catch { throw importError(number, 'JSON을 읽을 수 없습니다. ' + help + ' 진행자 백업이라면 ‘모은 기록 내려받기’로 저장한 파일을 선택하세요.'); }
+    if (data?.format === 'journal-editor-study-resume')
+      throw importError(number, '참여 기기에서 여는 이어하기 파일입니다. ' + help);
+    if (data?.type === 'journal-editor-study-summary-v1')
+      throw importError(number, '공유용 실측 요약입니다. 진행자 백업을 복원하려면 ‘모은 기록 내려받기’ 파일을 선택하세요. ' + help);
+    const backup = data?.type === collectionType, entries = backup ? data.records : [data];
+    if (!Array.isArray(entries) || entries.some(r => r?.kind !== 'editor' || r.protocol !== core.protocol))
+      throw importError(number, (backup ? '진행자 백업의 참여 기록 형식을 확인하세요. ' : '실제 편집자용 참여 기록 형식을 확인하세요. ') + help);
+    return {number, backup, entries, invitations:backup ? data.invitations : undefined};
+  }
+  function importRosters(batch) {
+    const pending = [];
+    for (const file of batch) {
+      if (file.invitations === undefined) continue;
+      try {
+        const group = mergeInvitations([], file.invitations);
+        checkRosterConflicts(records, group);
+        if (group.length) pending.push({number:file.number, group});
+      } catch (err) { throw importError(file.number, err.message); }
+    }
     let roster = invitations;
-    if (!roster.length && pending.length) roster = pending.shift();
+    if (!roster.length && pending.length) roster = pending.shift().group;
     while (pending.length) {
-      const index = pending.findIndex(group => group.some(inv => onRoster(roster, inv.ordinal, inv.id)));
-      if (index < 0) throw new Error('가져온 명부와 기존 명부에 일치하는 배정이 없습니다. 같은 연구의 원래 백업을 확인하세요. 다른 연구의 백업은 별도 브라우저 프로필에서 열 수 있습니다.');
-      roster = mergeInvitations(roster, pending.splice(index, 1)[0]);
+      const index = pending.findIndex(file => file.group.some(inv => onRoster(roster, inv.ordinal, inv.id)));
+      if (index < 0) throw importError(pending[0].number, '가져온 명부와 기존 명부에 일치하는 배정이 없습니다. 같은 연구의 원래 백업을 확인하세요. 다른 연구의 백업은 별도 브라우저 프로필에서 열 수 있습니다.');
+      const file = pending.splice(index, 1)[0];
+      try { roster = mergeInvitations(roster, file.group); }
+      catch (err) { throw importError(file.number, err.message); }
     }
     return roster;
+  }
+  function importRecords(batch, roster) {
+    function mergeThrough(count) {
+      const result = core.mergeRecords(records, batch.slice(0, count).flatMap(file => file.entries));
+      checkRosterConflicts(result, roster);
+      return result;
+    }
+    let updated;
+    try { updated = mergeThrough(batch.length); }
+    catch (err) {
+      // Find the first invalid prefix using the same merge rules as the successful path.
+      let first = 1, last = batch.length, cause = err;
+      while (first < last) {
+        const middle = Math.floor((first + last) / 2);
+        try { mergeThrough(middle); first = middle + 1; }
+        catch (problem) { last = middle; cause = problem; }
+      }
+      throw importError(first, cause.message);
+    }
+    for (const file of batch)
+      if (!file.backup && file.entries.some(r => !onRoster(roster, r.ordinal, r.participantId)))
+        throw importError(file.number, '이 진행자의 명부에 없는 개인 기록입니다. 원래 명부도 함께 선택하거나 별도로 보관한 배정 코드를 확인하세요.');
+    return updated;
   }
   function issueCodes() {
     if (assignedMeta && !assignedKit) {
@@ -1148,23 +1200,9 @@
       const files = [...event.target.files]; event.target.value = '';
       if (!files.length) return;
       try {
-        const incoming = [], rosterGroups = [], individuals = [];
-        for (const file of files) {
-          const parsed = JSON.parse(await file.text());
-          const data = parsed?.type === collectionType ? parsed.records : [parsed];
-          if (!Array.isArray(data) || data.some(r => !r || r.kind !== 'editor')) throw new Error('실제 편집자용 참여 기록을 선택하세요.');
-          incoming.push(...data);
-          if (parsed?.type !== collectionType) individuals.push(...data);
-          if (parsed?.type === collectionType && parsed.invitations !== undefined) {
-            if (!Array.isArray(parsed.invitations)) throw new Error('초대 코드 명부 형식을 확인하세요.');
-            rosterGroups.push(parsed.invitations);
-          }
-        }
-        const updated = core.mergeRecords(records, incoming);
-        const roster = importRosters(rosterGroups);
-        checkRosterConflicts(updated, roster);
-        if (individuals.some(r => !onRoster(roster, r.ordinal, r.participantId)))
-          throw new Error('이 진행자의 명부에 없는 개인 기록입니다. 원래 명부를 먼저 가져오거나 별도로 보관한 배정 코드를 확인하세요.');
+        const batch = [];
+        for (const [i, file] of files.entries()) batch.push(await readImport(file, i + 1));
+        const roster = importRosters(batch), updated = importRecords(batch, roster);
         records = updated; invitations = roster; persist(); showDashboard();
         const matched = records.filter(r => onRoster(roster, r.ordinal, r.participantId)).length;
         message('import-status', files.length + '개 파일을 확인했습니다. 현재 등록 ' + matched + '명입니다.' +
