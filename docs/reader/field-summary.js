@@ -487,20 +487,32 @@
   }
   function assignmentYieldCard(task) {
     const card = yieldCardHeader(task, task.caseId + ' · ' + task.taskId);
+    const criteria = node('div', '');
+    criteria.className = 'pair';
+    criteria.append(assignmentYieldPanel(task, false), assignmentYieldPanel(task, true));
+    card.append(criteria);
+    return card;
+  }
+  function assignmentYieldPanel(task, includeReason) {
+    const panel = node('section', '');
+    panel.className = includeReason ? 'assignment-with-reason' : 'assignment-basic';
+    panel.append(node('h5', includeReason ? '근거 위치·판정·판단 이유 일치' : '근거 위치·판정 일치'));
     for (const method of ['manual', 'journal']) {
       const arm = task[method];
       if (!arm) {
-        card.append(node('p', labels[method] + ' · 배정 0건'));
+        panel.append(node('p', labels[method] + ' · 배정 0건'));
         continue;
       }
-      const { verified, failed, withdrawn, unknown } = arm.yieldBounds;
+      const { verified, withdrawn, unknown } = includeReason ? arm.reasonYieldBounds : arm.yieldBounds;
       const range = yieldRange(verified, unknown, arm.assigned);
-      card.append(node('p', labels[method] + ' · 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
-        node('p', '성공 ' + verified + '건 · 위치 또는 판정 불일치 ' + failed + '건 · 중도 종료 ' + withdrawn +
+      panel.append(node('p', labels[method] + ' · 검증 성공률 ' + range + ' (배정 ' + arm.assigned + '건)'),
+        node('p', '성공 ' + verified + '건 · 위치 또는 판정 불일치 ' + arm.yieldBounds.failed + '건' +
+          (includeReason ? ' · 판단 이유 불일치 ' + arm.reasonYieldBounds.failedReason + '건' : '') + ' · 중도 종료 ' + withdrawn +
           '건 · 결과 미확인 ' + unknown + '건'));
     }
-    appendYieldDifference(card, task.difference, '같은 과제를 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
-    return card;
+    appendYieldDifference(panel, includeReason ? task.reasonDifference : task.difference,
+      '같은 과제를 두 방식 모두에 배정하면 성공률 차이를 계산할 수 있습니다.');
+    return panel;
   }
   function appendYieldDifference(card, difference, unavailable) {
     if (!difference) {

@@ -523,6 +523,13 @@
       // cannot establish whether the editor produced a correct assigned answer.
       arm.yieldBounds = {verified, failed:known - verified, withdrawn:arm.withdrawn,
         unknown:arm.assigned - known - arm.withdrawn};
+      const strictVerified = arm.outcomes?.verifiedWithReason ?? 0;
+      const strictKnown = arm.outcomes?.reasonOutcomeKnown ?? 0;
+      // A location/verdict failure already rules out success under both criteria.
+      const failedQuality = arm.yieldBounds.failed;
+      arm.reasonYieldBounds = {verified:strictVerified, failedQuality,
+        failedReason:strictKnown - strictVerified - failedQuality, withdrawn:arm.withdrawn,
+        unknown:arm.assigned - strictKnown - arm.withdrawn};
       const key = JSON.stringify([caseId, articleUrl, taskId, prompt]);
       if (!byTask.has(key)) byTask.set(key, {caseId, articleUrl, taskId, prompt, difference:null});
       byTask.get(key)[arm.method] = arm;
@@ -530,6 +537,7 @@
     for (const comparison of byTask.values()) {
       const {manual, journal} = comparison;
       comparison.difference = yieldDifference(manual, journal, manual?.yieldBounds, journal?.yieldBounds);
+      comparison.reasonDifference = yieldDifference(manual, journal, manual?.reasonYieldBounds, journal?.reasonYieldBounds);
     }
     for (const comparison of deadlines.values()) {
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);

@@ -449,9 +449,11 @@
   }
 
   function timedQualityStats(records) {
-    if (!records.length) return null;
+    if (!records.length) return {timedQuality:null, caseVerification:null};
     const arms = Object.fromEntries(methods.map(method => [method,
       {total:0, correct:0, citationCorrect:0, verified:0, unsafe:0, unsafeTotal:0, elapsedMs:0, secondsPerVerified:null, adoptions:emptyAdoptions()}]));
+    const byCase = new Map(cases.ids.map(id => [id, Object.fromEntries(methods.map(method =>
+      [method, {ms:0n, tasks:0, verified:0}]))]));
     const faster = {total:0, fewerVerified:0, sameVerified:0, moreVerified:0};
     const fasterJournalSuccessCounts = [0, 0, 0];
     const totalMs = {manual:0n, journal:0n}, verifiedMs = {manual:0n, journal:0n};
@@ -461,6 +463,10 @@
         const method = trial.method, arm = arms[method], grade = gradeTrial(trial);
         arm.total++;
         const duration = BigInt(trial.elapsedMs);
+        const caseArm = byCase.get(trial.caseId)[method];
+        caseArm.ms += duration;
+        caseArm.tasks++;
+        if (grade.verified) caseArm.verified++;
         elapsedMs[method] += duration;
         if (grade.correct) arm.correct++;
         if (grade.sourceCorrect) arm.citationCorrect++;
@@ -498,7 +504,16 @@
       perVerified.savedSeconds = Number(difference) / (1000 * manual.verified * journal.verified);
       perVerified.reductionPct = 100 * perVerified.savedSeconds / manual.secondsPerVerified;
     }
-    return {manual, journal, perVerified, faster, fasterJournalSuccessCounts};
+    // In a complete block, each case has two tasks per method, one for each party label.
+    const sample = arm => ({tasks:arm.tasks, verified:arm.verified, meanSeconds:Number(arm.ms) / 1000 / arm.tasks});
+    const rows = Array.from(byCase, ([caseId, {manual, journal}]) => {
+      const faster = journal.ms < manual.ms;
+      return {caseId, manual:sample(manual), journal:sample(journal), faster,
+        fasterWithFewerVerified:faster && journal.verified < manual.verified};
+    });
+    return {timedQuality:{manual, journal, perVerified, faster, fasterJournalSuccessCounts},
+      caseVerification:{comparedCases:rows.length, fasterCases:rows.filter(row => row.faster).length,
+        fasterWithFewerVerified:rows.filter(row => row.fasterWithFewerVerified).length, cases:rows}};
   }
 
   function verdictStats(records) {
@@ -631,7 +646,7 @@
     };
     counts.missingAnswerBounds = missingAnswerBounds(records, blocks);
     counts.phases = phaseStats(timedSample);
-    counts.timedQuality = timedQualityStats(timedSample);
+    Object.assign(counts, timedQualityStats(timedSample));
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
     return {...counts, time: timedSample.length ? timeStats(timedSample) : null, ...verdictStats(sample)};
   }
@@ -796,6 +811,22 @@
         : record);
   }
 
+  function caseVerificationDemoRecords() {
+    return Array.from({length:slots}, (_, i) => {
+      let record = createRecord('demo-case-verification-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const gold = cases.get(task.caseId, task.variant), journal = task.method === 'journal';
+        const faster = journal && task.caseId === 'filing';
+        let sourceIds = gold.expectedSourceIds;
+        if (faster) sourceIds = ['doc-2']; // Preliminary receipt, before the final filing.
+        if (!journal && task.caseId === 'transit') sourceIds = ['doc-1']; // Committee vote, before the floor vote.
+        record = addTrial(record, {elapsedMs:faster ? 5000 : 60000, verdict:gold.expectedVerdict,
+          sourceIds, journalUsed:journal, reason:'기사에 따라 대표 근거 선택이 달라진 모의 답안입니다.'});
+      }
+      return record;
+    });
+  }
+
   function cueReversalDemoRecords() {
     return Array.from({length:slots}, (_, i) => {
       let record = createRecord('demo-reversal-' + (i + 1), i + 1, 'demo', false);
@@ -863,5 +894,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, unfinishedBlockDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, unfinishedBlockDemoRecords, caseVerificationDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

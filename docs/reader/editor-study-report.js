@@ -1,9 +1,9 @@
 // Coordinator export. Write only the named aggregate fields to a script-free HTML file.
 (function (root, make) {
   'use strict';
-  if (typeof module === 'object' && module.exports) module.exports = make();
-  else root.JournalStudyReport = make();
-})(globalThis, function () {
+  if (typeof module === 'object' && module.exports) module.exports = make(require('./editor-study-cases.js'));
+  else root.JournalStudyReport = make(root.JournalStudyCases);
+})(globalThis, function (cases) {
   'use strict';
   const decimal = new Intl.NumberFormat('ko-KR', {maximumFractionDigits:2});
   const available = Number.isFinite;
@@ -30,7 +30,30 @@
   function row(label, a, b) {
     return '<tr><th scope="row">' + label + '</th><td>' + a + '</td><td>' + b + '</td></tr>';
   }
-  function metrics(data) {
+  function caseVerification(data, demo) {
+    const title = '<h3>기사별 검토 시간과 검증 성공</h3>';
+    if (data === undefined) return title + '<p>이 집계에는 기사별 시간과 검증 성공 건수가 기록되지 않았습니다.</p>';
+    if (!data?.comparedCases) return title + '<p>네 사람의 검토 시간이 모두 기록된 균형 묶음이 있어야 기사를 비교할 수 있습니다.</p>';
+    const lead = '비교한 기사 ' + measure(data.comparedCases,'개') + ' 중 저널 사용 시 평균 검토 시간이 짧아진 기사는 ' +
+      measure(data.fasterCases,'개') + '입니다.' + (data.fasterCases
+        ? ' 그중 판정과 대표 근거를 함께 맞힌 응답도 줄어든 기사는 <strong>' + ratio(data.fasterWithFewerVerified,data.fasterCases) + '개</strong>입니다.' : '');
+    if (!demo || !Array.isArray(data.cases)) return title + '<p>' + lead + '</p>';
+    function cell(arm) {
+      return measure(arm.meanSeconds,'초') + '<br><small>성공 ' + ratio(arm.verified,arm.tasks) + '건</small>';
+    }
+    const rows = [];
+    for (const id of cases.ids) {
+      const item = data.cases.find(entry => entry.caseId === id);
+      if (!item) continue;
+      // Titles come from the published study cases. No free text from a submission enters the export.
+      const label = cases.get(id,'A').title + (item.fasterWithFewerVerified === true ? '<br><small>시간 단축 · 성공 감소</small>' : '');
+      rows.push(row(label,cell(item.manual),cell(item.journal)));
+    }
+    return title + '<p>' + lead + '</p><table><thead><tr><th scope="col">기사</th><th scope="col">원자료만</th>' +
+      '<th scope="col">저널 병행</th></tr></thead><tbody>' + rows.join('') + '</tbody></table>' +
+      '<p class="small">각 기사에서 두 방식에 배정된 편집자는 서로 다릅니다. 표에는 같은 시간 표본의 평균과 성공 건수를 표시합니다.</p>';
+  }
+  function metrics(data, demo) {
     const time = data.time, gap = data.partyLabelAcceptanceGap, quality = data.verdictAndEvidence;
     const unsafe = data.unsupportedAcceptance;
     const joint = data.partyLabelGapAndQuality;
@@ -81,14 +104,14 @@
         ', 방향 미확인 ' + measure(directions.unknown,'명') + '입니다. 이 개인별 비교에는 기사와 정당 표기가 균등하게 배정되지 않을 수 있습니다.</p>';
     }
     return counts + headline + '<h3>격차가 줄어든 기사의 판정은 어떻게 달라졌나</h3><p>' + jointText +
-      '</p><h3>방식별 시간과 판정</h3>' + summary + outside;
+      '</p><h3>방식별 시간과 판정</h3>' + summary + caseVerification(time.caseVerification, demo) + outside;
   }
-  function editionSection(title, editions) {
+  function editionSection(title, editions, demo) {
     if (!Array.isArray(editions) || !editions.length) return '';
     return '<section><h2>' + title + '</h2>' + editions.map((entry,index) => {
       const stamp = typeof entry.kitVersion === 'string' && /^[a-f0-9]{64}$/.test(entry.kitVersion) ? entry.kitVersion : '';
       return '<details><summary>판본 ' + (index+1) + (stamp ? ' · <code>' + stamp.slice(0,12) + '</code>' : '') +
-        '</summary>' + (stamp ? '<p class="small">배포본 식별값 <code>' + stamp + '</code></p>' : '') + metrics(entry) + '</details>';
+        '</summary>' + (stamp ? '<p class="small">배포본 식별값 <code>' + stamp + '</code></p>' : '') + metrics(entry, demo) + '</details>';
     }).join('') + '</section>';
   }
   function html(summary) {
@@ -105,9 +128,9 @@
       'table{border-collapse:collapse;table-layout:fixed;width:100%;font-variant-numeric:tabular-nums}th,td{text-align:left;border-bottom:1px solid #d2dbd2;padding:.5rem .35rem;overflow-wrap:anywhere}' +
       'th:first-child{width:48%}thead{background:#e6ede6}summary{cursor:pointer;font-weight:650}details{margin:.7rem 0}code{overflow-wrap:anywhere}.small{font-size:.9rem}' +
       '@media print{body{background:white}main{padding:0}section{break-inside:avoid}}</style></head><body><main><h1>' + title + '</h1><p>' + lead +
-      ' 정당 표기는 기사에 붙인 실험 조건입니다.</p><section><h2>전체 결과</h2>' + metrics(summary.overall) + '</section>' +
-      editionSection('같은 판본으로 완료한 묶음',summary.observedEditions) +
-      editionSection('사전에 배정한 판본으로 완료한 묶음',summary.assignedMatchedEditions) +
+      ' 정당 표기는 기사에 붙인 실험 조건입니다.</p><section><h2>전체 결과</h2>' + metrics(summary.overall, demo) + '</section>' +
+      editionSection('같은 판본으로 완료한 묶음',summary.observedEditions, demo) +
+      editionSection('사전에 배정한 판본으로 완료한 묶음',summary.assignedMatchedEditions, demo) +
       '<p class="small">시간은 전체 시간을 기록한 묶음으로 계산합니다. 검증 성공은 판정과 대표 근거가 함께 맞은 과제입니다. ' +
       '정당 표기 격차는 동일 기사에서 두 표기의 사실 채택률 차이를 절댓값으로 구한 뒤 네 기사를 평균한 값입니다.</p></main></body></html>';
   }

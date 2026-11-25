@@ -86,6 +86,7 @@ test('요약과 대시보드의 시간·집단 격차·완주 및 정확도 분�
   assert.deepEqual(overall.unsupportedAcceptance, {manual:safe,journal:safe,changePp:0,increased:false});
   assert.deepEqual(overall.time, {editors:4,tasks:16,manualMeanSeconds:60,journalMeanSeconds:30,reductionPct:50,
     manualSecondsPerVerified:60,journalSecondsPerVerified:null,
+    caseVerification:{comparedCases:4,fasterCases:4,fasterWithFewerVerified:4},
     verifiedTrials:{manual:{verified:8,tasks:8},journal:{verified:0,tasks:8}},unsupportedAcceptance:overall.unsupportedAcceptance});
   assert.deepEqual(Array.from(p.el('metrics').querySelectorAll('.value'), el => el.textContent),
     [overall.time.reductionPct + '%', overall.partyLabelAcceptanceGap.reductionPp + '%p']);

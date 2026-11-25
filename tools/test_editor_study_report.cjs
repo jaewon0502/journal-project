@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {JSDOM} = require('jsdom');
 const report = require('../docs/reader/editor-study-report.js');
+const study = require('../docs/reader/editor-study-core.js');
 
 function studySummary() {
   return {
@@ -68,4 +69,31 @@ test('성공당 시간에는 그 시간 표본의 성공 건수를 사용한다'
     assert.equal(timed.cells[1].textContent,'미산출성공 0/8건');
     assert.equal(all.cells[1].textContent,'8/16 (50%)');
   } finally {dom.window.close();}
+});
+
+test('기사별 결과표는 전체 성공률이 같아도 시간이 줄면서 검증에 실패한 기사를 표시한다', () => {
+  const overall = studySummary();
+  overall.time.caseVerification = study.analyze(study.caseVerificationDemoRecords(), 'demo').caseVerification;
+  const cases = overall.time.caseVerification.cases;
+  cases.push({...cases[0], caseId:'PRIVATE-ARTICLE-IDENTIFIER'});
+  cases[0].title = 'PRIVATE-EDITOR-TITLE';
+  const html = report.html({kind:'demo',overall});
+  const dom = new JSDOM(html);
+  try {
+    const doc = dom.window.document;
+    const table = [...doc.querySelectorAll('table')].find(t => t.querySelector('th').textContent === '기사');
+    const rows = [...table.tBodies[0].rows];
+    assert.equal(rows.length,4);
+    assert.match(doc.body.textContent,/시간이 짧아진 기사는 1개.+응답도 줄어든 기사는 1\/1개/);
+    const filing = rows.find(r => r.cells[0].textContent.startsWith('사업비 자료 제출'));
+    assert.deepEqual([...filing.cells].map(cell=>cell.textContent),['사업비 자료 제출시간 단축 · 성공 감소','60초성공 2/2건','5초성공 0/2건']);
+    assert.doesNotMatch(html,/PRIVATE-/);
+    const shared = report.html({kind:'editor',overall});
+    assert.match(shared,/응답도 줄어든 기사는 <strong>1\/1개/);
+    assert.doesNotMatch(shared,/사업비 자료 제출|PRIVATE-/);
+    overall.time.caseVerification = null;
+    assert.match(report.html({kind:'editor',overall}),/검토 시간이 모두 기록된 균형 묶음이 있어야 기사를 비교/);
+    delete overall.time.caseVerification;
+    assert.match(report.html({kind:'editor',overall}),/기사별 시간과 검증 성공 건수가 기록되지 않았습니다/);
+  } finally { dom.window.close(); }
 });

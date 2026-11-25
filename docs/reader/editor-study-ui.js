@@ -426,6 +426,23 @@
     }
     return warnings;
   }
+  function caseVerificationPanel(summary) {
+    if (!summary) return node('p', '기사별 시간과 검증 성공을 비교하려면 네 명 모두 전체 시간을 기록한 묶음이 필요합니다.', 'subtle');
+    const panel = node('div');
+    const losses = summary.cases.filter(row => row.fasterWithFewerVerified);
+    const title = row => cases.get(row.caseId, 'A').title;
+    const lossText = losses.length ? ' (' + losses.map(title).join(', ') + ')' : '';
+    const counts = '기사 ' + summary.comparedCases + '개 중 평균 검토 시간이 줄어든 기사는 ' + summary.fasterCases + '개입니다.';
+    panel.append(node('p', counts + (summary.fasterCases
+      ? ' 그중 판정과 대표 근거가 모두 맞은 과제도 줄어든 기사는 ' + summary.fasterWithFewerVerified + '개' + lossText + '입니다.' : '')));
+    const details = node('details'), grid = node('div', undefined, 'scroll');
+    details.append(node('summary', '기사별 평균 시간과 검증 성공 건수'), grid);
+    const cell = arm => arm.meanSeconds.toLocaleString('ko-KR', {maximumFractionDigits:3}) + '초 · 성공 ' + arm.verified + '/' + arm.tasks + '건';
+    table(grid, ['기사', '원자료', '저널'], summary.cases.map(row => [title(row), cell(row.manual), cell(row.journal)]));
+    details.append(node('p', '한 기사 안에서 서로 다른 편집자의 두 방식 결과를 비교합니다. 시간 단축 여부는 반올림 전 기록으로 판단합니다.', 'subtle'));
+    panel.append(details);
+    return panel;
+  }
   function showTimedQuality(a) {
     const q = a.timedQuality;
     el('timed-quality-sample').textContent = '판정 비교에 포함된 ' + a.included + '명 중 시간까지 기록된 4인 묶음의 ' +
@@ -476,6 +493,7 @@
     el('timed-quality-change').textContent = change;
     el('timed-quality-editors').hidden = !q;
     el('timed-quality-editors').textContent = editors;
+    el('case-verification').replaceChildren(caseVerificationPanel(a.caseVerification));
     if (q) el('timed-quality-table').append(node('p', '¹ 기준 판정이 반박·근거 불충분·의견인 과제 중 ‘근거로 지지됨’을 고른 비율입니다.', 'subtle'));
   }
   function showEditions(records, kind) {
@@ -530,6 +548,7 @@
         details.append(node('summary', '자료 식별값 전체 보기'), node('p', kitVersion));
         section.append(details);
       }
+      section.append(caseVerificationPanel(analysis.caseVerification));
       container.append(section);
     }
   }
@@ -623,6 +642,12 @@
       return {manual:counts(group?.manual), journal:counts(group?.journal)};
     }
     const joint = a.bias?.gapAndQuality;
+    const caseTime = a.caseVerification;
+    const sharedCaseTime = caseTime && {
+      comparedCases:caseTime.comparedCases, fasterCases:caseTime.fasterCases,
+      fasterWithFewerVerified:caseTime.fasterWithFewerVerified
+    };
+    if (sharedCaseTime && a.kind === 'demo') sharedCaseTime.cases = caseTime.cases;
     return {
       editors:{enrolled:a.enrolled, included:a.included, excluded:a.excluded, completeBlocks:a.completeBlocks},
       submittedTasks:a.recordedTrials, includedTasks:a.trialCount,
@@ -631,6 +656,7 @@
         manualSecondsPerVerified:a.timedQuality?.manual.secondsPerVerified ?? null,
         journalSecondsPerVerified:a.timedQuality?.journal.secondsPerVerified ?? null,
         verifiedTrials:{manual:timedVerified('manual'), journal:timedVerified('journal')},
+        caseVerification:sharedCaseTime,
         unsupportedAcceptance:unsupportedAcceptance(a.timedQuality)},
       verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
       unsupportedAcceptance:unsupportedAcceptance(a.quality),
@@ -644,6 +670,7 @@
     };
   }
   const demoLinks = {
+    '#demo-case-verification':{example:'case-verification', heading:'case-verification-title'},
     '#demo-cue-agreement':{example:'agreement', heading:'cue-gap-quality-summary'},
     '#demo-cue-reversals':{example:'cue-reversals', heading:'cue-direction-summary'},
     '#demo-adoptions':{example:'adoptions', heading:'fact-adoptions-title'},
@@ -656,7 +683,7 @@
     if (demo) {
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
         agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords,
-        'unfinished-blocks':core.unfinishedBlockDemoRecords, 'cue-reversals':core.cueReversalDemoRecords};
+        'unfinished-blocks':core.unfinishedBlockDemoRecords, 'cue-reversals':core.cueReversalDemoRecords, 'case-verification':core.caseVerificationDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
