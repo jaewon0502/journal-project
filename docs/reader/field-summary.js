@@ -628,10 +628,44 @@
       editions.append(card);
     }
   }
-  function showEditorCrossover(data) {
+  function fasterAnswerPair(pair, number) {
+    const details = node('details', '');
+    details.className = 'faster-answer-pair';
+    const direction = pair.category === 'manualOnly' ? '평소 도구에서만 성공' : '저널에서만 성공';
+    details.append(node('summary', direction + ' · 사례 ' + number + ' 두 답안 대조'));
+    details.addEventListener('toggle', () => {
+      if (!details.open || details.children.length > 1) return;
+      for (const id of [pair.manualId, pair.journalId]) {
+        const entry = records.get(id);
+        const {trial, basis} = entry;
+        const elapsed = ['search', 'locate', 'decide'].reduce((sum, phase) => sum + BigInt(trial.phaseMs[phase]), 0n);
+        const section = node('section', '');
+        const gradeText = value => value === 'yes' ? '일치' : value === 'no' ? '불일치' : '미채점';
+        section.append(node('h4', labels[trial.method] + ' · ' + seconds(Number(elapsed), 1)), node('p', trial.prompt),
+          node('p', '채점 · 근거 위치 ' + gradeText(trial.found === 'missing' ? 'no' : entry.locationGrade) +
+            ' · 판정 ' + gradeText(entry.verdictGrade) + ' · 판단 이유 ' + gradeText(entry.reasonGrade)),
+          node('p', '제출한 근거 위치 · ' + (trial.locator || '찾지 못함')),
+          node('p', '기준 근거 위치 · ' + basis.reference.document + ' · ' + basis.reference.locator),
+          node('p', '판정 · ' + labels[trial.verdict] + ' / 기준 판정 · ' + labels[basis.verdict]),
+          node('p', '제출한 판단 이유 · ' + (trial.reason || '미기재')),
+          node('p', '기준 설명 · ' + (basis.explanation || '기록 없음')));
+        details.append(section);
+      }
+    });
+    return details;
+  }
+  function showEditorCrossover(data, pairs) {
     const area = el('editor-crossover');
     window.JournalFieldTimeReport.renderEditorCrossover(data, area);
     if (!data.comparedEditors) return;
+    if (pairs.length) {
+      const group = node('details', '');
+      group.id = 'faster-reason-answers';
+      group.append(node('summary', '한쪽에서만 검증에 성공한 빠른 편집자의 답안 ' + pairs.length + '쌍 보기'),
+        node('p', '같은 사람이 서로 다른 두 기사를 검증했습니다. 제출한 판단 이유와 각 과제의 기준 설명을 대조하세요.'));
+      pairs.forEach((pair, i) => group.append(fasterAnswerPair(pair, i + 1)));
+      area.append(group);
+    }
     const save = node('button', '같은 편집자의 시간 비교표 HTML 저장');
     save.type = 'button';
     save.onclick = () => {
@@ -641,7 +675,7 @@
     area.append(save);
   }
 
-  function showAllocations(report) {
+  function showAllocations(report, fasterPairs) {
     el('allocation-counts').textContent = assignmentCounts(report.all) +
       '. 명부 밖 코드의 현업 기록 ' + report.outsideRoster + '건 · 등록한 기사를 찾을 수 없는 현업 기록 ' +
       report.unlinked + '건.';
@@ -663,7 +697,7 @@
       yieldTargets.set(trialTarget(comparison), card.id);
       el('allocation-yield').append(card);
     }
-    showEditorCrossover(report.editorCrossover);
+    showEditorCrossover(report.editorCrossover, fasterPairs);
     showDeadlineComparisons(report);
     showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
@@ -735,7 +769,13 @@
       return;
     }
     const groups = c.group(eligible.map(applied));
-    if (hasAssignments) showAllocations(c.allocationReport(assignments, rows.map(applied), dupe));
+    if (hasAssignments) {
+      const pairs = [];
+      const report = c.allocationReport(assignments, rows.map(applied), dupe, pair => {
+        if (pair.category === 'manualOnly' || pair.category === 'journalOnly') pairs.push(pair);
+      });
+      showAllocations(report, pairs);
+    }
     showComparisons(groups, el('comparisons'));
     if (!groups.length) el('groups').append(node('p', '집계할 참여 기록이 없습니다.'));
     for (const g of groups) {

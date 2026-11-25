@@ -38,6 +38,19 @@ window.JournalFieldTimeReport = (() => {
       if (unsafe.eligible) area.append(node('p', '빨라진 사람 중 두 과제의 기준 판정이 모두 반박이거나 모두 근거 부족인 ' + unsafe.eligible +
         '명에서, 평소 도구에서는 사실로 채택하지 않았으나 저널에서는 채택한 편집자 ' + unsafe.more + '명'));
     }
+    const reason = data.fasterReason;
+    if (reason?.total) {
+      area.append(node('h4', '빨라진 편집자가 판단 이유까지 맞혔는지'),
+        node('p', '저널에서 빨라진 ' + reason.total + '명 중 평소 도구에서만 성공 ' + reason.manualOnly +
+          '명 · 저널에서만 성공 ' + reason.journalOnly + '명 · 양쪽 성공 ' + reason.bothPassed +
+          '명 · 양쪽 실패 ' + reason.bothFailed + '명'),
+        node('p', '성공 여부 미확정 ' + reason.pending + '명 · 같은 과제의 기준 설명이 달라 대조 보류 ' + reason.changedStandards +
+          '명. 성공은 근거 위치·판정·판단 이유를 모두 맞힌 경우입니다.'));
+      if (reason.unbalanced) area.append(node('p', '빠른 편집자 중 ' + reason.unbalanced +
+        '명은 어느 기사에 저널을 썼는지에 따라 인원이 달랐던 묶음에 속합니다. 기사 난이도가 결과에 영향을 줄 수 있습니다.'));
+    } else if (data.faster) {
+      area.append(node('p', '빨라진 ' + data.faster + '명의 판단 이유 비교 대기 · 이 자료에는 과제별 판단 이유를 채점할 기준 설명이 없습니다.'));
+    }
     const work = data.successfulWork;
     area.append(node('h4', '두 방식에서 근거 위치·판정·판단 이유가 모두 맞았을 때'),
       node('p', '전체 비교 ' + data.comparedEditors + '명 중 양쪽 모두 성공 ' + work.bothPassed +

@@ -471,8 +471,8 @@
       [...new Set(ref.acceptedDocuments || [])].sort(), [...new Set(ref.acceptedLocators || [])].sort()]);
     const verified = correct && location === 'yes';
     const reason = checkedReasonGrade(trial, basis, slot.completed.reasonGrade);
-    return {ms, verified, expected:basis.verdict, adopted:trial.verdict === 'supported', gradingKey,
-      outcome:verified ? (reason || 'pending') : 'no', explanation:basis.explanation || '',
+    return {id:trial.id, ms, verified, expected:basis.verdict, adopted:trial.verdict === 'supported', gradingKey,
+      outcome:verified ? (reason || 'pending') : 'no', explanation:text(basis.explanation) ? basis.explanation : '',
       phases:trial.split ? trial.phaseMs : null};
   }
 
@@ -484,7 +484,11 @@
 
   // A difference between two successful tasks is interpretable only if the
   // opposite article assignments remain balanced within that subset as well.
-  function successfulWork(cohorts) {
+  function crossoverWork(cohorts, onFasterReasonPair) {
+    const fasterReason = {total:0, manualOnly:0, journalOnly:0, bothPassed:0, bothFailed:0,
+      pending:0, changedStandards:0, unbalanced:0};
+    const outcomes = {yes:{yes:'bothPassed', no:'manualOnly'}, no:{yes:'journalOnly', no:'bothFailed'}};
+    const hasReasonBasis = cohorts.some(pairs => pairs.some(({m, j}) => m.explanation || j.explanation));
     const result = {bothPassed:0, failedPairs:0, pendingPairs:0, changedStandards:0,
       comparedEditors:0, phaseEditors:0, time:null, phaseTimes:null};
     let manual = 0n, journal = 0n;
@@ -502,7 +506,19 @@
         else passed.push(pair);
       }
       result.bothPassed += passed.length;
-      if (explanations.some(values => values.size > 1)) {
+      const changedStandards = explanations.some(values => values.size > 1);
+      const faster = pairs.filter(({m, j}) => j.ms < m.ms);
+      fasterReason.total += faster.length;
+      // Keep the observed counts even when more of the faster editors received one assignment direction.
+      if (!balanced(faster)) fasterReason.unbalanced += faster.length;
+      for (const {m, j} of faster) {
+        if (changedStandards) { fasterReason.changedStandards++; continue; }
+        if (m.outcome === 'pending' || j.outcome === 'pending') { fasterReason.pending++; continue; }
+        const category = outcomes[m.outcome][j.outcome];
+        fasterReason[category]++;
+        if (hasReasonBasis && onFasterReasonPair) onFasterReasonPair({category, manualId:m.id, journalId:j.id});
+      }
+      if (changedStandards) {
         result.changedStandards += passed.length;
         continue;
       }
@@ -520,10 +536,11 @@
     if (result.comparedEditors) result.time = meanTimeDifference(manual, journal, result.comparedEditors);
     if (result.phaseEditors) result.phaseTimes = Object.fromEntries(phases.map(phase => [phase,
       meanTimeDifference(byPhase[phase].manual, byPhase[phase].journal, result.phaseEditors)]));
-    return result;
+    // Older studies supplied no criterion for grading reasons, so keep their report shape.
+    return hasReasonBasis ? {successfulWork:result, fasterReason} : {successfulWork:result};
   }
 
-  function editorCrossover(byParticipant, unexpectedReturns) {
+  function editorCrossover(byParticipant, unexpectedReturns, onFasterReasonPair) {
     const result = {assignedEditors:byParticipant.size, pairedAssignments:0, completeEditors:0, comparedEditors:0,
       faster:0, sameTime:0, slower:0, fasterQuality:{fewer:0, same:0, more:0}, fasterUnsafe:{eligible:0, more:0},
       manualMeanMs:null, journalMeanMs:null, savedMs:null, savedPct:null};
@@ -578,12 +595,11 @@
     if (result.comparedEditors) {
       Object.assign(result, meanTimeDifference(manualMs, journalMs, result.comparedEditors));
     }
-    result.successfulWork = successfulWork(comparedCohorts);
-    return result;
+    return Object.assign(result, crossoverWork(comparedCohorts, onFasterReasonPair));
   }
 
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
-  function allocationReport(assignments, records, repeated) {
+  function allocationReport(assignments, records, repeated, onFasterReasonPair) {
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
     const armKey = a => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
     const byParticipant = new Map(), arms = new Map(), matched = [];
@@ -707,7 +723,7 @@
     for (const comparison of editionDeadlines.values())
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);
     return {all, arms:[...arms.values()], groups, outsideRoster, unlinked,
-      editorCrossover:editorCrossover(byParticipant, new Set(otherArticles)), assignmentComparisons:[...byTask.values()],
+      editorCrossover:editorCrossover(byParticipant, new Set(otherArticles), onFasterReasonPair), assignmentComparisons:[...byTask.values()],
       deadlineAssigned, deadlineComparisons:[...deadlines.values()], unknownPlannedEdition,
       editionDeadlineComparisons:[...editionDeadlines.values()]};
   }

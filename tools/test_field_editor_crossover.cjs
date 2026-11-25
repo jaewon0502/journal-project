@@ -211,6 +211,7 @@ test('교차 집계는 결과를 열었을 때만 인원수를 보여 주고 참
     el('toggle-results').click();
     assert.match(panel.textContent, /교차 배정 비교에 포함된 편집자 4명/);
     assert.match(panel.textContent, /평소 도구 60.0초 · 저널 병행 50.0초 · 10.0초 절감 \(16.7%\)/);
+    assert.match(panel.textContent, /빨라진 2명의 판단 이유 비교 대기/);
     assert.match(panel.textContent, new RegExp('하나 이상이 틀린 편집자 ' + (fastLost ? 2 : 0) + '명'));
     assert.match(panel.textContent, new RegExp('저널에서는 채택한 편집자 ' + (fastLost ? 2 : 0) + '명'));
     assert.ok(!panel.textContent.includes('private-'));
