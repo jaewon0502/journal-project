@@ -11,8 +11,7 @@
     return value[0] % size;
   }
 
-  function shuffledBlock(tasks) {
-    const block = tasks.flatMap(task => ['manual', 'journal'].map(method => ({task, method})));
+  function shuffled(block) {
     for (let i = block.length - 1; i > 0; i--) {
       const j = randomIndex(i + 1);
       [block[i], block[j]] = [block[j], block[i]];
@@ -76,9 +75,69 @@
     }
   };
 
-  function showAssignments(assignments, note, scope) {
+  const crossoverDesign = 'two-article-crossover-v1';
+  const catalogOptions = catalog.map((entry, index) => ({...entry, index})).filter(entry =>
+    core.kitVersion(entry.kitVersion) && entry.material.tasks.length && entry.files?.manual && entry.files?.journal);
+  function distinctArticles(a, b) {
+    return a && b && a.caseId !== b.caseId && core.articleIdentity(a.articleUrl) !== core.articleIdentity(b.articleUrl);
+  }
+  const first = catalogOptions[0], second = catalogOptions.find(option => distinctArticles(first?.material, option.material));
+  if (second) {
+    el('allocation-mode-picker').hidden = false;
+    for (const side of ['a','b']) {
+      const pick = el('cross-case-' + side), tasks = el('cross-task-' + side);
+      for (const entry of catalogOptions) pick.add(new Option(entry.material.title, String(entry.index)));
+      function selectTasks() {
+        tasks.replaceChildren(new Option('과제를 선택하세요', ''));
+        const material = catalog[pick.value]?.material;
+        for (const task of material?.tasks || []) tasks.add(new Option(task.id + ' · ' + task.prompt, task.id));
+        if (material?.tasks.length === 1) tasks.value = material.tasks[0].id;
+        el('cross-target-' + side).value = '';
+      }
+      pick.value = String((side === 'a' ? first : second).index);
+      pick.onchange = selectTasks;
+      tasks.onchange = () => { el('cross-target-' + side).value = ''; };
+      selectTasks();
+    }
+    el('allocation-mode').onchange = () => {
+      if (roster) return;
+      const cross = el('allocation-mode').value === 'crossover';
+      el('allocation-form').hidden = cross;
+      el('crossover-form').hidden = !cross;
+      el('status').textContent = '';
+    };
+  }
+
+  function participantCodes(input) {
+    const codes = input.value.split(/\r?\n/u).map(code => code.trim()).filter(Boolean);
+    if (!codes.length || codes.some(code => code.length > 64) || new Set(codes).size !== codes.length) {
+      el('status').textContent = '참여 화면에 쓸 64자 이내의 익명 코드를 한 명당 하나씩, 중복 없이 입력하세요.';
+      return null;
+    }
+    return codes;
+  }
+
+  function readTarget(input, id) {
+    input.removeAttribute('aria-invalid');
+    const value = input.value.trim();
+    if (!value) return undefined;
+    const seconds = Number(value);
+    if (/^\d+$/u.test(value) && core.validTargetSeconds(seconds)) return seconds;
+    const details = input.closest('details');
+    if (details) details.open = true;
+    input.setAttribute('aria-invalid', 'true');
+    el('status').textContent = id + '의 목표 시간을 확인하세요. 초 단위의 양의 정수로 입력하거나 비워 두세요.';
+    input.focus();
+    return null;
+  }
+
+  function showAssignments(assignments, note, scope, design) {
     roster = {format:core.assignmentFormat, assignments};
     if (scope !== undefined) roster.scope = scope;
+    const crossed = design === crossoverDesign;
+    if (crossed) roster.design = design;
+    el('cross-order-heading').hidden = !crossed;
+    const seenParticipants = new Set();
     for (const row of assignments) {
       const tr = el('allocations').insertRow();
       const kit = row.method === 'manual' ? '평소 도구' : '저널 병행';
@@ -102,19 +161,20 @@
       }
       const cell = tr.insertCell();
       const copy = document.createElement('button'), field = document.createElement('input');
+      const copyLabel = crossed ? row.participant + ' · ' + row.caseId + ' · ' + row.taskId : row.participant;
       copy.type = 'button';
       copy.textContent = '코드 복사';
-      copy.setAttribute('aria-label', row.participant + ' 배정 코드 복사');
+      copy.setAttribute('aria-label', copyLabel + ' 배정 코드 복사');
       field.readOnly = true;
       field.hidden = true;
-      field.setAttribute('aria-label', row.participant + ' 배정 코드');
+      field.setAttribute('aria-label', copyLabel + ' 배정 코드');
       copy.onclick = async () => {
         try {
           field.value = await window.JournalFieldInvite.encode(row);
           field.hidden = false;
           try {
             await navigator.clipboard.writeText(field.value);
-            el('status').textContent = row.participant + '의 배정 코드를 복사했습니다.';
+            el('status').textContent = copyLabel + '의 배정 코드를 복사했습니다.';
           } catch {
             field.select();
             el('status').textContent = '선택한 배정 코드를 복사해 전달하세요.';
@@ -125,8 +185,14 @@
       };
       cell.append(copy, field);
       tr.insertCell().textContent = row.targetSeconds === undefined ? '미설정' : row.targetSeconds + '초';
+      if (crossed) {
+        tr.insertCell().textContent = seenParticipants.has(row.participant) ? '두 번째' : '첫 번째';
+        seenParticipants.add(row.participant);
+      }
     }
-    el('block-count').textContent = note;
+    el('block-count').textContent = note + (crossed ? ' 각 참여자에게 첫 번째 과제부터 순서대로 전달하세요.' : '');
+    el('crossover-form').hidden = true;
+    el('allocation-mode-picker').hidden = true;
     el('allocation-form').hidden = true;
     el('reopen').hidden = true;
     el('allocation').hidden = false;
@@ -139,7 +205,10 @@
       const original = JSON.parse(await file.text());
       const assignments = core.mergeAssignments([], [original]);
       if (roster || el('roster-file').files[0] !== file) return;
-      showAssignments(assignments, '저장된 배정 ' + assignments.length + '건', original.scope);
+      if (original.design === crossoverDesign && !validCrossoverRoster(assignments, original)) {
+        throw Error('교차 배정의 두 기사와 과제, 판본과 권장 순서를 확인하세요.');
+      }
+      showAssignments(assignments, '저장된 배정 ' + assignments.length + '건', original.scope, original.design);
       saved = true;
       filename = file.name;
       el('status').textContent = '저장한 배정표를 열었습니다.';
@@ -153,33 +222,21 @@
 
   el('allocation-form').onsubmit = event => {
     event.preventDefault();
-    if (roster || !selectedCase) return;
-    const codes = el('participant-codes').value.split(/\r?\n/u).map(code => code.trim()).filter(Boolean);
-    if (!codes.length || codes.some(code => code.length > 64) || new Set(codes).size !== codes.length) {
-      el('status').textContent = '참여 화면에 쓸 64자 이내의 익명 코드를 한 명당 하나씩, 중복 없이 입력하세요.';
-      return;
-    }
+    if (roster || !selectedCase || el('allocation-mode').value === 'crossover') return;
+    const codes = participantCodes(el('participant-codes'));
+    if (!codes) return;
     const {caseId, articleUrl, tasks} = selectedCase;
     const targets = new Map();
     for (const input of el('target-inputs').querySelectorAll('input')) {
-      input.removeAttribute('aria-invalid');
-      const value = input.value.trim();
-      if (!value) continue;
-      const seconds = Number(value);
-      if (!/^\d+$/u.test(value) || !core.validTargetSeconds(seconds)) {
-        el('targets').open = true;
-        input.setAttribute('aria-invalid', 'true');
-        el('status').textContent = input.dataset.taskId + '의 목표 시간을 확인하세요. 초 단위의 양의 정수로 입력하거나 비워 두세요.';
-        input.focus();
-        return;
-      }
-      targets.set(input.dataset.taskId, seconds);
+      const seconds = readTarget(input, input.dataset.taskId);
+      if (seconds === null) return;
+      if (seconds !== undefined) targets.set(input.dataset.taskId, seconds);
     }
     const blockSize = tasks.length * 2;
     const assignedKitVersion = core.kitVersion(catalog[picker.value]?.kitVersion);
     let block;
     const assignments = codes.map((participant, index) => {
-      if (index % blockSize === 0) block = shuffledBlock(tasks);
+      if (index % blockSize === 0) block = shuffled(tasks.flatMap(task => ['manual', 'journal'].map(method => ({task, method}))));
       const {task, method} = block[index % blockSize];
       const assignment = {participant, caseId, articleUrl, taskId:task.id, prompt:task.prompt, method};
       if (assignedKitVersion) assignment.assignedKitVersion = assignedKitVersion;
@@ -193,6 +250,71 @@
     filename = 'field-assignments-' + selectedCase.caseId.replace(/[^a-zA-Z0-9_-]/gu, '_') +
       '-' + new Date().toISOString().replace(/[:.]/gu, '-') + '.json';
     el('status').textContent = '배정표를 저장한 뒤 배부하세요. 결과를 집계할 때 이 파일을 다시 불러옵니다.';
+    el('download').focus();
+  };
+
+  function validCrossoverRoster(rows, original) {
+    if (original.scope !== 'single-allocation' || original.assignments.length !== rows.length || !rows.length || rows.length % 4) return false;
+    const people = new Set(), tasks = new Map(), firstMethods = {manual:0, journal:0};
+    // Each consecutive pair encodes the coordinator's recommended order. Neither arm file sees the other assignment.
+    for (let i = 0; i < rows.length; i += 2) {
+      const a = rows[i], b = rows[i+1];
+      if (people.has(a.participant) || a.participant !== b.participant || a.method === b.method || !distinctArticles(a, b)) return false;
+      people.add(a.participant);
+      firstMethods[a.method]++;
+      for (const [index, row] of [a,b].entries()) {
+        if (!core.kitVersion(row.assignedKitVersion)) return false;
+        const key = JSON.stringify([row.caseId, row.articleUrl, row.taskId, row.prompt, row.assignedKitVersion]);
+        if (!tasks.has(key)) tasks.set(key, {manual:0, journal:0, first:0});
+        const task = tasks.get(key);
+        task[row.method]++;
+        if (index === 0) task.first++;
+      }
+    }
+    if (tasks.size !== 2 || firstMethods.manual !== firstMethods.journal) return false;
+    return [...tasks.values()].every(t => t.manual === t.journal && Math.abs(people.size - 2*t.first) === people.size % 4);
+  }
+
+  el('crossover-form').onsubmit = event => {
+    event.preventDefault();
+    if (roster || el('allocation-mode').value !== 'crossover' || !second) return;
+    const articles = ['a','b'].map(side => catalog[el('cross-case-' + side).value]);
+    if (!distinctArticles(articles[0]?.material, articles[1]?.material)) {
+      el('status').textContent = '기사 A와 기사 B에 서로 다른 기사를 선택하세요.';
+      return;
+    }
+    const specs = [];
+    for (const [index, side] of ['a','b'].entries()) {
+      const entry = articles[index], task = entry.material.tasks.find(item => item.id === el('cross-task-' + side).value);
+      if (!task || !core.kitVersion(entry.kitVersion)) { el('status').textContent = '기사별 배포본과 과제를 선택하세요.'; return; }
+      const targetSeconds = readTarget(el('cross-target-' + side), task.id);
+      if (targetSeconds === null) return;
+      const spec = {caseId:entry.material.caseId, articleUrl:entry.material.articleUrl,
+        taskId:task.id, prompt:task.prompt, assignedKitVersion:entry.kitVersion};
+      if (targetSeconds !== undefined) spec.targetSeconds = targetSeconds;
+      specs.push(spec);
+    }
+    const codes = participantCodes(el('cross-codes'));
+    if (!codes) return;
+    if (codes.length < 2 || codes.length % 2) { el('status').textContent = '교차 배정은 2명 이상 짝수 인원으로 구성하세요.'; return; }
+    const assignments = [];
+    for (let start = 0; start < codes.length; start += 4) {
+      const full = codes.length - start >= 4;
+      // In a group of four, each article starts once per method. With two remaining,
+      // randomize the starting article and give one editor each first method.
+      const firstArticles = full ? [0,1] : [randomIndex(2)];
+      const plan = shuffled(firstArticles.flatMap(index => ['manual','journal'].map(method => ({index, method}))));
+      for (const [offset, {index, method}] of plan.entries()) {
+        const participant = codes[start + offset];
+        assignments.push({...specs[index], participant, method},
+          {...specs[1-index], participant, method:method === 'manual' ? 'journal' : 'manual'});
+      }
+    }
+    const note = codes.length + '명에게 두 과제씩, 총 ' + assignments.length + '건을 교차 배정했습니다.' +
+      (codes.length % 4 ? ' 마지막 두 사람은 같은 기사부터 시작합니다.' : ' 기사별 첫 방식과 방식별 첫 기사 인원이 같습니다.');
+    showAssignments(assignments, note, 'single-allocation', crossoverDesign);
+    filename = 'field-crossover-' + new Date().toISOString().replace(/[:.]/gu, '-') + '.json';
+    el('status').textContent = '명부를 저장하고 각 편집자에게 권장 순서의 배정 코드와 해당 ZIP을 전달하세요.';
     el('download').focus();
   };
 

@@ -422,6 +422,82 @@
       editions:{matched:0, noReturn:0, unlinked:0, noObservedVersion:0, differentVersion:0, changedOnResume:0}};
   }
 
+  function crossoverReturn(slot) {
+    if (!slot.completed) return null;
+    const {trial, basis, locationGrade, verdictGrade} = slot.completed;
+    const {a} = slot;
+    if (trial.recovered || trial.method !== a.method || trial.journalUse !== (a.method === 'journal' ? 'yes' : 'no') ||
+        editionMatch('completed', trial, a.assignedKitVersion) !== 'matched' || !hasReference(trial, basis)) return null;
+    const correct = trial.verdict === basis.verdict;
+    const location = trial.found === 'missing' ? 'no' : locationGrade;
+    if (!['yes', 'no'].includes(location) || verdictGrade !== (correct ? 'yes' : 'no')) return null;
+    const ms = phases.reduce((sum, phase) => sum + BigInt(trial.phaseMs[phase]), 0n);
+    const ref = basis.reference;
+    const gradingKey = JSON.stringify([basis.verdict, ref.document, ref.locator, ref.documentUrl || null,
+      [...new Set(ref.acceptedDocuments || [])].sort(), [...new Set(ref.acceptedLocators || [])].sort()]);
+    return {ms, verified:correct && location === 'yes', expected:basis.verdict, adopted:trial.verdict === 'supported', gradingKey};
+  }
+
+  function editorCrossover(byParticipant, unexpectedReturns) {
+    const result = {assignedEditors:byParticipant.size, pairedAssignments:0, completeEditors:0, comparedEditors:0,
+      faster:0, sameTime:0, slower:0, fasterQuality:{fewer:0, same:0, more:0}, fasterUnsafe:{eligible:0, more:0},
+      manualMeanMs:null, journalMeanMs:null, savedMs:null, savedPct:null};
+    const cohorts = new Map();
+    const taskKey = ({a}) => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.assignedKitVersion, a.targetSeconds ?? null]);
+    for (const slots of byParticipant.values()) {
+      if (slots.length !== 2) continue;
+      const [one, two] = slots;
+      if (one.a.method === two.a.method || one.a.caseId === two.a.caseId || one.article === two.article ||
+          slots.some(s => !kitVersion(s.a.assignedKitVersion))) continue;
+      result.pairedAssignments++;
+      const [manual, journal] = one.a.method === 'manual' ? [one, two] : [two, one];
+      const tasks = [taskKey(manual), taskKey(journal)], direction = Number(tasks[0] > tasks[1]);
+      const key = JSON.stringify(tasks.sort());
+      if (!cohorts.has(key)) cohorts.set(key, {planned:[0, 0], complete:[0, 0], pairs:[], standards:[new Set(), new Set()]});
+      const cohort = cohorts.get(key);
+      cohort.planned[direction]++;
+      if (unexpectedReturns.has(slots)) continue;
+      const m = crossoverReturn(manual), j = crossoverReturn(journal);
+      if (!m || !j) continue;
+      result.completeEditors++;
+      cohort.complete[direction]++;
+      cohort.standards[direction].add(m.gradingKey);
+      cohort.standards[1 - direction].add(j.gradingKey);
+      cohort.pairs.push({m, j});
+    }
+    let manualMs = 0n, journalMs = 0n;
+    for (const {planned, complete, pairs, standards} of cohorts.values()) {
+      // Different articles are compared within one editor. Keep the whole pair of tasks
+      // only when both the roster and observed reviewers balance the opposite assignments.
+      if (planned[0] !== planned[1] || complete[0] !== complete[1] || standards.some(keys => keys.size !== 1)) continue;
+      for (const {m, j} of pairs) {
+        result.comparedEditors++;
+        manualMs += m.ms;
+        journalMs += j.ms;
+        if (j.ms === m.ms) result.sameTime++;
+        else if (j.ms > m.ms) result.slower++;
+        else {
+          result.faster++;
+          if (m.verified === j.verified) result.fasterQuality.same++;
+          else if (m.verified) result.fasterQuality.fewer++;
+          else result.fasterQuality.more++;
+          if (m.expected === j.expected && m.expected !== 'supported') {
+            result.fasterUnsafe.eligible++;
+            if (!m.adopted && j.adopted) result.fasterUnsafe.more++;
+          }
+        }
+      }
+    }
+    if (result.comparedEditors) {
+      result.manualMeanMs = Number(manualMs) / result.comparedEditors;
+      result.journalMeanMs = Number(journalMs) / result.comparedEditors;
+      const difference = manualMs - journalMs;
+      result.savedMs = Number(difference) / result.comparedEditors;
+      result.savedPct = manualMs === 0n ? null : 100 * Number(difference) / Number(manualMs);
+    }
+    return result;
+  }
+
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
   function allocationReport(assignments, records, repeated) {
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
@@ -479,6 +555,7 @@
           matched.push({...entry, trial:{...t, method:a.method}});
         }
       }
+      if (status === 'completed') slot.completed = related[0];
       arm[status]++; all[status]++;
       const targetSeconds = assignmentTarget(a);
       if (targetSeconds !== undefined) {
@@ -545,7 +622,8 @@
     }
     for (const comparison of editionDeadlines.values())
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);
-    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked, assignmentComparisons:[...byTask.values()],
+    return {all, arms:[...arms.values()], groups, outsideRoster, unlinked,
+      editorCrossover:editorCrossover(byParticipant, new Set(otherArticles)), assignmentComparisons:[...byTask.values()],
       deadlineAssigned, deadlineComparisons:[...deadlines.values()], unknownPlannedEdition,
       editionDeadlineComparisons:[...editionDeadlines.values()]};
   }
