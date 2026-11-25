@@ -40,6 +40,7 @@
     {id: 'briefing', title: '들길당 브리핑 속기록 (모의 자료)', url: 'https://example.invalid/journal/briefing', version: '연습 판본 1', locator: '대변인 발언 02분 10초', excerpt: '들길당 대변인: 운영비가 두 배가 될 것이라고 봅니다. 이는 우리 당의 전망이며 시가 발표한 확정액은 아닙니다.'}
   ];
   let article = '', sources = [], receipts = [], demo = false, result = null;
+  let loadedArticleDraft = '';
   let blindReview = null;
   let currentId = null, editingId = null, sourceForRow = null, dirty = false;
   let latestImport = 0;
@@ -50,7 +51,7 @@
   const studyFrame = window !== window.parent && parameters.get('study') === '1';
   const fieldHandoff = window === window.parent && parameters.get('field') === '1' &&
     !parameters.has('study') && (!parameters.has('method') || parameters.get('method') === 'journal');
-  let fieldArticleCommitted = false;
+  let hasCommittedArticle = false;
   let fieldCopyResult = null;
   let studyNonce = null;
   // Local file pages have opaque origins. Only the actual parent frame receives replies.
@@ -72,10 +73,24 @@
     target.textContent = text;
     target.classList.toggle('error', error);
   }
+  function setArticleDraft(text) {
+    loadedArticleDraft = text;
+    byId('article').value = text;
+  }
+  function currentArticleDraft() {
+    const value = byId('article').value;
+    // A textarea exposes LF for CRLF and CR. Preserve the exact loaded edition while its display is unchanged.
+    if (value === loadedArticleDraft.replace(/\r\n?/g, '\n')) return loadedArticleDraft;
+    if (value === article.replace(/\r\n?/g, '\n')) return article;
+    return value;
+  }
+  function articleIsCommitted() {
+    return hasCommittedArticle && currentArticleDraft() === article;
+  }
   function showBlindNotice() {
     const notice = byId('blind-notice');
     notice.hidden = !blindReview;
-    const action = byId('article').value === article
+    const action = articleIsCommitted()
       ? '평가를 마치면 ‘작업 파일 내려받기’로 저장하세요.'
       : '원문을 수정 중입니다. 배부받은 원문으로 되돌려야 이 묶음에서 비교할 수 있습니다. 바꾼 원문을 확정하면 A/B 표지가 해제됩니다.';
     const text = blindReview ? '블라인드 평가 ' + blindReview.slot + ' · 묶음 ' + blindReview.pairId.slice(0, 8) + ' · ' + action : '';
@@ -190,7 +205,7 @@
     for (const source of sources) {
       const part = node('details', undefined, 'source');
       part.append(node('summary', source.title || source.id), sourceDetails(source));
-      if (fieldHandoff && fieldArticleCommitted && !demo && !blindReview) addFieldCopy(part, source);
+      if (fieldHandoff && hasCommittedArticle && !demo && !blindReview) addFieldCopy(part, source);
       part.append(button('자료 수정', () => {
         if (sourceDraftIsDirty() && !confirm('입력 중인 자료를 비우고 이 자료를 수정할까요?')) return;
         clearFieldCopy();
@@ -450,7 +465,79 @@
     return result.complete ? '입력한 문장마다 검토 범위를 기록했습니다. 사실로 확인한 내용은 아래에 구절과 근거를 표시합니다.'
       : '미검토·부분 확인·보류·원자료와 충돌 중 추가로 확인할 문장이 남아 있습니다. 해당 문장은 추가 취재 또는 수정이 필요합니다.';
   }
+  const revisionInputs = new Map();
+  function selectedRevisions() {
+    return [...revisionInputs].filter(([input]) => input.checked).map(([, choice]) => choice);
+  }
+  function updateRevisionPreview() {
+    const preview = byId('revision-preview');
+    const selected = selectedRevisions();
+    byId('download-revision').disabled = !selected.length;
+    byId('revision-count').textContent = '정정 문구가 있는 ' + revisionInputs.size + '곳 중 ' + selected.length + '곳 선택';
+    preview.hidden = !selected.length;
+    byId('revision-preview-text').textContent = selected.length && preview.open
+      ? window.JournalRevisionDraft.apply(result, selected) : '';
+  }
+  function showRevisions() {
+    const panel = byId('revision-draft');
+    const list = byId('revision-choices');
+    const keys = new Set(selectedRevisions().map(choice => choice.binding + '/' + choice.start));
+    revisionInputs.clear();
+    list.replaceChildren();
+    message('revision-status', '');
+    const choices = blindReview || parameters.has('study') || !articleIsCommitted() ? [] : window.JournalRevisionDraft.proposals(result);
+    panel.hidden = !choices.length;
+    if (!choices.length) {
+      panel.open = false;
+      byId('revision-preview').open = false;
+      updateRevisionPreview();
+      return;
+    }
+    const rows = new Map(result.rows.map((row, i) => [row.id, {row, number:i + 1}]));
+    for (const choice of choices) {
+      const {row, number} = rows.get(choice.rowId);
+      const item = node('div', undefined, 'source');
+      const label = node('label', undefined, 'check-line');
+      const input = node('input');
+      input.type = 'checkbox';
+      input.checked = keys.has(choice.binding + '/' + choice.start);
+      revisionInputs.set(input, choice);
+      const repeated = row.positions.length > 1;
+      const occurrence = repeated ? ' · ' + row.positions.length + '곳 중 ' +
+        (row.positions.findIndex(position => position.start === choice.start) + 1) + '번째' : '';
+      label.append(input, document.createTextNode('구간 ' + number + occurrence));
+      const original = node('p', '원문 · ', 'verbatim');
+      if (repeated) original.append(result.article.slice(Math.max(0, choice.start - 50), choice.start));
+      original.append(node('mark', choice.original));
+      if (repeated) original.append(result.article.slice(choice.end, choice.end + 50));
+      const evidence = node('details');
+      evidence.append(node('summary', '정정의 근거와 판단 이유'));
+      evidence.ontoggle = () => {
+        if (!evidence.isConnected || !evidence.open || evidence.childElementCount > 1) return;
+        evidence.append(node('p', row.receipt.reason));
+        for (const id of row.receipt.sourceIds) evidence.append(sourceDetails(sources.find(s => s.id === id)));
+      };
+      item.append(label, original, node('p', '수정 · ' + choice.replacement, 'verbatim'), evidence);
+      list.append(item);
+    }
+    updateRevisionPreview();
+  }
+  byId('revision-choices').addEventListener('change', () => {
+    message('revision-status', '');
+    updateRevisionPreview();
+  });
+  byId('revision-preview').addEventListener('toggle', updateRevisionPreview);
+  byId('download-revision').addEventListener('click', () => {
+    if (blindReview || parameters.has('study') || !articleIsCommitted()) return;
+    try {
+      const text = window.JournalRevisionDraft.apply(result, selectedRevisions());
+      const packet = {...workspace.independentInput(currentWork()), article:text, articleDraft:text};
+      download(JSON.stringify(packet, null, 2), 'journal-revision-draft.json', 'application/json');
+      message('revision-status', '수정본 작업 파일 내려받기를 요청했습니다. 이 파일을 새 창에서 열어 바뀐 기사와 원자료를 대조하세요.');
+    } catch (err) { message('revision-status', err.message, true); }
+  });
   function showReport() {
+    showRevisions();
     const rows = byId('report-rows');
     rows.replaceChildren();
     byId('result-tag').textContent = result.complete ? '문장 검토 완료' : '추가 확인 필요';
@@ -540,12 +627,13 @@
     byId(find ? 'document-text' : 'source-title').focus();
   }
   function resetWork(text, initialSources, initialReceipts, sample, tag = null, committed = true) {
+    revisionInputs.clear();
     window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
     articleAssessment = null;
     articleAssessmentDraft = null;
     article = text;
-    fieldArticleCommitted = committed;
+    hasCommittedArticle = committed;
     sources = initialSources;
     receipts = initialReceipts;
     demo = sample;
@@ -553,7 +641,7 @@
     drafts = new Map();
     currentId = null;
     clearSourceForm();
-    byId('article').value = text;
+    setArticleDraft(text);
     showBlindNotice();
     window.JournalDocumentFile?.clear();
     byId('document-text').value = '';
@@ -611,14 +699,14 @@
 
   byId('article-form').addEventListener('submit', event => {
     event.preventDefault();
-    const text = byId('article').value;
+    const text = currentArticleDraft();
     if (!text.trim()) return message('article-status', '검토할 기사를 붙여 넣으세요.', true);
     try {
       let recoveryMessage = '';
       if (article !== text && result) {
         const {recovered, unmapped} = carryDrafts(engine.prepare(text, sources).rows);
         if (unmapped && !confirm('검토한 구간 또는 주변 문맥이 달라져 이전 입력 ' + unmapped + '개를 새 기사에 옮길 수 없습니다. 계속할까요? 취소하면 기존 기사를 유지하므로 작업 파일을 먼저 저장할 수 있습니다.')) {
-          byId('article').value = article;
+          setArticleDraft(article);
           byId('workspace').hidden = false;
           showBlindNotice();
           message('article-status', '기존 기사와 판단을 유지했습니다. 이전 작업을 보관하려면 작업 파일을 내려받으세요.');
@@ -635,7 +723,8 @@
       }
       latestImport++;
       article = text;
-      fieldArticleCommitted = true;
+      setArticleDraft(text);
+      hasCommittedArticle = true;
       showBlindNotice();
       dirty = true;
       refresh();
@@ -648,7 +737,7 @@
     clearFieldCopy();
     dirty = true;
     showBlindNotice();
-    byId('workspace').hidden = byId('article').value !== article || !article;
+    byId('workspace').hidden = !articleIsCommitted();
     message('article-status', byId('workspace').hidden && article ? '변경한 원문을 검토하려면 검토 목록을 다시 만드세요.' : '');
   });
   byId('new-work').addEventListener('click', () => {
@@ -1274,7 +1363,7 @@
   function currentWork() {
     const rowDrafts = [...drafts].map(([rowId, data]) => ({rowId, data: {...data, acknowledged: false, correctionChecked: false, contentChecked: false}}));
     return {
-      format: schema, article, sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: byId('article').value,
+      format: schema, article: hasCommittedArticle ? article : '', sources, receipts, demo, articleAssessment, articleAssessmentDraft, articleDraft: currentArticleDraft(),
       rowFilter: byId('row-filter').value,
       ...(blindReview ? {blindReview} : {}),
       rowDrafts, currentId, sourceDraft: {id: editingId, prefillId, fields: sourceFormData(),
@@ -1293,7 +1382,7 @@
     } catch (err) { message('file-status', '작업 파일을 만들 수 없습니다. ' + err.message, true); }
   }
   function exportReviewInput() {
-    if (!result?.rows.length || byId('article').value !== article) {
+    if (!result?.rows.length || !articleIsCommitted()) {
       return message('file-status', '현재 기사로 검토 목록을 만든 뒤 독립 평가용 파일을 저장하세요.', true);
     }
     try {
@@ -1356,9 +1445,9 @@
         const catalogDraft = w.sourceDraft.targetBinding === null && (w.sourceDraft.id == null || edit);
         byId('sources-panel').open = w.sourceDraft.panelOpen === true && !!(sameTarget || catalogDraft);
       }
-      byId('article').value = w.articleDraft;
+      setArticleDraft(w.articleDraft);
       showBlindNotice();
-      if (w.articleDraft !== article) {
+      if (!articleIsCommitted()) {
         byId('article-panel').open = true;
         byId('workspace').hidden = true;
       }

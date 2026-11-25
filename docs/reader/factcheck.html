@@ -36,10 +36,11 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 .finder-lines input[type=radio]{flex:none;width:auto;margin:0;padding:0;accent-color:var(--green)}
 .finder-lines label:has(:checked){font-weight:700;color:var(--green)}
 #rubric-guide h2{margin-top:1em}#rubric-guide h3{margin-top:.8em}#rubric-guide .guide-axis{break-inside:avoid}
+@media print{#revision-draft{display:none}}
 @media print{.print-rubric main>:not(#rubric-guide){display:none!important}.print-rubric #rubric-guide{margin:0;border:0;padding:0}.print-rubric #rubric-guide>summary{list-style:none;font-size:1.4rem}}
 </style>
 <script src="evidence-fiscal.js" defer></script>
-<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-columns.js" defer></script><script src="evidence-fiscal-table.js" defer></script><script src="evidence-transcript.js" defer></script><script src="evidence-search.js" defer></script><script src="factcheck-engine.js" defer></script><script src="field-citation.js" defer></script><script src="source-reader.js" defer></script><script src="document-file.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="factcheck-ui.js" defer></script>
+<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-columns.js" defer></script><script src="evidence-fiscal-table.js" defer></script><script src="evidence-transcript.js" defer></script><script src="evidence-search.js" defer></script><script src="factcheck-engine.js" defer></script><script src="field-citation.js" defer></script><script src="source-reader.js" defer></script><script src="document-file.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="revision-draft.js" defer></script><script src="factcheck-ui.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#article">기사 입력으로 이동</a>
@@ -111,6 +112,14 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <p id="result-scope"></p><p class="hint" id="coverage-limit"></p><p id="result-demo" class="callout" hidden>연습 기록 · 가상 기사 또는 모의 원자료 포함</p><div class="status-group" id="result-counts"></div>
 <div id="result-source-draft" class="callout" hidden><p id="source-draft-note"></p><div class="actions"><button type="button" id="return-source-draft">입력 중인 원자료로 이동</button></div></div>
 <div class="actions"><button type="button" id="export-report">검토 결과 내려받기 (.txt)</button></div><p class="hint">결과 파일에는 기사 문장 전체가 들어갑니다. 외부에 전달하기 전에 기사의 재배포 허용 범위를 확인하고, 필요하면 원문 링크로 대신하세요.</p>
-<p class="message" id="result-status" role="status"></p><div id="report-rows"></div></section>
+<p class="message" id="result-status" role="status"></p>
+<details id="revision-draft" hidden><summary>확인한 정정 문구로 수정본 만들기</summary>
+<p class="hint">원자료와 대조한 문구 중 수정본에 반영할 위치를 고르세요. 새 파일에는 수정한 기사와 등록된 원자료가 들어갑니다. 수정 전후를 비교하려면 원본 작업 파일도 따로 저장하고, 수정본을 다시 열어 평가하세요.</p>
+<div id="revision-choices"></div>
+<p id="revision-count" role="status"></p>
+<details id="revision-preview" hidden><summary>선택한 수정본 전체 보기</summary><p class="verbatim" id="revision-preview-text"></p></details>
+<button type="button" id="download-revision" disabled>수정본 작업 파일 내려받기</button>
+<p class="message" id="revision-status" role="status"></p></details>
+<div id="report-rows"></div></section>
 </div>
 </main><footer>기사와 검토 기록은 이 창에서 처리합니다. 작업을 이어가려면 작업 파일을 저장하세요.</footer></body></html>

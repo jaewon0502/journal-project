@@ -64,6 +64,63 @@ async function loadWorkspace(page, data, accept = true) {
   await loaded;
 }
 
+test('정정한 문장의 한 위치를 선택해 기존 판정 없는 수정본으로 보관하고 원래 작업은 계속한다', async t => {
+  const p = open(t);
+  const original = '사업비는 20억 원이다.';
+  const replacement = '사업비는 10억 원이다.';
+  const article = original + '  ' + original + '\n야당은 “' + original + '”라고 말했다.';
+  const sources = [{id:'budget',title:'의결서',url:'https://council.example/report.pdf',locator:'표 1',version:'1판',
+    excerpt:'의결한 사업비 10억 원', pdfPage:'5', pdfSha256:'a'.repeat(64)}];
+  const row = p.w.JournalFactcheck.report(article,sources).rows[0];
+  const receipt = p.w.JournalFactcheck.decide(row,{status:'contradicted',sourceIds:['budget'],reason:'의결서의 금액을 확인했다.',
+    acknowledged:true,correction:replacement,correctionChecked:true},sources);
+  const packet = {format:'journal-local-factcheck-v1',article,articleDraft:article,demo:false,sources,
+    receipts:[receipt],rowDrafts:[],sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}};
+  await loadWorkspace(p,packet);
+  assert.equal(p.el('revision-draft').hidden,false);
+  assert.equal(p.el('download-revision').disabled,true);
+  const checks = [...p.el('revision-choices').querySelectorAll('input')];
+  assert.equal(checks.length,2);
+  assert.match(checks[1].parentElement.textContent,/2곳 중 2번째/);
+  const proof = p.el('revision-choices').querySelector('details');
+  proof.open = true; proof.dispatchEvent(new p.w.Event('toggle'));
+  assert.ok(proof.textContent.includes(receipt.reason));
+  assert.ok(proof.textContent.includes(sources[0].excerpt));
+  assert.match(proof.querySelector('a').href,/#page=5$/);
+  checks[1].click();
+  const next = original + '  ' + replacement + '\n야당은 “' + original + '”라고 말했다.';
+  p.el('revision-preview').open = true;
+  p.el('revision-preview').dispatchEvent(new p.w.Event('toggle'));
+  assert.equal(p.el('revision-preview-text').textContent,next);
+  p.click('download-revision');
+  assert.equal(p.filename(),'journal-revision-draft.json');
+  const revised = JSON.parse(await p.snapshot());
+  assert.equal(revised.article,next);
+  assert.equal(revised.articleDraft,next);
+  assert.deepEqual(revised.sources,sources);
+  assert.deepEqual(revised.receipts,[]);
+  assert.deepEqual(revised.rowDrafts,[]);
+  assert.equal(revised.articleAssessment,null);
+  assert.equal(revised.articleAssessmentDraft,null);
+  assert.equal(revised.demo,false);
+  const independent = open(t); await loadWorkspace(independent,revised);
+  assert.ok(independent.el('revision-draft').hidden);
+  assert.equal(independent.el('report-rows').querySelectorAll('.report-row').length,3);
+  assert.equal(independent.el('verdict').value,'');
+  p.click('save-work');
+  const before = JSON.parse(await p.snapshot());
+  assert.equal(before.article,article);
+  assert.deepEqual(before.receipts,[JSON.parse(JSON.stringify(receipt))]);
+  p.set('reason','근거를 다시 대조하는 중');
+  assert.ok(p.el('revision-draft').hidden);
+  assert.equal(p.el('revision-preview-text').textContent,'');
+  const tagged = open(t);
+  await loadWorkspace(tagged,{...packet,blindReview:{pairId:'d'.repeat(32),slot:'A'}});
+  assert.ok(tagged.el('revision-draft').hidden);
+  const study = open(t,'?study=1'); await loadWorkspace(study,packet);
+  assert.ok(study.el('revision-draft').hidden);
+});
+
 test('첫 화면과 기준 바로가기에서 채점에 쓰는 네 축의 16단계를 읽고 안내만 인쇄한다', t => {
   const p = open(t, '#rubric-guide');
   const guide = p.el('rubric-guide');
