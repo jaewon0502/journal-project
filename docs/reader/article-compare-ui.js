@@ -346,12 +346,15 @@
     side.append(receiptEvidence(snapshot, decision.rowId));
     return side;
   }
-  function sameWordingDetails(snapshot, indexes, originalItem) {
+  function sameWordingDetails(snapshot, indexes, originalItem, quoted) {
     const total = indexes.reduce((n, index) => n + snapshot.rows[index].positions.length, 0);
     const title = '수정본에서 같은 문구가 나온 위치 ' + total + '곳';
     const list = element('section', null, 'wording-locations');
     originalItem.firstChild.append(element('small', title, 'joint-levels'));
-    list.append(element('h4', title), note('원본과 같은 주장을 하는지 앞뒤 문맥과 수정본의 판정 근거를 대조하세요. 이 위치들은 판본 간 대응으로 집계하지 않습니다.'));
+    const guidance = quoted
+      ? '앞뒤 문맥에서 발언자를 확인하고, 발언을 입증한 원자료와 인용 속 주장을 검토한 근거를 각각 대조하세요.'
+      : '원본과 같은 주장을 하는지 앞뒤 문맥과 수정본의 판정 근거를 대조하세요.';
+    list.append(element('h4', title), note(guidance + ' 이 위치들은 판본 간 대응으로 집계하지 않습니다.'));
     function showLocations() {
       if (!originalItem.open) return;
       originalItem.removeEventListener('toggle', showLocations);
@@ -389,7 +392,7 @@
         }
         after.append(receiptEvidence(snapshots[1], row.candidate.rowId), note('이 구절이 원래 주장을 바로잡았는지 대조하세요.'));
       } else if (row.sameWordingRows) {
-        after.append(sameWordingDetails(snapshots[1], row.sameWordingRows, item));
+        after.append(sameWordingDetails(snapshots[1], row.sameWordingRows, item, quoted));
       } else if (!revised) after.append(note('수정본에서 이 주장과 대응하는 구절을 찾아 대조하세요.'));
       pair.append(before, after);
       item.append(pair);

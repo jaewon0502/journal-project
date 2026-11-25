@@ -210,7 +210,7 @@
       if (originalConflict) {
         const conflict = {...entry, original, revised};
         // Locations for inspection only. Equal wording cannot establish a matched judgment.
-        if (!revised && category === 'contradicted' && revisedWording.has(row.text)) {
+        if (!revised && revisedWording.has(row.text)) {
           conflict.sameWordingRows = revisedWording.get(row.text);
         }
         const correction = row.receipt?.correction?.trim();

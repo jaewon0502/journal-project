@@ -688,6 +688,75 @@ test('반복 오류 하나만 고친 뒤 같은 원문이 남은 정확한 위�
   assert.equal(locations[2].querySelector('a'), null);
 });
 
+test('원래 반박된 인용문이 다른 문맥으로 옮겨지면 발언자까지 같은 문장의 현재 귀속·내용 근거를 직접 대조한다', async t => {
+  const p = page(t);
+  const quote = '지난해 집행액은 20억 원이었다';
+  const speech = '여당 대변인은 “' + quote + '”고 말했다.';
+  const changedSpeaker = speech.replace('여당', '야당');
+  const transcript = {id:'speech', title:'여당 회견 속기록', url:'https://council.example/briefing.pdf', pdfPage:'12',
+    version:'확정본', locator:'대변인 답변 4', excerpt:speech};
+  const ledger = {id:'ledger', title:'승인 결산서', url:'https://audit.example/report.pdf', pdfPage:'37',
+    version:'의회 승인본', locator:'표 4 집행액', excerpt:'지난해 해당 사업의 집행액은 10억 원이었다.'};
+  function saved(lines, status) {
+    const file = workspace(lines.join('\n'));
+    file.sources = [transcript, ledger];
+    const target = engine.report(file.article, file.sources).rows.find(r => r.text === speech);
+    if (target) file.receipts = [engine.decide(target, {status:'attribution', sourceIds:['speech'], acknowledged:true,
+      reason:'회견 속기록에서 발언자를 확인했다.', contentStatus:status,
+      ...(status === 'contradicted' ? {contentSourceIds:['ledger'], contentReason:'같은 사업의 승인 결산을 대조했다.', contentChecked:true} : {})
+    }, file.sources)];
+    return JSON.stringify(file);
+  }
+  p.load('left','원본.json',saved(['회의를 열었다.', speech, '논의가 이어졌다.'], 'contradicted'));
+  async function compareRevised(lines, status) {
+    p.load('right','수정본.json',saved(lines, status));
+    await p.settled(); p.el('ack').click(); p.el('compare').click();
+    return p.el('output');
+  }
+  for (const status of ['unverified', 'contradicted']) {
+    const out = await compareRevised(['회견이 열렸다.', '여야 의견을 모았다.', speech, changedSpeaker], status);
+    const list = out.querySelector('.wording-locations');
+    assert.ok(list);
+    assert.equal(list.firstChild.textContent, '수정본에서 같은 문구가 나온 위치 1곳');
+    assert.match(list.textContent, /발언자를 확인하고.*인용 속 주장을 검토한 근거/);
+    const originalItem = list.closest('details');
+    assert.match(originalItem.firstChild.textContent, /대응 구절 미확인/);
+    originalItem.open = true;
+    await t.waitFor(() => assert.ok(list.querySelector('details[open]')));
+    const location = list.querySelector('details[open]');
+    assert.equal(location.querySelector('mark').textContent, speech);
+    assert.match(location.firstChild.textContent, /수정본 구간 3 · 같은 문구 1\/1/);
+    const urls = [...location.querySelectorAll('a')].map(a => a.href);
+    assert.equal(urls[0], transcript.url + '#page=12');
+    assert.match(location.textContent, /원발언 · 여당 회견 속기록/);
+    if (status === 'unverified') {
+      assert.match(location.firstChild.textContent, /발언 사실 확인 · 담긴 주장 미확인/);
+      assert.equal(urls.length, 1);
+      assert.doesNotMatch(location.textContent, /내용 근거 ·/);
+      assert.match(out.textContent, /수정 후 인용 속 사실 주장 충돌 0개/);
+    } else {
+      assert.match(location.firstChild.textContent, /발언 귀속 확인 · 인용 속 사실 주장 충돌/);
+      assert.equal(urls[1], ledger.url + '#page=37');
+      assert.ok(location.textContent.includes('내용을 대조한 인용 구간' + quote));
+      assert.ok(location.textContent.includes(ledger.excerpt));
+      assert.match(out.textContent, /수정 후 인용 속 사실 주장 충돌 1개원본과 짝을 확인할 수 없는 충돌 구절/);
+    }
+  }
+  const repeated = await compareRevised(['오전 회견이다.', speech, '오후 회견도 열렸다.', speech, changedSpeaker], 'contradicted');
+  const locations = repeated.querySelector('.wording-locations');
+  assert.equal(locations.firstChild.textContent, '수정본에서 같은 문구가 나온 위치 2곳');
+  locations.closest('details').open = true;
+  await t.waitFor(() => assert.equal(locations.querySelectorAll('details').length, 2));
+  const [morning, afternoon] = locations.querySelectorAll('details');
+  assert.match(morning.firstChild.textContent, /구간 2 · 같은 문구 1\/2 · 발언 귀속 확인 · 인용 속 사실 주장 충돌/);
+  assert.match(afternoon.firstChild.textContent, /구간 4 · 같은 문구 2\/2 · 미확인/);
+  assert.equal(morning.querySelectorAll('a').length, 2);
+  assert.equal(afternoon.querySelectorAll('a').length, 0);
+  assert.deepEqual([morning, afternoon].map(item => item.querySelector('mark').textContent), [speech, speech]);
+  const onlyOtherSpeaker = await compareRevised(['회견이 열렸다.', changedSpeaker], 'unverified');
+  assert.equal(onlyOtherSpeaker.querySelector('.wording-locations'), null);
+});
+
 test('두 편집자의 판정이 같아도 구절별로 선택한 자료와 발언·내용 근거를 비교한다', async t => {
   const p = page(t);
   const article = '올해 시범 예산은 20억 원이다.\n의원은 “예산은 20억 원이었다”고 말했다.\n의회는 예산을 의결했다.';
