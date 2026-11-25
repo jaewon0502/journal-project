@@ -294,6 +294,29 @@ test('원자료를 바꾼 기사를 빼면 공동 중요 판정이 증가에서 
   }
 });
 
+test('공통 개선의 고정 분모와 순변화는 원자료가 같은 기사만 골라도 관측 수에서 재계산한다', () => {
+  const original = record('original sources', [[3,0,2,1], [2,null,2,3], [3,null,3,0], [3,'na',3,1]]);
+  const changed = record('updated sources', [[1,3,1,2], [2,1,2,1]], true);
+  const single = summarize([original]);
+  const pooled = summarize([original, changed, original]);
+  assert.equal(pooled.duplicateCount, 1);
+  assert.deepEqual(pooled.unchangedEvidenceRange, single.improvementRange);
+  assert.deepEqual(pooled.unchangedEvidenceNet, single.netSeverityChange);
+  assert.deepEqual([pooled.unchangedEvidenceRange.baseline, pooled.unchangedEvidenceRange.lowerPct,
+    pooled.unchangedEvidenceRange.upperPct], [4,25,50]);
+  assert.deepEqual([pooled.improvementRange.baseline, pooled.improvementRange.lowerPct,
+    pooled.improvementRange.upperPct], [5,40,60]);
+  assert.deepEqual([pooled.netSeverityChange.paired, pooled.netSeverityChange.beforeImportant,
+    pooled.netSeverityChange.afterImportant, pooled.netSeverityChange.relativeReductionPct], [3,2,1,50]);
+  assert.equal(pooled.unchangedEvidenceNet.relativeReductionPct, 100);
+  assert.deepEqual(pooled.articles[0].improvementRange, single.improvementRange);
+  assert.deepEqual(pooled.dimensions.find(d => d.id === 'omission').improvementRange,
+    {baseline:1,confirmed:0,ruledOut:0,unresolved:1,notApplicable:0,lowerPct:0,upperPct:100});
+  const none = summarize([changed]);
+  assert.equal(none.unchangedEvidenceRange.upperPct, null);
+  assert.equal(none.unchangedEvidenceNet.relativeReductionPct, null);
+});
+
 test('모든 기준에서 편집자 순서를 함께 바꾸거나 기준을 재정렬한 중복 파일은 한 번만 센다', () => {
   const r = record('same', [[2, 0, 3, 1], [1, 2, 0, 3]]);
   const swap = structuredClone(r);

@@ -237,6 +237,7 @@
       worseningEligibleArticles: articles.filter(a => a.worsened.denominator > 0).length,
       changedSources: articles.length - unchanged.length, unchangedSources: unchanged.length,
       unchangedEvidenceImprovement: unchangedScores.improved, unchangedEvidenceSeverity: unchangedScores.severity,
+      unchangedEvidenceRange: unchangedScores.improvementRange, unchangedEvidenceNet: unchangedScores.netSeverityChange,
       unchangedEvidencePaired: unchangedScores.paired,
       ...summarizeScores(unique.flatMap(r => r.dimensions)), dimensions, articles, facts};
   }

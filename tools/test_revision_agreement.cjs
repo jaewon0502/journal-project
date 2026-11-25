@@ -265,3 +265,67 @@ test('중복 배포, 다른 기사나 자료, 회수 전 변경, 연습·실제 
   second.after.sources[0].version += ' 개정';
   assert.throws(() => compare(first, second), /원자료 묶음이 일치/);
 });
+
+test('공동 개선의 가능한 범위는 원본에서 중요했던 전체 항목과 수정본에 남은 실제 점수를 사용한다', () => {
+  const item = (firstAfter, secondAfter) => ({
+    first:{before:3, after:firstAfter}, second:{before:2, after:secondAfter}
+  });
+  const dimensions = [item(0,1), item(null,2), item(null,0), item(null,null)];
+  const partial = summarizeScores(dimensions);
+  assert.deepEqual(partial.improved, ratio(1,1));
+  assert.deepEqual(partial.improvementRange, {baseline:4, confirmed:1, ruledOut:1, unresolved:2,
+    notApplicable:0, lowerPct:25, upperPct:75});
+  dimensions[1] = item(null,0);
+  const open = summarizeScores(dimensions);
+  assert.deepEqual(open.improved, partial.improved);
+  assert.equal(open.missingScores, partial.missingScores);
+  assert.deepEqual(open.improvementRange, {...partial.improvementRange, ruledOut:0, unresolved:3, upperPct:100});
+
+  const fixed = summarizeScores([item(1,'na'), item('na',null), item(2,'na'), item('na','na'), item(1,0)]);
+  assert.deepEqual(fixed.improvementRange, {baseline:5, confirmed:1, ruledOut:1, unresolved:0,
+    notApplicable:3, lowerPct:20, upperPct:20});
+  assert.deepEqual(summarizeScores([item('na','na')]).improvementRange,
+    {baseline:1, confirmed:0, ruledOut:0, unresolved:0, notApplicable:1, lowerPct:0, upperPct:0});
+  assert.deepEqual(summarizeScores([]).improvementRange,
+    {baseline:0, confirmed:0, ruledOut:0, unresolved:0, notApplicable:0, lowerPct:null, upperPct:null});
+});
+
+test('순변화는 네 점수가 모두 있는 항목에서 새 중요 왜곡을 포함하며 원본 0의 상대율을 보류한다', () => {
+  const item = (a,b,c,d) => ({first:{before:a, after:b}, second:{before:c, after:d}});
+  const dimensions = [
+    item(2,0,3,0), item(2,3,0,2), item(1,2,3,2), item(0,2,0,3), item(0,0,1,1),
+    item(2,null,3,1), item(null,2,1,3)
+  ];
+  const stats = summarizeScores(dimensions);
+  assert.deepEqual(stats.improved, ratio(1,1));
+  assert.deepEqual(stats.netSeverityChange,
+    {paired:5, beforeImportant:1, afterImportant:3, deltaPoints:40, relativeReductionPct:-200});
+  const swapped = dimensions.toReversed().map(({first,second}) => ({first:second, second:first}));
+  assert.deepEqual(summarizeScores(swapped), stats);
+  const reverse = side => ({before:side.after, after:side.before});
+  const reversed = dimensions.map(({first,second}) => ({first:reverse(first), second:reverse(second)}));
+  assert.deepEqual(summarizeScores(reversed).netSeverityChange,
+    {paired:5, beforeImportant:3, afterImportant:1, deltaPoints:-40, relativeReductionPct:100 * 2 / 3});
+  assert.deepEqual(summarizeScores([item(0,3,1,2)]).netSeverityChange,
+    {paired:1, beforeImportant:0, afterImportant:1, deltaPoints:100, relativeReductionPct:null});
+  assert.deepEqual(summarizeScores([]).netSeverityChange,
+    {paired:0, beforeImportant:0, afterImportant:0, deltaPoints:null, relativeReductionPct:null});
+});
+
+test('네 회수본에서 계산한 범위와 순변화는 익명 요약의 판정을 다시 집계해도 같다', async () => {
+  const series = require('../docs/reader/revision-series.js');
+  const levels = {wording:3, framing:2, omission:2, standards:3};
+  const first = await assignment(0, [levels, {wording:0, framing:3, standards:'na'}]);
+  const second = await assignment(1, [levels, {wording:1, standards:0}]);
+  const joint = compare(first, second);
+  const saved = series.makeRecord(joint, first.key);
+  assert.equal(saved.version, 7);
+  assert.ok(!Object.hasOwn(saved, 'improvementRange') && !Object.hasOwn(saved, 'netSeverityChange'));
+  const result = series.summarize([JSON.parse(JSON.stringify(saved))]);
+  assert.deepEqual(joint.improvementRange, {baseline:4, confirmed:1, ruledOut:1, unresolved:1,
+    notApplicable:1, lowerPct:25, upperPct:50});
+  assert.deepEqual(joint.netSeverityChange,
+    {paired:1, beforeImportant:1, afterImportant:0, deltaPoints:-100, relativeReductionPct:100});
+  assert.deepEqual(result.improvementRange, joint.improvementRange);
+  assert.deepEqual(result.netSeverityChange, joint.netSeverityChange);
+});

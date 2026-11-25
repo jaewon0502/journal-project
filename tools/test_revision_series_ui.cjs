@@ -408,3 +408,87 @@ test('보존율 1/1 옆에 대응 없는 핵심 발언의 증거 링크를 내�
   assert.equal(p.get('series-core-context'), null);
   assert.match(p.get('series-core-audit').textContent,/이전 형식으로 저장한 개선 기사 1건/);
 });
+
+test('빈 수정 점수를 보완할 수 있는 범위와 해당 없음·중요 판정이 남은 항목을 구분한다', async t => {
+  const p = page(t);
+  const beforeHigh = after => after.map(([a,b]) => [3,a,3,b]);
+  const scores = record('1','2',beforeHigh([[0,0],[3,null],[null,null],[0,'na']]));
+  const source = {...scores, version:2, facts:{before:[{outcome:'pending',flag:'none'}],after:[{outcome:'pending',flag:'none'}]}};
+  p.select(file('채점 중.json',source));
+  await flushed();
+  assert.match(p.get('series-improved').textContent,/100%1\/1/);
+  const panel = p.get('series-improvement-range');
+  assert.match(panel.textContent,/25~50% · 확인 1\/4개 · 미평가 점수를 채우면 최대 2\/4개/);
+  assert.match(panel.textContent,/한 명 이상 2~3단계 1개.*확인할 수 있는 항목 1개.*판단할 수 없는 항목 1개/);
+  const follow = p.get('series-improvement-pending');
+  assert.equal(follow.querySelectorAll('li').length,3);
+  assert.match(follow.querySelector('summary').textContent,/3개 확인/);
+  assert.deepEqual([...follow.querySelectorAll('li p')].map(el => el.textContent), [
+    '수정 후 첫 편집자 3단계 · 둘째 편집자 미평가', '수정 후 첫 편집자 미평가 · 둘째 편집자 미평가',
+    '수정 후 첫 편집자 0단계 · 둘째 편집자 해당 없음'
+  ]);
+  for (const [i,link] of [...follow.querySelectorAll('a')].entries()) {
+    assert.ok(link.hash.endsWith('&focus=bias-' + axisIds[i+1]));
+    assert.match(link.getAttribute('aria-label'),/새 탭/);
+  }
+  const na = record('3','4',[[0,0,0,0],[1,0,1,0],[0,1,0,1],[3,'na',3,'na']]);
+  p.select(file('전부 해당 없음.json',na));
+  await flushed();
+  assert.match(p.get('series-improvement-range').textContent,/원본 1개 모두 수정 후 해당 없음으로 기록되어 개선 여부를 판단할 수 없습니다/);
+  assert.doesNotMatch(p.get('series-improvement-range').textContent,/%/);
+  assert.match(p.get('series-severity-change').textContent,/네 판정이 있는 항목 중 원본에서 두 사람 모두 중요하다고 본 항목이 0개/);
+  assert.equal(p.get('series-improvement-pending').querySelector('a'),null);
+  assert.equal(p.get('series-improvement-pending').querySelectorAll('li').length,1);
+});
+
+test('분모가 고정된 %p 변화와 원본 대비 상대 변화를 원자료 동일 집단에도 표시한다', async t => {
+  const p = page(t);
+  const a = record('1','2',[[3,3,3,3],[0,3,0,3],[0,3,0,3],[0,3,0,3]]);
+  const b = record('3','4',[[3,0,3,0],[3,0,3,null],[3,null,3,null],[3,null,3,null]],true);
+  p.select(file('같은 원자료',a),file('새 자료',b));
+  await flushed();
+  assert.match(p.get('series-severity-change').textContent,/원본 40% \(2\/5\) → 수정본 80% \(4\/5\) · 40%p 증가 · 원본 대비 100% 증가/);
+  assert.match(p.get('series-severity').textContent,/원자료가 같은 기사 1건만 보면 · 원본 25% \(1\/4\) → 수정본 100% \(4\/4\) · 75%p 증가 · 원본 대비 300% 증가/);
+  assert.match(p.get('series-improvement-range').textContent,/20~80% · 확인 1\/5개/);
+  assert.match(p.get('series-improvement-range').textContent,/원자료가 같은 기사 1건의 개선 범위 · 개선 확인 0\/1개 \(0%\)/);
+  p.select(file('중요 왜곡 새로 발생',record('5','6',Array(4).fill([0,3,0,3]))));
+  await flushed();
+  assert.match(p.get('series-severity-change').textContent,/100%p 증가 · 네 판정이 있는 항목 중 원본에서 두 사람 모두 중요하다고 본 항목이 0개여서 상대 감소율 산출 불가/);
+  assert.match(p.get('series-improvement-range').textContent,/원본을 두 사람 모두 2~3단계로 기록한 항목이 없어 산출할 수 없습니다/);
+});
+
+test('미완료 예시와 기존 예시, 파일 전환 때 선택한 점수와 근거만 보인다', async t => {
+  const p = page(t);
+  const partial = p.get('series-partial-example'), full = p.get('series-example');
+  const partialLabel = partial.textContent, fullLabel = full.textContent;
+  let finish;
+  p.select({name:'늦은 원본',text:()=>new Promise(resolve=>{ finish=resolve; })});
+  partial.click();
+  finish(JSON.stringify({...one,demo:false}));
+  await flushed();
+  assert.equal(partial.getAttribute('aria-expanded'),'true');
+  assert.equal(full.getAttribute('aria-expanded'),'false');
+  assert.equal(p.get('series-status').textContent,'가상 기사 2건의 수정본 점수 일부를 가린 계산 예시입니다.');
+  assert.match(p.get('series-improved').textContent,/100%1\/1개/);
+  assert.match(p.get('series-improvement-range').textContent,/25~75% · 확인 1\/4개 · 미평가 점수를 채우면 최대 3\/4개/);
+  assert.equal(p.get('series-improvement-pending').querySelectorAll('li').length,3);
+  assert.equal(p.get('output').querySelector('a.review-evidence'),null);
+  assert.doesNotMatch(p.get('output').textContent,/이전 형식|이전 기준|이전 요약/);
+  full.click();
+  assert.equal(partial.textContent,partialLabel);
+  assert.equal(full.getAttribute('aria-expanded'),'true');
+  assert.match(p.get('series-improved').textContent,/75%3\/4개/);
+  assert.ok(p.get('output').querySelector('a.review-evidence'));
+  partial.click();
+  assert.equal(full.textContent,fullLabel);
+  p.select(file('실제 작업.json',{...one,demo:false}));
+  await flushed();
+  assert.equal(partial.textContent,partialLabel);
+  assert.doesNotMatch(p.get('result-title').textContent,/가상 예시/);
+  assert.match(p.get('series-articles').textContent,/실제 작업.json/);
+  partial.click();
+  partial.click();
+  p.empty();
+  assert.equal(partial.getAttribute('aria-expanded'),'false');
+  assert.ok(p.get('series-clear').disabled);
+});

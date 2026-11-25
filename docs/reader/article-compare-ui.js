@@ -698,6 +698,29 @@
     return item;
   }
 
+  function jointImprovementRange(range) {
+    const panel = element('div');
+    panel.id = 'joint-improvement-range';
+    panel.append(element('h4', '원본의 중요한 왜곡 전체에서 확인한 개선'));
+    if (!range.baseline) {
+      panel.append(note('원본에서 두 편집자 모두 2~3단계로 기록한 항목이 없어 개선율을 계산할 수 없습니다.'));
+      return panel;
+    }
+    if (range.notApplicable === range.baseline) {
+      panel.append(note('원본 ' + range.baseline + '개 모두 수정본에 ‘해당 없음’ 판정이 있어 개선 여부를 판단할 수 없습니다.'));
+      return panel;
+    }
+    panel.append(element('p', '원본 ' + range.baseline + '개 중 두 사람 모두 개선 확인 ' + range.confirmed + '개 (' + percent(range.lowerPct) + ')'));
+    if (range.unresolved) {
+      panel.append(element('p', '남은 미평가를 채울 때 가능한 개선율 ' + percent(range.lowerPct) + ' ~ ' +
+        percent(range.upperPct) + ' · 추가로 개선을 확인할 수 있는 항목 ' + range.unresolved + '개'));
+    }
+    if (range.ruledOut) panel.append(note('수정본에 한 사람이라도 2~3단계를 매긴 항목 ' + range.ruledOut + '개'));
+    if (range.notApplicable) panel.append(note('수정본에 ‘해당 없음’ 판정이 있어 개선을 확인할 수 없는 항목 ' + range.notApplicable +
+      '개. 해당 판정이 유지되면 미평가를 마쳐도 개선 건수에 들지 않습니다.'));
+    return panel;
+  }
+
   function jointSeverity(joint) {
     const panel = element('div');
     panel.id = 'joint-severity';
@@ -710,11 +733,17 @@
       panel.append(note('비교 대기 · 두 편집자가 원본과 수정본에 모두 단계를 매긴 항목이 없습니다.'));
       return panel;
     }
-    const {matrix, oppositeSteps, withinBandOppositeSteps} = joint.severity;
-    const before = matrix[2].reduce((total, n) => total + n, 0);
-    const after = matrix.reduce((total, row) => total + row[2], 0);
-    panel.append(element('p', '두 사람이 모두 중요한 왜곡(2~3단계)으로 본 항목 · 원본 ' +
-      before + '/' + joint.paired + '개 → 수정본 ' + after + '/' + joint.paired + '개'),
+    const {oppositeSteps, withinBandOppositeSteps} = joint.severity;
+    const {beforeImportant, afterImportant, paired, relativeReductionPct, deltaPoints} = joint.netSeverityChange;
+    const change = element('p');
+    change.id = 'joint-net-change';
+    const direction = deltaPoints < 0 ? '감소' : '증가';
+    const absolute = deltaPoints === 0 ? '비율 차이 0%p' : Number(Math.abs(deltaPoints).toFixed(1)) + '%p ' + direction;
+    const relative = relativeReductionPct === null ? '두 편집자가 두 판본을 모두 채점한 항목 중 원본에 함께 2~3단계를 매긴 항목이 없어 상대 변화율 산출 불가'
+      : relativeReductionPct === 0 ? '원본 대비 변화 없음 (0%)' : '원본 대비 ' + percent(Math.abs(relativeReductionPct)) + ' ' + direction;
+    change.textContent = '두 사람이 모두 중요한 왜곡(2~3단계)으로 본 항목 · 원본 ' +
+      beforeImportant + '/' + paired + '개 → 수정본 ' + afterImportant + '/' + paired + '개 · ' + absolute + ' · ' + relative;
+    panel.append(change,
       note('한 편집자는 단계를 낮추고 다른 편집자는 높인 항목 ' + oppositeSteps +
         '개 · 그중 둘 다 1단계와 2단계 사이의 경계를 넘지 않은 항목 ' + withinBandOppositeSteps + '개'));
     return panel;
@@ -746,7 +775,7 @@
     grid.append(card('두 사람 모두 개선으로 판정', joint.improved, '두 사람 모두 원본을 2~3단계로 평가하고 수정본도 채점한 항목 중'),
       card('두 사람 모두 악화로 판정', joint.worsened, '두 사람 모두 원본을 0~1단계로 평가하고 수정본도 채점한 항목 중'));
     const editors = [priorReview, current];
-    panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid,
+    panel.append(note(editors.map((r, i) => editorNames[i] + ' 묶음 ' + r.key.pairId.slice(0, 8)).join(' · ')), grid, jointImprovementRange(joint.improvementRange),
       note('네 판정이 모두 있는 항목 ' + joint.paired + '/' + joint.total + '개 · 비교할 단계가 부족한 항목 ' + joint.unpaired +
         '개 · 중요한 왜곡(2~3단계)의 개선·악화·유지 판단이 갈린 항목 ' + joint.disagreed + '개'), jointSeverity(joint));
     if (joint.stableSeverityDifferences) panel.append(note('두 사람 모두 유지로 보았지만 중요한 왜곡이 있는지에 대한 판단이 다른 항목 ' +

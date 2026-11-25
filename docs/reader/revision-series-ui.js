@@ -4,10 +4,11 @@
   const input = byId('series-files');
   const clear = byId('series-clear');
   const example = byId('series-example');
-  const exampleLabel = example.textContent;
+  const partialExample = byId('series-partial-example');
+  const exampleLabels = new Map([example, partialExample].map(button => [button, button.textContent]));
   const status = byId('series-status');
   const output = byId('output');
-  let selection = 0, showingExample = false;
+  let selection = 0, showingExample = null;
 
   function element(tag, text, className) {
     const node = document.createElement(tag);
@@ -74,15 +75,64 @@
     return link;
   }
 
-  function severityChange(matrix, paired) {
+  const rounded = n => Number(n.toFixed(1));
+  const level = value => Number.isInteger(value) ? value + '단계' : value === 'na' ? '해당 없음' : '미평가';
+
+  function severityChange({paired, beforeImportant, afterImportant, deltaPoints, relativeReductionPct}) {
     if (!paired) return '함께 채점한 항목이 없어 산출 대기';
-    const before = matrix[2].reduce((sum, count) => sum + count, 0);
-    const after = matrix.reduce((sum, row) => sum + row[2], 0);
-    const rate = count => Number((100 * count / paired).toFixed(1)) + '% (' + count + '/' + paired + ')';
-    const points = Number((100 * Math.abs(after - before) / paired).toFixed(1));
-    const change = after === before ? '변화 없음' :
-      (points ? points + '%p' : '0.1%p 미만') + (after > before ? ' 증가' : ' 감소');
-    return '원본 ' + rate(before) + ' → 수정본 ' + rate(after) + ' · ' + change;
+    const rate = count => rounded(100 * count / paired) + '% (' + count + '/' + paired + ')';
+    const size = (value, unit) => rounded(Math.abs(value)) ? rounded(Math.abs(value)) + unit : '0.1' + unit + ' 미만';
+    const change = deltaPoints === 0 ? '변화 없음' : size(deltaPoints, '%p') + (deltaPoints > 0 ? ' 증가' : ' 감소');
+    let relative = '네 판정이 있는 항목 중 원본에서 두 사람 모두 중요하다고 본 항목이 0개여서 상대 감소율 산출 불가';
+    if (relativeReductionPct !== null) {
+      relative = relativeReductionPct === 0 ? '원본 대비 변화 0%' :
+        '원본 대비 ' + size(relativeReductionPct, '%') + (relativeReductionPct > 0 ? ' 감소' : ' 증가');
+    }
+    return '원본 ' + rate(beforeImportant) + ' → 수정본 ' + rate(afterImportant) + ' · ' + change + ' · ' + relative;
+  }
+
+  function rangeText(range) {
+    const {baseline, confirmed, unresolved, notApplicable, lowerPct, upperPct} = range;
+    if (!baseline) return '원본을 두 사람 모두 2~3단계로 기록한 항목이 없어 산출할 수 없습니다.';
+    if (baseline === notApplicable) return '원본 ' + baseline + '개 모두 수정 후 해당 없음으로 기록되어 개선 여부를 판단할 수 없습니다.';
+    const counts = confirmed + '/' + baseline + '개';
+    if (!unresolved) return '개선 확인 ' + counts + ' (' + rounded(lowerPct) + '%)';
+    return rounded(lowerPct) + '~' + rounded(upperPct) + '% · 확인 ' + counts +
+      ' · 미평가 점수를 채우면 최대 ' + (confirmed + unresolved) + '/' + baseline + '개';
+  }
+
+  function improvementRange(report, sources) {
+    const range = report.improvementRange;
+    const area = element('section');
+    area.id = 'series-improvement-range';
+    area.append(element('h4', '원본의 중요한 왜곡 전체에서 확인할 수 있는 개선'),
+      element('p', rangeText(range)));
+    if (!range.baseline) return area;
+    area.append(element('p', '원본에서 두 편집자가 모두 2~3단계를 준 ' + range.baseline +
+      '개 중 수정 후 둘 다 0~1단계인 항목을 셉니다. 수정 후 한 명 이상 2~3단계 ' + range.ruledOut +
+      '개 · 추가 채점으로 개선을 확인할 수 있는 항목 ' + range.unresolved + '개 · 해당 없음으로 개선을 판단할 수 없는 항목 ' +
+      range.notApplicable + '개.', 'note'));
+    if (report.changedSources) area.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources +
+      '건의 개선 범위 · ' + rangeText(report.unchangedEvidenceRange), 'note'));
+    if (!report.pendingImportant) return area;
+    const details = element('details');
+    details.id = 'series-improvement-pending';
+    details.append(element('summary', '수정 후 미평가·해당 없음이 있는 원본 중요 항목 ' + report.pendingImportant + '개 확인'));
+    const list = element('ul');
+    for (const entry of sources.values()) {
+      for (const {id, title} of report.dimensions) {
+        const d = entry.record.dimensions.find(axis => axis.id === id);
+        if (!window.JournalRevisionAgreement.summarizeScores([d]).pendingImportant) continue;
+        const item = element('li');
+        if (entry.record.version >= 2 && !entry.summaryOnlyExample) item.append(evidenceLink(entry, title, '&focus=bias-' + id));
+        else item.append(element('strong', entry.name + ' · ' + title));
+        item.append(element('p', '수정 후 첫 편집자 ' + level(d.first.after) + ' · 둘째 편집자 ' + level(d.second.after)));
+        list.append(item);
+      }
+    }
+    details.append(list);
+    area.append(details);
+    return area;
   }
 
   function severityPanel(report, sources, rates) {
@@ -99,7 +149,6 @@
       details.append(element('summary', '원본 평가가 부족한 수정본의 중요한 왜곡 ' + report.revised.withoutBaseline + '개'),
         element('p', '수정본에서는 두 사람 모두 2~3단계로 봤습니다. 원본의 근거를 확인해야 왜곡이 언제 생겼는지 판단할 수 있습니다.'));
       const list = element('ul');
-      const level = value => Number.isInteger(value) ? value + '단계' : value === 'na' ? '해당 없음' : '미평가';
       for (const entry of sources.values()) {
         for (const {id, title} of report.dimensions) {
           const d = entry.record.dimensions.find(axis => axis.id === id);
@@ -116,16 +165,16 @@
       panel.append(details);
     }
     if (!report.paired) {
-      panel.append(element('p', '비교할 수 있는 항목이 생기면 변화가 표시됩니다.'), rates);
+      panel.append(element('p', '비교할 수 있는 항목이 생기면 변화가 표시됩니다.'), rates, improvementRange(report, sources));
       return panel;
     }
     const {matrix, oppositeSteps, withinBandOppositeSteps} = report.severity;
     const result = element('p', '두 사람 모두 중요하다고 본 비율 · ');
-    result.append(element('strong', severityChange(matrix, report.paired)));
+    result.append(element('strong', severityChange(report.netSeverityChange)));
     result.id = 'series-severity-change';
-    panel.append(result, rates);
+    panel.append(result, rates, improvementRange(report, sources));
     if (report.changedSources) panel.append(element('p', '원자료가 같은 기사 ' + report.unchangedSources +
-      '건만 보면 · ' + severityChange(report.unchangedEvidenceSeverity.matrix, report.unchangedEvidencePaired), 'note'));
+      '건만 보면 · ' + severityChange(report.unchangedEvidenceNet), 'note'));
     panel.append(element('p', '원본에서는 한 명만 중요하다고 봤고 수정본에서는 두 사람 모두 중요하다고 본 항목 ' +
       matrix[1][2] + '개 · 반대로 두 명에서 한 명이 된 항목 ' + matrix[2][1] + '개'),
       element('p', '한 편집자는 단계를 높이고 다른 편집자는 낮춘 항목 ' + oppositeSteps +
@@ -283,6 +332,10 @@
     const panel = element('section', null, 'panel');
     panel.id = 'series-facts';
     panel.append(element('h3', '편향 개선과 사실 확인'));
+    if (builtIn === 'partial') {
+      panel.append(element('p', '이 계산 예시에는 편향 점수만 담겨 있습니다.'));
+      return panel;
+    }
     const facts = report.facts;
     panel.append(element('p', '구절별 검토 상태가 담긴 기사 ' + facts.articleCount + '/' + report.articleCount + '건'));
     if (facts.missingArticles) panel.append(element('p', '이전 형식 요약 ' + facts.missingArticles +
@@ -347,7 +400,7 @@
           if (trace.unmatched + trace.changed) item.append(element('p', '수정본 대응 구절 미확인 ' + trace.unmatched +
             '개 · 대응 구절에서 전체 지지 미확인 ' + trace.changed + '개'));
         }
-      } else item.append(element('p', '이전 요약에 사실 판정 자료가 없습니다.', 'note'));
+      } else if (!sources.get(before).summaryOnlyExample) item.append(element('p', '이전 요약에 사실 판정 자료가 없습니다.', 'note'));
       panel.append(item);
     }
     return panel;
@@ -375,7 +428,7 @@
     const historical = [...sources.values()].filter(entry => entry.record.version < 5 &&
       (entry.record.factMatches?.some(([, match]) => match !== null) || entry.record.dimensions.some(d =>
         d.id === 'standards' && [d.first, d.second].some(r => Number.isInteger(r.before) || Number.isInteger(r.after)))));
-    if (historical.length) summary.append(element('p', '이전 기준으로 저장한 기사 ' + historical.length +
+    if (builtIn !== 'partial' && historical.length) summary.append(element('p', '이전 기준으로 저장한 기사 ' + historical.length +
       '건의 검증 기준 점수 또는 구절 대응이 포함됐습니다. 양쪽 당사자의 근거와 “해당 사업”이 가리키는 대상을 현행 기준으로 대조하려면 원래 작업 파일을 다시 열어 요약을 저장하세요.', 'note'));
     const earlierCore = [...sources.values()].filter(({record}) => record.version < 7 &&
       record.factContext?.matches.some(([before]) => record.factContext.beforeCore[before] === 2 || record.facts.before[before].outcome === 'supported'));
@@ -419,8 +472,11 @@
 
   function reset() {
     selection++;
-    showingExample = false;
-    example.textContent = exampleLabel;
+    showingExample = null;
+    for (const [button, label] of exampleLabels) {
+      button.textContent = label;
+      button.setAttribute('aria-expanded', 'false');
+    }
     byId('result').hidden = true;
     byId('result-title').textContent = '집계 결과';
     output.replaceChildren();
@@ -451,18 +507,23 @@
     }
   });
 
-  example.addEventListener('click', () => {
-    const close = showingExample;
-    input.value = '';
-    reset();
-    if (close) return;
-    const samples = window.JournalRevisionSeriesExample;
-    render(samples, samples.map(sample => sample.record), true);
-    showingExample = true;
-    example.textContent = '가상 예시 닫기';
-    clear.disabled = false;
-    status.textContent = '가상 기사 2건을 채점한 모의 예시입니다.';
-  });
+  for (const button of exampleLabels.keys()) {
+    button.setAttribute('aria-expanded', 'false');
+    button.addEventListener('click', () => {
+      const close = showingExample === button;
+      input.value = '';
+      reset();
+      if (close) return;
+      const partial = button === partialExample;
+      const samples = partial ? window.JournalPartialRevisionExample() : window.JournalRevisionSeriesExample;
+      render(samples, samples.map(sample => sample.record), partial ? 'partial' : 'full');
+      showingExample = button;
+      button.textContent = partial ? '미완료 평가 예시 닫기' : '가상 예시 닫기';
+      button.setAttribute('aria-expanded', 'true');
+      clear.disabled = false;
+      status.textContent = partial ? '가상 기사 2건의 수정본 점수 일부를 가린 계산 예시입니다.' : '가상 기사 2건을 채점한 모의 예시입니다.';
+    });
+  }
 
   clear.addEventListener('click', () => {
     input.value = '';

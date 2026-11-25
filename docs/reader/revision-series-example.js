@@ -1,4 +1,20 @@
 /* Blind revision exports from the synthetic birth-statistics and library-hours browser exercises. */
+// In the incomplete exercise the original ratings are identical. Hide selected
+// revised ratings in a new score-only record: the full exercise remains available.
+globalThis.JournalPartialRevisionExample = function () {
+  return globalThis.JournalRevisionSeriesExample.map(({name, evidenceExample, record}) => {
+    const library = evidenceExample === 'library';
+    const dimensions = record.dimensions.map(({id, first, second}) => {
+      const hideBoth = library && (id === 'framing' || id === 'omission');
+      const hideFirst = hideBoth || (!library && id === 'framing');
+      return {id, first:{before:first.before, after:hideFirst ? null : first.after},
+        second:{before:second.before, after:hideBoth ? null : second.after}};
+    });
+    return {name, record:{format:record.format, version:1, demo:true, before:{...record.before},
+      after:{...record.after}, dimensions}};
+  });
+};
+
 globalThis.JournalRevisionSeriesExample = [
   {
     name: "출생 통계 연습 기사",

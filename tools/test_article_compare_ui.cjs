@@ -285,6 +285,49 @@ test('중요한 왜곡의 전후 개수를 같은 네 점수로 비교하고 경
   assert.doesNotMatch(p.el('joint-severity').textContent, /0개|0%/);
 });
 
+test('두 사람의 공동 개선 범위와 같은 항목의 상대 변화를 실제 배정 파일로 표시한다', async t => {
+  const fixtures = await require('../docs/reader/revision-evidence-example.js').files();
+  async function open(profiles) {
+    const items = structuredClone(fixtures);
+    const keys = items.map(item => item.data).filter(data => data.mapping);
+    for (const {data} of items) {
+      if (!data.blindReview) continue;
+      const editor = keys.findIndex(key => key.pairId === data.blindReview.pairId);
+      const role = keys[editor].mapping.before.slot === data.blindReview.slot ? 'before' : 'after';
+      const ratings = data.articleAssessment.ratings;
+      for (const [i, id] of ['wording','framing','omission'].entries()) {
+        const score = profiles[editor][role][i];
+        if (score === null) delete ratings[id];
+        else Object.assign(ratings[id], {level:score, impact:'원자료가 나타내는 대상과 범위를 비교했다.'});
+      }
+    }
+    const p = page(t);
+    p.selectFiles('blind-bundle-files', items.map(({name, data}) => ({name, text:async () => JSON.stringify(data)})));
+    await t.waitFor(() => assert.ok(p.el('joint-improvement-range')));
+    return p;
+  }
+
+  const partial = await open([{before:[3,3,3], after:[0,2,null]}, {before:[3,3,3], after:[1,null,0]}]);
+  assert.match(partial.el('revision-agreement').textContent, /두 사람 모두 개선으로 판정100%1 \/ 1개/);
+  const range = partial.el('joint-improvement-range').textContent;
+  assert.match(range, /원본 3개 중 두 사람 모두 개선 확인 1개 \(33.3%\)/);
+  assert.match(range, /가능한 개선율 33.3% ~ 66.7%.*추가로 개선을 확인할 수 있는 항목 1개/);
+  assert.match(range, /수정본에 한 사람이라도 2~3단계를 매긴 항목 1개/);
+  assert.match(partial.el('joint-net-change').textContent, /원본 1\/1개 → 수정본 0\/1개 · 100%p 감소 · 원본 대비 100% 감소/);
+
+  const worsening = await open(Array(2).fill({before:[3,0,1], after:[3,2,3]}));
+  assert.match(worsening.el('joint-net-change').textContent, /원본 1\/3개 → 수정본 3\/3개 · 66.7%p 증가 · 원본 대비 200% 증가/);
+
+  const absent = await open(Array(2).fill({before:[0,0,0], after:[3,0,0]}));
+  assert.match(absent.el('joint-net-change').textContent, /33.3%p 증가 · 두 편집자가 두 판본을 모두 채점한 항목 중 원본에 함께 2~3단계를 매긴 항목이 없어 상대 변화율 산출 불가/);
+  assert.match(absent.el('joint-improvement-range').textContent, /개선율을 계산할 수 없습니다/);
+
+  const na = await open(Array(2).fill({before:[0,3,0], after:[0,'na',0]}));
+  assert.match(na.el('joint-improvement-range').textContent, /원본 1개 모두 수정본에 ‘해당 없음’ 판정이 있어 개선 여부를 판단할 수 없습니다/);
+  assert.doesNotMatch(na.el('joint-improvement-range').textContent, /0%/);
+  assert.match(na.el('joint-net-change').textContent, /원본 0\/2개 → 수정본 0\/2개.*두 편집자가 두 판본을 모두 채점한 항목 중 원본에 함께 2~3단계를 매긴 항목이 없어 상대 변화율 산출 불가/);
+});
+
 test('원본 사실 대조 링크는 같은 문구라도 문맥이 바뀐 위치와 양쪽 근거를 열고 구형·불일치 요약을 거절한다', async t => {
   const example = require('../docs/reader/revision-evidence-example.js');
   const blind = require('../docs/reader/blind-revision.js');

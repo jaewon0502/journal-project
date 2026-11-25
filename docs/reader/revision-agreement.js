@@ -74,6 +74,7 @@
   function summarizeScores(dimensions) {
     let paired = 0, disagreed = 0, stableSeverityDifferences = 0;
     let missingScores = 0, naScores = 0, pendingImportant = 0;
+    let unresolved = 0, notApplicable = 0;
     const revised = {rated:0, important:0, withoutBaseline:0};
     // Rows and columns count how many of the two editors marked an important
     // distortion in the original and revised versions of the same item.
@@ -93,7 +94,15 @@
         }
       }
       if (a === 'unpaired' || b === 'unpaired') {
-        if (first.before >= 2 && second.before >= 2) pendingImportant++;
+        if (first.before >= 2 && second.before >= 2) {
+          pendingImportant++;
+          // A single recorded high rating already rules out common improvement.
+          // An explicit NA remains NA when missing numeric ratings are filled.
+          if (!(first.after >= 2 || second.after >= 2)) {
+            if (first.after === 'na' || second.after === 'na') notApplicable++;
+            else unresolved++;
+          }
+        }
         continue;
       }
       paired++;
@@ -109,9 +118,18 @@
         else disagreed++;
       }
     }
+    const beforeImportant = matrix[2].reduce((sum, count) => sum + count, 0);
+    const afterImportant = matrix.reduce((sum, row) => sum + row[2], 0);
+    const baseline = beforeImportant + pendingImportant;
+    const confirmed = matrix[2][0];
+    const improvementRange = {baseline, confirmed, ruledOut:baseline - confirmed - unresolved - notApplicable,
+      unresolved, notApplicable, lowerPct:ratio(confirmed, baseline).pct, upperPct:ratio(confirmed + unresolved, baseline).pct};
+    const netSeverityChange = {paired, beforeImportant, afterImportant,
+      deltaPoints:ratio(afterImportant - beforeImportant, paired).pct,
+      relativeReductionPct:ratio(beforeImportant - afterImportant, beforeImportant).pct};
     return {total: dimensions.length, paired, unpaired: dimensions.length - paired, disagreed, stableSeverityDifferences,
       missingScores, naScores, pendingImportant, revised, severity: {matrix, oppositeSteps, withinBandOppositeSteps},
-      improved: ratio(matrix[2][0], matrix[2].reduce((sum, n) => sum + n, 0)),
+      improvementRange, netSeverityChange, improved: ratio(confirmed, beforeImportant),
       worsened: ratio(matrix[0][2], matrix[0].reduce((sum, n) => sum + n, 0))};
   }
 
