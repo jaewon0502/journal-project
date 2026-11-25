@@ -56,6 +56,7 @@ test('빈 실측의 분모는 0이고 효과는 미측정이며 가상 예시를
     manual:{verified:null,tasks:0},journal:{verified:null,tasks:0}});
   assert.equal(summary.overall.time.reductionPct, null);
   assert.equal(summary.overall.partyLabelDirectionReversals, null);
+  assert.equal(summary.overall.partyLabelBlockCueDirections, null);
   assert.equal(summary.overall.partyLabelVerdictSourceAssociation, null);
   assert.deepEqual(summary.overall.verdictAndEvidence.manual, {tasks:0,verified:null,verifiedPct:null});
   const unmeasured = {accepted:null,eligible:0,pct:null};
@@ -157,6 +158,27 @@ test('성공 한 건당 시간에는 온전히 시간을 기록한 과제만 들
     assert.equal(view.time.journalSecondsPerVerified,null);
     assert.deepEqual(view.verdictAndEvidence.journal,{tasks:16,verified:8,verifiedPct:50});
   }
+});
+
+test('묶음 방향 상쇄는 현업 공유본에 기사 수만 남고 관측·예정 일치 판본에서 다시 계산한다', async t => {
+  const roster = Array.from({length:8}, (_, i) => invitation(i+1));
+  const demo = study.blockCueDemoRecords();
+  const records = roster.map((invite,i) => completed(invite, {
+    actualEdition:i < 4 ? edition : 'c'.repeat(64),
+    answer(task) {
+      const {verdict,sourceIds} = demo[i].trials[task.position-1];
+      return {verdict,sourceIds};
+    }
+  }));
+  const summary = await dashboard(t, records, roster).save();
+  const overall = {opposingCases:1,cancelledCases:1}, one = {opposingCases:0,cancelledCases:0};
+  assert.deepEqual(summary.overall.partyLabelBlockCueDirections,{comparedCases:4,completeBlocks:2,manual:overall,journal:overall});
+  assert.equal(summary.observedEditions.length,2);
+  assert.equal(summary.assignedMatchedEditions.length,1);
+  for (const scope of [...summary.observedEditions, ...summary.assignedMatchedEditions]) {
+    assert.deepEqual(scope.partyLabelBlockCueDirections,{comparedCases:4,completeBlocks:1,manual:one,journal:one});
+  }
+  assert.doesNotMatch(JSON.stringify(summary),/"aOnly"|"bOnly"|"neither"|"caseId"|"repair"|"participantId"|PRIVATE-EDITOR-REASON/);
 });
 
 test('판정·근거 조합 차이는 실측 전체와 판본별 공유 파일에 기사 건수로만 전달한다', async t => {

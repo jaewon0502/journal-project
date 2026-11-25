@@ -112,6 +112,24 @@ test('채택 방향이 바뀐 두 기사를 표시하고 모의 보기에서 실
   assert.ok(p.el('case-quality').hidden);
 });
 
+test('전체 0%p 예시는 같은 기사와 방식에서 어느 표기만 채택한 묶음인지 표시한다', t => {
+  const p = page(t, '#demo-block-cue');
+  assert.equal(p.el('demo-example').value,'block-cue');
+  assert.equal(p.w.document.activeElement,p.el('block-cue-summary'));
+  assert.match(p.el('block-cue-summary').textContent,/가상 기록 · 완성 묶음 2개.*전체 채택률 격차가 0%p인 기사 · 원자료 1\/4건, 저널 1\/4건/);
+  const repair = p.el('cue-case-repair'), permits = p.el('cue-case-permits');
+  assert.match(repair.querySelector('summary').textContent,/사실 채택률 격차 0%p → 0%p.*저널에서 묶음별 채택 방향 상쇄/);
+  assert.match(permits.querySelector('summary').textContent,/원자료에서 묶음별 채택 방향 상쇄/);
+  const rows = [...repair.querySelectorAll('.case-block-cues tbody tr')].map(tr=>[...tr.cells].map(td=>td.textContent));
+  assert.deepEqual(rows,[['원자료','0/2','0/2','1/2','1/2'],['저널','1/2','1/2','0/2','0/2']]);
+  p.el('demo-example').value='adoptions';
+  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  assert.match(p.el('block-cue-summary').textContent,/완성 묶음 1개.*2개 이상 필요/);
+  p.el('real-view').click();
+  assert.equal(p.el('block-cue-summary').textContent,'');
+  assert.equal(page(t,'#demo-block-cue',undefined,undefined,true).el('block-cue-summary'),null);
+});
+
 test('가상 예시에서 판정과 근거의 조합이 달라진 행만 표기별 분모와 함께 확인한다', t => {
   const p = page(t, '#demo-verdict-source');
   assert.equal(p.w.document.activeElement, p.el('verdict-source-summary'));

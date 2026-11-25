@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
+from build_facilitator_pack import CASES, CASE_FOLDERS, DISPUTE_FILES, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -92,7 +92,7 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = {PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}
+            expected_json = {PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}
             sample = json.loads(archive.read(PARTY_LEDGER_SAMPLE))
             self.assertIs(sample['demo'], True)
             self.assertEqual(sample['articleAssessment']['ratings']['standards']['level'], 3)
@@ -115,13 +115,18 @@ class FacilitatorPack(unittest.TestCase):
             self.assertEqual([json.loads(data) for data in embedded], [case])
             self.assertEqual(len(case['items']), 6)
             self.assertTrue(all(item['data']['demo'] is True for item in case['items']))
+            [pair] = re.findall(r'<script id="core-dispute-practice" type="application/json">(.*?)</script>',
+                                archive.read('article-compare.html').decode(), re.S)
+            self.assertEqual(json.loads(pair), [json.loads(archive.read(name)) for name in DISPUTE_FILES.values()])
+            self.assertIn('article-compare.html#demo-core-dispute', archive.read('시작.html').decode())
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
-                        self.assertTrue({PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}.isdisjoint(nested.namelist()))
+                        self.assertTrue({PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
                         self.assertNotIn('core-context-notes-ui.js', nested.namelist())
                         for page in (n for n in nested.namelist() if n.endswith('.html')):
                             self.assertNotIn(b'id="quote-practice"', nested.read(page))
+                            self.assertNotIn(b'id="core-dispute-practice"', nested.read(page))
 
     def test_synthetic_rationales_are_only_in_the_coordinator_kit(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:

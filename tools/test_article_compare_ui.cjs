@@ -11,12 +11,18 @@ function workspace(article) {
   return {format:'journal-local-factcheck-v1', article, articleDraft:article, sources:[], receipts:[], rowDrafts:[],
     demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}};
 }
-function page(t, hash = '') {
+function page(t, hash = '', practice) {
   const dom = new JSDOM(fs.readFileSync(path.join(dir,'article-compare.html'),'utf8'), {url:'file:///reader/article-compare.html' + hash, runScripts:'outside-only'});
   t.after(() => dom.window.close());
   const w = dom.window;
   w.TextEncoder = TextEncoder;
   Object.defineProperty(w, 'crypto', {value:require('node:crypto').webcrypto});
+  if (practice !== undefined) {
+    const sample = w.document.createElement('script');
+    sample.id = 'core-dispute-practice'; sample.type = 'application/json';
+    sample.textContent = JSON.stringify(practice);
+    w.document.body.append(sample);
+  }
   for (const script of w.document.querySelectorAll('script[src]')) w.eval(fs.readFileSync(path.join(dir,script.getAttribute('src')), 'utf8'));
   const el = id => w.document.getElementById(id);
   function selectFiles(id, files) {
@@ -47,6 +53,68 @@ function captureDownload(t, view) {
     return JSON.parse(await downloaded.text());
   };
 }
+
+const corePractice = () => ['a','b'].map(side => JSON.parse(fs.readFileSync(
+  path.join(__dirname,'../experiments/core-spending-dispute/editor-' + side + '.json'),'utf8')));
+
+test('진행자용 두 예시는 핵심 불일치로 바로 열리고 실제 파일이나 기존 예시 위에 겹치지 않는다', async t => {
+  const hash = '#demo-core-dispute';
+  const p = page(t,hash,corePractice());
+  const target = p.el('reviewer-dispute-5');
+  assert.ok(target.closest('details').open);
+  assert.equal(p.w.document.activeElement,target.firstElementChild);
+  assert.match(p.el('result-title').textContent,/가상 예시.*두 편집자/);
+  assert.deepEqual([...target.querySelectorAll('a')].map(a => a.href),['https://example.org/0.pdf#page=2','https://example.org/1.pdf#page=7']);
+  assert.equal(p.el('file-left').files.length + p.el('file-right').files.length,0);
+  assert.equal(p.el('compare').disabled,true);
+  assert.equal(p.el('output').querySelector('a[download], #agreement-export'),null);
+
+  const navigate = async value => {
+    const changed = new Promise(resolve => p.w.addEventListener('hashchange',resolve,{once:true}));
+    p.w.location.hash=value; await changed;
+  };
+  await navigate('#inputs');
+  assert.equal(p.el('result').hidden,true);
+  assert.equal(p.w.document.querySelector('[name=mode]:checked').value,'revision');
+  const back = new Promise(resolve => p.w.addEventListener('hashchange',resolve,{once:true}));
+  p.w.history.back(); await back;
+  assert.equal(p.w.document.activeElement,p.el('reviewer-dispute-5').firstElementChild);
+  const forward = new Promise(resolve => p.w.addEventListener('hashchange',resolve,{once:true}));
+  p.w.history.forward(); await forward;
+  assert.equal(p.el('result').hidden,true);
+  p.el('example').click();
+  const prior = p.el('output').textContent;
+  await navigate(hash);
+  assert.equal(p.el('output').textContent,prior);
+  p.el('example').click();
+  await navigate('#inputs');
+  let ready;
+  p.selectFiles('file-left',[{name:'편집자의 작업.json',text:() => new Promise(resolve => {ready=resolve;})}]);
+  await navigate(hash);
+  assert.equal(p.el('result').hidden,true);
+  ready(JSON.stringify(workspace('작성 중인 기사다.')));
+  await p.settled();
+  assert.match(p.el('preview-left').textContent,/편집자의 작업.*작성 중인 기사/);
+});
+
+test('핵심 불일치 연습은 지정된 해시에서 두 가상 기록의 기사와 자료가 일치할 때만 연다', t => {
+  const hash = '#demo-core-dispute';
+  for (const [sample, message] of [
+    [undefined,/진행자 배포본/],
+    [corePractice().slice(0,1),/두 편집자의 가상 작업/],
+    [corePractice().map((x,i) => i ? {...x,demo:false} : x),/가상 작업/],
+    [corePractice().map((x,i) => i ? {...workspace('새 판본에 실린 기사다.'),demo:true} : x),/기사 원문이 일치/],
+    [corePractice().map((x,i) => i ? {...x,sources:[],receipts:[],articleAssessment:null} : x),/원자료 묶음이 일치/]
+  ]) {
+    const p = page(t,hash,sample);
+    assert.equal(p.el('result').hidden,true);
+    assert.match(p.el('status').textContent,message);
+    assert.equal(p.w.document.querySelector('[name=mode]:checked').value,'revision');
+  }
+  const other = page(t,hash+'&file=https://example.org/other.json',corePractice());
+  assert.equal(other.el('result').hidden,true);
+  assert.equal(other.el('status').textContent,'');
+});
 
 test('집계에서 선택한 익명 요약이 일치해야 수정본의 충돌 구절과 두 사람의 근거를 연다', async t => {
   const example = require('../docs/reader/revision-evidence-example.js');
@@ -862,6 +930,49 @@ test('두 편집자의 판정이 같아도 구절별로 선택한 자료와 발�
   p.load('right','같은 자료로 채점.json', saved('B', true));
   await p.settled(); p.el('compare').click();
   assert.match(output.textContent, /선택한 근거가 다른 구절 · 0개/);
+});
+
+test('핵심 불일치 바로가기는 같은 문구라도 지정된 구간과 두 편집자의 근거로 이동한다', async t => {
+  const p = page(t);
+  const claim = '지출액은 20억 원이다.';
+  const article = ['🌿 공원 결산을 확인했다.',claim,'공원 회의를 마쳤다.',
+    '🏫 학교의 결산을 확인했다.',claim,claim,'학교 회의를 마쳤다.'].join('\n');
+  function saved(side, core, agree = false) {
+    const file = workspace(article);
+    file.sources = ['예비','확정'].map((type,i) => ({id:side+i,title:type+' 결산서',version:type,
+      url:'https://example.org/'+i+'.pdf',pdfPage:i?'7':'2',locator:'사업별 지출',
+      excerpt:'공원·학교 지출액은 각각 '+(i?'19':'20')+'억 원이다.'}));
+    const rows = engine.prepare(article,file.sources).rows;
+    file.receipts = [1,4].map((i) => engine.decide(rows[i],{status:side==='A'||agree?'fact':'contradicted',
+      reason:(i===4?'학교':'공원')+' 사업의 금액을 대조했다.',sourceIds:[side+(side==='A'?0:1)],acknowledged:true},file.sources));
+    file.articleAssessment = rubric.save(engine.report(article,file.sources,file.receipts),file.sources,
+      {coreRowIds:core.map(i => rows[i].id),ratings:{}});
+    return JSON.stringify(file);
+  }
+  p.reviewers();
+  p.load('left','예비표 근거.json',saved('A',[]));
+  p.load('right','확정표 근거.json',saved('B',[4]));
+  await p.settled(); p.el('compare').click();
+  const out = p.el('output');
+  const jumps = out.querySelectorAll('button[aria-controls^="reviewer-dispute-"]');
+  assert.equal(jumps.length,1);
+  assert.equal(jumps[0].textContent,'구간 5 · '+claim);
+  const target = p.el(jumps[0].getAttribute('aria-controls')), group = target.closest('details');
+  assert.equal(group.open,false);
+  jumps[0].click();
+  assert.equal(group.open,true);
+  assert.equal(p.w.document.activeElement,target.firstElementChild);
+  assert.match(target.firstElementChild.textContent,/구간 5 · 편집자 B가 핵심으로 지정/);
+  const context = target.querySelector('blockquote');
+  assert.deepEqual([...context.querySelectorAll('mark')].map(n => n.textContent),[claim,claim]);
+  assert.ok(context.textContent.startsWith('🏫 학교의 결산'));
+  assert.doesNotMatch(context.textContent,/공원/);
+  assert.match(target.querySelector('.pair').textContent,/편집자 A.*학교 사업.*예비 결산서.*편집자 B.*학교 사업.*확정 결산서/s);
+  assert.deepEqual([...target.querySelectorAll('a')].map(a => a.href),['https://example.org/0.pdf#page=2','https://example.org/1.pdf#page=7']);
+  p.load('right','변경.json',saved('B',[4],true));
+  await p.settled(); p.el('compare').click();
+  assert.equal(out.querySelector('[aria-controls^="reviewer-dispute-"]'),null);
+  assert.equal(p.el('reviewer-dispute-5'),null);
 });
 
 test('파일이나 나머지 판정이 달라도 양쪽에 동일한 저장 기록을 찾아 남은 비교 건수를 표시한다', async t => {

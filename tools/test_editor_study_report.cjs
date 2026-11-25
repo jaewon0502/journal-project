@@ -120,3 +120,31 @@ test('기사별 결과표는 전체 성공률이 같아도 시간이 줄면서 �
     assert.match(report.html({kind:'editor',overall}),/기사별 시간과 검증 성공 건수가 기록되지 않았습니다/);
   } finally { dom.window.close(); }
 });
+
+test('0%p로 상쇄된 기사와 일부 상쇄된 기사의 분모를 공유하고 개별 묶음의 응답은 제외한다', () => {
+  const counts = {comparedCases:4,completeBlocks:3,manual:{opposingCases:1,cancelledCases:1},
+    journal:{opposingCases:2,cancelledCases:1},blocks:[{aOnly:'PRIVATE-answer',id:'PRIVATE-id'}]};
+  const render = value => report.html({kind:'editor', overall:{...studySummary(),partyLabelBlockCueDirections:value}});
+  const output = render(counts), dom = new JSDOM(output);
+  try {
+    const rows = [...dom.window.document.querySelectorAll('tr')];
+    const values = prefix => [...rows.find(r=>r.cells[0].textContent.startsWith(prefix)).cells].slice(1).map(td=>td.textContent);
+    assert.deepEqual(values('묶음에 따라 반대쪽'),['1/4개','2/4개']);
+    assert.deepEqual(values('그중 모든 묶음'),['1/4개','1/4개']);
+    assert.doesNotMatch(output,/PRIVATE-|aOnly/);
+  } finally { dom.window.close(); }
+  for (const v of [null,{...counts,completeBlocks:1}]) assert.match(render(v),/묶음이 두 개 이상 필요/);
+  assert.match(render(undefined),/묶음별 채택 방향이 기록되지/);
+  assert.match(render({...counts,journal:{opposingCases:1,cancelledCases:3}}),/기사 수와 묶음 수를 확인할 수 없어/);
+});
+
+test('전체에서 보이는 상쇄를 같은 판본 안에서 재현할 묶음이 있는지 구분한다', () => {
+  const overall = studySummary();
+  const one = {...overall,editors:{...overall.editors,completeBlocks:1}};
+  const show = (observed,assigned) => report.html({kind:'editor',overall,observedEditions:observed,assignedMatchedEditions:assigned});
+  assert.match(show([],[]),/판본이 같은 자료로 완료 · 0\/2묶음, 묶음 간 방향을 대조할 수 있는 판본 0개/);
+  assert.match(show([one,one],[]),/판본이 같은 자료로 완료 · 2\/2묶음, 묶음 간 방향을 대조할 수 있는 판본 0개/);
+  assert.match(show([overall],[one]),/판본이 같은 자료로 완료 · 2\/2묶음, 묶음 간 방향을 대조할 수 있는 판본 1개/);
+  assert.match(show([overall],[one]),/사전에 지정한 판본으로 완료 · 1\/2묶음/);
+  assert.match(show(undefined,undefined),/판본이 같은 자료로 완료 · 묶음 수 미기록/);
+});

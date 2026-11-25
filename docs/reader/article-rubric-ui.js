@@ -116,7 +116,7 @@
     });
     root.addEventListener('afterprint', () => document.documentElement.classList.remove('print-rubric'));
   }
-  function render(container, report, sources, saved, onChange, rawDraft, onDraft, reviewAction) {
+  function render(container, report, sources, saved, onChange, rawDraft, onDraft, reviewAction, openConflict) {
     if (!container || !api) return;
     const binding = api.bind(report);
     const open = new Set([...container.querySelectorAll('details[data-section][open]')].map(d => d.dataset.section));
@@ -169,6 +169,19 @@
       const counts = text('p', '근거 지지 ' + a.supported + ' · 원문과 근거 충돌 ' + a.contradicted + ' · 인용 속 사실 주장 충돌 ' + a.quotedConflict + ' · 미결 ' + a.unresolved + ' · 의견 제외 ' + a.excluded, 'rub-counts');
       const centralConcern = a.coreContradicted.length || a.coreQuotedConflict.length || a.coreUnresolved.length || a.coreExcluded.length || a.coreLimited.length;
       summaryBox.replaceChildren(text('h3', '사실 정확성'), cards, counts, text('p', a.summary, centralConcern ? 'callout' : 'rub-note'));
+      if (openConflict && (a.coreContradicted.length || a.coreQuotedConflict.length)) {
+        const links = text('div', undefined, 'actions compact');
+        for (const id of [...a.coreContradicted, ...a.coreQuotedConflict]) {
+          const {row, n} = rowById.get(id);
+          const quote = row.status === 'attribution';
+          const link = text('button', '핵심 ' + n + '번 · ' + (quote ? '인용 속 주장과 충돌한 근거 보기' : '기사 서술과 충돌한 근거 보기'));
+          link.type = 'button';
+          link.setAttribute('aria-controls', 'report-evidence-' + id);
+          link.onclick = () => openConflict(id);
+          links.append(link);
+        }
+        summaryBox.append(links);
+      }
       const listTitle = container.querySelector('[data-section="accuracy"] > summary');
       if (listTitle) listTitle.textContent = '구간별 집계와 핵심 주장 · ' + (a.coreRowIds.length ? a.coreRowIds.length + '개 지정' : '핵심 구절 미지정');
     }

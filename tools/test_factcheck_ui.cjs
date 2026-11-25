@@ -1913,6 +1913,50 @@ test('내 작업을 다시 열면 검토를 마친 문장과 선택한 목록을
   assert.equal(resumed.el('reason').value, '이전에 기록한 표결 수치를 다시 확인하고 있다.');
 });
 
+test('정확성 요약에서 핵심으로 지정한 충돌의 근거만 열고 다른 구절의 초안을 보존한다', async t => {
+  const p = open(t);
+  const work = require('../experiments/core-spending-dispute/editor-b.json');
+  await loadWorkspace(p, work);
+  p.set('reason', '첫 구간은 회의 기록을 더 찾는다.');
+  const links = p.el('article-rubric').querySelectorAll('button[aria-controls^="report-evidence-"]');
+  assert.equal(links.length,1);
+  assert.match(links[0].textContent,/핵심 5번 · 기사 서술과 충돌한 근거 보기/);
+  const target = p.el(links[0].getAttribute('aria-controls'));
+  links[0].click();
+  assert.equal(p.doc.activeElement,target);
+  assert.match(target.querySelector('.conflict-context').textContent,/학교의 결산을 확인했다.*지출액은 20억 원이다/s);
+  assert.doesNotMatch(target.querySelector('.conflict-context').textContent,/공원/);
+  links[0].click();
+  assert.equal(target.querySelectorAll('.conflict-context').length,1);
+  assert.match(target.querySelector('details[open]').textContent,/확정 결산서.*19억 원/s);
+  assert.equal(p.el('report-rows').querySelectorAll('details[open]').length,1);
+  assert.equal(p.el('reason').value,'첫 구간은 회의 기록을 더 찾는다.');
+  p.el('article-rubric').querySelector('input[data-core-row="' + work.articleAssessment.coreRowIds[0] + '"]').click();
+  assert.equal(p.el('article-rubric').querySelectorAll('button[aria-controls^="report-evidence-"]').length,0);
+});
+
+test('정확히 옮긴 발언 속 숫자가 틀리면 원발언과 별개인 확인 자료를 펼친다', async t => {
+  const p = open(t), engine = require('../docs/reader/factcheck-engine.js');
+  const rubric = require('../docs/reader/article-rubric.js');
+  const work = structuredClone(require('../experiments/core-spending-dispute/editor-b.json'));
+  work.article = work.articleDraft = '의원은 “사업비는 30억 원이었다”고 말했다.';
+  work.sources[0].excerpt = '회의록에서 의원이 사업비는 30억 원이었다고 발언했다.';
+  work.sources[1].excerpt = '확정 결산표의 사업비는 3억 원이다.';
+  const [row] = engine.prepare(work.article,work.sources).rows;
+  work.receipts = [engine.decide(row,{status:'attribution',sourceIds:['B0'],reason:'회의록에 같은 발언이 있다.',acknowledged:true,
+    contentStatus:'contradicted',contentChecked:true,contentReason:'확정 결산표의 사업비는 3억 원이다.',contentSourceIds:['B1']},work.sources)];
+  const report = engine.report(work.article,work.sources,work.receipts);
+  work.articleAssessment = rubric.save(report,work.sources,{coreRowIds:[row.id],ratings:{}});
+  await loadWorkspace(p,work);
+  const link = p.el('article-rubric').querySelector('button[aria-controls^="report-evidence-"]');
+  assert.match(link.textContent,/인용 속 주장과 충돌한 근거 보기/);
+  link.click();
+  const details = [...p.doc.activeElement.querySelectorAll(':scope > details')];
+  assert.deepEqual(details.map(d => d.open),[false,true]);
+  assert.match(details[1].textContent,/내용 근거.*확정 결산표의 사업비는 3억 원/s);
+  assert.match(p.doc.activeElement.textContent,/사업비는 30억 원이었다/);
+});
+
 test('결과와 정확성 평가에서 같은 문구의 서로 다른 문장을 열고 다른 문장의 메모를 보존한다', t => {
   const {doc, set, el, click} = open(t);
   const repeated = '이 사업은 무책임한 선심성 정책이다.';

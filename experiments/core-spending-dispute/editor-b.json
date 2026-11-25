@@ -1,0 +1,77 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "🌿 공원 결산을 확인했다.\n지출액은 20억 원이다.\n공원 회의를 마쳤다.\n🏫 학교의 결산을 확인했다.\n지출액은 20억 원이다.\n학교 회의를 마쳤다.",
+  "articleDraft": "🌿 공원 결산을 확인했다.\n지출액은 20억 원이다.\n공원 회의를 마쳤다.\n🏫 학교의 결산을 확인했다.\n지출액은 20억 원이다.\n학교 회의를 마쳤다.",
+  "sources": [
+    {
+      "id": "B0",
+      "title": "예비 결산서",
+      "url": "https://example.org/0.pdf",
+      "pdfPage": "2",
+      "locator": "사업별 지출",
+      "version": "예비",
+      "excerpt": "공원·학교 지출액은 각각 20억 원이다."
+    },
+    {
+      "id": "B1",
+      "title": "확정 결산서",
+      "url": "https://example.org/1.pdf",
+      "pdfPage": "7",
+      "locator": "사업별 지출",
+      "version": "확정",
+      "excerpt": "공원·학교 지출액은 각각 19억 원이다."
+    }
+  ],
+  "receipts": [
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-16",
+      "articleBinding": "b4ac682e56099ad4e4f46f67246b5211ec3dcdc8fa77583d2ac591e3a7e96e48",
+      "binding": "5863b52b15a16a1644c5b2dc001c2a21a016382c231980df7549eddea91b746f",
+      "references": "46825ec19274e8e01510ffa1a8d40763ba15486a4522a21d4e7d0f55c3f015f0",
+      "recordedAt": "2026-11-25T07:54:37.226Z",
+      "status": "contradicted",
+      "sourceIds": [
+        "B1"
+      ],
+      "reason": "공원에 대해 B가 결산서를 확인했다.",
+      "acknowledged": true,
+      "checksum": "07d2817c9c112ae5238855b8842fd52c67a801242173f0c78f6574dfbeb84a07"
+    },
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-59",
+      "articleBinding": "071afec64d93e8db700374823e9b605acba8a3807241e5461bdc116f52d5eef7",
+      "binding": "07ee07619da02201923463f5cf3eee3e692b9be3a3eea07b813e68391596fbc5",
+      "references": "46825ec19274e8e01510ffa1a8d40763ba15486a4522a21d4e7d0f55c3f015f0",
+      "recordedAt": "2026-11-25T07:54:37.226Z",
+      "status": "contradicted",
+      "sourceIds": [
+        "B1"
+      ],
+      "reason": "학교에 대해 B가 결산서를 확인했다.",
+      "acknowledged": true,
+      "checksum": "0444edfbc80ce128577bab6f980de9de57a57faa764f340a42cc37c9a3f4ed17"
+    }
+  ],
+  "rowDrafts": [],
+  "demo": true,
+  "sourceDraft": {
+    "fields": {
+      "title": "",
+      "url": "",
+      "locator": "",
+      "excerpt": "",
+      "version": ""
+    }
+  },
+  "articleAssessment": {
+    "version": "journal-article-rubric-v1",
+    "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"5c9cb65f0cbe7d914f3a800bd38742c920e225694ae785101a677213f2177cd5\",\"pending\",null,false],[\"unit-16\",\"5863b52b15a16a1644c5b2dc001c2a21a016382c231980df7549eddea91b746f\",\"contradicted\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-16\",\"articleBinding\":\"b4ac682e56099ad4e4f46f67246b5211ec3dcdc8fa77583d2ac591e3a7e96e48\",\"binding\":\"5863b52b15a16a1644c5b2dc001c2a21a016382c231980df7549eddea91b746f\",\"references\":\"46825ec19274e8e01510ffa1a8d40763ba15486a4522a21d4e7d0f55c3f015f0\",\"status\":\"contradicted\",\"sourceIds\":[\"B1\"],\"reason\":\"공원에 대해 B가 결산서를 확인했다.\",\"acknowledged\":true},false],[\"unit-30\",\"0b3c57f91fe05316ed8af7d358d0411730fd5630391afb38cb583777ccca3ec9\",\"pending\",null,false],[\"unit-42\",\"c503d611f6207e5005ecc4ad8975896836685e1e071b74f4373c42bb09168940\",\"pending\",null,false],[\"unit-59\",\"07ee07619da02201923463f5cf3eee3e692b9be3a3eea07b813e68391596fbc5\",\"contradicted\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-59\",\"articleBinding\":\"071afec64d93e8db700374823e9b605acba8a3807241e5461bdc116f52d5eef7\",\"binding\":\"07ee07619da02201923463f5cf3eee3e692b9be3a3eea07b813e68391596fbc5\",\"references\":\"46825ec19274e8e01510ffa1a8d40763ba15486a4522a21d4e7d0f55c3f015f0\",\"status\":\"contradicted\",\"sourceIds\":[\"B1\"],\"reason\":\"학교에 대해 B가 결산서를 확인했다.\",\"acknowledged\":true},false],[\"unit-73\",\"668f88b0d411e7f36dab3d53bd95ade1b35c6d5e44722da326aad2276475a0e3\",\"pending\",null,false]]]",
+    "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"cbd674394eba397905814f41e4787c36c9d932a7f049e404573a4015925de500\"],[\"unit-16\",\"b4ac682e56099ad4e4f46f67246b5211ec3dcdc8fa77583d2ac591e3a7e96e48\"],[\"unit-30\",\"fa1cbd72f7bbff9b0fb04a29af7ae17ee85e6649494eff600604daaa62227187\"],[\"unit-42\",\"7893a144fe0292044aaf1e4db7d3c5f3644f4a3fdcd988eaa47e61d69760529f\"],[\"unit-59\",\"071afec64d93e8db700374823e9b605acba8a3807241e5461bdc116f52d5eef7\"],[\"unit-73\",\"f88ff1ccd4846ceaf1edd7f0d93d84890110d82e166d0a1835e842a96a8e254a\"]]]",
+    "coreRowIds": [
+      "unit-59"
+    ],
+    "ratings": {}
+  }
+}

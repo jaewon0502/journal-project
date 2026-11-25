@@ -533,6 +533,18 @@
     actions.append(button(number + '번 문장 검토 열기', () => reviewRow(row)));
     return actions;
   }
+  function openConflictEvidence(id) {
+    const part = byId('report-evidence-' + id);
+    if (!part) return;
+    const row = result.rows.find(item => item.id === id);
+    if (row?.context && row.context !== row.text && !part.querySelector('.conflict-context')) {
+      const context = node('div', undefined, 'conflict-context');
+      context.append(node('small', '기사 앞뒤 문맥'), node('blockquote', row.context));
+      part.querySelector('.verbatim').after(context);
+    }
+    for (const evidence of part.querySelectorAll('details[data-conflict-evidence]')) evidence.open = true;
+    part.focus();
+  }
   function showQueue(focus = false, keepForm = false) {
     const previousId = currentId;
     const list = byId('row-list');
@@ -646,7 +658,12 @@
     byId('result-counts').replaceChildren(...statusCounts().map(text => node('span', text)));
     for (const [index, row] of result.rows.entries()) {
       const part = node('section', undefined, 'report-row');
-      part.append(node('p', (index + 1) + ' · ' + rowLabel(row) + (row.positions.length > 1 ? ' · 원문 ' + row.positions.length + '곳' : ''), 'report-label'), node('p', row.text, 'verbatim'));
+      const label = node('p', (index + 1) + ' · ' + rowLabel(row) + (row.positions.length > 1 ? ' · 원문 ' + row.positions.length + '곳' : ''), 'report-label');
+      part.id = 'report-evidence-' + row.id;
+      label.id = 'report-label-' + row.id;
+      part.setAttribute('aria-labelledby', label.id);
+      part.tabIndex = -1;
+      part.append(label, node('p', row.text, 'verbatim'));
       if (!row.receipt && row.reviewNote) part.append(node('p', row.reviewNote, 'hint'));
       if (row.receipt) {
         const r = row.receipt;
@@ -662,6 +679,9 @@
         for (const id of [...r.sourceIds, ...(r.contentSourceIds || [])]) {
           const s = sources.find(source => source.id === id);
           const detail = node('details');
+          if (r.status === 'contradicted' || (r.status === 'attribution' && r.contentStatus === 'contradicted' && r.contentSourceIds.includes(id))) {
+            detail.dataset.conflictEvidence = '';
+          }
           const prefix = r.status === 'attribution' ? (r.contentSourceIds?.includes(id) ? '내용 근거 · ' : '원발언 · ') : '';
           detail.append(node('summary', prefix + sourceSummary(s)), sourceDetails(s, false));
           part.append(detail, sourceLink(s));
@@ -697,7 +717,7 @@
       articleAssessment = value; dirty = true;
     }, articleAssessmentDraft, value => {
       articleAssessmentDraft = value; dirty = true;
-    }, reviewAction);
+    }, reviewAction, openConflictEvidence);
   }
   function openSourceTools(find) {
     byId('sources-panel').open = true;

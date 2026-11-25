@@ -536,6 +536,20 @@
         fasterWithFewerVerified:rows.filter(row => row.fasterWithFewerVerified).length, cases:rows}};
   }
 
+  function blockCueCounts(blocks, caseId, method) {
+    const counts = {aOnly:0, bOnly:0, both:0, neither:0};
+    for (const block of blocks.values()) {
+      // Each complete block assigns exactly one A and one B response to this case and method.
+      const {A, B} = block.get(caseId)[method];
+      const a = A.counts.supported, b = B.counts.supported;
+      if (a && b) counts.both++;
+      else if (a) counts.aOnly++;
+      else if (b) counts.bOnly++;
+      else counts.neither++;
+    }
+    return counts;
+  }
+
   function verdictStats(records) {
     const items = caseCells(), blocks = new Map();
     const quality = qualityGroups();
@@ -583,6 +597,7 @@
       row.sourceChoices.gapPp = Object.fromEntries(methods.map(method => [method, sourceChoiceGap(A[method], B[method])]));
       row.verdictSourceAssociation = Object.fromEntries(methods.map(method => [method,
         compareVerdictSources(detail.verdictSources[method], A[method].total, B[method].total)]));
+      row.blockCueDirections = Object.fromEntries(methods.map(method => [method, blockCueCounts(blocks, row.caseId, method)]));
       const manualGap = Math.abs(row.manual.A.endorsed - row.manual.B.endorsed);
       const journalGap = Math.abs(row.journal.A.endorsed - row.journal.B.endorsed);
       row.gapReductionPp = 100 * (manualGap - journalGap) / row.manual.A.total;
@@ -604,7 +619,11 @@
     }
     bias.directionReversals = reversals;
     bias.verdictSourceAssociation = {comparedCases:bias.cases.length};
+    bias.blockCueDirections = {comparedCases:bias.cases.length, completeBlocks:blocks.size};
     for (const method of methods) {
+      const opposed = bias.cases.map(row => row.blockCueDirections[method]).filter(count => count.aOnly && count.bOnly);
+      bias.blockCueDirections[method] = {opposingCases:opposed.length,
+        cancelledCases:opposed.filter(count => count.aOnly === count.bOnly).length};
       const different = bias.cases.filter(row => row.verdictSourceAssociation[method].gapPp > 0);
       bias.verdictSourceAssociation[method] = {differentCases:different.length,
         equalMarginalsWithGap:different.filter(row => row[method].distributionGapPp === 0 && row.sourceChoices.gapPp[method] === 0).length};
@@ -857,6 +876,24 @@
     });
   }
 
+  function blockCueDemoRecords() {
+    return Array.from({length:2 * slots}, (_, i) => {
+      let record = createRecord('demo-block-cue-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const gold = cases.get(task.caseId, task.variant);
+        let verdict = gold.expectedVerdict;
+        if (task.caseId === 'repair' || task.caseId === 'permits') {
+          const split = task.method === (task.caseId === 'repair' ? 'journal' : 'manual');
+          const adopted = split ? (i < slots) === (task.variant === 'A') : i < slots;
+          if (adopted) verdict = 'supported';
+        }
+        record = addTrial(record, {elapsedMs:60000, verdict, sourceIds:gold.expectedSourceIds,
+          journalUsed:task.method === 'journal', reason:'완성 묶음 안에서 표기별 사실 채택 방향을 비교하는 가상 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
   function verdictSourceDemoRecords() {
     return Array.from({length:2 * slots}, (_, i) => {
       let record = createRecord('demo-verdict-source-' + (i + 1), i + 1, 'demo', false);
@@ -943,5 +980,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, unfinishedBlockDemoRecords, caseVerificationDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, verdictSourceDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, unfinishedBlockDemoRecords, caseVerificationDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, verdictSourceDemoRecords, blockCueDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

@@ -346,6 +346,51 @@ test('틀린 자료의 방식별 합계와 판정이 같아도 정당 표기에 
   assert.deepEqual(split.sourceChoices.byVariant.B.journal, {byId:{'doc-1':0,'doc-2':2,'doc-3':0}, none:0, total:2});
 });
 
+test('기사별 채택률과 묶음 하나씩 제외한 전체 효과가 모두 같아도 반대 방향 묶음의 상쇄를 구별한다', () => {
+  const records = study.blockCueDemoRecords();
+  const control = structuredClone(records);
+  for (const r of control) for (const t of r.trials) {
+    if (t.caseId === 'repair' || t.caseId === 'permits')
+      t.verdict = r.ordinal <= 4 ? 'supported' : packets.get(t.caseId,t.variant).expectedVerdict;
+  }
+  const run = data => study.analyze(data,'demo');
+  const sample = run(records), baseline = run(control);
+  assert.deepEqual(sample.quality, baseline.quality);
+  assert.deepEqual(sample.bias.blockCueDirections, {comparedCases:4,completeBlocks:2,
+    manual:{opposingCases:1,cancelledCases:1}, journal:{opposingCases:1,cancelledCases:1}});
+  const counts = sample.bias.cases.find(r => r.caseId === 'repair').blockCueDirections;
+  assert.deepEqual(counts.manual, {aOnly:0,bOnly:0,both:1,neither:1});
+  assert.deepEqual(counts.journal, {aOnly:1,bOnly:1,both:0,neither:0});
+  assert.deepEqual(baseline.bias.blockCueDirections.journal, {opposingCases:0,cancelledCases:0});
+  const withoutBlockCounts = bias => {
+    const other = structuredClone(bias);
+    delete other.blockCueDirections;
+    for (const row of other.cases) delete row.blockCueDirections;
+    return other;
+  };
+  assert.deepEqual(withoutBlockCounts(sample.bias), withoutBlockCounts(baseline.bias));
+  assert.equal(study.analyze(records).bias,null);
+});
+
+test('양 방향이 일부만 상쇄된 기사, 완료 시간 누락과 불완전 배정 묶음을 구분한다', () => {
+  const records = Array.from({length:13}, (_, index) => observations(index+1, t => {
+    if (t.caseId !== 'repair' || t.method !== 'journal') return {};
+    const aOnly = index < 4 || index >= 8;
+    return {verdict:(t.variant === 'A') === aOnly ? 'supported' : 'insufficient'};
+  }));
+  records[0].trials[0].elapsedMs = null;
+  records[0].trials[0].observedMs = 5;
+  const result = study.analyze(records);
+  const counts = result.bias.blockCueDirections;
+  assert.equal(counts.completeBlocks,3);
+  assert.equal(result.timing.included,8);
+  assert.deepEqual(counts.journal,{opposingCases:1,cancelledCases:0});
+  assert.deepEqual(result.bias.cases.find(r=>r.caseId==='repair').blockCueDirections.journal,
+    {aOnly:2,bOnly:1,both:0,neither:0});
+  assert.equal(study.analyze(records.slice(0,3)).bias,null);
+  assert.deepEqual(study.analyze(records.slice(0,5)).bias.blockCueDirections.journal,{opposingCases:0,cancelledCases:0});
+});
+
 test('판정·자료 선택과 정확도가 각각 같아도 두 선택의 연결이 달라진 기사와 셀을 찾는다', () => {
   const records = study.verdictSourceDemoRecords();
   const control = structuredClone(records);

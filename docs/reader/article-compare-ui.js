@@ -19,6 +19,7 @@
   const ratio = (n, d, value) => percent(value) + ' (' + n + '/' + d + ')';
   const level = v => v === 'na' ? '해당 없음' : Number.isInteger(v) ? v + '단계' : '미평가';
   let showingExample = false;
+  let modeBeforeCorePractice = null;
   function element(tag, content, cls) {
     const node = document.createElement(tag);
     if (content != null) node.textContent = content;
@@ -54,6 +55,7 @@
     cancelRecovery();
     if (!keepBundle) clearBundleSelection();
     showingExample = false;
+    modeBeforeCorePractice = null;
     byId('example').textContent = '가상 예시 보기';
     byId('result').hidden = true;
     byId('output').replaceChildren();
@@ -453,10 +455,7 @@
     if (!f.disagreements.length) disputed.append(note(f.agreement.denominator
       ? '판정 또는 확인 범위의 차이가 발견되지 않았습니다.' : '두 사람이 모두 판정을 마친 사실 구간이 없습니다.'));
     const labels = {source:'원자료', speech:'원발언', content:'내용 근거'};
-    function rowEvidence(row, compareSources = false) {
-      const div = element('div', null, 'item');
-      div.append(element('blockquote', row.text));
-      if (compareSources) div.append(note('선택이 다른 근거 · ' + row.differentSources.map(d => labels[d.role]).join(', ')));
+    function evidencePair(row, compareSources = false) {
       const pair = element('div', null, 'pair');
       [row.leftLabel, row.rightLabel].forEach((label, i) => {
         const side = element('div');
@@ -472,14 +471,41 @@
         } else side.append(receiptEvidence(snapshots[i], row.rowId));
         pair.append(side);
       });
-      div.append(pair);
-      return div;
+      return pair;
     }
-    for (const row of f.disagreements) disputed.append(rowEvidence(row));
+    const coreLinks = element('ul');
+    const {article, rows} = snapshots[0], rowIndices = new Map(rows.map((row, index) => [row.id, index]));
+    for (const row of f.disagreements) {
+      const item = element('div', null, 'item'), index = rowIndices.get(row.rowId), number = index + 1;
+      const positions = rows[index].positions;
+      const start = rows[index - 1]?.positions.at(-1).start ?? positions[0].start;
+      const end = rows[index + 1]?.positions[0].end ?? positions.at(-1).end;
+      const core = row.coreLeft && row.coreRight ? '두 편집자가 핵심으로 지정' :
+        row.coreLeft ? '편집자 A가 핵심으로 지정' : row.coreRight ? '편집자 B가 핵심으로 지정' : '';
+      const title = element('h4', '구간 ' + number + (core ? ' · ' + core : ''));
+      item.append(title, markedContext(article, start, end, positions), evidencePair(row));
+      if (core) {
+        item.id = 'reviewer-dispute-' + number;
+        title.tabIndex = -1;
+        const link = element('button', '구간 ' + number + ' · ' + row.text);
+        link.type = 'button';
+        link.setAttribute('aria-controls', item.id);
+        link.onclick = () => { disputed.open = true; title.focus(); };
+        const li = element('li'); li.append(link); coreLinks.append(li);
+      }
+      disputed.append(item);
+    }
+    if (coreLinks.childElementCount)
+      panel.append(element('h4', '핵심 구절의 판정 또는 확인 범위 차이 ' + coreLinks.childElementCount + '개'), coreLinks);
     const evidence = detail('선택한 근거가 다른 구절 · ' + f.evidenceDifferences.length + '개');
     evidence.append(note('두 사람이 판단을 기록하고 한 사람 이상 근거를 선택한 ' + f.evidenceCompared +
       '개 구절을 비교했습니다. 각 구절에는 같은 용도로 한 편집자만 선택한 자료와 발췌문을 표시합니다.'));
-    for (const row of f.evidenceDifferences) evidence.append(rowEvidence(row, true));
+    for (const row of f.evidenceDifferences) {
+      const item = element('div', null, 'item');
+      item.append(element('blockquote', row.text),
+        note('선택이 다른 근거 · ' + row.differentSources.map(d => labels[d.role]).join(', ')), evidencePair(row, true));
+      evidence.append(item);
+    }
     const core = detail('핵심 주장 선정이 다른 구절 · ' + f.coreDifferences.length + '개');
     for (const r of f.coreDifferences) {
       core.append(element('blockquote', r.text), note((r.coreLeft ? '편집자 A' : '편집자 B') + '가 핵심 주장으로 지정했습니다.'));
@@ -1333,7 +1359,41 @@
   });
   const originalParent = picker.parentNode;
   const nextField = picker.nextElementSibling;
+  function openCorePractice() {
+    const data = document.querySelector('script#core-dispute-practice[type="application/json"]:not([src])');
+    if (!data) {
+      message('이 연습은 진행자 배포본의 시작 화면에서 열 수 있습니다.', true);
+      return;
+    }
+    const previous = mode();
+    try {
+      const works = JSON.parse(data.textContent);
+      if (!Array.isArray(works) || works.length !== 2 || works.some(work => work?.demo !== true))
+        throw new Error('두 편집자의 가상 작업 파일을 확인하세요.');
+      const snapshots = works.map(work => window.JournalWorkspaceSnapshot.read(work));
+      // Render the example separately from the two user-selected work files.
+      document.querySelector('[name=mode][value=reviewers]').checked = true;
+      updateInputs();
+      show(snapshots, true);
+      if (showingExample) {
+        modeBeforeCorePractice = previous;
+        byId('output').querySelector('button[aria-controls^="reviewer-dispute-"]')?.click();
+        return;
+      }
+    } catch (error) { message(error.message, true); }
+    document.querySelector('[name=mode][value=' + previous + ']').checked = true;
+    updateInputs();
+  }
   async function openCoordinatorLink() {
+    const corePractice = location.hash === '#demo-core-dispute';
+    if (corePractice && (!byId('result').hidden || files.left || files.right || bundleFiles.length || firstReview ||
+        [...document.querySelectorAll('input[type=file]')].some(input => input.files.length))) return;
+    if (!corePractice && modeBeforeCorePractice !== null) {
+      const previous = modeBeforeCorePractice;
+      clearResults();
+      document.querySelector('[name=mode][value=' + previous + ']').checked = true;
+      updateInputs();
+    }
     const requested = /^#review(?:=|&|$)/.test(location.hash);
     const leaving = reviewTarget && !requested;
     if (reviewTarget || requested) {
@@ -1383,6 +1443,7 @@
       }
       return;
     }
+    if (corePractice) { openCorePractice(); return; }
     if (location.hash === '#blind-revision' && mode() === 'revision') byId('blind-revision').open = true;
     if (leaving) (byId('blind-revision').open && mode() === 'revision' ? bundleInput : byId('inputs')).focus();
   }

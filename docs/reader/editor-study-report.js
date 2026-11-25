@@ -74,6 +74,21 @@
       '<th scope="col">저널 병행</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<p class="small">두 줄 모두 비교한 기사 전체를 분모로 씁니다. 같은 기사에서 정당 표기만 바꿔 서로 다른 편집자에게 배정한 결과입니다.</p>';
   }
+  function blockCueDirections(data) {
+    const title = '<h3>네 명씩 나누어 보아도 정당 표기 간 차이가 같았나</h3>';
+    if (data === undefined) return title + '<p>이 집계에는 묶음별 채택 방향이 기록되지 않았습니다.</p>';
+    if (data === null || data.completeBlocks === 1) return title + '<p>묶음 간 비교에는 네 명이 네 과제를 모두 끝낸 묶음이 두 개 이상 필요합니다.</p>';
+    const valid = arm => count(arm?.opposingCases) && arm.opposingCases <= data.comparedCases &&
+      count(arm.cancelledCases) && arm.cancelledCases <= arm.opposingCases;
+    if (!count(data.completeBlocks) || data.completeBlocks < 2 || !count(data.comparedCases) ||
+        !data.comparedCases || !valid(data.manual) || !valid(data.journal)) return title + '<p>기사 수와 묶음 수를 확인할 수 없어 비교를 보류했습니다.</p>';
+    const cells = (label, field) => row(label,ratio(data.manual[field],data.comparedCases) + '개',ratio(data.journal[field],data.comparedCases) + '개');
+    return title + '<p>완성된 ' + measure(data.completeBlocks,'묶음') + '에서 보수 표기만 채택한 묶음과 진보 표기만 채택한 묶음이 함께 있었는지 확인했습니다.</p>' +
+      '<table><thead><tr><th scope="col">비교한 기사 전체 중 해당 건수</th><th scope="col">원자료만</th><th scope="col">저널 병행</th></tr></thead><tbody>' +
+      cells('묶음에 따라 반대쪽 표기만 사실로 채택한 기사','opposingCases') +
+      cells('그중 모든 묶음을 합치면 채택률 격차가 0%p인 기사','cancelledCases') + '</tbody></table>' +
+      '<p class="small">한 묶음에서 같은 기사와 방식의 표기별 응답은 한 건씩입니다. 서로 다른 편집자의 응답 차이가 반영됩니다.</p>';
+  }
   function metrics(data, demo) {
     const time = data.time, gap = data.partyLabelAcceptanceGap, quality = data.verdictAndEvidence;
     const unsafe = data.unsupportedAcceptance;
@@ -126,7 +141,7 @@
     }
     return counts + headline + '<h3>격차가 줄어든 기사의 판정은 어떻게 달라졌나</h3><p>' + jointText +
       '</p><h3>방식별 시간과 판정</h3>' + summary + verdictSourceAssociation(data.partyLabelVerdictSourceAssociation) +
-      caseVerification(time.caseVerification, demo) + outside;
+      blockCueDirections(data.partyLabelBlockCueDirections) + caseVerification(time.caseVerification, demo) + outside;
   }
   function editionSection(title, editions, demo) {
     if (!Array.isArray(editions) || !editions.length) return '';
@@ -135,6 +150,20 @@
       return '<details><summary>판본 ' + (index+1) + (stamp ? ' · <code>' + stamp.slice(0,12) + '</code>' : '') +
         '</summary>' + (stamp ? '<p class="small">배포본 식별값 <code>' + stamp + '</code></p>' : '') + metrics(entry, demo) + '</details>';
     }).join('') + '</section>';
+  }
+  function editionCoverage(summary) {
+    const total = summary.overall.editors.completeBlocks;
+    const lead = '전체 결과에는 자료 판본이 다른 묶음이나 판본을 확인하지 못한 묶음도 포함될 수 있습니다.';
+    function coverage(editions, label) {
+      if (!count(total) || !Array.isArray(editions) || !editions.every(e => count(e?.editors?.completeBlocks))) return label + ' · 묶음 수 미기록';
+      const blocks = editions.reduce((sum,e) => sum + e.editors.completeBlocks,0);
+      if (blocks > total) return label + ' · 묶음 수 미확인';
+      if (!total) return label + ' · 완성 묶음 없음';
+      const comparable = editions.filter(e => e.editors.completeBlocks >= 2).length;
+      return label + ' · ' + fmt(blocks) + '/' + fmt(total) + '묶음, 묶음 간 방향을 대조할 수 있는 판본 ' + fmt(comparable) + '개';
+    }
+    return '<p>' + lead + '</p><p class="small">' + coverage(summary.observedEditions,'판본이 같은 자료로 완료') +
+      '<br>' + coverage(summary.assignedMatchedEditions,'사전에 지정한 판본으로 완료') + '</p>';
   }
   function html(summary) {
     if (!summary || !['demo','editor'].includes(summary.kind)) throw new Error('결과표의 실측 또는 가상 구분을 확인하세요.');
@@ -150,7 +179,7 @@
       'table{border-collapse:collapse;table-layout:fixed;width:100%;font-variant-numeric:tabular-nums}th,td{text-align:left;border-bottom:1px solid #d2dbd2;padding:.5rem .35rem;overflow-wrap:anywhere}' +
       'th:first-child{width:48%}thead{background:#e6ede6}summary{cursor:pointer;font-weight:650}details{margin:.7rem 0}code{overflow-wrap:anywhere}.small{font-size:.9rem}' +
       '@media print{body{background:white}main{padding:0}section{break-inside:avoid}}</style></head><body><main><h1>' + title + '</h1><p>' + lead +
-      ' 정당 표기는 기사에 붙인 실험 조건입니다.</p><section><h2>전체 결과</h2>' + metrics(summary.overall, demo) + '</section>' +
+      ' 정당 표기는 기사에 붙인 실험 조건입니다.</p><section><h2>전체 결과</h2>' + editionCoverage(summary) + metrics(summary.overall, demo) + '</section>' +
       editionSection('같은 판본으로 완료한 묶음',summary.observedEditions, demo) +
       editionSection('사전에 배정한 판본으로 완료한 묶음',summary.assignedMatchedEditions, demo) +
       '<p class="small">시간은 전체 시간을 기록한 묶음으로 계산합니다. 검증 성공은 판정과 대표 근거가 함께 맞은 과제입니다. ' +

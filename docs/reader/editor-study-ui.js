@@ -340,11 +340,38 @@
     }
     box.append(detail);
   }
+  function showBlockCueCounts(box, article, row, blocks) {
+    const detail = node('details', undefined, 'case-block-cues');
+    detail.append(node('summary', '4인 묶음별 정당 표기와 사실 채택'),
+      node('p', '각 칸은 전체 ' + blocks + '묶음 중 해당 조합이 나온 묶음 수입니다. 한 묶음에서는 같은 기사와 검토 방식의 보수 표기와 진보 표기를 서로 다른 사람이 한 번씩 봤습니다. 표기별 응답이 한 건씩이어서 우연한 차이도 반영됩니다.'));
+    const rows = [];
+    for (const [key, name] of [['manual','원자료'],['journal','저널']]) {
+      const counts = row.blockCueDirections[key];
+      rows.push([name, ...['aOnly','bOnly','both','neither'].map(field => counts[field] + '/' + blocks)]);
+    }
+    const wrap = node('div', undefined, 'scroll');
+    wrap.tabIndex = 0;
+    wrap.setAttribute('role', 'region');
+    wrap.setAttribute('aria-label', article.title + ' 묶음별 정당 표기와 사실 채택');
+    table(wrap, ['검토 방식', '보수 표기만 채택', '진보 표기만 채택', '양쪽 모두 채택', '양쪽 모두 미채택'], rows);
+    detail.append(wrap);
+    box.append(detail);
+  }
   function showCaseQuality(bias, biasCard) {
     const list = el('case-quality-list');
     list.replaceChildren();
     el('case-quality').hidden = !bias;
     const directionSummary = el('cue-direction-summary');
+    const blocks = bias?.blockCueDirections, blockSummary = el('block-cue-summary');
+    blockSummary.textContent = '';
+    if (blocks) {
+      const note = blocks.completeBlocks < 2 ? '묶음 간 채택 방향을 비교하려면 완성 묶음이 2개 이상 필요합니다.' :
+        '서로 반대 방향으로 한쪽 표기만 채택한 묶음이 나온 기사 · 원자료 ' + blocks.manual.opposingCases + '/' +
+        blocks.comparedCases + '건, 저널 ' + blocks.journal.opposingCases + '/' + blocks.comparedCases +
+        '건. 반대 방향의 차이가 상쇄되어 전체 채택률 격차가 0%p인 기사 · 원자료 ' + blocks.manual.cancelledCases + '/' +
+        blocks.comparedCases + '건, 저널 ' + blocks.journal.cancelledCases + '/' + blocks.comparedCases + '건.';
+      blockSummary.textContent = (viewKind === 'demo' ? '가상 기록 · ' : '') + '완성 묶음 ' + blocks.completeBlocks + '개. ' + note;
+    }
     directionSummary.textContent = bias ? (viewKind === 'demo' ? '가상 기록 · ' : '') + '원자료 방식과 저널 방식에서 사실 채택률이 더 높은 정당 표기가 바뀐 기사 ' +
       bias.directionReversals.reversedCases + '/' + bias.directionReversals.comparedCases + '건. 한 방식에서 두 표기의 채택률이 같으면 바뀐 건수에서 제외합니다.' : '';
     const association = bias?.verdictSourceAssociation;
@@ -391,6 +418,10 @@
           ? ' · 판정·근거 조합 격차 ' + fmt(row.verdictSourceAssociation.manual.gapPp) + '%p → ' +
             fmt(row.verdictSourceAssociation.journal.gapPp) + '%p' : ''));
       box.append(summary);
+      for (const [method, name] of [['manual','원자료'],['journal','저널']]) {
+        const {aOnly, bOnly} = row.blockCueDirections[method];
+        if (aOnly && bOnly) summary.append(' · ' + name + '에서 묶음별 채택 방향 ' + (aOnly === bOnly ? '상쇄' : '엇갈림'));
+      }
       if (viewKind === 'demo') box.append(node('p', '가상 응답으로 계산한 예시입니다.', 'subtle'));
       if (row.directionReversed) {
         box.append(node('strong', '사실 채택 · 기준 판정은 ' + verdictLabels[a.expectedVerdict]));
@@ -434,6 +465,7 @@
       table(wrap, ['기사 표기 · 방식', ...Object.values(criteria), '제출한 판정'], rows);
       box.append(wrap);
       showSourceChoices(box, a, row.sourceChoices);
+      showBlockCueCounts(box, a, row, blocks.completeBlocks);
       showVerdictSources(box, a, row.verdictSourceAssociation);
       box.append(node('h3', '검토한 기사와 근거'), node('p', a.question),
         node('blockquote', a.article), node('blockquote', b.article), node('strong', '기준 판정 · ' + verdictLabels[a.expectedVerdict]));
@@ -728,6 +760,7 @@
       unsupportedAcceptance:unsupportedAcceptance(a.quality),
       factAdoptions:{all:factAdoptions(a.quality), timed:factAdoptions(a.timedQuality)},
       partyLabelDirectionReversals:a.bias?.directionReversals ?? null,
+      partyLabelBlockCueDirections:a.bias?.blockCueDirections ?? null,
       partyLabelVerdictSourceAssociation:a.bias?.verdictSourceAssociation ?? null,
       partyLabelGapAndQuality:joint ? {cases:joint.cases, narrowed:joint.narrowed, narrowedUnsafeEligible:joint.narrowedUnsafeEligible,
         narrowedWithMoreUnsafe:joint.narrowedWithMoreUnsafe, narrowedWithMoreUnsafeBothLabels:joint.narrowedWithMoreUnsafeBothLabels,
@@ -741,6 +774,7 @@
     '#demo-cue-agreement':{example:'agreement', heading:'cue-gap-quality-summary'},
     '#demo-cue-reversals':{example:'cue-reversals', heading:'cue-direction-summary'},
     '#demo-verdict-source':{example:'verdict-source', heading:'verdict-source-summary'},
+    '#demo-block-cue':{example:'block-cue', heading:'block-cue-summary'},
     '#demo-adoptions':{example:'adoptions', heading:'fact-adoptions-title'},
     '#demo-unfinished-blocks':{example:'unfinished-blocks', heading:'individual-time-title'}
   };
@@ -752,7 +786,7 @@
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
         agreement:core.cueAgreementDemoRecords, adoptions:core.adoptionDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords,
         'unfinished-blocks':core.unfinishedBlockDemoRecords, 'cue-reversals':core.cueReversalDemoRecords,
-        'verdict-source':core.verdictSourceDemoRecords, 'case-verification':core.caseVerificationDemoRecords};
+        'verdict-source':core.verdictSourceDemoRecords, 'block-cue':core.blockCueDemoRecords, 'case-verification':core.caseVerificationDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
