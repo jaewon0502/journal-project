@@ -549,8 +549,10 @@
     if (focus && currentId) byId('row-heading').focus();
   }
   function resultScope() {
-    return result.complete ? '입력한 문장마다 검토 범위를 기록했습니다. 사실로 확인한 내용은 아래에 구절과 근거를 표시합니다.'
-      : '미검토·부분 확인·보류·원자료와 충돌 중 추가로 확인할 문장이 남아 있습니다. 해당 문장은 추가 취재 또는 수정이 필요합니다.';
+    if (!result.rows.length) return '검토할 문장이 없습니다.';
+    if (result.complete) return '모든 검토 항목의 판단을 기록했습니다. 항목별 확인 범위와 근거를 확인하세요.';
+    return '추가 확인이 필요한 검토 항목은 ' + result.pendingCount + '개입니다.' + (result.contentUnverifiedCount
+      ? ' 이 중 ' + result.contentUnverifiedCount + '개는 발언 사실을 확인했고, 발언 내용의 검증이 남았습니다.' : '');
   }
   const revisionInputs = new Map();
   function selectedRevisions() {
@@ -724,6 +726,7 @@
   }
   function resetWork(text, initialSources, initialReceipts, sample, tag = null, committed = true) {
     revisionInputs.clear();
+    byId('share-article-url').value = '';
     window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
     articleAssessment = null;
@@ -823,6 +826,7 @@
         }
       }
       latestImport++;
+      if (article !== text) byId('share-article-url').value = '';
       article = text;
       setArticleDraft(text);
       hasCommittedArticle = true;
@@ -1701,7 +1705,26 @@
       if (request === latestImport) message('file-status', '파일을 열지 못했습니다. ' + err.message, true);
     }
   });
-  function rubricReportLines() {
+  function reportExcerpt(text, excerpt, includeArticle, scope = '구간 안') {
+    if (includeArticle) return excerpt;
+    const start = text.indexOf(excerpt);
+    if (start < 0 || start !== text.lastIndexOf(excerpt)) return scope + ' 위치를 하나로 특정할 수 없음';
+    const first = Array.from(text.slice(0, start)).length + 1;
+    return scope + ' ' + first + '번째~' + (first + Array.from(excerpt).length - 1) + '번째 글자';
+  }
+  function articleRangesForShare() {
+    // The engine emits non-overlapping occurrences in article order, including adjacent duplicates.
+    let offset = 0, characters = 0;
+    function countTo(end) {
+      while (offset < end) {
+        offset += article.codePointAt(offset) > 0xffff ? 2 : 1;
+        characters++;
+      }
+      return characters;
+    }
+    return result.rows.map(row => row.positions.map(({start, end}) => (countTo(start) + 1) + '~' + countTo(end)).join(', '));
+  }
+  function rubricReportLines(includeArticle) {
     const {accuracy: a, bias: b, stale} = rubric.evaluate(result, sources, articleAssessment);
     const percent = value => value == null ? '산출 대기' : Number(value.toFixed(1)) + '%';
     const label = id => result.rows.find(row => row.id === id)?.text;
@@ -1709,6 +1732,7 @@
       const index = result.rows.findIndex(row => row.id === id);
       if (index < 0) return '';
       const row = result.rows[index];
+      if (!includeArticle && row.positions.length > 1) return ' · 구간 ' + (index + 1) + ' (원문 ' + row.positions.length + '곳)';
       const starts = row.positions.map(p => p.start + 1);
       return ' · 구간 ' + (index + 1) + (starts.length > 1 ? ' (원문 시작 위치 ' + starts.join(', ') + ')' : '');
     };
@@ -1720,7 +1744,7 @@
     if (!a.coreRowIds.length) lines.push('핵심 구절 미지정');
     for (const id of a.coreRowIds) {
       const row = a.rows.find(item => item.rowId === id);
-      lines.push('핵심 구절 · ' + row.label + ' · ' + label(id));
+      lines.push('핵심 구절 · ' + row.label + (includeArticle ? ' · ' + label(id) : location(id)));
     }
     lines.push('', '편향 · ' + b.summary, '근거로 평가 ' + b.assessed + '/4 · 해당 없음 ' + b.notApplicable + ' · 미평가 ' + b.unknown);
     const draft = rubricUI.restoreDraft(result, sources, articleAssessmentDraft);
@@ -1730,8 +1754,12 @@
       if (r.level === 'na') { lines.push(item.title + ' · 해당 없음 · ' + r.reason); continue; }
       const source = sources.find(s => s.id === r.sourceId);
       lines.push(item.title + ' · ' + r.level + '단계 · ' + rubric.severityLabels[r.level],
-        '기사 구절' + location(r.rowId) + ' · ' + r.quote);
-      if (r.compareQuote) lines.push('비교 구절' + location(r.compareRowId) + ' · ' + r.compareQuote);
+        '기사 구절' + location(r.rowId) + ' · ' + reportExcerpt(label(r.rowId), r.quote, includeArticle));
+      if (r.compareQuote) {
+        // Older ratings can bind their second excerpt to a unique position in the whole article.
+        const compared = label(r.compareRowId);
+        lines.push('비교 구절' + location(r.compareRowId) + ' · ' + reportExcerpt(compared ?? result.article, r.compareQuote, includeArticle, compared ? '구간 안' : '기사 원문'));
+      }
       lines.push('원자료 · ' + sourceSummary(source), citationAddress(source), '자료 구절 · ' + r.sourceQuote, '판단 이유 · ' + r.reason);
       if (source.originUrl) lines.push('최초 원문 · ' + source.originUrl);
       if (r.compareSourceId) {
@@ -1746,21 +1774,41 @@
     lines.push('');
     return lines;
   }
-  byId('export-report').addEventListener('click', () => {
+  function exportReport(includeArticle) {
+    const rawUrl = byId('share-article-url').value.trim();
+    const shareHeader = [];
+    if (!includeArticle) {
+      shareHeader.push('공유본 · 기사 본문 생략. 편집자의 판단 이유·수정 문구와 원자료 발췌는 그대로 실었습니다.',
+        '원문 위치는 입력한 기사 전체에서, 구간 안 위치는 해당 검토 구간에서 셉니다. 첫 글자를 1로 잡고 공백과 줄바꿈도 셉니다(유니코드 코드 포인트 기준).');
+      if (rawUrl) {
+        try {
+          const url = new URL(rawUrl);
+          if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error();
+          shareHeader.push('기사 원문 · ' + url.href);
+        } catch (_) {
+          byId('share-article-url').focus();
+          return message('result-status', '계정 정보가 없는 HTTP 또는 HTTPS 기사 주소를 입력하세요.', true);
+        }
+      }
+    }
     const sourceNote = sourceDraftNote();
     const lines = ['기사 팩트체크 검토 결과', demo ? '연습 기록 · 가상 기사 또는 모의 원자료 포함' : '검토자가 입력한 판단 기록',
-      resultScope(), ...(sourceNote ? [sourceNote] : []), coverageLimit, byId('counts').textContent, statusCounts().join(' · '), '', ...rubricReportLines()];
+      ...shareHeader, resultScope(), ...(sourceNote ? [sourceNote] : []), coverageLimit, byId('counts').textContent, statusCounts().join(' · '), '', ...rubricReportLines(includeArticle)];
+    const ranges = includeArticle ? null : articleRangesForShare();
     for (const [i, row] of result.rows.entries()) {
-      lines.push((i + 1) + '. ' + rowLabel(row) + (row.positions.length > 1 ? ' · 원문 ' + row.positions.length + '곳' : ''), row.text);
+      lines.push((i + 1) + '. ' + rowLabel(row) + (row.positions.length > 1 ? ' · 원문 ' + row.positions.length + '곳' : ''));
+      if (includeArticle) lines.push(row.text);
+      else lines.push('원문 글자 위치 · ' + ranges[i]);
       const r = row.receipt;
       if (!r && row.reviewNote) lines.push(row.reviewNote);
       if (r) {
-        if (['mixed','partial'].includes(r.status)) lines.push('사실 구절 · ' + r.factSpan);
-        if (r.status === 'mixed') lines.push('평가 구절 · ' + r.opinionSpan);
-        if (r.status === 'partial') lines.push('남은 구절 · ' + r.remainingSpans.join(' / '));
+        const excerpt = value => reportExcerpt(row.text, value, includeArticle);
+        if (['mixed','partial'].includes(r.status)) lines.push('사실 구절 · ' + excerpt(r.factSpan));
+        if (r.status === 'mixed') lines.push('평가 구절 · ' + excerpt(r.opinionSpan));
+        if (r.status === 'partial') lines.push('남은 구절 · ' + r.remainingSpans.map(excerpt).join(' / '));
         if (r.status === 'attribution') {
           lines.push('발언 내용 · ' + contentLabels[r.contentStatus]);
-          if (r.contentClaim) lines.push('내용을 대조한 인용 구간 · ' + r.contentClaim);
+          if (r.contentClaim) lines.push('내용을 대조한 인용 구간 · ' + excerpt(r.contentClaim));
           if (r.contentReason) lines.push('내용 판단 이유 · ' + r.contentReason);
         }
         if (r.correction) lines.push('근거와 대조한 수정 문구 · ' + r.correction);
@@ -1768,18 +1816,20 @@
         for (const id of [...r.sourceIds, ...(r.contentSourceIds || [])]) {
           const source = sources.find(s => s.id === id);
           const prefix = r.status === 'attribution' ? (r.contentSourceIds?.includes(id) ? '내용 근거 · ' : '원발언 · ') : '근거 · ';
-          lines.push(prefix + sourceSummary(source), citationAddress(source), source.excerpt);
+          lines.push(prefix + sourceSummary(source), citationAddress(source), includeArticle ? source.excerpt : '원자료 발췌 · ' + source.excerpt);
           if (source.originUrl) lines.push('최초 원문 · ' + source.originUrl);
         }
       }
       lines.push('');
     }
-    lines.push('검토 대상 원문', article);
+    if (includeArticle) lines.push('검토 대상 원문', article);
     try {
-      download(lines.join('\n'), 'journal-factcheck-result.txt', 'text/plain;charset=utf-8');
-      message('result-status', '검토 결과 내려받기를 요청했습니다.');
+      download(lines.join('\n'), includeArticle ? 'journal-factcheck-result.txt' : 'journal-factcheck-share.txt', 'text/plain;charset=utf-8');
+      message('result-status', includeArticle ? '검토 결과 내려받기를 요청했습니다.' : '기사 본문을 뺀 공유본 내려받기를 요청했습니다.');
     } catch (err) { message('result-status', err.message, true); }
-  });
+  }
+  byId('export-report').addEventListener('click', () => exportReport(true));
+  byId('export-share-report').addEventListener('click', () => exportReport(false));
   if (studyFrame) {
     document.documentElement.classList.add('study-frame');
     function receiveTask(task) {

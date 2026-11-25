@@ -24,7 +24,8 @@ blockquote{margin:9px 0;padding:10px 14px;border-left:3px solid #8ca595;backgrou
 .source-page-links{display:flex;gap:.25rem .8rem;flex-wrap:wrap;overflow-wrap:anywhere}.source-page-links span:empty{display:none}.source details label input[type=file]{display:block;max-width:100%}.source-line,.check-line{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}.source-line input,.check-line input{margin:4px 0}.check-line{font-size:.88rem;line-height:1.55}.check-line span{flex:1}.source-title{font-weight:650}.source blockquote,.report-row blockquote{font-size:.9rem}.meta{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}.hints{padding-left:1.4em;color:var(--warn);font-size:.9rem}.hints:empty{display:none}
 .status-group{display:flex;gap:7px 15px;flex-wrap:wrap;padding:8px 0;border-block:1px solid var(--line);font-size:.89rem}.report-row{padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.report-row:first-child{border:0}.report-label{font-size:.86rem;font-weight:700;color:var(--green)}.report-row p{margin-bottom:5px}
 .badge{font-size:.78rem;background:var(--pale);padding:2px 6px;display:inline-block;border-radius:4px;margin:0 4px}.skip{position:absolute;left:-9999px}.skip:focus{position:static}.filebar{margin:15px 0}.filebar summary{font-size:.91rem}.filebar p{margin:5px 0}
-@media(max-width:680px){.review-grid,.split{grid-template-columns:minmax(0,1fr)}.review-grid{gap:10px}#row-list{max-height:180px}.intro{margin-top:22px}.mast{display:block}.panel{margin:10px 0}}@media print{header,.skip,.intro,.filebar,#article-panel,#sources-panel,#review-panel,.actions,.message,footer,#demo-notice{display:none!important}#result-panel{border:0;margin:0;padding:0}.report-row{break-inside:avoid}html{background:white}main{width:100%;padding:0}}
+#share-report{margin-top:12px}
+@media(max-width:680px){.review-grid,.split{grid-template-columns:minmax(0,1fr)}.review-grid{gap:10px}#row-list{max-height:180px}.intro{margin-top:22px}.mast{display:block}.panel{margin:10px 0}}@media print{header,.skip,.intro,.filebar,#article-panel,#sources-panel,#review-panel,#share-report,.actions,.message,footer,#demo-notice{display:none!important}#result-panel{border:0;margin:0;padding:0}.report-row{break-inside:avoid}html{background:white}main{width:100%;padding:0}}
 .study-frame #rubric-guide,.study-frame #article-rubric,.study-frame header,.study-frame .skip,.study-frame .intro,.study-frame footer,.study-frame #file-panel,
 .study-frame #article-panel,.study-frame #sources-panel,.study-frame #demo-notice,.study-frame #result-panel,
 .study-frame #go-add-source,.study-frame #go-find{display:none!important}
@@ -112,7 +113,11 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <section class="panel" id="result-panel"><div class="mast"><h2>검토 결과</h2><span id="result-tag" class="count"></span></div>
 <p id="result-scope"></p><p class="hint" id="coverage-limit"></p><p id="result-demo" class="callout" hidden>연습 기록 · 가상 기사 또는 모의 원자료 포함</p><div class="status-group" id="result-counts"></div>
 <div id="result-source-draft" class="callout" hidden><p id="source-draft-note"></p><div class="actions"><button type="button" id="return-source-draft">입력 중인 원자료로 이동</button></div></div>
-<div class="actions"><button type="button" id="export-report">검토 결과 내려받기 (.txt)</button></div><p class="hint">결과 파일에는 기사 문장 전체가 들어갑니다. 외부에 전달하기 전에 기사의 재배포 허용 범위를 확인하고, 필요하면 원문 링크로 대신하세요.</p>
+<div class="actions"><button type="button" id="export-report">기사 본문 포함 결과 내려받기 (.txt)</button></div>
+<details id="share-report"><summary>기사 본문을 빼고 결과 공유하기</summary>
+<p class="hint">기사 전문과 문장별 인용은 생략하고, 판정한 구절의 위치를 표시합니다. 원자료 주소·발췌, 편집자가 작성한 판단 이유와 수정 문구는 그대로 실립니다. 전달하기 전에 이 내용에 포함된 인용도 확인하세요.</p>
+<label class="field" for="share-article-url">기사 원문 주소 (선택)</label><input id="share-article-url" type="url" autocomplete="off" placeholder="https://">
+<div class="actions"><button type="button" id="export-share-report">공유본 내려받기 (.txt)</button></div></details>
 <p class="message" id="result-status" role="status"></p>
 <details id="revision-draft" hidden><summary>확인한 정정 문구로 수정본 만들기</summary>
 <p class="hint">원자료와 대조한 문구 중 수정본에 반영할 위치를 고르세요. 새 파일에는 수정한 기사와 등록된 원자료가 들어갑니다. 수정 전후를 비교하려면 원본 작업 파일도 따로 저장하고, 수정본을 다시 열어 평가하세요.</p>

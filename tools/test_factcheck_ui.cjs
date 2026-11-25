@@ -212,6 +212,79 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   assert.equal(json.demo, true);
 });
 
+test('발언만 확인한 기사의 공유본은 입력한 기사 주소와 근거를 싣고 작업 교체 시 주소를 지운다', async t => {
+  const p = open(t);
+  const article = '위원장은 “공사가 끝났다”고 말했다.';
+  const sources = [{id:'speech', title:'기자회견 속기록', version:'공개본', url:'https://council.example/speech',
+    locator:'3쪽', excerpt:'위원장 발언 기록 · 공사가 끝났다.'}];
+  const [row] = p.w.JournalFactcheck.report(article, sources).rows;
+  const reason = '속기록에서 위원장의 발언을 확인했다.';
+  const receipt = p.w.JournalFactcheck.decide(row, {status:'attribution', sourceIds:['speech'], acknowledged:true,
+    contentStatus:'unverified', reason}, sources);
+  const work = {format:'journal-local-factcheck-v1', article, articleDraft:article, sources, receipts:[receipt],
+    rowDrafts:[], demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}};
+  await loadWorkspace(p, work);
+  const scope = p.el('result-scope').textContent;
+  assert.match(scope, /추가 확인이 필요한 검토 항목은 1개.+1개는 발언 사실을 확인했고, 발언 내용의 검증이 남았습니다/);
+  const articleUrl = 'https://news.example/articles/56';
+  p.set('share-article-url', articleUrl);
+  p.click('export-share-report');
+  assert.equal(p.filename(), 'journal-factcheck-share.txt');
+  const share = await p.snapshot();
+  for (const marker of [scope, '기사 원문 · ' + articleUrl, '1. 발언 귀속 확인', '발언 내용 · 내용 미확인',
+    '근거 일치율 산출 대기 (0/0)', '검증 범위 0% (0/1)', reason, sources[0].excerpt, sources[0].url]) assert.ok(share.includes(marker), marker);
+  assert.ok(!share.includes(article));
+  p.click('export-report');
+  const full = await p.snapshot();
+  assert.equal(p.filename(), 'journal-factcheck-result.txt');
+  assert.ok(full.includes('검토 대상 원문\n' + article) && !full.includes(articleUrl));
+  p.click('save-work');
+  const saved = await p.snapshot();
+  assert.ok(!saved.includes(articleUrl));
+  for (const value of ['https://name:password@news.example/56','javascript:void(0)']) {
+    p.set('share-article-url', value);
+    p.click('export-share-report');
+    assert.match(p.el('result-status').textContent, /HTTP 또는 HTTPS/);
+    assert.equal(p.filename(), 'journal-factcheck-work.json');
+  }
+  await loadWorkspace(p, JSON.parse(saved));
+  assert.equal(p.el('share-article-url').value, '');
+  p.set('share-article-url', articleUrl);
+  p.set('article', '새 기사입니다.');
+  p.el('article-form').requestSubmit();
+  assert.equal(p.el('share-article-url').value, '');
+  p.click('export-share-report');
+  assert.doesNotMatch(await p.snapshot(), /기사 원문 ·|새 기사입니다/);
+});
+
+test('구형 편향 평가의 비교 구절은 기사 전체에서 유일한 위치를 유니코드 글자로 센다', async t => {
+  const p = open(t);
+  p.click('load-demo');
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  const repeated = '의회는 🔎 검토를 시작했다.';
+  work.article = work.articleDraft = repeated + '  ' + repeated + '\n주민은 회의 공개를 요청했다.';
+  const report = p.w.JournalFactcheck.report(work.article, work.sources);
+  const [row, second] = report.rows;
+  const compareQuote = '공개를 요청했다';
+  const source = work.sources[0];
+  work.articleAssessment = p.w.JournalArticleRubric.save(report, work.sources, {coreRowIds:[], ratings:{framing:{
+    level:0, rowId:row.id, quote:'검토를 시작했다', compareQuote, sourceId:source.id,
+    sourceQuote:source.excerpt, reason:'두 문장의 서술 범위를 확인했다.'
+  }}});
+  await loadWorkspace(p, work);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  const first = [...work.article.slice(0, work.article.indexOf(compareQuote))].length + 1;
+  assert.equal(row.positions.length, 2);
+  const size = [...repeated].length;
+  assert.ok(share.includes('1. 미검토 · 원문 2곳\n원문 글자 위치 · 1~' + size + ', ' + (size + 3) + '~' + (size * 2 + 2)));
+  assert.ok(share.includes('2. 미검토\n원문 글자 위치 · ' + (size * 2 + 4) + '~' + [...work.article].length));
+  assert.match(share, /기사 구절 · 구간 1 \(원문 2곳\) · 구간 안 7번째~/);
+  assert.ok(share.includes('비교 구절 · 기사 원문 ' + first + '번째~' + (first + [...compareQuote].length - 1) + '번째 글자'));
+  assert.ok(!share.includes(row.text) && !share.includes(second.text) && !share.includes(compareQuote));
+});
+
 test('지지율을 직접 부분 확인해도 오차범위 밖 우세라는 해석은 작업 파일에서 미결로 남는다', async t => {
   const p = open(t);
   const observed = '여론조사에서 가 후보는 42%, 나 후보는 40%였고';
@@ -238,6 +311,14 @@ test('지지율을 직접 부분 확인해도 오차범위 밖 우세라는 해�
   assert.equal(work.receipts[0].status, 'partial');
   assert.equal(work.receipts[0].factSpan, observed);
   assert.deepEqual(work.receipts[0].remainingSpans, [', 이 격차는 오차범위 밖이었다.']);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  assert.match(share, /1\. 일부 확인 · 나머지 보류/);
+  const length = [...observed].length;
+  assert.ok(share.includes('사실 구절 · 구간 안 1번째~' + length + '번째 글자'));
+  assert.ok(share.includes('남은 구절 · 구간 안 ' + (length + 1) + '번째~' + [...claim].length + '번째 글자'));
+  assert.ok(!share.includes(observed) && !share.includes('이 격차는 오차범위 밖이었다'));
+  assert.ok(share.includes(details.excerpt));
 });
 
 test('판단 저장 뒤 미검토 문장을 우선하고 보류 문장만 남으면 다음 항목을 연다', t => {
@@ -412,6 +493,12 @@ test('핵심을 지정하지 않은 기사도 지지율 100%에서 문장 전체
   assert.match(exported, /근거 일치율 100% \(2\/2\)/);
   assert.match(exported, /검증 범위 100% \(2\/2\)/);
   assert.match(exported, both);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  assert.match(share, both);
+  assert.match(share, /사실 구절 · 구간 안 1번째~/);
+  assert.match(share, /평가 구절 · 구간 안 \d+번째~/);
+  assert.ok(!share.includes(fact) && !share.includes(opinion));
   const withFact = article + '\n시의회는 예산 3억 원을 의결했다.\n교육 사업은 내년에 시작한다.';
   const summary = await read(withFact, [...scoped, {status:'fact'}]);
   assert.match(summary, /미확인 1개가 남아 있습니다/);
@@ -446,6 +533,13 @@ test('당시 결산표가 인용 내용과 충돌하면 편집 화면·TXT·재�
   const report = await p.snapshot();
   for (const marker of ['근거 일치율 산출 대기 (0/0)', '검증 범위 100% (1/1)', '내용을 대조한 인용 구간 · 지난해 집행액은 20억 원이었다',
     '원발언 · 속기록', '내용 근거 · 결산표']) assert.ok(report.includes(marker), marker);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  for (const marker of ['근거 일치율 산출 대기 (0/0)', '검증 범위 100% (1/1)', '내용을 대조한 인용 구간 · 구간 안',
+    '원발언 · 속기록', '내용 근거 · 결산표', '지난해 해당 사업의 실제 집행액 10억 원']) assert.ok(share.includes(marker), marker);
+  // The independently registered source excerpt may legitimately repeat the article.
+  assert.equal(share.split(article).length - 1, 1);
+  assert.doesNotMatch(share, /검토 대상 원문|내용을 대조한 인용 구간 · 지난해/);
   p.click('save-work');
   const file = JSON.parse(await p.snapshot());
   const next = open(t);
@@ -591,6 +685,13 @@ test('반복된 제목과 본문을 대조한 위치, 평가 단계와 미결 �
   assert.match(txt, /0단계/);
   assert.match(txt, /기사 구절 · 구간 1 · 의회가/);
   assert.match(txt, /비교 구절 · 구간 2 · 의회가/);
+  reader.click('export-share-report');
+  const share = await reader.snapshot();
+  assert.match(share, /검증 범위 0% \(0\/2\)/);
+  assert.match(share, /핵심 구절 · 미확인 · 구간 1/);
+  assert.match(share, /기사 구절 · 구간 1 · 구간 안 1번째~/);
+  assert.match(share, /비교 구절 · 구간 2 · 구간 안 1번째~/);
+  assert.ok(share.includes(source.excerpt) && !share.includes(first.text));
   reader.click('save-work');
   const saved = JSON.parse(await reader.snapshot());
   assert.equal(saved.articleAssessment.ratings.framing.compareRowId, second.id);
