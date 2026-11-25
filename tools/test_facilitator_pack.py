@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
+from build_facilitator_pack import CASES, CASE_FOLDERS, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -92,7 +92,10 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = {PRACTICE_SAMPLE, *QUOTE_PRACTICE.values()}
+            expected_json = {PRACTICE_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}
+            sample = json.loads(archive.read(PARTY_LEDGER_SAMPLE))
+            self.assertIs(sample['demo'], True)
+            self.assertEqual(sample['articleAssessment']['ratings']['standards']['level'], 3)
             for case, label in CASE_FOLDERS.items():
                 for subdir, name in [('채점표', 'coordinator-key.json'), ('참여 과제', 'blind-tasks.json')]:
                     packed = f'{subdir}/{label}/{name}'
@@ -115,7 +118,7 @@ class FacilitatorPack(unittest.TestCase):
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
-                        self.assertTrue(set(QUOTE_PRACTICE.values()).isdisjoint(nested.namelist()))
+                        self.assertTrue({PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}.isdisjoint(nested.namelist()))
                         self.assertNotIn('core-context-notes-ui.js', nested.namelist())
                         for page in (n for n in nested.namelist() if n.endswith('.html')):
                             self.assertNotIn(b'id="quote-practice"', nested.read(page))

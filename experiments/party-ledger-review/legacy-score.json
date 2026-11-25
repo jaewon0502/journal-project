@@ -1,0 +1,68 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "가람당은 특별회계 3억 원을 집행했다.\n누리당은 특별회계 3억 원을 집행했다고 주장했다.",
+  "articleDraft": "가람당은 특별회계 3억 원을 집행했다.\n누리당은 특별회계 3억 원을 집행했다고 주장했다.",
+  "demo": true,
+  "sources": [
+    {
+      "id": "ledger",
+      "title": "모의 결산표",
+      "url": "https://example.org/synthetic-ledger",
+      "locator": "표 1",
+      "version": "모의 1판",
+      "excerpt": "가람당 특별회계 2025년 집행액 3억 원.\n가람당 특별회계 2025년 집행일 9월 2일.\n누리당 특별회계 2025년 집행액 3억 원."
+    }
+  ],
+  "receipts": [
+    {
+      "protocol": "journal-review/1",
+      "rowId": "unit-0",
+      "articleBinding": "49d7c74318f210d93d7b699a62e17b996d6bdbeb1fcccc04a786794a8276d0f9",
+      "binding": "bde3f65112936015581db1acd325e676940416bf50be67ea4fd499cf472fbe15",
+      "references": "486fc472309fd72c74414817247bcc9b54649b3039e6eaa39cb016213f72fa10",
+      "recordedAt": "2026-11-25T07:29:18.946Z",
+      "status": "fact",
+      "sourceIds": [
+        "ledger"
+      ],
+      "reason": "모의 결산표 1행에서 가람당의 집행액을 대조했다.",
+      "acknowledged": true,
+      "checksum": "dba0a143e5cac55b7788b6a312f7a1fa5bc1797b3250192cddfa5f998fb6011a"
+    }
+  ],
+  "rowDrafts": [],
+  "articleAssessment": {
+    "version": "journal-article-rubric-v1",
+    "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"bde3f65112936015581db1acd325e676940416bf50be67ea4fd499cf472fbe15\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"49d7c74318f210d93d7b699a62e17b996d6bdbeb1fcccc04a786794a8276d0f9\",\"binding\":\"bde3f65112936015581db1acd325e676940416bf50be67ea4fd499cf472fbe15\",\"references\":\"486fc472309fd72c74414817247bcc9b54649b3039e6eaa39cb016213f72fa10\",\"status\":\"fact\",\"sourceIds\":[\"ledger\"],\"reason\":\"모의 결산표 1행에서 가람당의 집행액을 대조했다.\",\"acknowledged\":true},false],[\"unit-22\",\"77ee001786cbfd0ecffac0d890d10f02302817cc0e0f0398a133018d17db5b8d\",\"pending\",null,false]]]",
+    "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"49d7c74318f210d93d7b699a62e17b996d6bdbeb1fcccc04a786794a8276d0f9\"],[\"unit-22\",\"5e9c4cdcd779ff82f46e6c75762be0b5b133302348e2d6e22b4391f3451efadc\"]]]",
+    "coreRowIds": [
+      "unit-0"
+    ],
+    "ratings": {
+      "standards": {
+        "level": 3,
+        "rowId": "unit-0",
+        "quote": "가람당은 특별회계 3억 원을 집행했다.",
+        "compareRowId": "unit-22",
+        "compareQuote": "누리당은 특별회계 3억 원을 집행했다고 주장했다.",
+        "sourceId": "ledger",
+        "sourceQuote": "가람당 특별회계 2025년 집행액 3억 원.",
+        "compareSourceId": "ledger",
+        "compareSourceQuote": "가람당 특별회계 2025년 집행일 9월 2일.",
+        "reason": "두 당의 집행액은 같은데 기사에서 확실성을 다르게 표현했다.",
+        "impact": "누리당의 지출만 미확인으로 읽힐 수 있다.",
+        "direction": ""
+      }
+    }
+  },
+  "sourceDraft": {
+    "id": null,
+    "fields": {
+      "title": "",
+      "url": "",
+      "version": "",
+      "locator": "",
+      "excerpt": ""
+    }
+  }
+}

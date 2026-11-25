@@ -110,8 +110,50 @@
     return passageText(a.locator) === passageText(b.locator);
   }
 
-  // This is the only newly invalid legacy score that kept both original citations.
-  class SplitClipOverlap extends Error {}
+  // Earlier workspaces could contain both citations and still need re-selection.
+  class ComparisonNeedsReview extends Error {}
+
+  // Only pair explicitly named subjects with table-style evidence. A speaker, a
+  // role such as "여당", or a pronoun needs an editor to interpret the context.
+  function namedPartySubject(text) {
+    const match = /^([가-힣]+당|국민의힘)(?:은|는|이|가|의)(?=\s)/u.exec(text);
+    if (!match || /^(?:여당|야당|여야당|집권당|원내정당|제[일이삼]야당|상대당|우리당|소속당|정당|해당|담당|분당|식당|성당|법당|서당|강당|본당)$/u.test(match[1])) return '';
+    return match[1];
+  }
+
+  function isPartyRecord(line, party) {
+    if (!line.startsWith(party)) return false;
+    const tail = line.slice(party.length);
+    // Either an explicit column separator or the name of an accounting field.
+    return /^\s*[|｜:\t]/u.test(tail) ||
+      /^(?:의)?\s+(?:\d{4}년(?:도)?\s+)?(?:특별회계|일반회계|집행액|집행일|의결액|지출액|지급액|인쇄비|결산액|제출일|제출\s*여부|득표수|찬성표|반대표)(?=\s|[\d:·|.,]|$)/u.test(tail);
+  }
+
+  function checkPartyRows(row, quote, compareRow, compareQuote, source, sourceQuote, other, otherQuote) {
+    const first = namedPartySubject(quote), second = namedPartySubject(compareQuote);
+    // Short and long forms of the same party, or passages concerning both
+    // parties, do not establish two unambiguous targets.
+    if (!first || !second || first.endsWith(second) || second.endsWith(first) ||
+        !compareRow || row.text.includes(second) || compareRow.text.includes(first)) return;
+    for (const [side, expected, opposite, doc, selected] of [
+      ['첫째', first, second, source, sourceQuote], ['둘째', second, first, other, otherQuote]
+    ]) {
+      if (selected.includes(expected) || /[\n\r\u2028\u2029]/u.test(selected)) continue;
+      const location = doc.excerpt.indexOf(selected);
+      if (location !== doc.excerpt.lastIndexOf(selected)) continue;
+      const lines = doc.excerpt.split(/\r\n|[\n\r\u2028\u2029]/u).map(line => line.trim());
+      const index = lines.findIndex(line => line.includes(selected));
+      const line = lines[index];
+      if (!isPartyRecord(line, opposite) || line.includes(expected) ||
+          /[“”‘’"'「」『』]|상대(?:방|\s*당)|여당|야당|발언|주장|밝혔|말했|따르면|대변인/u.test(line)) continue;
+      // A caption naming the expected party can scope the data to that party.
+      // The opposite name may be a payee or other column value in that table.
+      if ([doc.title, doc.locator].some(label => label?.includes(expected) && !label.includes(opposite))) continue;
+      if (lines.slice(0, index).some(header => header.includes(expected) && !isPartyRecord(header, expected))) continue;
+      throw new ComparisonNeedsReview(side + ' 기사 구절은 ' + expected + '에 관한 내용인데 선택한 자료 행에는 ' +
+        opposite + '의 기록이 표시됩니다. ' + expected + '의 행이나 해당 주장을 확인할 수 있는 자료 구절을 다시 고르세요.');
+    }
+  }
 
   // Align the suffix of one registered clip with the prefix of another in linear time.
   function joinedClipOverlap(first, second, left, right) {
@@ -142,7 +184,7 @@
     return /\p{L}{2,}/u.test(shared);
   }
 
-  function comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote) {
+  function comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote, row, compareRow) {
     const firstClaim = passageText(quote), secondClaim = passageText(compareQuote);
     if (!firstClaim || !secondClaim || firstClaim === secondClaim) {
       throw new Error('기사에서 비교할 주체나 주장이 각각 드러나는 두 구절을 옮기세요.');
@@ -161,13 +203,14 @@
       const common = texts.filter(t => t.includes(left) && t.includes(right));
       if (!common.length && (joinedClipOverlap(texts[0], texts[1], left, right) ||
           joinedClipOverlap(texts[1], texts[0], right, left))) {
-        throw new SplitClipOverlap('같은 위치에서 등록한 두 발췌의 인용이 겹칠 수 있습니다. 두 주장이 함께 나온 원문을 등록하고 겹치지 않는 두 구절을 고르거나, 각 행의 확인 위치를 구분하세요.');
+        throw new ComparisonNeedsReview('같은 위치에서 등록한 두 발췌의 인용이 겹칠 수 있습니다. 두 주장이 함께 나온 원문을 등록하고 겹치지 않는 두 구절을 고르거나, 각 행의 확인 위치를 구분하세요.');
       }
       if (left.includes(right) || right.includes(left) || (common.length && !common.some(t =>
         t.indexOf(left) + left.length <= t.lastIndexOf(right) || t.indexOf(right) + right.length <= t.lastIndexOf(left)))) {
         throw new Error('같은 자료 위치에서는 두 주장의 근거가 각각 드러나는 겹치지 않는 구절을 옮기세요.');
       }
     }
+    checkPartyRows(row, quote, compareRow, compareQuote, source, sourceQuote, other, otherQuote);
     return {compareSourceId: other.id, compareSourceQuote: otherQuote};
   }
 
@@ -192,7 +235,8 @@
       throw new Error(dimension.title + '에서 비교한 다른 기사 구절을 위치가 분명하고 첫 구절과 겹치지 않게 옮기세요.');
     }
     const secondSource = dimension.id === 'standards' && !legacyDraft
-      ? comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote) : {};
+      ? comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote, row,
+          report.rows.find(item => compareRowId ? item.id === compareRowId : item.text.includes(compareQuote))) : {};
     return {level, rowId: row.id, quote, sourceId: source.id, sourceQuote, reason, impact, compareQuote, compareRowId, ...secondSource,
       direction: level > 0 ? string(rating.direction) : ''};
   }
@@ -318,13 +362,12 @@
   function priorStandardsDraft(report, sources, rating) {
     if (!Number.isInteger(rating?.level)) return null;
     const singleSource = !('compareSourceId' in rating || 'compareSourceQuote' in rating);
-    if (!singleSource && rating.sourceId === rating.compareSourceId) return null;
     try {
       const dim = dimensions.find(d => d.id === 'standards');
       const checked = ratingFor(dim, rating, report, sources, singleSource);
       return singleSource ? copyFields(checked) : null;
     } catch (error) {
-      if (!(error instanceof SplitClipOverlap)) return null;
+      if (!(error instanceof ComparisonNeedsReview)) return null;
       return copyFields({...rating, impact:rating.level ? string(rating.impact) : '', direction:rating.level ? string(rating.direction) : ''});
     }
   }

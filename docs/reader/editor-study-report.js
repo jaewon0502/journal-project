@@ -53,6 +53,27 @@
       '<th scope="col">저널 병행</th></tr></thead><tbody>' + rows.join('') + '</tbody></table>' +
       '<p class="small">각 기사에서 두 방식에 배정된 편집자는 서로 다릅니다. 표에는 같은 시간 표본의 평균과 성공 건수를 표시합니다.</p>';
   }
+  function verdictSourceAssociation(data) {
+    const title = '<h3>같은 판정에 어떤 근거를 골랐나</h3>';
+    if (data === undefined) return title + '<p>이 집계에는 판정과 대표 근거의 조합을 비교한 기록이 없습니다.</p>';
+    if (data === null) return title + '<p>네 명이 네 과제를 모두 끝낸 묶음이 있어야 두 정당 표기의 응답을 비교할 수 있습니다.</p>';
+    function valid(arm) {
+      return count(arm?.differentCases) && arm.differentCases <= data.comparedCases &&
+        count(arm.equalMarginalsWithGap) && arm.equalMarginalsWithGap <= arm.differentCases;
+    }
+    if (!count(data?.comparedCases) || data.comparedCases === 0 || !valid(data.manual) || !valid(data.journal)) {
+      return title + '<p>기사 수와 방식별 건수를 확인할 수 없어 결과를 표시하지 않았습니다.</p>';
+    }
+    function cell(arm) {
+      return ratio(arm.differentCases,data.comparedCases) + '개';
+    }
+    const rows = row('정당 표기에 따라 판정과 근거의 조합이 달랐던 기사',cell(data.manual),cell(data.journal)) +
+      row('그중 판정 비율과 자료 선택 비율이 각각 같았던 기사',
+        ratio(data.manual.equalMarginalsWithGap,data.comparedCases) + '개',ratio(data.journal.equalMarginalsWithGap,data.comparedCases) + '개');
+    return title + '<table><thead><tr><th scope="col">비교한 기사 중 해당 건수</th><th scope="col">원자료만</th>' +
+      '<th scope="col">저널 병행</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<p class="small">두 줄 모두 비교한 기사 전체를 분모로 씁니다. 같은 기사에서 정당 표기만 바꿔 서로 다른 편집자에게 배정한 결과입니다.</p>';
+  }
   function metrics(data, demo) {
     const time = data.time, gap = data.partyLabelAcceptanceGap, quality = data.verdictAndEvidence;
     const unsafe = data.unsupportedAcceptance;
@@ -104,7 +125,8 @@
         ', 방향 미확인 ' + measure(directions.unknown,'명') + '입니다. 이 개인별 비교에는 기사와 정당 표기가 균등하게 배정되지 않을 수 있습니다.</p>';
     }
     return counts + headline + '<h3>격차가 줄어든 기사의 판정은 어떻게 달라졌나</h3><p>' + jointText +
-      '</p><h3>방식별 시간과 판정</h3>' + summary + caseVerification(time.caseVerification, demo) + outside;
+      '</p><h3>방식별 시간과 판정</h3>' + summary + verdictSourceAssociation(data.partyLabelVerdictSourceAssociation) +
+      caseVerification(time.caseVerification, demo) + outside;
   }
   function editionSection(title, editions, demo) {
     if (!Array.isArray(editions) || !editions.length) return '';

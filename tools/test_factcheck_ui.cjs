@@ -2213,7 +2213,7 @@ test('다른 문장에서 발췌 교체나 수기 수정을 하면 이전 문장
 test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개하고 반복되거나 빈 행을 선택하지 않는다', async t => {
   const p = open(t);
   const source = {id:'ledger',title:'지출표',url:'https://example.org/ledger',version:'확정',
-    locator:'표 3',excerpt:'단위: 원\n\n가당  인쇄비 480만 원\n합계\n나당  인쇄비 480만 원\n합계'};
+    locator:'표 3',excerpt:'단위: 원\n\n가당  인쇄비 480만 원\n합계\n나당  인쇄비 480만 원\n합계\n가당  집행일 9월 2일'};
   const article = '가당은 인쇄비를 지급했다.\n나당은 인쇄비를 지급했다고 밝혔다.';
   await loadWorkspace(p,{format:'journal-local-factcheck-v1', article, articleDraft:article, demo:false, sources:[source], receipts:[], rowDrafts:[],
     sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
@@ -2231,7 +2231,7 @@ test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개�
   set('첫째 구절의 원자료와 확인 위치','ledger');
   set('둘째 구절의 원자료와 확인 위치','ledger');
   const first = '첫째 근거로 인용할 원자료 행', second = '둘째 근거로 인용할 원자료 행';
-  assert.deepEqual([...field(first).options].slice(1).map(o => o.text),['1행 · 단위: 원','3행 · 가당 인쇄비 480만 원','5행 · 나당 인쇄비 480만 원']);
+  assert.deepEqual([...field(first).options].slice(1).map(o => o.text),['1행 · 단위: 원','3행 · 가당 인쇄비 480만 원','5행 · 나당 인쇄비 480만 원','7행 · 가당 집행일 9월 2일']);
   set(first,'가당  인쇄비 480만 원');
   assert.equal(field('둘째 주장과 대조한 자료 구절').value,source.excerpt);
   set(second,'나당  인쇄비 480만 원');
@@ -2244,6 +2244,13 @@ test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개�
   assert.equal(field(second).value,'나당  인쇄비 480만 원');
   set('둘째 주장과 대조한 자료 구절','나당  인쇄비');
   assert.equal(field(second).value,'');
+  set(second,'가당  집행일 9월 2일');
+  panel.querySelector('form').requestSubmit();
+  assert.match(panel.querySelector('[role=status]').textContent,/둘째 기사 구절은 나당.*가당/);
+  resumed.click('save-work');
+  const invalid=JSON.parse(await resumed.snapshot());
+  assert.equal(invalid.articleAssessment?.ratings?.standards,undefined);
+  assert.equal(invalid.articleAssessmentDraft.entries.standards.compareSourceQuote,'가당  집행일 9월 2일');
   set(second,'나당  인쇄비 480만 원');
   panel.querySelector('form').requestSubmit();
   resumed.click('save-work'); const rating=JSON.parse(await resumed.snapshot()).articleAssessment.ratings.standards;
@@ -2252,4 +2259,11 @@ test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개�
   assert.equal(rating.compareSourceQuote,'나당  인쇄비 480만 원');
   assert.deepEqual([...panel.querySelectorAll('.rub-evidence dt')].slice(0,4).map(dt => dt.textContent.split(' · ')[0]),
     ['기사 구절','첫째 구절의 근거','비교 구절','둘째 구절의 근거']);
+  const legacy = JSON.parse(await resumed.snapshot());
+  legacy.articleAssessment.ratings.standards.compareSourceQuote='가당  집행일 9월 2일';
+  const imported=open(t);await loadWorkspace(imported,legacy);
+  const restored=form(imported);
+  assert.match(restored.panel.querySelector('.callout').textContent,/이전 점수는 집계에서 제외.*둘째 기사 구절은 나당/);
+  assert.equal(restored.field(second).value,'가당  집행일 9월 2일');
+  assert.equal(restored.field('판단 이유').value,rating.reason);
 });

@@ -71,6 +71,29 @@ test('성공당 시간에는 그 시간 표본의 성공 건수를 사용한다'
   } finally {dom.window.close();}
 });
 
+test('공유용 결과는 판정·근거 조합의 차이를 전체 기사 수로 보여 주고 개인 응답을 내보내지 않는다', () => {
+  const association = {comparedCases:4,manual:{differentCases:0,equalMarginalsWithGap:0},
+    journal:{differentCases:2,equalMarginalsWithGap:1},cases:[{verdict:'PRIVATE-receipt',sourceId:'PRIVATE-source'}]};
+  const base = studySummary();
+  const render = value => report.html({kind:'editor',overall:{...base,partyLabelVerdictSourceAssociation:value}});
+  const html = render(association);
+  const dom = new JSDOM(html);
+  try {
+    const heading = [...dom.window.document.querySelectorAll('h3')].find(h=>h.textContent.includes('어떤 근거'));
+    const rows = [...heading.nextElementSibling.tBodies[0].rows];
+    assert.deepEqual(rows.map(r=>[r.cells[1].textContent,r.cells[2].textContent]),[['0/4개','2/4개'],['0/4개','1/4개']]);
+    assert.doesNotMatch(html,/PRIVATE-/);
+  } finally { dom.window.close(); }
+  assert.match(render(undefined),/조합을 비교한 기록이 없습니다/);
+  assert.match(render(null),/묶음이 있어야 두 정당 표기의 응답을 비교/);
+  for (const journal of [{differentCases:1,equalMarginalsWithGap:2},{differentCases:5,equalMarginalsWithGap:0},
+    {differentCases:'PRIVATE-forged-count',equalMarginalsWithGap:0}]) {
+    const result = render({...association,journal});
+    assert.match(result,/방식별 건수를 확인할 수 없어/);
+    assert.doesNotMatch(result,/PRIVATE-/);
+  }
+});
+
 test('기사별 결과표는 전체 성공률이 같아도 시간이 줄면서 검증에 실패한 기사를 표시한다', () => {
   const overall = studySummary();
   overall.time.caseVerification = study.analyze(study.caseVerificationDemoRecords(), 'demo').caseVerification;

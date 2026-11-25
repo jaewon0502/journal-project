@@ -346,6 +346,47 @@ test('틀린 자료의 방식별 합계와 판정이 같아도 정당 표기에 
   assert.deepEqual(split.sourceChoices.byVariant.B.journal, {byId:{'doc-1':0,'doc-2':2,'doc-3':0}, none:0, total:2});
 });
 
+test('판정·자료 선택과 정확도가 각각 같아도 두 선택의 연결이 달라진 기사와 셀을 찾는다', () => {
+  const records = study.verdictSourceDemoRecords();
+  const control = structuredClone(records);
+  for (const t of control.flatMap(record => record.trials)) {
+    if (t.caseId === 'repair' && t.method === 'journal' && t.variant === 'B')
+      t.sourceIds = [t.verdict === 'supported' ? 'doc-1' : 'doc-2'];
+  }
+  const baseline = study.analyze(control, 'demo');
+  const changed = study.analyze(records, 'demo');
+  assert.deepEqual(changed.quality, baseline.quality);
+  const original = baseline.bias.cases.find(row => row.caseId === 'repair');
+  const repair = changed.bias.cases.find(row => row.caseId === 'repair');
+  for (const key of ['manual','journal','quality','sourceChoices']) assert.deepEqual(repair[key], original[key]);
+  assert.deepEqual(changed.bias.verdictSourceAssociation, {comparedCases:4,
+    manual:{differentCases:0,equalMarginalsWithGap:0}, journal:{differentCases:1,equalMarginalsWithGap:1}});
+  assert.deepEqual(original.verdictSourceAssociation.journal, {gapPp:0,totalA:2,totalB:2,differences:[]});
+  assert.deepEqual(repair.verdictSourceAssociation.journal, {gapPp:100,totalA:2,totalB:2,differences:[
+    {verdict:'supported',sourceId:'doc-1',countA:1,countB:0}, {verdict:'supported',sourceId:'doc-2',countA:0,countB:1},
+    {verdict:'opinion',sourceId:'doc-1',countA:0,countB:1}, {verdict:'opinion',sourceId:'doc-2',countA:1,countB:0}
+  ]});
+  assert.equal(study.analyze(records.slice(0,3),'demo').bias, null);
+  assert.equal(study.analyze(records).bias, null);
+});
+
+test('대표 근거 미선택도 조합으로 세고, 시간이 누락된 완성 묶음과 미완성 묶음을 구별한다', () => {
+  const records = Array.from({length:9}, (_, i) => observations(i+1, t => {
+    if (i === 0 && t.position === 1) return {elapsedMs:null, observedMs:100};
+    if (i < 4 && t.caseId === 'repair' && t.method === 'journal' && t.variant === 'B') return {sourceIds:[]};
+    return {};
+  }));
+  const result = study.analyze(records);
+  assert.equal(result.included,8);
+  assert.equal(result.timing.included,4);
+  const row = result.bias.cases.find(row => row.caseId === 'repair');
+  assert.deepEqual(row.verdictSourceAssociation.journal, {gapPp:50,totalA:2,totalB:2,differences:[
+    {verdict:'contradicted',sourceId:'doc-3',countA:2,countB:1},
+    {verdict:'contradicted',sourceId:null,countA:0,countB:1}
+  ]});
+  assert.deepEqual(result.bias.verdictSourceAssociation.journal, {differentCases:1,equalMarginalsWithGap:0});
+});
+
 test('세 묶음에서 같은 1표 차이는 비율 반올림 때문에 격차 감소로 처리되지 않는다', () => {
   for (const higherJournalLabel of ['A','B']) {
     const data = Array.from({length:12}, (_, index) => observations(index + 1, t => {

@@ -201,6 +201,49 @@ test('이전 당사자별 점수는 재검토 초안으로 열리고 핵심 지�
   assert.equal(workspace.review(state(article+'\n새 소식이다.'), sources, saved, null).draft, null);
 });
 
+test('상대 당의 장부 행을 잘못 연결한 점수는 집계하지 않고 이전 작업의 근거를 보존한다', () => {
+  const article = '가람당은 특별회계 3억 원을 집행했다.\n누리당은 특별회계 3억 원을 집행했다고 주장했다.';
+  const amount = '가람당 특별회계 2025년 집행액 3억 원.';
+  const payment = '가람당 특별회계 2025년 집행일 9월 2일.';
+  const correct = '누리당 | 2025년 특별회계 3억 원.';
+  function fixture(second, text = article, first = amount, locator = '표 1') {
+    const src = {id:'ledger',url:'https://example.org/accounts',locator,version:'확정',excerpt:[first,second,correct].join('\n')};
+    const r = factcheck.report(text, [src]), [a,b] = r.rows;
+    const raw = {level:3,rowId:a.id,quote:a.text,compareRowId:b.id,compareQuote:b.text,
+      sourceId:src.id,sourceQuote:first,compareSourceId:src.id,compareSourceQuote:second,
+      reason:'두 당의 지출을 서로 다르게 서술했다.',impact:'한쪽의 지출만 미확인으로 읽힐 수 있다.'};
+    return {r,src,raw,save: changes => rubric.save(r,[src],{coreRowIds:[a.id],ratings:{standards:{...raw,...changes}}})};
+  }
+  const f = fixture(payment);
+  for (const level of [0,1,2,3]) assert.throws(() => f.save({level}), /둘째 기사 구절은 누리당.*가람당/);
+  assert.throws(() => f.save({compareSourceQuote:'9월 2일'}), /둘째 기사 구절은 누리당/);
+  assert.throws(() => f.save({sourceQuote:correct, compareSourceQuote:amount}), /첫째 기사 구절은 가람당.*누리당/);
+  assert.equal(rubric.evaluate(f.r,[f.src],f.save({compareSourceQuote:correct})).bias.maxLevel,3);
+
+  const old = rubric.save(f.r,[f.src],{coreRowIds:[f.raw.rowId],ratings:{}});
+  old.ratings.standards = f.raw;
+  const reopened = workspace.review(f.r,[f.src],old,null);
+  assert.equal(reopened.assessment.bias.maxLevel,null);
+  assert.equal(reopened.assessment.bias.assessed,0);
+  assert.deepEqual(reopened.assessment.accuracy.coreRowIds,[f.raw.rowId]);
+  assert.deepEqual(reopened.draft.entries.standards.legacyPrevious,rubric.copyFields(f.raw));
+  assert.deepEqual(workspace.review(f.r,[f.src],reopened.assessment.saved,reopened.draft).draft,reopened.draft);
+
+  // Role aliases and cited speakers require editorial interpretation. A table
+  // without an explicit actor can identify the party through its column header.
+  for (const [evidence, text] of [
+    ['집행일 9월 2일.',article], ['가람당 | 누리당 측이 제출한 지출 명세',article],
+    ['가람당 “상대는 대답한 적이 없다”',article], ['가람당 | “9월에 제출했다”',article],
+    [payment,article.replace('누리당은','여당은')], [payment,article.replace('누리당은','위원회는')],
+    [payment,article.replace('누리당은','누리당은 가람당 자료를 인용해')],
+    [payment,article.replace('가람당은','더가람당은').replace('누리당은','가람당은')]
+  ]) assert.equal(fixture(evidence,text).save().ratings.standards.level,3);
+  const section = fixture('누리당의 지급 명세\n지급처 | 금액\n가람당 | 3억 원');
+  assert.equal(section.save({compareSourceQuote:'가람당 | 3억 원'}).ratings.standards.level,3);
+  const disbursement = fixture('가람당 | 3억 원',article,amount,'누리당 집행 명세, 지급처별 금액');
+  assert.equal(disbursement.save().ratings.standards.level,3);
+});
+
 test('같은 판단을 다시 기록하거나 기록 전 문장에 입력해도 기사 평가는 무효가 되지 않는다', () => {
   const r = state(article, [['fact']]);
   const saved = form(r, {omission: entry(r.rows[0], 0)});

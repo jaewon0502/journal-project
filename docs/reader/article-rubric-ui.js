@@ -221,8 +221,8 @@
       const r = assessment?.ratings?.[id];
       const entry = draft.entries[id];
       const needsEvidence = id === 'standards' && /^[0-3]$/.test(entry?.level) && !entry.compareSourceQuote.trim();
-      const priorOverlap = id === 'standards' && entry?.legacyPrevious?.compareSourceQuote;
-      state.badge.textContent = needsEvidence ? '둘째 근거 필요 · 미평가' : priorOverlap ? '이전 근거 겹침 · 재확인 중' :
+      const priorPair = id === 'standards' && entry?.legacyPrevious?.compareSourceQuote;
+      state.badge.textContent = needsEvidence ? '둘째 근거 필요 · 미평가' : priorPair ? '이전 근거 재확인 · 미평가' :
         entry ? '작성 중 · 집계 제외' : r ? scoreName(r.level) : '미평가';
     }
     function showDimension(dim) {
@@ -246,8 +246,14 @@
         const pending = draft.entries[dim.id];
         updateDimension(dim.id);
         body.replaceChildren();
-        if (standards && pending?.legacyPrevious?.compareSourceQuote)
-          body.append(text('p', '이전 점수는 집계에서 제외했습니다. 등록한 두 인용이 같은 위치에서 겹칠 수 있습니다. 각 주장의 행이나 구절을 다시 확인하세요.', 'callout'));
+        if (standards && pending?.legacyPrevious?.compareSourceQuote) {
+          const prior = pending.legacyPrevious;
+          try {
+            api.save(report, sources, {coreRowIds:[], ratings:{standards:{...prior, level:Number(prior.level)}}});
+          } catch (error) {
+            body.append(text('p', '이전 점수는 집계에서 제외했습니다. ' + error.message, 'callout'));
+          }
+        }
         if (savedRating && !pending) {
           const entries = [];
           if (savedRating.rowId) entries.push(['기사 구절 · 구간 ' + rowById.get(savedRating.rowId)?.n, savedRating.quote]);

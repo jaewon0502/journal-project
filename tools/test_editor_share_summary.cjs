@@ -56,6 +56,7 @@ test('빈 실측의 분모는 0이고 효과는 미측정이며 가상 예시를
     manual:{verified:null,tasks:0},journal:{verified:null,tasks:0}});
   assert.equal(summary.overall.time.reductionPct, null);
   assert.equal(summary.overall.partyLabelDirectionReversals, null);
+  assert.equal(summary.overall.partyLabelVerdictSourceAssociation, null);
   assert.deepEqual(summary.overall.verdictAndEvidence.manual, {tasks:0,verified:null,verifiedPct:null});
   const unmeasured = {accepted:null,eligible:0,pct:null};
   assert.deepEqual(summary.overall.unsupportedAcceptance, {manual:unmeasured,journal:unmeasured,changePp:null,increased:null});
@@ -156,6 +157,21 @@ test('성공 한 건당 시간에는 온전히 시간을 기록한 과제만 들
     assert.equal(view.time.journalSecondsPerVerified,null);
     assert.deepEqual(view.verdictAndEvidence.journal,{tasks:16,verified:8,verifiedPct:50});
   }
+});
+
+test('판정·근거 조합 차이는 실측 전체와 판본별 공유 파일에 기사 건수로만 전달한다', async t => {
+  const roster = Array.from({length:8}, (_, i) => invitation(i + 1));
+  const demo = study.verdictSourceDemoRecords();
+  const records = roster.map((invite, i) => completed(invite, {answer(task) {
+    const {verdict, sourceIds} = demo[i].trials[task.position - 1];
+    return {verdict, sourceIds};
+  }}));
+  const summary = await dashboard(t, records, roster).save();
+  for (const view of [summary.overall, summary.observedEditions[0], summary.assignedMatchedEditions[0]]) {
+    assert.deepEqual(view.partyLabelVerdictSourceAssociation, {comparedCases:4,
+      manual:{differentCases:0,equalMarginalsWithGap:0}, journal:{differentCases:1,equalMarginalsWithGap:1}});
+  }
+  assert.doesNotMatch(JSON.stringify(summary), /"sourceId"|"differences"|"countA"|"countB"|"repair"|PRIVATE-EDITOR-REASON/);
 });
 
 test('전체와 해당 판본에서 정당 표기 채택의 방향이 뒤집힌 기사 수만 공유한다', async t => {

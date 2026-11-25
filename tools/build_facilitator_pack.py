@@ -14,6 +14,7 @@ from build_field_participant_packs import Assets, CASES, READER, ROOT, html, ver
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
 PRACTICE_SAMPLE = '연습 예시/고용률-판단이유-가상응답.json'
+PARTY_LEDGER_SAMPLE = '연습 예시/정당별-결산표-이전-점수.json'
 QUOTE_PRACTICE = {
     'series-summary.json': '연습 예시/핵심발언/기사별-요약.json',
     'coordinator-case.json': '연습 예시/핵심발언/진행자용-대조기록.json'
@@ -31,7 +32,8 @@ START = """<!doctype html>
 <li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 새 코드를 발급하세요. 화면 순서대로 ‘코드 복사’를 누르고 같은 행의 ‘참여자 ZIP’과 함께 한 명씩 전달하세요. 새 코드는 지정한 판본을 열었을 때만 등록됩니다. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다. 이 폴더에 동봉된 자료는 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>에서 다시 받을 수 있습니다.
 <p>이 ZIP의 참여자 자료 식별값은 <code>{{EDITOR_KIT}}</code>입니다. 회신을 모은 뒤 ‘같은 참여자 자료를 사용한 묶음의 결과’에서 이 값과 일치하는 판본을 확인하세요.</p></li>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다. 시간 차이를 볼 때는 같은 편집자들의 기준 판정 일치율과 대표 근거 일치율도 확인하세요.</li></ol>
-<p><a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본’을 고르면 사례당 평균 시간과 검증 성공 한 건에 쓴 시간을 비교할 수 있습니다. 미완료 묶음이 있다면 ‘8명 · 32건 중 한 건 미제출’에서 마지막 답에 따라 정당 표기 격차가 얼마나 달라지는지 확인하세요.</p></section>
+<p><a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본’을 고르면 사례당 평균 시간과 검증 성공 한 건에 쓴 시간을 비교할 수 있습니다. 미완료 묶음이 있다면 ‘8명 · 32건 중 한 건 미제출’에서 마지막 답에 따라 정당 표기 격차가 얼마나 달라지는지 확인하세요.</p>
+<p>같은 자료를 고른 두 집단이 서로 다른 판정을 내린 경우도 살펴보세요. <a href="editor-study.html#demo-verdict-source">예산 기사의 판정과 근거 대조</a></p></section>
 <section class="box"><h2>실제 기사에서 원자료 찾기</h2>
 <ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>에서 검토할 기사를 선택하세요. 같은 편집자의 두 방식을 비교하려면 ‘한 사람이 기사 두 건을 서로 다른 방식으로 검토’를 골라 기사별로 과제를 하나씩 정하세요. 교차 배정에서는 참여자마다 두 행이 생깁니다. 각 행의 순서에 맞춰 ZIP과 코드를 전달하세요.
 과제별로 목표 활동 시간이 있으면 배정 전에 초 단위로 입력하세요. 참여 순서대로 익명 코드를 입력해 배정표를 만들고 배부 전에 JSON을 보관하세요.
@@ -64,6 +66,9 @@ START = """<!doctype html>
 <ol><li><a href="factcheck.html">기사 팩트체크</a>에서 기사 입력을 확정하고 원자료를 등록하세요. ‘작업 파일 저장 · 이어 열기’에서 ‘독립 평가용 기사·자료 내려받기’를 누릅니다.</li>
 <li>두 편집자에게 같은 기사·자료 JSON과 <a href="독립 기사 검토.zip" download>독립 기사 검토.zip</a>을 전달하세요. 각자 압축을 풀고 <code>factcheck.html</code>의 ‘파일 이어 열기’로 JSON을 연 뒤 문장 판정과 편향 평가를 기록합니다. 각자 저장한 작업 JSON은 따로 보관하세요.</li>
 <li><a href="article-compare.html">기사 평가 비교</a>에서 ‘두 편집자의 평가’를 선택하고 각자의 작업 파일을 여세요.</li></ol>
+<p>두 정당에 같은 검증 기준을 적용했는지 연습하려면 <a href="factcheck.html">기사 검토 화면</a>에서
+‘파일 이어 열기’로 <a href="연습 예시/정당별-결산표-이전-점수.json" download>정당별 결산표 모의 작업 파일</a>을 고르세요.
+‘당사자에게 적용한 검증 기준’에서 두 근거가 왜 같은 당을 가리키는지 읽고 둘째 근거를 누리당의 집행액 행으로 바꿔 기록하세요.</p>
 <h3>수정 전후를 가리고 평가하려면</h3>
 <ol><li><a href="article-compare.html#blind-revision">판본을 가린 평가 준비</a>에서 수정 전 작업 파일을 왼쪽, 수정 후 파일을 오른쪽에 넣으세요. A·B 평가용 파일 두 개와 진행자용 대응표를 내려받으세요. 대응표는 진행자가 따로 보관하세요.</li>
 <li>편집자별 폴더에 세 파일을 저장하고, 각자에게는 자기 A·B 파일과 <a href="독립 기사 검토.zip" download>독립 기사 검토.zip</a>을 전달하세요. 두 번째 편집자는 ‘다음 편집자용 A·B 만들기’로 새 묶음을 배정하세요. 서로 의견을 나누기 전에 각자 두 결과 파일을 저장합니다.</li>
@@ -139,6 +144,7 @@ def packet_bytes():
     start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii')).replace('{{EDITOR_KIT}}', editor_edition)
     files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer),
              'participant-editor-study.zip': editor_zip, PRACTICE_SAMPLE: practice,
+             PARTY_LEDGER_SAMPLE: (CASES / 'party-ledger-review' / 'legacy-score.json').read_bytes(),
              'prepare_pdf_source.py': (ROOT / 'tools' / 'prepare_pdf_source.py').read_bytes()}
     for filename, destination in QUOTE_PRACTICE.items():
         files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()

@@ -112,6 +112,26 @@ test('채택 방향이 바뀐 두 기사를 표시하고 모의 보기에서 실
   assert.ok(p.el('case-quality').hidden);
 });
 
+test('가상 예시에서 판정과 근거의 조합이 달라진 행만 표기별 분모와 함께 확인한다', t => {
+  const p = page(t, '#demo-verdict-source');
+  assert.equal(p.w.document.activeElement, p.el('verdict-source-summary'));
+  assert.equal(p.el('demo-example').value, 'verdict-source');
+  assert.match(p.el('verdict-source-summary').textContent, /가상 기록.*원자료 0\/4건, 저널 1\/4건/);
+  const repair = p.el('cue-case-repair');
+  assert.match(repair.querySelector('summary').textContent, /자료 선택 격차 0%p → 0%p.*판정·근거 조합 격차 0%p → 100%p/);
+  const rows = [...repair.querySelectorAll('.case-verdict-sources tbody tr')].map(row => [...row.cells].map(cell => cell.textContent));
+  assert.equal(rows.length, 4);
+  assert.deepEqual(rows[0], ['저널','근거로 지지됨','예산 요구서','1/2','0/2']);
+  assert.deepEqual(rows[1], ['저널','근거로 지지됨','예산안 부속 설명서','0/2','1/2']);
+  assert.equal(p.el('cue-case-filing').querySelector('.case-verdict-sources tbody'), null);
+  p.el('real-view').click();
+  assert.equal(p.el('verdict-source-summary').textContent, '');
+  assert.equal(p.el('case-quality').hidden, true);
+  const participant = page(t, '#demo-verdict-source', undefined, undefined, true);
+  assert.equal(participant.el('verdict-source-summary'), null);
+  assert.equal(participant.el('participant').hidden, false);
+});
+
 test('오승인 예시 링크는 해당 표를 열고, 직접 전환하거나 진행 중인 참여자가 열면 현재 선택을 따른다', t => {
   const link = '#demo-adoptions';
   for (const choice of ['real','partial']) {

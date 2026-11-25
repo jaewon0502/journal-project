@@ -422,6 +422,26 @@
     return 50 * distance / a.total;
   }
 
+  function verdictSourceCells(caseId) {
+    const sourceIds = [...cases.get(caseId, 'A').sources.map(source => source.id), null];
+    const cells = () => Object.fromEntries(verdicts.map(verdict =>
+      [verdict, new Map(sourceIds.map(id => [id, {A:0, B:0}]))]));
+    return {manual:cells(), journal:cells()};
+  }
+
+  function compareVerdictSources(cells, totalA, totalB) {
+    const differences = [];
+    let distance = 0;
+    for (const verdict of verdicts) {
+      for (const [sourceId, {A, B}] of cells[verdict]) {
+        if (A === B) continue; // Complete blocks have equal label denominators.
+        differences.push({verdict, sourceId, countA:A, countB:B});
+        distance += Math.abs(A - B);
+      }
+    }
+    return {gapPp:50 * distance / totalA, totalA, totalB, differences};
+  }
+
   function gradeTrial(trial) {
     const gold = cases.get(trial.caseId, trial.variant);
     const expectedVerdict = gold.expectedVerdict;
@@ -519,7 +539,8 @@
   function verdictStats(records) {
     const items = caseCells(), blocks = new Map();
     const quality = qualityGroups();
-    const caseDetails = new Map(cases.ids.map(id => [id, {quality:qualityGroups(), sourceChoices:caseSourceChoices(id)}]));
+    const caseDetails = new Map(cases.ids.map(id => [id, {quality:qualityGroups(),
+      sourceChoices:caseSourceChoices(id), verdictSources:verdictSourceCells(id)}]));
     for (const record of records) {
       const block = Math.ceil(record.ordinal / slots);
       if (!blocks.has(block)) blocks.set(block, caseCells());
@@ -532,6 +553,7 @@
           cell.counts[t.verdict]++;
         }
         const detail = caseDetails.get(t.caseId);
+        detail.verdictSources[t.method][t.verdict].get(t.sourceIds[0] ?? null)[t.variant]++;
         const choices = detail.sourceChoices;
         for (const arm of [choices[t.method], choices.byVariant[t.variant][t.method]]) {
           arm.total++;
@@ -559,6 +581,8 @@
       row.sourceChoices = detail.sourceChoices;
       const {A, B} = row.sourceChoices.byVariant;
       row.sourceChoices.gapPp = Object.fromEntries(methods.map(method => [method, sourceChoiceGap(A[method], B[method])]));
+      row.verdictSourceAssociation = Object.fromEntries(methods.map(method => [method,
+        compareVerdictSources(detail.verdictSources[method], A[method].total, B[method].total)]));
       const manualGap = Math.abs(row.manual.A.endorsed - row.manual.B.endorsed);
       const journalGap = Math.abs(row.journal.A.endorsed - row.journal.B.endorsed);
       row.gapReductionPp = 100 * (manualGap - journalGap) / row.manual.A.total;
@@ -579,6 +603,12 @@
         .every(variant => variant.journal.unsafe > variant.manual.unsafe);
     }
     bias.directionReversals = reversals;
+    bias.verdictSourceAssociation = {comparedCases:bias.cases.length};
+    for (const method of methods) {
+      const different = bias.cases.filter(row => row.verdictSourceAssociation[method].gapPp > 0);
+      bias.verdictSourceAssociation[method] = {differentCases:different.length,
+        equalMarginalsWithGap:different.filter(row => row[method].distributionGapPp === 0 && row.sourceChoices.gapPp[method] === 0).length};
+    }
     const narrowedCases = bias.cases.filter(row => row.gapReductionPp > 0);
     bias.gapAndQuality = {
       cases:bias.cases.length, narrowed:narrowedCases.length,
@@ -827,6 +857,25 @@
     });
   }
 
+  function verdictSourceDemoRecords() {
+    return Array.from({length:2 * slots}, (_, i) => {
+      let record = createRecord('demo-verdict-source-' + (i + 1), i + 1, 'demo', false);
+      for (const task of plan(record.ordinal)) {
+        const gold = cases.get(task.caseId, task.variant), journal = task.method === 'journal';
+        let verdict = gold.expectedVerdict, sourceIds = gold.expectedSourceIds;
+        if (task.caseId === 'repair') {
+          const adopted = i < slots;
+          verdict = adopted ? 'supported' : 'opinion';
+          const swap = journal && task.variant === 'B';
+          sourceIds = [adopted !== swap ? 'doc-1' : 'doc-2'];
+        }
+        record = addTrial(record, {elapsedMs:60000, verdict, sourceIds, journalUsed:journal,
+          reason:'같은 자료를 어떤 판정의 근거로 골랐는지 비교하는 가상 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
   function cueReversalDemoRecords() {
     return Array.from({length:slots}, (_, i) => {
       let record = createRecord('demo-reversal-' + (i + 1), i + 1, 'demo', false);
@@ -894,5 +943,5 @@
   }
 
   return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, parseInvite, analyze, analyzeEditions, analyzeAssignedEditions, demoRecords,
-    partialTimeDemoRecords, unfinishedBlockDemoRecords, caseVerificationDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, missingCueDemoRecords, editionDemoRecords});
+    partialTimeDemoRecords, unfinishedBlockDemoRecords, caseVerificationDemoRecords, adoptionDemoRecords, cueAgreementDemoRecords, cueReversalDemoRecords, verdictSourceDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });
