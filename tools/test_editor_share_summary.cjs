@@ -15,15 +15,15 @@ function invitation(ordinal) {
   const id = 'E' + String(ordinal).padStart(16,'0');
   return {ordinal, id, code:'J2-' + ordinal + '-' + id + '-' + edition};
 }
-function completed(invite, {partialTime=false, actualEdition=edition} = {}) {
+function completed(invite, {partialTime=false, actualEdition=edition, answer} = {}) {
   let record = study.createRecord(invite.id, invite.ordinal, 'editor', true);
   for (const task of study.plan(invite.ordinal)) {
     const item = cases.get(task.caseId, task.variant);
     const timing = partialTime && task.position === 1
       ? {elapsedMs:null, observedMs:10000}
       : {elapsedMs:task.method === 'manual' ? 60000 : 30000};
-    record = study.addTrial(record, {...timing, journalUsed:task.method === 'journal', kitVersion:actualEdition,
-      verdict:item.expectedVerdict, sourceIds:task.method === 'journal' ? [] : item.expectedSourceIds, reason:privateReason});
+    const response = answer ? answer(task,item) : {verdict:item.expectedVerdict, sourceIds:task.method === 'journal' ? [] : item.expectedSourceIds};
+    record = study.addTrial(record, {...timing, ...response, journalUsed:task.method === 'journal', kitVersion:actualEdition, reason:privateReason});
   }
   return record;
 }
@@ -54,6 +54,9 @@ test('빈 실측의 분모는 0이고 효과는 미측정이며 가상 예시를
   assert.equal(summary.overall.time.tasks, 0);
   assert.equal(summary.overall.time.reductionPct, null);
   assert.deepEqual(summary.overall.verdictAndEvidence.manual, {tasks:0,verified:null,verifiedPct:null});
+  const unmeasured = {accepted:null,eligible:0,pct:null};
+  assert.deepEqual(summary.overall.unsupportedAcceptance, {manual:unmeasured,journal:unmeasured,changePp:null,increased:null});
+  assert.deepEqual(summary.overall.time.unsupportedAcceptance, summary.overall.unsupportedAcceptance);
   assert.deepEqual(Object.values(summary.overall.partyLabelAcceptanceGap), [null,null,null,null]);
   assert.deepEqual(summary.observedEditions, []);
   p.el('demo-view').click();
@@ -76,8 +79,10 @@ test('요약과 대시보드의 시간·집단 격차·완주 및 정확도 분�
   const overall = summary.overall;
   assert.equal(overall.submittedTasks,20);
   assert.equal(overall.includedTasks,16);
+  const safe = {accepted:0,eligible:4,pct:0};
+  assert.deepEqual(overall.unsupportedAcceptance, {manual:safe,journal:safe,changePp:0,increased:false});
   assert.deepEqual(overall.time, {editors:4,tasks:16,manualMeanSeconds:60,journalMeanSeconds:30,reductionPct:50,
-    manualSecondsPerVerified:60,journalSecondsPerVerified:null});
+    manualSecondsPerVerified:60,journalSecondsPerVerified:null,unsupportedAcceptance:overall.unsupportedAcceptance});
   assert.deepEqual(Array.from(p.el('metrics').querySelectorAll('.value'), el => el.textContent),
     [overall.time.reductionPct + '%', overall.partyLabelAcceptanceGap.reductionPp + '%p']);
   assert.deepEqual(overall.partyLabelAcceptanceGap,{manualPp:0,journalPp:0,reductionPp:0,relativeReductionPct:null});
@@ -97,6 +102,37 @@ test('요약과 대시보드의 시간·집단 격차·완주 및 정확도 분�
     assert.equal(json.includes(value), false);
 });
 
+test('동시 일치율이 같은 두 방식의 오승인과 시간이 온전히 기록된 표본의 경고를 구분한다', async t => {
+  const roster = Array.from({length:8}, (_,i) => invitation(i + 1));
+  const records = roster.map(invite => completed(invite, {partialTime:invite.ordinal === 5, answer(task,item) {
+    // Each method misses one case twice per block. The error can be false acceptance or excess caution.
+    const acceptsUnsupported = task.method === (invite.ordinal <= 4 ? 'journal' : 'manual');
+    let verdict = item.expectedVerdict;
+    if (acceptsUnsupported && task.caseId === 'repair') verdict = 'supported';
+    if (!acceptsUnsupported && task.caseId === 'transit') verdict = 'insufficient';
+    return {verdict, sourceIds:item.expectedSourceIds};
+  }}));
+  const p = dashboard(t,records,roster);
+  const {overall, observedEditions, assignedMatchedEditions} = await p.save();
+  assert.equal(overall.editors.included,8);
+  assert.equal(overall.time.editors,4);
+  assert.equal(overall.time.reductionPct,50);
+  assert.deepEqual(overall.verdictAndEvidence.manual, {tasks:16,verified:12,verifiedPct:75});
+  assert.deepEqual(overall.verdictAndEvidence.journal, overall.verdictAndEvidence.manual);
+  const all = {accepted:2,eligible:8,pct:25};
+  assert.deepEqual(overall.unsupportedAcceptance, {manual:all,journal:all,changePp:0,increased:false});
+  const timed = {manual:{accepted:0,eligible:4,pct:0},journal:{accepted:2,eligible:4,pct:50},changePp:50,increased:true};
+  assert.deepEqual(overall.time.unsupportedAcceptance,timed);
+  assert.deepEqual(observedEditions[0].time.unsupportedAcceptance,timed);
+  assert.deepEqual(assignedMatchedEditions[0].time.unsupportedAcceptance,timed);
+  assert.equal(p.el('timed-quality-warning').hidden,false);
+  assert.match(p.el('timed-quality-warning').textContent,/근거 없는 사실 채택률 50%p 상승/);
+  const first = (await dashboard(t,records.slice(0,4),roster.slice(0,4)).save()).overall;
+  assert.deepEqual(first.unsupportedAcceptance,timed);
+  assert.deepEqual(first.verdictAndEvidence.manual, {tasks:8,verified:6,verifiedPct:75});
+  assert.deepEqual(first.verdictAndEvidence.journal,first.verdictAndEvidence.manual);
+});
+
 test('부족한 시간·다른 배정 판본·미완성 묶음을 수치 0으로 바꾸지 않는다', async t => {
   const roster = [1,2,3,4].map(invitation);
   const records = roster.map(i => completed(i, {partialTime:i.ordinal===1, actualEdition:'c'.repeat(64)}));
@@ -105,6 +141,8 @@ test('부족한 시간·다른 배정 판본·미완성 묶음을 수치 0으로
   assert.equal(summary.overall.includedTasks,16);
   assert.equal(summary.overall.time.tasks,0);
   assert.equal(summary.overall.time.reductionPct,null);
+  assert.equal(summary.overall.time.unsupportedAcceptance.increased,null);
+  assert.equal(summary.overall.unsupportedAcceptance.increased,false);
   assert.equal(summary.overall.verdictAndEvidence.manual.verifiedPct,100);
   assert.equal(summary.observedEditions[0].kitVersion, 'c'.repeat(64));
   assert.deepEqual(summary.assignedEditionCoverage, {rosterBlocks:1,matchedBlocks:0});

@@ -295,6 +295,43 @@ test('시간 절감률은 참가자별 두 방식의 평균 시간 차이에 같
   assert.deepEqual(r.time.editorPairs.map(row => row.savedSeconds), [-20,10,10,10]);
 });
 
+test('시간이 온전한 4인 묶음을 차례로 제외하면 전체 절감률의 방향이 뒤집히는 경우를 찾는다', () => {
+  const records = Array.from({length:8}, (_, i) => observations(i + 1, t => ({
+    elapsedMs:t.method === 'manual' ? 60000 : (i < 4 ? 10000 : 90000)
+  })));
+  const interrupted = [13,14,15,16].map(i => observations(i, t => i === 13 && t.position === 1
+    ? {elapsedMs:null, observedMs:500} : {elapsedMs:1000}));
+  const time = study.analyze([...records, observations(9), ...interrupted]).time;
+  assert.equal(time.reductionPct, 100 / 6);
+  assert.deepEqual(time.leaveOneBlockOut, {blocks:2, estimates:2, minReductionPct:-50,
+    maxReductionPct:250 / 3, reversesDirection:true});
+  assert.equal(study.analyze(records.slice(0, 7)).time.leaveOneBlockOut, null);
+});
+
+test('묶음 제외 절감률은 남은 시간의 합으로 재계산하고 변화 없는 결과를 반전으로 세지 않는다', () => {
+  const durations = [[10000,10000], [40000,40000], [100000,50000]];
+  const records = Array.from({length:12}, (_, i) => observations(i + 1, t => ({
+    elapsedMs:durations[Math.floor(i / 4)][t.method === 'manual' ? 0 : 1]
+  })));
+  const range = study.analyze(records).time.leaveOneBlockOut;
+  assert.deepEqual(range, {blocks:3, estimates:3, minReductionPct:0,
+    maxReductionPct:500 / 11, reversesDirection:false});
+});
+
+test('단계별 수동 시간이 0인 제외 결과는 생략하고 전체와 유효 결과의 방향을 비교한다', () => {
+  const records = Array.from({length:8}, (_, i) => observations(i + 1, t => {
+    const elapsedMs = t.method === 'manual' ? 120000 : 90000;
+    const select = i < 4 ? (t.method === 'manual' ? 60000 : 10000) : (t.method === 'manual' ? 0 : 90000);
+    return {phaseMs:{select, locate:elapsedMs - select, decide:0}};
+  }));
+  const {select, decide} = study.analyze(records).phases.byStage;
+  assert.ok(select.reductionPct < 0);
+  assert.deepEqual(select.leaveOneBlockOut, {blocks:2, estimates:1,
+    minReductionPct:250 / 3, maxReductionPct:250 / 3, reversesDirection:true});
+  assert.equal(decide.reductionPct, null);
+  assert.equal(decide.leaveOneBlockOut, null);
+});
+
 test('시간이 일부만 남은 답은 품질과 정당 비교에 쓰고 전체 시간은 온전한 4인 묶음으로 비교한다', () => {
   const partial = {elapsedMs:null, observedMs:1500, phaseMs:null};
   const records = Array.from({length:8}, (_, i) => observations(i + 1, t =>

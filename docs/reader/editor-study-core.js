@@ -234,8 +234,25 @@
     return grouped;
   }
 
+  function timeBlockSensitivity(totals, blockTotals) {
+    if (blockTotals.size < 2) return null;
+    let estimates = 0, minReductionPct = Infinity, maxReductionPct = -Infinity;
+    for (const block of blockTotals.values()) {
+      const manual = totals.manual - block.manual, journal = totals.journal - block.journal;
+      if (manual === 0n) continue;
+      const reductionPct = 100 * Number(manual - journal) / Number(manual);
+      minReductionPct = Math.min(minReductionPct, reductionPct);
+      maxReductionPct = Math.max(maxReductionPct, reductionPct);
+      estimates++;
+    }
+    if (!estimates) return null;
+    const hasSaving = totals.manual > totals.journal || maxReductionPct > 0;
+    const hasSlowdown = totals.manual < totals.journal || minReductionPct < 0;
+    return {blocks:blockTotals.size, estimates, minReductionPct, maxReductionPct, reversesDirection:hasSaving && hasSlowdown};
+  }
+
   function timeStats(records, stage) {
-    const totals = {manual:0n, journal:0n}, editorPairs = [];
+    const totals = {manual:0n, journal:0n}, editorPairs = [], blockTotals = new Map();
     // The counterbalanced plan has two cases per method for every eligible editor.
     const msPerAverageSecond = 1000 * slots / methods.length;
     for (const record of records) {
@@ -245,6 +262,11 @@
       }
       totals.manual += ms.manual;
       totals.journal += ms.journal;
+      const block = Math.ceil(record.ordinal / slots);
+      if (!blockTotals.has(block)) blockTotals.set(block, {manual:0n, journal:0n});
+      const blockMs = blockTotals.get(block);
+      blockMs.manual += ms.manual;
+      blockMs.journal += ms.journal;
       editorPairs.push({participantId:record.participantId, manualSeconds:Number(ms.manual) / msPerAverageSecond,
         journalSeconds:Number(ms.journal) / msPerAverageSecond, savedSeconds:Number(ms.manual - ms.journal) / msPerAverageSecond});
     }
@@ -256,7 +278,8 @@
     const fasterEditors = savings.filter(seconds => seconds > 0).length;
     const slowerEditors = savings.filter(seconds => seconds < 0).length;
     return {manualSeconds, journalSeconds, savedSeconds, reductionPct: manualSeconds ? 100 * savedSeconds / manualSeconds : null,
-      editorPairs, medianSavedSeconds, fasterEditors, slowerEditors, unchangedEditors:savings.length - fasterEditors - slowerEditors};
+      editorPairs, medianSavedSeconds, fasterEditors, slowerEditors, unchangedEditors:savings.length - fasterEditors - slowerEditors,
+      leaveOneBlockOut:timeBlockSensitivity(totals, blockTotals)};
   }
 
   function timingCoverage(records) {

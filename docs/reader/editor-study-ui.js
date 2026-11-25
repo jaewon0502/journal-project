@@ -522,14 +522,26 @@
       return {tasks:arm?.total ?? 0, verified:arm?.qualityCorrect ?? null,
         verifiedPct:arm?.total ? 100 * arm.qualityCorrect / arm.total : null};
     }
+    function unsupportedAcceptance(group) {
+      function counts(arm) {
+        const eligible = arm?.unsafeTotal ?? 0;
+        return {accepted:arm?.unsafe ?? null, eligible, pct:eligible ? 100 * arm.unsafe / eligible : null};
+      }
+      const manual = counts(group?.manual), journal = counts(group?.journal);
+      const changePp = manual.eligible && journal.eligible
+        ? 100 * (journal.accepted / journal.eligible - manual.accepted / manual.eligible) : null;
+      return {manual, journal, changePp, increased:changePp === null ? null : changePp > 0};
+    }
     return {
       editors:{enrolled:a.enrolled, included:a.included, excluded:a.excluded, completeBlocks:a.completeBlocks},
       submittedTasks:a.recordedTrials, includedTasks:a.trialCount,
       time:{editors:a.timing.included, tasks:a.timing.trialCount, manualMeanSeconds:a.time?.manualSeconds ?? null,
         journalMeanSeconds:a.time?.journalSeconds ?? null, reductionPct:a.time?.reductionPct ?? null,
         manualSecondsPerVerified:a.timedQuality?.manual.secondsPerVerified ?? null,
-        journalSecondsPerVerified:a.timedQuality?.journal.secondsPerVerified ?? null},
+        journalSecondsPerVerified:a.timedQuality?.journal.secondsPerVerified ?? null,
+        unsupportedAcceptance:unsupportedAcceptance(a.timedQuality)},
       verdictAndEvidence:{manual:quality('manual'), journal:quality('journal')},
+      unsupportedAcceptance:unsupportedAcceptance(a.quality),
       partyLabelAcceptanceGap:{manualPp:a.bias?.manualGapPp ?? null, journalPp:a.bias?.journalGapPp ?? null,
         reductionPp:a.bias?.reductionPp ?? null, relativeReductionPct:a.bias?.reductionPct ?? null}
     };
@@ -604,6 +616,13 @@
       const change = median === 0 ? '차이 없음' : fmt(Math.abs(median)) + '초 ' + (median > 0 ? '단축' : '증가');
       timeCard.append(node('small', '편집자별 시간 차이의 중앙값 ' + change),
         node('small', '단축 ' + t.fasterEditors + '명 · 동일 ' + t.unchangedEditors + '명 · 증가 ' + t.slowerEditors + '명'));
+      const range = t.leaveOneBlockOut;
+      if (range) {
+        const describe = pct => pct === 0 ? '변화 없음' : fmt(Math.abs(pct)) + '% ' + (pct < 0 ? '증가' : '절감');
+        timeCard.append(node('small', '시간을 모두 기록한 ' + range.blocks + '묶음 중 하나씩 제외한 결과 ' +
+          describe(range.minReductionPct) + ' ~ ' + describe(range.maxReductionPct) + '.'));
+        if (range.reversesDirection) timeCard.append(node('small', '어느 묶음을 포함하느냐에 따라 시간이 줄었는지 늘었는지가 달라집니다.'));
+      }
     }
     const biasCard = metric(biasTitle, b && fmt(Math.abs(b.reductionPp)) + '%p', b && [b.manualGapPp, b.journalGapPp], '%p',
       !b ? '성향 표지만 다른 두 조건의 사실 채택률 차이' : b.reductionPct == null ? '원자료 차이 0%p · 상대 감소율 산출 불가'

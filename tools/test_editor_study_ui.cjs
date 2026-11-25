@@ -944,6 +944,25 @@ test('실제 네 명의 집단 평균이 개선되어도 개인별 중앙값 증
   assert.match(card(),/단축 1명 · 동일 0명 · 증가 3명/);
 });
 
+test('포함한 묶음에 따라 평균 시간이 늘거나 줄면 절감률 바로 아래에 표시한다', async t => {
+  const p = page(t);
+  p.el('issue-codes').click();
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(({ordinal, id}) => {
+    const record = completedRecord(ordinal, id);
+    for (const trial of record.trials)
+      trial.elapsedMs = trial.method === 'manual' ? 60000 : ordinal <= 4 ? 10000 : 90000;
+    return JSON.stringify(record);
+  });
+  await importFiles(p, records.slice(0, 4));
+  const card = () => p.el('metrics').firstElementChild.textContent;
+  assert.doesNotMatch(card(), /묶음 중 하나씩 제외/);
+  await importFiles(p, records.slice(4));
+  assert.match(card(), /시간 절감률16.7%/);
+  assert.match(card(), /2묶음 중 하나씩 제외한 결과 50% 증가 ~ 83.3% 절감/);
+  assert.match(card(), /시간이 줄었는지 늘었는지가 달라집니다/);
+});
+
 test('중단한 타이머가 있으면 완성한 묶음 전체의 시간 단축 가능 범위를 따로 표시한다', async t => {
   const p = page(t);
   for (let block = 0; block < 3; block++) p.el('issue-codes').click();
