@@ -25,8 +25,8 @@
     const record = study.validateRecord(raw);
     if (record.kind !== 'editor' || !/^E[A-F0-9]{16}$/u.test(record.participantId) || record.ordinal > 999999999)
       throw new Error('현업 참여자가 본인의 초대 코드로 저장한 기록을 선택하세요.');
-    for (const trial of raw.trials) requireFields(trial, [...assignmentKeys, 'elapsedMs', 'verdict', 'sourceIds', 'reason', 'journalUsed'], ['observedMs', 'phaseMs']);
-    if (raw.withdrawalTask != null) requireFields(raw.withdrawalTask, [...assignmentKeys, 'elapsedMs', 'partial']);
+    for (const trial of raw.trials) requireFields(trial, [...assignmentKeys, 'elapsedMs', 'verdict', 'sourceIds', 'reason', 'journalUsed'], ['observedMs', 'phaseMs', 'kitVersion']);
+    if (raw.withdrawalTask != null) requireFields(raw.withdrawalTask, [...assignmentKeys, 'elapsedMs', 'partial'], ['kitVersion']);
     return record;
   }
 
@@ -42,9 +42,11 @@
   function validDuration(ms) { return Number.isSafeInteger(ms) && ms >= 0; }
 
   function checkedSession(raw, record, task) {
-    requireFields(raw, sessionKeys);
+    requireFields(raw, sessionKeys, ['kitVersion']);
     const {state, activeMs, recoveredMs, partialTime, stage, phaseMs, phaseOmitted, used, verdict, source, reason} = raw;
     const invalid = () => { throw new Error('저장된 회차의 진행 상태, 측정 시간과 작성한 답을 확인하세요.'); };
+    if (Object.hasOwn(raw, 'kitVersion') && (state !== 'paused' ||
+        (raw.kitVersion !== null && !study.kitVersion(raw.kitVersion)))) invalid();
     const ended = record.withdrawn ? 'withdrawn' : 'done';
     if (task ? !['ready', 'paused'].includes(state) : state !== ended) invalid();
     if (typeof partialTime !== 'boolean' || typeof used !== 'boolean' || typeof phaseOmitted !== 'boolean' ||
@@ -80,6 +82,7 @@
       throw new Error('다음 과제의 시작 전 상태와 저장한 초안이 일치하지 않습니다.');
     }
     if (inTask) {
+      if (Object.hasOwn(local, 'kitVersion')) session.kitVersion = local.kitVersion;
       const recovered = local.recoveredMs ?? 0;
       if (![local.activeMs, recovered].every(ms => Number.isFinite(ms) && ms >= 0 && ms <= Number.MAX_SAFE_INTEGER) ||
           recovered > local.activeMs) throw new Error('저장된 측정 시간을 확인하세요.');

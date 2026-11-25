@@ -1,5 +1,6 @@
 """Build the offline participant kit for the four-person editor experiment."""
 import argparse
+from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
 import re
@@ -43,7 +44,16 @@ def participant_core():
     core, marker, analysis = source.partition('  function blockRoster(records) {')
     if not marker or 'function demoRecords()' not in analysis or 'function mergeRecords(' not in core:
         raise ValueError('편집자용 코어와 진행자 집계 코드의 경계를 다시 확인하세요.')
-    return core + '  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords});\n});\n'
+    return core + '  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion});\n});\n'
+
+
+def participant_ui():
+    source = (READER / 'editor-study-ui.js').read_text()
+    shared, *sections = source.split('  // coordinator-only:begin\n')
+    end = '  // coordinator-only:end\n'
+    if not sections or end in shared or any(section.count(end) != 1 for section in sections):
+        raise ValueError('편집자 실험 화면의 진행자 전용 코드 경계를 확인하세요.')
+    return shared + ''.join(section.partition(end)[2] for section in sections)
 
 
 def participant_page():
@@ -61,7 +71,7 @@ def participant_page():
     return page.replace(' (공용 기기는 비움)', '').replace('id="invite-code" type="text"', 'id="invite-code" required type="text"')
 
 
-def packet_bytes():
+def versioned_packet():
     packet = {}
     for name, page in [('editor-study.html', participant_page()), ('factcheck.html', html('factcheck.html', 'journal', ''))]:
         packet[name] = page.encode()
@@ -74,6 +84,8 @@ def packet_bytes():
                 packet[asset] = public_cases().encode()
             elif asset == 'editor-study-core.js':
                 packet[asset] = participant_core().encode()
+            elif asset == 'editor-study-ui.js':
+                packet[asset] = participant_ui().encode()
             else:
                 packet[asset] = (READER / asset).read_bytes()
     packet['시작 안내.txt'] = (
@@ -81,13 +93,25 @@ def packet_bytes():
         '중간에 창을 닫았다면 같은 폴더와 브라우저에서 같은 코드를 입력하세요. '
         '다른 기기로 옮기려면 잠시 멈추기를 누르고 내 이어하기 파일을 저장하세요. 새 기기에서 본인 코드로 등록한 뒤 과제를 시작하기 전에 파일을 여세요. '
         '네 과제를 마치거나 중단한 뒤 내 참여 기록을 내려받아 진행자에게 전달하세요.\n').encode()
+    # Fingerprint the exact participant assets before adding the stamp itself.
+    digest = sha256()
+    for name, contents in sorted(packet.items()):
+        digest.update(name.encode() + b'\0')
+        digest.update(sha256(contents).digest())
+    edition = digest.hexdigest()
+    stamp = f'<meta name="journal-editor-kit" content="{edition}">'.encode()
+    packet['editor-study.html'] = packet['editor-study.html'].replace(b'</head>', stamp + b'</head>', 1)
     result = BytesIO()
     with ZipFile(result, 'w') as archive:
         for name, contents in sorted(packet.items()):
             info = ZipInfo(name, (2024, 1, 1, 0, 0, 0))
             info.external_attr = 0o644 << 16
             archive.writestr(info, contents, compress_type=ZIP_DEFLATED)
-    return result.getvalue()
+    return edition, result.getvalue()
+
+
+def packet_bytes():
+    return versioned_packet()[1]
 
 
 if __name__ == '__main__':

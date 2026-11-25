@@ -3,12 +3,16 @@
   const el = id => document.getElementById(id);
   const core = window.JournalEditorStudy, cases = window.JournalStudyCases;
   const stageLabels = {select:'자료 선택', locate:'근거 위치 확인', decide:'판정 기록'};
+  // coordinator-only:begin
   const verdictLabels = {supported:'근거로 지지됨', contradicted:'근거와 충돌', insufficient:'근거 불충분', opinion:'의견·가치판단'};
   const variantLabels = {A:'보수 성향 표기', B:'진보 성향 표기'};
+  // coordinator-only:end
   const stageButtons = [...document.querySelectorAll('[data-phase]')];
   const participantOnly = document.documentElement.hasAttribute('data-participant-kit');
   let storeKey = participantOnly ? null : 'journal-editor-study-workspace-v1';
+  // coordinator-only:begin
   const collectionType = 'journal-editor-study-collection-v1';
+  // coordinator-only:end
   const invitePattern = /^J1-([1-9]\d{0,8})-(E[A-F0-9]{16})$/;
   let records = [], invitations = [], session = null, viewKind = 'editor';
   let frame = null, frameNonce = null, liveStart = null, storageVersion = null, storageLocked = false;
@@ -27,6 +31,7 @@
     message('global-status', '실험 구성 파일을 불러오지 못했습니다. 연구용 폴더 안에서 이 화면을 여세요.', true);
     return;
   }
+  const localKit = participantOnly ? core.kitVersion(document.querySelector('meta[name="journal-editor-kit"]')?.content) : null;
   const clock = () => performance.now();
   const idBytes = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
   function sampleIndex(length) {
@@ -161,6 +166,7 @@
     } catch (err) { message('transfer-status', '열지 못했습니다. ' + err.message, true); }
   }
   function fmt(n) { return Number(n.toFixed(1)).toLocaleString('ko-KR'); }
+  // coordinator-only:begin
   const percent = (a, b) => b ? fmt(100 * a / b) + '%' : '—';
   const ratio = (a, b) => b ? percent(a, b) + ' (' + a + '/' + b + ')' : '— (0/0)';
   function table(target, heads, rows, empty) {
@@ -179,6 +185,7 @@
     }
     wrap.append(tbl);
   }
+  // coordinator-only:end
   function metric(title, value, pair, unit, caption) {
     const box = node('section', undefined, 'metric');
     box.append(node('h2', title), node('p', value ?? '측정 대기', 'value'));
@@ -190,6 +197,7 @@
     });
     box.append(node('small', caption)); return box;
   }
+  // coordinator-only:begin
   function showInvitations() {
     el('export-all').disabled = !records.length && !invitations.length;
     table('invites', ['발급 묶음', '전달할 초대 코드', '이 기기 수집 상태'], invitations.filter(inv => !inv.atDevice).map(inv => [
@@ -361,16 +369,69 @@
     el('timed-quality-editors').textContent = editors;
     if (q) el('timed-quality-table').append(node('p', '¹ 기준 판정이 반박·근거 불충분·의견인 과제 중 ‘근거로 지지됨’을 고른 비율입니다.', 'subtle'));
   }
+  function showEditions(records, kind) {
+    const {blocks, editions} = core.analyzeEditions(records, kind);
+    const states = {verified:'같은 판본 확인', mixed:'여러 판본 확인', unknown:'판본 미확인', incomplete:'미완료'};
+    const count = state => blocks.filter(block => block.state === state).length;
+    el('edition-coverage').textContent = blocks.length
+      ? Object.entries(states).map(([key, label]) => label + ' ' + count(key) + '묶음').join(' · ')
+      : '명부에서 확인한 참여 기록을 기다리고 있습니다.';
+    const container = el('edition-tables');
+    container.replaceChildren();
+    el('edition-success-note').hidden = !editions.length;
+    if (!editions.length) container.append(node('p', '처음 배정된 네 명이 같은 판본으로 네 과제씩 마치면 이곳에서 해당 판본의 결과를 볼 수 있습니다.', 'subtle'));
+    for (const {kitVersion, blockNumbers, analysis} of editions) {
+      const {time, bias, quality, timing, timedQuality} = analysis;
+      const section = node('section'), grid = node('div', undefined, 'scroll');
+      const duration = x => fmt(x) + '초', points = x => fmt(x) + '%p';
+      const change = (x, unit) => x === 0 ? '변화 없음' : fmt(Math.abs(x)) + unit + (x > 0 ? ' 감소' : ' 증가');
+      const gapChange = change(bias.reductionPp, '%p') + (bias.reductionPct === null
+        ? ' (원자료 격차 0%p로 상대율 계산 불가)' : ' (원자료 대비 ' + fmt(Math.abs(bias.reductionPct)) + '%)');
+      section.append(node('h3', kind === 'demo' ? '가상 참여자 자료 A' : '참여자 자료 ' + kitVersion.slice(0, 12)),
+        node('p', '배정 묶음 ' + blockNumbers.join(', ') + '번 · 판정 ' + analysis.included + '명 ' + analysis.trialCount +
+          '건 · 시간 비교 ' + timing.included + '명 ' + timing.trialCount + '건'), grid);
+      const arms = [quality.manual, quality.journal];
+      const joint = arm => arm.qualityCorrect / arm.total;
+      const jointDiff = 100 * (joint(quality.journal) - joint(quality.manual));
+      const jointChange = jointDiff === 0 ? '변화 없음' : fmt(Math.abs(jointDiff)) + '%p ' + (jointDiff > 0 ? '상승' : '하락');
+      const perSuccess = method => {
+        if (!timedQuality) return '—';
+        const arm = timedQuality[method];
+        return (arm.verified ? duration(arm.secondsPerVerified) : '산출 불가') + ' (성공 ' + arm.verified + '/' + arm.total + '건)';
+      };
+      const successChange = timedQuality?.perVerified.reductionPct;
+      table(grid, ['지표', '원자료', '저널', '저널 사용 시 차이'], [
+        ['사례당 평균 검토 시간', time ? duration(time.manualSeconds) : '—', time ? duration(time.journalSeconds) : '—',
+          time ? change(time.reductionPct, '%') : '전체 시간이 기록된 묶음 대기'],
+        ['검증 성공 1건당 총투입 시간', perSuccess('manual'), perSuccess('journal'),
+          successChange != null ? change(successChange, '%') : timedQuality ? '성공 건수 부족' : '전체 시간이 기록된 묶음 대기'],
+        ['판정과 대표 근거 모두 일치', ...arms.map(arm => ratio(arm.qualityCorrect, arm.total)), jointChange],
+        ['정당 표기별 사실 채택률 격차', points(bias.manualGapPp), points(bias.journalGapPp), gapChange]
+      ]);
+      if (kind !== 'demo') {
+        const details = node('details');
+        details.append(node('summary', '자료 식별값 전체 보기'), node('p', kitVersion));
+        section.append(details);
+      }
+      container.append(section);
+    }
+    el('edition-blocks').hidden = !blocks.length;
+    table('edition-block-table', ['배정 묶음', '제출한 과제의 판본'], blocks.map(b => [
+      b.block + '번', states[b.state] + (b.kitVersion ? ' · ' + (kind === 'demo' ? '가상 자료 A' : b.kitVersion.slice(0, 12)) : '')
+    ]), '');
+  }
   function showDashboard() {
     const demo = viewKind === 'demo';
     const confirmed = records.filter(r => onRoster(invitations, r.ordinal, r.participantId));
     let sample = confirmed;
     if (demo) {
       const examples = {complete:core.demoRecords, partial:core.partialTimeDemoRecords,
-        agreement:core.cueAgreementDemoRecords, missing:core.missingCueDemoRecords};
+        agreement:core.cueAgreementDemoRecords, missing:core.missingCueDemoRecords, editions:core.editionDemoRecords};
       sample = examples[el('demo-example').value]();
     }
     const a = core.analyze(sample, viewKind);
+    el('edition-results').hidden = demo && el('demo-example').value !== 'editions';
+    if (!el('edition-results').hidden) showEditions(sample, viewKind);
     el('demo-options').hidden = !demo;
     el('real-view').setAttribute('aria-pressed', String(!demo));
     el('demo-view').setAttribute('aria-pressed', String(demo));
@@ -378,6 +439,8 @@
       : a.completeBlocks ? '기사 편집·검증 업무를 수행한다고 본인이 응답한 참여자의 기록입니다. 시간과 판정의 관측값은 완성된 배정 묶음에서 계산했습니다.'
       : '실제 참여 기록 · 완성된 4인 묶음이 생기면 시간과 판정 차이를 표시합니다.';
     if (a.completeBlocks > 0 && a.completeBlocks <= 2) el('data-notice').textContent += ' 사례·방식·정당 표기별 응답은 각 ' + a.completeBlocks + '명으로, 한 사람의 응답에도 격차가 크게 바뀝니다.';
+    if (!demo && a.completeBlocks) el('data-notice').textContent += ' 상단의 두 지표는 자료 판본을 구분하지 않고 계산했습니다. 특정 배포본의 수치는 바로 아래에서 확인하세요.';
+    if (demo && el('demo-example').value === 'editions') el('data-notice').textContent += ' 상단은 8명을 합친 값입니다. 판본별 표에는 같은 자료를 쓴 첫 4명이 포함됩니다.';
     if (!demo && confirmed.length < records.length) el('data-notice').textContent +=
       ' 명부 미확인 ' + (records.length - confirmed.length) + '명은 보관 중입니다. 아래에서 원래 명부나 개별 배정 코드를 확인하세요.';
     el('data-notice').classList.toggle('sample', demo);
@@ -517,6 +580,7 @@
     showInvitations();
   }
 
+  // coordinator-only:end
   // Allocation and registrations are saved before task material is disclosed.
   function inviteConflict(list, ordinal, id) {
     return list.some(inv => (inv.ordinal === ordinal) !== (inv.id === id));
@@ -551,6 +615,7 @@
     }
     return merged;
   }
+  // coordinator-only:begin
   function importRosters(groups) {
     const pending = groups.map(group => mergeInvitations([], group)).filter(group => group.length);
     let roster = invitations;
@@ -571,6 +636,7 @@
     }
     persist(); showDashboard(); message('import-status', '배정한 초대 코드를 표시 순서대로 전달하세요.');
   }
+  // coordinator-only:end
   function enroll(event) {
     event.preventDefault();
     try {
@@ -606,6 +672,7 @@
     } catch (err) { message('enroll-status', err.message, true); }
   }
   function clearTaskState(next) {
+    delete session.kitVersion;
     Object.assign(session, {state:next, activeMs:0, segmentAt:null, recoveredMs:null, partialTime:false, stage:null, phaseMs:null, phaseOmitted:false, used:false, verdict:'', source:'', reason:''});
     liveStart = null; dropFrame();
   }
@@ -675,6 +742,9 @@
       session.phaseMs = null; session.stage = null;
       message('session-status', '');
     }
+    // A submission-only import cannot prove that the next task had not already started.
+    if (session.state === 'ready') session.kitVersion = session.partialTime ? null : localKit;
+    else if (!localKit || session.kitVersion !== localKit) session.kitVersion = null;
     liveStart = clock(); session.segmentAt = Date.now(); session.state = 'running';
     persist(); renderParticipant(); el('trial-heading').focus();
   }
@@ -686,6 +756,7 @@
   function withdraw() {
     if (!session || !['ready','running','paused','interrupted'].includes(session.state)) return;
     const task = session.state === 'ready' ? null : {...assignment(),
+      kitVersion:core.kitVersion(session.kitVersion),
       elapsedMs:Math.round(elapsed() - (session.recoveredMs ?? 0)),
       partial:!!session.partialTime || session.state === 'interrupted' || session.recoveredMs != null};
     if (!confirm('제출한 과제와 현재 과제에서 측정한 시간을 보관합니다. 이번 참여를 중단할까요?')) return;
@@ -743,6 +814,7 @@
       const elapsedMs = Math.max(1, observedMs);
       const timing = session.partialTime ? {elapsedMs:null, observedMs, phaseMs:null} : {elapsedMs, phaseMs:phaseResult(elapsedMs)};
       const r = core.addTrial(currentRecord(), {...timing, verdict:el('verdict').value, reason:el('reason').value,
+        kitVersion:core.kitVersion(session.kitVersion),
         sourceIds:el('source').value === 'none' ? [] : [el('source').value], journalUsed:a.method === 'journal' && session.used});
       records = core.mergeRecords(records, [r]);
       clearTaskState(r.trials.length === 4 ? 'done' : 'ready'); persist();
@@ -813,7 +885,10 @@
     const participant = participantOnly || location.hash === '#participate' || inSession;
     el('participant').hidden = !participant;
     if (!participantOnly) el('dashboard').hidden = participant;
-    if (participant) renderParticipant(); else showDashboard();
+    if (participant) renderParticipant();
+  // coordinator-only:begin
+    else showDashboard();
+  // coordinator-only:end
   }
   el('enroll').onsubmit = enroll;
   el('begin-trial').onclick = el('resume-unbroken').onclick = el('resume-trial').onclick = () => start();
@@ -836,6 +911,7 @@
     if (location.hash !== '#participate') location.hash = 'participate';
     route(); el('invite-code').focus();
   };
+  // coordinator-only:begin
   if (!participantOnly) {
     el('recover-roster').onsubmit = event => {
       event.preventDefault();
@@ -884,6 +960,7 @@
       } catch (err) { message('import-status', '가져오지 못했습니다. ' + err.message, true); }
     };
   }
+  // coordinator-only:end
   window.addEventListener('beforeunload', event => {
     if (session?.state === 'running') { event.preventDefault(); event.returnValue = ''; }
   });

@@ -14,6 +14,10 @@ function page(t, hash = '', url = 'https://study.example/editor-study.html', pri
   if (participantKit) {
     w.document.documentElement.setAttribute('data-participant-kit', '');
     w.document.getElementById('dashboard').remove();
+    if (typeof participantKit === 'string') {
+      const meta = w.document.createElement('meta');
+      meta.name = 'journal-editor-kit'; meta.content = participantKit; w.document.head.append(meta);
+    }
   }
   let ticks = 0;
   if (prior) w.localStorage.setItem('journal-editor-study-workspace-v1',JSON.stringify(prior));
@@ -434,6 +438,82 @@ function completedRecord(ordinal, id) {
   return record;
 }
 
+test('같은 판본 표는 원래 네 명이 함께 사용한 자료로 시간·판정·정당 표기 격차를 계산한다', async t => {
+  const p = page(t), kits = ['a'.repeat(64), 'b'.repeat(64)];
+  for (let i = 0; i < 4; i++) p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const r = completedRecord(inv.ordinal, inv.id);
+    const which = Math.ceil(r.ordinal / 4);
+    for (const trial of r.trials) {
+      if (which === 1 || which === 2 || which === 3) trial.kitVersion = kits[
+        which === 1 || (which === 2 && r.ordinal % 2 === 0) ? 0 : 1];
+      if (which === 3) {
+        trial.verdict = 'insufficient'; trial.sourceIds = [];
+        if (trial.method === 'manual') trial.elapsedMs = 10000;
+      }
+    }
+    if (r.ordinal === 9) Object.assign(r.trials[0], {elapsedMs:null, observedMs:950});
+    return r;
+  });
+  await importFiles(p, records.map(r => JSON.stringify(r)));
+  assert.match(p.el('data-notice').textContent, /판본을 구분하지 않고 계산/);
+  assert.match(p.el('edition-coverage').textContent, /같은 판본 확인 2묶음.*여러 판본 확인 1묶음.*판본 미확인 1묶음/);
+  const sections = [...p.el('edition-tables').children];
+  assert.equal(sections.length, 2);
+  const a = sections.find(s => s.textContent.includes(kits[0]));
+  const b = sections.find(s => s.textContent.includes(kits[1]));
+  assert.match(a.textContent, /배정 묶음 1번 · 판정 4명 16건 · 시간 비교 4명 16건/);
+  assert.match(a.textContent, /사례당 평균 검토 시간60초30초50% 감소/);
+  assert.match(a.textContent, /검증 성공 1건당 총투입 시간160초 \(성공 3\/8건\)30초 \(성공 8\/8건\)81.3% 감소/);
+  assert.match(a.textContent, /판정과 대표 근거 모두 일치.*100% \(8\/8\)/);
+  assert.match(a.textContent, /정당 표기별 사실 채택률 격차100%p0%p100%p 감소/);
+  assert.match(b.textContent, /배정 묶음 3번 · 판정 4명 16건 · 시간 비교 0명 0건/);
+  assert.match(b.textContent, /전체 시간이 기록된 묶음 대기/);
+  assert.match(b.textContent, /0% \(0\/8\)/);
+  assert.match(b.textContent, /원자료 격차 0%p로 상대율 계산 불가/);
+  assert.match(p.el('edition-block-table').textContent, /2번여러 판본 확인/);
+  p.el('demo-view').click();
+  assert.ok(p.el('edition-results').hidden);
+  p.el('real-view').click();
+  assert.equal(p.el('edition-results').hidden, false);
+});
+
+test('판본별 가상 예시에서 성공당 시간과 표기 격차를 바로 읽고 빈 실제 집계로 돌아온다', t => {
+  const p = page(t);
+  p.el('demo-view').click();
+  p.el('demo-example').value = 'editions';
+  p.el('demo-example').dispatchEvent(new p.w.Event('change'));
+  assert.equal(p.el('edition-results').hidden, false);
+  assert.match(p.el('edition-coverage').textContent, /같은 판본 확인 1묶음 · 여러 판본 확인 1묶음/);
+  const content = p.el('edition-tables').textContent;
+  assert.match(content, /가상 참여자 자료 A/);
+  assert.match(content, /검증 성공 1건당 총투입 시간60초 \(성공 8\/8건\)120초 \(성공 2\/8건\)100% 증가/);
+  assert.match(content, /정당 표기별 사실 채택률 격차0%p100%p100%p 증가/);
+  p.el('real-view').click();
+  assert.equal(p.el('edition-tables').querySelector('table'), null);
+  assert.equal(p.el('edition-success-note').hidden, true);
+  assert.match(p.el('counts').textContent, /등록 0명/);
+});
+
+test('같은 판본에서 평균이 빨라져도 검증 성공이 줄면 성공당 투입 시간은 증가로 표시한다', async t => {
+  const p = page(t), kit = 'd'.repeat(64);
+  p.el('issue-codes').click();
+  const records = p.workspace().invitations.map(inv => {
+    const r = completedRecord(inv.ordinal, inv.id);
+    for (const trial of r.trials) {
+      trial.kitVersion = kit;
+      if (trial.method === 'manual') {
+        trial.verdict = p.w.JournalStudyCases.get(trial.caseId, trial.variant).expectedVerdict;
+      } else if (r.ordinal !== 1) trial.sourceIds = [];
+    }
+    return r;
+  });
+  await importFiles(p, records.map(r => JSON.stringify(r)));
+  const table = p.el('edition-tables').querySelector('tbody');
+  assert.match(table.textContent, /사례당 평균 검토 시간60초30초50% 감소/);
+  assert.match(table.textContent, /검증 성공 1건당 총투입 시간60초 \(성공 8\/8건\)120초 \(성공 2\/8건\)100% 증가/);
+});
+
 test('시간이 절반으로 줄어도 같은 편집자들의 성공률 하락을 전체 집계가 가리지 않는다', async t => {
   const p = page(t);
   p.el('issue-codes').click(); p.el('issue-codes').click();
@@ -646,7 +726,7 @@ test('중단한 편집자의 개인 파일과 진행자 백업이 대기 중인 
   participant.el('withdraw').click(); participant.el('export-finished').click();
   const [active, stopped] = await Promise.all(participantFiles.map(file => file.text()));
   assert.equal(JSON.parse(stopped).withdrawn, true);
-  const expected = {...require('../docs/reader/editor-study-core.js').plan(1)[1], elapsedMs:2300, partial:false};
+  const expected = {...require('../docs/reader/editor-study-core.js').plan(1)[1], elapsedMs:2300, partial:false, kitVersion:null};
   assert.deepEqual(JSON.parse(stopped).withdrawalTask, expected);
   await importFiles(coordinator, [stopped, active]);
   assert.match(coordinator.el('counts').textContent, /중단 확인 1명/);
@@ -994,6 +1074,31 @@ async function restoreParticipant(p, data) {
 
 const participantWorkspace = (p, ordinal = 1) => JSON.parse(
   p.w.localStorage.getItem('journal-editor-study-participant-v1/J1-' + ordinal + '-E0000000000000001'));
+
+test('같은 판본의 중단 회차만 판본을 유지하고 다른 판본·구형 개인 파일의 진행 이력을 새 판본으로 바꾸지 않는다', async t => {
+  const a = 'ab'.repeat(32), b = 'cd'.repeat(32);
+  const first = page(t, '', undefined, undefined, a);
+  first.enroll(1); first.el('begin-trial').click(); first.advance(1000); first.el('pause-trial').click();
+  const files = captureDownloads(first);
+  first.el('export-resume').click();
+  const paused = JSON.parse(await files.at(-1).text());
+  assert.equal(paused.session.kitVersion, a);
+  const oldResponse = paused.record;
+  for (const [kit, input, expected] of [[a, paused, a], [b, paused, null], [b, oldResponse, null]]) {
+    const other = page(t, '', undefined, undefined, kit);
+    other.enroll(1); await restoreParticipant(other, input);
+    other.el(input === paused ? 'resume-trial' : 'begin-trial').click();
+    other.advance(2000); other.answer();
+    assert.equal(participantWorkspace(other).records[0].trials[0].kitVersion, expected);
+    other.el('begin-trial').click(); other.w.confirm = () => true; other.el('withdraw').click();
+    assert.equal(participantWorkspace(other).records[0].withdrawalTask.kitVersion, kit);
+  }
+  const latest = page(t, '', undefined, undefined, b);
+  const key = first.w.localStorage.key(0);
+  latest.w.localStorage.setItem(key, first.w.localStorage.getItem(key));
+  latest.enroll(1); latest.el('resume-trial').click(); latest.advance(3000); latest.answer();
+  assert.equal(participantWorkspace(latest).records[0].trials[0].kitVersion, null);
+});
 
 test('다른 기기의 같은 참여 코드는 휴식 전 초안과 단계 시간을 이어가며 기존 응답을 다시 풀지 않는다', async t => {
   const original = page(t, '', undefined, undefined, true);

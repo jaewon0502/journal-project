@@ -21,10 +21,15 @@
 <div class="headline"><div><h1>팩트체크 효과 측정</h1><p>같은 편집자가 원자료만 읽었을 때와 저널을 함께 썼을 때를 비교합니다.</p></div><a class="button primary" href="#participate">편집자 참여</a></div>
 <div class="tabs" aria-label="집계 대상"><button id="real-view" aria-pressed="true">실제 편집자 기록</button><button id="demo-view" aria-pressed="false">가상 수치 예시</button></div>
 <p id="data-notice" class="notice"></p>
-<div id="demo-options" hidden><label for="demo-example">살펴볼 가상 기록</label><select id="demo-example"><option value="complete">8명 · 모든 과제의 시간 기록</option><option value="partial">12명 · 두 과제의 시간 일부 누락</option><option value="agreement">4명 · 두 표기에서 같은 오답을 고른 사례</option><option value="missing">8명 · 32건 중 한 건 미제출</option></select></div>
+<div id="demo-options" hidden><label for="demo-example">살펴볼 가상 기록</label><select id="demo-example">
+<option value="complete">8명 · 모든 과제의 시간 기록</option><option value="partial">12명 · 두 과제의 시간 일부 누락</option><option value="agreement">4명 · 두 표기에서 같은 오답을 고른 사례</option><option value="missing">8명 · 32건 중 한 건 미제출</option>
+<option value="editions">8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본</option></select></div>
 <div class="statline" id="counts"></div>
 <section class="box" id="withdrawal-work" hidden><h2>제출 전에 중단한 과제</h2><p id="withdrawal-counts"></p><div class="scroll" id="withdrawal-table"></div><p class="subtle">시간은 중단한 과제에서 타이머로 확인한 구간의 합계입니다. 실행 중 창이 닫혔다면 확인 가능한 구간만 더합니다. 이 과제는 방식별 평균과 판정 비교에서 제외합니다.</p></section>
 <div id="metrics" class="metricgrid"></div>
+<section id="edition-results" class="box" aria-labelledby="edition-heading"><h2 id="edition-heading">같은 참여자 자료를 사용한 묶음의 결과</h2>
+<p id="edition-coverage"></p><div id="edition-tables"></div><p id="edition-success-note" hidden>검증 성공 1건당 시간에는 실패한 과제에 쓴 시간도 포함합니다. 판정과 대표 근거가 모두 일치하면 성공입니다.</p>
+<details id="edition-blocks" hidden><summary>배정 묶음별 판본 확인</summary><div class="scroll" id="edition-block-table"></div></details></section>
 <section class="box" aria-labelledby="missing-answer-heading"><h2 id="missing-answer-heading">미제출 답에 따른 정당 표기 격차의 변화 범위</h2>
 <p id="missing-answer-sample"></p><p id="missing-answer-range"></p>
 <p class="subtle">제출한 판정은 그대로 두고, 남은 각 과제에서 사실을 채택하거나 채택하지 않았을 때 가능한 격차 감소폭의 양 끝을 계산합니다. 원자료 방식의 격차에서 저널 방식의 격차를 뺀 값입니다. 이 범위는 해당 배정에 가능한 답을 비교한 것으로, 모집단의 신뢰구간은 별도 분석이 필요합니다.</p></section>

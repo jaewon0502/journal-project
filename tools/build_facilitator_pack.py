@@ -8,7 +8,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
-from build_editor_study_pack import packet_bytes as editor_participant_zip
+from build_editor_study_pack import versioned_packet as editor_participant_kit
 from build_field_participant_packs import Assets, CASES, READER, ROOT, html, versioned_packet_pair
 
 
@@ -28,9 +28,10 @@ START = """<!doctype html>
 <section class="box"><h2>편집 시간과 정당 표기 효과</h2>
 <ol><li><a href="editor-study.html">편집자 집계 화면 열기</a> → ‘실제 편집자 기록’ → ‘참여 기록 가져오기’에서 별도로 보관한 초대명부를 먼저 여세요.
 첫 묶음의 기존 파일 이름은 <code>첫-4인-초대명부.json</code>입니다. 첫 명부가 없거나 기존 명부에 다음 네 명을 추가할 때는 ‘배정 묶음 발급’을 누르고 ‘모은 기록 내려받기’로 명부를 보관하세요.</li>
-<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>과 화면 순서대로 코드 하나씩을 네 명에게 전달하세요. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다.</li>
+<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>과 화면 순서대로 코드 하나씩을 네 명에게 전달하세요. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다.
+<p>이 ZIP의 참여자 자료 식별값은 <code>{{EDITOR_KIT}}</code>입니다. 회신을 모은 뒤 ‘같은 참여자 자료를 사용한 묶음의 결과’에서 이 값과 일치하는 판본을 확인하세요.</p></li>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다. 시간 차이를 볼 때는 같은 편집자들의 기준 판정 일치율과 대표 근거 일치율도 확인하세요.</li></ol>
-<p>미완료 묶음이 있다면 ‘미제출 답에 따른 정당 표기 격차의 변화 범위’에서 이미 받은 답도 확인하세요. <a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 32건 중 한 건 미제출’을 고르면 마지막 답에 따라 가능한 결과를 볼 수 있습니다.</p></section>
+<p><a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본’을 고르면 사례당 평균 시간과 검증 성공 한 건에 쓴 시간을 비교할 수 있습니다. 미완료 묶음이 있다면 ‘8명 · 32건 중 한 건 미제출’에서 마지막 답에 따라 정당 표기 격차가 얼마나 달라지는지 확인하세요.</p></section>
 <section class="box"><h2>실제 기사에서 원자료 찾기</h2>
 <ol><li><a href="field-allocation.html">현장 기사 과제 배정</a>에서 검토할 기사를 선택하세요.
 과제별로 목표 활동 시간이 있으면 배정 전에 초 단위로 입력하세요. 참여 순서대로 익명 코드를 입력해 배정표를 만들고 배부 전에 JSON을 보관하세요.
@@ -133,10 +134,11 @@ def packet_bytes():
     reviewer = {}
     add_page(reviewer, 'factcheck.html', standalone)
     practice = field_practice_sample()
+    editor_edition, editor_zip = editor_participant_kit()
     # A data URL also downloads from a local file:// launch page in Chrome.
-    start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii'))
+    start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii')).replace('{{EDITOR_KIT}}', editor_edition)
     files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer),
-             'participant-editor-study.zip': editor_participant_zip(), PRACTICE_SAMPLE: practice,
+             'participant-editor-study.zip': editor_zip, PRACTICE_SAMPLE: practice,
              'prepare_pdf_source.py': (ROOT / 'tools' / 'prepare_pdf_source.py').read_bytes()}
     for filename, destination in QUOTE_PRACTICE.items():
         files[destination] = (CASES / 'core-quote-revision' / filename).read_bytes()

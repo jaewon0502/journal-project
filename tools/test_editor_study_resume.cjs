@@ -21,6 +21,24 @@ function local(record, changes = {}) {
 }
 const jsonCopy = value => JSON.parse(JSON.stringify(value));
 
+test('이미 제출한 회차와 휴식 중 회차의 판본을 따로 보존하고 판본이 없는 옛 파일을 그대로 읽는다', () => {
+  const a = 'ab'.repeat(32), b = 'cd'.repeat(32);
+  const previous = participant(2);
+  previous.trials[0].kitVersion = a;
+  const paused = portable.create(previous, local(previous, {kitVersion:b}));
+  const opened = portable.read(paused, invite);
+  assert.deepEqual(opened.record, previous);
+  assert.equal(opened.session.kitVersion, b);
+  for (const invalid of [b.toUpperCase(), 'latest', b + '\n']) {
+    assert.throws(() => portable.create(previous, local(previous, {kitVersion:invalid})));
+    assert.throws(() => portable.read({...paused, session:{...paused.session, kitVersion:invalid}}, invite));
+  }
+  assert.equal(portable.create(previous, local(previous, {kitVersion:null})).session.kitVersion, null);
+  const unknown = portable.create(previous, local(previous));
+  assert.equal(Object.hasOwn(portable.read(unknown, invite).session, 'kitVersion'), false);
+  assert.equal(Object.hasOwn(opened.record.trials[1], 'kitVersion'), false);
+});
+
 test('한 사람의 휴식 시점, 단계 시간, 작성 중인 판정과 이미 제출한 회차를 새 기기로 옮긴다', () => {
   for (let index = 0; index < 4; index++) {
     const record = participant(index), current = local(record);

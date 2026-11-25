@@ -24,6 +24,17 @@
     }
   }
 
+  function kitVersion(value) {
+    return typeof value === 'string' && value.length === 64 && !/[^a-f0-9]/.test(value) ? value : null;
+  }
+
+  function checkedKit(observation) {
+    if (!Object.hasOwn(observation, 'kitVersion')) return {};
+    if (observation.kitVersion !== null && !kitVersion(observation.kitVersion))
+      throw new Error('과제를 수행한 배포본 ID를 확인하세요.');
+    return {kitVersion:observation.kitVersion};
+  }
+
   function plan(ordinal) {
     checkOrdinal(ordinal);
     const editor = (ordinal - 1) % slots;
@@ -95,7 +106,7 @@
     const trial = {...expected, elapsedMs, verdict, reason: reason.trim(), sourceIds: [...sourceIds], journalUsed};
     if (elapsedMs === null) trial.observedMs = observation.observedMs;
     if (Object.hasOwn(observation, 'phaseMs')) trial.phaseMs = checkedPhases(observation.phaseMs, elapsedMs);
-    return trial;
+    return {...trial, ...checkedKit(observation)};
   }
 
   function validateRecord(input) {
@@ -119,7 +130,7 @@
         checkAssignment(expected, task, true);
         if (!Number.isSafeInteger(task.elapsedMs) || task.elapsedMs < 0 || typeof task.partial !== 'boolean')
           throw new Error('중단 과제의 측정 시간과 일부 측정 여부를 확인하세요.');
-        result.withdrawalTask = {...expected, elapsedMs:task.elapsedMs, partial:task.partial};
+        result.withdrawalTask = {...expected, elapsedMs:task.elapsedMs, partial:task.partial, ...checkedKit(task)};
       }
     }
     return result;
@@ -155,8 +166,10 @@
         const longer = record.trials.length > previous.trials.length ? record : previous;
         const trials = [...longer.trials];
         for (let i = 0; i < common; i++) {
-          const {phaseMs: priorPhases, ...prior} = previous.trials[i];
-          const {phaseMs: nextPhases, ...next} = record.trials[i];
+          const {phaseMs: priorPhases, kitVersion: priorKit, ...prior} = previous.trials[i];
+          const {phaseMs: nextPhases, kitVersion: nextKit, ...next} = record.trials[i];
+          if ((priorKit ?? null) !== (nextKit ?? null))
+            throw new Error('같은 참가자·회차의 배포본이 다르거나 한쪽 기록에만 확인된 판본이 있습니다. 원본을 확인하세요.');
           if (JSON.stringify(prior) !== JSON.stringify(next) ||
               (priorPhases !== undefined && nextPhases !== undefined && JSON.stringify(priorPhases) !== JSON.stringify(nextPhases))) {
             throw new Error('같은 참가자·회차에 서로 다른 기록이 있습니다. 원본을 확인하세요.');
@@ -164,15 +177,18 @@
           // A v1 export from an earlier viewer may omit the optional phase field.
           if (priorPhases !== undefined) trials[i] = previous.trials[i];
           else if (nextPhases !== undefined) trials[i] = record.trials[i];
+          if (priorKit === null || nextKit === null) trials[i] = {...trials[i], kitVersion:null};
         }
         const merged = {...longer, trials};
         if (previous.withdrawn || record.withdrawn) merged.withdrawn = true;
+        const comparableWithdrawal = task => task === null ? null : {...task, kitVersion:task.kitVersion ?? null};
         if (previous.withdrawalTask !== undefined && record.withdrawalTask !== undefined &&
-            JSON.stringify(previous.withdrawalTask) !== JSON.stringify(record.withdrawalTask)) {
+            JSON.stringify(comparableWithdrawal(previous.withdrawalTask)) !== JSON.stringify(comparableWithdrawal(record.withdrawalTask))) {
           throw new Error('같은 참가자의 중단 과제 기록이 서로 다릅니다. 원본을 확인하세요.');
         }
         if (previous.withdrawalTask !== undefined) merged.withdrawalTask = previous.withdrawalTask;
         else if (record.withdrawalTask !== undefined) merged.withdrawalTask = record.withdrawalTask;
+        if (record.withdrawalTask?.kitVersion === null) merged.withdrawalTask = record.withdrawalTask;
         byId.set(id, merged);
       } else {
         byId.set(id, record);
@@ -183,13 +199,7 @@
   }
 
   function blockRoster(records) {
-    const grouped = new Map();
-    for (const record of records) {
-      const block = Math.floor((record.ordinal - 1) / slots) + 1;
-      if (!grouped.has(block)) grouped.set(block, new Map());
-      grouped.get(block).set(record.ordinal, record);
-    }
-    return [...grouped].map(([block, members]) => {
+    return [...groupBlocks(records)].map(([block, members]) => {
       const missingOrdinals = [], unfinishedOrdinals = [], withdrawnOrdinals = [];
       let completed = 0;
       for (let i = 1; i <= slots; i++) {
@@ -203,6 +213,16 @@
       }
       return {block, enrolled: members.size, completed, included: completed === slots, missingOrdinals, unfinishedOrdinals, withdrawnOrdinals};
     });
+  }
+
+  function groupBlocks(records) {
+    const grouped = new Map();
+    for (const record of records) {
+      const block = Math.floor((record.ordinal - 1) / slots) + 1;
+      if (!grouped.has(block)) grouped.set(block, new Map());
+      grouped.get(block).set(record.ordinal, record);
+    }
+    return grouped;
   }
 
   function timeStats(records, stage) {
@@ -487,9 +507,16 @@
     return {quality, bias};
   }
 
-  function analyze(input, kind = 'editor') {
+  function checkedRecords(input, kind) {
     if (!['editor', 'demo'].includes(kind)) throw new Error('등록 자료와 예시 자료의 집계 범위를 확인하세요.');
-    const records = mergeRecords([], input).filter(record => record.kind === kind);
+    return mergeRecords([], input).filter(record => record.kind === kind);
+  }
+
+  function analyze(input, kind = 'editor') {
+    return analyzeRecords(checkedRecords(input, kind), kind);
+  }
+
+  function analyzeRecords(records, kind) {
     const blocks = blockRoster(records);
     const eligible = new Set(blocks.filter(b => b.included).map(b => b.block));
     const sample = records.filter(r => eligible.has(Math.floor((r.ordinal - 1) / slots) + 1));
@@ -522,6 +549,32 @@
     counts.timedQuality = timedQualityStats(timedSample);
     if (!sample.length) return {...counts, time: null, bias: null, quality: null};
     return {...counts, time: timedSample.length ? timeStats(timedSample) : null, ...verdictStats(sample)};
+  }
+
+  function analyzeEditions(input, kind = 'editor') {
+    const records = checkedRecords(input, kind), byEdition = new Map(), blocks = [];
+    for (const [block, members] of groupBlocks(records)) {
+      const people = [...members.values()];
+      let state = 'incomplete', version = null;
+      if (people.length === slots && people.every(r => r.trials.length === slots)) {
+        const versions = new Set(people.flatMap(r => r.trials.map(t => t.kitVersion ?? null)));
+        const unknown = versions.delete(null);
+        if (versions.size > 1) state = 'mixed';
+        else if (unknown) state = 'unknown';
+        else {
+          state = 'verified';
+          [version] = versions;
+          if (!byEdition.has(version)) byEdition.set(version, {blockNumbers:[], people:[]});
+          const cohort = byEdition.get(version);
+          cohort.blockNumbers.push(block);
+          cohort.people.push(...people);
+        }
+      }
+      blocks.push({block, state, kitVersion:version});
+    }
+    const editions = [...byEdition].map(([version, cohort]) => ({kitVersion:version,
+      blockNumbers:cohort.blockNumbers, analysis:analyzeRecords(cohort.people, kind)}));
+    return {blocks, editions};
   }
 
   function demoRecords() {
@@ -593,6 +646,26 @@
     });
   }
 
-  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, analyze, demoRecords,
-    partialTimeDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords});
+  function editionDemoRecords() {
+    return Array.from({length:2 * slots}, (_, i) => {
+      const ordinal = i + 1;
+      const version = (ordinal <= 6 ? 'a' : 'b').repeat(64);
+      let record = createRecord('demo-edition-' + ordinal, ordinal, 'demo', false);
+      for (const task of plan(ordinal)) {
+        const gold = cases.get(task.caseId, task.variant);
+        const journal = task.method === 'journal';
+        let verdict = gold.expectedVerdict, sourceIds = gold.expectedSourceIds;
+        if (ordinal <= slots && journal) {
+          verdict = task.variant === 'A' ? 'supported' : 'insufficient';
+          if (task.caseId === 'permits') sourceIds = [];
+        }
+        record = addTrial(record, {kitVersion:version, elapsedMs:journal ? 30000 : 60000,
+          journalUsed:journal, verdict, sourceIds, reason:'판본별 시간·근거·판정 차이를 살펴보는 가상 응답입니다.'});
+      }
+      return record;
+    });
+  }
+
+  return Object.freeze({protocol, stages, plan, createRecord, addTrial, validateRecord, mergeRecords, kitVersion, analyze, analyzeEditions, demoRecords,
+    partialTimeDemoRecords, cueAgreementDemoRecords, missingCueDemoRecords, editionDemoRecords});
 });

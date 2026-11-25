@@ -41,6 +41,10 @@ class FacilitatorPack(unittest.TestCase):
             self.assertIn('prepare_pdf_source.py', links.local)
             self.assertEqual(coordinator.read('prepare_pdf_source.py'), Path(__file__).with_name('prepare_pdf_source.py').read_bytes())
             expected = {'participant-editor-study.zip': editor_participant_zip()}
+            with ZipFile(BytesIO(expected['participant-editor-study.zip'])) as kit:
+                page = kit.read('editor-study.html').decode()
+                [edition] = re.findall(r'<meta name="journal-editor-kit" content="([0-9a-f]{64})">', page)
+            self.assertIn(f'<code>{edition}</code>', coordinator.read('시작.html').decode())
             for case, folder in CASE_FOLDERS.items():
                 pair = packet_pair(case)
                 expected[f'참여 과제/{folder}/{folder}-평소도구.zip'] = pair['manual']
