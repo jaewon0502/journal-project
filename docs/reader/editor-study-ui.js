@@ -1042,6 +1042,7 @@
   }
   function clearTaskState(next) {
     delete session.kitVersion;
+    delete session.pausedWhenHidden;
     Object.assign(session, {state:next, activeMs:0, segmentAt:null, recoveredMs:null, partialTime:false, stage:null, phaseMs:null, phaseOmitted:false, used:false, verdict:'', source:'', reason:''});
     liveStart = null; dropFrame();
   }
@@ -1088,6 +1089,7 @@
   }
   function start(observedOnly = false) {
     if (!session || !['ready','paused','interrupted'].includes(session.state)) return;
+    if (session.pausedWhenHidden && document.hidden) return;
     if (session.state === 'ready') {
       session.stage = session.partialTime ? null : 'select';
       session.phaseMs = session.partialTime ? null : {select:0}; session.phaseOmitted = false;
@@ -1114,15 +1116,18 @@
     // A submission-only import cannot prove that the next task had not already started.
     if (session.state === 'ready') session.kitVersion = session.partialTime ? null : localKit;
     else if (!localKit || session.kitVersion !== localKit) session.kitVersion = null;
+    delete session.pausedWhenHidden;
     if (localKit && frame) identifyChild();
     liveStart = clock(); session.segmentAt = Date.now(); session.state = 'running';
     message('session-status', '');
     persist(); renderParticipant(); el('trial-heading').focus();
   }
-  function pause() {
+  function pause(pageHidden = false) {
     if (session?.state !== 'running') return;
     bankTime(); session.segmentAt = null; liveStart = null; session.state = 'paused';
-    persist(); renderParticipant(); el('resume-trial').focus();
+    if (pageHidden) session.pausedWhenHidden = true;
+    persist(); renderParticipant();
+    if (!pageHidden) el('resume-trial').focus();
   }
   function withdraw() {
     if (!session || !['ready','running','paused','interrupted'].includes(session.state)) return;
@@ -1264,9 +1269,10 @@
     el('start-pane').hidden = s !== 'ready'; el('task-pane').hidden = s !== 'running';
     el('partial-start').hidden = s !== 'ready' || !session.partialTime;
     el('pause-pane').hidden = s !== 'paused'; el('recovery').hidden = s !== 'interrupted';
-    el('pause-note').textContent = session.partialTime
+    const pauseReason = session.pausedWhenHidden ? '과제 화면이 가려져 시간 측정을 멈췄습니다. ' : '';
+    el('pause-note').textContent = pauseReason + (session.partialTime
       ? '이 과제는 일부 시간만 확인할 수 있습니다. 계속하면 지금부터 검토한 시간을 더합니다.'
-      : '휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.' + recoveryNote(session);
+      : '검토 계속하기를 누르면 다시 시간을 잽니다.' + recoveryNote(session));
     el('resume-unbroken').hidden = !!session.partialTime;
     updateTime();
     if (s !== 'running') return;
@@ -1316,7 +1322,7 @@
     if (session?.state !== 'running') return;
     session.phaseOmitted = el('phase-omit').checked; persist(); updateStages();
   };
-  el('pause-trial').onclick = pause; el('withdraw').onclick = el('stop-interrupted').onclick = withdraw;
+  el('pause-trial').onclick = () => pause(); el('withdraw').onclick = el('stop-interrupted').onclick = withdraw;
   el('answer').onsubmit = submitTrial;
   el('answer').addEventListener('input',cacheAnswer);
   el('export-resume').onclick = exportResume;
@@ -1387,7 +1393,9 @@
     if (event.persisted && session?.state === 'interrupted') renderParticipant();
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && session?.state === 'running') persist();
+    // All material for these controlled tasks is on this page, including the Journal frame.
+    if (document.hidden) pause(true);
+    else if (session?.state === 'paused' && session.pausedWhenHidden) el('resume-trial').focus();
   });
   window.addEventListener('hashchange',route);
   setInterval(() => {

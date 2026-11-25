@@ -235,7 +235,7 @@ test('실측이 비었을 때 예시 수치가 실측으로 남지 않는다', t
   assert.equal(p.workspace(), null);
 });
 
-test('명시적 휴식만 시간에서 빠지고 과제 사이에 근거와 답안이 노출되지 않는다', t => {
+test('참여자가 누른 휴식 시간이 빠지고 과제 사이에 근거와 답안이 노출되지 않는다', t => {
   const p = page(t, '#participate');
   p.enroll(1);
   assert.equal(p.el('task-pane').hidden, true);
@@ -250,6 +250,71 @@ test('명시적 휴식만 시간에서 빠지고 과제 사이에 근거와 답�
   assert.equal(trial.journalUsed, false);
   assert.equal(trial.reason, '제공된 자료의 표결 수치를 확인했다.');
   assert.equal(p.el('task-pane').hidden, true);
+});
+
+function showTaskTab(p, visible) {
+  Object.defineProperty(p.w.document, 'hidden', {value:!visible, configurable:true});
+  p.w.document.dispatchEvent(new p.w.Event('visibilitychange'));
+}
+
+test('두 방식 모두 가려진 탭의 60초를 제외하고 직접 재개한 시간과 기존 근거만 제출한다', t => {
+  for (const ordinal of [1,3]) {
+    const p = page(t, '#participate');
+    showTaskTab(p, true); p.enroll(ordinal); p.el('begin-trial').click(); p.advance(500);
+    p.w.document.querySelector('[data-phase="locate"]').click(); p.advance(500);
+    const frame = p.w.document.querySelector('iframe');
+    const reason = '원자료에서 확인한 대표 근거.';
+    if (ordinal === 3) {
+      let packet;
+      frame.contentWindow.postMessage = m => {packet = m;};
+      const reply = data => p.w.dispatchEvent(new p.w.MessageEvent('message',
+        {source:frame.contentWindow, origin:p.w.location.origin, data}));
+      reply({type:'journal-study-ready'});
+      reply({type:'journal-study-used', nonce:packet.nonce, status:'held', sourceIds:['doc-2'], reason});
+    } else {
+      p.el('verdict').value = 'insufficient'; p.el('source').value = 'doc-2'; p.el('reason').value = reason;
+      p.el('reason').dispatchEvent(new p.w.Event('input', {bubbles:true}));
+    }
+    showTaskTab(p, false);
+    assert.equal(p.workspace().session.state, 'paused'); assert.equal(p.workspace().session.activeMs, 1000);
+    assert.ok(p.el('task-pane').hidden); assert.match(p.el('pause-note').textContent, /가려져/);
+    p.advance(60000); p.el('resume-trial').click();
+    assert.equal(p.workspace().session.state, 'paused');
+    showTaskTab(p, true); p.advance(5000);
+    assert.equal(p.w.document.activeElement, p.el('resume-trial'));
+    assert.ok(p.el('task-pane').hidden); assert.equal(p.workspace().session.activeMs, 1000);
+    p.el('resume-trial').click();
+    assert.equal(p.el('reason').value, reason); assert.equal(p.el('source').value, 'doc-2');
+    assert.equal(p.w.document.querySelector('iframe'), frame);
+    assert.equal(p.w.document.querySelector('[data-phase="locate"]').getAttribute('aria-pressed'), 'true');
+    p.w.document.querySelector('[data-phase="decide"]').click(); p.advance(1000);
+    p.el('answer').requestSubmit();
+    const trial = p.workspace().records[0].trials[0];
+    assert.equal(trial.elapsedMs, 2000);
+    assert.deepEqual(trial.phaseMs, {select:500, locate:500, decide:1000});
+    assert.equal(trial.verdict, 'insufficient'); assert.equal(trial.reason, reason);
+    assert.deepEqual(trial.sourceIds, ['doc-2']);
+    assert.equal(trial.journalUsed, ordinal === 3);
+  }
+});
+
+test('탭에서 자동으로 멈춘 뒤 화면을 떠나거나 이어하기 파일을 열어도 휴식과 단계 시간이 그대로 남는다', async t => {
+  const p = page(t, '#participate'); showTaskTab(p, true); p.enroll(1);
+  p.el('begin-trial').click(); p.advance(1000); showTaskTab(p, false);
+  p.w.dispatchEvent(new p.w.PageTransitionEvent('pagehide', {persisted:true})); p.advance(60000);
+  p.w.dispatchEvent(new p.w.PageTransitionEvent('pageshow', {persisted:true})); showTaskTab(p, true);
+  assert.equal(p.el('recovery').hidden, true); assert.equal(p.el('pause-pane').hidden, false);
+  const downloads = captureDownloads(p); p.el('export-resume').click();
+  const checkpoint = JSON.parse(await downloads[0].text());
+  assert.equal(checkpoint.session.state, 'paused'); assert.equal(checkpoint.session.activeMs, 1000);
+  assert.equal(checkpoint.session.partialTime, false);
+  const q = page(t, '#participate', undefined, p.workspace()); showTaskTab(q, true);
+  q.advance(60000); q.el('resume-trial').click(); q.advance(1000); q.answer();
+  assert.equal(q.workspace().records[0].trials[0].elapsedMs, 2000);
+  const otherDevice = page(t, '', undefined, undefined, true);
+  otherDevice.enroll(1); await restoreParticipant(otherDevice, checkpoint);
+  otherDevice.advance(60000); otherDevice.el('resume-trial').click(); otherDevice.advance(1000); otherDevice.answer();
+  assert.equal(participantWorkspace(otherDevice).records[0].trials[0].elapsedMs, 2000);
 });
 
 test('저널 조건은 배정된 자식 화면의 확인된 판단이 도착해야 제출할 수 있다', t => {
