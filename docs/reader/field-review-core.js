@@ -117,7 +117,7 @@
   }
   function group(records) {
     const groups = new Map();
-    const completedTimes = new Map();
+    const clocks = new Map();
     for (const { trial: t, locationGrade, verdictGrade, reasonGrade:submittedReasonGrade, expected, basis, gradingTime } of records) {
       const key = JSON.stringify([t.caseId, t.taskId, t.prompt, t.articleUrl, t.method, t.kind]);
       if (!groups.has(key))
@@ -166,11 +166,14 @@
           partialVerified:0, partialOutcomePending:0, reasonGraded:0, verifiedWithReason:0, reasonOutcomePending:0,
           gradingMeasured:0, gradingComplete:0, gradingMs:0, resumedWithoutMatchingKit:0};
         g.timedKits.set(version, totals);
-        completedTimes.set(totals, []);
+        clocks.set(totals, {completedTimes:[], participantMs:0n, gradingMs:0n});
       }
       const kit = g.timedKits.get(version);
+      const clock = clocks.get(kit);
+      for (const phase of phases) clock.participantMs += BigInt(t.phaseMs[phase]);
       if (changedKit) kit.resumedWithoutMatchingKit++;
       if (gradingTime) {
+        clock.gradingMs += BigInt(gradingTime.ms);
         kit.gradingMeasured++;
         kit.gradingMs += gradingTime.ms;
         if (gradingTime.status === 'complete' && !gradingTime.partial) kit.gradingComplete++;
@@ -191,7 +194,7 @@
           if (!verificationKnown) kit.partialOutcomePending++;
         }
       } else {
-        if (t.status === 'completed') completedTimes.get(kit).push(elapsedMs);
+        if (t.status === 'completed') clock.completedTimes.push(elapsedMs);
         for (const totals of [g, kit]) {
           if (t.status === 'withdrawn') {
             totals.timedWithdrawn++;
@@ -236,7 +239,11 @@
         if (verdictGrade === 'yes') g.verdictHits++;
       }
     }
-    for (const [kit, times] of completedTimes) {
+    for (const [kit, clock] of clocks) {
+      const times = clock.completedTimes;
+      // Keep integer sums serializable and exact even when several valid clocks exceed Number's precision.
+      kit.participantClockMs = String(clock.participantMs);
+      kit.gradingClockMs = String(clock.gradingMs);
       times.sort((a, b) => a - b);
       const middle = Math.floor(times.length / 2);
       kit.medianMs = times.length ? (times[middle] + times[Math.floor((times.length - 1) / 2)]) / 2 : null;
@@ -284,6 +291,32 @@
       }
       return {manual, journal, difference};
     }
+    function personCost(kit) {
+      if (!kit) return null;
+      const partial = kit.partialCompleted + kit.partialWithdrawn;
+      const returned = kit.totalTimed + kit.timedWithdrawn + partial;
+      const verified = kit.verifiedWithReason, possible = verified + kit.reasonOutcomePending;
+      // A coordinator may stop the grading clock before deciding the reason grade.
+      // Finishing that review can add unbounded work even if every recorded clock is marked complete.
+      const completeTime = !partial && kit.gradingComplete === returned && !kit.reasonOutcomePending;
+      const observedMs = String(BigInt(kit.participantClockMs) + BigInt(kit.gradingClockMs));
+      // Endpoints are conditional on at least one success. A failed or withdrawn return still costs time.
+      return {observedMs, lowerDivisor:possible, upperDivisor:verified && completeTime ? verified : null};
+    }
+    function comparePersonCost(version, manualKit, journalKit) {
+      const manual = personCost(manualKit), journal = personCost(journalKit);
+      function difference(j, m) {
+        if (!j || !m) return null;
+        const a = BigInt(j), b = BigInt(m);
+        return {numerator:String(BigInt(journal.observedMs) * b - BigInt(manual.observedMs) * a),
+          denominator:String(a * b)};
+      }
+      // A zero-success possibility in either arm makes a directional conclusion premature.
+      const comparable = version && manualKit?.verifiedWithReason > 0 && journalKit?.verifiedWithReason > 0;
+      return {manual, journal, difference:comparable ? {
+        low:difference(journal.lowerDivisor, manual.upperDivisor),
+        high:difference(journal.upperDivisor, manual.lowerDivisor)} : null};
+    }
     const tasks = new Map();
     for (const g of groups) {
       const key = JSON.stringify([g.kind, g.caseId, g.articleUrl, g.taskId, g.prompt]);
@@ -302,6 +335,7 @@
           median: change(version, manual?.medianMs ?? null, journal?.medianMs ?? null),
           perVerified: change(version, msPerVerified(manual), msPerVerified(journal)),
           returnedCost: compareReturnedCost(version, manual, journal),
+          personCost: comparePersonCost(version, manual, journal),
           returnedCostWithReason: manual?.reasonGraded || journal?.reasonGraded
             ? compareReturnedCost(version, manual, journal, true) : null };
       });

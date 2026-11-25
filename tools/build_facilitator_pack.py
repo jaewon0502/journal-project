@@ -14,6 +14,7 @@ from build_field_participant_packs import Assets, CASES, READER, ROOT, html, ver
 
 CASE_FOLDERS = {'cross-party-review': '예비비', 'labour-field-review': '고용'}
 PRACTICE_SAMPLE = '연습 예시/고용률-판단이유-가상응답.json'
+PARTIAL_GRADING_SAMPLE = '연습 예시/채점시간-일부누락-가상응답.json'
 PARTY_LEDGER_SAMPLE = '연습 예시/정당별-결산표-이전-점수.json'
 QUOTE_PRACTICE = {
     'series-summary.json': '연습 예시/핵심발언/기사별-요약.json',
@@ -29,7 +30,7 @@ START = """<!doctype html>
 <section class="box"><h2>편집 시간과 정당 표기 효과</h2>
 <ol><li><a href="editor-study.html">편집자 집계 화면 열기</a> → ‘실제 편집자 기록’ → ‘참여 기록 가져오기’에서 별도로 보관한 초대명부를 먼저 여세요.
 첫 묶음의 기존 파일 이름은 <code>첫-4인-초대명부.json</code>입니다. 첫 명부가 없거나 기존 명부에 다음 네 명을 추가할 때는 ‘배정 묶음 발급’을 누르고 ‘모은 기록 내려받기’로 명부를 보관하세요.</li>
-<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 새 코드를 발급하세요. 화면 순서대로 ‘코드 복사’를 누르고 같은 행의 ‘참여자 ZIP’과 함께 한 명씩 전달하세요. 새 코드는 지정한 판본을 열었을 때만 등록됩니다. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다. 이 폴더에 동봉된 자료는 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>에서 다시 받을 수 있습니다.
+<li>‘다른 기기에서 참여할 초대 코드’를 펼쳐 새 코드를 발급하세요. 이번 판본의 참여자 ZIP은 한 번 내려받아 함께 씁니다. 각 행에서 그 사람의 참여 안내를 복사해 ZIP과 함께 개별 전달하세요. 새 코드는 지정한 판본을 열었을 때만 등록됩니다. 참여자는 압축을 풀어 <code>editor-study.html</code>에서 각자 네 과제를 진행합니다. 이 폴더에 동봉된 자료는 <a href="participant-editor-study.zip" download>편집자 비교 실험 참여자 ZIP</a>에서 다시 받을 수 있습니다.
 <p>이 ZIP의 참여자 자료 식별값은 <code>{{EDITOR_KIT}}</code>입니다. 회신을 모은 뒤 ‘같은 참여자 자료를 사용한 묶음의 결과’에서 이 값과 일치하는 판본을 확인하세요.</p></li>
 <li>돌아온 <code>journal-editor-….json</code> 파일을 ‘참여 기록 가져오기’로 엽니다. 등록·완료·분석 인원을 확인한 뒤 ‘모은 기록 내려받기’로 보관하세요. 네 명이 모두 네 과제를 마치면 첫 비교가 표시됩니다. 시간 차이를 볼 때는 같은 편집자들의 기준 판정 일치율과 대표 근거 일치율도 확인하세요.</li></ol>
 <p><a href="editor-study.html">편집자 집계 화면</a>의 ‘가상 수치 예시’에서 ‘8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본’을 고르면 사례당 평균 시간과 검증 성공 한 건에 쓴 시간을 비교할 수 있습니다. 미완료 묶음이 있다면 ‘8명 · 32건 중 한 건 미제출’에서 마지막 답에 따라 정당 표기 격차가 얼마나 달라지는지 확인하세요.</p>
@@ -53,6 +54,8 @@ START = """<!doctype html>
 <p><a href="data:application/json;base64,{{PRACTICE_DATA}}" download="고용률-판단이유-가상응답.json">가상 답안 4건 내려받기</a> ·
 <a href="field-summary.html" target="_blank" rel="noopener">새 집계 화면</a>에서 ‘참여 JSON 또는 이전 집계 JSON 불러오기’로 예시 파일을 여세요.
 ‘연습’을 고르고 ‘배정과 결과 보기’를 누르면 판단 이유까지 맞은 답안 한 건에 참여자와 진행자가 각각 몇 초를 썼는지 볼 수 있습니다. 두 역할의 시간은 모두 가상 값입니다.</p>
+<p><a href="data:application/json;base64,{{PARTIAL_GRADING_DATA}}" download="채점시간-일부누락-가상응답.json">채점 시간이 일부 빠진 가상 답안 2건 내려받기</a> ·
+같은 절차로 열면 참여자 평균은 60초에서 40초로 줄었지만 성공 한 건에 두 사람이 쓴 시간은 65초에서 최소 90초로 늘어난 사례가 나옵니다. ‘이 과제의 시간 비교표 HTML 저장’으로 숫자만 담은 파일을 열어 보세요.</p>
 <details><summary>PDF 원문에서 후보가 있는 쪽 열기</summary>
 <p>진행자가 원본 PDF와 같은 폴더에 <a href="prepare_pdf_source.py" download>검색 파일 변환 도구</a>를 저장합니다. Python 3.9 이상과 Poppler의 pdftotext가 있는 컴퓨터에서 <code>python3 prepare_pdf_source.py "원본.pdf"</code>를 실행하세요.</p>
 <p><a href="factcheck.html">기사 팩트체크</a>에서 검토 목록을 만들고 ‘원자료 관리 → 원자료 본문에서 근거 구간 찾기 → 파일에서 원자료 불러오기’를 엽니다. 생성된 <code>.journal-source.json</code>과 원본 PDF를 차례로 고르세요. 검색 결과의 PDF 쪽 링크를 누르면 그 자리에서 원문을 대조할 수 있습니다. 발췌문을 옮긴 뒤 자료 주소를 확인하고 ‘확인한 PDF 쪽 입력’을 누르면 다음 편집자도 같은 PDF 판본과 쪽에서 근거를 열 수 있습니다. 검색 파일에는 자료 전문이 들어갑니다.</p></details>
@@ -104,21 +107,23 @@ def zip_bytes(files):
     return buffer.getvalue()
 
 
-def field_practice_sample():
+def field_practice_sample(*, partial_grading=False):
     key = json.loads((CASES / 'labour-field-review' / 'coordinator-key.json').read_text())
     task = next(item for item in key['tasks'] if item['id'] == 'labour-rate')
     basis = {**task, 'caseId': key['caseId'], 'articleUrl': key['articleUrl']}
     # A separate version keeps this worked example out of other practice cohorts.
-    version = sha256(b'journal-practice-only/labour-rate/reason-comparison-v1').hexdigest()
+    scenario = 'partial-grading-v1' if partial_grading else 'reason-comparison-v1'
+    version = sha256(('journal-practice-only/labour-rate/' + scenario).encode()).hexdigest()
     correct = '분모는 15세 이상 인구다. 2023년 62.6%에서 2024년 62.7%로 0.1%포인트 올랐다.'
     wrong = '15~64세 인구에서 69.2%가 69.5%가 됐으므로 15세 이상 고용률이 0.1%포인트 올랐다.'
     entries = []
-    for i, (method, reason, grading_seconds) in enumerate([
+    responses = [('manual', correct, 5), ('journal', correct, 50)] if partial_grading else [
         ('manual', correct, 5), ('manual', correct, 5), ('journal', correct, 45), ('journal', wrong, 5)
-    ], start=1):
+    ]
+    for i, (method, reason, grading_seconds) in enumerate(responses, start=1):
         trial = {
-            'format': 'journal-field-trial-v1', 'id': f'practice-labour-reason-{i}',
-            'participant': f'가상-{i}', 'kind': 'practice', 'method': method,
+            'format': 'journal-field-trial-v1', 'id': f'practice-partial-grading-{i}' if partial_grading else f'practice-labour-reason-{i}',
+            'participant': f'가상-부분채점-{i}' if partial_grading else f'가상-{i}', 'kind': 'practice', 'method': method,
             'caseId': key['caseId'], 'articleUrl': key['articleUrl'], 'taskId': task['id'],
             'prompt': task['prompt'], 'kitVersion': version, 'status': 'completed',
             'journalUse': 'yes' if method == 'journal' else 'no', 'recovered': False, 'split': True,
@@ -127,7 +132,7 @@ def field_practice_sample():
             'verdict': 'supported', 'reason': reason
         }
         observation = {'id': sha256(('grading/' + trial['id']).encode()).hexdigest()[:32],
-                       'ms': grading_seconds * 1000, 'status': 'complete', 'partial': False}
+                       'ms': grading_seconds * 1000, 'status': 'complete', 'partial': partial_grading and method == 'journal'}
         entries.append({'trial': trial, 'basis': basis, 'expected': task['verdict'], 'locationGrade': 'yes',
                         'verdictGrade': 'yes', 'reasonGrade': 'no' if reason == wrong else 'yes',
                         'gradingTime': observation})
@@ -139,11 +144,14 @@ def packet_bytes():
     reviewer = {}
     add_page(reviewer, 'factcheck.html', standalone)
     practice = field_practice_sample()
+    partial_grading = field_practice_sample(partial_grading=True)
     editor_edition, editor_zip = editor_participant_kit()
     # A data URL also downloads from a local file:// launch page in Chrome.
     start = START.replace('{{PRACTICE_DATA}}', b64encode(practice).decode('ascii')).replace('{{EDITOR_KIT}}', editor_edition)
+    start = start.replace('{{PARTIAL_GRADING_DATA}}', b64encode(partial_grading).decode('ascii'))
     files = {**reviewer, '독립 기사 검토.zip': zip_bytes(reviewer),
              'participant-editor-study.zip': editor_zip, PRACTICE_SAMPLE: practice,
+             PARTIAL_GRADING_SAMPLE: partial_grading,
              PARTY_LEDGER_SAMPLE: (CASES / 'party-ledger-review' / 'legacy-score.json').read_bytes(),
              'prepare_pdf_source.py': (ROOT / 'tools' / 'prepare_pdf_source.py').read_bytes()}
     for filename, destination in QUOTE_PRACTICE.items():

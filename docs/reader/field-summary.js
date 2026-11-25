@@ -241,7 +241,7 @@
       area.append(node('p', '같은 배포본·과제의 평소 도구 기록과 저널 기록을 불러오면 절감률을 계산합니다.'));
       return;
     }
-    for (const task of c.compareTimes(groups)) {
+    for (const [taskIndex, task] of c.compareTimes(groups).entries()) {
       const card = node('article', '');
       const article = node('a', '과제의 기사 열기 ↗');
       article.href = task.articleUrl;
@@ -265,7 +265,10 @@
         card.append(node('p', '완료·중도 종료 시간 · ' + kitCoverage(arms, n => n.totalTimed + n.timedWithdrawn)));
       if (!task.byVersion.length)
         card.append(node('p', '산출 대기 · 두 방식 모두 시간 기록이 필요합니다.'));
-      for (const comparison of task.byVersion) card.append(versionComparison(comparison));
+      for (const [versionIndex, comparison] of task.byVersion.entries()) {
+        card.append(versionComparison(comparison, {task:taskIndex + 1, edition:versionIndex + 1,
+          practice:el('kind').value === 'practice', assigned:area.id === 'allocation-comparisons'}));
+      }
       if (arms.some(g => g.totalTimed + g.timedWithdrawn)) card.append(kitDetails(arms));
       area.append(card);
     }
@@ -355,6 +358,13 @@
     }
     return section;
   }
+  function personSeconds(numerator, denominator = 1, unit = '인초') {
+    const n = BigInt(numerator), d = BigInt(denominator);
+    const ms = n / d;
+    if (n > 0n && ms === 0n) return n + '/' + (1000n * d) + unit;
+    const fraction = String(ms % 1000n).padStart(3, '0').replace(/0+$/, '');
+    return (ms / 1000n).toLocaleString('ko-KR') + (fraction ? '.' + fraction : '') + unit;
+  }
   function personTimePanel(comparison) {
     const section = node('section', '');
     section.className = 'person-time';
@@ -363,33 +373,57 @@
       section.append(node('p', '진행자 채점 시간 미측정 · 합산 대기'));
       return section;
     }
-    const costs = {};
+    section.append(node('p', '1인초는 한 사람이 일한 1초입니다. 회수한 완료·중도 종료 기록의 참여자 활동 시간과 진행자 채점 시간을 더하고, 근거 위치·판정·판단 이유가 모두 맞은 답안 수로 나눕니다.'));
+    const cost = comparison.personCost;
     for (const method of ['manual', 'journal']) {
       const arm = comparison[method];
       if (!arm) continue;
+      const range = cost[method];
       const partial = arm.partialCompleted + arm.partialWithdrawn;
       const n = arm.totalTimed + arm.timedWithdrawn + partial;
       section.append(node('p', labels[method] + ' · 회수 ' + n + '건 · 참여자 전체 시간 ' + (n - partial) + '/' + n +
         '건 · 진행자 전체 시간 ' + arm.gradingComplete + '/' + n + '건 · 세 항목 성공 ' + arm.verifiedWithReason +
         '건, 확인 대기 ' + arm.reasonOutcomePending + '건'));
-      if (partial || arm.gradingComplete !== n || arm.reasonOutcomePending || !arm.verifiedWithReason) {
-        section.append(node('p', '성공당 인력 시간 산출 대기'));
+      if (range.upperDivisor !== null) {
+        const value = Number(range.observedMs) / arm.verifiedWithReason;
+        const amount = value > 0 && value < 50 ? '0.1초 미만' : seconds(value, 1);
+        section.append(node('p', '참여자 ' + personSeconds(arm.participantClockMs, 1, '초') + ' + 진행자 ' +
+          personSeconds(arm.gradingClockMs, 1, '초') + ' · 성공 1건당 ' + amount + '의 인력 시간'));
         continue;
       }
-      const participant = arm.totalMs + arm.withdrawnMs;
-      costs[method] = (participant + arm.gradingMs) / arm.verifiedWithReason;
-      const amount = costs[method] > 0 && costs[method] < 50 ? '0.1초 미만' : seconds(costs[method], 1);
-      section.append(node('p', '참여자 ' + minimumSeconds(participant) + ' + 진행자 ' + minimumSeconds(arm.gradingMs) +
-        ' · 성공 1건당 ' + amount + '의 인력 시간'));
+      section.append(node('p', '기록된 인력 시간 ' + personSeconds(range.observedMs) +
+        ' (참여자 ' + personSeconds(arm.participantClockMs) + ' + 진행자 ' + personSeconds(arm.gradingClockMs) + ')'));
+      if (!range.lowerDivisor) {
+        section.append(node('p', '세 항목 성공 0건 · 성공 1건당 인력 시간을 계산할 수 없습니다.'));
+        continue;
+      }
+      const low = personSeconds(range.observedMs, range.lowerDivisor);
+      const upperNote = arm.reasonOutcomePending ? '남은 채점 시간이 있어 상한 미확인' : '시간이 빠져 상한 미확인';
+      section.append(node('p', (arm.verifiedWithReason ? '' : '성공이 한 건 이상으로 확인되면 ') +
+        '성공 1건당 최소 ' + low + ' · ' + upperNote +
+        (arm.verifiedWithReason ? '' : '. 모두 실패하면 성공당 시간을 계산할 수 없습니다.')));
     }
-    if (comparison.version && costs.manual !== undefined && costs.journal !== undefined) {
-      const savedMs = costs.manual - costs.journal;
-      section.append(node('strong', '저널의 성공당 인력 시간 ' + timeChangeText({savedMs,
-        savedPct:costs.manual ? 100 * savedMs / costs.manual : null})));
+    const delta = cost.difference;
+    if (delta) {
+      const low = delta.low && BigInt(delta.low.numerator), high = delta.high && BigInt(delta.high.numerator);
+      if (delta.low && delta.high && low * BigInt(delta.high.denominator) === high * BigInt(delta.low.denominator)) {
+        const savedMs = -Number(low) / Number(delta.low.denominator);
+        const manualMs = Number(cost.manual.observedMs) / cost.manual.lowerDivisor;
+        section.append(node('strong', '저널의 성공당 인력 시간 ' + timeChangeText({savedMs,
+          savedPct:manualMs ? 100 * savedMs / manualMs : null})));
+      } else if (delta.low && low > 0n) {
+        section.append(node('strong', '저널은 세 항목 성공 1건당 최소 ' + personSeconds(low, delta.low.denominator) + ' 더 걸렸습니다.'));
+      } else if (delta.high && high < 0n) {
+        section.append(node('strong', '저널은 세 항목 성공 1건당 최소 ' + personSeconds(-high, delta.high.denominator) + ' 절감했습니다.'));
+      } else if (low === 0n || high === 0n) {
+        section.append(node('p', '저널의 성공당 인력 시간은 평소 검증 도구와 같거나 ' + (low === 0n ? '더 깁니다.' : '더 짧습니다.')));
+      } else {
+        section.append(node('p', '남아 있는 시간과 채점 결과로는 어느 방식의 성공당 인력 시간이 더 짧은지 확정할 수 없습니다.'));
+      }
     }
     return section;
   }
-  function versionComparison(comparison) {
+  function versionComparison(comparison, scope) {
     const card = node('section', '');
     const heading = node('h4', comparison.version ? '배포본 ' + comparison.version : '버전 미확인');
     heading.style.overflowWrap = 'anywhere';
@@ -439,6 +473,17 @@
     if (comparison.returnedCostWithReason)
       card.append(returnedCostPanel(comparison.version, comparison.returnedCostWithReason, true));
     card.append(personTimePanel(comparison));
+    const save = node('button', '이 과제의 시간 비교표 HTML 저장');
+    save.type = 'button';
+    save.addEventListener('click', () => {
+      const panels = [partialTimePanel(comparison).firstElementChild, personTimePanel(comparison)].filter(Boolean);
+      const html = window.JournalFieldTimeReport.html(comparison, scope, panels, timeChangeText);
+      const group = scope.practice ? '연습' : '현업';
+      const method = scope.assigned ? '원배정' : '기록상';
+      downloadFile(new Blob([html], {type:'text/html;charset=utf-8'}),
+        '현장-시간비교-' + group + '-' + method + '-과제' + scope.task + '-판본' + scope.edition + '.html');
+    });
+    card.append(save);
     return card;
   }
   function assignmentCounts(n) {
@@ -1275,8 +1320,11 @@
     persistDraft();
   };
   function downloadJson(data, filename) {
+    downloadFile(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}), filename);
+  }
+  function downloadFile(blob, filename) {
     const a = document.createElement('a');
-    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}));
+    const url = URL.createObjectURL(blob);
     a.href = url;
     a.download = filename;
     a.click();

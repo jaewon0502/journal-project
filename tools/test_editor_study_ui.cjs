@@ -461,12 +461,13 @@ test('여러 파일을 접수하다 실패하면 선택 순서와 복구 방법�
   }
 });
 
-test('진행자는 같은 행의 배정 코드와 ZIP을 복사하고 복사가 제한되면 코드 전체를 선택한다', async t => {
+test('공통 ZIP 한 개와 각자의 코드만 담은 참여 안내를 준비하고 다른 판본에는 원래 자료를 안내한다', async t => {
   const current = 'cd'.repeat(32), previous = 'ab'.repeat(32);
   const p = page(t, '', undefined, undefined, false, current);
   const priorCode = 'J2-1-E0000000000000001-' + previous;
   p.el('roster-code').value = priorCode;
   p.el('recover-roster').requestSubmit();
+  assert.equal(p.el('invite-common-download').hasAttribute('href'), false);
   p.el('issue-codes').click();
   const rows = [...p.el('invites').querySelectorAll('tbody tr')];
   assert.equal(rows.length, 5);
@@ -478,11 +479,37 @@ test('진행자는 같은 행의 배정 코드와 ZIP을 복사하고 복사가 
   await t.waitFor(() => assert.match(p.el('import-status').textContent, /복사했습니다/));
   assert.equal(copied, rows[1].querySelector('code').textContent);
   assert.ok(copied.endsWith(current));
-  assert.equal(rows[1].querySelector('a[download]').getAttribute('href'), 'participant-editor-study.zip');
+  assert.equal(p.el('invite-common').hidden,false);
+  assert.equal(p.el('invite-common-download').getAttribute('href'),'participant-editor-study.zip');
+  assert.equal(p.w.document.querySelectorAll('a[href="participant-editor-study.zip"]').length,1);
+  assert.equal(rows.filter(row => row.cells[3].textContent.includes('이번 판본')).length,4);
+  const codes = rows.map(row => row.querySelector('code').textContent);
+  assert.equal(new Set(codes.slice(1)).size,4);
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].querySelectorAll('button')[1].click();
+    assert.deepEqual(copied.match(/J[12]-[\w-]+/g), [codes[i]]);
+    assert.match(copied,/editor-study\.html.*네 과제/);
+    assert.match(copied,/내 참여 기록 내려받기.*JSON.*개별 회신/);
+    assert.doesNotMatch(copied,/명부|기준 답|보수|진보|진행자용/);
+  }
+  assert.equal(p.workspace().records.length,0);
   p.w.navigator.clipboard.writeText = async () => { throw new Error('denied'); };
+  rows[2].querySelectorAll('button')[1].click();
+  await t.waitFor(() => assert.equal(p.el('invite-manual').hidden,false));
+  const manual = p.el('invite-manual-text');
+  assert.deepEqual(manual.value.match(/J[12]-[\w-]+/g),[codes[2]]);
+  assert.equal(p.w.document.activeElement,manual);
+  assert.equal(manual.value.slice(manual.selectionStart,manual.selectionEnd),manual.value);
   rows[3].querySelector('button').click();
   await t.waitFor(() => assert.match(p.el('import-status').textContent, /코드 전체를 선택/));
   assert.equal(p.w.getSelection().toString(), rows[3].querySelector('code').textContent);
+  assert.equal(p.el('invite-manual').hidden,true);
+  assert.equal(manual.value,'');
+  const unstamped = page(t);
+  unstamped.el('issue-codes').click();
+  assert.equal(unstamped.el('invite-common').hidden,true);
+  assert.equal(unstamped.el('invite-common-download').hasAttribute('href'),false);
+  assert.match(unstamped.el('invites').textContent,/판본 미지정/);
 });
 
 test('J2는 지정한 참가자 ZIP에서만 등록하고, 재개와 응답 저장 중에도 처음 발급한 코드를 유지한다', async t => {

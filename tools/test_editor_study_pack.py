@@ -72,7 +72,7 @@ class EditorStudyPack(unittest.TestCase):
             self.assertIn('id="resume-file"', page)
             self.assertIn('editor-study-resume.js', expected)
             self.assertIn('이어하기 파일', archive.read('시작 안내.txt').decode())
-            for marker in ['id="dashboard"', 'id="demo-view"', 'id="demo-example"', 'id="timing-coverage"', 'id="case-quality"', 'id="issue-codes"', 'id="import-files"']:
+            for marker in ['id="dashboard"', 'id="demo-view"', 'id="demo-example"', 'id="timing-coverage"', 'id="case-quality"', 'id="issue-codes"', 'id="import-files"', 'invite-common-download', 'invite-manual-text']:
                 self.assertNotIn(marker, page)
             self.assertNotIn('editor-study.html', archive.read('factcheck.html').decode())
             cases = archive.read('editor-study-cases.js')
@@ -83,7 +83,7 @@ class EditorStudyPack(unittest.TestCase):
             self.assertNotIn(b'function demoRecords', core)
             self.assertNotIn(b'function verdictStats', core)
             ui = archive.read('editor-study-ui.js')
-            for marker in (b'showCaseQuality', b'showEditions', b'showDashboard', b'recover-roster', b'issueCodes'):
+            for marker in (b'showCaseQuality', b'showEditions', b'showDashboard', b'recover-roster', b'issueCodes', b'inviteCopyButton', b'participant-editor-study.zip'):
                 self.assertNotIn(marker, ui)
             archive.extractall(directory)
             # Exercise the exact compiled study assets. Verify all eight public

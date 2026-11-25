@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from zipfile import ZipFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_facilitator_pack import CASES, CASE_FOLDERS, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
+from build_facilitator_pack import CASES, CASE_FOLDERS, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, PRACTICE_SAMPLE, QUOTE_PRACTICE, READER, packet_bytes
 from build_editor_study_pack import packet_bytes as editor_participant_zip
 from build_field_participant_packs import packet_pair
 
@@ -92,7 +92,7 @@ class FacilitatorPack(unittest.TestCase):
             for asset in (n for n in files if n.endswith(('.js', '.css'))):
                 self.assertEqual(archive.read(asset), (READER / asset).read_bytes())
             self.assertIn(b'factcheck.html?study=1', archive.read('editor-study-ui.js'))
-            expected_json = {PRACTICE_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}
+            expected_json = {PRACTICE_SAMPLE, PARTIAL_GRADING_SAMPLE, PARTY_LEDGER_SAMPLE, *QUOTE_PRACTICE.values()}
             sample = json.loads(archive.read(PARTY_LEDGER_SAMPLE))
             self.assertIs(sample['demo'], True)
             self.assertEqual(sample['articleAssessment']['ratings']['standards']['level'], 3)
@@ -135,6 +135,14 @@ class FacilitatorPack(unittest.TestCase):
             self.assertEqual(sample['format'], 'journal-field-grades-v1')
             rows = sample['entries']
             self.assertEqual(len(rows), 4)
+            data_url = links.downloads[Path(PARTIAL_GRADING_SAMPLE).name]
+            partial_bytes = coordinator.read(PARTIAL_GRADING_SAMPLE)
+            self.assertEqual(b64decode(data_url.split(',', 1)[1], validate=True), partial_bytes)
+            pair = json.loads(partial_bytes)['entries']
+            self.assertTrue(all(r['trial']['kind'] == 'practice' and r['reasonGrade'] == 'yes' for r in pair))
+            self.assertTrue({r['trial']['participant'] for r in rows}.isdisjoint(r['trial']['participant'] for r in pair))
+            self.assertEqual([(sum(r['trial']['phaseMs'].values()),r['gradingTime']['ms'],r['gradingTime']['partial'])
+                              for r in pair], [(60000,5000,False),(40000,50000,True)])
             key = json.loads(coordinator.read('채점표/고용/coordinator-key.json'))
             target = next(task for task in key['tasks'] if task['id'] == 'labour-rate')
             for row in rows:
@@ -157,6 +165,7 @@ class FacilitatorPack(unittest.TestCase):
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(coordinator.read(name))) as participant:
                         self.assertNotIn(PRACTICE_SAMPLE, participant.namelist())
+                        self.assertNotIn(PARTIAL_GRADING_SAMPLE, participant.namelist())
 
     def test_two_reviewers_receive_the_editor_without_scoring_keys_or_each_others_work(self):
         with ZipFile(BytesIO(packet_bytes())) as coordinator:

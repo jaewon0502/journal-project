@@ -21,6 +21,26 @@ function response(assignment, elapsedMs, trialChanges = {}, gradeChanges = {}) {
     verdictGrade:trial.verdict === basis.verdict ? 'yes' : 'no', ...gradeChanges};
 }
 
+test('합산 인력 시간의 차이는 밀리초 정수와 성공 건수로 비교하며 표시값의 반올림으로 결론 내리지 않는다', () => {
+  const max = Number.MAX_SAFE_INTEGER;
+  const records = Array.from({length:6}, (unused,i) => {
+    const a = slot(i, i < 3 ? 'manual' : 'journal');
+    return response(a, max, {}, {reasonGrade:'yes', gradingTime:{
+      id:String(i).padStart(32,'0'), ms:i===5 ? 1 : 0, status:'complete', partial:i===5}});
+  });
+  const cost = entries => core.compareTimes(core.group(entries))[0].byVersion[0].personCost;
+  const result = cost(records);
+  assert.equal(result.manual.observedMs, String(BigInt(max) * 3n));
+  assert.equal(result.journal.observedMs, String(BigInt(max) * 3n + 1n));
+  assert.deepEqual(result.difference, {low:{numerator:'3',denominator:'9'},high:null});
+  records[5].gradingTime.ms=0;
+  assert.deepEqual(cost(records).difference, {low:{numerator:'0',denominator:'9'},high:null});
+  records[0].gradingTime.status='paused';
+  assert.deepEqual(cost(records).difference, {low:null,high:null});
+  records.forEach(e=>{e.reasonGrade='';});
+  assert.equal(cost(records).difference,null);
+});
+
 test('같은 배정에서 목표 시간을 추가·삭제·교체할 수 없고 초를 밀리초로 정확하게 저장한다', () => {
   const assigned = slot('one');
   const {targetSeconds, ...legacy} = assigned;

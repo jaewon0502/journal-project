@@ -206,38 +206,69 @@
     box.append(node('small', caption)); return box;
   }
   // coordinator-only:begin
+  let lastInviteAction;
+  function inviteCopyButton(ordinal, label, content, codeNode) {
+    const button = node('button', label);
+    const who = '배정 ' + ordinal + '번';
+    button.type = 'button';
+    button.setAttribute('aria-label', who + ' ' + (codeNode ? '초대 코드 복사' : label));
+    button.onclick = async () => {
+      lastInviteAction = button;
+      el('invite-manual').hidden = true;
+      el('invite-manual-text').value = '';
+      try {
+        await navigator.clipboard.writeText(content);
+        if (lastInviteAction === button)
+          message('import-status', who + (codeNode ? ' 초대 코드를' : ' 개인 참여 안내를') + ' 복사했습니다.');
+      } catch (_) {
+        if (lastInviteAction !== button) return;
+        if (codeNode) {
+          const range = document.createRange();
+          range.selectNodeContents(codeNode);
+          const selection = window.getSelection();
+          selection.removeAllRanges(); selection.addRange(range);
+          message('import-status', who + ' 코드 전체를 선택했습니다. 복사해서 전달하세요.');
+        } else {
+          el('invite-manual-label').textContent = who + ' 개인 참여 안내 · 선택한 내용을 복사하세요.';
+          el('invite-manual').hidden = false;
+          const field = el('invite-manual-text');
+          field.value = content; field.focus(); field.select();
+          message('import-status', who + ' 개인 참여 안내를 선택했습니다. 복사해서 전달하세요.');
+        }
+      }
+    };
+    return button;
+  }
   function showInvitations() {
     el('export-all').disabled = !records.length && !invitations.length;
-    if (assignedKit) el('invite-help').textContent = '화면 순서대로 새 코드와 같은 행의 참여자 ZIP을 한 명씩 전달하세요. 이전에 발급한 코드는 처음 전달한 ZIP을 사용하세요. 초대만 받은 사람은 등록 인원에 포함되지 않습니다.';
+    lastInviteAction = null;
+    el('invite-manual').hidden = true;
+    el('invite-manual-text').value = '';
     const issued = invitations.filter(inv => !inv.atDevice);
+    const common = assignedKit && issued.some(inv => core.parseInvite(inv.code).kitVersion === assignedKit);
+    el('invite-common').hidden = !common;
+    const download = el('invite-common-download');
+    if (common) download.href = 'participant-editor-study.zip';
+    else download.removeAttribute('href');
     const rows = issued.map(inv => {
       const expected = core.parseInvite(inv.code).kitVersion;
       const code = node('code', inv.code, 'invitation-code');
-      const copy = node('button', '코드 복사');
-      copy.type = 'button';
-      copy.setAttribute('aria-label', '배정 ' + inv.ordinal + '번 초대 코드 복사');
-      copy.onclick = async () => {
-        try {
-          await navigator.clipboard.writeText(inv.code);
-          message('import-status', '배정 ' + inv.ordinal + '번 초대 코드를 복사했습니다.');
-        } catch (_) {
-          const range = document.createRange();
-          range.selectNodeContents(code);
-          const selection = window.getSelection();
-          selection.removeAllRanges(); selection.addRange(range);
-          message('import-status', '배정 ' + inv.ordinal + '번 코드 전체를 선택했습니다. 복사해서 전달하세요.');
-        }
-      };
+      const guide = [
+        '편집자 팩트체크 비교 실험에 참여해 주세요.',
+        '본인 초대 코드: ' + inv.code,
+        '함께 받은 참여자 ZIP의 압축을 풀고 editor-study.html을 여세요. 위 코드를 입력해 등록한 뒤 네 과제를 진행해 주세요.',
+        '완료하면 ‘내 참여 기록 내려받기’를 눌러 저장한 JSON 파일을 진행자에게 개별 회신해 주세요.'
+      ].join('\n');
+      const buttons = node('div');
+      buttons.append(inviteCopyButton(inv.ordinal, '코드 복사', inv.code, code), ' ',
+        inviteCopyButton(inv.ordinal, '개인 참여 안내 복사', guide));
       let material = '판본 미지정 · 실험에서 정한 참여자 ZIP 사용';
       if (expected && expected === assignedKit) {
-        material = node('a', '참여자 ZIP');
-        material.href = 'participant-editor-study.zip';
-        material.download = '';
-        material.setAttribute('aria-label', '배정 ' + inv.ordinal + '번 참여자 ZIP 내려받기');
+        material = '이번 판본 · 위 공통 ZIP 사용';
       } else if (expected) {
         material = '자료 ' + expected.slice(0, 12) + ' · 이 코드를 발급한 진행자 폴더에서 받으세요.';
       }
-      return [Math.ceil(inv.ordinal / 4) + '묶음 · ' + inv.ordinal + '번', code, copy, material,
+      return [Math.ceil(inv.ordinal / 4) + '묶음 · ' + inv.ordinal + '번', code, buttons, material,
         records.some(r => r.participantId === inv.id) ? '기록 있음' : '기록 대기'];
     });
     table('invites', ['배정', '전달할 초대 코드', '복사', '함께 보낼 자료', '회신'], rows, '발급된 초대 코드가 없습니다.');

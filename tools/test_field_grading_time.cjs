@@ -102,6 +102,54 @@ test('두 편집 역할의 시간을 따로 측정한 뒤 원배정·기록상 �
   assert.match(legacy.person(),/진행자 전체 시간 0\/1건/);
 });
 
+test('채점 시간 일부가 빠져도 합산 인력 시간이 반드시 더 든 경우를 양쪽 배정 화면에 표시한다', async t => {
+  const p = page(t), trials = [trial(1,'manual',60000), trial(2,'journal',40000)];
+  await p.upload('key-file',key);
+  await p.upload('roster-file',{format:'journal-field-assignment-v1', assignments:trials.map(
+    ({participant,method,caseId,articleUrl,taskId,prompt})=>({participant,method,caseId,articleUrl,taskId,prompt}))});
+  await p.upload('imports',...trials);
+  for (const [i, duration] of [[1,5000],[2,50000]]) {
+    p.click(i,'측정 시작'); p.wait(duration);
+    p.grade(i,'근거 위치'); p.grade(i,'판단 이유');
+    if (i === 2) p.click(i,'빠진 시간 표시');
+    p.click(i,'채점 시간 확정');
+  }
+  for (const section of ['comparisons','allocation-comparisons']) {
+    const text = p.person(section);
+    assert.match(text,/성공 1건당 65.0초/);
+    assert.match(text,/기록된 인력 시간 90인초 \(참여자 40인초 \+ 진행자 50인초\)/);
+    assert.match(text,/성공 1건당 최소 90인초 · 시간이 빠져 상한 미확인/);
+    assert.match(text,/저널은 세 항목 성공 1건당 최소 25인초 더 걸렸습니다/);
+  }
+  const reversed = await p.save();
+  for (const e of reversed.entries) e.trial.method = e.trial.method === 'journal' ? 'manual' : 'journal';
+  const other = page(t);
+  await other.upload('imports', reversed);
+  assert.match(other.person(), /저널은 세 항목 성공 1건당 최소 25인초 절감했습니다/);
+  for (const e of reversed.entries) delete e.trial.kitVersion;
+  const unknown = page(t);
+  await unknown.upload('imports',reversed);
+  assert.match(unknown.person(),/최소 90인초/);
+  assert.doesNotMatch(unknown.person(),/최소 25인초/);
+});
+
+test('이유 미채점, 실패와 중도 종료에 쓴 인력 시간의 분모와 상한을 구별한다', async t => {
+  const p = page(t);
+  await p.upload('key-file',key);
+  await p.upload('imports',trial(1,'manual',10000),trial(2,'manual',20000,{status:'withdrawn'}),
+    trial(3,'journal',12000),trial(4,'journal',15000));
+  for (const n of [1,2,3,4]) {
+    p.click(n,'측정 시작'); p.wait(1000);
+    if (n !== 2) p.grade(n,'근거 위치',n===1 ? 'no' : 'yes');
+    p.click(n,'채점 시간 확정');
+  }
+  const pending = p.person();
+  assert.match(pending,/기록된 인력 시간 32인초.*세 항목 성공 0건 · 성공 1건당 인력 시간을 계산할 수 없습니다/);
+  assert.match(pending,/회수 2건 · 참여자 전체 시간 2\/2건 · 진행자 전체 시간 2\/2건 · 세 항목 성공 0건, 확인 대기 2건/);
+  assert.match(pending,/성공이 한 건 이상으로 확인되면 성공 1건당 최소 14.5인초 · 남은 채점 시간이 있어 상한 미확인/);
+  assert.doesNotMatch(pending,/저널은 세 항목 성공/);
+});
+
 test('독립 채점 시계가 달라도 같은 기준에서 갈린 근거 위치와 판단 이유를 익명으로 알린다', async t => {
   const trials = [trial(1,'manual',60000), trial(2,'journal',40000)];
   async function independentGrade(lastScore, duration) {
