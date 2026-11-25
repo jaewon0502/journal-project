@@ -37,6 +37,64 @@ test('수치는 단위와 크기를 붙여 비교하고, 조사처럼 끝나는 
   assert.ok(find('회의 개회.\n어린이 수당 확대.', '어린이가 받는 수당')[0].matched.includes('어린이'));
 });
 
+test('같은 금액의 다른 통화보다 질문한 매출의 원화 문단을 찾고, 기사와 다른 금액도 남긴다', () => {
+  const q = '2025년 매출은 27억 원이었나?';
+  const wrong = ['2025년 매출은 27억 달러였다.', '2025년 매출은 27억 유로였다.', '2025년 매출은 27억 엔이었다.'];
+  for (const amount of ['27억 원', '26억 원']) {
+    const right = '2025년 매출은 ' + amount + '이었다.';
+    const hits = find([...wrong, right].join('\n'), q);
+    assert.deepEqual([hits[0].paragraph, hits[0].text], [4, right]);
+    assert.ok(hits.some(h => wrong.includes(h.text)));
+  }
+  const scales = ['2025년 매출은 27만 원이었다.', ...wrong, '2025년 매출은 26억 원이었다.'];
+  assert.equal(find(scales.join('\n'), q)[0].paragraph, 5);
+});
+
+test('복합 금액에서 지표·연도·통화가 맞는 문단을 찾으며 반대 수치도 맨 앞에 둔다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  const currencies = ['원','달러','유로','엔'];
+  for (const [currency, printed] of [['원','120백만'], ['원','110백만'], ['달러','110백만'], ['엔','1억 1천만']]) {
+    const source = currencies.filter(c => c !== currency).map(c => '2025년 매출은 1억 2천만 ' + c + '이었다.');
+    source.push('2024년 매출은 1억 2천만 ' + currency + '이었다.',
+      '2025년 매출은 제자리였다. 영업비용은 1억 2천만 ' + currency + '이었다.',
+      '2025년 매출은 ' + printed + ' ' + currency + '이었다.');
+    const result = search(source.join('\n'), '2025년 매출은 1억 2천만 ' + currency + '이었나?');
+    assert.deepEqual([result.passages[0].paragraph, result.passages[0].text], [6, source[5]]);
+  }
+});
+
+test('금액 범위·여러 금액·잘못된 단위 순서를 한 통화 질문으로 해석하지 않는다', () => {
+  const {search} = require('../docs/reader/evidence-search.js');
+  for (const reading of ['1억~2천만', '1억 - 2천만', '1 -2천만', '1억에서 2천만', '1억 2천만 원부터 3억', '1억 원과 2천만',
+    '1만 2억', '1억 2억', '1,20억 2천만', '1억'.repeat(1200) + ' 2천만']) {
+    const source = ['달러','유로','엔'].map(c => '2025년 매출은 ' + reading + ' ' + c + '이었다.');
+    source.push('2025년 매출은 110백만 원이었다.');
+    const result = search(source.join('\n'), '2025년 매출은 ' + reading + ' 원이었나?');
+    assert.notEqual(result.passages[0]?.paragraph, 4, reading.slice(0,40));
+  }
+});
+
+test('세대와 인원 등 서로 다른 단위를 구분하고 다른 항목의 수치로 해당 문단을 우대하지 않는다', () => {
+  const q = '2025년 지원 가구는 300가구였다.';
+  const source = ['2025년 지원 가구는 300명으로 집계했다. 인근 조사 대상은 300가구였다.',
+    '2025년 지원 가구는 300건으로 집계했고 모집 대상은 300가구였다.',
+    '2025년 지원 가구는 300원으로 집계했다.', '2024년 지원 가구는 300가구였다.'];
+  for (const amount of ['300가구', '299가구']) {
+    const right = '2025년 지원 가구는 ' + amount + '로 집계했다.';
+    assert.equal(find([...source, right].join('\n'), q)[0].text, right);
+  }
+});
+
+test('접미어와 복합 금액에서 부분 일치한 단위로 원문 순위를 올리지 않는다', () => {
+  const q = '2025년 지급액은 50만 원인가?';
+  const right = '2025년 지급액은 49만 원이었다.';
+  const source = ['2025년 지급액은 50만 원산지표시 대상과 관련된다.',
+    '2025년 지급액은 2억 50만 원이었다.', '2025년 지급액은 50만 원/건이었다.', right];
+  assert.equal(find(source.join('\n'), q)[0].text, right);
+  const points = ['찬성률은 2% 증가했다.', '찬성률은 1.5퍼센트포인트 상승했다.'];
+  assert.equal(find(points.join('\n'), '찬성률은 2%p 올랐다.')[0].paragraph, 2);
+});
+
 test('같은 낱말의 원형과 활용형을 한 번만 세어 관련 문단을 앞에 둔다', () => {
   const doc = ['시의회는 오전 10시 본회의를 열었다.', '시의회는 회의 시작 전 묵념을 했다.', '시의회는 다음 회기 일정을 공지했다.',
     '시의회가 돌봄 예산 3억 원 삭감안을 의결했다.', '교육 예산은 동결됐다.', '복지 예산은 늘었다.', '주거 예산은 줄었다.',
@@ -309,4 +367,16 @@ test('명시한 단위가 없는 단독 표는 보류하고 주석과 다른 표
   assert.equal(find(chart + '\n' + note, q)[0].text, note);
   const second = '정비 지출\n(단위: 원)\n2019\t2020\n정비 금액의 합계\t930\t1400';
   assert.equal(find(chart + '\n' + second, q)[0].text, '정비 금액의 합계\t930\t1400');
+});
+
+test('사건의 연도를 첫 열에 둔 표에서는 주장한 수가 다른 해에 있어도 요청한 연도·지표 행을 먼저 보여 준다', () => {
+  const lines = ['신고년\t신고건수\t부상자수', '2018\t3800\t126', '2019\t4100\t132'];
+  const doc = lines.join('\n');
+  const hits = find(doc, '2018년 부상자는 132명이었나?', {includeContext: true});
+  assert.equal(hits[0].paragraph, 2);
+  assert.equal(hits[0].text, lines[1]);
+  assert.ok(hits[0].context.some(row => row.text === lines[0]));
+  const unrelated = ['번호\t부상자수', '2018\t126', '2019\t132'].join('\n');
+  const [first] = find(unrelated, '2018년 부상자는 132명이었나?');
+  assert.notEqual(first.paragraph, 2, '문서 번호에는 연도 표의 우선순위를 주지 않는다.');
 });

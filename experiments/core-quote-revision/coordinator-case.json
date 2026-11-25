@@ -1,0 +1,642 @@
+{
+  "format": "journal-retention-case",
+  "version": 3,
+  "reviewId": "6e262c689d8f4554dedaeaf150e9709f94261c36f5185379d87764fd13d9df6d",
+  "evidenceDigest": "b34920c8aa4a56db5196ac193017e00e12412fd7d4ff2d57ec0a928388a8c855",
+  "items": [
+    {
+      "name": "가상-편집자1-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "b50de519c9c54288259e4755a5ee4ed7",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "B",
+            "articleSha256": "f4706486969edc188494627979451b4b98fb255f983cf0f97185abe20aa9f3c9",
+            "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+          },
+          "after": {
+            "slot": "A",
+            "articleSha256": "f92ed590f6c619e82ba69a70df5588589cbf7960722720c748bca4d09a4d3058",
+            "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+          }
+        }
+      }
+    },
+    {
+      "name": "가상-편집자1-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.\n여당 의원은 “바람직하다”고 말했다.",
+        "articleDraft": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.\n여당 의원은 “바람직하다”고 말했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 예산 의결서",
+            "url": "https://transit.example.invalid/source-0",
+            "locator": "의결서 1쪽 사업비",
+            "excerpt": "시의회는 시범운행 예산 10억 원을 의결했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 공청회 회의록",
+            "url": "https://transit.example.invalid/source-1",
+            "locator": "회의록 2쪽 발언 순서 3·4",
+            "excerpt": "야당 의원은 “무책임하다”고 말했다. 여당 의원은 “바람직하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-3",
+            "title": "가상 공청회 속기록",
+            "url": "https://transit.example.invalid/source-2",
+            "locator": "속기록 3쪽 찬반 발언",
+            "excerpt": "여당 의원은 “바람직하다”고 말했다. 야당 의원은 “무책임하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-4",
+            "title": "가상 시범운행 결정문",
+            "url": "https://transit.example.invalid/source-3",
+            "locator": "결정문 2항 의견 반영",
+            "excerpt": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+            "version": "연습용 확정본"
+          }
+        ],
+        "receipts": [
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-0",
+            "articleBinding": "3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05",
+            "binding": "f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb",
+            "references": "1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775",
+            "recordedAt": "2026-11-24T22:40:56.811Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-1"
+            ],
+            "reason": "의결서의 사업비와 금액이 같다.",
+            "acknowledged": true,
+            "checksum": "fe631274315bf0c788e78e85498b359237c4d88954d3fb800cd1dcda88c0ba89"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-26",
+            "articleBinding": "e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931",
+            "binding": "d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942",
+            "references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "recordedAt": "2026-11-24T22:40:56.811Z",
+            "status": "opinion",
+            "sourceIds": [],
+            "reason": "성과를 지켜보자는 의견이다.",
+            "acknowledged": true,
+            "checksum": "705b3a455ad60f17a8be8a5e146c79e6f37e996d363d376d9389de9ded1fca53"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-44",
+            "articleBinding": "7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd",
+            "binding": "f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97",
+            "references": "01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce",
+            "recordedAt": "2026-11-24T22:40:56.811Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-4"
+            ],
+            "reason": "결정문에서 의견 반영과 결정의 순서를 확인했다.",
+            "acknowledged": true,
+            "checksum": "6840880811339482f56042fd6a8564766c2187bb60486600df85d9f8a011f48b"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-85",
+            "articleBinding": "71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1",
+            "binding": "fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c",
+            "references": "7bc27c94cdc0346e861180c5947cafdc7747a60cb1d55b9e0c41d756fd9cf371",
+            "recordedAt": "2026-11-24T22:40:56.811Z",
+            "status": "attribution",
+            "sourceIds": [
+              "source-2"
+            ],
+            "reason": "회의록에서 발언 주체와 표현을 확인했다.",
+            "acknowledged": true,
+            "contentStatus": "opinion",
+            "contentChecked": true,
+            "contentReason": "사업에 대한 찬반 의견을 밝힌 발언이다.",
+            "checksum": "e98d4564288aad15bfdbee813b10d120e10287781922eb222c59655ef3b54220"
+          }
+        ],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05\",\"binding\":\"f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb\",\"references\":\"1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775\",\"status\":\"fact\",\"sourceIds\":[\"source-1\"],\"reason\":\"의결서의 사업비와 금액이 같다.\",\"acknowledged\":true},false],[\"unit-26\",\"d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942\",\"opinion\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-26\",\"articleBinding\":\"e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931\",\"binding\":\"d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942\",\"references\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\",\"status\":\"opinion\",\"sourceIds\":[],\"reason\":\"성과를 지켜보자는 의견이다.\",\"acknowledged\":true},false],[\"unit-44\",\"f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-44\",\"articleBinding\":\"7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd\",\"binding\":\"f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97\",\"references\":\"01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce\",\"status\":\"fact\",\"sourceIds\":[\"source-4\"],\"reason\":\"결정문에서 의견 반영과 결정의 순서를 확인했다.\",\"acknowledged\":true},false],[\"unit-85\",\"fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c\",\"attribution\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-85\",\"articleBinding\":\"71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1\",\"binding\":\"fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c\",\"references\":\"7bc27c94cdc0346e861180c5947cafdc7747a60cb1d55b9e0c41d756fd9cf371\",\"status\":\"attribution\",\"sourceIds\":[\"source-2\"],\"reason\":\"회의록에서 발언 주체와 표현을 확인했다.\",\"acknowledged\":true,\"contentStatus\":\"opinion\",\"contentChecked\":true,\"contentReason\":\"사업에 대한 찬반 의견을 밝힌 발언이다.\"},false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05\"],[\"unit-26\",\"e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931\"],[\"unit-44\",\"7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd\"],[\"unit-85\",\"71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1\"]]]",
+          "coreRowIds": [
+            "unit-0",
+            "unit-85"
+          ],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-44",
+              "quote": "시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.",
+              "sourceId": "source-4",
+              "sourceQuote": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+              "reason": "의견을 듣고 일정을 조정한 과정을 결정문 강도에 맞게 썼다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "b50de519c9c54288259e4755a5ee4ed7",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "가상-편집자1-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 묵살하고 시범운행을 강행한다.\n야당 의원은 “무책임하다”고 말했다.",
+        "articleDraft": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 묵살하고 시범운행을 강행한다.\n야당 의원은 “무책임하다”고 말했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 예산 의결서",
+            "url": "https://transit.example.invalid/source-0",
+            "locator": "의결서 1쪽 사업비",
+            "excerpt": "시의회는 시범운행 예산 10억 원을 의결했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 공청회 회의록",
+            "url": "https://transit.example.invalid/source-1",
+            "locator": "회의록 2쪽 발언 순서 3·4",
+            "excerpt": "야당 의원은 “무책임하다”고 말했다. 여당 의원은 “바람직하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-3",
+            "title": "가상 공청회 속기록",
+            "url": "https://transit.example.invalid/source-2",
+            "locator": "속기록 3쪽 찬반 발언",
+            "excerpt": "여당 의원은 “바람직하다”고 말했다. 야당 의원은 “무책임하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-4",
+            "title": "가상 시범운행 결정문",
+            "url": "https://transit.example.invalid/source-3",
+            "locator": "결정문 2항 의견 반영",
+            "excerpt": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+            "version": "연습용 확정본"
+          }
+        ],
+        "receipts": [
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-0",
+            "articleBinding": "74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f",
+            "binding": "3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527",
+            "references": "1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775",
+            "recordedAt": "2026-11-24T22:40:56.808Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-1"
+            ],
+            "reason": "의결서의 사업비와 금액이 같다.",
+            "acknowledged": true,
+            "checksum": "00259d81d5ba92a2f087e6af3e5a85db7a5aeba521737cc4e29eed6726b0673c"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-26",
+            "articleBinding": "2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73",
+            "binding": "dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014",
+            "references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "recordedAt": "2026-11-24T22:40:56.808Z",
+            "status": "opinion",
+            "sourceIds": [],
+            "reason": "성과를 지켜보자는 의견이다.",
+            "acknowledged": true,
+            "checksum": "f42f109cb8a76ad9717d87603c6f54f712e84a24d639b4edd3e724839bccc45b"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-44",
+            "articleBinding": "ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9",
+            "binding": "b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92",
+            "references": "01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce",
+            "recordedAt": "2026-11-24T22:40:56.808Z",
+            "status": "contradicted",
+            "sourceIds": [
+              "source-4"
+            ],
+            "reason": "결정문은 의견 반영 뒤 운행 시간을 바꿨다고 기록한다.",
+            "acknowledged": true,
+            "checksum": "68fe8c80331397d939defd8061fd099b40f9abfb3c76601ef1f4fe9e79666bca"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-72",
+            "articleBinding": "5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85",
+            "binding": "fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620",
+            "references": "7bc27c94cdc0346e861180c5947cafdc7747a60cb1d55b9e0c41d756fd9cf371",
+            "recordedAt": "2026-11-24T22:40:56.809Z",
+            "status": "attribution",
+            "sourceIds": [
+              "source-2"
+            ],
+            "reason": "회의록에서 발언 주체와 표현을 확인했다.",
+            "acknowledged": true,
+            "contentStatus": "opinion",
+            "contentChecked": true,
+            "contentReason": "사업에 대한 찬반 의견을 밝힌 발언이다.",
+            "checksum": "5f28fc6df28d2f90cca05c24d1242c61ebdbfd57439e803042b40f6ad0d7cc0b"
+          }
+        ],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f\",\"binding\":\"3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527\",\"references\":\"1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775\",\"status\":\"fact\",\"sourceIds\":[\"source-1\"],\"reason\":\"의결서의 사업비와 금액이 같다.\",\"acknowledged\":true},false],[\"unit-26\",\"dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014\",\"opinion\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-26\",\"articleBinding\":\"2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73\",\"binding\":\"dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014\",\"references\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\",\"status\":\"opinion\",\"sourceIds\":[],\"reason\":\"성과를 지켜보자는 의견이다.\",\"acknowledged\":true},false],[\"unit-44\",\"b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92\",\"contradicted\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-44\",\"articleBinding\":\"ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9\",\"binding\":\"b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92\",\"references\":\"01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce\",\"status\":\"contradicted\",\"sourceIds\":[\"source-4\"],\"reason\":\"결정문은 의견 반영 뒤 운행 시간을 바꿨다고 기록한다.\",\"acknowledged\":true},false],[\"unit-72\",\"fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620\",\"attribution\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-72\",\"articleBinding\":\"5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85\",\"binding\":\"fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620\",\"references\":\"7bc27c94cdc0346e861180c5947cafdc7747a60cb1d55b9e0c41d756fd9cf371\",\"status\":\"attribution\",\"sourceIds\":[\"source-2\"],\"reason\":\"회의록에서 발언 주체와 표현을 확인했다.\",\"acknowledged\":true,\"contentStatus\":\"opinion\",\"contentChecked\":true,\"contentReason\":\"사업에 대한 찬반 의견을 밝힌 발언이다.\"},false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f\"],[\"unit-26\",\"2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73\"],[\"unit-44\",\"ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9\"],[\"unit-72\",\"5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85\"]]]",
+          "coreRowIds": [
+            "unit-0",
+            "unit-72"
+          ],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-44",
+              "quote": "시청은 주민 의견을 묵살하고 시범운행을 강행한다.",
+              "sourceId": "source-4",
+              "sourceQuote": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+              "reason": "주민 의견을 반영했다는 기록을 묵살과 강행으로 서술했다.",
+              "impact": "시청이 의견을 들었는지에 대한 독자의 판단이 달라진다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "b50de519c9c54288259e4755a5ee4ed7",
+          "slot": "B"
+        }
+      }
+    },
+    {
+      "name": "가상-편집자2-key.json",
+      "data": {
+        "format": "journal-blind-revision-key-v1",
+        "pairId": "27317441db2b0484dee62e97b48ed667",
+        "demo": true,
+        "mapping": {
+          "before": {
+            "slot": "A",
+            "articleSha256": "f4706486969edc188494627979451b4b98fb255f983cf0f97185abe20aa9f3c9",
+            "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+          },
+          "after": {
+            "slot": "B",
+            "articleSha256": "f92ed590f6c619e82ba69a70df5588589cbf7960722720c748bca4d09a4d3058",
+            "sourcesSha256": "dc0ec6cbc8baaae87843f5401cff83366c25fb3f8b8de540bb1c7e85f81ce22b"
+          }
+        }
+      }
+    },
+    {
+      "name": "가상-편집자2-A.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 묵살하고 시범운행을 강행한다.\n야당 의원은 “무책임하다”고 말했다.",
+        "articleDraft": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 묵살하고 시범운행을 강행한다.\n야당 의원은 “무책임하다”고 말했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 예산 의결서",
+            "url": "https://transit.example.invalid/source-0",
+            "locator": "의결서 1쪽 사업비",
+            "excerpt": "시의회는 시범운행 예산 10억 원을 의결했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 공청회 회의록",
+            "url": "https://transit.example.invalid/source-1",
+            "locator": "회의록 2쪽 발언 순서 3·4",
+            "excerpt": "야당 의원은 “무책임하다”고 말했다. 여당 의원은 “바람직하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-3",
+            "title": "가상 공청회 속기록",
+            "url": "https://transit.example.invalid/source-2",
+            "locator": "속기록 3쪽 찬반 발언",
+            "excerpt": "여당 의원은 “바람직하다”고 말했다. 야당 의원은 “무책임하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-4",
+            "title": "가상 시범운행 결정문",
+            "url": "https://transit.example.invalid/source-3",
+            "locator": "결정문 2항 의견 반영",
+            "excerpt": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+            "version": "연습용 확정본"
+          }
+        ],
+        "receipts": [
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-0",
+            "articleBinding": "74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f",
+            "binding": "3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527",
+            "references": "1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775",
+            "recordedAt": "2026-11-24T22:40:56.814Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-1"
+            ],
+            "reason": "시의회 의결 금액 10억 원을 확인했다.",
+            "acknowledged": true,
+            "checksum": "51a3f9145dde998ab9abaf9827bcf1e881ad3b55122ddf49d408bee874adce4b"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-26",
+            "articleBinding": "2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73",
+            "binding": "dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014",
+            "references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "recordedAt": "2026-11-24T22:40:56.814Z",
+            "status": "opinion",
+            "sourceIds": [],
+            "reason": "검증 가능한 성과 수치가 제시되지 않은 평가다.",
+            "acknowledged": true,
+            "checksum": "44ecb825842e404b3dac5442a5b6e1b8ddee055178c5305a2990f111ecb2022b"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-44",
+            "articleBinding": "ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9",
+            "binding": "b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92",
+            "references": "01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce",
+            "recordedAt": "2026-11-24T22:40:56.814Z",
+            "status": "contradicted",
+            "sourceIds": [
+              "source-4"
+            ],
+            "reason": "의견을 묵살했다는 설명은 결정문에 적힌 야간 시간 조정과 충돌한다.",
+            "acknowledged": true,
+            "checksum": "e771b1239ec3554d4dfd0846155ec09dbed071a90f020614226b188494d773db"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-72",
+            "articleBinding": "5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85",
+            "binding": "fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620",
+            "references": "714d38b26cac7b12a3f3463c3c7f8e18e10474e81716023bb4acb41cba83aaae",
+            "recordedAt": "2026-11-24T22:40:56.814Z",
+            "status": "attribution",
+            "sourceIds": [
+              "source-3"
+            ],
+            "reason": "속기록에서 발언자와 찬반 의사를 대조했다.",
+            "acknowledged": true,
+            "contentStatus": "opinion",
+            "contentChecked": true,
+            "contentReason": "사업에 대한 찬반 의견을 밝힌 발언이다.",
+            "checksum": "51a6dff1ea3b705146e4019420259ddb45c7393897f8e55718ffdff89be229a4"
+          }
+        ],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f\",\"binding\":\"3c64f5be5e2aad60c13e3e381cfccded5826de82daec67e0ec05e4d7aefd1527\",\"references\":\"1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775\",\"status\":\"fact\",\"sourceIds\":[\"source-1\"],\"reason\":\"시의회 의결 금액 10억 원을 확인했다.\",\"acknowledged\":true},false],[\"unit-26\",\"dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014\",\"opinion\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-26\",\"articleBinding\":\"2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73\",\"binding\":\"dee2aa270e3c61a48c754f1848eaa74948e97c70ea469bd9b5a8a3339d596014\",\"references\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\",\"status\":\"opinion\",\"sourceIds\":[],\"reason\":\"검증 가능한 성과 수치가 제시되지 않은 평가다.\",\"acknowledged\":true},false],[\"unit-44\",\"b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92\",\"contradicted\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-44\",\"articleBinding\":\"ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9\",\"binding\":\"b953b65d9023d0ab1ef90bb66595fa7c501bb6d458c916c8feb46bb5e6dbce92\",\"references\":\"01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce\",\"status\":\"contradicted\",\"sourceIds\":[\"source-4\"],\"reason\":\"의견을 묵살했다는 설명은 결정문에 적힌 야간 시간 조정과 충돌한다.\",\"acknowledged\":true},false],[\"unit-72\",\"fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620\",\"attribution\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-72\",\"articleBinding\":\"5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85\",\"binding\":\"fe7888928d5568d44ac6c1a0479571397e97a8535bcaeb2e2172853006e17620\",\"references\":\"714d38b26cac7b12a3f3463c3c7f8e18e10474e81716023bb4acb41cba83aaae\",\"status\":\"attribution\",\"sourceIds\":[\"source-3\"],\"reason\":\"속기록에서 발언자와 찬반 의사를 대조했다.\",\"acknowledged\":true,\"contentStatus\":\"opinion\",\"contentChecked\":true,\"contentReason\":\"사업에 대한 찬반 의견을 밝힌 발언이다.\"},false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"74300a4a158e3d6bb5c5aa4009a7552c6a10a06bcc8031cc1079e5a604d1902f\"],[\"unit-26\",\"2708c076185368cbe7fe42414479dc013de7ece213d8d028c8aa2a6741572e73\"],[\"unit-44\",\"ff23d4df8384e85ebf00b43d6b20cf3d165a6e29ef19286f87a865fb17a76cb9\"],[\"unit-72\",\"5c09a04dd019ebaa5ee299bb9aecfe10b22a6eb28c81fb3d11885fd877a7fa85\"]]]",
+          "coreRowIds": [
+            "unit-0",
+            "unit-72"
+          ],
+          "ratings": {
+            "wording": {
+              "level": 2,
+              "rowId": "unit-44",
+              "quote": "시청은 주민 의견을 묵살하고 시범운행을 강행한다.",
+              "sourceId": "source-4",
+              "sourceQuote": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+              "reason": "의견을 듣고 계획을 조정했다는 결정문과 기자의 단정이 다르다.",
+              "impact": "시청이 의견을 들었는지에 대한 독자의 판단이 달라진다.",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "27317441db2b0484dee62e97b48ed667",
+          "slot": "A"
+        }
+      }
+    },
+    {
+      "name": "가상-편집자2-B.json",
+      "data": {
+        "format": "journal-local-factcheck-v1",
+        "article": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.\n여당 의원은 “바람직하다”고 말했다.",
+        "articleDraft": "시의회는 시범운행 예산 10억 원을 의결했다.\n사업 성과는 더 지켜볼 일이다.\n시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.\n여당 의원은 “바람직하다”고 말했다.",
+        "demo": true,
+        "sources": [
+          {
+            "id": "source-1",
+            "title": "가상 예산 의결서",
+            "url": "https://transit.example.invalid/source-0",
+            "locator": "의결서 1쪽 사업비",
+            "excerpt": "시의회는 시범운행 예산 10억 원을 의결했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-2",
+            "title": "가상 공청회 회의록",
+            "url": "https://transit.example.invalid/source-1",
+            "locator": "회의록 2쪽 발언 순서 3·4",
+            "excerpt": "야당 의원은 “무책임하다”고 말했다. 여당 의원은 “바람직하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-3",
+            "title": "가상 공청회 속기록",
+            "url": "https://transit.example.invalid/source-2",
+            "locator": "속기록 3쪽 찬반 발언",
+            "excerpt": "여당 의원은 “바람직하다”고 말했다. 야당 의원은 “무책임하다”고 말했다.",
+            "version": "연습용 확정본"
+          },
+          {
+            "id": "source-4",
+            "title": "가상 시범운행 결정문",
+            "url": "https://transit.example.invalid/source-3",
+            "locator": "결정문 2항 의견 반영",
+            "excerpt": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+            "version": "연습용 확정본"
+          }
+        ],
+        "receipts": [
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-0",
+            "articleBinding": "3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05",
+            "binding": "f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb",
+            "references": "1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775",
+            "recordedAt": "2026-11-24T22:40:56.815Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-1"
+            ],
+            "reason": "시의회 의결 금액 10억 원을 확인했다.",
+            "acknowledged": true,
+            "checksum": "9a2c139b3d8dda2d288c096b9a715fcfd126b744d035b78de274756a0807a3c9"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-26",
+            "articleBinding": "e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931",
+            "binding": "d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942",
+            "references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "recordedAt": "2026-11-24T22:40:56.815Z",
+            "status": "opinion",
+            "sourceIds": [],
+            "reason": "검증 가능한 성과 수치가 제시되지 않은 평가다.",
+            "acknowledged": true,
+            "checksum": "0a0fbcde33dae5a12fd7d3098478f2ef91c256d665b06fe18c2941fd1159cd75"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-44",
+            "articleBinding": "7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd",
+            "binding": "f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97",
+            "references": "01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce",
+            "recordedAt": "2026-11-24T22:40:56.815Z",
+            "status": "fact",
+            "sourceIds": [
+              "source-4"
+            ],
+            "reason": "야간 운행 시간을 조정해 결정했다는 기술과 일치한다.",
+            "acknowledged": true,
+            "checksum": "41cccd1e904f762c1307b450eea9a1078b834e157976a97d1794c2bb4ac4c64b"
+          },
+          {
+            "protocol": "journal-review/1",
+            "rowId": "unit-85",
+            "articleBinding": "71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1",
+            "binding": "fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c",
+            "references": "714d38b26cac7b12a3f3463c3c7f8e18e10474e81716023bb4acb41cba83aaae",
+            "recordedAt": "2026-11-24T22:40:56.815Z",
+            "status": "attribution",
+            "sourceIds": [
+              "source-3"
+            ],
+            "reason": "속기록에서 발언자와 찬반 의사를 대조했다.",
+            "acknowledged": true,
+            "contentStatus": "opinion",
+            "contentChecked": true,
+            "contentReason": "사업에 대한 찬반 의견을 밝힌 발언이다.",
+            "checksum": "ede8541cbcab886263adb1361447811c5ae770a062f2328f143130390fe62303"
+          }
+        ],
+        "rowDrafts": [],
+        "articleAssessment": {
+          "version": "journal-article-rubric-v1",
+          "binding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-0\",\"articleBinding\":\"3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05\",\"binding\":\"f4f3cfe4277a50d06df65343e3f822784a2b60dc542e64d8b2a6d4a69f1016eb\",\"references\":\"1019a81fb08e9120e09d7fae49aee22467e6c97c23fe7e93f2fa3ef974da4775\",\"status\":\"fact\",\"sourceIds\":[\"source-1\"],\"reason\":\"시의회 의결 금액 10억 원을 확인했다.\",\"acknowledged\":true},false],[\"unit-26\",\"d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942\",\"opinion\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-26\",\"articleBinding\":\"e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931\",\"binding\":\"d954b5e09e31bc2a346b78d4d6a48baaaacade5737ec95556a9334efc4416942\",\"references\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\",\"status\":\"opinion\",\"sourceIds\":[],\"reason\":\"검증 가능한 성과 수치가 제시되지 않은 평가다.\",\"acknowledged\":true},false],[\"unit-44\",\"f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97\",\"fact\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-44\",\"articleBinding\":\"7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd\",\"binding\":\"f830fea2becb332d55df1635d62ab6e717e06937b0f75603481a14cc803bdd97\",\"references\":\"01832309355c29c304a4d18aece04c6cc55afda86a8035b560f7f3a615edc0ce\",\"status\":\"fact\",\"sourceIds\":[\"source-4\"],\"reason\":\"야간 운행 시간을 조정해 결정했다는 기술과 일치한다.\",\"acknowledged\":true},false],[\"unit-85\",\"fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c\",\"attribution\",{\"protocol\":\"journal-review/1\",\"rowId\":\"unit-85\",\"articleBinding\":\"71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1\",\"binding\":\"fdf5408dbbd974547a8f95b669c62d8189c866b0778dc1efb83bb5179ded0f2c\",\"references\":\"714d38b26cac7b12a3f3463c3c7f8e18e10474e81716023bb4acb41cba83aaae\",\"status\":\"attribution\",\"sourceIds\":[\"source-3\"],\"reason\":\"속기록에서 발언자와 찬반 의사를 대조했다.\",\"acknowledged\":true,\"contentStatus\":\"opinion\",\"contentChecked\":true,\"contentReason\":\"사업에 대한 찬반 의견을 밝힌 발언이다.\"},false]]]",
+          "coreBinding": "[\"journal-article-rubric-v1\",[[\"unit-0\",\"3db79733ebe80bcab0602e94ed689defddf4e3ea55e2dbf1a7f5a6a941421f05\"],[\"unit-26\",\"e236f0370834bfa247d76dbc077c4cc0eb2090f266768ce4acd3bdfaaf2e1931\"],[\"unit-44\",\"7636f53476ba84137670c0a86a9d65b67e33f6f9c07be634c40165d6f8773ecd\"],[\"unit-85\",\"71784bab9b96534f1b2b4b4d33fd04e1ec075e626dce0fba26383bee61b7e8f1\"]]]",
+          "coreRowIds": [
+            "unit-0",
+            "unit-85"
+          ],
+          "ratings": {
+            "wording": {
+              "level": 0,
+              "rowId": "unit-44",
+              "quote": "시청은 주민 의견을 들어 야간 운행 시간을 바꾼 뒤 시범운행을 결정했다.",
+              "sourceId": "source-4",
+              "sourceQuote": "시는 주민 의견을 반영해 야간 운행 시간을 조정하고 시범운행을 의결했다.",
+              "reason": "의견 반영과 의결의 순서를 판단 표현 없이 적었다.",
+              "impact": "",
+              "compareQuote": "",
+              "compareRowId": "",
+              "direction": ""
+            }
+          }
+        },
+        "articleAssessmentDraft": null,
+        "currentId": null,
+        "sourceDraft": {
+          "id": null,
+          "fields": {
+            "title": "",
+            "url": "",
+            "locator": "",
+            "excerpt": "",
+            "version": "",
+            "originUrl": "",
+            "pdfPage": ""
+          }
+        },
+        "blindReview": {
+          "pairId": "27317441db2b0484dee62e97b48ed667",
+          "slot": "B"
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "checksum": "2313b1a6b2557ee913c8997af4df1ca7bb93b6059a9bc79cd40c2a35264d2779"
+}

@@ -5,19 +5,23 @@ const path = require('node:path');
 const {JSDOM, VirtualConsole} = require('jsdom');
 const folder = path.join(__dirname, '../docs/reader');
 
-function open(t) {
-  const errors = [], blobs = [];
+function open(t, suffix = '', configureWindow) {
+  const errors = [], blobs = [], filenames = [];
   const console = new VirtualConsole();
   console.on('jsdomError', error => errors.push(error.message));
   const dom = new JSDOM(readFileSync(path.join(folder, 'factcheck.html'), 'utf8'), {
-    url: 'https://journal.example/factcheck.html', runScripts: 'outside-only', virtualConsole: console
+    url: 'https://journal.example/factcheck.html' + suffix, runScripts: 'outside-only', virtualConsole: console
   });
   const w = dom.window, doc = w.document;
+  if (configureWindow) configureWindow(w);
   w.TextEncoder = TextEncoder;
   w.confirm = () => true;
   w.URL.createObjectURL = blob => { blobs.push(blob); return 'blob:journal'; };
   w.URL.revokeObjectURL = () => {};
-  doc.addEventListener('click', event => { if (event.target.closest('a[download]')) event.preventDefault(); });
+  doc.addEventListener('click', event => {
+    const link = event.target.closest('a[download]');
+    if (link) { event.preventDefault(); filenames.push(link.download); }
+  });
   for (const script of doc.querySelectorAll('script[src]')) {
     w.eval(readFileSync(path.join(folder, script.getAttribute('src')), 'utf8'));
   }
@@ -33,12 +37,42 @@ function open(t) {
     el(id).value = value;
     el(id).dispatchEvent(new w.Event('input', {bubbles: true}));
   };
-  return {w, doc, el, set, snapshot, click: id => el(id).click()};
+  return {w, doc, el, set, snapshot, filename: () => filenames.at(-1), click: id => el(id).click()};
 }
+
+test('판본이 있는 하위 화면은 구형 부모가 보낸 과제와 확인한 판본이 다른 과제를 열지 않는다', t => {
+  const edition = 'ab'.repeat(32), replies = [], delivered = [];
+  const host = {postMessage:(message, origin, transfer)=>replies.push({message,origin,transfer})};
+  let channel;
+  const p = open(t, '?study=1', w => {
+    Object.defineProperty(w, 'parent', {value:host});
+    const meta = w.document.createElement('meta'); meta.name = 'journal-editor-kit'; meta.content = edition; w.document.head.append(meta);
+    w.MessageChannel = class {
+      constructor() {
+        this.port1 = {postMessage:m=>delivered.push(m), close() {}}; this.port2 = {};
+        channel = this;
+      }
+    };
+  });
+  const send = data => {
+    const e = new p.w.Event('message');
+    Object.assign(e, {data,source:host,origin:p.w.location.origin}); p.w.dispatchEvent(e);
+  };
+  const task = {type:'journal-study-task', nonce:'case-1',article:'심의는 끝났다.',sources:[]};
+  send(task); assert.equal(p.el('article').value,''); assert.equal(replies.at(-1).message.type,'journal-study-error');
+  send({type:'journal-study-identify',challenge:'page-1'});
+  assert.equal(replies.at(-1).message.kitVersion,edition); assert.equal(replies.at(-1).message.challenge,'page-1');
+  assert.equal(replies.at(-1).transfer[0],channel.port2);
+  channel.port1.onmessage({data:task});
+  channel.port1.onmessage({data:{...task,kitVersion:'cd'.repeat(32)}});
+  assert.equal(p.el('article').value,''); assert.equal(delivered.length,0);
+  channel.port1.onmessage({data:{...task,kitVersion:edition}});
+  assert.equal(p.el('article').value,task.article); assert.equal(delivered.at(-1).type,'journal-study-loaded');
+});
 
 async function loadWorkspace(page, data, accept = true) {
   const {w, el} = page;
-  w.confirm = () => accept;
+  w.confirm = typeof accept === 'function' ? accept : () => accept;
   const input = el('import-file');
   const file = new w.File([JSON.stringify(data)], 'work.json', {type: 'application/json'});
   Object.defineProperty(input, 'files', {value: [file], configurable: true});
@@ -60,6 +94,93 @@ async function loadWorkspace(page, data, accept = true) {
   input.dispatchEvent(new w.Event('change'));
   await loaded;
 }
+
+test('정정한 문장의 한 위치를 선택해 기존 판정 없는 수정본으로 보관하고 원래 작업은 계속한다', async t => {
+  const p = open(t);
+  const original = '사업비는 20억 원이다.';
+  const replacement = '사업비는 10억 원이다.';
+  const article = original + '  ' + original + '\n야당은 “' + original + '”라고 말했다.';
+  const sources = [{id:'budget',title:'의결서',url:'https://council.example/report.pdf',locator:'표 1',version:'1판',
+    excerpt:'의결한 사업비 10억 원', pdfPage:'5', pdfSha256:'a'.repeat(64)}];
+  const row = p.w.JournalFactcheck.report(article,sources).rows[0];
+  const receipt = p.w.JournalFactcheck.decide(row,{status:'contradicted',sourceIds:['budget'],reason:'의결서의 금액을 확인했다.',
+    acknowledged:true,correction:replacement,correctionChecked:true},sources);
+  const packet = {format:'journal-local-factcheck-v1',article,articleDraft:article,demo:false,sources,
+    receipts:[receipt],rowDrafts:[],sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}};
+  await loadWorkspace(p,packet);
+  assert.equal(p.el('revision-draft').hidden,false);
+  assert.equal(p.el('download-revision').disabled,true);
+  const checks = [...p.el('revision-choices').querySelectorAll('input')];
+  assert.equal(checks.length,2);
+  assert.match(checks[1].parentElement.textContent,/2곳 중 2번째/);
+  const proof = p.el('revision-choices').querySelector('details');
+  proof.open = true; proof.dispatchEvent(new p.w.Event('toggle'));
+  assert.ok(proof.textContent.includes(receipt.reason));
+  assert.ok(proof.textContent.includes(sources[0].excerpt));
+  assert.match(proof.querySelector('a').href,/#page=5$/);
+  checks[1].click();
+  const next = original + '  ' + replacement + '\n야당은 “' + original + '”라고 말했다.';
+  p.el('revision-preview').open = true;
+  p.el('revision-preview').dispatchEvent(new p.w.Event('toggle'));
+  assert.equal(p.el('revision-preview-text').textContent,next);
+  p.click('download-revision');
+  assert.equal(p.filename(),'journal-revision-draft.json');
+  const revised = JSON.parse(await p.snapshot());
+  assert.equal(revised.article,next);
+  assert.equal(revised.articleDraft,next);
+  assert.deepEqual(revised.sources,sources);
+  assert.deepEqual(revised.receipts,[]);
+  assert.deepEqual(revised.rowDrafts,[]);
+  assert.equal(revised.articleAssessment,null);
+  assert.equal(revised.articleAssessmentDraft,null);
+  assert.equal(revised.demo,false);
+  const independent = open(t); await loadWorkspace(independent,revised);
+  assert.ok(independent.el('revision-draft').hidden);
+  assert.equal(independent.el('report-rows').querySelectorAll('.report-row').length,3);
+  assert.equal(independent.el('verdict').value,'');
+  p.click('save-work');
+  const before = JSON.parse(await p.snapshot());
+  assert.equal(before.article,article);
+  assert.deepEqual(before.receipts,[JSON.parse(JSON.stringify(receipt))]);
+  p.set('reason','근거를 다시 대조하는 중');
+  assert.ok(p.el('revision-draft').hidden);
+  assert.equal(p.el('revision-preview-text').textContent,'');
+  const tagged = open(t);
+  await loadWorkspace(tagged,{...packet,blindReview:{pairId:'d'.repeat(32),slot:'A'}});
+  assert.ok(tagged.el('revision-draft').hidden);
+  const study = open(t,'?study=1'); await loadWorkspace(study,packet);
+  assert.ok(study.el('revision-draft').hidden);
+});
+
+test('첫 화면과 기준 바로가기에서 채점에 쓰는 네 축의 16단계를 읽고 안내만 인쇄한다', t => {
+  const p = open(t, '#rubric-guide');
+  const guide = p.el('rubric-guide');
+  assert.equal(guide.open, true);
+  assert.equal(p.el('workspace').hidden, true);
+  const definitions = p.w.JournalArticleRubric.dimensions;
+  const scales = [...guide.querySelectorAll('.guide-axis')];
+  assert.equal(scales.length, 4);
+  for (const [i, item] of scales.entries()) {
+    const dim = definitions[i];
+    assert.equal(item.querySelector('h3').textContent, dim.title);
+    assert.equal(item.querySelector('p').textContent, dim.question);
+    assert.equal(item.querySelector('ol').start, 0);
+    assert.deepEqual([...item.querySelectorAll('li')].map(li => li.textContent), Array.from(dim.levels));
+  }
+  assert.match(guide.textContent, /지지 ÷ \(지지 \+ 원문 충돌\)/);
+  assert.match(guide.textContent, /완료 ÷ \(완료 \+ 미결\)/);
+  assert.match(guide.textContent, /인용 속 사실 주장과 독립 원자료의 충돌/);
+  assert.equal(guide.querySelector('a[href$=".md"]'), null);
+  let prints = 0;
+  p.w.print = () => { assert.ok(p.doc.documentElement.classList.contains('print-rubric')); prints++; };
+  p.click('print-rubric');
+  assert.equal(prints, 1);
+  p.w.dispatchEvent(new p.w.Event('afterprint'));
+  assert.ok(!p.doc.documentElement.classList.contains('print-rubric'));
+  const study = open(t, '?study=1#rubric-guide');
+  assert.equal(study.el('rubric-guide').hidden, true);
+  assert.equal(study.el('rubric-guide-scales').childElementCount, 0);
+});
 
 test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장이 결과와 작업 파일에 구분된다', async t => {
   const {el, click, doc, set, snapshot} = open(t);
@@ -89,6 +210,350 @@ test('가상 정치 기사에서 확인한 수치와 발언 속 미확인 주장
   const json = JSON.parse(await snapshot());
   assert.deepEqual(json.receipts.map(r => r.status), ['fact', 'attribution']);
   assert.equal(json.demo, true);
+});
+
+test('발언만 확인한 기사의 공유본은 입력한 기사 주소와 근거를 싣고 작업 교체 시 주소를 지운다', async t => {
+  const p = open(t);
+  const article = '위원장은 “공사가 끝났다”고 말했다.';
+  const sources = [{id:'speech', title:'기자회견 속기록', version:'공개본', url:'https://council.example/speech',
+    locator:'3쪽', excerpt:'위원장 발언 기록 · 공사가 끝났다.'}];
+  const [row] = p.w.JournalFactcheck.report(article, sources).rows;
+  const reason = '속기록에서 위원장의 발언을 확인했다.';
+  const receipt = p.w.JournalFactcheck.decide(row, {status:'attribution', sourceIds:['speech'], acknowledged:true,
+    contentStatus:'unverified', reason}, sources);
+  const work = {format:'journal-local-factcheck-v1', article, articleDraft:article, sources, receipts:[receipt],
+    rowDrafts:[], demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}};
+  await loadWorkspace(p, work);
+  const scope = p.el('result-scope').textContent;
+  assert.match(scope, /추가 확인이 필요한 검토 항목은 1개.+1개는 발언 사실을 확인했고, 발언 내용의 검증이 남았습니다/);
+  const articleUrl = 'https://news.example/articles/56';
+  p.set('share-article-url', articleUrl);
+  p.click('export-share-report');
+  assert.equal(p.filename(), 'journal-factcheck-share.txt');
+  const share = await p.snapshot();
+  for (const marker of [scope, '기사 원문 · ' + articleUrl, '1. 발언 귀속 확인', '발언 내용 · 내용 미확인',
+    '근거 일치율 산출 대기 (0/0)', '검증 범위 0% (0/1)', reason, sources[0].excerpt, sources[0].url]) assert.ok(share.includes(marker), marker);
+  assert.ok(!share.includes(article));
+  p.click('export-report');
+  const full = await p.snapshot();
+  assert.equal(p.filename(), 'journal-factcheck-result.txt');
+  assert.ok(full.includes('검토 대상 원문\n' + article) && !full.includes(articleUrl));
+  p.click('save-work');
+  const saved = await p.snapshot();
+  assert.ok(!saved.includes(articleUrl));
+  for (const value of ['https://name:password@news.example/56','javascript:void(0)']) {
+    p.set('share-article-url', value);
+    p.click('export-share-report');
+    assert.match(p.el('result-status').textContent, /HTTP 또는 HTTPS/);
+    assert.equal(p.filename(), 'journal-factcheck-work.json');
+  }
+  await loadWorkspace(p, JSON.parse(saved));
+  assert.equal(p.el('share-article-url').value, '');
+  p.set('share-article-url', articleUrl);
+  p.set('article', '새 기사입니다.');
+  p.el('article-form').requestSubmit();
+  assert.equal(p.el('share-article-url').value, '');
+  p.click('export-share-report');
+  assert.doesNotMatch(await p.snapshot(), /기사 원문 ·|새 기사입니다/);
+});
+
+test('구형 편향 평가의 비교 구절은 기사 전체에서 유일한 위치를 유니코드 글자로 센다', async t => {
+  const p = open(t);
+  p.click('load-demo');
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  const repeated = '의회는 🔎 검토를 시작했다.';
+  work.article = work.articleDraft = repeated + '  ' + repeated + '\n주민은 회의 공개를 요청했다.';
+  const report = p.w.JournalFactcheck.report(work.article, work.sources);
+  const [row, second] = report.rows;
+  const compareQuote = '공개를 요청했다';
+  const source = work.sources[0];
+  work.articleAssessment = p.w.JournalArticleRubric.save(report, work.sources, {coreRowIds:[], ratings:{framing:{
+    level:0, rowId:row.id, quote:'검토를 시작했다', compareQuote, sourceId:source.id,
+    sourceQuote:source.excerpt, reason:'두 문장의 서술 범위를 확인했다.'
+  }}});
+  await loadWorkspace(p, work);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  const first = [...work.article.slice(0, work.article.indexOf(compareQuote))].length + 1;
+  assert.equal(row.positions.length, 2);
+  const size = [...repeated].length;
+  assert.ok(share.includes('1. 미검토 · 원문 2곳\n원문 글자 위치 · 1~' + size + ', ' + (size + 3) + '~' + (size * 2 + 2)));
+  assert.ok(share.includes('2. 미검토\n원문 글자 위치 · ' + (size * 2 + 4) + '~' + [...work.article].length));
+  assert.match(share, /기사 구절 · 구간 1 \(원문 2곳\) · 구간 안 7번째~/);
+  assert.ok(share.includes('비교 구절 · 기사 원문 ' + first + '번째~' + (first + [...compareQuote].length - 1) + '번째 글자'));
+  assert.ok(!share.includes(row.text) && !share.includes(second.text) && !share.includes(compareQuote));
+});
+
+test('지지율을 직접 부분 확인해도 오차범위 밖 우세라는 해석은 작업 파일에서 미결로 남는다', async t => {
+  const p = open(t);
+  const observed = '여론조사에서 가 후보는 42%, 나 후보는 40%였고';
+  const claim = observed + ', 이 격차는 오차범위 밖이었다.';
+  p.set('article', claim);
+  p.el('article-form').requestSubmit();
+  const details = {title:'가상 조사 결과표', url:'https://poll.example/results', version:'발표본',
+    locator:'표 1, 전체 응답자 행', excerpt:'가 후보 42%, 나 후보 40%. 전체 표본오차 ±3.1%p.'};
+  for (const [key, value] of Object.entries(details)) p.set('source-' + key, value);
+  p.el('source-form').requestSubmit();
+  assert.match(p.el('row-hints').textContent, /격차의 신뢰구간이나 검정 결과/);
+  assert.equal(p.el('verdict').value, '');
+  assert.equal(p.el('row-sources').querySelectorAll('input:checked').length, 0);
+  p.el('row-sources').querySelector('input[value="source-1"]').click();
+  p.set('verdict', 'partial');
+  p.set('fact-span', observed);
+  p.set('reason', '표 1의 두 지지율을 확인했다. 격차 자체의 신뢰구간은 추가로 확인한다.');
+  p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  assert.equal(p.el('result-tag').textContent, '추가 확인 필요');
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.receipts.length, 1);
+  assert.equal(work.receipts[0].status, 'partial');
+  assert.equal(work.receipts[0].factSpan, observed);
+  assert.deepEqual(work.receipts[0].remainingSpans, [', 이 격차는 오차범위 밖이었다.']);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  assert.match(share, /1\. 일부 확인 · 나머지 보류/);
+  const length = [...observed].length;
+  assert.ok(share.includes('사실 구절 · 구간 안 1번째~' + length + '번째 글자'));
+  assert.ok(share.includes('남은 구절 · 구간 안 ' + (length + 1) + '번째~' + [...claim].length + '번째 글자'));
+  assert.ok(!share.includes(observed) && !share.includes('이 격차는 오차범위 밖이었다'));
+  assert.ok(share.includes(details.excerpt));
+});
+
+test('판단 저장 뒤 미검토 문장을 우선하고 보류 문장만 남으면 다음 항목을 연다', t => {
+  const {doc, el, set, click} = open(t);
+  const subjects = ['돌봄 사업', '교통 사업', '문화 사업', '주택 사업'];
+  set('article', subjects.map(subject => `${subject}은 무책임한 정책이다.`).join('\n'));
+  el('article-form').requestSubmit();
+  function record(verdict, reason) {
+    set('verdict', verdict);
+    set('reason', reason);
+    click('acknowledged');
+    el('decision-form').requestSubmit();
+  }
+  function expectRow(index) {
+    assert.equal(el('row-text').textContent, `${subjects[index]}은 무책임한 정책이다.`);
+    assert.equal(doc.activeElement, el('row-heading'));
+  }
+  const waiting = '발언의 앞뒤 문맥을 확인할 자료를 기다린다.';
+  record('held', waiting);
+  record('held', waiting);
+  el('row-list').querySelector('button').click();
+  record('held', '회의 영상이 공개되면 발언 문맥을 확인한다.');
+  expectRow(2);
+  record('held', waiting);
+  record('held', waiting);
+  expectRow(0);
+  assert.match(el('counts').textContent, /추가 확인 4개/);
+  assert.match(el('review-status').textContent, /4번 문장/);
+
+  click('acknowledged');
+  el('decision-form').requestSubmit();
+  expectRow(0);
+  record('held', '당일 회의 영상과 회의록을 함께 확인한다.');
+  expectRow(1);
+  for (let i = 0; i < 3; i++) record('opinion', '원문의 비판은 정책에 대한 가치판단이다.');
+  expectRow(0);
+  record('held', waiting);
+  expectRow(0);
+  assert.match(el('counts').textContent, /추가 확인 1개/);
+});
+
+test('과거 재인용 판정을 열면 원발언만 초안에 남고 저장 파일과 보고서에 내용 승인이 남지 않는다', async t => {
+  const archived = require('./fixtures/reprinted-speech-work.json');
+  const [old] = archived.receipts;
+  const ledger = {id:'ledger',url:'https://audit.example/record',version:'확정본',locator:'1면',excerpt:'서명한 참여자 50명.'};
+  const expanded = [...archived.sources,ledger];
+  for (const extra of [{},{blindReview:{pairId:'a'.repeat(32),slot:'A'}}]) {
+    const p = open(t);
+    const cached = {rowId:old.rowId,data:{...old,factSpan:'',opinionSpan:''}};
+    await loadWorkspace(p,{...archived,...extra,sources:expanded,rowDrafts:[cached]});
+    const checked = id => [...p.el(id).querySelectorAll('input:checked')].map(e => e.value);
+    const assertPending = () => {
+      assert.equal(p.el('verdict').value,'attribution');
+      assert.equal(p.el('reason').value,old.reason);
+      assert.deepEqual(checked('row-sources'),['speech']);
+      assert.equal(p.el('content-status').value,'unverified');
+      assert.equal(p.el('content-reason').value,'');
+      assert.deepEqual(checked('content-sources'),[]);
+      assert.equal(p.el('acknowledged').checked,false);
+      assert.equal(p.el('content-checked').checked,false);
+      assert.match(p.el('prior-note').textContent,/원발언 자료.+초안/);
+      assert.match(p.el('prior-note').textContent,/자료 목록도 달라졌습니다/);
+      assert.match(p.el('counts').textContent,/추가 확인 1개/);
+      assert.equal(p.el('result-tag').textContent,'추가 확인 필요');
+    };
+    assertPending();
+    p.click('export-report');
+    const text = await p.snapshot();
+    assert.match(text,/근거 지지 0 · 반박 0 · 인용 속 사실 주장 충돌 0 · 미결 1/);
+    assert.ok(!text.includes(old.contentReason) && !text.includes(old.reason));
+    p.click('save-work');
+    const work = JSON.parse(await p.snapshot());
+    assert.deepEqual(work.receipts,[]);
+    assert.deepEqual(work.rowDrafts[0].data.contentSourceIds,[]);
+    assert.ok(!JSON.stringify(work).includes(old.contentReason));
+    assert.equal(p.w.JournalWorkspaceSnapshot.read(work).assessment.accuracy.adjudicated,0);
+    await loadWorkspace(p,work);
+    assertPending();
+    p.el('decision-form').requestSubmit();
+    assert.equal(p.el('acknowledged').validity.valueMissing,true);
+    p.click('save-work');
+    assert.deepEqual(JSON.parse(await p.snapshot()).receipts,[]);
+    p.click('acknowledged');
+    p.el('decision-form').requestSubmit();
+    p.click('save-work');
+    const [fresh] = JSON.parse(await p.snapshot()).receipts;
+    assert.equal(fresh.contentStatus,'unverified');
+    assert.equal(fresh.reason,old.reason);
+    assert.equal(fresh.contentSourceIds,undefined);
+    await loadWorkspace(p,{...archived,...extra,receipts:[fresh],sources:[...expanded,{...ledger,id:'amendment',excerpt:'후속 정정 공지'}]});
+    assert.match(p.el('prior-note').textContent,/이전 판단을 초안.+자료 목록이 달라졌습니다/);
+    assert.doesNotMatch(p.el('prior-note').textContent,/재인용|귀속 판단 이유만/);
+    const working = {...cached.data,contentSourceIds:['ledger'],contentReason:'서명한 50명을 셌다.'};
+    await loadWorkspace(p,{...archived,...extra,sources:[...archived.sources,ledger],rowDrafts:[{rowId:old.rowId,data:working}]});
+    assert.equal(p.el('content-status').value,'supported');
+    assert.equal(p.el('content-reason').value,working.contentReason);
+    assert.deepEqual(checked('content-sources'),['ledger']);
+    assert.equal(p.el('content-checked').checked,false);
+    assert.equal(p.el('acknowledged').checked,false);
+    assert.doesNotMatch(p.el('prior-note').textContent,/귀속 판단 이유만/);
+    assert.match(p.el('prior-note').textContent,/이전 내용 판정은 제외.+자료 목록도 달라졌습니다/);
+    p.click('export-report');
+    assert.ok(!(await p.snapshot()).includes(working.contentReason));
+    p.click('save-work');
+    const unfinished = JSON.parse(await p.snapshot());
+    assert.deepEqual(unfinished.receipts,[]);
+    assert.deepEqual(unfinished.rowDrafts[0].data.contentSourceIds,['ledger']);
+    await loadWorkspace(p,unfinished);
+    assert.match(p.el('prior-note').textContent,/이전 내용 판정은 제외.+자료 목록도 달라졌습니다/);
+  }
+  for (const [w,trust] of [[archived,false],[{...archived,receipts:[{...old,checksum:'changed'}]},true],
+    [{...archived,sources:[archived.sources[0],{...archived.sources[1],version:'변경판'}]},true]]) {
+    const p = open(t);
+    await loadWorkspace(p,w,trust);
+    assert.equal(p.el('verdict').value,'');
+    assert.equal(p.el('reason').value,'');
+    assert.equal(p.el('row-sources').querySelectorAll('input:checked').length,0);
+  }
+});
+
+test('참석자 수를 확인해도 기자가 덧붙인 사업비 주장은 결과 파일에서 미결로 남는다', async t => {
+  const p = open(t);
+  p.set('article', '사업비가 2배 증가한 가운데 위원장은 “참여자는 50명”이라고 말했다.');
+  p.el('article-form').requestSubmit();
+  for (const [title, url, excerpt] of [['속기록', 'https://council.example/remarks', '위원장은 “참여자는 50명”이라고 말했다.'],
+    ['참석자 명부', 'https://audit.example/count', '당일 확인된 참석자는 총 50명이다.']]) {
+    for (const [field, value] of Object.entries({title, url, locator:'1쪽', version:'확정본', excerpt})) p.set('source-' + field, value);
+    p.el('source-form').requestSubmit();
+  }
+  p.el('row-list').querySelectorAll('button')[1].click();
+  p.el('row-sources').querySelector('input[value="source-1"]').click();
+  p.set('verdict','attribution');
+  p.set('reason','속기록에서 화자와 인용을 대조했다.');
+  p.set('content-status','supported');
+  p.el('content-sources').querySelector('input[value="source-2"]').click();
+  p.set('content-reason','당일 명부의 실제 인원과 일치한다.');
+  p.click('content-checked'); p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  assert.match(p.el('row-text').textContent,/사업비가 2배/);
+  assert.equal(p.el('result-tag').textContent, '추가 확인 필요');
+  p.click('export-report');
+  const exported = await p.snapshot();
+  assert.match(exported, /근거 일치율 100% \(1\/1\)/);
+  assert.match(exported, /검증 범위 50% \(1\/2\)/);
+  assert.match(exported, /1\. 미검토\n사업비가 2배 증가한 가운데/);
+  assert.match(exported, /내용 근거 · 참석자 명부/);
+});
+
+test('핵심을 지정하지 않은 기사도 지지율 100%에서 문장 전체와 발언·사실 구절만 확인한 개수를 화면과 TXT에 밝힌다', async t => {
+  const p = open(t);
+  const engine = p.w.JournalFactcheck;
+  const sources = [{id:'minutes', title:'시의회 회의록', url:'https://council.example/minutes', locator:'1쪽', version:'확정본',
+    excerpt:'시의회는 예산 3억 원을 의결했다. 의원은 “참담하다”고 말했다.'}];
+  const fact = '시의회가 3억 원을 의결한 것은';
+  const opinion = '무책임한 결정이다.';
+  const article = fact + ' ' + opinion + '\n의원은 “참담하다”고 말했다.';
+  async function read(text, decisions) {
+    const {rows} = engine.prepare(text, sources);
+    const receipts = decisions.map((d, i) => engine.decide(rows[i], {
+      ...d, sourceIds:['minutes'], acknowledged:true, reason:'회의록에서 해당 구절을 확인했다.'
+    }, sources));
+    await loadWorkspace(p, {format:'journal-local-factcheck-v1', article:text, articleDraft:text, sources, receipts,
+      rowDrafts:[], demo:false, sourceDraft:{fields:{title:'', url:'', locator:'', excerpt:'', version:''}}});
+    return p.el('article-rubric').textContent;
+  }
+  const scoped = [{status:'mixed', factSpan:fact, opinionSpan:opinion},
+    {status:'attribution', contentStatus:'opinion', contentChecked:true, contentReason:'의원의 평가를 인용했다.'}];
+  const both = /구간 전체의 사실 확인 0개, 사실과 평가가 섞여 사실 구절만 확인 1개, 의견·전망을 인용해 발언 사실만 확인 1개/;
+  assert.match(await read(article, scoped), both);
+  p.click('export-report');
+  const exported = await p.snapshot();
+  assert.match(exported, /근거 일치율 100% \(2\/2\)/);
+  assert.match(exported, /검증 범위 100% \(2\/2\)/);
+  assert.match(exported, both);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  assert.match(share, both);
+  assert.match(share, /사실 구절 · 구간 안 1번째~/);
+  assert.match(share, /평가 구절 · 구간 안 \d+번째~/);
+  assert.ok(!share.includes(fact) && !share.includes(opinion));
+  const withFact = article + '\n시의회는 예산 3억 원을 의결했다.\n교육 사업은 내년에 시작한다.';
+  const summary = await read(withFact, [...scoped, {status:'fact'}]);
+  assert.match(summary, /미확인 1개가 남아 있습니다/);
+  assert.match(summary, /근거가 지지한 3개 구간의 확인 범위는 구간 전체의 사실 확인 1개/);
+  assert.doesNotMatch(await read('시의회는 예산 3억 원을 의결했다.', [{status:'fact'}]), /발언 사실만 확인|사실 구절만 확인/);
+});
+
+test('당시 결산표가 인용 내용과 충돌하면 편집 화면·TXT·재개 파일에 귀속과 반증을 함께 남긴다', async t => {
+  const p = open(t);
+  const article = '위원장은 “지난해 집행액은 20억 원이었다”고 말했다.';
+  p.set('article', article);
+  p.el('article-form').requestSubmit();
+  for (const [title, url, excerpt] of [['속기록', 'https://speaker.example/transcript', article],
+    ['결산표', 'https://audit.example/report', '지난해 해당 사업의 실제 집행액 10억 원']]) {
+    for (const [field, value] of Object.entries({title, url, locator:'표 1', version:'당시 확정본', excerpt})) p.set('source-' + field, value);
+    p.el('source-form').requestSubmit();
+  }
+  const source = (group, title) => [...p.el(group).querySelectorAll('label')].find(label => label.textContent.includes(title)).querySelector('input');
+  source('row-sources', '속기록').click();
+  p.set('verdict', 'attribution');
+  p.set('reason', '속기록에서 발언자와 정확한 인용을 확인했다.');
+  p.set('content-status', 'contradicted');
+  assert.equal(p.el('content-sources-part').hidden, false);
+  source('content-sources', '결산표').click();
+  p.set('content-reason', '같은 사업과 기간의 결산표에는 실제 집행액 10억 원이 기록돼 있다.');
+  p.click('content-checked'); p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  p.el('article-rubric').querySelector('[data-core-row]').click();
+  assert.match(p.el('result-counts').textContent, /내용 충돌 1개/);
+  assert.match(p.el('article-rubric').textContent, /핵심 항목 중 1개에서 발언 귀속을 확인/);
+  p.click('export-report');
+  const report = await p.snapshot();
+  for (const marker of ['근거 일치율 산출 대기 (0/0)', '검증 범위 100% (1/1)', '내용을 대조한 인용 구간 · 지난해 집행액은 20억 원이었다',
+    '원발언 · 속기록', '내용 근거 · 결산표']) assert.ok(report.includes(marker), marker);
+  p.click('export-share-report');
+  const share = await p.snapshot();
+  for (const marker of ['근거 일치율 산출 대기 (0/0)', '검증 범위 100% (1/1)', '내용을 대조한 인용 구간 · 구간 안',
+    '원발언 · 속기록', '내용 근거 · 결산표', '지난해 해당 사업의 실제 집행액 10억 원']) assert.ok(share.includes(marker), marker);
+  // The independently registered source excerpt may legitimately repeat the article.
+  assert.equal(share.split(article).length - 1, 1);
+  assert.doesNotMatch(share, /검토 대상 원문|내용을 대조한 인용 구간 · 지난해/);
+  p.click('save-work');
+  const file = JSON.parse(await p.snapshot());
+  const next = open(t);
+  await loadWorkspace(next, file);
+  assert.match(next.el('report-rows').textContent, /발언 내용 · 독립 원자료와 충돌/);
+  const result = next.w.JournalWorkspaceSnapshot.read(file).assessment.accuracy;
+  assert.deepEqual([result.adjudicated, result.reviewed, result.quotedConflict, result.coreQuotedConflict.length], [0, 1, 1, 1]);
+  next.el('row-filter').value = 'all'; next.el('row-filter').dispatchEvent(new next.w.Event('change'));
+  next.el('row-list').querySelector('button').click();
+  next.set('content-reason', '다시 대조 중');
+  next.click('save-work');
+  const draft = JSON.parse(await next.snapshot());
+  assert.equal(draft.rowDrafts[0].data.contentStatus, 'contradicted');
+  assert.equal(next.w.JournalWorkspaceSnapshot.read(draft).assessment.accuracy.quotedConflict, 0);
 });
 
 test('자료 찾기에서 원문 전체와 임시 줄 번호가 검증 근거로 자동 등록되지 않는다', async t => {
@@ -220,6 +685,13 @@ test('반복된 제목과 본문을 대조한 위치, 평가 단계와 미결 �
   assert.match(txt, /0단계/);
   assert.match(txt, /기사 구절 · 구간 1 · 의회가/);
   assert.match(txt, /비교 구절 · 구간 2 · 의회가/);
+  reader.click('export-share-report');
+  const share = await reader.snapshot();
+  assert.match(share, /검증 범위 0% \(0\/2\)/);
+  assert.match(share, /핵심 구절 · 미확인 · 구간 1/);
+  assert.match(share, /기사 구절 · 구간 1 · 구간 안 1번째~/);
+  assert.match(share, /비교 구절 · 구간 2 · 구간 안 1번째~/);
+  assert.ok(share.includes(source.excerpt) && !share.includes(first.text));
   reader.click('save-work');
   const saved = JSON.parse(await reader.snapshot());
   assert.equal(saved.articleAssessment.ratings.framing.compareRowId, second.id);
@@ -238,6 +710,52 @@ test('반복된 제목과 본문을 대조한 위치, 평가 단계와 미결 �
   assert.match(await pending.snapshot(), /제목·도입부와 본문 · 작성 중 · 미평가/);
 });
 
+test('이전 당사자 비교를 미평가 초안으로 이어 열고 양쪽 근거를 보완해 JSON과 결과에 기록한다', async t => {
+  const page = open(t);
+  page.click('load-demo'); page.click('save-work');
+  const job = JSON.parse(await page.snapshot());
+  job.article = job.articleDraft = '가당은 지출 근거를 제출했다.\n나당은 지출 근거를 제출하지 않았다.';
+  const firstSource = {...job.sources[0], id:'record', excerpt:'가당은 3억 원 결산서를 제출했다.'};
+  const secondSource = {...job.sources[0], id:'source-2', title:'나당 접수 기록', locator:'나당 회신', excerpt:'나당은 해당 연도 결산서를 제출하지 않았다.'};
+  job.sources = [firstSource];
+  const r = page.w.JournalFactcheck.report(job.article, job.sources), [a,b] = r.rows;
+  job.articleAssessment = page.w.JournalArticleRubric.save(r, job.sources, {coreRowIds:[a.id], ratings:{}});
+  job.articleAssessment.ratings.standards = {level:2, rowId:a.id, quote:a.text, compareRowId:b.id, compareQuote:b.text,
+    sourceId:firstSource.id, sourceQuote:firstSource.excerpt, reason:'두 당의 자료 제출 현황을 대조했다.', impact:'나당 지출도 확인된 것으로 읽힌다.'};
+  await loadWorkspace(page, job);
+  const section = () => page.doc.querySelector('[data-section="dim-standards"]');
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  page.click('save-work');
+  const draft = JSON.parse(await page.snapshot());
+  assert.equal(draft.articleAssessment.ratings.standards, undefined);
+  assert.equal(draft.articleAssessmentDraft.entries.standards.reason, job.articleAssessment.ratings.standards.reason);
+  await loadWorkspace(page, draft);
+  section().querySelector('form').requestSubmit();
+  assert.match(section().querySelector('[role=status]').textContent, /둘째 기사 구절의 근거/);
+  for (const field of ['title','url','version','locator','excerpt']) page.set('source-'+field, secondSource[field]);
+  page.el('source-form').requestSubmit();
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  page.click('save-work');
+  const expanded = JSON.parse(await page.snapshot());
+  await loadWorkspace(page, expanded);
+  assert.match(section().textContent, /둘째 근거 필요 · 미평가/);
+  const formField = title => [...section().querySelectorAll('label')].find(l => l.firstChild.textContent === title).lastChild;
+  const source = formField('둘째 구절의 원자료와 확인 위치');
+  source.value = secondSource.id; source.dispatchEvent(new page.w.Event('change'));
+  assert.equal(formField('둘째 주장과 대조한 자료 구절').value, secondSource.excerpt);
+  section().querySelector('form').requestSubmit();
+  assert.match(section().textContent, /2단계 · 중요한 왜곡/);
+  page.click('save-work');
+  const approved = JSON.parse(await page.snapshot());
+  assert.equal(approved.articleAssessment.ratings.standards.compareSourceId, secondSource.id);
+  assert.equal(approved.articleAssessmentDraft, null);
+  await loadWorkspace(page, approved);
+  page.click('export-report');
+  const report = await page.snapshot();
+  assert.ok(report.includes(firstSource.excerpt));
+  assert.ok(report.includes('둘째 자료 구절 · ' + secondSource.excerpt));
+});
+
 function recordFirstFact(page) {
   const {doc, el, set, click} = page;
   click('load-demo');
@@ -247,6 +765,41 @@ function recordFirstFact(page) {
   click('acknowledged');
   el('decision-form').requestSubmit();
 }
+
+test('수정 중인 근거의 판본과 인용 문장을 화면과 TXT에서 밝히고 초안 내용은 공개하지 않는다', async t => {
+  const p = open(t);
+  recordFirstFact(p);
+  p.el('source-list').querySelector('button').click();
+  const original = p.el('source-excerpt').value;
+  assert.equal(p.el('result-source-draft').hidden, true);
+  p.set('source-excerpt', '편집 중이라 전달하지 않을 정정 수치');
+  const warning = p.el('source-draft-note').textContent;
+  assert.equal(p.el('result-source-draft').hidden, false);
+  assert.match(warning, /수정 전 판본.*문장 번호는 1입니다/);
+  p.click('return-source-draft');
+  assert.equal(p.el('sources-panel').open, true);
+  assert.equal(p.doc.activeElement, p.el('source-excerpt'));
+  p.click('export-report');
+  const txt = await p.snapshot();
+  assert.ok(txt.includes(warning) && txt.includes(original));
+  assert.doesNotMatch(txt, /전달하지 않을 정정 수치/);
+  p.click('save-work');
+  const restored = open(t);
+  await loadWorkspace(restored, JSON.parse(await p.snapshot()));
+  assert.equal(restored.el('source-draft-note').textContent, warning);
+  restored.el('source-form').requestSubmit();
+  assert.equal(restored.el('result-source-draft').hidden, true);
+  assert.match(restored.el('report-rows').textContent, /판단 작성 중/);
+  p.set('source-excerpt', original);
+  assert.equal(p.el('result-source-draft').hidden, true);
+  p.click('source-cancel');
+  p.set('source-title', '새로 조사 중인 비공개 자료명');
+  assert.match(p.el('source-draft-note').textContent, /등록 전인 새 원자료/);
+  p.click('export-report');
+  assert.doesNotMatch(await p.snapshot(), /새로 조사 중인 비공개 자료명/);
+  p.set('source-title', '');
+  assert.equal(p.el('result-source-draft').hidden, true);
+});
 
 test('인용한 원자료를 수정하면 기록한 판단을 다시 확인할 초안으로 남긴다', async t => {
   const page = open(t);
@@ -354,6 +907,96 @@ test('공식 다운로드 주소에 확인한 PDF 쪽·표·행을 연결하고 
   b.click('save-work'); const draft=JSON.parse(await b.snapshot());
   const c=open(t); await loadWorkspace(c,draft);
   assert.equal(c.el('source-pdfPage').value,'17');
+});
+
+function selectEmploymentPassage(page, quote) {
+  page.set('document-text', 'PDF 28쪽\n전년 대비 전체 취업자 수는 5만 명 늘었다.\n\f\nPDF 42쪽\n' + quote);
+  page.set('document-query', quote);
+  page.click('find-passages');
+  const card = [...page.el('finder-results').querySelectorAll('.source')].find(hit => hit.querySelector('blockquote')?.textContent === quote);
+  assert.ok(card);
+  card.querySelector(':scope > button').click();
+}
+
+test('다른 쪽의 발췌문을 선택하면 취소·초안 복원 후에도 확인 전에는 자료와 기존 판단 기록을 바꾸지 않는다', async t => {
+  const p = open(t), url = 'https://stats.example/report.pdf';
+  const original = '전년 대비 전체 취업자 수는 5만 명 늘었다.';
+  const quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+  p.set('article', original); p.el('article-form').requestSubmit();
+  for (const [field, value] of Object.entries({title:'고용 조사', url, version:'확정본', locator:'28쪽 전체 취업자 행', pdfPage:'28', excerpt:original}))
+    p.set('source-' + field, value);
+  p.el('source-form').requestSubmit();
+  p.el('row-sources').querySelector('input').click(); p.set('verdict', 'fact');
+  p.set('reason', '확정본 전체 취업자 행과 대조했다.'); p.click('acknowledged'); p.el('decision-form').requestSubmit();
+  p.el('source-list').querySelector('button').click();
+  p.w.confirm = prompt => { assert.match(prompt, /PDF 28쪽/); return false; };
+  selectEmploymentPassage(p, quote);
+  assert.equal(p.el('source-excerpt').value, original);
+  assert.ok(p.el('source-location-review').hidden);
+  p.w.confirm = () => true;
+  selectEmploymentPassage(p, quote);
+  assert.equal(p.el('source-pdfPage').value, '28');
+  assert.equal(p.el('source-location-summary').textContent, 'PDF 28쪽 · 28쪽 전체 취업자 행');
+  p.el('source-form').requestSubmit();
+  assert.equal(p.doc.activeElement, p.el('source-location-checked'));
+  p.click('save-work'); const work = JSON.parse(await p.snapshot());
+  assert.equal(work.sources[0].excerpt, original); assert.equal(work.receipts.length, 1);
+  assert.equal(work.sourceDraft.locationReview, 'pending');
+  const restored = open(t); await loadWorkspace(restored, work);
+  assert.equal(restored.el('source-location-checked').checked, false);
+  restored.click('source-save');
+  assert.equal(restored.doc.activeElement, restored.el('source-location-checked'));
+  restored.click('source-location-checked');
+  restored.set('source-pdfPage', '42'); restored.set('source-locator', '42쪽 고용률 행');
+  assert.equal(restored.el('source-location-checked').checked, false);
+  assert.equal(restored.el('source-location-summary').textContent, 'PDF 42쪽 · 42쪽 고용률 행');
+  restored.click('source-location-checked'); restored.click('source-save');
+  assert.equal(restored.doc.querySelector('#source-list .source-page-links > a').href, url + '#page=42');
+  restored.click('save-work'); const corrected = JSON.parse(await restored.snapshot());
+  assert.equal(corrected.sources[0].excerpt, quote); assert.equal(corrected.receipts.length, 0);
+  assert.equal(corrected.sourceDraft.locationReview, undefined);
+});
+
+test('이미 등록한 발췌문과 글자가 같은 위치를 골라도 확인 대기 초안으로 복원하고 독립 검토에서 제외한다', async t => {
+  const p = open(t), quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+  p.set('article', quote); p.el('article-form').requestSubmit();
+  const fields = {title:'고용 조사', url:'https://stats.example/report.pdf#page=28', version:'확정본', locator:'집계표 고용률 행', excerpt:quote};
+  for (const [field, value] of Object.entries(fields)) p.set('source-' + field, value);
+  p.click('source-save'); p.el('source-list').querySelector('button').click();
+  selectEmploymentPassage(p, quote);
+  p.click('save-work'); const work = JSON.parse(await p.snapshot());
+  assert.ok(p.w.JournalWorkspaceSnapshot.read(work).sourceDraftPending);
+  const own = open(t); await loadWorkspace(own, work);
+  assert.equal(own.el('source-location-review').hidden, false);
+  own.click('source-save'); assert.equal(own.doc.activeElement, own.el('source-location-checked'));
+  const independent = open(t); await loadWorkspace(independent, work, false);
+  assert.ok(independent.el('source-location-review').hidden);
+  assert.equal(independent.el('source-excerpt').value, '');
+  assert.equal(independent.el('source-count').textContent, '· 1개');
+});
+
+test('주소에 적힌 PDF 쪽과 직접 적은 위치는 같은 쪽으로 다시 확인한 뒤에만 문장에 연결한다', async t => {
+  for (const [suffix, summary] of [['#page=28&zoom=100', '문서 주소의 #page=28 · 인쇄 21쪽 고용률 행'], ['', '인쇄 21쪽 고용률 행']]) {
+    const p = open(t), url = 'https://stats.example/report.pdf' + suffix;
+    const quote = '15세 이상 인구의 2024년 고용률은 62.7%다.';
+    p.set('article', quote); p.el('article-form').requestSubmit(); p.click('go-find');
+    for (const [field, value] of Object.entries({title:'고용 조사', url, version:'확정본', locator:'인쇄 21쪽 고용률 행', excerpt:quote}))
+      p.set('source-' + field, value);
+    selectEmploymentPassage(p, quote);
+    assert.equal(p.el('source-location-summary').textContent, summary);
+    p.click('source-save-link');
+    assert.equal(p.el('source-count').textContent, '· 0개');
+    assert.equal(p.el('row-sources').querySelectorAll('input:checked').length, 0);
+    p.click('source-location-checked'); p.click('save-work');
+    const r = open(t); await loadWorkspace(r, JSON.parse(await p.snapshot()));
+    assert.ok(r.el('source-location-checked').checked);
+    r.click('source-save-link');
+    assert.equal(r.el('row-sources').querySelectorAll('input:checked').length, 1);
+    r.click('save-work'); const saved = JSON.parse(await r.snapshot());
+    assert.equal(saved.sources.length, 1); assert.equal(saved.sources[0].url, url);
+    assert.equal(saved.sources[0].locator, '인쇄 21쪽 고용률 행'); assert.equal(saved.receipts.length, 0);
+    assert.equal(saved.sources[0].locationReview, undefined);
+  }
 });
 
 test('첨부용 PDF는 같은 판본의 여러 쪽에만 연결되고 작업 파일에서는 빠진다', async t => {
@@ -544,6 +1187,33 @@ test('중량을 물었을 때 대금만 있는 표와 중량을 다른 단위로
   }
 });
 
+test('제출일 검토에서 사전 접수와 공개 일정의 구분을 보이고 선택한 원문을 펼친다', async t => {
+  const {article, sources} = require('../docs/reader/editor-study-cases.js').get('filing','A');
+  const p = open(t);
+  await loadWorkspace(p, {format:'journal-local-factcheck-v1', article, articleDraft:article, demo:true,
+    sources, receipts:[], rowDrafts:[], sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
+  const pick = id => p.el('row-sources').querySelector('input[value="' + id + '"]');
+  assert.equal(pick('doc-1').hasAttribute('aria-describedby'), false);
+  for (const [id, type] of [['doc-2',/사전 검토/], ['doc-3',/공개 일정/]]) {
+    const checkbox = pick(id), card = checkbox.closest('.source');
+    assert.match(p.el(checkbox.getAttribute('aria-describedby')).textContent, type);
+    assert.equal(card.querySelector('details').open, false);
+    checkbox.click();
+    assert.equal(card.querySelector('details').open, true);
+    assert.ok(card.querySelector('details').textContent.includes(sources.find(s=>s.id===id).excerpt));
+    checkbox.click();
+  }
+  pick('doc-1').click();
+  p.set('verdict','fact');
+  p.set('reason','최종 자료의 제출 기한과 실제 접수일을 대조했다.');
+  p.click('acknowledged');
+  p.el('decision-form').requestSubmit();
+  p.click('save-work');
+  const file = JSON.parse(await p.snapshot());
+  assert.deepEqual(file.receipts[0].sourceIds,['doc-1']);
+  assert.doesNotMatch(JSON.stringify(file.receipts),/filing-source-note|공개 일정/);
+});
+
 test('결과를 뒷받침할 자료가 부족하면 후보를 닫아 두고 편집자가 직접 대조할 수 있다', async t => {
   const {claims, bundles} = require('../experiments/source-order-pilot/holdout.json');
   const claim = claims.find(c => c.type === 'unmeasured downstream outcome');
@@ -559,4 +1229,1104 @@ test('결과를 뒷받침할 자료가 부족하면 후보를 닫아 두고 편�
   details.open = true;
   assert.ok(details.textContent.includes(sources.find(s => s.id === details.parentElement.querySelector('input').value).excerpt));
   assert.equal(p.el('verdict').value, '');
+});
+
+test('근거를 찾던 문장에만 새 자료를 연결하고 기존 이유는 보관하되 판정은 직접 기록한다', async t => {
+  const page = open(t);
+  const {el, click, set, doc, snapshot} = page;
+  set('article', '시의회는 예산을 확정했다.\n예산은 3억 원이다.');
+  el('article-form').requestSubmit();
+  assert.equal(el('source-save-link').hidden, true);
+  set('verdict', 'fact');
+  set('reason', '의결된 예산만 확인한다.');
+  click('go-find');
+  assert.match(el('source-save-link').textContent, /1번/);
+  set('document-text', '시의회는 예산을 확정했다.');
+  click('find-passages');
+  el('finder-results').querySelector('button:last-child').click();
+  const fields = {title:'공개 회의록', url:'https://council.example/record.pdf#page=2', version:'확정본', locator:'의결란'};
+  for (const [id, value] of Object.entries(fields)) set('source-' + id, value);
+  click('source-save-link');
+  assert.equal(el('source-count').textContent, '· 1개');
+  assert.equal(el('sources-panel').open, false);
+  assert.equal(el('verdict'), doc.activeElement);
+  assert.equal(doc.querySelector('#row-sources input:checked')?.value, 'source-1');
+  assert.equal(el('reason').value, '의결된 예산만 확인한다.');
+  assert.equal(el('acknowledged').checked, false);
+  click('save-work');
+  const work = JSON.parse(await snapshot());
+  assert.equal(work.receipts.length, 0);
+  const parsed = page.w.JournalWorkspaceSnapshot.read(work);
+  assert.equal(parsed.sourceDraftPending, false, '다음 발췌를 위해 남긴 문서 정보는 작성 중인 자료가 아니다');
+  assert.equal(parsed.assessment.accuracy.adjudicated, 0);
+  const restored = open(t);
+  await loadWorkspace(restored, work);
+  assert.equal(restored.el('source-url').value, 'https://council.example/record.pdf');
+  restored.set('source-excerpt', '추가로 확인 중인 대목');
+  restored.click('save-work');
+  assert.equal(restored.w.JournalWorkspaceSnapshot.read(JSON.parse(await restored.snapshot())).sourceDraftPending, true);
+  click('go-add-source');
+  el('row-list').children[1].querySelector('button').click();
+  assert.equal(el('source-save-link').hidden, true, '근거 입력 중 다른 문장을 고르면 연결 대상을 해제한다');
+  assert.equal(doc.querySelector('#row-sources input:checked'), null);
+  el('row-list').children[0].querySelector('button').click();
+  click('acknowledged');
+  el('decision-form').requestSubmit();
+  click('save-work');
+  assert.equal(JSON.parse(await snapshot()).receipts[0].status, 'fact');
+});
+
+test('원자료를 작성하다 이어 열면 같은 위치의 문장에 편집자가 직접 연결할 수 있다', async t => {
+  const writer = open(t);
+  const claim = '의회는 돌봄 예산을 의결했다.';
+  const article = [claim, '다음 안건을 논의했다.', claim].join('\n\n');
+  writer.set('article', article);
+  writer.el('article-form').requestSubmit();
+  writer.el('row-list').children[2].querySelector('button').click();
+  writer.set('reason', '세 번째 문장에서 인용할 회의록을 대조한다.');
+  writer.click('go-find');
+  writer.set('document-text', '공개하지 않을 자료 전문');
+  const fields = {title:'예산 회의록', url:'https://council.example/minutes', version:'공개본',
+    locator:'의결사항 3', excerpt:'돌봄 예산 의결'};
+  for (const [key, value] of Object.entries(fields)) writer.set('source-' + key, value);
+  writer.click('save-work');
+  const serialized = await writer.snapshot();
+  assert.ok(!serialized.includes('공개하지 않을 자료 전문'));
+  const work = JSON.parse(serialized);
+  const reader = open(t);
+  await loadWorkspace(reader, work);
+  assert.equal(reader.el('source-save-link').hidden, false);
+  assert.equal(reader.el('source-save-link').textContent, '3번 문장의 대조 자료로 추가');
+  assert.equal(reader.el('sources-panel').open, true);
+  assert.equal(reader.el('source-count').textContent, '· 0개');
+  assert.equal(reader.el('document-text').value, '');
+  reader.click('source-save-link');
+  assert.equal(reader.el('row-sources').querySelectorAll('input:checked').length, 1);
+  assert.equal(reader.el('acknowledged').checked, false);
+  reader.el('row-list').firstElementChild.querySelector('button').click();
+  assert.equal(reader.el('row-sources').querySelectorAll('input:checked').length, 0);
+  reader.click('save-work');
+  const attached = JSON.parse(await reader.snapshot());
+  assert.equal(attached.sources.length, 1);
+  assert.equal(attached.receipts.length, 0);
+
+  writer.el('sources-panel').open = false;
+  writer.click('save-work');
+  const closed = open(t);
+  await loadWorkspace(closed, JSON.parse(await writer.snapshot()));
+  assert.equal(closed.el('sources-panel').open, false);
+  assert.equal(closed.el('source-save-link').hidden, false);
+
+  const legacy = structuredClone(work);
+  delete legacy.sourceDraft.targetBinding;
+  const stale = article + '\n\n뒤에 확인한 내용이 추가됐다.';
+  for (const input of [legacy, {...work, currentId:'unit-0'}, {...work, currentId:null},
+    {...work, article:stale, articleDraft:stale}, {...work, articleDraft:stale},
+    {...work, sourceDraft:{...work.sourceDraft, targetBinding:{}}},
+    {...work, sources:attached.sources, sourceDraft:{...work.sourceDraft, id:attached.sources[0].id}},
+    {...work, sourceDraft:{...work.sourceDraft, id:'missing-source'}}]) {
+    const fresh = open(t);
+    await loadWorkspace(fresh, input);
+    assert.equal(fresh.el('source-save-link').hidden, true);
+    assert.equal(fresh.el('sources-panel').open, false);
+    assert.equal(fresh.el('source-excerpt').value, fields.excerpt);
+  }
+  const untrusted = open(t);
+  await loadWorkspace(untrusted, work, false);
+  assert.equal(untrusted.el('source-save-link').hidden, true);
+  assert.equal(untrusted.el('source-excerpt').value, '');
+  writer.click('save-review-input');
+  const packet = JSON.parse(await writer.snapshot());
+  assert.equal(packet.sourceDraft.targetBinding, undefined);
+  assert.equal(packet.sourceDraft.fields.excerpt, '');
+});
+
+test('같은 원자료로 다음 문장을 찾으면 새 후보만 표시하고 발췌와 판단은 편집자에게 남긴다', async t => {
+  const {el, click, set, doc, snapshot} = open(t);
+  const first = '시의회는 돌봄 예산을 확정했다.';
+  const second = '도서관은 신간 도서를 구입했다.';
+  const privateNote = '내보내지 않을 문서 메모';
+  set('article', [first, second].join('\n'));
+  el('article-form').requestSubmit();
+  click('go-find');
+  assert.equal(doc.activeElement, el('document-text'));
+  assert.equal(el('finder-status').textContent, '');
+
+  set('document-text', [first, second, privateNote].join('\n'));
+  click('find-passages');
+  assert.equal(el('finder-results').querySelector('blockquote').textContent, first);
+  el('row-list').children[1].querySelector('button').click();
+  click('go-find');
+  assert.equal(el('document-query').value, second);
+  assert.equal(el('finder-results').querySelector('blockquote')?.textContent, second);
+  assert.equal(doc.activeElement, el('find-passages'));
+  assert.equal(el('source-excerpt').value, '');
+  assert.equal(el('source-locator').value, '');
+  assert.equal(el('acknowledged').checked, false);
+  click('save-work');
+  const serialized = await snapshot();
+  assert.ok(!serialized.includes(privateNote));
+  const work = JSON.parse(serialized);
+  assert.equal(work.sources.length, 0);
+  assert.equal(work.receipts.length, 0);
+});
+
+test('먼저 연 큰 파일이 늦게 읽혀도 마지막으로 고른 기사를 덮지 않는다', async t => {
+  const page = open(t);
+  page.click('load-demo');
+  page.click('save-work');
+  const initial = JSON.parse(await page.snapshot());
+  let finishRead;
+  const early = {text: () => new Promise(resolve => { finishRead = resolve; })};
+  const input = page.el('import-file');
+  Object.defineProperty(input, 'files', {value: [early], configurable: true});
+  input.dispatchEvent(new page.w.Event('change'));
+  const chosen = {...initial, article:'두 번째로 고른 기사입니다.', articleDraft:'두 번째로 고른 기사입니다.'};
+  await loadWorkspace(page, chosen);
+  finishRead(JSON.stringify(initial));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.el('article').value, chosen.article);
+});
+
+test('아직 제출하지 않은 다른 편집자의 문장 판단도 독립 검토를 선택하면 복원하지 않는다', async t => {
+  const author = open(t);
+  author.click('load-demo');
+  author.set('reason', '이전 편집자가 정리한 예비 결론');
+  author.click('save-work');
+  const work = JSON.parse(await author.snapshot());
+  assert.equal(work.receipts.length, 0);
+  assert.equal(work.rowDrafts.length, 1);
+  const reviewer = open(t);
+  await loadWorkspace(reviewer, work, false);
+  assert.equal(reviewer.el('article').value, work.article);
+  assert.equal(reviewer.el('reason').value, '');
+});
+
+test('판정이 없어도 미등록 발췌나 고치는 중인 기사에는 이어서 작업할지 선택할 수 있다', async t => {
+  const author = open(t);
+  author.click('load-demo');
+  author.click('save-work');
+  const original = JSON.parse(await author.snapshot());
+  assert.equal(original.receipts.length + original.rowDrafts.length, 0);
+  const privateText = '편집 중인 사적 논평';
+  const excerptDraft = structuredClone(original);
+  excerptDraft.sourceDraft.fields.excerpt = privateText;
+  const editDraft = structuredClone(original);
+  const source = editDraft.sources[0];
+  editDraft.sourceDraft.id = source.id;
+  for (const field of Object.keys(editDraft.sourceDraft.fields)) {
+    editDraft.sourceDraft.fields[field] = source[field] || '';
+  }
+  const untouchedEdit = structuredClone(editDraft);
+  editDraft.sourceDraft.fields.excerpt = privateText;
+  source.editorComment = privateText;
+  const articleDraft = {...original, articleDraft: original.article + '\n' + privateText};
+  for (const work of [excerptDraft, editDraft, articleDraft]) {
+    const trusted = open(t);
+    let prompts = 0;
+    await loadWorkspace(trusted, work, () => { prompts++; return true; });
+    assert.equal(prompts, 1);
+    assert.match(trusted.el('file-status').textContent, /문장 판단은 0건/);
+    assert.equal(trusted.el('article').value, work.articleDraft);
+    assert.equal(trusted.el('source-excerpt').value, work.sourceDraft.fields.excerpt);
+    const independent = open(t);
+    await loadWorkspace(independent, work, false);
+    assert.equal(independent.el('article').value, original.article);
+    assert.equal(independent.el('source-excerpt').value, '');
+    independent.click('save-work');
+    const clean = JSON.parse(await independent.snapshot());
+    assert.deepEqual(clean.sources, original.sources);
+    assert.ok(!JSON.stringify(clean).includes(privateText));
+  }
+  for (const work of [original, untouchedEdit, {...original, article: ''}]) {
+    const unchanged = open(t);
+    let prompts = 0;
+    await loadWorkspace(unchanged, work, () => { prompts++; return true; });
+    assert.equal(prompts, 0);
+    assert.equal(unchanged.el('article').value, original.article);
+  }
+});
+
+test('목록에서 원자료를 수정하다 이어 열면 편집 중인 발췌를 같은 자료에서 이어 쓴다', async t => {
+  const writer = open(t);
+  writer.click('load-demo');
+  writer.el('sources-panel').open = true;
+  const item = writer.el('source-list').querySelector('details');
+  item.open = true;
+  item.querySelector('button').click();
+  const title = writer.el('source-title').value;
+  writer.set('source-excerpt', '확정 전 발췌 수정안');
+  writer.click('save-work');
+  const work = JSON.parse(await writer.snapshot());
+  const owner = open(t);
+  await loadWorkspace(owner, work);
+  assert.equal(owner.el('sources-panel').open, true);
+  assert.equal(owner.el('source-form-title').textContent, '원자료 수정');
+  assert.equal(owner.el('source-title').value, title);
+  assert.equal(owner.el('source-excerpt').value, '확정 전 발췌 수정안');
+  assert.equal(owner.el('source-save-link').hidden, true);
+  assert.ok(!owner.el('source-list').textContent.includes('확정 전 발췌 수정안'));
+});
+
+test('독립 평가 파일에는 확정한 기사와 원자료만 남고 판정·초안·추가 입력은 전달되지 않는다', async t => {
+  const a = open(t);
+  recordFirstFact(a);
+  a.click('save-work');
+  const seed = JSON.parse(await a.snapshot());
+  seed.sources[0].internalNote = '먼저 본 사람의 비공개 메모';
+  const owner = open(t);
+  await loadWorkspace(owner, seed);
+  owner.set('reason', '미완성 판정의 메모');
+  owner.set('source-excerpt', '등록하지 않은 발췌');
+  owner.click('save-review-input');
+  const packed = JSON.parse(await owner.snapshot());
+  assert.equal(packed.article, seed.article);
+  assert.equal(packed.demo, true);
+  assert.deepEqual(packed.sources.map(s => s.excerpt), seed.sources.map(s => s.excerpt));
+  for (const value of ['먼저 본 사람의 비공개 메모', '미완성 판정의 메모', '등록하지 않은 발췌', seed.receipts[0].reason]) {
+    assert.ok(!JSON.stringify(packed).includes(value));
+  }
+  assert.deepEqual(packed.receipts, []);
+  assert.deepEqual(packed.rowDrafts, []);
+  const b = open(t);
+  await loadWorkspace(b, packed, false);
+  assert.equal(b.el('verdict').value, '');
+  assert.equal(b.el('row-list').children.length, 5);
+  assert.equal(b.w.JournalWorkspaceSnapshot.read(packed).assessment.accuracy.adjudicated, 0);
+  owner.set('article', '수정 중인 기사');
+  owner.click('save-review-input');
+  assert.match(owner.el('file-status').textContent, /검토 목록을 만든 뒤/);
+});
+
+test('A/B 작업 파일은 편집 판단과 중립 표지만 이어 저장하고 독립 평가용 내보내기는 표지를 제거한다', async t => {
+  const seed = open(t);
+  recordFirstFact(seed);
+  seed.set('reason', '별도 근거를 확인 중이다.');
+  seed.click('save-work');
+  const work = JSON.parse(await seed.snapshot());
+  const originalReceipt = {...work.receipts[0]};
+  const privateNote = '진행자 전용 역할 메모';
+  work.role = privateNote;
+  work.sources[0].internalNote = privateNote;
+  work.receipts[0].role = privateNote;
+  work.rowDrafts[0].data.role = privateNote;
+  const editor = open(t);
+  for (const slot of ['A', 'B']) {
+    const tag = {pairId: '0123456789abcdef0123456789abcdef', slot};
+    await loadWorkspace(editor, {...work, blindReview: tag});
+    const notice = editor.el('blind-notice');
+    assert.ok(!notice.hidden);
+    assert.ok(notice.textContent.includes('블라인드 평가 ' + slot + ' · 묶음 01234567'));
+    editor.click('save-work');
+    assert.equal(editor.filename(), 'journal-work-' + tag.pairId + '-' + slot + '.json');
+    const raw = await editor.snapshot();
+    assert.ok(!raw.includes(privateNote));
+    const returned = JSON.parse(raw);
+    assert.deepEqual(returned.blindReview, tag);
+    assert.deepEqual(returned.receipts, [originalReceipt]);
+    assert.equal(returned.rowDrafts[0].data.reason, '별도 근거를 확인 중이다.');
+    await loadWorkspace(editor, returned);
+    assert.equal(editor.el('reason').value, '별도 근거를 확인 중이다.');
+    editor.click('save-review-input');
+    assert.equal(editor.filename(), 'journal-independent-review.json');
+    const clean = JSON.parse(await editor.snapshot());
+    assert.ok(!Object.hasOwn(clean, 'blindReview'));
+    assert.deepEqual(clean.receipts, []);
+    assert.deepEqual(clean.rowDrafts, []);
+    assert.ok(!JSON.stringify(clean).includes(privateNote));
+  }
+});
+
+test('A/B 평가에서 원문을 편집 중인 작업을 다시 열고 되돌릴 수 있고 변경 확정 뒤에는 일반 기사로 저장한다', async t => {
+  const seed = open(t);
+  recordFirstFact(seed);
+  seed.click('save-work');
+  const tagged = JSON.parse(await seed.snapshot());
+  tagged.blindReview = {pairId: 'a'.repeat(32), slot: 'B'};
+  const page = open(t);
+  await loadWorkspace(page, tagged);
+  const replacement = '새 기사입니다.';
+  page.set('article', replacement);
+  assert.match(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.click('save-work');
+  const draft = JSON.parse(await page.snapshot());
+  assert.deepEqual(draft.blindReview, tagged.blindReview);
+  assert.throws(() => page.w.JournalWorkspaceSnapshot.read(draft), /기사를 수정 중/);
+  await loadWorkspace(page, draft);
+  assert.equal(page.el('article').value, replacement);
+  assert.match(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.w.confirm = () => false;
+  page.el('article-form').requestSubmit();
+  assert.equal(page.el('article').value, tagged.article);
+  assert.doesNotMatch(page.el('blind-notice').textContent, /원문을 수정 중/);
+  page.click('save-work');
+  assert.deepEqual(JSON.parse(await page.snapshot()).blindReview, tagged.blindReview);
+  page.w.confirm = () => true;
+  page.set('article', replacement);
+  page.el('article-form').requestSubmit();
+  assert.match(page.el('review-status').textContent, /A\/B 표지를 해제/);
+  assert.ok(page.el('blind-notice').hidden);
+  page.click('save-work');
+  assert.equal(page.filename(), 'journal-factcheck-work.json');
+  assert.ok(!Object.hasOwn(JSON.parse(await page.snapshot()), 'blindReview'));
+});
+
+test('연습 기사나 표지 없는 기존 파일을 열면 이전 A/B 표지를 지우고 추가 역할 필드가 있는 표지도 전달하지 않는다', async t => {
+  const page = open(t);
+  page.click('load-demo');
+  page.click('save-review-input');
+  const old = JSON.parse(await page.snapshot());
+  const tag = {pairId: 'b'.repeat(32), slot: 'A'};
+  for (const replace of [
+    () => page.click('load-demo'),
+    () => loadWorkspace(page, old),
+    () => loadWorkspace(page, {...old, blindReview: {...tag, role: 'private-version'}})
+  ]) {
+    await loadWorkspace(page, {...old, blindReview: tag});
+    assert.ok(!page.el('blind-notice').hidden);
+    await replace();
+    assert.ok(page.el('blind-notice').hidden);
+    page.click('save-work');
+    assert.equal(page.filename(), 'journal-factcheck-work.json');
+    const raw = await page.snapshot();
+    assert.ok(!Object.hasOwn(JSON.parse(raw), 'blindReview'));
+    assert.ok(!raw.includes('private-version'));
+  }
+});
+
+test('문장 판정을 편집하다 저장해도 잠시 제외된 편향 평가는 근거가 일치할 때만 복원한다', async t => {
+  const a = open(t);
+  recordFirstFact(a); a.click('save-work');
+  const work = JSON.parse(await a.snapshot());
+  const report = a.w.JournalFactcheck.report(work.article, work.sources, work.receipts);
+  const row = report.rows[0], vote = work.sources[0];
+  work.articleAssessment = a.w.JournalArticleRubric.save(report, work.sources, {coreRowIds: [row.id], ratings: {
+    wording: {level: 0, rowId: row.id, quote: row.text, sourceId: vote.id, sourceQuote: vote.excerpt, reason: '원표와 대조함'}
+  }});
+  const editor = open(t);
+  await loadWorkspace(editor, work);
+  editor.el('row-filter').value = 'all';
+  editor.el('row-filter').dispatchEvent(new editor.w.Event('change'));
+  editor.el('row-list').querySelector('button').click();
+  editor.set('reason', '근거를 다시 읽는 중');
+  editor.click('save-work');
+  const paused = JSON.parse(await editor.snapshot());
+  const resumed = open(t);
+  await loadWorkspace(resumed, paused);
+  assert.match(resumed.el('article-rubric').textContent, /근거로 채점 0\/4/);
+  resumed.click('export-report');
+  assert.ok(!(await resumed.snapshot()).includes('원표와 대조함'));
+  resumed.set('reason', work.receipts[0].reason);
+  assert.match(resumed.el('article-rubric').textContent, /근거로 채점 1\/4/);
+  resumed.click('export-report');
+  assert.ok((await resumed.snapshot()).includes('원표와 대조함'));
+});
+
+function employmentOverviewFixture() {
+  const headers = ['1. 전체 경제활동인구 총괄', '                                                                          (단위: 천명)',
+    '               15세 이상 인구                           경제활동 고용률', '                                                                     1)',
+    '                                                                          실업률2)', '                     경 제 활 동 인 구          비 경 제 참 가 율',
+    '                           취업자     실업자 활동인구         (%)   (%)               (%)'];
+  const otherYear = '  2022       45,260 28,922  28,089    833   16,339   63.9 62.1            2.9';
+  const earlier = '  2023       45,407 29,203  28,416    787   16,204   64.3 62.6            2.7';
+  const later = '  2024       45,570 29,399  28,576    823   16,172   64.5 62.7            2.8';
+  const quarter = '2022.4/4     45,317   28,957    28,216     741    16,360   63.9   62.3    2.6   (2.8)';
+  const definition = '주: 1) 취업자/15세이상인구×100';
+  const document = [...headers, otherYear, earlier, later, quarter, definition, '   2) 실업자/경제활동인구×100, (        )내는 계절조정 실업률'];
+  const expected = [...headers, '[…]', earlier, later, '[…]', definition].join('\n');
+  return {document, expected, definition, quarter};
+}
+
+test('고용률 두 해를 대조할 때 카드·주변 원문·등록 자료에 원표의 머리글과 연간 행, 분모 주석을 함께 남긴다', async t => {
+  const p = open(t);
+  const {document, expected, definition, quarter} = employmentOverviewFixture();
+  const question = '2024년 연간 15세 이상 고용률은 2023년보다 얼마나 올랐나?';
+  p.set('article',question); p.el('article-form').requestSubmit(); p.click('go-find');
+  p.set('document-text',document.join('\n')); p.set('document-query',question); p.click('find-passages');
+  const card = p.el('finder-results').querySelector('.source');
+  assert.ok(card); assert.equal(card.querySelector(':scope > blockquote').textContent,expected);
+  assert.match(card.querySelector('strong').textContent,/2023년과 2024년 연간 고용률/);
+  assert.equal(p.el('source-excerpt').value,'');
+  const pick = card.querySelector(':scope > button');
+  assert.match(pick.textContent,/두 해의 행/); pick.click();
+  const location = '1. 전체 경제활동인구 총괄 · 2023년·2024년 연간 행 · 고용률 열';
+  assert.equal(p.el('source-locator').value,location); assert.equal(p.el('source-excerpt').value,expected);
+  const nearby = card.querySelector('details'); nearby.open = true; nearby.dispatchEvent(new p.w.Event('toggle'));
+  nearby.querySelector('button').click();
+  assert.equal(p.el('source-excerpt').value,expected); assert.ok(nearby.textContent.includes(definition));
+  nearby.querySelector('input[value="11"]').click(); nearby.querySelector('button').click();
+  assert.equal(p.el('source-excerpt').value,quarter); assert.equal(p.el('source-locator').value,'');
+  pick.click();
+  p.set('source-title','경제활동인구조사'); p.set('source-url','https://agency.example/survey.pdf'); p.set('source-version','2025-01-15');
+  p.click('source-save-link'); p.click('save-work');
+  const saved = JSON.parse(await p.snapshot());
+  assert.equal(saved.sources[0].excerpt,expected); assert.equal(saved.sources[0].locator,location); assert.equal(saved.receipts.length,0);
+});
+
+test('두 쪽의 원문 발췌만 제공하면 고용률 카드에서 인원표를 연결하지 않는다', t => {
+  const p = open(t);
+  const {document} = employmentOverviewFixture();
+  const rates = ['2024년 연간 고용동향','’23년  ’24년','취 업 자(천명)  28,416  28,576',
+    '15세이상 고용률(%)  62.6  62.7','(전년대비 증감, %p)  (0.5) (0.1)'];
+  const query = '2024년 연간 15세 이상 고용률은 2023년보다 상대 0.1% 증가했다.';
+  p.set('article',query); p.el('article-form').requestSubmit(); p.click('go-find');
+  p.set('document-text',[...rates,'\f',...document].join('\n')); p.click('find-passages');
+  const card = p.el('finder-results').querySelector('.annual-rate');
+  assert.match(card.textContent,/약 0\.16%/);
+  assert.equal(card.querySelector('.annual-counts'),null);
+  assert.equal(p.el('source-excerpt').value,''); assert.equal(p.el('verdict').value,'');
+});
+
+test('연도별 자료에서 선택한 지표의 다른 원문 수치와 위치를 볼 수 있고 판정은 편집자가 한다', t => {
+  const {doc, el, set, click} = open(t);
+  click('load-demo');
+  const before = el('report-rows').textContent;
+  const lines = ['발생년\t교통사고건수\t사망자수', '2023\t198296\t2551', '2024\t196349\t2521'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2024년 교통사고 사망자는 2,551명이었다는 주장이 통계와 일치하나?');
+  click('find-passages');
+  const card = doc.querySelector('#finder-results .source');
+  assert.equal(card.querySelector('blockquote').textContent, lines[2]);
+  assert.match(card.textContent, /2024년 · 사망자수 · 원문 값 2521/);
+  assert.match(card.textContent, /머리글 1문단 · 자료 3문단 · 왼쪽에서 3번째 열/);
+  assert.ok(![...doc.querySelectorAll('#finder-results .source')].slice(1).some(c => /원문 값/.test(c.textContent)));
+  assert.equal(el('verdict').value, '');
+  assert.equal(el('report-rows').textContent, before);
+  set('document-query', '2024년 인구 10만 명당 사망자는?'); click('find-passages');
+  assert.doesNotMatch(el('finder-results').textContent, /원문 값/);
+});
+
+test('선택한 연도의 총계와 기간·기사 문맥·단위가 다르면 후보 행만 원문대로 확인한다', t => {
+  const {el, set, click, doc, w} = open(t);
+  click('load-demo');
+  const source = ['연도\t지원자수(명)', '2024\t210', '2025\t300'];
+  const direct = '2025년 지원자수는 300명이었나?';
+  set('document-text', source.join('\n'));
+  set('document-query', direct);
+  click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 300/);
+  for (const [query, context, reason] of [
+    ['2025년 설 연휴 지원자수는 300명이었나?', '', /특정 기간/],
+    [direct, '신청 기간을 2025년 설 연휴로 한정했다.', /추가한 기사 문맥/],
+    ['2025년 지원자수는 300건이었나?', '', /단위가 서로 다릅니다/]
+  ]) {
+    set('document-query', query); set('search-context', context); click('find-passages');
+    const card = [...doc.querySelectorAll('#finder-results .source')]
+      .find(n => n.querySelector('blockquote')?.textContent === source[2]);
+    assert.ok(card);
+    assert.match(card.textContent, reason);
+    assert.doesNotMatch(card.textContent, /원문 값 300/);
+    const details = [...card.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent.includes('원표 항목'));
+    details.open = true;
+    details.dispatchEvent(new w.Event('toggle'));
+    assert.match(details.textContent, /2열 · 지원자수\(명\) · 300/);
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', direct); click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 300/);
+});
+
+test('두 정당 지지율이 각각 40%였던 날을 찾으면 해당 정당의 열과 원문 행을 보여 준다', t => {
+  const {el, doc, set, click} = open(t);
+  click('load-demo');
+  const lines = ['조사일\t여당 지지율(%)\t야당 지지율(%)',
+    '2025-04-01\t40.0\t28.0', '2025-04-02\t29.0\t40.0'];
+  set('document-text', lines.join('\n'));
+  for (const [side, paragraph, column] of [['여당',1,2],['야당',2,3]]) {
+    set('document-query', side + ' 지지율이 40%인 날짜는?'); click('find-passages');
+    const card = doc.querySelector('#finder-results .source');
+    assert.equal(card.querySelector('blockquote').textContent, lines[paragraph]);
+    assert.ok(card.textContent.includes('자료 행의 ' + column + '열 · ' + side + ' 지지율(%) · 원문 표기 40.0'));
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', '지지율이 40%인 날짜는?'); click('find-passages');
+  assert.doesNotMatch(el('finder-results').textContent, /자료 행의 \d+열/);
+});
+
+test('연도가 가로인 표에서 선택한 행을 원문 그대로 옮기고 편집자가 적은 위치를 보존한다', async t => {
+  const {el, set, click, snapshot} = open(t);
+  set('article', '2023년 장비 대여는 87건이었다.');
+  el('article-form').requestSubmit();
+  click('go-find');
+  const lines = ['구분\t2022년\t2023년', '장비 반납(건)\t48\t87', '장비 대여(건)\t29\t31  '];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2023년 장비 대여는 87건인가?');
+  click('find-passages');
+
+  const cards = el('finder-results').querySelectorAll('.source');
+  assert.equal(cards[0].querySelector('blockquote').textContent, lines[2]);
+  assert.match(cards[0].textContent, /장비 대여\(건\) 행 · 2023년 열 · 원문 값 31/);
+  assert.match(cards[0].textContent, /머리글 1문단 · 자료 3문단 · 왼쪽에서 3번째 열/);
+  assert.ok([...cards].slice(1).every(card => !card.textContent.includes('원문 값')));
+  assert.equal(el('source-excerpt').value, '');
+  assert.equal(el('source-locator').value, '');
+
+  const selectRow = cards[0].querySelector(':scope > button');
+  assert.equal(selectRow.textContent, '이 행을 발췌하고 표 위치 확인');
+  selectRow.click();
+  assert.equal(el('source-excerpt').value, [lines[0], '[…]', lines[2]].join('\n'));
+  assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
+  assert.equal(el('source-locator').readOnly, false);
+  assert.equal(el('source-locator').disabled, false);
+
+  const editorLocation = '장비 이용 대장 7쪽, 표 2';
+  set('source-locator', editorLocation);
+  set('document-query', '2023년 장비 반납은 31건인가?');
+  click('find-passages');
+  el('finder-results').querySelector('.source > button').click();
+  assert.equal(el('source-excerpt').value, lines.slice(0, 2).join('\n'));
+  assert.equal(el('source-locator').value, editorLocation);
+  assert.equal(el('verdict').value, '');
+  click('save-work');
+  const work = JSON.parse(await snapshot());
+  assert.deepEqual(work.sources, []);
+  assert.deepEqual(work.receipts, []);
+});
+
+test('대상 연도의 항목을 펼쳐도 표 전체의 값을 질문의 답으로 제시하거나 판정을 기록하지 않는다', t => {
+  const {el, set, click, w} = open(t);
+  click('load-demo');
+  const lines = ['연도\t지정\t확인\t보유시설수', '2019\t8\t51\t103', '2020\t9\t49\t108'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '2020년 승인 현황을 확인한 결과 시설이 몇 곳이었나?');
+  click('find-passages');
+  const lookup = el('finder-results');
+  const inspect = [...lookup.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent === '2020년 원표 항목 3개 보기');
+  assert.ok(inspect);
+  assert.equal(inspect.open,false);
+  assert.doesNotMatch(lookup.textContent,/원문 값/);
+  const report = el('report-rows').textContent;
+  const excerpt = el('source-excerpt').value;
+  inspect.open = true;
+  inspect.dispatchEvent(new w.Event('toggle'));
+  assert.match(inspect.textContent, /머리글 1문단 · 자료 3문단/);
+  assert.deepEqual([...inspect.querySelectorAll('li')].map(li => li.textContent),
+    ['2열 · 지정 · 9','3열 · 확인 · 49','4열 · 보유시설수 · 108']);
+  assert.equal(el('source-excerpt').value,excerpt);
+  assert.equal(el('report-rows').textContent,report);
+  assert.equal(el('verdict').value,'');
+  set('document-query', '2017년 보유 시설은 얼마인가?'); click('find-passages');
+  assert.doesNotMatch(lookup.textContent,/원표 항목/);
+});
+
+test('직접 고른 표의 좌표는 작업을 다시 열어도 발췌문과 함께 바뀌며 취소하면 둘 다 보존된다', async t => {
+  const first = open(t);
+  first.set('article', '시설 이용 기록을 확인한다.');
+  first.el('article-form').requestSubmit();
+  const lines = ['구분\t2023년\t2024년', '평일 이용\t120\t133', '휴일 이용\t59\t72  '];
+  function browse(page) {
+    page.set('document-text', lines.join('\n'));
+    page.set('document-query', '2024년 휴일 이용자 중 어린이는 몇 명인가요?');
+    page.click('find-passages');
+    const results = page.el('finder-results');
+    assert.doesNotMatch(results.textContent, /원문 값/);
+    const chooser = [...results.querySelectorAll('details')].find(d =>
+      d.querySelector('summary')?.textContent === '원표의 행과 연도 직접 선택');
+    chooser.open = true;
+    chooser.dispatchEvent(new page.w.Event('toggle'));
+    const selects = chooser.querySelectorAll('select');
+    const use = chooser.querySelector('button');
+    assert.ok(use.disabled);
+    const choose = (index, item) => {
+      selects[index].selectedIndex = item;
+      selects[index].dispatchEvent(new page.w.Event('change'));
+    };
+    return {choose, use, preview:chooser.querySelector('[aria-live]')};
+  }
+  let selection = browse(first);
+  selection.choose(0, 1);
+  assert.ok(selection.use.disabled);
+  selection.choose(1, 2);
+  assert.match(selection.preview.textContent, /평일 이용.*2024년.*133.*3번째 열/);
+  assert.equal(first.el('source-excerpt').value, '');
+  selection.use.click();
+  first.click('save-work');
+  const saved = JSON.parse(await first.snapshot());
+  const page = open(t);
+  await loadWorkspace(page, saved);
+  selection = browse(page);
+  selection.choose(0, 2); selection.choose(1, 1);
+  page.w.confirm = () => false;
+  selection.use.click();
+  assert.equal(page.el('source-excerpt').value, lines.slice(0, 2).join('\n'));
+  assert.equal(page.el('source-locator').value, '‘평일 이용’ 행 · ‘2024년’ 열');
+  page.w.confirm = () => true;
+  selection.use.click();
+  assert.equal(page.el('source-excerpt').value, [lines[0], '[…]', lines[2]].join('\n'));
+  assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2023년’ 열');
+  selection.choose(1, 2); selection.use.click();
+  assert.equal(page.el('source-locator').value, '‘휴일 이용’ 행 · ‘2024년’ 열');
+  page.set('document-text', '별도 회의 자료에서 참석자 수를 확인했다.');
+  page.set('document-query', '회의 자료'); page.click('find-passages');
+  page.el('finder-results').querySelector('.source > button').click();
+  assert.equal(page.el('source-locator').value, '');
+  assert.equal(page.el('source-excerpt').value, '별도 회의 자료에서 참석자 수를 확인했다.');
+  page.click('save-work');
+  const changed = JSON.parse(await page.snapshot());
+  assert.deepEqual(changed.sources, []); assert.deepEqual(changed.receipts, []);
+  assert.equal(page.el('verdict').value, '');
+});
+
+test('조건이 붙은 통계는 원표 좌표를 직접 연 뒤에만 숫자를 보여 주고 제목까지 발췌 위치에 보존한다', t => {
+  const {set, el, click, doc} = open(t);
+  set('article', '1곳당 이용 인원을 검토한다.'); el('article-form').requestSubmit();
+  const title = '<표 8> 평일 체육관 한 곳당 이용자 수';
+  const line = '남부\t1,125\t1,503';
+  set('document-text', [title, '(단위: 명)', '구분\t2022년\t2023년', line, '북부\t1,367\t1,617'].join('\n'));
+  set('document-query', '2022년 남부에서 청소년은 한 곳에 몇 명 방문했나요?');
+  click('find-passages');
+  const area = el('finder-results');
+  assert.ok(!area.textContent.includes('원문 값'));
+  const openAt = [...area.querySelectorAll('button')].find(b => b.textContent === '‘남부’ 행의 2022년 열 직접 대조');
+  const picker = [...area.querySelectorAll('details')].find(d => d.firstElementChild?.textContent === '원표의 행과 연도 직접 선택');
+  assert.ok(!picker.open);
+  openAt.click();
+  assert.ok(picker.open);
+  assert.equal(doc.activeElement, picker.querySelectorAll('select')[1]);
+  assert.match(picker.querySelector('[aria-live]').textContent, /남부.*2022년.*1,125.*머리글 3문단.*자료 4문단/);
+  assert.ok(picker.textContent.includes(title)); assert.ok(picker.textContent.includes('(단위: 명)'));
+  assert.equal(el('source-excerpt').value, ''); assert.equal(el('verdict').value, '');
+  picker.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, [title, '(단위: 명)', '구분\t2022년\t2023년', line].join('\n'));
+  assert.equal(el('source-locator').value, title + ' · ‘남부’ 행 · ‘2022년’ 열');
+});
+
+test('내 작업을 다시 열면 검토를 마친 문장과 선택한 목록을 이어 본다', async t => {
+  const author = open(t);
+  recordFirstFact(author);
+  const rows = author.el('report-rows').children;
+  rows[0].querySelector('button').click();
+  const completed = author.el('row-text').textContent;
+  author.click('save-work');
+  const saved = JSON.parse(await author.snapshot());
+  const legacy = {...saved};
+  delete legacy.rowFilter;
+  const resumed = open(t);
+  for (const work of [saved, legacy]) {
+    await loadWorkspace(resumed, work);
+    assert.equal(resumed.el('row-text').textContent, completed);
+    assert.equal(resumed.el('row-filter').value, 'all');
+    assert.equal(resumed.el('verdict').value, 'fact');
+  }
+  rows[2].querySelector('button').click();
+  author.click('save-work');
+  await loadWorkspace(resumed, JSON.parse(await author.snapshot()));
+  assert.equal(resumed.el('row-filter').value, 'all');
+  assert.match(resumed.el('row-heading').textContent, /^문장 3 ·/);
+  const independent = open(t);
+  await loadWorkspace(independent, saved, false);
+  assert.equal(independent.el('row-filter').value, 'open');
+  assert.equal(independent.el('verdict').value, '');
+  assert.equal(independent.el('row-list').children.length, 5);
+  await loadWorkspace(resumed, {...saved, rowFilter: 'invalid', currentId: 'removed'});
+  assert.equal(resumed.el('row-filter').value, 'open');
+  assert.match(resumed.el('row-heading').textContent, /^문장 2 ·/);
+  await loadWorkspace(resumed, saved);
+  resumed.set('reason', '이전에 기록한 표결 수치를 다시 확인하고 있다.');
+  resumed.click('save-work');
+  const editedLegacy = JSON.parse(await resumed.snapshot());
+  delete editedLegacy.rowFilter;
+  await loadWorkspace(resumed, editedLegacy);
+  assert.equal(resumed.el('row-filter').value, 'open');
+  assert.match(resumed.el('row-heading').textContent, /^문장 1 · 판단 작성 중/);
+  assert.equal(resumed.el('reason').value, '이전에 기록한 표결 수치를 다시 확인하고 있다.');
+});
+
+test('정확성 요약에서 핵심으로 지정한 충돌의 근거만 열고 다른 구절의 초안을 보존한다', async t => {
+  const p = open(t);
+  const work = require('../experiments/core-spending-dispute/editor-b.json');
+  await loadWorkspace(p, work);
+  p.set('reason', '첫 구간은 회의 기록을 더 찾는다.');
+  const links = p.el('article-rubric').querySelectorAll('button[aria-controls^="report-evidence-"]');
+  assert.equal(links.length,1);
+  assert.match(links[0].textContent,/핵심 5번 · 기사 서술과 충돌한 근거 보기/);
+  const target = p.el(links[0].getAttribute('aria-controls'));
+  links[0].click();
+  assert.equal(p.doc.activeElement,target);
+  assert.match(target.querySelector('.conflict-context').textContent,/학교의 결산을 확인했다.*지출액은 20억 원이다/s);
+  assert.doesNotMatch(target.querySelector('.conflict-context').textContent,/공원/);
+  links[0].click();
+  assert.equal(target.querySelectorAll('.conflict-context').length,1);
+  assert.match(target.querySelector('details[open]').textContent,/확정 결산서.*19억 원/s);
+  assert.equal(p.el('report-rows').querySelectorAll('details[open]').length,1);
+  assert.equal(p.el('reason').value,'첫 구간은 회의 기록을 더 찾는다.');
+  p.el('article-rubric').querySelector('input[data-core-row="' + work.articleAssessment.coreRowIds[0] + '"]').click();
+  assert.equal(p.el('article-rubric').querySelectorAll('button[aria-controls^="report-evidence-"]').length,0);
+});
+
+test('정확히 옮긴 발언 속 숫자가 틀리면 원발언과 별개인 확인 자료를 펼친다', async t => {
+  const p = open(t), engine = require('../docs/reader/factcheck-engine.js');
+  const rubric = require('../docs/reader/article-rubric.js');
+  const work = structuredClone(require('../experiments/core-spending-dispute/editor-b.json'));
+  work.article = work.articleDraft = '의원은 “사업비는 30억 원이었다”고 말했다.';
+  work.sources[0].excerpt = '회의록에서 의원이 사업비는 30억 원이었다고 발언했다.';
+  work.sources[1].excerpt = '확정 결산표의 사업비는 3억 원이다.';
+  const [row] = engine.prepare(work.article,work.sources).rows;
+  work.receipts = [engine.decide(row,{status:'attribution',sourceIds:['B0'],reason:'회의록에 같은 발언이 있다.',acknowledged:true,
+    contentStatus:'contradicted',contentChecked:true,contentReason:'확정 결산표의 사업비는 3억 원이다.',contentSourceIds:['B1']},work.sources)];
+  const report = engine.report(work.article,work.sources,work.receipts);
+  work.articleAssessment = rubric.save(report,work.sources,{coreRowIds:[row.id],ratings:{}});
+  await loadWorkspace(p,work);
+  const link = p.el('article-rubric').querySelector('button[aria-controls^="report-evidence-"]');
+  assert.match(link.textContent,/인용 속 주장과 충돌한 근거 보기/);
+  link.click();
+  const details = [...p.doc.activeElement.querySelectorAll(':scope > details')];
+  assert.deepEqual(details.map(d => d.open),[false,true]);
+  assert.match(details[1].textContent,/내용 근거.*확정 결산표의 사업비는 3억 원/s);
+  assert.match(p.doc.activeElement.textContent,/사업비는 30억 원이었다/);
+});
+
+test('결과와 정확성 평가에서 같은 문구의 서로 다른 문장을 열고 다른 문장의 메모를 보존한다', t => {
+  const {doc, set, el, click} = open(t);
+  const repeated = '이 사업은 무책임한 선심성 정책이다.';
+  set('article', ['의회는 지난주 회의를 열었다.', repeated, '의회는 내년에 사업을 검토한다.', repeated].join('\n\n'));
+  el('article-form').requestSubmit();
+  const report = () => el('report-rows').querySelectorAll('.report-row');
+  const rubricRows = () => el('article-rubric').querySelectorAll('[data-section="accuracy"] li');
+  const jump = (row, n) => [...row.querySelectorAll('button')].find(b => b.textContent === n + '번 문장 검토 열기').click();
+  jump(report()[1], 2);
+  set('verdict', 'opinion'); set('reason', '가치판단을 나타내는 표현을 확인했다.');
+  click('acknowledged'); el('decision-form').requestSubmit();
+  assert.equal(el('row-filter').value, 'open');
+  jump(report()[3], 4);
+  set('reason', '뒤쪽에 반복된 문장의 근거를 찾는 중이다.');
+  jump(rubricRows()[1], 2);
+  assert.equal(el('row-filter').value, 'all');
+  assert.equal(doc.activeElement, el('row-heading'));
+  assert.match(el('row-heading').textContent, /^문장 2 ·/);
+  assert.equal(el('row-text').textContent, repeated);
+  assert.equal(el('reason').value, '가치판단을 나타내는 표현을 확인했다.');
+  jump(report()[3], 4);
+  assert.equal(el('row-filter').value, 'all');
+  assert.equal(doc.activeElement, el('row-heading'));
+  assert.match(el('row-heading').textContent, /^문장 4 ·/);
+  assert.equal(el('row-text').textContent, repeated);
+  assert.equal(el('reason').value, '뒤쪽에 반복된 문장의 근거를 찾는 중이다.');
+});
+
+test('주변 원문에서 검색 후보를 발췌해도 직접 누른 행·열이 보존되고 다른 행에는 그 위치가 붙지 않는다', t => {
+  const {el, set, click, w} = open(t);
+  click('load-demo');
+  const body = ['구분\t2022년\t2023년', '장비 반납(건)\t48\t87', '장비 대여(건)\t29\t31'];
+  set('document-text', body.join('\n'));
+  set('document-query', '2023년 장비 대여는 87건인가?');
+  click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  const details = [...card.querySelectorAll('details')].find(d => d.firstElementChild.textContent === '주변 원문 확인');
+  details.open = true;
+  details.dispatchEvent(new w.Event('toggle'));
+  details.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, [body[0], '[…]', body[2]].join('\n'));
+  assert.equal(el('source-locator').value, '‘장비 대여(건)’ 행 · ‘2023년’ 열');
+  details.querySelector('input[value="2"]').click();
+  details.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, body[1]);
+  assert.equal(el('source-locator').value, '');
+  assert.equal(el('verdict').value, '');
+});
+
+test('당사자가 부인한 발언을 찾으면 질문자와 분리하고 당사자 표지부터 원문을 발췌한다', async t => {
+  const {el, set, click, w, snapshot} = open(t);
+  const article = '김도현 장관은 “청년수당을 전면 중단하겠다”고 말했다.';
+  const lines = ['◯박서윤 위원  김도현 장관님, “청년수당을 전면 중단하겠다”고 말씀하셨습니까?',
+    '◯김도현 장관', '', '그런 뜻이 아닙니다. 소득 기준을 초과한 신청자에 한해 지급을 보류합니다.',
+    '◯위원장 이정수  다음 질의를 받겠습니다.'];
+  set('article', article);
+  el('article-form').requestSubmit(); click('go-find');
+  set('document-text', lines.join('\n')); set('document-query', article); click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  assert.ok(card);
+  assert.match(card.textContent, /회의록 발언자 · 김도현 장관/);
+  assert.equal(card.querySelector('blockquote').textContent, lines[3]);
+  const expected = lines.slice(1,4).join('\n');
+  const preview = [...card.querySelectorAll('details')].find(d => d.querySelector('summary')?.textContent.includes('발췌할 발언 원문'));
+  assert.equal(preview.querySelector('blockquote').textContent, expected);
+  card.querySelector(':scope > button').click();
+  assert.equal(el('source-excerpt').value, expected);
+  assert.equal(el('source-locator').value, '');
+  const nearby = card.querySelector('details');
+  nearby.open = true; nearby.dispatchEvent(new w.Event('toggle'));
+  nearby.querySelector('input[value="1"]').click(); nearby.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, lines[0]);
+  nearby.querySelector('input[value="3"]').click(); nearby.querySelector('button').click();
+  assert.equal(el('source-excerpt').value, expected);
+  assert.equal(el('verdict').value, '');
+  click('save-work');
+  const workspace = JSON.parse(await snapshot());
+  assert.deepEqual(workspace.receipts, []);
+  assert.equal(workspace.sourceDraft.fields.excerpt, expected);
+  set('document-query', article.replace('김도현', '최민영')); click('find-passages');
+  assert.equal(el('finder-results').querySelectorAll('.source').length, 0);
+});
+
+test('좁은 대상의 질문에 연간 전체 수치를 답으로 붙이지 않고 원표 행을 열어볼 수 있다', t => {
+  const {el, set, click} = open(t);
+  const records = require('../experiments/evidence-retrieval-transfer/nov25/holdout.json');
+  const cases = ['2024년 서울 교통사고 사망자 수는 몇 명이었나?', '2024년 자전거 교통사고 사망자 수는 몇 명이었나?'];
+  click('load-demo'); set('document-text', records.lines.join('\n'));
+  for (const query of cases) {
+    set('document-query', query); click('find-passages');
+    const area = el('finder-results');
+    assert.match(el('finder-status').textContent, /대상이나 범위/);
+    assert.doesNotMatch(area.textContent, /원문 값 2521/);
+    assert.ok([...area.querySelectorAll('summary')].some(s => s.textContent.includes('2024년 원표 항목')));
+    assert.equal(el('verdict').value, '');
+  }
+  set('document-query', '2024년 교통사고 사망자 수는 몇 명이었나?'); click('find-passages');
+  assert.match(el('finder-results').textContent, /원문 값 2521/);
+});
+
+test('당사자의 여러 발언에서 같은 주제와 정확한 수치를 나란히 구분한다', t => {
+  const {el, set, click} = open(t);
+  click('load-demo');
+  const lines = ['◯정다현 장관  교통세율을 15%로 조정하기로 했습니다.',
+    '◯김선미 위원  추가 질의입니다.', '◯정다현 장관  교통세율을 1.5%로 조정하기로 했습니다.'];
+  set('document-text', lines.join('\n'));
+  set('document-query', '정다현 장관은 “교통세율을 1.5%로 조정하기로 했습니다”고 말했다.');
+  click('find-passages');
+  const cards = [...el('finder-results').querySelectorAll('.source')];
+  assert.equal(cards[0].querySelector('blockquote').textContent, lines[2]);
+  const earlier = cards.find(card => card.querySelector('blockquote').textContent === lines[0]);
+  if (earlier) assert.match(earlier.textContent, /일부 단어가 겹칩니다/);
+  assert.equal(el('verdict').value, '');
+});
+
+test('장기 기록을 다루지 않는 표를 고르면 실제 연도와 근거 범위가 발췌 뒤에도 남는다', t => {
+  const {el, click, set} = open(t);
+  const title = '독서실 이용자 증가';
+  const claim = '2021년에는 8만 명 늘어나며 2001년 이후 20년 만의 최대 폭을 기록했지만, 이후 2022년 4만 명으로 축소한 데 이어 올해 2만 명대로 떨어지는 등 2년 연속 증가 폭이 둔화했다.';
+  const table = ['2023년 연간 통계', '< 독서실 서비스 >', '구분 2021년 2022년 2023년',
+    '독서실 이용자(만명, 전년대비증감)   8   4   2'].join('\n');
+  set('article', title + '\n' + claim);
+  el('article-form').requestSubmit();
+  [...el('row-list').querySelectorAll('button')].find(row => row.textContent.includes('2001')).click();
+  click('go-find');
+  set('document-text', table);
+  click('find-passages');
+  assert.equal(el('search-context').value, '');
+  assert.match(el('finder-status').textContent, /비교할 지표/);
+  click('use-article-title');
+  const card = el('finder-results').querySelector('.source');
+  assert.match(card.textContent, /2021~2023년/);
+  assert.match(card.textContent, /2001년부터 2020년까지.*추가 자료/);
+  assert.match(el('finder-status').textContent, /기사 발행일/);
+  const verdict = el('verdict').value;
+  [...card.querySelectorAll('button')].find(b => b.textContent.includes('표에 실린 기간만')).click();
+  assert.match(el('source-excerpt').value, /2021년 2022년 2023년/);
+  assert.match(el('source-excerpt').value, /이용자.*전년대비증감/);
+  assert.doesNotMatch(el('source-excerpt').value, /2001년/);
+  assert.match(el('source-locator').value, /2021~2023년.*2001년.*추가 자료/);
+  assert.equal(el('verdict').value, verdict);
+  set('search-context', '독서실 이용자 증가 폭 99%');
+  click('find-passages');
+  assert.match(el('finder-status').textContent, /수량의 증감.*비율.*단위/);
+  assert.ok(!el('finder-results').textContent.includes('표에 실린 기간만 발췌'));
+  set('document-query', '새 검토 문장');
+  assert.equal(el('finder-results').childElementCount, 0);
+});
+
+test('서울 1인 가구 수치가 원문에 없으면 전체 평균을 접고 발췌와 판정을 편집자에게 남긴다', t => {
+  const {el, set, click} = open(t);
+  set('document-text','2024년 가구의 1인당 연간 쌀 소비량은 55.8kg이었다.');
+  set('document-query','2024년 서울 1인 가구의 1인당 연간 쌀 소비량은 55.8kg이었다.');
+  click('find-passages');
+  assert.match(el('finder-status').textContent,/서울 1인 가구.*따로 집계/);
+  const fallback = el('finder-results').firstElementChild;
+  assert.equal(fallback.tagName,'DETAILS');
+  assert.equal(fallback.open,false);
+  assert.match(fallback.querySelector('blockquote').textContent,/55.8kg/);
+  assert.doesNotMatch(fallback.textContent,/원문 값/);
+  assert.equal(el('source-excerpt').value,'');
+  assert.equal(el('verdict').value,'');
+});
+
+test('임금 수치가 다른 기준에 붙은 경우 문단에서 비교하고 편집자가 고른 원문만 발췌한다', t => {
+  const {el, set, click} = open(t);
+  const excerpt = '2024년 연간 임금\n연간 월평균 명목임금은 2.9% 증가하였고, 실질임금은 0.5% 증가하였습니다.';
+  set('document-text',excerpt);
+  set('document-query','2024년 월평균 실질임금은 전년보다 2.9% 증가했다.');
+  click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  assert.match(card.textContent,/2\.9% 증가는 원문에서 명목임금에 붙은 수치/);
+  assert.equal(card.querySelector('blockquote').textContent,excerpt.split('\n')[1]);
+  assert.equal(el('source-excerpt').value,'');
+  assert.equal(el('verdict').value,'');
+  [...card.querySelectorAll('button')].find(b => b.textContent.includes('기간 표지와 구절')).click();
+  assert.equal(el('source-excerpt').value,excerpt);
+  assert.equal(el('verdict').value,'');
+});
+
+test('연간 월평균 임금 기준을 두 문장에서 대조한 뒤 발췌하면 두 문장을 함께 보존한다', t => {
+  const {el, set, click} = open(t);
+  const excerpt = '2023년 연간 월평균 명목임금은 전년대비 2.5% 증가했습니다. 실질임금은 1.1% 감소한 것으로 나타났습니다.';
+  set('document-text', excerpt);
+  set('document-query', '2023년 월평균 실질임금은 전년보다 2.5% 증가했다.');
+  click('find-passages');
+  const card = el('finder-results').querySelector('.source');
+  assert.match(card.textContent, /명목임금에 붙은 수치/);
+  assert.equal(card.querySelector('blockquote').textContent, excerpt);
+  assert.equal(el('source-excerpt').value, '');
+  [...card.querySelectorAll('button')].find(b => b.textContent.includes('발췌문으로 사용')).click();
+  assert.equal(el('source-excerpt').value, excerpt);
+  assert.equal(el('verdict').value, '');
+});
+
+test('한 번 기록해 다음 미검토 문장의 근거를 찾되 두 번째 판단·발췌를 미리 선택하지 않는다', async t => {
+  const p = open(t);
+  const lines = ['공사비가 8억 원으로 늘었다.', '조사 참여자는 42명이다.'];
+  p.set('article', lines.join('\n'));
+  p.el('article-form').requestSubmit();
+  const action = p.el('save-find-next');
+  assert.equal(action.hidden,true);
+  p.set('document-text',lines.join('\n'));
+  assert.equal(action.hidden,false);
+  p.set('verdict','held');
+  p.set('reason','계약 변경에 관한 추가 자료를 요청한다.');
+  action.click();
+  assert.equal(p.el('row-text').textContent,lines[0]);
+  assert.equal(p.el('finder-results').childElementCount,0);
+  p.click('acknowledged');
+  action.click();
+  assert.equal(p.el('row-text').textContent,lines[1]);
+  assert.equal(p.el('document-query').value,lines[1]);
+  assert.equal(p.el('finder-results').querySelector('blockquote').textContent,lines[1]);
+  assert.equal(p.doc.activeElement,p.el('find-passages'));
+  assert.equal(p.el('verdict').value,'');
+  assert.equal(p.el('source-excerpt').value,'');
+  assert.equal(action.hidden,true);
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.receipts.length,1);
+  assert.equal(work.sources.length,0);
+});
+
+test('미등록 발췌는 다른 문장의 자료로 옮길 때만 확인하고, 취소 후 이어 열어도 원래 문장에 남는다', async t => {
+  const p = open(t);
+  const original = '예산은 50억 원이었다.';
+  p.set('article',[original,'참여 인원은 70명이었다.',original].join('\n\n'));
+  p.el('article-form').requestSubmit();
+  p.set('document-text','예산 50억 원\n참여 인원 70명');
+  const select = (page,i) => page.el('row-list').children[i].querySelector('button').click();
+  select(p,2);
+  p.click('go-find');
+  for (const [k,v] of Object.entries({title:'예산서',url:'https://council.example/budget',version:'확정판',locator:'표 3',excerpt:original})) p.set('source-'+k,v);
+  let questions = 0;
+  p.w.confirm = () => { questions++; return false; };
+  p.click('go-find');
+  assert.equal(questions,0);
+  select(p,1);
+  assert.equal(p.el('save-find-next').hidden,true);
+  p.click('go-find');
+  assert.equal(questions,1);
+  assert.equal(p.el('source-save-link').hidden,true);
+  assert.equal(p.el('source-excerpt').value,original);
+  assert.match(p.el('finder-results').querySelector('blockquote').textContent,/70명/);
+  assert.equal(p.el('row-sources').querySelector('input:checked'),null);
+  p.click('save-work');
+  const work = JSON.parse(await p.snapshot());
+  assert.equal(work.sources.length,0);
+  const restored = open(t);
+  await loadWorkspace(restored,work);
+  assert.equal(restored.el('source-save-link').hidden,true);
+  select(restored,0);
+  assert.equal(restored.el('source-save-link').hidden,true);
+  select(restored,2);
+  assert.equal(restored.el('source-save-link').hidden,false);
+  assert.match(restored.el('source-save-link').textContent,/3번/);
+  assert.equal(restored.el('source-excerpt').value,original);
+  p.w.confirm = () => true;
+  p.click('go-add-source');
+  p.click('source-save-link');
+  assert.equal(p.el('row-sources').querySelectorAll('input:checked').length,1);
+  assert.equal(p.el('verdict').value,'');
+});
+
+test('다른 문장에서 발췌 교체나 수기 수정을 하면 이전 문장의 연결 대상도 해제된다', async t => {
+  for (const replaceFromCandidate of [true,false]) {
+    const p = open(t);
+    const first = '올해 예산은 5억 원이다.';
+    const second = '참여자는 모두 70명이다.';
+    p.set('article',[first,second].join('\n'));
+    p.el('article-form').requestSubmit();
+    p.click('go-find');
+    p.set('document-text',[first,second].join('\n'));
+    p.set('source-excerpt',first);
+    p.el('row-list').children[1].querySelector('button').click();
+    p.w.confirm = () => false;
+    p.click('go-find');
+    assert.equal(p.el('source-save-link').hidden,true);
+    if (replaceFromCandidate) {
+      p.w.confirm = () => true;
+      const pick = [...p.el('finder-results').querySelectorAll('button')].find(button => button.textContent.includes('발췌'));
+      pick.click();
+    } else {
+      p.set('source-excerpt',second);
+    }
+    assert.equal(p.el('source-excerpt').value,second);
+    p.el('row-list').firstElementChild.querySelector('button').click();
+    assert.equal(p.el('source-save-link').hidden,true);
+    p.click('save-work');
+    const work = JSON.parse(await p.snapshot());
+    assert.equal(work.sourceDraft.targetBinding,null);
+    assert.equal(work.sourceDraft.fields.excerpt,second);
+    assert.deepEqual(work.receipts,[]);
+  }
+});
+
+test('같은 결산표에서 양쪽 근거 행을 직접 골라 저장·재개하고 반복되거나 빈 행을 선택하지 않는다', async t => {
+  const p = open(t);
+  const source = {id:'ledger',title:'지출표',url:'https://example.org/ledger',version:'확정',
+    locator:'표 3',excerpt:'단위: 원\n\n가당  인쇄비 480만 원\n합계\n나당  인쇄비 480만 원\n합계\n가당  집행일 9월 2일'};
+  const article = '가당은 인쇄비를 지급했다.\n나당은 인쇄비를 지급했다고 밝혔다.';
+  await loadWorkspace(p,{format:'journal-local-factcheck-v1', article, articleDraft:article, demo:false, sources:[source], receipts:[], rowDrafts:[],
+    sourceDraft:{id:null,fields:{title:'',url:'',version:'',locator:'',excerpt:''}}});
+  function form(page) {
+    const panel = page.doc.querySelector('[data-section="dim-standards"]');
+    const field = name => [...panel.querySelectorAll('label')].find(l => l.firstElementChild?.textContent === name).lastElementChild;
+    const set = (name,value) => { const el = field(name); el.value = value; el.dispatchEvent(new page.w.Event(el.tagName === 'SELECT' ? 'change' : 'input',{bubbles:true})); };
+    return {panel,field,set};
+  }
+  let {panel,field,set} = form(p);
+  const rowIds = p.w.JournalFactcheck.report(article,[source]).rows.map(row => row.id);
+  set('판정 단계','2');
+  set('대조할 기사 구간',rowIds[0]);
+  set('비교할 다른 구간 불러오기',rowIds[1]);
+  set('첫째 구절의 원자료와 확인 위치','ledger');
+  set('둘째 구절의 원자료와 확인 위치','ledger');
+  const first = '첫째 근거로 인용할 원자료 행', second = '둘째 근거로 인용할 원자료 행';
+  assert.deepEqual([...field(first).options].slice(1).map(o => o.text),['1행 · 단위: 원','3행 · 가당 인쇄비 480만 원','5행 · 나당 인쇄비 480만 원','7행 · 가당 집행일 9월 2일']);
+  set(first,'가당  인쇄비 480만 원');
+  assert.equal(field('둘째 주장과 대조한 자료 구절').value,source.excerpt);
+  set(second,'나당  인쇄비 480만 원');
+  set('판단 이유','같은 결산표에서 두 당 지급을 모두 확인했다.');set('이 차이가 독자의 해석에 미치는 영향','한쪽의 지출만 미확인으로 읽힐 수 있다.');
+  p.click('save-work'); const draft=JSON.parse(await p.snapshot());
+  assert.equal(draft.articleAssessment?.ratings?.standards,undefined);
+  const resumed=open(t);await loadWorkspace(resumed,draft);
+  ({panel,field,set}=form(resumed));
+  assert.equal(field(first).value,'가당  인쇄비 480만 원');
+  assert.equal(field(second).value,'나당  인쇄비 480만 원');
+  set('둘째 주장과 대조한 자료 구절','나당  인쇄비');
+  assert.equal(field(second).value,'');
+  set(second,'가당  집행일 9월 2일');
+  panel.querySelector('form').requestSubmit();
+  assert.match(panel.querySelector('[role=status]').textContent,/둘째 기사 구절은 나당.*가당/);
+  resumed.click('save-work');
+  const invalid=JSON.parse(await resumed.snapshot());
+  assert.equal(invalid.articleAssessment?.ratings?.standards,undefined);
+  assert.equal(invalid.articleAssessmentDraft.entries.standards.compareSourceQuote,'가당  집행일 9월 2일');
+  set(second,'나당  인쇄비 480만 원');
+  panel.querySelector('form').requestSubmit();
+  resumed.click('save-work'); const rating=JSON.parse(await resumed.snapshot()).articleAssessment.ratings.standards;
+  assert.equal(rating.level,2);
+  assert.equal(rating.sourceQuote,'가당  인쇄비 480만 원');
+  assert.equal(rating.compareSourceQuote,'나당  인쇄비 480만 원');
+  assert.deepEqual([...panel.querySelectorAll('.rub-evidence dt')].slice(0,4).map(dt => dt.textContent.split(' · ')[0]),
+    ['기사 구절','첫째 구절의 근거','비교 구절','둘째 구절의 근거']);
+  const legacy = JSON.parse(await resumed.snapshot());
+  legacy.articleAssessment.ratings.standards.compareSourceQuote='가당  집행일 9월 2일';
+  const imported=open(t);await loadWorkspace(imported,legacy);
+  const restored=form(imported);
+  assert.match(restored.panel.querySelector('.callout').textContent,/이전 점수는 집계에서 제외.*둘째 기사 구절은 나당/);
+  assert.equal(restored.field(second).value,'가당  집행일 9월 2일');
+  assert.equal(restored.field('판단 이유').value,rating.reason);
 });

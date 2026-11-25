@@ -1,0 +1,94 @@
+{
+  "format": "journal-revision-series-record",
+  "version": 9,
+  "demo": true,
+  "before": {
+    "articleSha256": "4fced73b243293d9e746113355c6b106e99b9b66f16ab80fcce4a3506be4d3f1",
+    "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+  },
+  "after": {
+    "articleSha256": "a6f6324b2aae4ee3bc00ab397067257bc039aa7ae99f4a5ac8bb4efe9290bab6",
+    "sourcesSha256": "19409a31b293651ca549a66677f31ba567f546ddbd0101656a00017eb2c403d0"
+  },
+  "dimensions": [
+    {
+      "id": "wording",
+      "first": {
+        "before": 2,
+        "after": 0
+      },
+      "second": {
+        "before": 2,
+        "after": 0
+      }
+    },
+    {
+      "id": "framing",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "omission",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "standards",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    }
+  ],
+  "facts": {
+    "before": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ],
+    "after": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ]
+  },
+  "factMatches": [],
+  "factContext": {
+    "beforeCore": [
+      0,
+      0
+    ],
+    "afterCore": [
+      0,
+      0
+    ],
+    "matches": []
+  },
+  "biasEvidenceSha256": "a07a350ed467f20478d793e22831764641eeeab144f84ac96554809b98da0749"
+}

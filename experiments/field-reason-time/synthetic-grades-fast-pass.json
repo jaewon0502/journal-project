@@ -1,0 +1,366 @@
+{
+  "format": "journal-field-grades-v1",
+  "synthetic": true,
+  "entries": [
+    {
+      "trial": {
+        "participant": "SYNTHETIC-01",
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "taskId": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "method": "manual",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-01-synthetic-a",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recovered": false,
+        "split": true,
+        "journalUse": "no",
+        "phaseMs": {
+          "search": 50000,
+          "locate": 30000,
+          "decide": 20000
+        },
+        "found": "found",
+        "documentUrl": "https://library.example.invalid/table",
+        "locator": "가상 표 A 1행, 전년 100건·올해 120건",
+        "verdict": "supported",
+        "reason": "증가분 20건을 전년의 100건으로 나누면 20%다."
+      },
+      "basis": {
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "id": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "증가분 20건을 전년의 100건으로 나누면 20%다.",
+        "reference": {
+          "document": "가상 도서관 대출표",
+          "documentUrl": "https://library.example.invalid/table",
+          "locator": "가상 표 A 1행, 전년 100건·올해 120건"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-01",
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "taskId": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "method": "journal",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-01-synthetic-b",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "recovered": false,
+        "split": true,
+        "journalUse": "yes",
+        "phaseMs": {
+          "search": 8000,
+          "locate": 7000,
+          "decide": 5000
+        },
+        "found": "found",
+        "documentUrl": "https://bike.example.invalid/table",
+        "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회",
+        "verdict": "supported",
+        "reason": "감소분 20회를 직전 달의 80회로 나누면 25%다."
+      },
+      "basis": {
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "id": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "감소분 20회를 직전 달의 80회로 나누면 25%다.",
+        "reference": {
+          "document": "가상 자전거 대여표",
+          "documentUrl": "https://bike.example.invalid/table",
+          "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-02",
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "taskId": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "method": "journal",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-02-synthetic-b",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "recovered": false,
+        "split": true,
+        "journalUse": "yes",
+        "phaseMs": {
+          "search": 40000,
+          "locate": 35000,
+          "decide": 45000
+        },
+        "found": "found",
+        "documentUrl": "https://bike.example.invalid/table",
+        "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회",
+        "verdict": "supported",
+        "reason": "감소분 20회를 이번 달 60회로 나누면 25%다."
+      },
+      "basis": {
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "id": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "감소분 20회를 직전 달의 80회로 나누면 25%다.",
+        "reference": {
+          "document": "가상 자전거 대여표",
+          "documentUrl": "https://bike.example.invalid/table",
+          "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "no"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-02",
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "taskId": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "method": "manual",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-02-synthetic-a",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recovered": false,
+        "split": true,
+        "journalUse": "no",
+        "phaseMs": {
+          "search": 50000,
+          "locate": 30000,
+          "decide": 20000
+        },
+        "found": "found",
+        "documentUrl": "https://library.example.invalid/table",
+        "locator": "가상 표 A 1행, 전년 100건·올해 120건",
+        "verdict": "supported",
+        "reason": "증가분 20건을 전년의 100건으로 나누면 20%다."
+      },
+      "basis": {
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "id": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "증가분 20건을 전년의 100건으로 나누면 20%다.",
+        "reference": {
+          "document": "가상 도서관 대출표",
+          "documentUrl": "https://library.example.invalid/table",
+          "locator": "가상 표 A 1행, 전년 100건·올해 120건"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-03",
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "taskId": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "method": "journal",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-03-synthetic-a",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recovered": false,
+        "split": true,
+        "journalUse": "yes",
+        "phaseMs": {
+          "search": 8000,
+          "locate": 7000,
+          "decide": 5000
+        },
+        "found": "found",
+        "documentUrl": "https://library.example.invalid/table",
+        "locator": "가상 표 A 1행, 전년 100건·올해 120건",
+        "verdict": "supported",
+        "reason": "증가분 20건을 전년의 100건으로 나누면 20%다."
+      },
+      "basis": {
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "id": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "증가분 20건을 전년의 100건으로 나누면 20%다.",
+        "reference": {
+          "document": "가상 도서관 대출표",
+          "documentUrl": "https://library.example.invalid/table",
+          "locator": "가상 표 A 1행, 전년 100건·올해 120건"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-03",
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "taskId": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "method": "manual",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-03-synthetic-b",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "recovered": false,
+        "split": true,
+        "journalUse": "no",
+        "phaseMs": {
+          "search": 50000,
+          "locate": 30000,
+          "decide": 20000
+        },
+        "found": "found",
+        "documentUrl": "https://bike.example.invalid/table",
+        "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회",
+        "verdict": "supported",
+        "reason": "감소분 20회를 직전 달의 80회로 나누면 25%다."
+      },
+      "basis": {
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "id": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "감소분 20회를 직전 달의 80회로 나누면 25%다.",
+        "reference": {
+          "document": "가상 자전거 대여표",
+          "documentUrl": "https://bike.example.invalid/table",
+          "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-04",
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "taskId": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "method": "manual",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-04-synthetic-b",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "recovered": false,
+        "split": true,
+        "journalUse": "no",
+        "phaseMs": {
+          "search": 50000,
+          "locate": 30000,
+          "decide": 20000
+        },
+        "found": "found",
+        "documentUrl": "https://bike.example.invalid/table",
+        "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회",
+        "verdict": "supported",
+        "reason": "감소분 20회를 직전 달의 80회로 나누면 25%다."
+      },
+      "basis": {
+        "caseId": "synthetic-bike",
+        "articleUrl": "https://bike.example.invalid/article-b",
+        "id": "synthetic-b",
+        "prompt": "가상 과제 B. 가상 대여소의 한 달 대여 횟수가 80회에서 60회로 25% 줄었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "감소분 20회를 직전 달의 80회로 나누면 25%다.",
+        "reference": {
+          "document": "가상 자전거 대여표",
+          "documentUrl": "https://bike.example.invalid/table",
+          "locator": "가상 표 B 1행, 직전 달 80회·이번 달 60회"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "yes"
+    },
+    {
+      "trial": {
+        "participant": "SYNTHETIC-04",
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "taskId": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "method": "journal",
+        "format": "journal-field-trial-v1",
+        "id": "SYNTHETIC-04-synthetic-a",
+        "kind": "editor",
+        "status": "completed",
+        "kitVersion": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recovered": false,
+        "split": true,
+        "journalUse": "yes",
+        "phaseMs": {
+          "search": 40000,
+          "locate": 35000,
+          "decide": 45000
+        },
+        "found": "found",
+        "documentUrl": "https://library.example.invalid/table",
+        "locator": "가상 표 A 1행, 전년 100건·올해 120건",
+        "verdict": "supported",
+        "reason": "증가분 20건을 올해 120건으로 나누면 20%다."
+      },
+      "basis": {
+        "caseId": "synthetic-library",
+        "articleUrl": "https://library.example.invalid/article-a",
+        "id": "synthetic-a",
+        "prompt": "가상 과제 A. 가상 도서관의 연간 대출 건수가 100건에서 120건으로 20% 늘었다는 설명을 검토하세요.",
+        "verdict": "supported",
+        "explanation": "증가분 20건을 전년의 100건으로 나누면 20%다.",
+        "reference": {
+          "document": "가상 도서관 대출표",
+          "documentUrl": "https://library.example.invalid/table",
+          "locator": "가상 표 A 1행, 전년 100건·올해 120건"
+        }
+      },
+      "expected": "supported",
+      "locationGrade": "yes",
+      "verdictGrade": "yes",
+      "reasonGrade": "no"
+    }
+  ]
+}

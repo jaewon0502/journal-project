@@ -9,5 +9,15 @@ button,.button{font:inherit;font-size:.92rem;font-weight:630;display:inline-bloc
 #phase-clock{position:sticky;top:0;background:var(--card,#fff);z-index:1;border-block:1px solid var(--line);padding:6px 0}
 .phase-controls{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.phase-controls button{padding:5px 8px;font-size:.87rem}.phase-controls button[aria-pressed=true]{background:var(--green);color:white}.phase-controls #pause-trial{margin-left:auto}.phase-controls strong{font-size:.88rem}
 #phase-pairs{margin-top:10px}
+#demo-options{max-width:26rem}
+#deadline-example :is(caption,th){white-space:normal;word-break:keep-all}
+.case-cautions{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+.case-cautions p{margin:0 0 6px}
+.case-cautions button{margin:2px 4px 2px 0;text-align:left}
+.case-evidence{border-top:1px solid var(--line);padding:10px 0}
+.case-evidence summary{line-height:1.45}
+.case-evidence blockquote{margin:6px 0;padding:6px 12px;border-left:2px solid var(--line)}
+.case-evidence td:last-child{white-space:normal;min-width:9rem}
+.case-changes{margin:4px 0 0;padding-left:1.25rem}
 @media(max-width:620px){.phase-controls strong{width:100%}.phase-controls #pause-trial{margin-left:0}}
 @media(max-height:520px){#phase-clock{position:static}}

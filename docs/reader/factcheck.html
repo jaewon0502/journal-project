@@ -24,18 +24,24 @@ blockquote{margin:9px 0;padding:10px 14px;border-left:3px solid #8ca595;backgrou
 .source-page-links{display:flex;gap:.25rem .8rem;flex-wrap:wrap;overflow-wrap:anywhere}.source-page-links span:empty{display:none}.source details label input[type=file]{display:block;max-width:100%}.source-line,.check-line{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}.source-line input,.check-line input{margin:4px 0}.check-line{font-size:.88rem;line-height:1.55}.check-line span{flex:1}.source-title{font-weight:650}.source blockquote,.report-row blockquote{font-size:.9rem}.meta{font-size:.82rem;color:var(--muted);overflow-wrap:anywhere}.hints{padding-left:1.4em;color:var(--warn);font-size:.9rem}.hints:empty{display:none}
 .status-group{display:flex;gap:7px 15px;flex-wrap:wrap;padding:8px 0;border-block:1px solid var(--line);font-size:.89rem}.report-row{padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}.report-row:first-child{border:0}.report-label{font-size:.86rem;font-weight:700;color:var(--green)}.report-row p{margin-bottom:5px}
 .badge{font-size:.78rem;background:var(--pale);padding:2px 6px;display:inline-block;border-radius:4px;margin:0 4px}.skip{position:absolute;left:-9999px}.skip:focus{position:static}.filebar{margin:15px 0}.filebar summary{font-size:.91rem}.filebar p{margin:5px 0}
-@media(max-width:680px){.review-grid,.split{grid-template-columns:minmax(0,1fr)}.review-grid{gap:10px}#row-list{max-height:180px}.intro{margin-top:22px}.mast{display:block}.panel{margin:10px 0}}@media print{header,.skip,.intro,.filebar,#article-panel,#sources-panel,#review-panel,.actions,.message,footer,#demo-notice{display:none!important}#result-panel{border:0;margin:0;padding:0}.report-row{break-inside:avoid}html{background:white}main{width:100%;padding:0}}
+#share-report{margin-top:12px}
+@media(max-width:680px){.review-grid,.split{grid-template-columns:minmax(0,1fr)}.review-grid{gap:10px}#row-list{max-height:180px}.intro{margin-top:22px}.mast{display:block}.panel{margin:10px 0}}@media print{header,.skip,.intro,.filebar,#article-panel,#sources-panel,#review-panel,#share-report,.actions,.message,footer,#demo-notice{display:none!important}#result-panel{border:0;margin:0;padding:0}.report-row{break-inside:avoid}html{background:white}main{width:100%;padding:0}}
 .study-frame #rubric-guide,.study-frame #article-rubric,.study-frame header,.study-frame .skip,.study-frame .intro,.study-frame footer,.study-frame #file-panel,
 .study-frame #article-panel,.study-frame #sources-panel,.study-frame #demo-notice,.study-frame #result-panel,
 .study-frame #go-add-source,.study-frame #go-find{display:none!important}
 .study-frame main{padding:0 .6rem}.study-frame #review-panel{margin:.4rem 0}
 header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
+#document-file-status{overflow-wrap:anywhere}
 .finder-lines{max-height:24rem;overflow:auto;padding:0 0 0 3.2rem;border-block:1px solid var(--line)}
 .finder-lines li{padding:.25rem 0}.finder-lines label{display:flex;align-items:baseline;gap:.5rem;font-weight:400;cursor:pointer}
 .finder-lines input[type=radio]{flex:none;width:auto;margin:0;padding:0;accent-color:var(--green)}
 .finder-lines label:has(:checked){font-weight:700;color:var(--green)}
+#rubric-guide h2{margin-top:1em}#rubric-guide h3{margin-top:.8em}#rubric-guide .guide-axis{break-inside:avoid}
+@media print{#revision-draft{display:none}}
+@media print{.print-rubric main>:not(#rubric-guide){display:none!important}.print-rubric #rubric-guide{margin:0;border:0;padding:0}.print-rubric #rubric-guide>summary{list-style:none;font-size:1.4rem}}
 </style>
-<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-search.js" defer></script><script src="evidence-columns.js" defer></script><script src="factcheck-engine.js" defer></script><script src="source-reader.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="factcheck-ui.js" defer></script>
+<script src="evidence-fiscal.js" defer></script>
+<script src="evidence-period.js" defer></script><script src="evidence-finder.js" defer></script><script src="evidence-trend.js" defer></script><script src="evidence-columns.js" defer></script><script src="evidence-fiscal-table.js" defer></script><script src="evidence-transcript.js" defer></script><script src="evidence-search.js" defer></script><script src="factcheck-engine.js" defer></script><script src="field-citation.js" defer></script><script src="source-reader.js" defer></script><script src="document-file.js" defer></script><script src="article-rubric.js" defer></script><script src="article-rubric-ui.js" defer></script><script src="workspace-snapshot.js" defer></script><script src="revision-draft.js" defer></script><script src="factcheck-ui.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#article">기사 입력으로 이동</a>
@@ -43,13 +49,21 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <main>
 <section class="intro"><h1>기사 팩트체크</h1><p>기사와 원자료를 대조하고, 확인한 사실과 추가 취재가 필요한 대목을 기록합니다.</p></section>
 <details class="panel" id="rubric-guide"><summary>기사 한 편의 정확성과 편향을 평가하는 기준</summary>
-<p>정확성은 원자료와 대조해 결론을 낸 구절에서 몇 개가 맞았는지, 아직 확인할 구절은 몇 개인지 함께 봅니다. 제목이나 핵심 결론이 틀렸으면 따로 표시합니다.</p>
-<p>문장별 사실 판정을 마친 뒤 편향을 평가하세요. 표현과 발언 귀속, 제목이 본문을 대표하는 정도, 중요한 근거 누락, 대상별 검증 기준을 각각 0~3단계로 기록합니다. 근거가 부족하면 미평가로 둡니다. 기사·원자료·문장 판정을 수정하면 이전 편향 평가도 다시 확인해야 합니다.</p>
+<div class="actions"><button type="button" id="print-rubric">평가 기준만 인쇄</button></div>
+<h2>사실 정확성</h2>
+<p>먼저 제목이나 핵심 결론에 해당하는 구절을 표시하세요. 각 사실 구절을 원자료의 같은 대상·기간·단위와 대조합니다.</p>
+<p><strong>근거 지지율</strong> = 지지 ÷ (지지 + 원문 충돌) × 100. 기사 서술을 원자료로 판정한 구간에서 계산합니다.</p>
+<p><strong>판정 완료율</strong> = 완료 ÷ (완료 + 미결) × 100. 완료에는 지지, 원문 충돌, 정확히 옮긴 인용 속 사실 주장과 독립 원자료의 충돌을 포함합니다.</p>
+<p>순수한 의견은 두 분모에서 제외합니다. 부분 확인이거나 인용한 주장의 내용이 미확인이면 미결로 둡니다. 분모가 0이면 해당 비율은 산출을 보류합니다.</p>
 <p><strong>가상 계산 예시</strong> · 지지 4개, 충돌 1개, 미결 1개라면 근거 지지율은 <strong>80% (4/5)</strong>, 판정 완료율은 <strong>83.3% (5/6)</strong>입니다. 충돌한 구간이 제목이라면 핵심 오류도 표시합니다.</p>
+<h2>정치적·편집적 편향</h2>
+<p>문장별 사실 판정을 마친 뒤, 각 기준에서 기사 구절과 원자료 구절을 나란히 보고 근거와 단계를 기록하세요. 근거가 부족하면 미평가로 둡니다. ‘해당 없음’은 제목·도입부 또는 비교할 당사자가 없어 그 기준을 적용할 수 없을 때 이유와 함께 기록합니다.</p>
+<p>네 기준 중 몇 개를 평가했는지 최고 단계와 함께 보세요. 기사·원자료·문장 판정이 바뀌면 이전 편향 평가도 다시 확인합니다.</p>
 <p><strong>편향 판정 예시</strong> · 원자료와 본문에는 시범 노선의 대기 시간만 절반으로 줄었다고 했는데 제목이 도시 전체의 성과로 소개했다면, 제목이 범위를 넓힌 정도는 <strong>2단계</strong>로 평가할 수 있습니다. 도시 전체 수치의 사실 여부는 해당 자료를 구할 때까지 미결입니다.</p>
-<a href="../article-rubric.md">세부 판정표와 계산 예시</a></details>
+<div id="rubric-guide-scales"></div></details>
 <noscript><p class="callout">이 화면을 사용하려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
-<details class="filebar" id="file-panel"><summary>작업 파일 저장 · 이어 열기</summary><p class="hint">기사와 원자료 발췌, 입력한 판단이 JSON에 함께 담깁니다. 직접 저장한 파일이나 작성자를 신뢰하는 파일을 선택하세요.</p><div class="actions"><button type="button" id="save-work">작업 파일 내려받기</button><button type="button" id="load-work">파일 이어 열기</button><input type="file" id="import-file" hidden accept=".json,application/json"></div><p class="message" id="file-status" role="status"></p></details>
+<p class="callout" id="blind-notice" role="status" hidden></p>
+<details class="filebar" id="file-panel"><summary>작업 파일 저장 · 이어 열기</summary><p class="hint">작업 파일에는 입력한 판단과 메모가 함께 담깁니다. 다른 편집자에게 같은 자료로 독립 평가를 요청할 때는 기사와 등록된 원자료만 담은 파일을 사용하세요.</p><div class="actions"><button type="button" id="save-work">작업 파일 내려받기</button><button type="button" id="save-review-input">독립 평가용 기사·자료 내려받기</button><button type="button" id="load-work">파일 이어 열기</button><input type="file" id="import-file" hidden accept=".json,application/json"></div><p class="message" id="file-status" role="status"></p></details>
 <p class="callout" id="demo-notice" hidden>가상 기사 또는 모의 원자료가 포함되어 있습니다. 결과를 내보낼 때도 연습 기록으로 표시합니다.</p>
 <details class="panel" id="article-panel" open><summary>검토할 기사</summary>
 <form id="article-form"><label for="article" class="field">제목과 본문</label><textarea id="article" rows="7" placeholder="검토할 글을 원문 그대로 붙여 넣으세요."></textarea>
@@ -59,18 +73,25 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <details class="panel" id="sources-panel"><summary>원자료 관리 <span id="source-count"></span></summary>
 <p class="hint">문서의 판본과 확인 위치를 함께 기록하면 각 문장에서 같은 자료를 다시 사용할 수 있습니다.</p>
 <div id="source-list"></div>
-<details id="finder"><summary>원자료 본문에서 근거 구간 찾기</summary><p class="hint">현재 문장의 표현과 겹치는 문단을 찾습니다. 앞뒤 문맥과 주장 지지 여부는 원문에서 확인하세요. 문단 순서는 붙여넣은 글 안의 위치입니다. 인용할 때는 원본의 쪽·표·절을 입력하세요. 붙여넣은 전문은 작업 파일에 담지 않습니다.</p>
+<details id="finder"><summary>원자료 본문에서 근거 구간 찾기</summary><p class="hint">원자료에서 기사와 대조할 문단이나 표의 행을 찾습니다. 예산표는 연도·단계가 적힌 머리글과 단위 줄을 함께 붙여넣으세요. 문단 번호는 붙여넣은 글 안의 위치입니다. 회의록의 직접 인용은 발언자 이름과 직책이 적힌 구간을 대조하세요. 인용할 때는 원본에서 문맥을 확인하고 쪽·표·절을 입력하세요. 붙여넣은 원자료 중 직접 등록한 발췌문이 작업 파일에 담깁니다.</p>
+<details id="document-file-options"><summary>파일에서 원자료 불러오기</summary>
+<label class="field" for="document-file">텍스트(.txt) 또는 PDF에서 만든 검색 파일(.journal-source.json)</label><input type="file" id="document-file" accept=".txt,.json">
+<div id="document-pdf-panel" hidden><label class="field" for="document-pdf">검색 파일을 만들 때 사용한 원본 PDF</label><input type="file" id="document-pdf" accept=".pdf,application/pdf"></div>
+<p id="document-file-status" class="hint" role="status"></p></details>
 <label class="field" for="document-text">원자료 본문</label><textarea rows="4" id="document-text"></textarea>
 <label class="field" for="document-query">찾을 주장 또는 표현</label><input id="document-query">
 <details id="search-context-options"><summary>기사에서 비교 대상·기간 보충</summary><label class="field" for="search-context">기사 제목이나 앞뒤 문장에 나온 지표·기간</label><textarea rows="2" id="search-context"></textarea><div class="actions"><button type="button" id="use-article-title" hidden>기사 첫 줄로 다시 찾기</button><button type="button" id="use-article-context" hidden>앞뒤 구절로 다시 찾기</button></div></details>
 <div class="actions"><button type="button" id="find-passages">근거 후보 찾기</button></div><p id="finder-status" class="message" role="status"></p><div id="finder-results"></div></details>
 <form id="source-form"><h3 id="source-form-title">원자료 추가</h3>
+<div id="pdf-source-options" hidden></div>
 <label class="field" for="source-title">자료 이름</label><input id="source-title" required placeholder="예산안 의결 회의록">
 <div class="split"><div><label class="field" for="source-url">확인한 문서 주소</label><input type="url" id="source-url" required placeholder="https://"></div><div><label class="field" for="source-version">판본 또는 기준일</label><input id="source-version" required placeholder="2026-09-03 정정본"></div></div>
 <label class="field" for="source-originUrl">전재·재인용한 자료의 최초 원문 주소 (선택)</label><input type="url" id="source-originUrl" placeholder="https://"><label class="field" for="source-locator">쪽 · 표 · 발언 시각 등 확인 위치</label><input id="source-locator" required placeholder="통계표 12, 서울특별시 행, 2023년 열, 인쇄 41쪽">
 <label class="field" for="source-pdfPage">PDF 뷰어에서 확인한 쪽번호 (선택)</label><input id="source-pdfPage" type="text" inputmode="numeric" pattern="[1-9][0-9]*" aria-describedby="pdf-page-hint" placeholder="예: 44"><p id="pdf-page-hint" class="hint">확인한 문서 주소가 PDF를 직접 열거나 내려받는 주소일 때 입력하세요. 표지부터 1쪽으로 세는 PDF 파일 순서입니다. 표·행·연도와 인쇄 쪽수는 위 확인 위치에 적으세요.</p>
+<div id="source-pdf-proposal" hidden><p id="source-pdf-proposal-text" class="hint"></p><button id="use-pdf-location" type="button">확인한 PDF 쪽 입력</button></div>
 <label class="field" for="source-excerpt">해당 구간 원문</label><textarea id="source-excerpt" rows="2" required></textarea>
-<div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
+<div id="source-location-review" class="callout" hidden><p>선택한 발췌문에 이전 확인 위치가 남아 있습니다. 원문에서 같은 쪽과 표·행인지 확인하고, 다르면 위에서 고치세요.</p><p id="source-location-summary"></p><label class="check-line"><input type="checkbox" id="source-location-checked" aria-describedby="source-location-summary"><span>이 위치에서 발췌문을 확인했습니다.</span></label></div>
+<div class="actions"><button type="submit" id="source-save">자료 추가</button><button type="submit" id="source-save-link" hidden>이 문장의 근거로 추가</button><button type="button" id="source-cancel" hidden>수정 취소</button></div><p class="message" id="source-status" role="status"></p></form></details>
 <section class="panel" id="review-panel"><div class="mast"><h2>문장 검토</h2><p class="count" id="counts"></p></div>
 <div class="review-grid"><nav class="queue" aria-label="검토할 문장"><label for="row-filter">검토 목록</label>
 <select id="row-filter"><option value="open">확인이 필요한 문장</option><option value="all">모든 문장</option></select><ol id="row-list"></ol><p class="hint" id="queue-empty" hidden>이 목록에 남은 문장이 없습니다.</p></nav>
@@ -80,17 +101,31 @@ header nav{display:flex;gap:1em;flex-wrap:wrap;justify-content:flex-end}
 <form id="decision-form"><fieldset><legend>대조한 원자료</legend><label class="field" for="source-search">자료 찾기</label><input type="search" id="source-search" placeholder="이름, 위치, 발췌문 검색"><div id="row-sources"></div><div class="actions compact"><button type="button" id="go-add-source">원자료 추가하기</button><button type="button" id="go-find">원자료 본문에서 찾기</button></div></fieldset>
 <label class="field" for="verdict">문장 판단</label><select id="verdict" required><option value="">판단을 선택하세요</option><option value="fact">사실 확인</option><option value="attribution">발언자·인용 내용 확인</option><option value="opinion">의견·가치판단</option><option value="partial">일부 사실만 확인 · 나머지 보류</option><option value="mixed">사실과 평가가 섞인 문장</option><option value="held">판단 보류 · 추가 취재 필요</option><option value="contradicted">원자료와 충돌</option></select>
 <p id="verdict-help" class="hint"></p><div id="mixed-parts" hidden><label class="field" for="fact-span">원자료로 확인한 사실 구절</label><textarea rows="2" id="fact-span"></textarea><div id="opinion-part"><label class="field" for="opinion-span">의견·평가 구절</label><textarea rows="2" id="opinion-span"></textarea></div><p class="hint">확인 범위가 드러나도록 주체·시점·조건을 포함해 원문의 구절을 그대로 옮기세요. 남은 질문은 판단 이유에 적으세요.</p></div><label class="field" for="reason">판단 이유 · 남은 질문</label><textarea id="reason" required rows="2" placeholder="자료의 어느 내용이 주장을 뒷받침하는지, 무엇이 더 필요한지 적으세요."></textarea>
-<fieldset id="attribution-part" hidden><legend>발언 내용 자체의 확인 범위</legend><label class="field" for="content-status">인용 속 주장</label><select id="content-status"><option value="unverified">내용 미확인 · 추가 확인 필요</option><option value="opinion">의견 또는 전망으로 확인</option><option value="supported">별도 원자료로 사실 확인</option></select>
+<fieldset id="attribution-part" hidden><legend>발언 내용 자체의 확인 범위</legend><label class="field" for="content-status">인용 속 주장</label><select id="content-status"><option value="unverified">내용 미확인 · 추가 확인 필요</option><option value="opinion">의견 또는 전망으로 확인</option><option value="supported">별도 원자료로 사실 확인</option><option value="contradicted">발언 내용이 별도 원자료와 충돌</option></select>
+<p id="content-conflict-note" class="hint" hidden>발언 시점에 같은 대상을 직접 다룬 자료에서 반대되는 사실을 찾았을 때 기록하세요. 근거가 부족하거나 일부 주장만 반박할 수 있으면 내용을 미확인으로 두고 이유를 남기세요.</p>
 <div id="content-sources-part" hidden><p class="hint">위에서는 원발언을, 아래에서는 발언 내용 자체를 직접 확인한 독립 원자료를 고르세요. 같은 발언을 옮긴 기사들은 한 출처입니다.</p><div id="content-sources"></div></div>
 <div id="content-details" hidden><label class="field" for="content-reason">내용 판단 이유</label><textarea id="content-reason" rows="2"></textarea><label class="check-line"><input type="checkbox" id="content-checked"><span id="content-ack"></span></label></div></fieldset>
 <div id="correction-part" hidden><label class="field" for="correction">수정 문구 (선택)</label><textarea rows="2" id="correction" placeholder="근거와 대조한 대체 문장"></textarea><label class="check-line"><input type="checkbox" id="correction-checked"><span>수정 문구도 원자료와 대조해 확인했습니다.</span></label></div>
 <label class="check-line"><input type="checkbox" id="acknowledged" required><span id="ack-text">문장의 범위와 판단 이유를 확인했습니다.</span></label>
-<div class="actions"><button type="submit" class="primary">판단 기록</button></div></form></section></div>
+<div class="actions"><button type="submit" class="primary">판단 기록</button><button type="submit" id="save-find-next" hidden>기록하고 다음 미검토 문장의 근거 찾기</button></div></form></section></div>
 <p class="message" id="review-status" role="status"></p></section>
 <section class="panel" id="article-rubric" aria-label="기사 정확성과 편향 평가"></section>
 <section class="panel" id="result-panel"><div class="mast"><h2>검토 결과</h2><span id="result-tag" class="count"></span></div>
 <p id="result-scope"></p><p class="hint" id="coverage-limit"></p><p id="result-demo" class="callout" hidden>연습 기록 · 가상 기사 또는 모의 원자료 포함</p><div class="status-group" id="result-counts"></div>
-<div class="actions"><button type="button" id="export-report">검토 결과 내려받기 (.txt)</button></div><p class="hint">결과 파일에는 기사 문장 전체가 들어갑니다. 외부에 전달하기 전에 기사의 재배포 허용 범위를 확인하고, 필요하면 원문 링크로 대신하세요.</p>
-<p class="message" id="result-status" role="status"></p><div id="report-rows"></div></section>
+<div id="result-source-draft" class="callout" hidden><p id="source-draft-note"></p><div class="actions"><button type="button" id="return-source-draft">입력 중인 원자료로 이동</button></div></div>
+<div class="actions"><button type="button" id="export-report">기사 본문 포함 결과 내려받기 (.txt)</button></div>
+<details id="share-report"><summary>기사 본문을 빼고 결과 공유하기</summary>
+<p class="hint">기사 전문과 문장별 인용은 생략하고, 판정한 구절의 위치를 표시합니다. 원자료 주소·발췌, 편집자가 작성한 판단 이유와 수정 문구는 그대로 실립니다. 전달하기 전에 이 내용에 포함된 인용도 확인하세요.</p>
+<label class="field" for="share-article-url">기사 원문 주소 (선택)</label><input id="share-article-url" type="url" autocomplete="off" placeholder="https://">
+<div class="actions"><button type="button" id="export-share-report">공유본 내려받기 (.txt)</button></div></details>
+<p class="message" id="result-status" role="status"></p>
+<details id="revision-draft" hidden><summary>확인한 정정 문구로 수정본 만들기</summary>
+<p class="hint">원자료와 대조한 문구 중 수정본에 반영할 위치를 고르세요. 새 파일에는 수정한 기사와 등록된 원자료가 들어갑니다. 수정 전후를 비교하려면 원본 작업 파일도 따로 저장하고, 수정본을 다시 열어 평가하세요.</p>
+<div id="revision-choices"></div>
+<p id="revision-count" role="status"></p>
+<details id="revision-preview" hidden><summary>선택한 수정본 전체 보기</summary><p class="verbatim" id="revision-preview-text"></p></details>
+<button type="button" id="download-revision" disabled>수정본 작업 파일 내려받기</button>
+<p class="message" id="revision-status" role="status"></p></details>
+<div id="report-rows"></div></section>
 </div>
 </main><footer>기사와 검토 기록은 이 창에서 처리합니다. 작업을 이어가려면 작업 파일을 저장하세요.</footer></body></html>

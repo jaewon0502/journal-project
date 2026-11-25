@@ -5,13 +5,18 @@
   const engine = useNode ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const rubric = useNode ? require('./article-rubric.js') : root.JournalArticleRubric;
   const statuses = ['partial','pending','fact','attribution','opinion','mixed','held','contradicted'];
-  const contentStatuses = ['unverified','opinion','supported'];
+  const contentStatuses = ['unverified','opinion','supported','contradicted'];
   const schema = 'journal-local-factcheck-v1';
   const sourceFields = ['title', 'url', 'locator', 'excerpt', 'version', 'originUrl', 'pdfPage'];
-  function isMock(source) {
-    return [source.url, source.originUrl].filter(Boolean).some(value => {
-      try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
-    });
+  const isMock = engine.isMock;
+  function sourceDefaults(source = {}) {
+    let url = source.url || '';
+    if (url && engine.sourceTarget(source)?.page) {
+      const document = new URL(url);
+      document.hash = '';
+      url = document.href;
+    }
+    return {title: source.title || '', url, version: source.version || '', originUrl: source.originUrl || ''};
   }
   function decisionKey(d = {}) {
     const content = [d.status || '', d.reason || '', [...(d.sourceIds || [])].sort()];
@@ -40,22 +45,33 @@
       throw new Error('이 화면에서 저장한 형식의 작업 파일이 필요합니다.');
     }
     if (!(w.article.trim() || w.articleDraft.trim())) throw new Error('작업 파일에 기사 본문이 없습니다.');
+    engine.validatePdfBinding(w.sourceDraft.pdfSha256, w.sourceDraft.fields.pdfPage);
   }
 
   function activeReport(article, sources, receipts, drafts) {
-    const prior = new Map(receipts.map(r => [r.rowId, r]));
-    const active = receipts.filter(r => !draftChangesRecord(drafts.get(r.rowId), r));
-    const report = engine.report(article, sources, active);
+    let report = engine.report(article, sources, receipts);
+    const pending = new Map();
     for (const row of report.rows) {
-      row.draftPending = draftChangesRecord(drafts.get(row.id), prior.get(row.id));
-      if (row.draftPending) row.reviewNote = '판단을 작성하고 있습니다. 기록하기 전까지 확인한 결과에서 제외합니다.';
+      if (draftChangesRecord(drafts.get(row.id), row.receipt ?? undefined)) pending.set(row.id, row.receipt);
+    }
+    // Only a receipt validated against this article and catalogue can become the
+    // prior judgment for an edit. Keep the engine's counts based on visible decisions.
+    if ([...pending.values()].some(Boolean)) {
+      report = engine.report(article, sources, receipts.filter(r => r && !pending.has(r.rowId)));
+    }
+    for (const row of report.rows) {
+      row.draftPending = pending.has(row.id);
+      if (row.draftPending) {
+        row.draftRecord = pending.get(row.id);
+        row.reviewNote = '판단을 작성하고 있습니다. 기록하기 전까지 확인한 결과에서 제외합니다.';
+      }
     }
     return report;
   }
 
   function review(report, sources, saved, rawDraft) {
     let assessment = rubric.evaluate(report, sources, saved);
-    const draft = rubric.restoreDraft(report, sources, rawDraft);
+    const draft = rubric.restoreDraft(report, sources, rawDraft, saved);
     const dropped = assessment.stale || (rawDraft != null && !draft);
     if (assessment.saved && draft) {
       // A workspace can contain an open edit as well as an older rating for the same dimension.
@@ -64,6 +80,26 @@
       assessment = rubric.evaluate(report, sources, {...assessment.saved, ratings: filtered});
     }
     return {assessment, draft, dropped};
+  }
+
+  // Compare the cited version and passage independently of local IDs and display names.
+  function sourceIdentity(source) {
+    const target = engine.sourceTarget(source);
+    const url = new URL(source.url);
+    if (target?.page) url.hash = '';
+    return JSON.stringify([target?.page ? url.href : source.url, source.originUrl || '', source.version,
+      source.locator, source.excerpt, target?.page || source.pdfPage || '', ...(source.pdfSha256 ? [source.pdfSha256] : [])]);
+  }
+  function sourceIdentities(sources) {
+    return [...new Set(sources.map(sourceIdentity))].sort();
+  }
+
+  function hasSourceDraft(w) {
+    if (['pending', 'confirmed'].includes(w.sourceDraft.locationReview)) return true;
+    const editing = w.sources.find(s => s.id === w.sourceDraft.id);
+    const prefill = w.sources.find(s => s.id === w.sourceDraft.prefillId);
+    const baseline = editing || sourceDefaults(prefill);
+    return w.sourceDraft.pdfSha256 !== baseline.pdfSha256 || sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (baseline[k] || ''));
   }
 
   function read(w) {
@@ -76,21 +112,35 @@
     const report = activeReport(w.article, w.sources, receipts, drafts);
     if (!report.rows.length) throw new Error('비교할 기사 구간이 없습니다.');
     const checked = review(report, w.sources, w.articleAssessment, w.articleAssessmentDraft);
-    // Independently entered copies of the same source have different UI IDs and often different display names.
-    const sourceKey = JSON.stringify(w.sources.map(s => {
-      const target = engine.sourceTarget(s);
-      const url = new URL(s.url);
-      if (target?.page) url.hash = '';
-      return JSON.stringify([target?.page ? url.href : s.url, s.originUrl || '', s.version,
-        s.locator, s.excerpt, target?.page || s.pdfPage || '']);
-    }).sort());
-    const editing = w.sources.find(s => s.id === w.sourceDraft.id);
-    const sourceDraftPending = sourceFields.some(k => (w.sourceDraft.fields[k] || '') !== (editing?.[k] || ''));
+    const sourceKey = JSON.stringify(sourceIdentities(w.sources));
     return {article: report.article, rows: report.rows, sources: w.sources, sourceKey,
-      demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending};
+      demo: w.demo || w.sources.some(isMock), assessment: checked.assessment, stale: checked.dropped, sourceDraftPending: hasSourceDraft(w)};
   }
 
-  const api = Object.freeze({schema, sourceFields, isMock, validateWork, activeReport, draftChangesRecord, review, read});
+  function sourceInput(source) {
+    return Object.fromEntries(['id', ...sourceFields, 'pdfSha256'].filter(key => source[key] != null).map(key => [key, source[key]]));
+  }
+
+  function independentInput(work) {
+    const {article, sources, demo} = read(work);
+    return {
+      format: schema, article, articleDraft: article, demo,
+      sources: sources.map(sourceInput),
+      receipts: [], rowDrafts: [], articleAssessment: null, articleAssessmentDraft: null,
+      currentId: null, sourceDraft: {id: null, fields: Object.fromEntries(sourceFields.map(key => [key, '']))}
+    };
+  }
+
+  function blindTag(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value) ||
+        Object.keys(value).length !== 2 || !Object.hasOwn(value, 'pairId') || !Object.hasOwn(value, 'slot') ||
+        typeof value.pairId !== 'string' || !/^[a-f0-9]{32}$/u.test(value.pairId) ||
+        !['A', 'B'].includes(value.slot)) return null;
+    return {pairId: value.pairId, slot: value.slot};
+  }
+
+  const api = Object.freeze({schema, sourceFields, sourceDefaults, sourceIdentity, sourceIdentities, sourceInput, isMock, validateWork, hasSourceDraft, activeReport,
+    draftChangesRecord, review, read, independentInput, blindTag});
   if (useNode) module.exports = api;
   else root.JournalWorkspaceSnapshot = api;
 })(globalThis);

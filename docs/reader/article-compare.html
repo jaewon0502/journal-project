@@ -6,11 +6,24 @@
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="article-compare.css">
 <title>기사 평가 비교 · Journal</title>
+<script src="evidence-fiscal.js" defer></script>
+<script src="evidence-fiscal-table.js" defer></script>
 <script src="factcheck-engine.js" defer></script>
 <script src="article-rubric.js" defer></script>
 <script src="workspace-snapshot.js" defer></script>
+<script src="blind-revision.js" defer></script>
 <script src="article-compare-example.js" defer></script>
 <script src="article-compare-core.js" defer></script>
+<script src="revision-facts.js" defer></script>
+<script src="revision-facts-view.js" defer></script>
+<script src="revision-agreement.js" defer></script>
+<script src="revision-series.js" defer></script>
+<script src="revision-bias-evidence.js" defer></script>
+<script src="revision-bias-audit.js" defer></script>
+<script src="retention-case.js" defer></script>
+<script src="retention-notes-ui.js" defer></script>
+<script src="core-context-notes-ui.js" defer></script>
+<script src="revision-evidence-example.js" defer></script>
 <script src="article-compare-ui.js" defer></script>
 </head>
 <body>
@@ -20,6 +33,13 @@
 <h1>기사 평가 비교</h1>
 <p class="intro">팩트체크 화면에서 저장한 작업 파일 두 개로 기사의 수정 효과나 편집자 간 판정 차이를 확인하세요.</p>
 <noscript><p>파일을 비교하려면 브라우저에서 JavaScript를 켜 주세요.</p></noscript>
+<section id="review-target" class="panel" aria-labelledby="review-target-title" hidden>
+<h2 id="review-target-title" tabindex="-1">집계에서 선택한 기사의 평가 근거 확인</h2>
+<p id="review-target-status" role="status"></p>
+<button id="review-example-resume" type="button" hidden>이 예시의 진행자용 대조 기록 이어 열기</button>
+<div id="review-upload" class="coordinator"></div>
+<a id="review-release" href="#blind-revision">다른 기사 비교하기</a>
+</section>
 <section class="panel" id="inputs" tabindex="-1" aria-label="비교 조건과 작업 파일">
 <fieldset class="modes"><legend>비교할 대상</legend>
 <label><input type="radio" name="mode" value="revision" checked> 수정 전후</label>
@@ -33,12 +53,52 @@
 <label id="ack-wrap" class="ack" hidden><input type="checkbox" id="ack"> 두 파일이 같은 기사의 수정 전과 수정 후 기록임을 확인했습니다.</label>
 <div class="actions"><button id="compare" class="primary" type="button" disabled>작업 파일 비교</button><button id="example" type="button">가상 예시 보기</button></div>
 <p id="status" class="status" role="status"></p>
+<details id="blind-revision" class="coordinator">
+<summary>진행자용 · 수정 전후를 가리고 평가하기</summary>
+<section aria-labelledby="blind-prepare-title">
+<h3 id="blind-prepare-title">검토용 파일 준비</h3>
+<p class="note">위에 수정 전과 수정 후 파일을 차례로 넣고 순서를 확인하세요. 기사와 등록한 원자료만 담아 A·B를 무작위로 배정합니다. 본문과 자료에 판본을 알려 주는 표현이 있는지도 확인하세요.</p>
+<button id="blind-prepare" type="button" disabled>검토용 A·B 만들기</button>
+<p id="blind-prep-status" class="status" role="status"></p>
+<div id="blind-downloads" hidden>
+<div class="actions"><button id="blind-download-a" type="button">검토용 A 저장</button><button id="blind-download-b" type="button">검토용 B 저장</button></div>
+<p class="note">검토자에게 A·B 파일을 전달하세요. 각 파일을 팩트체크 화면에서 열고 평가한 뒤 작업 JSON으로 저장하면 됩니다.</p>
+<button id="blind-download-key" type="button">진행자 전용 대응표 저장</button>
+<p class="note">대응표에는 실제 순서가 들어 있습니다. 검토자에게 전달하지 말고 따로 보관하세요.</p>
+<p class="note">다음 편집자를 배정하기 전에 세 파일을 편집자별 폴더에 저장하세요. 편집자마다 새 묶음을 만들면 다른 사람의 평가가 섞였을 때 확인할 수 있습니다.</p>
+<button id="blind-next" type="button" disabled>다음 편집자용 A·B 만들기</button>
+</div>
+</section>
+<section aria-labelledby="blind-restore-title">
+<h3 id="blind-restore-title">돌아온 평가 비교</h3>
+<div id="blind-bundle-picker">
+<label for="blind-bundle-files">두 편집자의 결과 한꺼번에 열기</label>
+<p id="blind-bundle-help" class="note">처음 비교할 때는 같은 기사의 작업 파일 4개와 진행자 대응표 2개를 선택하세요. 폴더가 다르면 나눠서 추가할 수 있습니다. 이어서 검토할 때는 저장한 진행자용 대조 기록 1개를 선택하세요.</p>
+<input type="file" id="blind-bundle-files" accept=".json,application/json" multiple aria-describedby="blind-bundle-help">
+<p id="blind-bundle-status" class="status" role="status"></p>
+<div id="blind-bundle-selection" hidden>
+<ol id="blind-bundle-list"></ol>
+<button id="blind-bundle-clear" type="button">선택한 파일 모두 지우기</button>
+</div>
+</div>
+<h4>편집자 한 명의 결과 열기</h4>
+<p class="note">한 검토자가 평가한 작업 파일 두 개를 어느 쪽에 넣어도 됩니다. 같은 묶음의 대응표를 선택하세요.</p>
+<div id="agreement-held" hidden><p id="agreement-status" class="status" role="status"></p><button id="agreement-reset" type="button">첫 편집자 선택 해제</button></div>
+<div class="pair">
+<div><label for="blind-return-first">평가 파일 1</label><input type="file" id="blind-return-first" accept=".json,application/json"></div>
+<div><label for="blind-return-second">평가 파일 2</label><input type="file" id="blind-return-second" accept=".json,application/json"></div>
+</div>
+<label for="blind-return-key">진행자 전용 대응표</label><input type="file" id="blind-return-key" accept=".json,application/json">
+<button id="blind-resolve" type="button" disabled>순서 복원하고 비교</button>
+<p id="blind-return-status" class="status" role="status"></p>
+</section>
+</details>
 </section>
 <section id="result" aria-labelledby="result-title" hidden>
 <div class="result-head"><h2 tabindex="-1" id="result-title">비교 결과</h2><a href="#inputs">파일 선택으로</a></div>
 <div id="output"></div>
 </section>
 </main>
-<footer>파일은 현재 브라우저에서 읽습니다. <a href="../article-rubric.md">기사 평가 기준과 계산식</a></footer>
+<footer>파일은 현재 브라우저에서 읽습니다. <a href="factcheck.html#rubric-guide">기사 정확성과 편향 평가 기준</a> · <a href="../article-rubric.md">상세 판정표와 집계식</a> · <a href="revision-series.html">여러 기사 개선율 집계</a></footer>
 </body>
 </html>

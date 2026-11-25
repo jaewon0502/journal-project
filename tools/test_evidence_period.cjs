@@ -1,6 +1,6 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {different} = require('../docs/reader/evidence-period.js');
+const {different, requestedPeriod} = require('../docs/reader/evidence-period.js');
 
 const row = date => ({text: date + '   45.2    197', paragraph: 1, context: []});
 
@@ -61,4 +61,19 @@ test('축약된 세기와 중첩·역전·불완전한 기간은 안전하게 �
   for (const r of ["'00.02.29~'00.04.30", "'23.01.32 ~ '23.12.31", "'23.06.01 ~ '23.05.31",
     "'21.12.31 ~ '24.01.01", "'23.01.01 ~ 12.31", "23.01.01 ~ 23.12.31", "'23.01.01 ~ '23.12.31 ~ '24.03.31",
     "기간 항목: '23.01.01 ~ '23.12.31"]) assert.equal(different('2026년 10월 요금',row(r)),null,r);
+});
+
+test('같은 달의 다른 관측일을 구분하고 날짜가 여러 개인 질문에는 단일 날짜를 배정하지 않는다', () => {
+  const q = '2025년 8월 6일 저수율은 78.5%였나?';
+  for (const stamp of ['2025년 8월 9일', '2025-08-09T00:05:00+09:00', '2025\t8월 9일']) {
+    assert.deepEqual(different(q, row(stamp)), {requested:'2025년 8월 6일',source:'2025년 8월 9일'});
+  }
+  assert.equal(different(q, row('2025년 8월')), null);
+  assert.equal(different(q, row('2025년 8월 6일')), null);
+  assert.equal(different('2025년 8월 저수율', row('2025년 8월 9일')), null);
+  for (const query of ['2025년 8월 6일과 9일의 저수율', '2025년 8월 6·9일 저수율',
+    '2025-08-06 및 9일의 저수율']) {
+    assert.equal(requestedPeriod(query), null, query);
+    assert.equal(different(query, row('2025년 8월 7일')), null, query);
+  }
 });

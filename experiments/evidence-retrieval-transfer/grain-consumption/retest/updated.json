@@ -1,0 +1,271 @@
+{
+  "browser": "158.0.8127.38",
+  "readerSha256": "21caedb297c1a756bb74e30b5d38f6b1d076504cb31ef55cee9aa544c75bd55b",
+  "inputs": {
+    "freezeSha256": "85dabc74dd8d67837ce73e535e5c7be31d2acb412299038ebfa37bc99b480642",
+    "firstObservationSha256": "27b76bf19a3b1ee1a5e3a413710e095bee1a4378775b4200b1e2b8151d7f6fe8",
+    "pdfSha256": "b8fde990442f32a971e1aac8fef254febcbc3a471fc73d6b742ffcca98e3af33",
+    "sourceJsonSha256": "b9ca682b5988b8b2639ad32cd20ba21ddb81c12a058776994e055543f27e4d70",
+    "layoutSha256": "ada6ff3fe9f1b6f75871a375648d6bc0fb23afdd85fc38fec44b5dda3332ec7f"
+  },
+  "runs": [
+    {
+      "id": "household",
+      "width": 320,
+      "status": "확인할 원문 후보 3개",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": true,
+          "page": 7,
+          "quoteRows": [
+            84
+          ],
+          "qualifies": true
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 5,
+          "quoteRows": [
+            48
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 6,
+          "quoteRows": [
+            67
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 7,
+        "quoteRows": [
+          84
+        ],
+        "qualifies": true,
+        "quoteSha256": "1f72a72e3f267d2622fe047cab7f8dc91b99f2b1007bd1aea6cec40d58edf199"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    },
+    {
+      "id": "food-manufacturing",
+      "width": 320,
+      "status": "확인할 원문 후보 3개",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": true,
+          "page": 11,
+          "quoteRows": [
+            216
+          ],
+          "qualifies": true
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 5,
+          "quoteRows": [
+            58
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 11,
+          "quoteRows": [
+            200
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 11,
+        "quoteRows": [
+          216
+        ],
+        "qualifies": true,
+        "quoteSha256": "cc09c02c579201937572dffdc0d102d8a1a2682f6821380683304aa635280220"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    },
+    {
+      "id": "seoul-one-person",
+      "width": 320,
+      "status": "‘서울 1인 가구’의 수치를 같은 원문 구절에서 확인하지 못했습니다. 전체 가구의 1인당 평균과 구분해 해당 집단을 따로 집계한 표와 주석을 확인하세요.",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": false,
+          "page": 7,
+          "quoteRows": [
+            84
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": false,
+          "page": 5,
+          "quoteRows": [
+            48
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": false,
+          "page": 6,
+          "quoteRows": [
+            67
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 7,
+        "quoteRows": [
+          84
+        ],
+        "qualifies": false,
+        "quoteSha256": "1f72a72e3f267d2622fe047cab7f8dc91b99f2b1007bd1aea6cec40d58edf199"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    },
+    {
+      "id": "household",
+      "width": 1280,
+      "status": "확인할 원문 후보 3개",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": true,
+          "page": 7,
+          "quoteRows": [
+            84
+          ],
+          "qualifies": true
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 5,
+          "quoteRows": [
+            48
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 6,
+          "quoteRows": [
+            67
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 7,
+        "quoteRows": [
+          84
+        ],
+        "qualifies": true,
+        "quoteSha256": "1f72a72e3f267d2622fe047cab7f8dc91b99f2b1007bd1aea6cec40d58edf199"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    },
+    {
+      "id": "food-manufacturing",
+      "width": 1280,
+      "status": "확인할 원문 후보 3개",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": true,
+          "page": 11,
+          "quoteRows": [
+            216
+          ],
+          "qualifies": true
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 5,
+          "quoteRows": [
+            58
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": true,
+          "page": 11,
+          "quoteRows": [
+            200
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 11,
+        "quoteRows": [
+          216
+        ],
+        "qualifies": true,
+        "quoteSha256": "cc09c02c579201937572dffdc0d102d8a1a2682f6821380683304aa635280220"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    },
+    {
+      "id": "seoul-one-person",
+      "width": 1280,
+      "status": "‘서울 1인 가구’의 수치를 같은 원문 구절에서 확인하지 못했습니다. 전체 가구의 1인당 평균과 구분해 해당 집단을 따로 집계한 표와 주석을 확인하세요.",
+      "initialCandidates": [
+        {
+          "visibleBeforeExpanding": false,
+          "page": 7,
+          "quoteRows": [
+            84
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": false,
+          "page": 5,
+          "quoteRows": [
+            48
+          ],
+          "qualifies": false
+        },
+        {
+          "visibleBeforeExpanding": false,
+          "page": 6,
+          "quoteRows": [
+            67
+          ],
+          "qualifies": false
+        }
+      ],
+      "firstSelection": {
+        "pdfPage": 7,
+        "quoteRows": [
+          84
+        ],
+        "qualifies": false,
+        "quoteSha256": "1f72a72e3f267d2622fe047cab7f8dc91b99f2b1007bd1aea6cec40d58edf199"
+      },
+      "visibleTypedCell": false,
+      "viewportFits": true,
+      "excerptBeforeSelectionEmpty": true,
+      "verdictBeforeAndAfterEmpty": true
+    }
+  ]
+}

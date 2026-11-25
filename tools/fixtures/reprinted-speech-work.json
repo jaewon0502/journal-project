@@ -1,0 +1,29 @@
+{
+  "format": "journal-local-factcheck-v1",
+  "article": "위원장은 “지난해 사업 참여자는 50명이었다”고 말했다.",
+  "articleDraft": "위원장은 “지난해 사업 참여자는 50명이었다”고 말했다.",
+  "demo": false,
+  "sources": [
+    {"id":"speech","url":"https://council.example/record","version":"확정본","locator":"2면","excerpt":"위원장: 지난해 사업 참여자는 50명이었다."},
+    {"id":"copy","url":"https://press.example/record","version":"확정본","locator":"2면","excerpt":"위원장은 “지난해 사업 참여자는 50명이었다”고 밝혔다."}
+  ],
+  "receipts": [{
+    "protocol": "journal-review/1",
+    "rowId": "unit-0",
+    "articleBinding": "1d579e5baf2ea19e9e87d86c6687ac46c254046f12350f9fbeb742fd58a8370c",
+    "binding": "78ba8a737f363e29f15348a4e75d0e56ea8f0576e29aed226afe63cd1391990b",
+    "references": "1313b0f5efe3d61effe831aa4747f4ec77654565f1bc87f1e99b4d447fd289fc",
+    "recordedAt": "2026-11-25T03:00:00.000Z",
+    "status": "attribution",
+    "sourceIds": ["speech"],
+    "reason": "회의 속기록과 발언자를 대조했다.",
+    "acknowledged": true,
+    "contentStatus": "supported",
+    "contentChecked": true,
+    "contentReason": "기사에서 같은 수치를 보았다.",
+    "contentSourceIds": ["copy"],
+    "checksum": "455f7fc83252c5d06556353d544a33ef24148037ce2b367bbb312c99375013ce"
+  }],
+  "rowDrafts": [],
+  "sourceDraft": {"id":null,"fields":{"title":"","url":"","version":"","locator":"","excerpt":""}}
+}

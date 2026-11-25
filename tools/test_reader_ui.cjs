@@ -47,6 +47,23 @@ function setup(t, { mode = 'review', storageFailure = false, localFailure = fals
   return { w, d, get, click, fill, choose, downloads, exported, readBlob, unloadBlocked, scrolls };
 }
 
+test('두 읽기 방식에서 기사 검증·평가 비교·통제 실험·현장 집계의 로컬 화면을 직접 연다', t => {
+  for (const mode of ['read','review']) {
+    const {d,get} = setup(t,{mode});
+    const nav = d.querySelector('main > nav[aria-label="기사 검증과 편집자 측정"]');
+    assert.deepEqual([...nav.querySelectorAll('a')].map(a => [a.textContent, a.getAttribute('href')]), [
+      ['새 기사 팩트체크','factcheck.html'], ['기사 정확성·편향 비교','article-compare.html'],
+      ['제공된 자료로 비교 실험','editor-study.html'], ['실제 기사 현장 집계','field-summary.html']
+    ]);
+    for (const a of nav.querySelectorAll('a')) assert.ok(fs.existsSync(path.join(__dirname,'../docs/reader',a.getAttribute('href'))));
+    assert.equal(get('review-mode').textContent,'개인 검토 메모');
+    if (mode === 'review') {
+      assert.equal(get('reader').hidden,true);
+      assert.equal(get('ai-results').hidden,true);
+    }
+  }
+});
+
 test('review starts without prior AI verdicts; source metadata stays neutral', t => {
   const page = setup(t);
   for (const item of source.cases) {

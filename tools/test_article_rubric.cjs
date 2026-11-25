@@ -2,6 +2,7 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const factcheck = require('../docs/reader/factcheck-engine.js');
 const rubric = require('../docs/reader/article-rubric.js');
+const workspace = require('../docs/reader/workspace-snapshot.js');
 
 const sources = [
   {id: 'minute', url: 'https://council.example/agenda', locator: '의결표', version: '확정', excerpt: '시의회는 사업비 3억 원을 의결했다. 가 정당은 찬성했다. 이미 사업을 도입한 시행 범위는 시범 구역 한 곳이다.'},
@@ -145,6 +146,104 @@ test('같은 제목·리드도 기사 안의 두 위치가 다를 때만 대조�
   assert.equal(rubric.evaluate(r,sources,old).bias.assessed,1);
 });
 
+test('당사자별 검증 기준은 0~3단계 모두 두 기사 구절과 양측의 원자료 구절이 있어야 집계한다', () => {
+  const article = '가당의 3억 원 지출은 결산서로 확인됐다.\n나당이 3억 원을 썼다는 주장은 아직 확인되지 않았다.';
+  const a = '가당의 확정 지출액은 3억 원이다.', b = '나당은 올해 결산서를 제출하지 않았다.';
+  const src = {id:'ledger', url:'https://example.org/ledger.pdf#page=1', version:'확정', locator:'제출 현황', excerpt:a + ' ' + b};
+  function assess(catalog, level, extra = {}) {
+    const r = factcheck.report(article, catalog), [left, right] = r.rows;
+    const rating = {level, rowId:left.id, quote:left.text, compareRowId:right.id, compareQuote:right.text,
+      sourceId:src.id, sourceQuote:a, reason:'두 당에 적용된 확인 절차를 대조했다.', impact:'나당의 지출액도 확인됐다고 읽게 한다.', ...extra};
+    const saved = rubric.save(r, catalog, {coreRowIds:[], ratings:{standards:rating}});
+    return rubric.evaluate(r, catalog, saved).bias;
+  }
+  for (const level of [0,1,2,3]) {
+    assert.throws(() => assess([{...src, excerpt:a}], level), /둘째 기사 구절의 근거/);
+    assert.equal(assess([src], level, {compareSourceId:src.id, compareSourceQuote:b}).maxLevel, level);
+  }
+  for (const otherQuote of [a, '확정 지출액', '확정 지출액은 3억 원이다. 나당은']) {
+    const copy = {...src, id:'another-id', url:'https://www.example.org/ledger.pdf?utm_source=news#page=1'};
+    assert.throws(() => assess([src,copy], 3, {compareSourceId:copy.id, compareSourceQuote:otherQuote}), /겹치지 않는/);
+  }
+  const repost = {...src, id:'repost', url:'https://archive.example.org/ledger', originUrl:src.url};
+  const indirect = {...src, id:'second-copy', url:'https://paper.example.org/report', originUrl:repost.url};
+  assert.throws(() => assess([src,repost,indirect], 2, {compareSourceId:indirect.id, compareSourceQuote:a}), /겹치지 않는/);
+  assert.throws(() => assess([src], 3, {compareSourceId:src.id, compareSourceQuote:'등록되지 않은 회신'}), /발췌문/);
+  const duplicate = factcheck.report(article.split('\n')[0] + '\n' + article.split('\n')[0], [src]);
+  const [row] = duplicate.rows;
+  assert.throws(() => rubric.save(duplicate, [src], {coreRowIds:[], ratings:{standards:{level:0,rowId:row.id,quote:row.text,
+    compareRowId:duplicate.rows.at(-1).id,compareQuote:row.text,sourceId:src.id,sourceQuote:a,compareSourceId:src.id,compareSourceQuote:b,reason:'대조했다.'}}}), /주체나 주장/);
+  const left = {...src, title:'가당 공문 회신', excerpt:'미제출', locator:'제출 현황'};
+  for (const other of [{...left, id:'other', title:'나당 공문 회신', locator:'나당 제출 현황'},
+    {...left, id:'other', title:'나당 공문 회신', url:'https://example.org/ledger.pdf#page=2'},
+    {...left, id:'other', title:'나당 공문 회신', url:'https://example.org/party-b-reply.pdf'}]) {
+    assert.equal(assess([left, other], 1, {sourceQuote:'미제출', compareSourceId:other.id, compareSourceQuote:'미제출'}).maxLevel, 1);
+  }
+});
+
+test('이전 당사자별 점수는 재검토 초안으로 열리고 핵심 지정과 나머지 기준은 집계에 남는다', () => {
+  const r = state(), first = r.rows[0], other = r.rows[1];
+  const legacy = entry(first, 3, {compareRowId:other.id, compareQuote:other.text, direction:'당사자에게 불리'});
+  const saved = form(r, {wording:entry(first, 1)}, [first.id]);
+  saved.ratings.standards = legacy;
+  const firstOpen = workspace.review(r, sources, saved, null);
+  assert.deepEqual([firstOpen.assessment.bias.assessed, firstOpen.assessment.bias.maxLevel, firstOpen.assessment.bias.unknown], [1,1,3]);
+  assert.deepEqual(firstOpen.assessment.accuracy.coreRowIds, [first.id]);
+  assert.equal(firstOpen.dropped, true);
+  const secondOpen = workspace.review(r, sources, firstOpen.assessment.saved, firstOpen.draft);
+  const recovered = secondOpen.draft.entries.standards;
+  assert.deepEqual(recovered, {...rubric.copyFields(legacy), legacyPrevious:rubric.copyFields(legacy)});
+  const existing = {binding:saved.binding, entries:{standards:{...recovered, reason:'저장 전 작성한 새 이유'}}};
+  const editing = workspace.review(r, sources, saved, existing);
+  assert.equal(editing.draft.entries.standards.reason, '저장 전 작성한 새 이유');
+  assert.deepEqual(editing.draft.entries.standards.legacyPrevious, recovered.legacyPrevious);
+  assert.deepEqual(workspace.review(r, sources, editing.assessment.saved, editing.draft).draft, editing.draft);
+  assert.equal(workspace.review(state(article+'\n새 소식이다.'), sources, saved, null).draft, null);
+});
+
+test('상대 당의 장부 행을 잘못 연결한 점수는 집계하지 않고 이전 작업의 근거를 보존한다', () => {
+  const article = '가람당은 특별회계 3억 원을 집행했다.\n누리당은 특별회계 3억 원을 집행했다고 주장했다.';
+  const amount = '가람당 특별회계 2025년 집행액 3억 원.';
+  const payment = '가람당 특별회계 2025년 집행일 9월 2일.';
+  const correct = '누리당 | 2025년 특별회계 3억 원.';
+  function fixture(second, text = article, first = amount, locator = '표 1') {
+    const src = {id:'ledger',url:'https://example.org/accounts',locator,version:'확정',excerpt:[first,second,correct].join('\n')};
+    const r = factcheck.report(text, [src]), [a,b] = r.rows;
+    const raw = {level:3,rowId:a.id,quote:a.text,compareRowId:b.id,compareQuote:b.text,
+      sourceId:src.id,sourceQuote:first,compareSourceId:src.id,compareSourceQuote:second,
+      reason:'두 당의 지출을 서로 다르게 서술했다.',impact:'한쪽의 지출만 미확인으로 읽힐 수 있다.'};
+    return {r,src,raw,save: changes => rubric.save(r,[src],{coreRowIds:[a.id],ratings:{standards:{...raw,...changes}}})};
+  }
+  const f = fixture(payment);
+  for (const level of [0,1,2,3]) assert.throws(() => f.save({level}), /둘째 기사 구절은 누리당.*가람당/);
+  assert.throws(() => f.save({compareSourceQuote:'9월 2일'}), /둘째 기사 구절은 누리당/);
+  assert.throws(() => f.save({sourceQuote:correct, compareSourceQuote:amount}), /첫째 기사 구절은 가람당.*누리당/);
+  assert.equal(rubric.evaluate(f.r,[f.src],f.save({compareSourceQuote:correct})).bias.maxLevel,3);
+
+  const old = rubric.save(f.r,[f.src],{coreRowIds:[f.raw.rowId],ratings:{}});
+  old.ratings.standards = f.raw;
+  const reopened = workspace.review(f.r,[f.src],old,null);
+  assert.equal(reopened.assessment.bias.maxLevel,null);
+  assert.equal(reopened.assessment.bias.assessed,0);
+  assert.deepEqual(reopened.assessment.accuracy.coreRowIds,[f.raw.rowId]);
+  assert.deepEqual(reopened.draft.entries.standards.legacyPrevious,rubric.copyFields(f.raw));
+  assert.deepEqual(workspace.review(f.r,[f.src],reopened.assessment.saved,reopened.draft).draft,reopened.draft);
+
+  // Role aliases and cited speakers require editorial interpretation. A table
+  // without an explicit actor can identify the party through its column header.
+  for (const [evidence, text] of [
+    ['집행일 9월 2일.',article], ['가람당 | 누리당 측이 제출한 지출 명세',article],
+    ['가람당 “상대는 대답한 적이 없다”',article], ['가람당 | “9월에 제출했다”',article],
+    [payment,article.replace('누리당은','여당은')], [payment,article.replace('누리당은','위원회는')],
+    [payment,article.replace('누리당은','누리당은 가람당 자료를 인용해')],
+    [payment,article.replace('가람당은','더가람당은').replace('누리당은','가람당은')]
+  ]) assert.equal(fixture(evidence,text).save().ratings.standards.level,3);
+  const section = fixture('누리당의 지급 명세\n지급처 | 금액\n가람당 | 3억 원');
+  assert.equal(section.save({compareSourceQuote:'가람당 | 3억 원'}).ratings.standards.level,3);
+  const disbursement = fixture('가람당 | 3억 원',article,amount,'누리당 집행 명세, 지급처별 금액');
+  assert.equal(disbursement.save().ratings.standards.level,3);
+});
+
 test('같은 판단을 다시 기록하거나 기록 전 문장에 입력해도 기사 평가는 무효가 되지 않는다', () => {
   const r = state(article, [['fact']]);
   const saved = form(r, {omission: entry(r.rows[0], 0)});
@@ -167,4 +266,144 @@ test('이전 형식으로 저장한 평가도 현재 판단과 같으면 그대�
   assert.equal(rubric.evaluate(r, sources, old).stale, false);
   assert.equal(rubric.evaluate(r, sources, old).bias.assessed, 1);
   assert.equal(rubric.evaluate(state(article, [['held']]), sources, old).stale, true);
+});
+
+test('같은 판본에서 한 항목의 근거가 손상돼도 독립적으로 확인되는 평가와 핵심 표시는 복원한다', () => {
+  const r = state();
+  const {id} = r.rows[0];
+  const saved = form(r, {wording: entry(r.rows[0], 3), omission: entry(r.rows[1], 1)}, [id]);
+  saved.ratings.omission.sourceQuote = '원자료 어디에도 없다.';
+  saved.coreRowIds.push('존재하지 않는 구간');
+  const file = {format: workspace.schema, article, articleDraft: article, demo: false, sources, receipts: [],
+    rowDrafts: [], sourceDraft: {fields: Object.fromEntries(workspace.sourceFields.map(k => [k, '']))}, articleAssessment: saved};
+  const restored = workspace.read(file);
+  assert.equal(restored.stale, true);
+  assert.deepEqual(restored.assessment.accuracy.coreRowIds, [id]);
+  assert.equal(restored.assessment.bias.maxLevel, 3);
+  assert.equal(restored.assessment.bias.assessed, 1);
+  assert.deepEqual(Object.keys(restored.assessment.saved.ratings), ['wording']);
+  const roundTrip = workspace.read({...file, articleAssessment: restored.assessment.saved});
+  assert.equal(roundTrip.stale, false);
+  assert.equal(roundTrip.assessment.bias.maxLevel, 3);
+  assert.equal(workspace.read({...file, sources: [{...sources[0], version: '다음 판'}, sources[1]]}).assessment.bias.maxLevel, null);
+});
+
+test('근거 지지율이 100%여도 분모에서 빠지거나 일부 범위만 지지된 핵심 구절을 요약한다', () => {
+  const fact = '시의회가 3억 원을 의결한 것은';
+  const article = ['이 결정은 무책임하다.', fact + ' 무책임한 결정이다.', '의원은 “참담하다”고 말했다.', '회의가 열렸다.'].join('\n');
+  const report = state(article, [['opinion', []], ['mixed', ['minute'], {factSpan: fact, opinionSpan: '무책임한 결정이다.'}],
+    ['attribution', ['speech'], {contentStatus: 'opinion', contentChecked: true, contentReason: '의원의 평가다.'}], ['fact']]);
+  const result = rubric.evaluate(report, sources, form(report, {}, report.rows.map(r => r.id))).accuracy;
+  assert.equal(result.accuracyPct, 100);
+  assert.equal(result.coveragePct, 100);
+  assert.deepEqual(result.coreExcluded, [report.rows[0].id]);
+  assert.deepEqual(result.coreLimited, [report.rows[1].id, report.rows[2].id]);
+  assert.match(result.summary, /핵심 항목 1개는 의견.*분모/);
+  assert.match(result.summary, /핵심 항목 2개는 사실 구절 또는 발언 사실만/);
+});
+
+test('정확히 인용한 발언의 내용 충돌은 기사 지지율에서 따로 떼고 완료율에는 포함한다', () => {
+  const quote = '사업비는 30억 원이었다';
+  const statement = '의원은 “' + quote + '”고 말했다.';
+  const dual = ['attribution', ['speech'], {contentStatus:'contradicted', contentChecked:true,
+    contentReason:'당시 확정 의결표에는 같은 사업비가 3억 원으로 기록됐다.', contentSourceIds:['minute']}];
+  for (const debunked of [false, true]) {
+    const article = debunked ? statement + '\n의결표의 사업비는 3억 원이다.' : statement;
+    const report = state(article, debunked ? [dual, ['fact']] : [dual]);
+    const a = rubric.evaluate(report, sources, form(report, {}, [report.rows[0].id])).accuracy;
+    assert.deepEqual(a.coreQuotedConflict, [report.rows[0].id]);
+    assert.deepEqual(a.coreContradicted, []);
+    assert.deepEqual([a.contradicted, a.unresolved, a.quotedConflict, a.coveragePct], [0, 0, 1, 100]);
+    assert.deepEqual([a.supported, a.adjudicated, a.accuracyPct], debunked ? [1, 1, 100] : [0, 0, null]);
+    assert.deepEqual([a.reviewed, a.total], debunked ? [2, 2] : [1, 1]);
+    assert.equal(a.rows[0].scope, quote);
+  }
+});
+
+test('충돌 판정을 다시 작성하는 동안에는 미확인 시절 편향 평가가 되살아나지 않는다', () => {
+  const unreviewed = state(), id = unreviewed.rows[0].id;
+  const earlier = form(unreviewed, {wording: entry(unreviewed.rows[0], 0)});
+  const conflict = decision(unreviewed.rows[0], 'contradicted');
+  const draft = {...conflict, reason: '표의 기간을 다시 적는다.'};
+  const live = (receipts, edits) => workspace.activeReport(article, sources, receipts, new Map(edits));
+  const editing = live([conflict], [[id, draft]]);
+  assert.equal(editing.confirmedCount, 0);
+  assert.equal(editing.contradictedCount, 0);
+  assert.equal(editing.rows[0].receipt, null);
+  assert.equal(rubric.evaluate(editing, sources, earlier).bias.assessed, 0);
+  assert.equal(rubric.restoreDraft(editing, sources, {binding: earlier.binding, activeId: 'wording', entries: {wording: {level: '0'}}}), null);
+  const underReview = form(editing, {wording: entry(editing.rows[0], 1)});
+  assert.equal(rubric.evaluate(editing, sources, underReview).bias.assessed, 1);
+  const other = decision(unreviewed.rows[0], 'fact');
+  assert.equal(rubric.evaluate(live([other], [[id, draft]]), sources, underReview).bias.assessed, 0);
+  const duplicate = live([other, conflict], [[id, other]]);
+  assert.equal(duplicate.confirmedCount, 0);
+  assert.equal(duplicate.rows[0].receipt, null);
+  assert.equal(duplicate.rows[0].draftRecord, null);
+  const ambiguousLegacy = {...earlier, binding: JSON.stringify([rubric.version, editing.rows.map(row => [
+    row.id, row.binding, row.status, row.receipt?.checksum ?? null, !!row.draftPending
+  ])])};
+  assert.equal(rubric.evaluate(editing, sources, ambiguousLegacy).bias.assessed, 0);
+  assert.equal(rubric.evaluate(live([], [[id, draft]]), sources, earlier).bias.assessed, 1);
+  const recorded = live([conflict], []);
+  const confirmed = form(recorded, {wording: entry(recorded.rows[0], 2)});
+  assert.equal(rubric.evaluate(editing, sources, confirmed).bias.assessed, 0);
+  assert.equal(rubric.evaluate(live([conflict], []), sources, confirmed).bias.maxLevel, 2);
+});
+
+test('같은 표 위치에서 한 당의 행을 나눈 두 발췌는 서로 다른 근거로 저장하거나 복원하지 않는다', () => {
+  const article = '가당은 예산 3억 원을 집행했다.\n나당은 예산 3억 원을 집행했다고 주장했다.';
+  const first = {id:'first',title:'2025 결산',url:'https://example.org/ledger.pdf',pdfPage:'7',version:'확정',
+    locator:'표 3 첫째 행',excerpt:'가당의 결산 · 2025년 지급액 3억 원'};
+  const second = {...first,id:'second',excerpt:'2025년 지급액 3억 원은 9월에 집행됐다.'};
+  function fixture(a, b, {left = a.excerpt, right = b.excerpt, level = 3} = {}) {
+    const sources = a.id === b.id ? [a] : [a,b];
+    const report = factcheck.report(article,sources);
+    const [claim,compare] = report.rows;
+    const rating = {level,rowId:claim.id,quote:claim.text,compareRowId:compare.id,compareQuote:compare.text,
+      sourceId:a.id,sourceQuote:left,compareSourceId:b.id,compareSourceQuote:right,
+      reason:'결산 기준과 기사에 쓰인 단정 표현을 두 당에 대해 대조했다.',impact:'나당의 지출만 미확인으로 읽힐 수 있다.'};
+    return {sources,report,rating,save:() => rubric.save(report,sources,{coreRowIds:[],ratings:{standards:rating}})};
+  }
+  for (const level of [0,1,2,3]) {
+    assert.throws(fixture(first,second,{level}).save,/두 발췌의 인용이 겹칠 수/);
+    assert.throws(fixture(second,first,{level}).save,/두 발췌의 인용이 겹칠 수/);
+  }
+  const old = fixture(first,second);
+  const stored = rubric.save(old.report,old.sources,{coreRowIds:[old.report.rows[0].id],ratings:{}});
+  stored.ratings.standards = old.rating;
+  const restored = workspace.review(old.report,old.sources,stored,null);
+  assert.ok(restored.dropped);
+  assert.deepEqual(restored.assessment.accuracy.coreRowIds,[old.report.rows[0].id]);
+  assert.equal(restored.assessment.bias.assessed,0);
+
+  const recovered = restored.draft.entries.standards;
+  assert.deepEqual(recovered.legacyPrevious,rubric.copyFields(old.rating));
+  assert.deepEqual(recovered,{...rubric.copyFields(old.rating),legacyPrevious:rubric.copyFields(old.rating)});
+  assert.deepEqual(workspace.review(old.report,old.sources,restored.assessment.saved,restored.draft).draft,restored.draft);
+  const editing = {binding:stored.binding,activeId:'standards',entries:{standards:{...recovered,reason:'편집 중인 새 이유'}}};
+  const reopened = workspace.review(old.report,old.sources,stored,editing);
+  assert.equal(reopened.draft.entries.standards.reason,'편집 중인 새 이유');
+  assert.deepEqual(reopened.draft.entries.standards.legacyPrevious,recovered.legacyPrevious);
+  assert.equal(workspace.review(old.report,old.sources,restored.assessment.saved,null).draft,null);
+  for (const invalid of [{sourceQuote:'없는 인용'}, {compareSourceId:'없는 id'}, {reason:''}, {impact:''}, {rowId:'없는 문장'}]) {
+    const damaged = {...stored,ratings:{standards:{...old.rating,...invalid}}};
+    assert.equal(workspace.review(old.report,old.sources,damaged,null).draft,null);
+  }
+  const differentArticle = factcheck.report(article + ' 추가 보도.',old.sources);
+  assert.equal(workspace.review(differentArticle,old.sources,stored,null).draft,null);
+
+  const a = {...first,excerpt:'가당 의결액은 3억 원. 다음은 각 당의 결산 기준.'};
+  const b = {...second,excerpt:'다음은 각 당의 결산 기준. 나당 집행액은 3억 원.'};
+  assert.equal(fixture(a,b,{left:'가당 의결액은 3억 원',right:'나당 집행액은 3억 원'}).save().ratings.standards.level,3);
+  const full = {...first,excerpt:'가당 의결액은 3억 원. 나당 집행액은 3억 원.'};
+  assert.equal(fixture(full,full,{left:'가당 의결액은 3억 원',right:'나당 집행액은 3억 원'}).save().ratings.standards.level,3);
+  for (const boundary of ['3억 원','300,000,000원','1,000,000킬로그램','2025년 11월 25일', '※ 표 3']) {
+    const prev = {...first,excerpt:'가당이 대조한 첫째 행 ' + boundary};
+    const next = {...second,excerpt:boundary + ' 나당이 대조한 둘째 행'};
+    assert.equal(fixture(prev,next).save().ratings.standards.level,3);
+  }
+  for (const changed of [{locator:'표 3 둘째 행'},{pdfPage:'8'}]) {
+    assert.equal(fixture(first,{...second,...changed}).save().ratings.standards.level,3);
+  }
 });

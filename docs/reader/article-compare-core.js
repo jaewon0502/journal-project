@@ -1,12 +1,13 @@
 /* Compare snapshots rebuilt by the workspace reader from validated article and review data. */
 (function (root) {
   'use strict';
+  const workspace = typeof module === 'object' && module.exports ? require('./workspace-snapshot.js') : root.JournalWorkspaceSnapshot;
 
   function ratio(numerator, denominator) {
     return {numerator, denominator, pct: denominator ? 100 * numerator / denominator : null};
   }
 
-  function compareRatings(leftItems, rightItems) {
+  function compareRatings(leftItems, rightItems, hasRevision) {
     const rightById = new Map(rightItems.map(item => [item.id, item]));
     const dimensions = leftItems.map(item => {
       const other = rightById.get(item.id);
@@ -14,18 +15,39 @@
         right: other?.rating?.level ?? null, leftRating: item.rating, rightRating: other?.rating ?? null};
     });
     const pairs = dimensions.filter(d => Number.isInteger(d.left) && Number.isInteger(d.right));
-    const important = pairs.filter(d => d.left >= 2);
-    const pendingImportant = dimensions.filter(d => Number.isInteger(d.left) && d.left >= 2 && !Number.isInteger(d.right));
-    const minor = pairs.filter(d => d.left < 2);
+    const revisionDimensions = hasRevision ? dimensions : [];
+    const revisionPairs = hasRevision ? pairs : [];
+    const important = revisionPairs.filter(d => d.left >= 2);
+    const pendingImportant = revisionDimensions.filter(d => Number.isInteger(d.left) && d.left >= 2 && !Number.isInteger(d.right));
+    const minor = revisionPairs.filter(d => d.left < 2);
     const bias = {
-      total: dimensions.length, paired: pairs.length, unpaired: dimensions.length - pairs.length,
+      hasRevision, total: dimensions.length, paired: pairs.length, unpaired: dimensions.length - pairs.length,
       improved: ratio(important.filter(d => d.right < 2).length, important.length),
       pendingImportant: pendingImportant.map(d => d.title),
+      revisedImportantWithoutPrior: revisionDimensions.filter(d => Number.isInteger(d.right) && d.right >= 2 && !Number.isInteger(d.left))
+        .map(d => ({title:d.title, prior:d.left})),
       worsened: ratio(minor.filter(d => d.right >= 2).length, minor.length),
       agreement: ratio(pairs.filter(d => d.left === d.right).length, pairs.length),
       largeDifferences: pairs.filter(d => Math.abs(d.left - d.right) >= 2).length
     };
     return {dimensions, bias};
+  }
+
+  function sourceRoles(receipt, keyById) {
+    const refs = ids => new Map((ids ?? []).map(id => [keyById.get(id), id]));
+    const speech = receipt.status === 'attribution';
+    return {source:refs(speech ? [] : receipt.sourceIds), speech:refs(speech ? receipt.sourceIds : []),
+      content:refs(receipt.contentSourceIds)};
+  }
+
+  function exclusiveIds(selected, other) {
+    return [...selected].filter(([key]) => !other.has(key)).map(([, id]) => id);
+  }
+
+  function fullySupported(decision, row) {
+    if (decision?.category !== 'supported') return false;
+    const r = row.receipt;
+    return r.status === 'fact' || (r.status === 'attribution' && r.contentStatus === 'supported');
   }
 
   function reviewFacts(left, right) {
@@ -34,7 +56,9 @@
     const rightById = new Map(rightAccuracy.rows.map(row => [row.rowId, row]));
     const leftRows = new Map(left.rows.map(row => [row.id, row]));
     const rightRows = new Map(right.rows.map(row => [row.id, row]));
-    const isDecided = category => category === 'supported' || category === 'contradicted';
+    const sourceKeys = [left, right].map(s => new Map(s.sources.map(ref => [ref.id, workspace.sourceIdentity(ref)])));
+    const isDecided = category => category === 'supported' || category === 'contradicted' || category === 'quotedConflict';
+    let evidenceCompared = 0;
     const rows = leftAccuracy.rows.map(a => {
       const b = rightById.get(a.rowId);
       if (!b) throw new Error('두 편집자가 같은 구간을 검토했는지 확인하고 작업 파일을 다시 여세요.');
@@ -44,20 +68,40 @@
       const sameJudgment = isDecided(a.category) && isDecided(b.category)
         ? a.category === b.category && sameScope : null;
       const leftRow = leftRows.get(a.rowId), rightRow = rightRows.get(b.rowId);
+      const receipt = leftRow.receipt;
+      // A matching supported judgment can cover only a factual span or the attribution of an opinion.
+      const limitedAgreement = sameJudgment === true && a.category === 'supported' && !fullySupported(a, leftRow);
+      // A copied exclusion cannot remove a passage from the independent review denominator.
+      // Partial, held and unchecked decisions stay unresolved even if their receipts match.
+      const sameReceipt = a.category !== 'unresolved' && b.category !== 'unresolved' &&
+        !!receipt?.checksum && receipt.checksum === rightRow.receipt?.checksum;
       const openScopeDifference = a.category === 'unresolved' && b.category === 'unresolved' && !sameScope
         && !!leftRow.receipt && !!rightRow.receipt && !leftRow.draftPending && !rightRow.draftPending;
+      const differentSources = [];
+      if (leftRow.receipt && rightRow.receipt) {
+        const chosen = sourceRoles(leftRow.receipt, sourceKeys[0]), other = sourceRoles(rightRow.receipt, sourceKeys[1]);
+        if (Object.values(chosen).some(refs => refs.size) || Object.values(other).some(refs => refs.size)) evidenceCompared++;
+        for (const [role, refs] of Object.entries(chosen)) {
+          const left = exclusiveIds(refs, other[role]), right = exclusiveIds(other[role], refs);
+          if (left.length || right.length) differentSources.push({role, left, right});
+        }
+      }
       return {rowId: a.rowId, text: leftRow.text, left: a.category, right: b.category, openScopeDifference,
-        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment,
-        coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId)};
+        leftLabel: a.label, rightLabel: b.label, leftScope: a.scope, rightScope: b.scope, sameJudgment, sameReceipt, limitedAgreement,
+        coreLeft: leftCore.has(a.rowId), coreRight: rightCore.has(a.rowId), differentSources};
     });
     const pairs = rows.filter(r => r.sameJudgment !== null);
+    const distinct = pairs.filter(r => !r.sameReceipt);
     return {
       total: rows.length, rows,
       agreement: ratio(pairs.filter(r => r.sameJudgment).length, pairs.length),
+      sharedReceipts: pairs.filter(r => r.sameReceipt),
+      distinctAgreement: ratio(distinct.filter(r => r.sameJudgment).length, distinct.length),
       unresolved: rows.filter(r => r.left === 'unresolved' || r.right === 'unresolved').length,
       excluded: rows.filter(r => r.left === 'excluded' || r.right === 'excluded').length,
       bothExcluded: rows.filter(r => r.left === 'excluded' && r.right === 'excluded').length,
       disagreements: rows.filter(r => r.sameJudgment === false || r.left !== r.right || r.openScopeDifference),
+      evidenceCompared, evidenceDifferences: rows.filter(r => r.differentSources.length),
       coreDifferences: rows.filter(r => r.coreLeft !== r.coreRight)
     };
   }
@@ -65,42 +109,206 @@
   function rowFingerprint(row) {
     return JSON.stringify([row.text, row.context, row.positions.length]);
   }
-  function uniqueRows(rows) {
+  // In "정부안과 같은 금액", 같은 has a comparison in the clause. In "같은 사업", its referent may be several sentences back.
+  const referenceModifier = /(?<![\p{L}\p{N}])(?:이|그|해당|이런|그런|이러한|그러한|(?<![과와]\s)같은)\s+\p{L}/u;
+  const referencePronoun = /(?<![\p{L}\p{N}])(?:그녀|그|이|이들|그들|이곳|그곳|이것|그것)(?:은|는|이|가|의|을|를|도|에서|에게)(?!\p{L})/u;
+  // A standalone quotation can belong to a heading above it or a signature below it.
+  const detachedQuotation = /^(?:“[\s\S]+”|"[\s\S]+"|‘[\s\S]+’|'[\s\S]+'|「[\s\S]+」|『[\s\S]+』|«[\s\S]+»)(?:\s*(?:이?라고|고)\s*(?:말했다|밝혔다|주장했다|답했다|덧붙였다))?[.!?…。！？]*$/u;
+  // A reporting particle and a single predicate still leave the speaker outside the row.
+  const reportedQuotation = /^(?:“[^”]+”|"[^"]+"|‘[^’]+’|'[^']+'|「[^」]+」|『[^』]+』|«[^»]+»)\s*(?:이?라고|고|이?라며|며|이?라면서|면서)\s*[가-힣]+다[.!?…。！？]*$/u;
+  // Require an explicit name field; an ordinary '발언자: 해당 의원' label can still refer back to the heading.
+  const namedSpeaker = /^(?:발언자|화자)\s+실명\s*[:：]\s*[가-힣]{2,5}\s+(?:의원|시장|장관|위원장|대변인|대표|기자)$/u;
+  // In indirect speech the subject of the quoted assertion can be quite different
+  // from the person reporting it. Only an explicit speaker can supply that identity.
+  const directQuote = /(?:“[^”]+”|"[^"]+"|‘[^’]+’|'[^']+'|「[^」]+」|『[^』]+』|«[^»]+»)/u;
+  const reportParticle = /(?:다거나|라거나|다면서|라면서|다며|라며|다고|라고|냐고|자고|고|며|면서)\s*/gu;
+  const speechPredicate = /(?:말(?:했|한)|밝혔|전했|답했|덧붙였|(?:강조|주장|설명|지적|반박|해명|촉구|대답|답변|평가|경고|부인|언급|발표|역설|비판|요구|호소|반문|토로|반발|비난|질타)했)다[.!?…。！？]*$/u;
+  const speakerNoun = /(?:의원|대변인|위원장|시장|장관|대표|기자|담당자|관계자|국장|교수|차관|대통령|씨|정부|위원회|시청|교육청|협회|노조|정당|여당|야당)(?:께서는|께서|은|는|이|가)(?=\s)/u;
+  function unanchoredReport(text) {
+    const speech = speechPredicate.exec(text);
+    if (!speech) return false;
+    const opening = directQuote.exec(text);
+    if (opening) {
+      const prefix = text.slice(0, opening.index).trimEnd();
+      const frame = text.slice(opening.index + opening[0].length);
+      // A speaker before the quote takes precedence over reporting adverbs.
+      if (speakerNoun.test(prefix + ' ') || /(?:께서|께서는)$/u.test(prefix)) return false;
+      // A named topic before a direct quote need not carry a job title ("한빛은행은").
+      // Time, location and instrumental phrases still leave the speaker unstated.
+      if (/\p{L}(?:은|는)$/u.test(prefix) && !/(?:에|에서|으로|로|까지|부터|당시|반면)는$/u.test(prefix)) return false;
+      return /^(?:이?라고|고|이?라며|며|이?라면서|면서)\s*/u.test(frame.trimStart()) && !speakerNoun.test(frame);
+    }
+    const particle = Array.from(text.slice(0, speech.index).matchAll(reportParticle)).at(-1);
+    if (!particle || speakerNoun.test(text.slice(particle.index + particle[0].length))) return false;
+    // A topic-marked speaker introducing a separate embedded subject is explicit.
+    // A lone subject in "김 의원이 반대했다고 주장했다" belongs to the embedded claim.
+    const clause = text.slice(0, particle.index);
+    const subject = speakerNoun.exec(clause);
+    return !subject || !/(?:은|는|이|가)\s/u.test(clause.slice(subject.index + subject[0].length));
+  }
+  function uniqueRows(rows, keyFor = rowFingerprint) {
     const index = new Map();
     for (const row of rows) {
-      const key = rowFingerprint(row);
+      const key = keyFor(row);
       index.set(key, index.has(key) ? null : row.id);
     }
     return index;
   }
 
+  // Only explicit, whole-line labels establish inherited scope. Keep independent
+  // fields distinct: a repeated unit does not replace an earlier population.
+  const dataField = /^(조사\s*대상|집계\s*대상|모집단|표본(?:\s*(?:수|크기|규모))?|분모|(?:집계\s*|표시\s*)?단위|(?:조사|집계|기준)\s*(?:기간|시점|연도|지역)|기준일|조사\s*기관|자료\s*출처|자료|출처|원자료)\s*[:：]\s*(.*)$/u;
+  const populationIntro = /^다음\s+(?:수치|통계)는\s+(.+?)(?:을|를)\s+대상으로\s+한다[.。]?$/u;
+  const tableStart = /^(?:\[표\s*\d+\](?:\s+.*)?|표\s*\d+(?:\s*[.:：．].*)?)$/u;
+  const tableEnd = /^(?:\[표\s*끝\]|표\s*끝)[.。]?$/u;
+  const metric = /(?:비율|고용률|실업률|응답률|지지율|증가율|감소율|평균|중앙값|합계|총액|인원|집계치|수치|건수|득표율|점유율|사례\s*수)/u;
+  function statisticalRow(text, inTable) {
+    const s = text.normalize('NFKC');
+    if (inTable && /\d/u.test(s)) return true;
+    if (metric.test(s) && /\d|높|낮|상승|하락|늘었|줄었|증가|감소/u.test(s)) return true;
+    if (/절반|과반|[\t|]\s*[+-]?\d/u.test(s)) return true;
+    return /\d[\d,.]*\s*(?:%|퍼센트|원|만|억|조|명|가구|건|개|배|점|톤|킬로|달러|유로|석|곳|표|위(?=였|다|[.\s]|$)|이?다(?=[.。\s]|$))/u.test(s)
+      || /^[+-]?\d[\d,.\s]*$/u.test(s);
+  }
+
+  function statisticalScopes(snapshot) {
+    const result = new Map(), fields = new Map();
+    let table = null, signature = '', index = 0;
+    for (const line of snapshot.article.matchAll(/[^\r\n]+/gu)) {
+      const text = line[0].trim().normalize('NFC').replace(/\s+/gu, ' ');
+      const field = dataField.exec(text), population = populationIntro.exec(text);
+      const start = tableStart.test(text), end = tableEnd.test(text);
+      if (start) table = new Map([['표', text]]);
+      else if (end) table = null;
+      else if (field || population) {
+        let key = field ? field[1].replace(/\s/gu, '') : '조사대상';
+        if (key === '자료출처') key = '출처';
+        const value = field ? field[2] : population[1];
+        (table ?? fields).set(key, key.endsWith('단위') ? value.replace(/([십백천만억조]) 원$/u, '$1원') : value);
+      }
+      if (start || end || field || population) {
+        // Table-local settings override the surrounding article only within that table.
+        const active = new Map([...fields, ...(table ?? [])]);
+        signature = active.size ? JSON.stringify([...active].sort(([a], [b]) => a.localeCompare(b))) : '';
+      }
+      const limit = line.index + line[0].length;
+      while (index < snapshot.rows.length && snapshot.rows[index].positions[0].start < limit) {
+        const row = snapshot.rows[index++];
+        if (signature && !start && !end && !field && !population && statisticalRow(row.text, table !== null)) result.set(row.id, signature);
+      }
+    }
+    return result;
+  }
+
+  // Row IDs encode offsets. Across different editions, link only a single location
+  // whose wording and immediate context identify one row in each edition.
+  function matchRevisionRows(before, after, withheldFromV5, withheldFromV6, withheldFromV7, withheldFromV8) {
+    if (before.article === after.article) return new Map(before.rows.map(row => [row.id, row.id]));
+    let commonPrefix = 0;
+    while (before.article[commonPrefix] === after.article[commonPrefix]) commonPrefix++;
+    let commonSuffix = 0;
+    const shortest = Math.min(before.article.length, after.article.length);
+    while (commonSuffix < shortest && before.article.at(-1 - commonSuffix) === after.article.at(-1 - commonSuffix)) commonSuffix++;
+    const original = uniqueRows(before.rows), revised = uniqueRows(after.rows);
+    const matches = new Map();
+    const priorScopes = statisticalScopes(before), revisedScopes = statisticalScopes(after);
+    for (const [index, row] of before.rows.entries()) {
+      if (row.positions.length !== 1) continue;
+      const key = rowFingerprint(row);
+      const target = revised.get(key);
+      if (original.get(key) !== row.id || target == null) continue;
+      // A matching window cannot establish the referent after an earlier edit or a move.
+      const priorTextChanged = row.positions[0].start > commonPrefix || row.id !== target;
+      if (priorTextChanged && (referenceModifier.test(row.text) || referencePronoun.test(row.text))) continue;
+      const detached = detachedQuotation.test(row.text), reported = reportedQuotation.test(row.text);
+      const needsSpeaker = detached || reported || unanchoredReport(row.text);
+      const previous = before.rows[index - 1];
+      const anchored = needsSpeaker && previous?.positions.length === 1 && namedSpeaker.test(previous.text) &&
+        previous.positions[0].start >= before.article.length - commonSuffix;
+      if ((detached || reported) && !anchored) {
+        withheldFromV5?.set(row.id, target);
+        if (!detached) withheldFromV6?.set(row.id, target);
+        continue;
+      }
+      if (priorScopes.get(row.id) !== revisedScopes.get(target)) {
+        withheldFromV5?.set(row.id, target);
+        withheldFromV6?.set(row.id, target);
+        withheldFromV7?.set(row.id, target);
+        continue;
+      }
+      if (needsSpeaker && !anchored) {
+        // v8 already excluded changed statistical headings, but still paired this speech.
+        for (const old of [withheldFromV5, withheldFromV6, withheldFromV7, withheldFromV8]) old?.set(row.id, target);
+        continue;
+      }
+      matches.set(row.id, target);
+    }
+    return matches;
+  }
+
   function revisionDetails(left, right) {
     const sameArticle = left.article === right.article;
-    const leftById = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r.category]));
+    const originalDecisions = new Map(left.assessment.accuracy.rows.map(r => [r.rowId, r]));
+    const revisedDecisions = new Map(right.assessment.accuracy.rows.map(r => [r.rowId, r]));
     const rightById = new Map(right.rows.map(r => [r.id, r]));
-    const oldRows = sameArticle ? null : uniqueRows(left.rows);
-    const newRows = sameArticle ? null : uniqueRows(right.rows);
-    function matchingId(row, from, to) {
-      if (sameArticle) return row.id;
-      // An offset alone may now point at a rewritten claim. Each version must
-      // have exactly one row with this wording, surrounding text and repeat count.
-      const key = rowFingerprint(row);
-      return from.get(key) === row.id ? to.get(key) : null;
+    const matched = matchRevisionRows(left, right);
+    const priorIds = new Map(Array.from(matched, ([before, after]) => [after, before]));
+    const revisedWording = new Map();
+    if (!sameArticle) {
+      for (const [index, row] of right.rows.entries()) {
+        if (!revisedWording.has(row.text)) revisedWording.set(row.text, []);
+        revisedWording.get(row.text).push(index);
+      }
     }
-    const conflicts = {newlyObserved: [], unmatched: [], persisting: []};
+    const proposedCorrections = sameArticle ? null : uniqueRows(
+      left.rows.filter(row => row.receipt?.correction), row => row.receipt.correction.trim()
+    );
+    const groups = () => ({newlyObserved: [], unmatched: [], persisting: [], scopeChanged: []});
+    const conflicts = groups(), quotedConflicts = groups();
     for (const decision of right.assessment.accuracy.rows) {
-      if (decision.category !== 'contradicted') continue;
+      if (decision.category !== 'contradicted' && decision.category !== 'quotedConflict') continue;
       const row = rightById.get(decision.rowId);
-      const previous = leftById.get(matchingId(row, newRows, oldRows)) ?? null;
-      const entry = {rowId: row.id, text: row.text, previous};
-      if (previous === null) conflicts.unmatched.push(entry);
-      else if (previous === 'contradicted') conflicts.persisting.push(entry);
-      else conflicts.newlyObserved.push(entry);
+      const priorDecision = originalDecisions.get(priorIds.get(row.id)) ?? null;
+      const entry = {rowId: row.id, text: row.text, previous: priorDecision?.category ?? null, priorDecision, revised: decision};
+      const inventory = decision.category === 'quotedConflict' ? quotedConflicts : conflicts;
+      if (!priorDecision) inventory.unmatched.push(entry);
+      else if (priorDecision.category === decision.category && priorDecision.scope === decision.scope) inventory.persisting.push(entry);
+      else if (priorDecision.category === 'contradicted' || priorDecision.category === 'quotedConflict') inventory.scopeChanged.push(entry);
+      else inventory.newlyObserved.push(entry);
     }
     const core = new Set(left.assessment.accuracy.coreRowIds);
-    const untracedCore = left.rows.filter(row => core.has(row.id) && !matchingId(row, oldRows, newRows))
-      .map(row => ({rowId: row.id, text: row.text}));
-    return {conflicts, untracedCore};
+    const untracedCore = [], originalConflicts = [], originalQuotedConflicts = [], originalSupported = [];
+    for (const row of left.rows) {
+      const original = originalDecisions.get(row.id);
+      const category = original.category;
+      const originalConflict = category === 'contradicted' || category === 'quotedConflict';
+      const supported = fullySupported(original, row);
+      if (!supported && !originalConflict && !core.has(row.id)) continue;
+      const revisedId = matched.get(row.id);
+      const revised = revisedDecisions.get(revisedId) ?? null;
+      const entry = {rowId: row.id, text: row.text};
+      if (supported) originalSupported.push({...entry, original, revised,
+        revisedFullySupported: fullySupported(revised, rightById.get(revisedId))});
+      if (!revised && core.has(row.id)) untracedCore.push(entry);
+      if (originalConflict) {
+        const conflict = {...entry, original, revised};
+        // Locations for inspection only. Equal wording cannot establish a matched judgment.
+        if (!revised && revisedWording.has(row.text)) {
+          conflict.sameWordingRows = revisedWording.get(row.text);
+        }
+        const correction = row.receipt?.correction?.trim();
+        if (!revised && correction && proposedCorrections?.get(correction) === row.id && !left.article.includes(correction)
+            && (conflict.sameWordingRows || (row.positions.length === 1 && !right.article.includes(row.text)))) {
+          const indexes = revisedWording.get(correction);
+          const candidate = indexes?.length === 1 ? right.rows[indexes[0]] : null;
+          // Consecutive repetitions share a row, but still have more than one location.
+          if (candidate?.positions.length === 1) conflict.candidate = {...revisedDecisions.get(candidate.id), text: candidate.text};
+        }
+        if (category === 'quotedConflict') originalQuotedConflicts.push(conflict);
+        else originalConflicts.push(conflict);
+      }
+    }
+    return {conflicts, quotedConflicts, untracedCore, originalConflicts, originalQuotedConflicts, originalSupported};
   }
 
   function compare(left, right, mode) {
@@ -115,13 +323,13 @@
     }
     const accuracy = {left: left.assessment.accuracy, right: right.assessment.accuracy};
     const result = {mode, demo: left.demo, sourceChanged, accuracy,
-      ...compareRatings(left.assessment.bias.items, right.assessment.bias.items)};
+      ...compareRatings(left.assessment.bias.items, right.assessment.bias.items, mode === 'revision' && left.article !== right.article)};
     if (mode === 'reviewers') result.facts = reviewFacts(left, right);
     else Object.assign(result, revisionDetails(left, right));
     return result;
   }
 
-  const api = Object.freeze({compare});
+  const api = Object.freeze({compare, matchRevisionRows});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalArticleCompare = api;
 })(globalThis);

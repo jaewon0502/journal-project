@@ -6,3 +6,7 @@ button[aria-pressed=true]{background:#245b46;color:#fff}
 fieldset{min-width:0;margin:1rem 0;border:1px solid #bcbeb4;border-radius:.4rem}
 #entries article{border-block-start:1px solid #c3c9be;padding:1rem 0}
 #entries a, #entries p{overflow-wrap:anywhere}
+.deadline-criteria h5{font-size:1rem;margin:.75rem 0}
+
+#evidence-preview{white-space:pre-wrap;overflow-wrap:anywhere}
+#field-evidence{margin:.8rem 0}

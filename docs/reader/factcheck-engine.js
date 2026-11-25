@@ -3,6 +3,8 @@
   'use strict';
 
   const protocol = 'journal-review/1';
+  const fiscal = typeof module === 'object' && module.exports ? require('./evidence-fiscal.js') : root.JournalEvidenceFiscal;
+  const fiscalTable = typeof module === 'object' && module.exports ? require('./evidence-fiscal-table.js') : root.JournalEvidenceFiscalTable;
   const states = ['fact', 'attribution', 'opinion', 'mixed', 'partial', 'held', 'contradicted'];
   const withEvidence = new Set(['fact', 'attribution', 'mixed', 'partial', 'contradicted']);
   const unresolved = new Set(['pending', 'partial', 'held', 'contradicted']);
@@ -23,7 +25,9 @@
   const rotate = (value, count) => (value >>> count) | (value << (32 - count));
   function digest(value) {
     // JSON escaping preserves lone UTF-16 surrogates, which TextEncoder alone replaces.
-    const raw = JSON.stringify(value);
+    return sha256Text(JSON.stringify(value));
+  }
+  function sha256Text(raw) {
     const bytes = new TextEncoder().encode(raw);
     const buffer = new Uint8Array(Math.ceil((bytes.length + 9) / 64) * 64);
     buffer.set(bytes);
@@ -59,6 +63,55 @@
     return value;
   }
 
+  function validatePdfBinding(hash, page) {
+    if (hash === undefined) return;
+    if (typeof hash !== 'string' || !/^[0-9a-f]{64}$/u.test(hash) || !page) {
+      throw new Error('PDF 판본에는 확인한 쪽번호와 올바른 SHA-256 값이 필요합니다.');
+    }
+    physicalPage(page);
+  }
+
+  function isMock(source) {
+    return [source?.url, source?.originUrl].filter(Boolean).some(value => {
+      try { return /(?:^|\.)invalid$/i.test(new URL(value).hostname.replace(/\.$/, '')); } catch { return false; }
+    });
+  }
+  // Null means that the written locator does not name a physical PDF page.
+  function pdfPageInLocator(locator, page) {
+    const named = [...locator.normalize('NFKC').matchAll(/PDF\s*(?:뷰어|파일)?\s*(\d+)(?:\s*(?:~|∼|–|-)\s*(\d+))?\s*(?:쪽|페이지)/giu)];
+    if (!named.length) return null;
+    return named.some(([, first, last]) => Number(first) <= Number(page) && Number(page) <= Number(last || first));
+  }
+
+  const pdfViewParameters = new Set(['page', 'zoom', 'view', 'viewrect', 'nameddest', 'pagemode', 'search', 'highlight',
+    'toolbar', 'navpanes', 'scrollbar', 'statusbar']);
+  const signingParameter = /^(?:x-(?:amz|goog)-(?:algorithm|credential|date|expires|signature|signedheaders)|x-amz-(?:security-token|content-sha256)|AWSAccessKeyId|GoogleAccessId)$/iu;
+  function documentParams(query, fragment = false, normalizeFile) {
+    const params = new URLSearchParams();
+    for (const [key, value] of new URLSearchParams(query)) {
+      if (/^(?:utm_.*|gclid|fbclid|page|pageNo|token|access_token|signature|expires)$/iu.test(key)
+          || signingParameter.test(key)
+          || (fragment && (pdfViewParameters.has(key.toLowerCase()) || /^(?:section|anchor|tab)$/iu.test(key)))) continue;
+      params.append(key, normalizeFile ? normalizeFile(key, value) : value);
+    }
+    params.sort();
+    return params.toString();
+  }
+  // A viewer may select the document in a hash route or parameter. Anchors,
+  // PDF pages, and tracking tokens change the view without changing its source.
+  function documentSelector(hash, normalizeFile) {
+    const fragment = hash.slice(1).split('#', 1)[0].split(':~:', 1)[0];
+    if (!fragment) return '';
+    const route = /^(!?[^?=&]*\/[^?=&]*|![^?=&]+)(?:\?(.*))?$/u.exec(fragment);
+    if (route) {
+      const query = documentParams(route[2], true, normalizeFile);
+      const path = route[1].replace(/^!/u, '').replace(/\/+$/u, '');
+      return path || query ? '#' + path + (query ? '?' + query : '') : '';
+    }
+    if (!fragment.includes('=')) return '';
+    const selector = documentParams(fragment.replace(/^\?/u, ''), true, normalizeFile);
+    return selector ? '#' + selector : '';
+  }
   function sourceTarget(source) {
     const url = new URL(source.url);
     const mock = [url, ...(source.originUrl ? [new URL(source.originUrl)] : [])].some(u =>
@@ -66,18 +119,21 @@
     if (mock) return null;
     const fragment = new URLSearchParams(url.hash.slice(1));
     const values = fragment.getAll('page');
+    const documentFragment = documentSelector(url.hash);
     let page = null;
     if (source.pdfPage != null && source.pdfPage !== '') {
       page = physicalPage(source.pdfPage);
-      if (/\.(?:html?|xlsx?|csv|docx?|hwpx?|pptx?|txt|png|jpe?g|zip)$/iu.test(url.pathname)) {
+      if (/\.(?:xlsx?|csv|docx?|hwpx?|pptx?|txt|png|jpe?g|zip)$/iu.test(url.pathname) ||
+          (!documentFragment && /\.html?$/iu.test(url.pathname))) {
         throw new Error('쪽번호를 연결하려면 확인한 문서 주소에 PDF 파일을 여는 주소를 입력하세요.');
       }
+      if (documentFragment) return {href:url.href, page:null, localPage:page};
       // Direct PDF download endpoints may have no .pdf suffix. An explicit viewer
       // page is the editor's assertion about that file, never about its landing page.
       const view = new URLSearchParams({page});
       for (const key of ['zoom','view']) if (fragment.has(key)) view.set(key, fragment.get(key));
       url.hash = view.toString();
-    } else if (/\.pdf$/iu.test(url.pathname) && values.length === 1 && /^[1-9]\d*$/u.test(values[0])
+    } else if (!documentFragment && /\.pdf$/iu.test(url.pathname) && values.length === 1 && /^[1-9]\d*$/u.test(values[0])
         && Number.isSafeInteger(Number(values[0])) && !fragment.has('nameddest')) {
       page = values[0];
     }
@@ -98,13 +154,15 @@
         if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('원문의 HTTP 또는 HTTPS 주소를 입력하세요.');
       }
       const hasPage = entry.pdfPage != null && entry.pdfPage !== '';
+      validatePdfBinding(entry.pdfSha256, entry.pdfPage);
       if (hasPage) {
         physicalPage(entry.pdfPage);
         sourceTarget(entry);
       }
       if (items.has(entry.id)) throw new Error('근거 식별자가 중복됐습니다.');
       if (entry.title != null && typeof entry.title !== 'string') throw new Error('근거 제목을 확인하세요.');
-      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version, ...(hasPage ? {pdfPage: entry.pdfPage} : {})});
+      items.set(entry.id, {id: entry.id, title: entry.title ?? '', url: entry.url, ...(entry.originUrl ? {originUrl: entry.originUrl} : {}), locator: entry.locator, excerpt: entry.excerpt, version: entry.version,
+        ...(hasPage ? {pdfPage: entry.pdfPage} : {}), ...(entry.pdfSha256 ? {pdfSha256:entry.pdfSha256} : {})});
     }
     const ordered = [...items.keys()].sort().map(id => items.get(id));
     return {items, key: digest(ordered)};
@@ -173,9 +231,24 @@
   const allegation = /의혹|혐의|고발|의심|용의자|비리|횡령|뇌물/u;
   const allegationQualifier = /의혹|혐의|의심|용의자/u;
   const assessment = /무책임|무능|참담|포퓰리즘|실정|졸속|폭거|망국|독선|탁월|치적|훌륭|위대|쾌거|현명|어리석|정쟁|기만|최악|최선|폭주|선동|굴욕|퍼주기|악법|잘못된|바람직|정당한|부당|해야\s*한다/u;
+  // 정치+적, 상반기+만 and the legal term 부당이득금 each contain a different evaluative word.
+  // Mask only that occurrence so a separate judgment in the same sentence still needs review.
+  const neutralAssessmentOverlaps = /(?:정치|수치|가치|위치|자치|통치)적|(?:상반기|하반기|분기|학기|회기|임기|하기)만|부당이득|부당\s+이득(?:금|\s*반환)|시위대|실정법/gu;
+  function hasAssessment(text) {
+    return assessment.test(text.replace(neutralAssessmentOverlaps, ' '));
+  }
+  function endsInValueJudgment(quote) {
+    // A direct verdict such as "부당하다" or "치적이다" differs from a report that
+    // somebody reached that verdict ("부당하다고 판결했다").
+    const predicate = /(?:^|\s)([가-힣]+)[.!。！]?$/u.exec(quote.trim())?.[1];
+    if (!predicate) return false;
+    if (/^(?:무책임|무능|참담|탁월|훌륭|위대|현명|부당|바람직)(?:하다|합니다|했다|했습니다)$/u.test(predicate)) return true;
+    const noun = predicate.replace(/(?:이다|입니다|이었다|이었습니다|였다|였습니다|이에요|예요)$/u, '');
+    return assessment.exec(noun)?.[0] === noun;
+  }
   const quantitative = /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|년|월|일|표|석|점|회|곳)/u;
   const proceeding = /기소(?:했|됐|되었|유예)|무죄.{0,8}(?:선고|판결|확정)|유죄.{0,8}(?:선고|판결|확정)|공소.{0,4}제기|수사.{0,5}(?:착수|개시)|수사\s*중|불송치|불기소|구속영장.{0,8}(?:청구|발부|기각)/u;
-  const eventFact = /의결|가결|부결|표결|집행|통과|인상|인하|삭감|증액|감액|폐지|도입|인정했|선고|기소|체포|구속|증가|감소|늘렸|늘린|늘었|줄였|줄인|줄었|찬성했|반대했/;
+  const eventFact = /의결|가결|부결|표결|집행|통과|인상|인하|삭감|증액|감액|폐지|도입|인정했|선고|(?:판결|판시)(?:했|하였)|기소|체포|구속|증가|감소|늘렸|늘린|늘었|줄였|줄인|줄었|찬성했|반대했/;
   // A transcript cannot verify a narrator's independent assertion in a neighbouring clause.
   // Split only outside quotations, at a coordinated predicate followed by a new explicit subject.
   // In indirect speech ("A는 B가 X했고 C가 Y했다고 주장했다") the left clause belongs to the
@@ -198,7 +271,8 @@
   const reportedWhole = /^(?:\S+\s+){0,2}?\S*에\s*(?:따르면|의하면)\s|(?:다|라)고\s+(?:\S+\s)?\S+(?:은|는|이|가)\s+(?:\S+\s+)?\S*(?:밝|말|전|주장|설명|강조|발표|덧붙|확인|보도|지적)(?:했|혔|였)다/u;
   function splitReportedClauses(text) {
     if (!attributed.test(text) || reportedWhole.test(text)) return [{text, start: 0}];
-    const connective = new RegExp('(?:[' + past + '](?:고|으며|지만|으나|는데)|(?<=[가-힣])(?:하자|되자)|(?<=[가-힣])[한된]\\s+(?:뒤|후))[,，]?\\s+', 'gu');
+    const connective = new RegExp('(?:[' + past + '](?:고|으며|지만|으나|는데도?)|(?<=[가-힣])(?:하자|되자)|(?<=[가-힣])[한된]\\s+(?:뒤|후)' +
+      '|(?:[한된난진른던힌인]|있는|없는)\\s+(?:가운데|상황에서))[,，]?\\s+', 'gu');
     // Lazy: the first subject-marked word after the connective (의회는, not 의회는 절차가).
     const subject = /^(?:[^\s“”"‘’「」『』]{1,20}\s+){0,3}?[^\s“”"‘’「」『』]+(?:은|는|이|가|측도|측은)\s+/u;
     const matches = [...text.matchAll(connective)];
@@ -234,15 +308,40 @@
   // A quotation ending like a sentence (“시장은 사퇴하라”는) or carrying an evaluation,
   // a figure, an event or an allegation is always speech.
   const nameQuote = /[“"]([^“”"\n]{1,30}[^다라요까죠\s.!?])[”"](?=(?:을|를|이|가|은|는|의|과|와|에|에서|으로|로|도)(?:[\s.,]|$))/gu;
-  const asTitle = (match, name) => [assessment, quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
-  function triage(text) {
+  const asTitle = (match, name) => hasAssessment(name) || [quantitative, eventFact, allegation].some(re => re.test(name)) ? match : '「' + name + '」';
+  const pollMeasure = /지지율|지지도|(?:후보|정당)\s*선호도/u;
+  const reportedPollGap = /(?:지지율|지지도|선호도)(?:의)?\s*(?:격차|차이)(?:는|가|은|이)?\s*\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)\s*(?:[pP]|포인트)(?=\s*(?:[.,!?。]|$|이?다|였|이었|입니다|로\s*(?:집계|조사|발표|나타)))/u;
+  const pollInference = /(?:표본\s*오차(?:\s*범위)?|오차\s*범위)(?:를|의|에서)?\s*(?:밖|안|이?[내외]|벗어|넘)|통계적(?:으로)?\s*유의(?:한|하|했|미|성)/u;
+  function hasPollPair(text) {
+    const support = pollMeasure.test(text);
+    if (support && /(?:두|양)\s*(?:후보|정당)|(?:후보|정당)\s*간|여야|양당/u.test(text)) return true;
+    if (!support && !/여론\s*조사|출구\s*조사/u.test(text)) return false;
+    const named = text.replace(/후보\s+([A-Z]\d*)(?![A-Za-z\d])/gu, '$1 후보');
+    const options = named.matchAll(/(?<![\p{L}\d])([가-힣A-Za-z\d]+\s+후보|여당|야당)(?:는|은|이|가|의|와|과|도)?(?=$|[\s.,，·])\s*(\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)(?!\s*(?:[pP]|포인트)))?/gu);
+    const names = new Set();
+    for (const [_, label, rate] of options) if (support || rate) names.add(label.replace(/\s+/gu, ''));
+    return names.size >= 2;
+  }
+  function pollReviewHint(text, previous) {
+    const interprets = pollInference.test(text);
+    const shares = text.match(/\d+(?:\.\d+)?\s*(?:[%％]|퍼센트)(?!\s*(?:[pP]|포인트))/gu) || [];
+    if (!interprets && shares.length < 2 && !reportedPollGap.test(text)) return '';
+    // Use the preceding poll for a short follow-up about its gap, never across paragraphs.
+    const followUp = /^(?:(?:(?:두|양)\s*(?:후보|정당)(?:\s*간|의)?|이|그)\s*)?(?:격차|차이)|^오차\s*범위/u.test(text);
+    if (!hasPollPair(text) && !(interprets && followUp && hasPollPair(previous))) return '';
+    const observed = '조사표에서 두 비율의 조사 시점·응답자 집단·문항이 같은지 확인하고, 표에 나온 값의 차이를 퍼센트포인트(%p)로 대조하세요.';
+    return interprets ? observed + ' 우열을 통계적으로 판단한 표현은 두 비율 격차의 신뢰구간이나 검정 결과를 확인하세요. 조사 전체의 표본오차만으로는 판단할 수 없습니다.' : observed;
+  }
+  function triage(text, previous) {
     const speech = attributed.test(text.replace(nameQuote, asTitle)), suspicion = allegation.test(text);
-    const number = quantitative.test(text), evaluation = assessment.test(text);
+    const number = quantitative.test(text), evaluation = hasAssessment(text);
     const mixed = evaluation && (number || eventFact.test(text));
     const hints = [];
     if (speech) hints.push('누가 누구에 대해 어떤 말을 했는지 원발언과 대조하세요. 발언 내용 자체의 사실성은 별도 쟁점입니다.');
     if (suspicion) hints.push('의혹 제기·수사·확정 판단의 단계, 당사자의 답변과 추가 근거를 확인하세요.');
-    if (number) hints.push('수치의 기간, 단위, 분모와 비교 기준을 확인하세요.');
+    const pollHint = pollReviewHint(text, previous);
+    if (pollHint) hints.push(pollHint);
+    else if (number) hints.push('수치의 기간, 단위, 분모와 비교 기준을 확인하세요.');
     if (evaluation) hints.push('평가·비판의 주체와 강도를 보존하고 확인할 사실이 함께 있는지 살펴보세요.');
     if (mixed) hints.push('같은 문장에 확인할 사실과 평가 표현이 있습니다. 확인한 구절을 지정하세요.');
     let allowedStatuses = [...states];
@@ -282,6 +381,44 @@
     if (preliminary.test(heading)) return -1;
     if (observed.test(heading)) return 1;
     return claimStage(source.version);
+  }
+  const reviewCopy = /사전\s*(?:검토|심사|제출|접수)|예비\s*(?:접수|심사|제출)|가접수|검토용|초안/u;
+  const releaseSchedule = /(?:공개|공시|게시|공표)(?:할|될|가|를)?\s*(?:예정|일정|계획)/u;
+  const recordedFiling = /(?:제출|접수)(?:했|하였|됐|되었|됨|[이가을를]?\s*(?:완료|마쳤)|한\s*사실을\s*확인)|(?:자료|서류|보고서|신청서|최종본)[^.!?\n]{0,50}\s냈(?:다|습니다)/u;
+  const datedReceipt = /(?:제출|접수)\s*(?:일(?:자|시)?|날짜)?\s*(?:\(확정\)\s*)?[:：]?\s*\d{1,4}(?:\s*(?:년|월|일)|[-./]\s*\d)/u;
+  const disputedRole = /아님|아닌|아니다|아니었|해당\s*없|일정\s*없|등재\s*오류/u;
+  function filingSourceCaution(articleText, source) {
+    if (!nonblank(articleText) || !source) return null;
+    const claim = articleText.trim();
+    const filing = /(?:제출|접수)(?:을|를|이|가)?\s*(?:완료)?(?:했|하였|됐|되었)(?:다|습니다)[.!。]?$/u;
+    const handedIn = /(?:자료|서류|보고서|신청서|정산서|최종본)[^.!?\n]{0,50}\s냈(?:다|습니다)[.!。]?$/u;
+    if ((!filing.test(claim) && !handedIn.test(claim)) ||
+        !/최종|정식|실제|기한|마감|늦게|지연|\d\s*(?:월|일)/u.test(claim) ||
+        reviewCopy.test(claim) || attributed.test(claim) || hasAssessment(claim) ||
+        /[‘’「『]|라면|다면|경우|아니라|않았|(?:[!?。！？]|(?<!\d)\.)\s*\S/u.test(claim)) return null;
+    const metadata = [source.title, source.locator, source.version].filter(value => nonblank(value) && !disputedRole.test(value));
+    const excerpt = typeof source.excerpt === 'string' ? source.excerpt : '';
+    const clauses = excerpt.split(/[,\n。;]|(?:[!?]|(?<!\d)\.)(?:\s|$)/u);
+    const pieces = [...metadata, ...clauses.filter(text => !disputedRole.test(text))];
+    const filingRecord = /접수|제출|요약본|파일|사본|냈다/u;
+    const early = pieces.some(text => reviewCopy.test(text) && filingRecord.test(text)) ||
+      (metadata.some(text => reviewCopy.test(text)) && filingRecord.test(excerpt));
+    const scheduled = pieces.some(text => releaseSchedule.test(text));
+    if (!early && !scheduled) return null;
+    // A ledger may give preliminary and final receipts together. A reference to a
+    // separate future filing is not an entry recording an actual filing.
+    const finalLedger = metadata.some(text => /(?:최종|정식|실제)[^.!?\n]{0,18}(?:접수|제출)\s*(?:대장|기록|확인증)/u.test(text));
+    const actual = clauses.some(text => {
+      const marker = text.search(/최종|실제|정식|본접수/u);
+      if (marker < 0 && !finalLedger) return false;
+      const entry = marker < 0 ? text : text.slice(marker);
+      return (recordedFiling.test(entry) || datedReceipt.test(entry)) && !reviewCopy.test(entry) && !attributed.test(entry) &&
+        !/예정|계획|예고|여부|확인\s*중|미접수|미제출|아직|않|주장|부인|사실무근|오류|취소|(?:접수|제출)\s*전/u.test(entry);
+    });
+    if (actual) return null;
+    return early
+      ? '사전 검토용 제출·접수에 관한 기록이 있습니다. 기사에서 다룬 자료의 제출 기한과 최종 접수일을 대조하세요.'
+      : '자료 공개 일정이 적혀 있습니다. 기사에서 다룬 자료의 제출 기한과 실제 접수일을 대조하세요.';
   }
   function revisionStage(text) {
     const draft = /초안|초고|잠정|가안|초기본/u.test(text), final = /확정|최종|결정본/u.test(text);
@@ -328,13 +465,108 @@
     return indexed;
   }
   const contextOnly = new Set(['올해','지난해','내년','최종','확정','자료','기준','공개','현재','대상','해당','실제']);
+  // A document can cite last year's approved sum next to this year's request.
+  // Associate its dates with the passage that actually names each measure.
+  function fiscalScope(text) {
+    const [, quarters, months] = sourceScope(text);
+    return [fiscal.years(text), quarters ?? new Set(), months ?? new Set()];
+  }
+  function fiscalAmount(text, heading) {
+    if (/\d[\d,.]*\s*(?:[십백천만억조]+\s*)?(?:원|%|퍼센트)|\d[\d,.]*\s*[억조](?=\s|[.,]|$)|(?:전액\s*삭감|전액\s*불용|영\s*원)/u.test(text)) return true;
+    const withoutDates = text.replace(/\d+\s*(?:회계연도|년도|년|분기|월|일|쪽)/gu, '');
+    return /(?:단위\s*[:：]?\s*[(（]?\s*|[(（]\s*)(?:[십백천만억조]+\s*)?원/u.test(heading) &&
+      /\d[\d,.]*\s*$/u.test(withoutDates.trim());
+  }
+  function fiscalPassages(source) {
+    const heading = source.title + ' ' + source.locator;
+    const passages = fiscal.clauses(source.excerpt).map(part => ({...part,
+      words: terms(part.text, true), hasAmount: fiscalAmount(part.text, heading)}));
+    if (!passages.some(passage => passage.stage)) {
+      const headerStage = fiscal.request(source.locator) || fiscal.request(source.title);
+      // A labeled table can omit its measure in an individual amount cell.
+      // A cover title alone also appears on forecasts and withheld figures.
+      for (const passage of passages) {
+        if (passage.hasAmount &&
+            !(headerStage === 'spent' && (fiscal.otherExecutionMeasure(passage.text) || fiscal.otherExecutionMeasure(source.locator))) &&
+            !/예정|계획|전망|미정|미공개|아직|보류|부결|예상|요구|요청|제출안|정부안|본예산|의결|승인|확정|가결|집행|지출|지급|결산|공개되지|않|못했|아니|아닌|취소|무산/u.test(passage.text)) {
+          passage.stage = headerStage;
+        }
+      }
+    }
+    return passages;
+  }
+  const fiscalVocabulary = /^(?:사업|항목|규모|금액|총액|부처|국회|정부|의회|요구|신청|제출|의결|배정|편성|확정|예산|본예산|결산|집행|지출|실적|실제|당초|년도|회계연도|전년|작년|금년|지난해|올해|내년|대비|얼마|원(?:이다|이었다|이었다고|인가|입니까)|늘었다|줄었다|사업비)(?:안|서|액|본|액수|된|한|도|비|량)?$/u;
+  function fiscalSubject(claim) {
+    return [...claim].filter(word => !contextOnly.has(word) && !/\d/u.test(word) &&
+      !fiscalVocabulary.test(word) && !fiscal.stages(word).size);
+  }
+  function fiscalFit(candidate, stage, wanted, project, subject) {
+    if (!candidate.fiscalPassages) candidate.fiscalPassages = fiscalPassages(candidate.source);
+    const heading = candidate.source.title + ' ' + candidate.source.locator;
+    const passages = candidate.fiscalPassages.filter(passage => {
+      if (passage.stage !== stage || !passage.hasAmount) return false;
+      if (!project) return subject.every(word => candidate.heading.has(word) || passage.words.has(word));
+      const parts = project.split(' ');
+      if (passage.project && !passage.project.split(' ').every(part => parts.includes(part))) return false;
+      const compact = (heading + ' ' + passage.text + ' ' + (passage.project || '')).replace(/[\s·ㆍ・]/gu, '');
+      return parts.every(part => compact.includes(part));
+    });
+    if (!passages.length) return [];
+    const span = passages.map(passage => passage.text).join(' ');
+    const actual = fiscalScope(span), location = fiscalScope(candidate.source.locator), title = fiscalScope(candidate.source.title);
+    actual[0] = new Set(passages.flatMap(passage => [...passage.years]));
+    const coversPeriod = wanted.every((set, i) => {
+      const available = actual[i].size ? actual[i] : location[i].size ? location[i] : title[i];
+      return [...set].every(value => available.has(value));
+    });
+    if (!coversPeriod) return [];
+    // A multi-year source can answer the question while its other figures are irrelevant.
+    return passages.filter(passage => {
+      const period = fiscalScope(passage.text);
+      period[0] = passage.years;
+      return wanted.every((set, i) => !set.size || !actual[i].size ||
+        [...set].some(value => period[i].has(value)));
+    });
+  }
   function suggest(text, indexed) {
+    const attributedClaim = attributed.test(text.replace(nameQuote, asTitle));
+    const rateQuestion = !attributedClaim && fiscalTable.registeredRateQuestion(text);
+    if (rateQuestion) {
+      const candidates = [], bases = new Set();
+      for (const {source} of indexed) {
+        const cell = rateQuestion(source);
+        if (cell.status !== 'compatible') continue;
+        bases.add(cell.basis || '');
+        candidates.push({id:source.id,
+          reason:'원표의 집행률 · ' + cell.value + ' (단위 ' + cell.unit + ') · ' + source.locator});
+      }
+      if (bases.size > 1) return {candidates:[], caution:'등록 자료들의 집행률 분모가 서로 다르거나 일부 표에 빠져 있습니다. 기사에서 어느 예산을 기준으로 삼았는지 확인하세요.'};
+      if (!candidates.length) return {candidates:[], caution:indexed.length
+        ? '등록 자료에서 이 사업의 회계연도와 집행률 기준이 일치하는 셀을 특정하지 못했습니다. 원자료의 행과 분모를 확인하세요.' : null};
+      return {candidates:candidates.slice(0, 4), caution:bases.has('')
+        ? '선택한 집행률 열에 분모가 적혀 있지 않습니다. 원표 주석에서 기준 예산을 확인하세요.' : null};
+    }
     const claim = terms(text), matches = [], askedSlots = new Map();
     const stage = claimStage(text), revision = revisionStage(text), scope = sourceScope(text), basis = budgetBasis(text);
-    const quotes = attributed.test(text.replace(nameQuote, asTitle))
+    const financial = !attributedClaim && fiscal.request(text);
+    const amountQuestion = !attributedClaim && fiscalTable.registeredAmountQuestion(text);
+    let excludedAmountCell = false;
+    const wanted = financial && fiscalScope(text);
+    const project = financial && fiscal.project(text);
+    const subject = financial && !project && fiscalSubject(claim);
+    const quotes = attributedClaim
       ? Array.from(text.matchAll(/“([^”]+)”|"([^"]+)"/gu), m => m[1] || m[2]).filter(q => q.length >= 6) : [];
     for (const candidate of indexed) {
       const {source, words, heading} = candidate;
+      const amount = amountQuestion && amountQuestion(source);
+      if (amount) {
+        if (amount.status === 'compatible') {
+          const cell = amount.cell;
+          matches.push({id:source.id, score:0, scopeConflict:false, fiscalRank:3,
+            reason:'저장한 표의 ' + cell.heading + ' · 원문 표기 ' + cell.value + ' (단위 ' + cell.unit + ') · ' + source.locator});
+        } else excludedAmountCell = true;
+        continue;
+      }
       const exact = source.excerpt.includes(text) || (source.excerpt.length >= 6 && text.includes(source.excerpt));
       const common = [...claim].filter(word => words.has(word));
       if (!exact && !common.some(word => /\p{L}/u.test(word) && !/^\d/u.test(word) && !contextOnly.has(word))) continue;
@@ -355,12 +587,26 @@
       const score = overlap + (exact || quotedSpeech ? 4 : 0) +
         (common.length >= 2 ? 3 * stage * candidate.stage + 2 * revision * candidate.revision : 0) +
         (common.length >= 2 || common.some(word => heading.has(word)) ? 3 * basis * candidate.basis : 0);
-      const reason = exact ? '입력 문장과 같은 구절' : `함께 나온 표현 · ${common.slice(0, 4).join(', ')}`;
-      matches.push({id: source.id, score, scopeConflict, reason});
+      let reason = exact ? '입력 문장과 같은 구절' : `함께 나온 표현 · ${common.slice(0, 4).join(', ')}`;
+      let fiscalRank = 0;
+      if (financial && !scopeConflict && (project ? project.split(' ').every(part => candidate.compact.replace(/[·ㆍ・]/gu, '').includes(part)) :
+        subject.every(word => words.has(word)))) {
+        const passages = fiscalFit(candidate, financial, wanted, project, subject);
+        fiscalRank = passages.length ? 2 : 1;
+        if (passages.length) {
+          const termsInPassage = common.filter(word => passages.some(passage => passage.words.has(word)));
+          reason = `예산 단계 · ${fiscal.label(financial)}`;
+          if (termsInPassage.length) reason += ` / 해당 구절과 겹친 표현 · ${termsInPassage.slice(0, 4).join(', ')}`;
+        }
+      }
+      matches.push({id: source.id, score, scopeConflict, fiscalRank, reason});
     }
     matches.sort((a, b) => Number(a.scopeConflict) - Number(b.scopeConflict) ||
-      b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
-    return matches.slice(0, 4).map(({id, reason}) => ({id, reason}));
+      b.fiscalRank - a.fiscalRank || b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+    const candidates = matches.slice(0, 4).map(({id, reason}) => ({id, reason}));
+    const caution = financial && matches.length && !matches.some(match => match.fiscalRank >= 2) ? fiscal.gap(financial)
+      : !matches.length && excludedAmountCell ? '등록한 표의 원문에서 이 연도·항목·예산 단계의 셀을 특정할 수 없습니다. 원표에서 열을 확인하세요.' : null;
+    return {candidates, caution};
   }
 
   // Limit caution to an expressly unresolved reference or a named post-event change.
@@ -427,19 +673,101 @@
     }
   }
   // Keep document selectors such as ?docId=, discard navigation and tracking variants.
-  function originAddress(url) {
+  function originAddress(url, depth = 0) {
     const parsed = new URL(url);
-    for (const key of [...parsed.searchParams.keys()]) {
-      if (/^(?:utm_.*|gclid|fbclid|page|pageNo)$/iu.test(key)) parsed.searchParams.delete(key);
+    const files = [];
+    function normalizeFile(key, value) {
+      if (depth >= 4 || !/^(?:file|pdf|fileUrl|pdfUrl|docUrl|documentUrl)$/iu.test(key)) return value;
+      // Viewers resolve path references against their own address. Plain IDs
+      // such as file=A still select a viewer document, not a sibling file.
+      const fileReference = /^(?:https?:\/\/|\/|\.\.?\/)|^[^?#:\\]+\.pdf(?:[?#]|$)/iu;
+      if (!fileReference.test(value)) return value;
+      let file;
+      try { file = new URL(value, parsed); } catch (_) { return value; }
+      if (!['http:', 'https:'].includes(file.protocol) || file.username || file.password) return value;
+      const address = originAddress(file, depth + 1);
+      const normalized = 'https://' + address;
+      files.push({address, selector:new URLSearchParams([[key, normalized]]).toString()});
+      return normalized;
     }
-    parsed.searchParams.sort();
+    const query = documentParams(parsed.search, false, normalizeFile);
+    const hash = documentSelector(parsed.hash, normalizeFile);
+    // A viewer selecting only one file is another way to open that file. Keep
+    // other selectors (such as an edition ID) when they also choose the document.
+    if (files.length === 1 && ((!hash && query === files[0].selector) || (!query && hash === '#' + files[0].selector))) {
+      return files[0].address;
+    }
     // A mobile or www copy is the same document as the desktop page.
-    return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '') + parsed.search;
+    return parsed.host.toLowerCase().replace(/^(?:www|m|mobile)\./u, '') + parsed.pathname.replace(/\/+$/u, '')
+      + (query ? '?' + query : '') + hash;
   }
-  function excerptIdentity(source) {
-    return source.excerpt.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
+  // From the editor's recorded provenance only. Reprints may name another reprint
+  // as their source, and two differently worded reports can share that chain.
+  function relatedDocuments(catalog, selected) {
+    const links = new Map();
+    for (const source of catalog.items.values()) {
+      const aliases = [];
+      if (source.originUrl) aliases.push(originAddress(source.originUrl));
+      if (source.pdfSha256) aliases.push('sha256:' + source.pdfSha256);
+      if (!aliases.length) continue;
+      const copy = originAddress(source.url);
+      if (!links.has(copy)) links.set(copy, []);
+      for (const alias of aliases) {
+        if (!links.has(alias)) links.set(alias, []);
+        links.get(copy).push(alias);
+        links.get(alias).push(copy);
+      }
+    }
+    const related = new Set(selected.map(s => originAddress(s.url)));
+    for (const address of related) {
+      for (const linked of links.get(address) || []) related.add(linked);
+    }
+    return related;
+  }
+  const wholeQuote = /^(?:“([^“”"‘’']+)”|"([^“”"‘’']+)"|‘([^“”"‘’']+)’|'([^“”"‘’']+)')$/u;
+  function quotedBody(text) {
+    return wholeQuote.exec(text)?.slice(1).find(Boolean);
+  }
+  function sentenceEnd(text) {
+    return text.trim().replace(/(?<![.。])[.。]$|(?<=[다요죠네])[!！]$/u, '').trimEnd();
+  }
+  function excerptIdentity(text) {
+    // Keep measurement notation and letter case (1.5 vs 15, mW vs MW).
+    // Whitespace between digits may also divide two distinct table cells.
+    const normalized = text.normalize('NFC').replace(/[！-～]/gu, ch => String.fromCharCode(ch.charCodeAt(0) - 0xfee0));
+    const sentence = sentenceEnd(normalized);
+    return sentenceEnd(quotedBody(sentence) ?? sentence).replace(/(?<=[가-힣]),(?=\s*[가-힣])/gu, '')
+      .replace(/\s+/gu, ' ').replace(/(?<!\p{N}) | (?!\p{N})/gu, '');
+  }
+  const namedSpeaker = String.raw`([\p{L}][\p{L}\p{N}]*(?:[ \t]+[\p{L}][\p{L}\p{N}]*){0,2})`;
+  const transcriptLine = new RegExp('^' + namedSpeaker + ' *[:：] *(.+)$', 'u');
+  const reportedLine = new RegExp('^' + namedSpeaker + '(?:은|는|이|가)\\s+(.+?)(?:이?라고|고|이?라며|며)\\s*' +
+    '(?:했다|말했다|밝혔다|답했다|대답했다|발표했다|주장했다|설명했다|강조했다|덧붙였다|반박했다|전했다)$', 'u');
+  function speechTurn(line, transcript, ledger) {
+    const label = transcriptLine.exec(line);
+    const frame = label || reportedLine.exec(sentenceEnd(line));
+    if (!frame) return null;
+    const body = sentenceEnd(frame[2]), quote = quotedBody(body);
+    // "위원장: 1.5억 원" can be a table row, not a transcript.
+    if (label && (ledger || (!transcript && !/[다요죠네][.!?。！？]?$/u.test(quote ?? body)))) return null;
+    if (!quote && (!label || /[“”"‘’']/u.test(body))) return null;
+    const words = excerptIdentity(quote ?? body);
+    return words ? frame[1].normalize('NFC').replace(/[ \t]+/gu, ' ') + '\n' + words : null;
+  }
+  function speechTurns(source) {
+    const lines = source.excerpt.trim().split(/\r\n|[\r\n\u2028\u2029]/u).map(s => s.trim()).filter(Boolean);
+    const heading = lines.length > 1 && !/[:：“”"‘’']/u.test(lines[0]) && /(?:록|전문|명세서|표|명부|대장|원장)$/u.test(lines[0]) ? lines[0] : '';
+    const where = (source.title || '') + ' ' + source.locator + ' ' + heading;
+    const transcript = /속기록|회의록|녹취록|발언록|문답록|발언\s*원문|인터뷰\s*전문/u.test(where);
+    const ledger = /명세서|집계표|결산표|통계표|정산표|명부|(?:급여|등록|지급)\s*대장|(?:회계|거래|총계정)\s*원장|표\s*\d+\s*행/u.test(where);
+    return lines.map(line => speechTurn(line, transcript, ledger));
+  }
+  const repeatedSpeechNote = '같은 화자 표기의 발언만 다시 전한 발췌입니다. 발언 내용을 확인할 명부·결산표·현장 기록 등 다른 원자료를 선택하세요.';
+  function sameSourceDocument(sources, a, b) {
+    return relatedDocuments({items: sources}, [a]).has(originAddress(b.url));
   }
   const forecast = /(?:될|할|늘|오를|내릴|줄|높아질|낮아질|늘어날|감소할|증가할|이길|패할|거둘|받을|넘을|이어질|커질)\s*(?:것|전망|예정|계획|가능성)|예상(?:된|한|했)|전망(?:된|한|했)/u;
+  const relativeQuantity = /절반|반값|반액|과반|(?:\d+|[일이삼사오육칠팔구십백천만]+)분의\s*(?:\d+|[일이삼사오육칠팔구십백천만]+)|(?<![가-힣])(?:한|두|세|네|다섯|여섯|일곱|여덟|아홉|열|[일이삼사오육칠팔구십백천만]+)\s*배(?=$|[\s\p{P}]|가|나|는|를|만|로|라|인|였|이|에|씩|다|일|임|입|의|보다|와)/u;
   function speechScope(text) {
     const quotes = [...text.matchAll(/[“"]([^“”"]+)[”"]/gu)].map(match => match[1]);
     // Without quotation marks, a calendar date right after the speaker belongs to the frame,
@@ -452,41 +780,102 @@
     const allNonfactual = clauses.length > 0 && clauses.every(part => {
       if (allegation.test(part)) return false;
       if (forecast.test(part)) return true;
-      return assessment.test(part) && !quantitative.test(part) && !eventFact.test(part);
+      return hasAssessment(part) && !quantitative.test(part) && !eventFact.test(part);
     });
-    // Narrator text outside the quotation ("의회가 3억 원을 삭감하자 시장은 “…”고 말했다")
-    // can carry its own facts. The reporting tail attached to the closing quote and ending in
-    // a reporting or stance verb (”이라며 예산안 처리에 반대했다) is not one of them, and dates
-    // (년·월·일·회) only place the speech in time.
-    const tail = /[”"](?:이?라고|고|이?라며|다며|며|면서|이?라면서)\s+[^“”"]*$/u.exec(text);
-    const framed = tail && reportingVerb.test(tail[0].trim()) ? text.slice(0, tail.index + 1) : text;
-    const frame = quotes.length ? framed.replace(/[“"][^“”"]+[”"]/gu, ' ') : '';
-    const frameFact = allegation.test(frame) || eventFact.test(frame)
+    // A date places a speech in time. An outside amount, allegation or event
+    // ("의회가 3억 원을 삭감하자 시장은 …") can instead make an independent claim.
+    // Remove the speaker's bare name and the final speech verb, not everything
+    // after the quote: a second action or reported figure can follow it.
+    const frame = quotes.length ? text.replace(/(?<!\S)[가-힣]+(?:은|는|이|가)\s+(?=[“"])/gu, '')
+      .replace(/[“"][^“”"]+[”"]/gu, ' ')
+      .replace(/[가-힣]+에(?:도|는)?\s+(?:찬성|반대)했다[.!?]?$/u, '').replace(reportingVerb, '') : '';
+    const frameFact = allegation.test(frame) || eventFact.test(frame) || relativeQuantity.test(frame)
       || /\d(?:[\d.,]*\d)?\s*(?:[%％]|퍼센트|명|건|만|억|조|원|배|표|석|점|곳)/u.test(frame);
-    return {hasForecast, allNonfactual: allNonfactual && !frameFact};
+    return {hasForecast, allNonfactual: allNonfactual && !frameFact, quotes, frameFact};
+  }
+  const reportEnding = /^(?:고|이?라고|하고)\s*(?:말했다|밝혔다|주장했다|반박했다|설명했다|전했다|발표했다|강조했다|답했다|덧붙였다)[.!。！]?$/u;
+  const multipleClaims = /(?:,(?!\d)|(?<!\d),)|[，、;；]|[.!。！]\s*\S|(?:[았었였했됐이하되]고|지만|으나|이며|으며|면서|는데|은데|반면)\s/u;
+  const secondQuantity = /\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)[^.!?]{0,60}\s+[가-힣]+(?:은|는|이|가)\s+\d[\d.,]*\s*(?:[%％]|억|조|원|명|건|표|석|곳)/u;
+  const nonAssertion = /[?？]|겠|(?:을|할|될|일)\s*(?:것|계획|방침|예정|전망)|약속(?:한|했|드)|(?:라면|다면|이면|경우에는)|해야\s*(?:한|합)/u;
+  // Korean reports frequently omit the copula for a named, measured quantity.
+  // A bare number, document title or noun phrase does not identify a proposition.
+  const namedMeasurement = /[가-힣](?:은|는|이|가)\s+(?:[약총]\s*)?\d[\d,.]*\s*(?:천|만|억|조)?\s*(?:원|명|건|석|곳|표|개|[%％]|퍼센트)[.!。！]?$/u;
+  const futurePeriod = /내년|내일|다음\s*(?:달|해|분기)/u;
+  const recordedDecision = /(?:확정|의결|가결|승인|편성|기재|기록)(?:됐|되었|했|하였|되지\s*않았|하지\s*않았|(?:돼|되어)\s*있었?)(?:다|어요|습니다)(?:고\s*\S+다)?[.!。！]?$/u;
+  function conflictClaim(original, text, scope) {
+    const quote = /[“"]([^“”"]+)[”"]/u.exec(text);
+    const marks = text.match(/[“”"]/gu) || [];
+    const error = '화자가 직접 단정한 하나의 사실 진술만 대조하세요. 부인·질문·약속이거나 범위가 모호하면 발언 내용 미확인으로 남겨 주세요.';
+    if (scope.allNonfactual || scope.frameFact || !attributed.test(original)) throw new Error(error);
+    let assertion;
+    if (marks.length) {
+      if (marks.length !== 2 || !quote) throw new Error(error);
+      const before = text.slice(0, quote.index).trim(), after = text.slice(quote.index + quote[0].length).trim();
+      // The reporting tail must itself affirm this utterance. A final "밝혔다" alone
+      // also matches "말한 적이 없다고 밝혔다", which reverses the inner quotation.
+      if (!reportEnding.test(after) || /[?？]|다면|라면|조건으로|가정해/u.test(before)) throw new Error(error);
+      assertion = quote[1].trim();
+    } else {
+      const reported = /^(.+(?:다|아니라))(고\s*[^\s]+[.!。！]?)$/u.exec(text);
+      if (!reported || !reportEnding.test(reported[2]) || /(?:말|주장|밝|전|답|발언)(?:하지|하였|했|한|혔|힌|했다던)|(?:다고|라고)\s/u.test(reported[1])) throw new Error(error);
+      assertion = reported[1];
+    }
+    // Only a complete declarative assertion can be contradicted as a whole.
+    // Ignore commas and periods inside numbers when looking for a second claim.
+    const declarative = /(?:다|[았었였했됐]어요|이에요|예요)[.!。！]?$/u.test(assertion) || namedMeasurement.test(assertion)
+      || (!quote && assertion.endsWith('아니라'));
+    if (!declarative || nonAssertion.test(assertion) || hasAssessment(assertion)
+        || multipleClaims.test(assertion.replace(/(?<=\d)\.(?=\d)/gu, '')) || secondQuantity.test(assertion)) throw new Error(error);
+    return quote ? assertion : original;
   }
   function contentFields(row, decision, catalog, speechIds) {
     const contentStatus = decision.contentStatus ?? 'unverified';
-    if (!['unverified','opinion','supported'].includes(contentStatus)) throw new Error('발언 내용의 검토 상태를 확인하세요.');
+    if (!['unverified','opinion','supported','contradicted'].includes(contentStatus)) throw new Error('발언 내용의 검토 상태를 확인하세요.');
     if (contentStatus === 'unverified') return {contentStatus};
     if (decision.contentChecked !== true || !nonblank(decision.contentReason)) throw new Error('발언 내용의 범위와 판단 이유를 확인하세요.');
-    const scope = speechScope(row.text);
+    const checkingConflict = contentStatus === 'contradicted';
+    const scopedText = contentStatus !== 'opinion' ? row.text.replace(/[‘「『]/gu, '“').replace(/[’」』]/gu, '”')
+      .replace(/(?<![A-Za-z])'([^'\n]+)'(?![A-Za-z])/gu, '“$1”') : row.text;
+    const scope = speechScope(scopedText);
     if (contentStatus === 'opinion') {
       if (!scope.allNonfactual) throw new Error('발언에 남은 사실·의혹을 별도 근거로 확인하거나 내용 미확인으로 남겨 주세요.');
       return {contentStatus, contentChecked: true, contentReason: decision.contentReason};
     }
-    if (scope.hasForecast) throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과는 시점을 명시한 별도 주장과 원자료가 필요합니다.');
+    if (scope.frameFact && contentStatus === 'supported') {
+      throw new Error('인용 밖에도 확인할 사실이 있습니다. 발언 귀속만 기록하거나, 독립적으로 확인한 절이 있으면 ‘일부 사실만 확인’을 골라 그 구절을 지정하세요.');
+    }
+    const content = scope.quotes.length ? scope.quotes.join(' ') : scopedText;
+    if (/(?:것으로|것이라(?:고)?|으로|로)\s*(?:추정|추산)(?:된|될|됐|했|하|한|되|됩)/u.test(content)) {
+      throw new Error('추정치를 실제 확정된 수치로 판정하기 어려우면 내용 미확인으로 남기고, 자료가 제시한 수치의 성격을 기록하세요.');
+    }
+    if (scope.hasForecast || /일\s*것|일\s*전망|예측(?:한|했|이)|예상(?:이|하)|전망(?:이|하)/u.test(content)
+        || (futurePeriod.test(content) && !recordedDecision.test(content))) {
+      throw new Error('전망은 발언 당시의 예상으로 기록하세요. 실제 결과를 판단할 자료가 부족하면 내용 미확인으로 남겨 주세요.');
+    }
+    const closing = Math.max(scopedText.lastIndexOf('”'), scopedText.lastIndexOf('"'));
+    const speechAct = closing < 0 ? scopedText : scopedText.slice(closing + 1);
+    if (scope.quotes.length === 1 && reportEnding.test(speechAct.trim()) && endsInValueJudgment(scope.quotes[0])) {
+      throw new Error('화자의 가치 판단은 의견으로 기록하고, 함께 언급된 사실은 범위를 구분해 확인하세요.');
+    }
+    if (/[?？]|겠(?:다|습니)|(?:인가요|일까요|나요|습니까)[.!]?$/u.test(content)
+        || (closing >= 0 && /아니(?:라|었|냐)|사실이\s*아니/u.test(speechAct))
+        || /(?:말한|주장한|발표한|발언한|밝힌)\s*(?:적|사실)(?:이|은)?\s*없|(?:말하|주장하|발표하|발언하|밝히)지\s*않|(?:부인했|물었|되물었|반문했|질문했|약속했)다/u.test(speechAct)) {
+      throw new Error('부인·질문·약속의 원발언을 확인하고, 발언 속 표현을 독립된 사실로 단정하기 어려우면 내용 미확인으로 남겨 주세요.');
+    }
+    const contentClaim = checkingConflict ? conflictClaim(row.text, scopedText, scope) : null;
     const ids = decision.contentSourceIds;
     if (!Array.isArray(ids) || !ids.length || ids.some(id => !catalog.items.has(id)) || new Set(ids).size !== ids.length) throw new Error('발언의 내용 자체를 확인한 별도의 원자료를 선택하세요.');
     const speech = speechIds.map(id => catalog.items.get(id));
+    const speechDocuments = relatedDocuments(catalog, speech);
+    const speechExcerpts = new Set(speech.map(source => excerptIdentity(source.excerpt)));
     for (const id of ids) {
-      const source = catalog.items.get(id), excerpt = excerptIdentity(source);
-      const addresses = [source.url, source.originUrl].filter(Boolean).map(originAddress);
-      if (speech.some(original => [original.url, original.originUrl].filter(Boolean).some(url => addresses.includes(originAddress(url))) || excerptIdentity(original) === excerpt)) {
-        throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서 또는 같은 발췌문으로 내용을 확인할 수 없습니다.');
+      const source = catalog.items.get(id);
+      if (speechDocuments.has(originAddress(source.url)) || speechExcerpts.has(excerptIdentity(source.excerpt))) {
+        throw new Error('발언과 다른 원자료가 필요합니다. 같은 문서, 그 문서를 재인용한 자료, 같은 발췌문은 발언 내용의 독립 근거가 될 수 없습니다.');
       }
     }
-    return {contentStatus, contentChecked: true, contentReason: decision.contentReason, contentSourceIds: [...ids].sort()};
+    return {contentStatus, contentChecked: true, contentReason: decision.contentReason, contentSourceIds: [...ids].sort(),
+      ...(contentClaim ? {contentClaim} : {})};
   }
   function decisionFields(row, decision, catalog) {
     if (!decision || decision.acknowledged !== true) throw new Error('원문과 판단 범위를 직접 확인했다는 표시가 필요합니다.');
@@ -512,7 +901,7 @@
         if (fact.start < opinion.end && opinion.start < fact.end) throw new Error('사실과 평가 구절이 겹칩니다.');
         const gaps = outside(row.text, [fact, opinion].sort((a, b) => a.start - b.start));
         if (gaps.some(gap => gap.replace(/[\s\p{P}]/gu, '') !== '')) throw new Error('사실·평가 구절에 포함되지 않은 말이 있습니다. 두 구절에 포함하거나 부분 확인으로 남겨 주세요.');
-        if (assessment.test(decision.factSpan) && !assessment.test(decision.opinionSpan)
+        if (hasAssessment(decision.factSpan) && !hasAssessment(decision.opinionSpan)
           || !forecast.test(decision.opinionSpan) && (quantitative.test(decision.opinionSpan) || eventFact.test(decision.opinionSpan))) {
           throw new Error('평가로 표시한 구절에 확인할 사실이 있거나 사실과 평가 구절의 위치가 바뀌었습니다.');
         }
@@ -529,10 +918,21 @@
     const references = digest(linked.map(id => catalog.items.get(id)));
     return {protocol, rowId: row.id, articleBinding: row.articleBinding, binding, references, recordedAt, ...fields};
   }
+  function repeatsSpeech(fields, catalog) {
+    if (fields.status !== 'attribution' || !fields.contentSourceIds?.length) return false;
+    // A transcript may include headings and procedural notes. On the content side, every
+    // line must be an identified turn before ruling out independently reported evidence.
+    const known = new Set(fields.sourceIds.flatMap(id => speechTurns(catalog.items.get(id))).filter(Boolean));
+    return known.size > 0 && fields.contentSourceIds.some(id => {
+      const turns = speechTurns(catalog.items.get(id));
+      return turns.length > 0 && turns.every(turn => known.has(turn));
+    });
+  }
   function decide(row, decision, sources = []) {
     const catalog = sourceCatalog(sources);
     if (!row || catalog.key !== row.sourceKey) throw new Error('근거가 달라졌습니다. 현재 자료로 항목을 다시 열어 주세요.');
     const fields = decisionFields(row, decision, catalog);
+    if (repeatsSpeech(fields, catalog)) throw new Error(repeatedSpeechNote);
     const body = receiptBody(row, fields, new Date().toISOString(), catalog);
     return {...body, checksum: digest(body)};
   }
@@ -552,8 +952,15 @@
       const fields = decisionFields(row, saved, catalog);
       const body = receiptBody(row, fields, saved.recordedAt, catalog, saved.binding);
       if (saved.references !== body.references || digest(body) !== saved.checksum) throw new Error();
+      if (repeatsSpeech(fields, catalog)) {
+        // The historical decision passed its integrity checks. Only its attribution inputs are reusable.
+        row.reviewNote = '원발언 자료와 귀속 판단 이유만 초안으로 불러왔습니다. ' + repeatedSpeechNote;
+        if (saved.binding !== row.binding) row.reviewNote += ' 자료 목록도 달라졌습니다. 추가·변경된 자료를 확인하세요.';
+        row.attributionDraft = {status:fields.status, sourceIds:fields.sourceIds, reason:fields.reason};
+        return;
+      }
       if (saved.binding !== row.binding) {
-        row.reviewNote = '기사와 인용 근거는 그대로지만 자료 목록이 달라졌습니다. 추가·변경된 근거를 확인한 뒤 다시 판단하세요.';
+        row.reviewNote = '이전 판단을 초안으로 불러왔습니다. 원문과 인용한 자료는 같지만 자료 목록이 달라졌습니다. 추가 근거나 반증을 확인한 뒤 다시 기록하세요.';
         row.priorDecision = {...body, checksum: saved.checksum};
         return;
       }
@@ -586,11 +993,12 @@
       const positions = group.map(({start, end}) => ({start, end}));
       const before = groups[i - 1]?.at(-1) ?? group[0];
       const after = groups[i + 1]?.[0] ?? group.at(-1);
-      const sourceMatches = suggest(text, indexed);
+      const previous = i && !/\n[ \t]*\n/u.test(article.slice(before.end, start).replace(/\r\n?/gu, '\n')) ? before.text : '';
+      const {candidates: sourceMatches, caution} = suggest(text, indexed);
       const row = {id: `unit-${start}`, text, positions, context: article.slice(before.start, after.end),
         articleBinding: digest([articleKey, positions]), priorDecision: null,
-        binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text), sourceMatches,
-        sourceCaution: sourceMatches.length ? sourceCaution(text, indexed) : null,
+        binding: digest([scope, positions]), sourceKey: catalog.key, ...triage(text, previous), sourceMatches,
+        sourceCaution: (sourceMatches.length && sourceCaution(text, indexed)) || caution,
         sourceIds: sourceMatches.map(match => match.id), status: 'pending', receipt: null, reviewNote: ''};
       restore(row, decisions.get(row.id) ?? [], catalog);
       row.needsReview = unresolved.has(row.status) || row.receipt?.contentStatus === 'unverified';
@@ -601,11 +1009,12 @@
     const contentCount = state => rows.filter(row => row.receipt?.contentStatus === state).length;
     return {article, rows, pendingCount, complete: rows.length > 0 && pendingCount === 0,
       contentSupportedCount: contentCount('supported'), contentOpinionCount: contentCount('opinion'), contentUnverifiedCount: contentCount('unverified'),
+      contentContradictedCount: contentCount('contradicted'),
       confirmedCount: count('fact'), attributedCount: count('attribution'), opinionCount: count('opinion'),
       mixedCount: count('mixed'), partialCount: count('partial'), heldCount: count('held'), contradictedCount: count('contradicted')};
   }
 
-  const api = Object.freeze({prepare, decide, report: prepare, sourceTarget});
+  const api = Object.freeze({prepare, decide, report: prepare, filingSourceCaution, sourceTarget, validatePdfBinding, isMock, pdfPageInLocator, sameSourceDocument, digestValue: digest, sha256Text});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalFactcheck = api;
 })(typeof window === 'undefined' ? globalThis : window);

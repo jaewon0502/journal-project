@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>현장 기사 과제 배정 · Journal</title><link rel="stylesheet" href="editor-study.css">
+<script defer src="field-review-core.js"></script><script defer src="field-invite.js"></script><script defer src="field-allocation.js"></script></head>
+<body><header><strong>Journal</strong><a href="field-summary.html">현장 집계</a></header>
+<main><section class="headline"><div><h1>현장 기사 과제 배정</h1>
+<p>검토를 시작하기 전에 편집자에게 검토할 기사와 과제, 검증 방식을 배정하세요.</p></div></section>
+<section class="box"><details id="kit-setup"><summary>처음 진행할 때 참여자 배포본 준비하기</summary>
+<p>진행자용 집계도구.zip이 있으면 압축을 풀고 ‘시작.html’을 여세요. 그 안에서 기사를 선택해 배정표를 만들면 각 참여자의 행에서 해당 방식의 ZIP을 받을 수 있습니다.</p>
+<p>저장소에서 배포본을 만들려면 Python 3.11과 Node.js가 있는 컴퓨터에서 저장소 폴더를 열고 <code>python3 tools/build_facilitator_pack.py</code>를 실행하세요. 결과는 다운로드 폴더의 <code>Journal-편집자-파일럿/진행자용/집계도구.zip</code>에 저장됩니다.</p></details>
+<div id="allocation-mode-picker" hidden><label for="allocation-mode">배정 방식</label><select id="allocation-mode"><option value="single">한 사람에게 기사 한 건 배정</option><option value="crossover">한 사람이 기사 두 건을 서로 다른 방식으로 검토</option></select></div>
+<form id="allocation-form">
+<div id="bundled-picker" hidden><label for="bundled-case">이 배포본의 기사 선택</label><select id="bundled-case"><option value="">기사를 선택하세요</option></select></div>
+<label for="case-file">참여자용 과제 파일</label><input required id="case-file" type="file" accept=".json,application/json">
+<p id="case-note">참여자 ZIP의 blind-tasks.json 또는 진행자 폴더의 ‘참여 과제’에서 고르세요.</p>
+<details id="targets" hidden><summary>과제별 목표 활동 시간 설정 (선택)</summary>
+<p id="target-note">진행자용 기준입니다. 집계할 때 일시정지 시간을 뺀 활동 시간과 비교합니다. 과제마다 1초 이상의 정수를 입력하거나 비워 두세요. 참여자는 목표 시간을 넘겨도 검토를 마칠 수 있습니다.</p>
+<div id="target-inputs"></div></details>
+<label for="participant-codes">참여 순서대로 익명 코드 입력 · 한 줄에 한 명</label>
+<textarea required id="participant-codes" rows="5" spellcheck="false" placeholder="예: E01"></textarea>
+<p>이름과 소속은 입력하지 마세요. 같은 사람에게는 연습과 현업 참여에서 같은 코드를 사용하세요.</p>
+<button id="generate" class="primary" type="submit" disabled>과제와 방식 배정</button>
+</form>
+<form id="crossover-form" hidden>
+<p>편집자 한 명이 서로 다른 기사에서 평소 도구와 저널을 한 번씩 씁니다. 두 기사를 선택하고, 기사마다 비교할 과제를 하나씩 정하세요.</p>
+<fieldset><legend>기사 A</legend>
+<label for="cross-case-a">기사 A 선택</label><select required id="cross-case-a"></select>
+<label for="cross-task-a">기사 A 과제</label><select required id="cross-task-a"></select>
+<label for="cross-target-a">기사 A 목표 활동 시간 · 초 (선택)</label><input id="cross-target-a" inputmode="numeric" aria-describedby="cross-target-note"></fieldset>
+<fieldset><legend>기사 B</legend>
+<label for="cross-case-b">기사 B 선택</label><select required id="cross-case-b"></select>
+<label for="cross-task-b">기사 B 과제</label><select required id="cross-task-b"></select>
+<label for="cross-target-b">기사 B 목표 활동 시간 · 초 (선택)</label><input id="cross-target-b" inputmode="numeric" aria-describedby="cross-target-note"></fieldset>
+<p id="cross-target-note">목표를 쓰면 해당 과제를 맡은 두 방식에 같은 시간이 적용됩니다. 1초 이상의 정수를 입력하거나 비워 두세요.</p>
+<label for="cross-codes">참여자 익명 코드 · 한 줄에 한 명</label><textarea required id="cross-codes" rows="5" spellcheck="false"></textarea>
+<p>2명 이상 짝수 인원이 필요합니다. 이름과 소속은 입력하지 마세요. 네 명씩 첫 기사와 첫 방식을 고르게 섞습니다. 마지막에 두 명이 남으면 두 사람은 같은 기사부터 서로 다른 방식으로 시작합니다. 이 두 사람만으로 기사 순서의 영향을 구분하기는 어렵습니다.</p>
+<button id="cross-generate" class="primary" type="submit">두 기사 교차 배정</button></form>
+<details id="reopen"><summary>저장한 배정표 다시 보기</summary>
+<label for="roster-file">진행자 배정표 JSON</label><input id="roster-file" type="file" accept=".json,application/json">
+</details><p id="status" role="status"></p></section>
+<section id="allocation" class="box" hidden><h2>진행자 배정표</h2><p id="block-count"></p>
+<div class="scroll"><table><thead><tr><th scope="col">익명 코드</th><th scope="col">기사 사례</th><th scope="col">과제 번호</th><th scope="col">전달할 파일</th><th scope="col">배정 코드</th><th scope="col">목표 활동 시간</th><th scope="col" id="cross-order-heading" hidden>권장 진행 순서</th></tr></thead><tbody id="allocations"></tbody></table></div>
+<p>배정표는 진행자가 보관하고 각 참여자에게는 자기 배정 코드와 해당 ZIP만 전달하세요.</p>
+<button type="button" id="download" class="primary">배정표 JSON 저장</button>
+</section><noscript>배정표를 만들려면 JavaScript가 필요합니다.</noscript></main></body></html>

@@ -1,0 +1,40 @@
+{
+  "sourceUrl": "https://mods.go.kr/boardDownload.es?bid=210&list_no=434801&seq=1",
+  "pdfSha256FromManifest": "69325b4d227fc0cbe62e1ff6e26d59eccbeb35cbd0d40a1b15f7b5bbe0ed1a93",
+  "verifiedLayoutSha256": "c49ed71c04e00adc0f3ecff89fe9a5fd646f403870b5e6eb0b18e0d2673ad53b",
+  "scope": "2023·2024년 연간 15세 이상 인구의 고용률. 15~64세 및 분기·월별 행은 제외.",
+  "evidence": "PDF 2쪽 46–47행 반올림 안내, 30쪽 연간 표제, 32쪽 19·22·38·41행 연도·취업자·15세 이상 고용률·공표 증감, 42쪽 1–7행 표 머리글, 11–12행 연간 인원, 55행 분모 각주. 행 번호는 각 쪽 layout 원문 기준.",
+  "assumption": "PDF의 반올림 안내에 따라 정수 천명은 각 셀 ±0.5천 명, 소수 한 자리 비율은 ±0.05%p로 가정. 닫힌 구간을 사용하며 경계는 소수점 여섯 자리에서 바깥쪽으로 표시. 이 범위에는 표본오차가 포함되지 않음.",
+  "observations": [
+    {
+      "year": 2023,
+      "pdf42Line": 11,
+      "populationThousands": 45407,
+      "employedThousands": 28416,
+      "displayedPct": 62.6,
+      "rateFromCountsPct": 62.580659369700705
+    },
+    {
+      "year": 2024,
+      "pdf42Line": 12,
+      "populationThousands": 45570,
+      "employedThousands": 28576,
+      "displayedPct": 62.7,
+      "rateFromCountsPct": 62.70792187842879
+    }
+  ],
+  "published2024ChangePp": 0.1,
+  "relativeFromRateDisplays": {
+    "estimatePct": 0.15974440894568917,
+    "lowerPct": 0,
+    "upperPct": 0.319745,
+    "exceedsPointOne": null
+  },
+  "relativeFromCountDisplays": {
+    "estimatePct": 0.20335757086909684,
+    "lowerPct": 0.197638,
+    "upperPct": 0.209077,
+    "exceedsPointOne": true
+  },
+  "interpretation": "32쪽의 두 표시 비율만으로는 상대 증가율이 0.1%를 넘는지 확정할 수 없습니다. 42쪽의 같은 대상·기간의 천명 단위 인원을 위 가정으로 대조하면 상대 증가율 하한도 0.1%를 넘습니다. 이 범위는 공표 인원으로 재계산한 값입니다. 원표에 공표한 변화량의 단위는 퍼센트포인트입니다."
+}

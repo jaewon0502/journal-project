@@ -3,6 +3,7 @@
 (function (root) {
   'use strict';
 
+  const engine = typeof module === 'object' && module.exports ? require('./factcheck-engine.js') : root.JournalFactcheck;
   const version = 'journal-article-rubric-v1';
   const severityLabels = ['뚜렷한 문제를 찾지 못함', '국소적 강조', '중요한 왜곡', '핵심 결론 왜곡'];
   const dimensions = [
@@ -54,8 +55,9 @@
   // no verdict. A draft only counts while it hides a recorded decision.
   function bind(report) {
     return JSON.stringify([version, report.rows.map(row => {
-      const {recordedAt, checksum, ...judgment} = row.receipt ?? {};
-      return [row.id, row.binding, row.status, row.receipt ? judgment : null, !!(row.draftPending && row.receipt)];
+      const record = row.receipt ?? row.draftRecord;
+      const {recordedAt, checksum, ...judgment} = record ?? {};
+      return [row.id, row.binding, row.status, record ? judgment : null, !!(row.draftPending && record)];
     })]);
   }
 
@@ -67,7 +69,7 @@
     ])]);
   }
   function matches(binding, report) {
-    return binding === bind(report) || binding === legacyBind(report);
+    return binding === bind(report) || (!report.rows.some(row => row.draftRecord) && binding === legacyBind(report));
   }
 
   function bindCore(report) {
@@ -97,7 +99,122 @@
     return row.positions.every(position => disjoint(position.start + offset, other));
   }
 
-  function ratingFor(dimension, rating, report, sources) {
+  const passageText = value => value.normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu, '');
+
+  function sameSourceLocation(sources, a, b) {
+    if (a.id === b.id) return true;
+    if (!engine.sameSourceDocument(sources, a, b)) return false;
+    const page = s => s.pdfPage || engine.sourceTarget(s)?.page || '';
+    const firstPage = page(a), secondPage = page(b);
+    if (firstPage && secondPage && String(firstPage) !== String(secondPage)) return false;
+    return passageText(a.locator) === passageText(b.locator);
+  }
+
+  // Earlier workspaces could contain both citations and still need re-selection.
+  class ComparisonNeedsReview extends Error {}
+
+  // Only pair explicitly named subjects with table-style evidence. A speaker, a
+  // role such as "여당", or a pronoun needs an editor to interpret the context.
+  function namedPartySubject(text) {
+    const match = /^([가-힣]+당|국민의힘)(?:은|는|이|가|의)(?=\s)/u.exec(text);
+    if (!match || /^(?:여당|야당|여야당|집권당|원내정당|제[일이삼]야당|상대당|우리당|소속당|정당|해당|담당|분당|식당|성당|법당|서당|강당|본당)$/u.test(match[1])) return '';
+    return match[1];
+  }
+
+  function isPartyRecord(line, party) {
+    if (!line.startsWith(party)) return false;
+    const tail = line.slice(party.length);
+    // Either an explicit column separator or the name of an accounting field.
+    return /^\s*[|｜:\t]/u.test(tail) ||
+      /^(?:의)?\s+(?:\d{4}년(?:도)?\s+)?(?:특별회계|일반회계|집행액|집행일|의결액|지출액|지급액|인쇄비|결산액|제출일|제출\s*여부|득표수|찬성표|반대표)(?=\s|[\d:·|.,]|$)/u.test(tail);
+  }
+
+  function checkPartyRows(row, quote, compareRow, compareQuote, source, sourceQuote, other, otherQuote) {
+    const first = namedPartySubject(quote), second = namedPartySubject(compareQuote);
+    // Short and long forms of the same party, or passages concerning both
+    // parties, do not establish two unambiguous targets.
+    if (!first || !second || first.endsWith(second) || second.endsWith(first) ||
+        !compareRow || row.text.includes(second) || compareRow.text.includes(first)) return;
+    for (const [side, expected, opposite, doc, selected] of [
+      ['첫째', first, second, source, sourceQuote], ['둘째', second, first, other, otherQuote]
+    ]) {
+      if (selected.includes(expected) || /[\n\r\u2028\u2029]/u.test(selected)) continue;
+      const location = doc.excerpt.indexOf(selected);
+      if (location !== doc.excerpt.lastIndexOf(selected)) continue;
+      const lines = doc.excerpt.split(/\r\n|[\n\r\u2028\u2029]/u).map(line => line.trim());
+      const index = lines.findIndex(line => line.includes(selected));
+      const line = lines[index];
+      if (!isPartyRecord(line, opposite) || line.includes(expected) ||
+          /[“”‘’"'「」『』]|상대(?:방|\s*당)|여당|야당|발언|주장|밝혔|말했|따르면|대변인/u.test(line)) continue;
+      // A caption naming the expected party can scope the data to that party.
+      // The opposite name may be a payee or other column value in that table.
+      if ([doc.title, doc.locator].some(label => label?.includes(expected) && !label.includes(opposite))) continue;
+      if (lines.slice(0, index).some(header => header.includes(expected) && !isPartyRecord(header, expected))) continue;
+      throw new ComparisonNeedsReview(side + ' 기사 구절은 ' + expected + '에 관한 내용인데 선택한 자료 행에는 ' +
+        opposite + '의 기록이 표시됩니다. ' + expected + '의 행이나 해당 주장을 확인할 수 있는 자료 구절을 다시 고르세요.');
+    }
+  }
+
+  // Align the suffix of one registered clip with the prefix of another in linear time.
+  function joinedClipOverlap(first, second, left, right) {
+    const length = Math.min(first.length, second.length);
+    const minimum = 8;
+    if (length < minimum || !first.includes(second.slice(0, minimum), first.length - length)) return false;
+    const prefix = new Uint32Array(length);
+    for (let i = 1, n = 0; i < length; i++) {
+      while (n && second[n] !== second[i]) n = prefix[n - 1];
+      if (second[n] === second[i]) n++;
+      prefix[i] = n;
+    }
+    let width = 0;
+    for (let i = first.length - length; i < first.length; i++) {
+      while (width && second[width] !== first[i]) width = prefix[width - 1];
+      if (second[width] === first[i]) width++;
+    }
+    const offset = first.length - width;
+    // Only the intersection common to every possible placement of each selected
+    // quote is relevant. The clips may share context while their quotes are separate.
+    const start = Math.max(first.lastIndexOf(left), offset + second.lastIndexOf(right));
+    const end = Math.min(first.indexOf(left) + left.length, offset + second.indexOf(right) + right.length);
+    if (end - start < minimum) return false;
+    // Bare dates, figures and units may repeat in distinct table rows.
+    const quoteIntersection = first.slice(start, end);
+    if (/^\d+\p{L}*$/u.test(quoteIntersection)) return false;
+    const shared = quoteIntersection.replace(/\d+(?:[십백천만억조]*(?:원|달러|유로)|개월|년도?|월|일|명|건|회|개|톤|%p?|kg|g)?/giu, ' ');
+    return /\p{L}{2,}/u.test(shared);
+  }
+
+  function comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote, row, compareRow) {
+    const firstClaim = passageText(quote), secondClaim = passageText(compareQuote);
+    if (!firstClaim || !secondClaim || firstClaim === secondClaim) {
+      throw new Error('기사에서 비교할 주체나 주장이 각각 드러나는 두 구절을 옮기세요.');
+    }
+    const other = sources.find(s => s.id === rating.compareSourceId);
+    const otherQuote = string(rating.compareSourceQuote);
+    if (!other || !otherQuote || !other.excerpt.includes(otherQuote)) {
+      throw new Error('둘째 기사 구절의 근거가 있는 원자료와 해당 발췌문 속 구절을 입력하세요.');
+    }
+    const left = passageText(sourceQuote), right = passageText(otherQuote);
+    if (!left || !right) throw new Error('각 주장의 근거를 확인할 수 있는 자료 구절을 옮기세요.');
+    if (sameSourceLocation(sources, source, other)) {
+      // The same document may cover both parties. A copied or overlapping passage at
+      // one location does not supply two citations, even through another catalogue ID.
+      const texts = [source.excerpt, other.excerpt].map(passageText);
+      const common = texts.filter(t => t.includes(left) && t.includes(right));
+      if (!common.length && (joinedClipOverlap(texts[0], texts[1], left, right) ||
+          joinedClipOverlap(texts[1], texts[0], right, left))) {
+        throw new ComparisonNeedsReview('같은 위치에서 등록한 두 발췌의 인용이 겹칠 수 있습니다. 두 주장이 함께 나온 원문을 등록하고 겹치지 않는 두 구절을 고르거나, 각 행의 확인 위치를 구분하세요.');
+      }
+      if (left.includes(right) || right.includes(left) || (common.length && !common.some(t =>
+        t.indexOf(left) + left.length <= t.lastIndexOf(right) || t.indexOf(right) + right.length <= t.lastIndexOf(left)))) {
+        throw new Error('같은 자료 위치에서는 두 주장의 근거가 각각 드러나는 겹치지 않는 구절을 옮기세요.');
+      }
+    }
+    checkPartyRows(row, quote, compareRow, compareQuote, source, sourceQuote, other, otherQuote);
+    return {compareSourceId: other.id, compareSourceQuote: otherQuote};
+  }
+
+  function ratingFor(dimension, rating, report, sources, legacyDraft = false) {
     const reason = string(rating?.reason);
     if (!object(rating) || !reason) throw new Error(dimension.title + '의 판정 이유를 적으세요.');
     if (rating.level === 'na' && dimension.allowNA) return {level: 'na', reason};
@@ -117,7 +234,10 @@
     if (needsComparison && (typeof compareRowId !== 'string' || !secondAnchor(report, row, quote, compareQuote, compareRowId))) {
       throw new Error(dimension.title + '에서 비교한 다른 기사 구절을 위치가 분명하고 첫 구절과 겹치지 않게 옮기세요.');
     }
-    return {level, rowId: row.id, quote, sourceId: source.id, sourceQuote, reason, impact, compareQuote, compareRowId,
+    const secondSource = dimension.id === 'standards' && !legacyDraft
+      ? comparisonEvidence(rating, sources, source, sourceQuote, quote, compareQuote, row,
+          report.rows.find(item => compareRowId ? item.id === compareRowId : item.text.includes(compareQuote))) : {};
+    return {level, rowId: row.id, quote, sourceId: source.id, sourceQuote, reason, impact, compareQuote, compareRowId, ...secondSource,
       direction: level > 0 ? string(rating.direction) : ''};
   }
 
@@ -149,6 +269,7 @@
       case 'mixed': return result('supported', '사실 구절만 지지', r.factSpan);
       case 'partial': return result('unresolved', '부분 확인 · 나머지 미확인', r.factSpan);
       case 'attribution':
+        if (r.contentStatus === 'contradicted') return result('quotedConflict', '발언 귀속 확인 · 인용 속 사실 주장 충돌', r.contentClaim);
         if (r.contentStatus === 'supported') return result('supported', '발언과 내용의 근거 확인', row.text);
         if (r.contentStatus === 'opinion') return result('supported', '발언 사실 확인 · 내용은 의견이나 전망', row.text);
         return result('unresolved', '발언 사실 확인 · 담긴 주장 미확인', row.text);
@@ -160,24 +281,40 @@
     const rows = report.rows.map(classify);
     const count = key => rows.filter(row => row.category === key).length;
     const supported = count('supported'), contradicted = count('contradicted'), unresolved = count('unresolved');
-    const adjudicated = supported + contradicted, total = adjudicated + unresolved;
+    const quotedConflict = count('quotedConflict');
+    const adjudicated = supported + contradicted, reviewed = adjudicated + quotedConflict, total = reviewed + unresolved;
     const core = new Set(coreRows);
     const selected = key => rows.filter(row => core.has(row.rowId) && row.category === key).map(row => row.rowId);
-    const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved');
+    const coreContradicted = selected('contradicted'), coreUnresolved = selected('unresolved'), coreExcluded = selected('excluded');
+    const coreQuotedConflict = selected('quotedConflict');
+    const limited = report.rows.filter((row, index) => rows[index].category === 'supported'
+      && (row.status === 'mixed' || (row.status === 'attribution' && row.receipt.contentStatus === 'opinion')));
+    const coreLimited = limited.filter(row => core.has(row.id)).map(row => row.id);
     const summary = [];
     if (coreContradicted.length) summary.push('지정한 핵심 항목 ' + coreContradicted.length + '개가 원자료와 충돌합니다.');
+    if (coreQuotedConflict.length) summary.push('지정한 핵심 항목 중 ' + coreQuotedConflict.length + '개에서 발언 귀속을 확인했고, 인용 속 사실 주장은 독립 원자료와 충돌했습니다.');
     if (coreUnresolved.length) summary.push('지정한 핵심 항목 ' + coreUnresolved.length + '개는 판단이 남아 있습니다.');
+    if (coreExcluded.length) summary.push('지정한 핵심 항목 ' + coreExcluded.length + '개는 의견·평가로 두 비율의 분모에서 제외했습니다.');
+    if (coreLimited.length) summary.push('지정한 핵심 항목 ' + coreLimited.length + '개는 사실 구절 또는 발언 사실만 근거로 확인했습니다.');
     if (!total) summary.push('지금 집계할 사실 확인 항목이 없습니다.');
-    else if (!adjudicated) summary.push('지지·충돌을 판정한 항목이 없어 정확도를 계산할 수 없습니다.');
+    else if (!adjudicated) summary.push('기사 서술에 대해 지지·충돌 판정을 마친 항목이 없어 근거 지지율을 계산할 수 없습니다.');
     else if (unresolved) summary.push('미확인 ' + unresolved + '개가 남아 있습니다. 지지율은 판정을 마친 ' + adjudicated + '개에만 적용됩니다.');
     else summary.push('판정을 마친 ' + adjudicated + '개 중 원자료가 지지한 항목은 ' + supported + '개입니다.');
+    if (limited.length) {
+      const mixed = limited.filter(row => row.status === 'mixed').length;
+      const scopeCounts = ['구간 전체의 사실 확인 ' + (supported - limited.length) + '개'];
+      if (mixed) scopeCounts.push('사실과 평가가 섞여 사실 구절만 확인 ' + mixed + '개');
+      if (limited.length > mixed) scopeCounts.push('의견·전망을 인용해 발언 사실만 확인 ' + (limited.length - mixed) + '개');
+      summary.push('근거가 지지한 ' + supported + '개 구간의 확인 범위는 ' + scopeCounts.join(', ') + '입니다.');
+    }
+    if (quotedConflict) summary.push('인용 속 사실 주장 충돌 ' + quotedConflict + '건은 근거 지지율의 분모에서 제외하고 판정 완료율에 포함했습니다.');
     if (total && !core.size) summary.push('제목·핵심 결론으로 지정한 항목은 없습니다.');
-    return {supported, contradicted, unresolved, excluded: count('excluded'), adjudicated, total,
+    return {supported, contradicted, quotedConflict, unresolved, excluded: count('excluded'), adjudicated, reviewed, total,
       accuracyPct: adjudicated ? 100 * supported / adjudicated : null,
-      coveragePct: total ? 100 * adjudicated / total : null,
+      coveragePct: total ? 100 * reviewed / total : null,
       partialCount: report.rows.filter(r => !r.draftPending && r.receipt?.status === 'partial').length,
       attributionOnlyCount: report.rows.filter(r => !r.draftPending && r.receipt?.contentStatus === 'unverified').length,
-      coreRowIds: [...coreRows], coreContradicted, coreUnresolved, rows, summary: summary.join(' ')};
+      coreRowIds: [...coreRows], coreContradicted, coreQuotedConflict, coreUnresolved, coreExcluded, coreLimited, rows, summary: summary.join(' ')};
   }
 
   function biasFor(ratings) {
@@ -197,47 +334,85 @@
 
   function evaluate(report, sources, stored = null) {
     let saved = null, stale = stored != null;
-    if (stored && stored.version === version && stored.coreBinding === bindCore(report)) {
-      try {
-        // A headline or central assertion belongs to the article text, even when a
-        // new fact decision invalidates framing judgments made against older evidence.
-        saved = save(report, sources, {coreRowIds: stored.coreRowIds, ratings: {}});
+    if (stored && report.rows.length && stored.version === version && stored.coreBinding === bindCore(report)) {
+      // Core selections bind to the article alone. An obsolete ID or a damaged
+      // citation in one dimension does not invalidate the other selections.
+      const knownIds = new Set(report.rows.map(row => row.id));
+      const core = Array.isArray(stored.coreRowIds) ? [...new Set(stored.coreRowIds.filter(id => knownIds.has(id)))] : [];
+      saved = save(report, sources, {coreRowIds: core, ratings: {}});
+      stale = !Array.isArray(stored.coreRowIds) || core.length !== stored.coreRowIds.length || !object(stored.ratings);
+      if (object(stored.ratings) && Object.keys(stored.ratings).length) {
         if (matches(stored.binding, report)) {
-          saved = save(report, sources, stored);
-          stale = false;
-        } else if (object(stored.ratings) && !Object.keys(stored.ratings).length) {
-          stale = false;
-        }
-      } catch (_) { /* Invalid ratings cannot enter the results; keep only independently valid core IDs. */ }
+          for (const [id, raw] of Object.entries(stored.ratings)) {
+            const dimension = dimensions.find(d => d.id === id);
+            if (!dimension) { stale = true; continue; }
+            try { saved.ratings[id] = ratingFor(dimension, raw, report, sources); }
+            catch (_) { stale = true; }
+          }
+        } else stale = true;
+      }
     }
     return {accuracy: accuracyFor(report, saved?.coreRowIds ?? []), bias: biasFor(saved?.ratings ?? {}), saved, stale};
   }
 
-  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'reason', 'impact', 'direction'];
+  const fields = ['level', 'rowId', 'quote', 'sourceId', 'sourceQuote', 'compareRowId', 'compareQuote', 'compareSourceId', 'compareSourceQuote', 'reason', 'impact', 'direction'];
   function copyFields(raw) {
     return Object.fromEntries(fields.map(key => [key, raw[key] == null ? '' : String(raw[key])]));
   }
-  function restoreDraft(report, sources, raw) {
-    if (!raw || typeof raw !== 'object' || !matches(raw.binding, report) || !raw.entries || typeof raw.entries !== 'object') return null;
+  function priorStandardsDraft(report, sources, rating) {
+    if (!Number.isInteger(rating?.level)) return null;
+    const singleSource = !('compareSourceId' in rating || 'compareSourceQuote' in rating);
+    try {
+      const dim = dimensions.find(d => d.id === 'standards');
+      const checked = ratingFor(dim, rating, report, sources, singleSource);
+      return singleSource ? copyFields(checked) : null;
+    } catch (error) {
+      if (!(error instanceof ComparisonNeedsReview)) return null;
+      return copyFields({...rating, impact:rating.level ? string(rating.impact) : '', direction:rating.level ? string(rating.direction) : ''});
+    }
+  }
+  function restoreDraft(report, sources, raw, saved = null) {
+    const valid = raw && matches(raw.binding, report);
     const entries = {};
     for (const dim of dimensions) {
-      const d = raw.entries[dim.id];
+      const d = object(raw?.entries) && raw.entries[dim.id];
       if (!d || typeof d !== 'object' || fields.some(k => d[k] != null && typeof d[k] !== 'string')) continue;
+      if (!valid && !(dim.id === 'standards' && !d.previous && typeof d.addedSourceBinding === 'string'
+          && matches(d.addedSourceBinding, report))) continue;
       const clean = copyFields(d);
       if (!['', '0', '1', '2', '3', ...(dim.allowNA ? ['na'] : [])].includes(clean.level)) continue;
       if (clean.rowId && !report.rows.some(row => row.id === clean.rowId)) continue;
       if (clean.sourceId && !sources.some(s => s.id === clean.sourceId)) continue;
+      if (clean.compareSourceId && !sources.some(s => s.id === clean.compareSourceId)) continue;
       if (clean.compareRowId && !report.rows.some(row => row.id === clean.compareRowId)) continue;
       if (d.previous) {
         try {
           const checked = save(report, sources, {coreRowIds: [], ratings: {[dim.id]: d.previous}});
           clean.previous = checked.ratings[dim.id];
-        } catch (_) { /* An unvalidated prior entry cannot be restored as a finding. */ }
+        } catch (_) {
+          if (dim.id === 'standards') clean.legacyPrevious = priorStandardsDraft(report, sources, d.previous);
+        }
+      }
+      if (dim.id === 'standards' && d.legacyPrevious && !clean.previous) {
+        const prior = {...d.legacyPrevious, level: Number(d.legacyPrevious.level)};
+        // Earlier one-source drafts serialized these absent fields as empty strings.
+        if (!prior.compareSourceId && !prior.compareSourceQuote) {
+          delete prior.compareSourceId;
+          delete prior.compareSourceQuote;
+        }
+        clean.legacyPrevious = priorStandardsDraft(report, sources, prior);
       }
       entries[dim.id] = clean;
     }
+    if (saved?.version === version && saved.coreBinding === bindCore(report) && matches(saved.binding, report)) {
+      const legacy = priorStandardsDraft(report, sources, saved.ratings?.standards);
+      if (legacy) {
+        if (!entries.standards) entries.standards = {...legacy, legacyPrevious: legacy};
+        else if (!entries.standards.previous) entries.standards.legacyPrevious ??= legacy;
+      }
+    }
     if (!Object.keys(entries).length) return null;
-    return {binding: bind(report), activeId: Object.hasOwn(entries, raw.activeId) ? raw.activeId : '', entries};
+    return {binding: bind(report), activeId: Object.hasOwn(entries, raw?.activeId) ? raw.activeId : '', entries};
   }
 
   const api = Object.freeze({version, severityLabels, dimensions, bind, matches, save, evaluate, draftFields: fields, copyFields, restoreDraft});

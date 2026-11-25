@@ -1,0 +1,99 @@
+{
+  "format": "journal-revision-series-record",
+  "version": 9,
+  "demo": true,
+  "before": {
+    "articleSha256": "6797c9243f4b5ded89c0442d2df51f52226f0198058ff9ac8f94ec97672f1977",
+    "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+  },
+  "after": {
+    "articleSha256": "eb3c72120dcc3701e908564f988c249f426faadfe5f5ecfe6b2f7641259bc4cc",
+    "sourcesSha256": "94a4f603f5db71e041faf96ff76a6df96ea9763d04cc9082776a6f8b93064fa9"
+  },
+  "dimensions": [
+    {
+      "id": "wording",
+      "first": {
+        "before": 2,
+        "after": 0
+      },
+      "second": {
+        "before": 3,
+        "after": 1
+      }
+    },
+    {
+      "id": "framing",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "omission",
+      "first": {
+        "before": 2,
+        "after": null
+      },
+      "second": {
+        "before": 2,
+        "after": 0
+      }
+    },
+    {
+      "id": "standards",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    }
+  ],
+  "facts": {
+    "before": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ],
+    "after": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ]
+  },
+  "factMatches": [],
+  "factContext": {
+    "beforeCore": [
+      0,
+      0
+    ],
+    "afterCore": [
+      0,
+      0,
+      0
+    ],
+    "matches": []
+  },
+  "biasEvidenceSha256": "d85d87fbf720879d1644e799e3ce74e3df90b6b04187bc2e9fbce446aacf57f1"
+}

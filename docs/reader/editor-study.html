@@ -6,8 +6,11 @@
 <link rel="icon" href="data:,">
 <title>편집자 비교 실험 · Journal</title>
 <link rel="stylesheet" href="editor-study.css">
+<link rel="stylesheet" href="editor-study-roster.css">
 <script defer src="editor-study-cases.js"></script>
 <script defer src="editor-study-core.js"></script>
+<script defer src="editor-study-resume.js"></script>
+<script defer src="editor-study-report.js"></script>
 <script defer src="editor-study-ui.js"></script>
 </head>
 <body>
@@ -19,30 +22,76 @@
 <section id="dashboard">
 <div class="headline"><div><h1>팩트체크 효과 측정</h1><p>같은 편집자가 원자료만 읽었을 때와 저널을 함께 썼을 때를 비교합니다.</p></div><a class="button primary" href="#participate">편집자 참여</a></div>
 <div class="tabs" aria-label="집계 대상"><button id="real-view" aria-pressed="true">실제 편집자 기록</button><button id="demo-view" aria-pressed="false">가상 수치 예시</button></div>
+<button id="export-study-report" type="button" disabled>실측 결과표 HTML 저장</button>
 <p id="data-notice" class="notice"></p>
+<div id="demo-options" hidden><label for="demo-example">살펴볼 가상 기록</label><select id="demo-example">
+<option value="complete">8명 · 모든 과제의 시간 기록</option><option value="partial">12명 · 두 과제의 시간 일부 누락</option><option value="agreement">4명 · 격차가 줄고 두 표기가 같은 오답을 고른 사례</option><option value="missing">8명 · 32건 중 한 건 미제출</option>
+<option value="editions">8명 · 빨리 끝냈지만 검증 성공은 줄어든 판본</option>
+<option value="case-verification">4명 · 전체 성공 건수는 같아도 한 기사에서 빨라지며 근거를 놓친 사례</option>
+<option value="unfinished-blocks">12명 · 두 명이 중단하고 열 명이 끝낸 사례</option>
+<option value="cue-reversals">4명 · 격차가 같아도 더 많이 채택한 정당 표기가 바뀐 사례</option>
+<option value="block-cue">8명 · 두 묶음에서 반대 표기만 채택해 전체 격차가 0%p인 사례</option>
+<option value="verdict-source">8명 · 같은 자료를 골라도 정당 표기별로 그 자료를 쓴 판정이 달라진 사례</option>
+<option value="adoptions">4명 · 오승인은 같은데 반박된 주장을 더 많이 채택한 사례</option></select></div>
 <div class="statline" id="counts"></div>
-<div id="metrics" class="metricgrid"></div><p id="quality-warning" class="notice sample" hidden></p>
+<section class="box" id="withdrawal-work" hidden><h2>제출 전에 중단한 과제</h2><p id="withdrawal-counts"></p><div class="scroll" id="withdrawal-table"></div><p class="subtle">시간은 중단한 과제에서 타이머로 확인한 구간의 합계입니다. 실행 중 창이 닫혔다면 확인 가능한 구간만 더합니다. 이 과제는 방식별 평균과 판정 비교에서 제외합니다.</p></section>
+<div id="metrics" class="metricgrid"></div>
+<section class="box" id="individual-time" aria-labelledby="individual-time-title" hidden><h2 id="individual-time-title" tabindex="-1">네 과제를 마친 편집자의 검토 시간 변화</h2>
+<p id="individual-time-sample"></p><p id="individual-time-directions"></p><p id="individual-time-range"></p>
+<p class="subtle">각 편집자가 원자료와 저널로 각각 두 건을 검토하는 데 쓴 시간을 비교했습니다. 시간이 일부 빠진 과제는 확인된 시간의 합을 하한으로 씁니다. 어느 쪽이 더 오래 걸렸는지 알 수 없으면 미확정으로 표시합니다. 기사의 난이도와 표기 배정은 네 명이 모두 마친 묶음에서 균형을 이룹니다.</p></section>
+<section id="edition-results" class="box" aria-labelledby="edition-heading"><h2 id="edition-heading">같은 참여자 자료를 사용한 묶음의 결과</h2>
+<p class="subtle">제출한 과제에 기록된 실제 사용 판본을 기준으로 합니다.</p>
+<p id="edition-coverage"></p><div id="edition-tables"></div><p id="edition-success-note" hidden>검증 성공 1건당 시간에는 실패한 과제에 쓴 시간도 포함합니다. 판정과 대표 근거가 모두 일치하면 성공입니다.</p>
+<details id="edition-blocks" hidden><summary>배정 묶음별 판본 확인</summary><div class="scroll" id="edition-block-table"></div></details></section>
+<section id="assigned-editions" class="box" aria-labelledby="assigned-edition-heading" hidden><h2 id="assigned-edition-heading">사전에 배정한 판본으로 마친 묶음</h2>
+<p id="assigned-edition-summary"></p><div id="assigned-edition-results"></div>
+<details id="assigned-gap" hidden><summary>예정 판본에서 확인하지 못한 답이 정당 표기 격차를 얼마나 바꿀 수 있나</summary>
+<p>처음부터 같은 판본을 배정한 네 명의 답을 대상으로 합니다. 지정한 판본에서 받은 답을 고정하고, 미제출·다른 판본·판본 미확인 회차에서 사실을 채택하거나 채택하지 않을 때 가능한 격차 감소폭을 계산합니다. 양수는 격차 감소, 음수는 증가입니다.</p><div id="assigned-gap-rows"></div></details>
+<details><summary>배정 번호별 판본과 제출 회차 확인</summary><div id="assigned-edition-blocks"></div></details></section>
+<section class="box" aria-labelledby="missing-answer-heading"><h2 id="missing-answer-heading">미제출 답에 따른 정당 표기 격차의 변화 범위</h2>
+<p id="missing-answer-sample"></p><p id="missing-answer-range"></p>
+<p class="subtle">제출한 판정은 그대로 두고, 남은 각 과제에서 사실을 채택하거나 채택하지 않았을 때 가능한 격차 감소폭의 양 끝을 계산합니다. 원자료 방식의 격차에서 저널 방식의 격차를 뺀 값입니다. 이 범위는 해당 배정에 가능한 답을 비교한 것으로, 모집단의 신뢰구간은 별도 분석이 필요합니다.</p></section>
+<section class="box" id="timing-coverage" hidden><h2>시간이 일부만 기록된 묶음까지 포함한 결과</h2>
+<p id="timing-coverage-summary"></p><p id="timing-coverage-range"></p>
+<p class="subtle">네 명 모두 답안을 제출한 묶음에서 편집자마다 방식별 두 과제의 합계를 비교합니다. 타이머가 중단된 과제도 기록된 구간이 상대 방식의 전체 시간보다 길면 어느 쪽이 더 오래 걸렸는지 알 수 있습니다. 빠진 시간이 얼마나 긴지는 알 수 없어 절감률 계산에는 기존의 완전한 시간 기록만 씁니다.</p></section>
+<section class="box" aria-labelledby="timed-quality-title"><h2 id="timed-quality-title">검증 결과별 시간과 성공 1건당 총투입 시간</h2>
+<p id="timed-quality-sample"></p><p id="timed-quality-warning" class="notice sample" hidden></p>
+<p id="same-adoption-sample" hidden>이 편집자들의 <a href="#fact-adoptions-title">사실 채택과 원자료 일치율</a>을 확인할 수 있습니다.</p>
+<div class="scroll" id="timed-quality-table" role="region" aria-label="방식별 시간과 판정 품질 비교표" tabindex="0"></div><p class="subtle">결과별 평균은 해당 방식에서 성공하거나 실패한 제출 과제 한 건씩에 같은 비중을 줍니다. 방식에 따라 각 결과에 포함된 기사와 편집자가 다를 수 있습니다.</p><p id="timed-quality-change" hidden></p><p id="timed-quality-editors" hidden></p>
+<h3 id="case-verification-title" tabindex="-1">기사별 검토 시간과 검증 성공</h3><div id="case-verification"></div>
+</section>
 <section class="box"><h2>제공된 원자료 검토 시간</h2><p id="phase-counts"></p><div class="scroll" id="phase-table"></div>
 <details id="phase-pairs"><summary>편집자별 단계 시간</summary><div class="scroll" id="phase-pair-table"></div></details>
 <p class="subtle">원자료를 처음 찾아 확보하는 시간은 <a href="field-review.html">실제 기사 검토</a>에서 따로 잽니다.</p></section>
-<section class="box"><h2>판정 품질</h2><p>속도와 함께 기준 판정 일치율, 미확인·반증·의견을 사실로 채택한 비율, 근거 선택을 확인하세요.</p><div class="scroll" id="quality"></div></section>
-<details class="box"><summary>사례별 사실 채택 수와 정당 단서</summary><p>사실로 채택한 응답 수 / 해당 조건의 전체 응답 수입니다. 가상 정당의 성향 표지만 바꾸고 기사 내용과 근거는 동일하게 맞췄습니다.</p><div class="scroll" id="cells"></div></details>
+<section class="box"><h2>완료한 편집자 묶음 전체의 판정 품질</h2><p>답안을 모두 제출한 묶음은 시간이 일부 빠졌어도 여기에 포함합니다.</p><p id="quality-warning" class="notice sample" hidden></p><div class="scroll" id="quality"></div>
+<h3 id="fact-adoptions-title" tabindex="-1">사실 채택과 원자료 일치율</h3>
+<p>첫 두 행은 편집자가 사실로 채택한 응답을 분모로 씁니다. 아래 두 행은 기준 판정이 각각 ‘반박’인 과제와 ‘근거 불충분’인 과제에서 사실로 채택한 비율입니다.</p>
+<div class="scroll" id="adoption-quality" role="region" aria-labelledby="fact-adoptions-title" tabindex="0"></div>
+<h3>가상 기사에 붙인 성향 표기별 결과</h3><p>근거 없는 사실 채택률은 기준 판정이 ‘근거로 지지됨’ 이외인 과제에서 계산합니다. 나머지 비율의 분모는 해당 표기와 방식으로 완료한 분석 대상 과제 수입니다.</p><div class="scroll" id="quality-by-variant"></div></section>
+<section class="box" id="case-quality" aria-labelledby="case-quality-heading" hidden><h2 id="case-quality-heading">기사별 정당 표기 격차와 검증 정확도</h2><p id="cue-direction-summary" tabindex="-1"></p><p id="block-cue-summary" tabindex="-1"></p><p id="verdict-source-summary" tabindex="-1"></p><p>각 모의 기사의 두 표기를 서로 다른 편집자에게 배정합니다. 기사를 펼치면 실제로 고른 판정과 실험의 기준 자료를 대조할 수 있습니다. 각 칸의 분모는 해당 방식과 표기로 기사를 검토한 응답 수입니다.</p><p>판정·근거 조합 격차는 두 표기의 응답에서 각 조합의 비율 차이를 절댓값으로 더한 뒤 절반을 취한 값입니다. 근거를 고르지 않은 응답도 포함합니다. 조합별 비율이 모두 같으면 0%p, 겹치는 조합이 없으면 100%p입니다.</p><div id="case-quality-list"></div></section>
+<details class="box"><summary>정당 표기별 판정 분포와 사례별 응답 수</summary><p id="distribution-gap"></p><p>같은 기사와 근거를 본 두 집단의 응답을 비교합니다. 사례별로 네 판정의 응답률 차이를 절댓값으로 더한 뒤 절반을 취해 평균냅니다. 두 집단의 분포가 같으면 0%p, 어느 판정도 겹치지 않으면 100%p입니다. 표의 각 칸은 해당 판정 건수 / 전체 응답 수입니다.</p><div class="scroll" id="cells"></div></details>
 <details class="box"><summary>분석에 포함된 배정 묶음</summary><p>연구자가 미리 배정한 연속 4명을 한 묶음으로 봅니다. 네 참여자가 모두 네 사례를 끝내야 비교합니다.</p><div class="scroll" id="blocks"></div></details>
 <details class="box"><summary>지표 계산과 해석</summary><p>시간은 편집자마다 각 방식에서 2건의 평균을 구한 뒤 참여자에게 같은 가중치를 주어 평균냅니다. 절감률은 두 방식의 평균 시간 차이를 원자료 방식의 평균으로 나눈 값입니다.</p><p>정당 단서 차이는 사례별로 보수·진보 성향 표지 간 사실 채택률 차이의 절댓값을 구한 뒤 네 사례를 평균냅니다. 절대 감소는 %p, 상대 감소는 원자료 방식의 차이를 분모로 한 %입니다. 원자료 방식의 차이가 0이면 상대 감소를 계산할 수 없습니다.</p><p>각 사례·방식·표기당 1명이면 한 사람의 판단만 달라도 격차가 크게 바뀝니다. 소수 편집자가 답한 가상 사례의 집계에는 우연한 응답 차이도 반영됩니다. 일반 기사에서의 정치적 편향이나 개인의 성향을 이 수치로 판단할 수 없습니다.</p></details>
 <section class="box" id="manage-records"><h2>실제 기록 모으기</h2><p>한 기기에서는 등록할 때 빈자리에 무작위로 배정합니다. 여러 기기에서 진행할 때는 연구자 한 명이 아래에서 초대 코드를 발급해 표시 순서대로 한 사람에게 하나씩 전달하세요. 편집자가 내려받은 JSON 파일을 여러 개 선택해 합칠 수 있습니다. 같은 기록을 다시 가져오면 한 번만 셉니다.</p>
-<details class="invite"><summary>다른 기기에서 참여할 초대 코드</summary><p>같은 연구용 폴더를 각 기기에서 열고 코드를 입력합니다. 초대 코드는 발급만으로 참여자 수에 들어가지 않습니다.</p><button type="button" id="issue-codes">배정 묶음 발급</button><div id="invites" class="scroll"></div></details><details class="invite"><summary>기존 배정 코드로 명부 복원</summary><form id="recover-roster"><p>원래 명부 파일이 없을 때는 모집 당시 따로 보관한 배정 코드나 참여자에게 다시 확인한 코드를 입력하세요.</p><label>확인한 초대 코드<input id="roster-code" type="text" required maxlength="60" autocomplete="off"></label><button type="submit">배정 확인</button></form></details><div class="actions"><a class="button" href="#participate" id="participant-link">참여 화면</a><button id="import-trigger" type="button">참여 기록 가져오기</button><input hidden type="file" id="import-files" accept=".json,application/json" multiple><button id="export-all" type="button">모은 기록 내려받기</button></div><p id="import-status" class="status" role="status"></p></section>
+<details class="invite"><summary>다른 기기에서 참여할 초대 코드</summary>
+<p id="invite-help">배정 묶음을 발급하고 표시된 순서대로 각 사람에게 개인 참여 안내와 해당 행의 자료를 보내세요. 안내에는 그 사람의 코드와 과제 진행·회신 방법이 들어 있습니다. 초대만 받은 사람은 등록 인원에 포함되지 않습니다.</p>
+<button type="button" id="issue-codes">배정 묶음 발급</button>
+<p id="invite-common" hidden><a id="invite-common-download" download>이번 판본의 공통 참여자 ZIP 내려받기</a><br>‘이번 판본’으로 표시된 사람에게는 한 번 받은 파일을 함께 보내세요.</p>
+<div id="invites" class="scroll" tabindex="0" role="region" aria-label="발급한 초대 코드와 참여자 자료"></div>
+<div id="invite-manual" hidden><label for="invite-manual-text" id="invite-manual-label">수동으로 복사할 개인 참여 안내</label><textarea id="invite-manual-text" rows="5" readonly></textarea></div>
+</details><details class="invite"><summary>기존 배정 코드로 명부 복원</summary><form id="recover-roster"><p>원래 명부 파일이 없을 때는 모집 당시 따로 보관한 배정 코드나 참여자에게 다시 확인한 코드를 입력하세요.</p><label>확인한 초대 코드<input id="roster-code" type="text" required maxlength="110" autocomplete="off"></label><button type="submit">배정 확인</button></form></details><div class="actions"><a class="button" href="#participate" id="participant-link">참여 화면</a><button id="import-trigger" type="button">참여 기록 가져오기</button><input hidden type="file" id="import-files" accept=".json,application/json" multiple><button id="export-all" type="button">모은 기록 내려받기</button><button id="export-summary" type="button" aria-describedby="export-summary-help">공유용 실측 요약 저장</button></div><p id="export-summary-help" class="subtle">공유용 JSON에는 인원·과제 수와 전체·판본별 결과만 담습니다. ‘모은 기록 내려받기’는 명부·초대 코드와 개인별 답변을 포함한 진행자용 백업입니다. 완성된 묶음이 없으면 효과 지표는 미측정으로 남습니다.</p><p id="import-status" class="status" role="status"></p></section>
 </section>
 
 <section id="participant" hidden>
 <div class="headline"><div><h1>편집자 검토 과제</h1><p>가상 기사 4건을 검토합니다. 각 기사의 판단과 대표 근거 하나를 기록하세요.</p></div></div>
 <section id="enroll-box" class="box"><h2>참여 등록</h2><p>공용 기기에서는 등록하면 자동 배정됩니다. 다른 기기로 참여하는 경우 연구자에게 받은 초대 코드를 입력하세요. 이름과 연락처는 수집하지 않습니다. 결과는 이 브라우저에 저장되며 JSON으로 내려받아 직접 전달할 수 있습니다.</p><form id="enroll">
-<label>연구자에게 받은 초대 코드 (공용 기기는 비움)<input id="invite-code" type="text" maxlength="60" autocomplete="off" autocapitalize="characters" placeholder="연구자에게 받은 코드"></label>
-<label class="check"><input type="checkbox" id="qualified" required>기사의 편집·사실 검증을 실제로 수행하는 편집자로서, 이 실험 사례와 기준 답을 사전에 보지 않았고 기록에 동의합니다.</label>
+<label>연구자에게 받은 초대 코드 (공용 기기는 비움)<input id="invite-code" type="text" maxlength="110" autocomplete="off" autocapitalize="characters" placeholder="연구자에게 받은 코드"></label>
+<label class="check"><input type="checkbox" id="qualified" required>기사의 편집·사실 검증을 실제로 수행하는 편집자로서, 처음 참여하기 전에 이 실험 사례와 기준 답을 보지 않았고 기록에 동의합니다.</label>
 <div class="actions"><button class="primary" type="submit">참여 등록</button></div><p id="enroll-status" class="status" role="status"></p></form></section>
 <section id="run" class="box" hidden><div class="runbar"><h2 id="trial-heading" tabindex="-1"></h2><div id="timer" aria-label="경과 시간">00:00</div></div><p id="trial-info" class="subtle"></p>
-<div id="start-pane"><p>시작하면 기사와 원자료가 열리고 자료 선택 시간을 잽니다. 문서 안에서 근거를 찾거나 판단을 작성할 때는 해당 단계 버튼을 누르세요. 앞 단계로 돌아갈 수 있습니다.</p><button id="begin-trial" class="primary">과제 시작</button></div>
-<div id="recovery" class="notice" hidden><strong>진행 중이던 과제가 다시 열렸습니다.</strong><p>창을 닫은 동안의 시간은 자동으로 분리할 수 없습니다. 쉬지 않고 검토를 이어갔다면 그 시간을 포함해 계속하세요. 중단이 있었다면 이번 참여를 미완료로 보관합니다.</p><div class="actions"><button id="resume-unbroken">쉬지 않고 검토를 이어갔습니다</button><button id="stop-interrupted">중단 기록하고 종료</button></div></div>
-<div id="pause-pane" class="notice" hidden><p>휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.</p><button id="resume-trial" class="primary">검토 계속하기</button></div>
+<div id="start-pane"><p>시작하면 기사와 원자료가 열리고 자료 선택 시간을 잽니다. 문서 안에서 근거를 찾거나 판단을 작성할 때는 해당 단계 버튼을 누르세요. 앞 단계로 돌아갈 수 있습니다. 다른 탭으로 이동하거나 창을 최소화하면 측정을 멈춥니다. 돌아와서 ‘검토 계속하기’를 누르세요.</p><p id="partial-start" class="notice" hidden>이전 참여 기록에 이 과제를 시작한 시각이 없습니다. 지금부터 잰 시간만 보관하며 이 과제의 전체 시간은 산출하지 않습니다.</p><button id="begin-trial" class="primary">과제 시작</button></div>
+<div id="recovery" class="notice" hidden><strong>진행 중이던 과제가 다시 열렸습니다.</strong><p>창을 닫은 사이에 쉬었거나 얼마나 검토했는지 기억나지 않으면 시간을 제외하고 계속하세요. 답과 근거는 제출할 수 있습니다. 쉬지 않고 검토했다면 그 구간을 전체 시간에 포함할 수 있습니다.</p><div class="actions"><button id="resume-partial">시간 제외 후 계속</button><button id="resume-unbroken">쉬지 않고 검토를 이어갔습니다</button><button id="stop-interrupted">중단 기록하고 종료</button></div></div>
+<div id="pause-pane" class="notice" hidden><p id="pause-note">휴식 중입니다. 자료를 다시 볼 때부터 시간을 잽니다.</p><button id="resume-trial" class="primary">검토 계속하기</button></div>
 <div id="task-pane" hidden><div id="phase-clock"><div class="phase-controls" role="group" aria-label="지금 하는 작업">
 <strong>지금 하는 작업</strong><button type="button" data-phase="select" aria-pressed="false">자료 선택</button><button type="button" data-phase="locate" aria-pressed="false">근거 위치 확인</button><button type="button" data-phase="decide" aria-pressed="false">판정 기록</button><button id="pause-trial" type="button">잠시 멈추기</button></div></div>
 <p id="phase-note" class="subtle"></p>
@@ -52,6 +101,11 @@
 <label>판단에 사용한 대표 근거<select id="source" required></select></label>
 <label>판단 이유<textarea id="reason" rows="2" required maxlength="4000" placeholder="어떤 근거로 판단했는지 간략히 적으세요."></textarea></label><label class="check"><input type="checkbox" id="phase-omit">단계 전환을 놓쳐 이 과제의 총시간만 사용합니다.</label><div class="actions"><button class="primary" type="submit">이 과제 제출</button></div><p id="answer-status" class="status" role="status"></p></form></div>
 </section>
+<section id="transfer-pane" class="box" hidden><h2>다른 기기에서 이어하기</h2>
+<p>이어하기 파일에는 제출한 응답과 현재 과제의 최종 답안 초안이 담깁니다. 저널 안에서 작성 중인 판단은 먼저 기록하세요. 전체 시간을 이어서 재려면 ‘잠시 멈추기’를 누른 뒤 저장하세요.</p>
+<button type="button" id="export-resume">내 이어하기 파일 저장</button>
+<div id="open-resume" hidden><label for="resume-file">본인의 이어하기 파일 또는 이전 참여 기록 열기</label><input id="resume-file" type="file" accept=".json,application/json" aria-describedby="transfer-status"></div>
+<p id="transfer-status" role="status" class="status"></p></section>
 <section id="session-actions" class="actions" hidden><button id="export-one">내 참여 기록 내려받기</button><button id="withdraw">참여 중단</button></section>
 <section id="ended" class="box" hidden><h2 id="ended-heading" tabindex="-1"></h2><p id="ended-text"></p><div id="personal-time" hidden></div><div class="actions"><button id="export-finished" class="primary">내 참여 기록 내려받기</button><button id="leave-session">다음 참여자 등록 화면으로</button></div></section>
 <p id="session-status" class="status" role="status"></p>

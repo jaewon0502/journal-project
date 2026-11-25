@@ -1,0 +1,104 @@
+{
+  "format": "journal-revision-series-record",
+  "version": 9,
+  "demo": true,
+  "before": {
+    "articleSha256": "09d1f10b43ae833c2a4f67cca8cf08cdef70806a9cd3e736db025ea9c127513d",
+    "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+  },
+  "after": {
+    "articleSha256": "3b6e0c32026fd3b0e45497f45f173da4824e1b2804b29b1ebc720bb829dfb2b8",
+    "sourcesSha256": "38817d840ebc22c33485eeff0ac5123c2caf0c6f94ab4e3c9fa44c62e9a39071"
+  },
+  "dimensions": [
+    {
+      "id": "wording",
+      "first": {
+        "before": 2,
+        "after": 0
+      },
+      "second": {
+        "before": 2,
+        "after": 0
+      }
+    },
+    {
+      "id": "framing",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "omission",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    },
+    {
+      "id": "standards",
+      "first": {
+        "before": null,
+        "after": null
+      },
+      "second": {
+        "before": null,
+        "after": null
+      }
+    }
+  ],
+  "facts": {
+    "before": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ],
+    "after": [
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      },
+      {
+        "outcome": "pending",
+        "flag": "none"
+      }
+    ]
+  },
+  "factMatches": [],
+  "factContext": {
+    "beforeCore": [
+      0,
+      0,
+      0
+    ],
+    "afterCore": [
+      0,
+      0,
+      0
+    ],
+    "matches": []
+  },
+  "biasEvidenceSha256": "04633ecc5e30a826412dc91650f2e42e00ad87f80e0ba8e4995c4545e2c090e7"
+}

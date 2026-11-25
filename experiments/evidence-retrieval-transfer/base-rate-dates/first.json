@@ -1,0 +1,55 @@
+{
+  "positive": 4,
+  "first": 2,
+  "topThree": 3,
+  "results": [
+    {
+      "id": "bok-january-decision",
+      "expectedLine": 9,
+      "candidates": [
+        9,
+        8,
+        1
+      ],
+      "rank": 1
+    },
+    {
+      "id": "bok-april-correction",
+      "expectedLine": 8,
+      "candidates": [
+        8,
+        9,
+        1
+      ],
+      "rank": 1
+    },
+    {
+      "id": "bok-reverse-lookup",
+      "expectedLine": 6,
+      "candidates": [
+        1
+      ],
+      "rank": null
+    },
+    {
+      "id": "bok-november-date",
+      "expectedLine": 10,
+      "candidates": [
+        3,
+        10,
+        11
+      ],
+      "rank": 2
+    },
+    {
+      "id": "bok-outside-excerpt",
+      "expectedLine": null,
+      "candidates": [
+        12,
+        1
+      ],
+      "coverageNotice": null,
+      "state": "ordinary"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+.invitation-code {
+  display: inline-block;
+  max-width: min(30ch, 55vw);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+#assigned-edition-blocks td:nth-child(2),
+#assigned-edition-blocks td:last-child {
+  min-width: 10ch;
+  max-width: 32ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,49 @@
+{
+  "positive": 4,
+  "first": 4,
+  "topThree": 4,
+  "results": [
+    {
+      "id": "road-01",
+      "expectedLine": 3,
+      "candidates": [
+        3
+      ],
+      "rank": 1
+    },
+    {
+      "id": "road-02",
+      "expectedLine": 6,
+      "candidates": [
+        6
+      ],
+      "rank": 1
+    },
+    {
+      "id": "road-03",
+      "expectedLine": 5,
+      "candidates": [
+        5,
+        1,
+        4
+      ],
+      "rank": 1
+    },
+    {
+      "id": "road-04",
+      "expectedLine": 2,
+      "candidates": [
+        2,
+        1
+      ],
+      "rank": 1
+    },
+    {
+      "id": "road-05",
+      "expectedLine": null,
+      "candidates": [],
+      "coverageNotice": null,
+      "state": "ordinary"
+    }
+  ]
+}

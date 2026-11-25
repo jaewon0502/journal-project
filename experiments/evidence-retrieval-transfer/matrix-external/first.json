@@ -1,0 +1,232 @@
+{
+  "source": {
+    "title": "<표 16> 지역별 1관당 방문자 수",
+    "url": "https://www.mcst.go.kr/site/s_notice/press/pressView.jsp?pSeq=21279",
+    "locator": "보도자료 본문 PDF, 붙임 「2024년 전국 공공도서관 통계조사 주요 결과」 11쪽 표 16",
+    "unit": "명"
+  },
+  "fixtureSha256": "9f8a5b2f4695d0831777d8f1ad947ea2023298e1488d5c9544b4b56b99ec6d30",
+  "readerSha256": "03240f71e1f5ac9f8fa58840a79674105ad017e5f00a9d1ff0321d66c74b5d51",
+  "node": "v24.22.3",
+  "totals": {
+    "answerable": 4,
+    "controls": 2,
+    "first": 4,
+    "top3": 4,
+    "autoExact": 0,
+    "anyWrong": 0,
+    "specificOnControls": 0,
+    "withheldAnswerable": 4,
+    "manualExactWhenWithheld": 0
+  },
+  "cases": [
+    {
+      "id": "P01",
+      "query": "2023년 제주에서는 공공도서관 한 곳을 평균 몇 명이 찾았나요?",
+      "expected": {
+        "row": 20,
+        "col": 6,
+        "value": "90,101"
+      },
+      "header": 3,
+      "status": "확인할 원문 후보 2개",
+      "cards": [
+        {
+          "row": 20,
+          "excerpt": "제주\t151,907\t41,820\t69,434\t76,891\t90,101",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 3,
+          "excerpt": "구 분\t2019\t2020\t2021\t2022\t2023",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": true,
+      "top3": true,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    },
+    {
+      "id": "P02",
+      "query": "세종 공공도서관의 2021년 방문자 수를 기사에 넣으려고 합니다. 한 곳당 몇 명이었나요?",
+      "expected": {
+        "row": 11,
+        "col": 4,
+        "value": "56,788"
+      },
+      "header": 3,
+      "status": "확인할 원문 후보 3개",
+      "cards": [
+        {
+          "row": 11,
+          "excerpt": "세종\t122,820\t40,958\t56,788\t91,224\t85,250",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 1,
+          "excerpt": "<표 16> 지역별 1관당 방문자 수",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 3,
+          "excerpt": "구 분\t2019\t2020\t2021\t2022\t2023",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": true,
+      "top3": true,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    },
+    {
+      "id": "P03",
+      "query": "초고에 2022년 충북의 공공도서관 한 곳당 방문자가 77,092명이라고 썼는데, 표에 나온 충북 수치는 몇 명인가요?",
+      "expected": {
+        "row": 14,
+        "col": 5,
+        "value": "57,862"
+      },
+      "header": 3,
+      "status": "확인할 원문 후보 3개",
+      "cards": [
+        {
+          "row": 14,
+          "excerpt": "충북\t154,139\t38,047\t44,574\t57,862\t64,950",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 15,
+          "excerpt": "충남\t158,932\t46,570\t70,507\t77,092\t99,149",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 1,
+          "excerpt": "<표 16> 지역별 1관당 방문자 수",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": true,
+      "top3": true,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    },
+    {
+      "id": "P04",
+      "query": "코로나19 첫해인 2020년, 전국 공공도서관 한 곳을 찾은 사람은 평균 몇 명이었나요?",
+      "expected": {
+        "row": 21,
+        "col": 3,
+        "value": "76,431"
+      },
+      "header": 3,
+      "status": "확인할 원문 후보 2개",
+      "cards": [
+        {
+          "row": 21,
+          "excerpt": "전국\t250,804\t76,431\t115,016\t142,160\t159,137",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 3,
+          "excerpt": "구 분\t2019\t2020\t2021\t2022\t2023",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": true,
+      "top3": true,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    },
+    {
+      "id": "P05",
+      "query": "2023년 제주 공공도서관 한 곳을 찾은 방문자 중 초등학생은 평균 몇 명이었나요?",
+      "expected": null,
+      "header": 3,
+      "status": "확인할 원문 후보 3개",
+      "cards": [
+        {
+          "row": 20,
+          "excerpt": "제주\t151,907\t41,820\t69,434\t76,891\t90,101",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 1,
+          "excerpt": "<표 16> 지역별 1관당 방문자 수",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 3,
+          "excerpt": "구 분\t2019\t2020\t2021\t2022\t2023",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": null,
+      "top3": null,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    },
+    {
+      "id": "P06",
+      "query": "2018년 세종의 공공도서관 한 곳당 방문자는 몇 명이었나요?",
+      "expected": null,
+      "header": 3,
+      "status": "확인할 원문 후보 2개",
+      "cards": [
+        {
+          "row": 11,
+          "excerpt": "세종\t122,820\t40,958\t56,788\t91,224\t85,250",
+          "folded": false,
+          "cues": []
+        },
+        {
+          "row": 1,
+          "excerpt": "<표 16> 지역별 1관당 방문자 수",
+          "folded": false,
+          "cues": []
+        }
+      ],
+      "first": null,
+      "top3": null,
+      "autoExact": false,
+      "anyWrong": false,
+      "abstained": true,
+      "manual": {
+        "available": false
+      }
+    }
+  ]
+}

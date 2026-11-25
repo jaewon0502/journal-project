@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "unit": "seconds",
+  "difference": "journalMinusManualSeconds",
+  "default": "synthetic-grades-slow-pass.json",
+  "scenarios": {
+    "synthetic-grades-slow-pass.json": {
+      "all": {"editors": 4, "manualMeanSeconds": 100, "journalMeanSeconds": 70, "journalMinusManualSeconds": -30},
+      "bothPassed": {"editors": 2, "manualMeanSeconds": 100, "journalMeanSeconds": 120, "journalMinusManualSeconds": 20}
+    },
+    "synthetic-grades-fast-pass.json": {
+      "all": {"editors": 4, "manualMeanSeconds": 100, "journalMeanSeconds": 70, "journalMinusManualSeconds": -30},
+      "bothPassed": {"editors": 2, "manualMeanSeconds": 100, "journalMeanSeconds": 20, "journalMinusManualSeconds": -80}
+    }
+  }
+}
