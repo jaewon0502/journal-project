@@ -530,17 +530,21 @@
 
   // A detached publisher/audience tag is not a search term for an independent
   // factual subject. Keep it when the wording could ask about the outlet itself.
+  function independentSubject(body) {
+    if (body.startsWith('[') || !/(?:^|\s)[\p{L}\d]+\s+[\p{L}\d]+[은는이가](?=\s|[?,.])/u.test(body)) return false;
+    const publication = /신문|언론|매체|기사|보도|사설|표제|제목|제호|이름|지면|기자|필자|편집|독자|구독|발행|발간|창간|매출|영업이익|순이익/u;
+    const attribution = /인용|발언|논평|주장|발표|반박|게재|밝[히힌혔]|전했|말했|말한|썼|(?:찬성|반대|지지|선호|응답|평가|비판|지적|강조|설명)(?:했|한|하나|하는)/u;
+    return !/["'“”‘’「」『』]/u.test(body) && !publication.test(body) && !attribution.test(body);
+  }
+
   function passageQuery(raw) {
     const tag = /^\s*\[(?:(?:발행처|매체)\s*[:：]\s*)?(?:보수|중도|진보)\s*성향\s*(?:신문|매체|일간지|주간지|독자용)\][ \t]+/u;
     const body = raw.replace(tag, '');
-    if (body === raw || body.startsWith('[') || !/(?:^|\s)[\p{L}\d]+\s+[\p{L}\d]+[은는이가](?=\s|[?,.])/u.test(body)) return raw;
-    const publication = /신문|언론|매체|기사|보도|사설|표제|제목|제호|이름|지면|기자|필자|편집|독자|구독|발행|발간|창간|매출|영업이익|순이익/u;
-    const attribution = /인용|발언|논평|주장|발표|반박|게재|밝[히힌혔]|전했|말했|말한|썼|(?:찬성|반대|지지|선호|응답|평가|비판|지적|강조|설명)(?:했|한|하나|하는)/u;
-    return /["'“”‘’「」『』]/u.test(body) || publication.test(body) || attribution.test(body) ? raw : body;
+    return body !== raw && independentSubject(body) ? body : raw;
   }
 
   function find(documentText, rawQuery, {includeContext = false, matrixCell = null, matrixNavigation = null,
-      fiscalTargets = null, industryContext = '', passageFilter = null} = {}) {
+      fiscalTargets = null, industryContext = '', passageFilter = null, requireAnyTerm = null} = {}) {
     const periods = typeof module !== 'undefined' && module.exports ? require('./evidence-period.js') : root.JournalEvidencePeriod;
     const query = passageQuery(rawQuery);
     const wanted = [...terms(query)];
@@ -594,6 +598,7 @@
     const scored = [];
     for (const row of rows) {
       if (passageFilter && !passageFilter(row.text)) continue;
+      if (requireAnyTerm && !row.keys.some(key => requireAnyTerm.has(key))) continue;
       const metricMatched = row.table?.metricTerms && [...row.table.metricTerms].some(field =>
         namedMetrics.some(key => key === field || (field.length >= 2 && key.endsWith(field))));
       const dateAndMetric = Boolean(asked && metricMatched && periods.matchesTablePeriod(asked, row.text));
@@ -665,7 +670,60 @@
     });
   }
 
-  const api = {find, tableAmbiguities, passageQuery, sourceRows};
+  const phraseStop = new Set('a an the and or as at by for from in into of on to with about that this these those it its their there is are was were be been being has have had do does did will would could can may might should he her his she they them my our who which when where how why according said says reported'.split(' '));
+
+  function phraseWithoutPublisherTag(articleQuery, phrase) {
+    const articleBody = passageQuery(articleQuery);
+    if (!independentSubject(articleBody)) return phrase;
+    const korean = passageQuery(phrase);
+    if (korean !== phrase) return korean;
+    // A bare translated tag is metadata only when the article carries a
+    // detachable tag as well. Never erase a party, speaker or outlet name.
+    const tag = /^\[(?:(publisher|outlet|source|audience)\s*[:：]\s*)?(?:conservative|centrist|liberal|progressive|(?:left|right)[- ]leaning)\s+(?:newspaper|news outlet|outlet|daily|weekly|audience)\][ \t]+/iu.exec(phrase);
+    if (!tag || (!tag[1] && articleBody === articleQuery)) return phrase;
+    const body = phrase.slice(tag[0].length);
+    if (!/^[A-Za-z\d]/u.test(body) || /[[\]"'“”‘’]/u.test(body)) return phrase;
+    const outletOrStatement = /\b(?:newspapers?|editors?|editorials?|headlines?|subscribers?|circulation|readership|publications?|outlets?|journalists?|revenue|profits?|according|quotes?|quoted|claim(?:s|ed)?|say(?:s)?|said|reports?|reported|wrote|writes?|den(?:y|ies|ied)|endors(?:e|es|ed)|support(?:s|ed)?|oppos(?:e|es|ed))\b/iu;
+    return outletOrStatement.test(body) ? phrase : body;
+  }
+
+  // Keep the article search intact. A phrase supplied by the reader only opens
+  // more places to inspect; a word match does not settle a claim or a quotation.
+  function withSourcePhrase(documentText, articleQuery, sourcePhrase, lookup) {
+    const phrase = sourcePhrase.trim();
+    if (!phrase || phrase === articleQuery.trim()) return lookup;
+    const plainFields = ['paragraph', 'text', 'matched', 'context'];
+    if (lookup.state !== 'ordinary' || lookup.gap || lookup.notice || lookup.yearMatrix ||
+        lookup.transcript || lookup.fiscalTable || lookup.householdScope || lookup.wageBasis || lookup.labourScope ||
+        lookup.passages.some(p => Object.keys(p).some(key => !plainFields.includes(key)))) {
+      return {...lookup, phraseSearch:'structured'};
+    }
+    const body = phraseWithoutPublisherTag(articleQuery, phrase);
+    const labelOmitted = body !== phrase ? {phraseLabelOmitted:true} : {};
+    const words = [...terms(body).keys()].filter(word => !phraseStop.has(word));
+    const topics = new Set(words.filter(word => /\p{L}/u.test(word) && !/^[-\d]/u.test(word) && !/^(?:not|no|never)$/u.test(word)));
+    if (!topics.size) return {...lookup, ...labelOmitted, phraseSearch:'no-match'};
+    // A year or a common connecting word alone cannot add a second candidate.
+    const hits = find(documentText, words.join(' '), {includeContext:true, requireAnyTerm:topics});
+    if (!hits.length) return {...lookup, ...labelOmitted, phraseSearch:'no-match'};
+    const original = new Map(lookup.passages.map(p => [p.paragraph, p]));
+    const extra = new Map(hits.map(p => [p.paragraph, p]));
+    const selected = new Map();
+    for (let i = 0; i < Math.max(hits.length, lookup.passages.length); i++) {
+      for (const p of [hits[i], lookup.passages[i]]) {
+        if (!p || selected.has(p.paragraph)) continue;
+        const a = original.get(p.paragraph), b = extra.get(p.paragraph);
+        // Preserve the quoted line and surrounding source text even when a hint
+        // includes an inaccurate translation or names the opposite side.
+        const hit = a || {paragraph:b.paragraph, text:b.text, matched:b.matched, context:b.context};
+        const matched = a && b ? [...new Set([...a.matched, ...b.matched])] : hit.matched;
+        selected.set(p.paragraph, {...hit, matched, phraseMatch:a ? (b ? 'both' : 'article') : 'phrase'});
+      }
+    }
+    return {...lookup, ...labelOmitted, passages:[...selected.values()], phraseSearch:'matched'};
+  }
+
+  const api = {find, tableAmbiguities, passageQuery, sourceRows, withSourcePhrase};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.JournalEvidenceFinder = api;
 })(globalThis);
