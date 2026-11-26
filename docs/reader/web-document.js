@@ -22,6 +22,42 @@
     } catch { return ''; }
   }
 
+  function articleSchema(fragment, url) {
+    if (!url) return [];
+    const page = url.split('#')[0];
+    const matched = [];
+    for (const script of fragment.querySelectorAll('script[type="application/ld+json" i]')) {
+      let data;
+      try { data = JSON.parse(script.textContent); } catch { continue; }
+      for (const rootNode of [].concat(data)) {
+        for (const item of [rootNode, ...([].concat(rootNode?.['@graph'] || []))]) {
+          if (!item || ![].concat(item['@type']).some(type =>
+            ['Article', 'NewsArticle', 'ReportageNewsArticle', 'AnalysisNewsArticle', 'BlogPosting', 'ScholarlyArticle'].includes(type))) continue;
+          const identity = item.mainEntityOfPage;
+          const pageId = typeof identity === 'string' ? identity : identity?.['@id'];
+          const explicit = [pageId, item.url].filter(Boolean);
+          if (!explicit.length && item['@id']) explicit.push(item['@id']);
+          if (explicit.length && explicit.every(value => typeof value === 'string' && webUrl(value).split('#')[0] === page)) matched.push(item);
+        }
+      }
+    }
+    return matched;
+  }
+
+  function consistentDate(tags) {
+    if (!tags.length) return {value:'', uncertain:false};
+    const dates = tags.map(value => value.replace(/^(\d{4}-\d{2}-\d{2})Z$/iu, '$1'));
+    if (!dates.every(explicitDate)) return {value:'', uncertain:true};
+    if (new Set(dates).size === 1) return {value:dates[0], uncertain:false};
+    // Alternate offsets can denote exactly the same instant. Only compare
+    // instants that contain an explicit zone, never a browser-local time.
+    if (dates.every(value => value.includes('T') && /(?:Z|[+-]\d{2}:\d{2})$/iu.test(value)) &&
+        new Set(dates.map(value => new Date(value).getTime())).size === 1)
+      return {value:dates[0], uncertain:false};
+    const day = unique(dates.map(value => value.slice(0,10)));
+    return {value:day, uncertain:true};
+  }
+
   function articleBody(fragment) {
     for (const selector of ['[itemprop~="articleBody"]', '.entry-content, .entry__content', 'article', 'main, [role="main"]']) {
       const areas = [...fragment.querySelectorAll(selector)].filter(el => el.querySelector('p, blockquote, li, br'));
@@ -50,6 +86,7 @@
     const title = unique(metadata('meta[property="og:title" i]', 'content')) ||
       unique(top.filter(el => el.matches('title')).map(el => el.textContent.trim()));
 
+    const schema = articleSchema(fragment, url);
     for (const el of fragment.querySelectorAll('script, style, noscript, template, iframe, object, embed, svg, math, nav, aside, footer, form, [hidden], [aria-hidden="true" i]')) el.remove();
     const body = articleBody(fragment);
     for (const el of body.querySelectorAll('article')) el.remove();
@@ -59,8 +96,15 @@
         const value = (el.getAttribute('datetime') || el.getAttribute('content') || '').trim();
         if (value) tags.push(value);
       }
-      const value = unique(tags);
-      return {value:explicitDate(value) ? value : '', uncertain:tags.length > 0 && !explicitDate(value)};
+      tags.push(...schema.map(item => item[property === 'published_time' ? 'datePublished' : 'dateModified'])
+        .filter(value => typeof value === 'string' && value.trim()).map(value => value.trim()));
+      if (property === 'published_time') {
+        for (const time of body.querySelectorAll('header time.post-date[datetime],header time.published[datetime]')) {
+          if (time.closest('header').querySelector('h1') && !time.matches('[itemprop~="dateModified"],.updated'))
+            tags.push(time.getAttribute('datetime').trim());
+        }
+      }
+      return consistentDate(tags);
     }
     const published = dateField('published_time', 'datePublished');
     const modified = dateField('modified_time', 'dateModified');
