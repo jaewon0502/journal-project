@@ -654,7 +654,7 @@
     });
     return details;
   }
-  function showEditorCrossover(data, pairs) {
+  function showEditorCrossover(data, pairs, orderPairs) {
     const area = el('editor-crossover');
     window.JournalFieldTimeReport.renderEditorCrossover(data, area);
     if (!data.comparedEditors) return;
@@ -666,16 +666,31 @@
       pairs.forEach((pair, i) => group.append(fasterAnswerPair(pair, i + 1)));
       area.append(group);
     }
+    let order = null;
     const save = node('button', '같은 편집자의 시간 비교표 HTML 저장');
+    if (window.JournalFieldOrder) {
+      const section = node('section', '두 완료 파일의 연결을 대조하고 있습니다.');
+      section.id = 'crossover-observed-order';
+      area.append(section);
+      save.disabled = true;
+      window.JournalFieldOrder.compare(orderPairs).then(value => {
+        if (!section.isConnected) return;
+        order = value;
+        section.replaceChildren();
+        window.JournalFieldTimeReport.renderOrder(order, section);
+      }).catch(() => {
+        if (section.isConnected) section.textContent = '이 브라우저에서 완료 파일의 연결을 확인하지 못했습니다. 순서별 집계는 대기 중입니다.';
+      }).finally(() => { save.disabled = false; });
+    }
     save.type = 'button';
     save.onclick = () => {
-      downloadFile(new Blob([window.JournalFieldTimeReport.crossoverHtml(data)],
+      downloadFile(new Blob([window.JournalFieldTimeReport.crossoverHtml(data, '', order)],
         {type:'text/html;charset=utf-8'}), '현장-교차배정-시간비교.html');
     };
     area.append(save);
   }
 
-  function showAllocations(report, fasterPairs) {
+  function showAllocations(report, fasterPairs, orderPairs) {
     el('allocation-counts').textContent = assignmentCounts(report.all) +
       '. 명부 밖 코드의 현업 기록 ' + report.outsideRoster + '건 · 등록한 기사를 찾을 수 없는 현업 기록 ' +
       report.unlinked + '건.';
@@ -697,7 +712,7 @@
       yieldTargets.set(trialTarget(comparison), card.id);
       el('allocation-yield').append(card);
     }
-    showEditorCrossover(report.editorCrossover, fasterPairs);
+    showEditorCrossover(report.editorCrossover, fasterPairs, orderPairs);
     showDeadlineComparisons(report);
     showComparisons(report.groups, el('allocation-comparisons'), yieldTargets);
   }
@@ -770,11 +785,11 @@
     }
     const groups = c.group(eligible.map(applied));
     if (hasAssignments) {
-      const pairs = [];
+      const pairs = [], orderPairs = [];
       const report = c.allocationReport(assignments, rows.map(applied), dupe, pair => {
         if (pair.category === 'manualOnly' || pair.category === 'journalOnly') pairs.push(pair);
-      });
-      showAllocations(report, pairs);
+      }, pair => orderPairs.push(pair));
+      showAllocations(report, pairs, orderPairs);
     }
     showComparisons(groups, el('comparisons'));
     if (!groups.length) el('groups').append(node('p', '집계할 참여 기록이 없습니다.'));
@@ -981,7 +996,8 @@
       t.reason || '',
       t.journalUse || '',
       c.kitVersion(t.kitVersion),
-      Object.hasOwn(t, 'startedKitVersion') ? t.startedKitVersion : false
+      Object.hasOwn(t, 'startedKitVersion') ? t.startedKitVersion : false,
+      t.previousCompletion ? [t.previousCompletion.id, t.previousCompletion.sha256] : null
     ]);
   }
   function loadKey(v) {

@@ -136,7 +136,8 @@
     if (scope !== undefined) roster.scope = scope;
     const crossed = design === crossoverDesign;
     if (crossed) roster.design = design;
-    el('cross-order-heading').hidden = !crossed;
+    const showOrder = crossed || assignments.some(row => row.plannedPeriod);
+    el('cross-order-heading').hidden = !showOrder;
     const seenParticipants = new Set();
     for (const row of assignments) {
       const tr = el('allocations').insertRow();
@@ -185,8 +186,9 @@
       };
       cell.append(copy, field);
       tr.insertCell().textContent = row.targetSeconds === undefined ? '미설정' : row.targetSeconds + '초';
-      if (crossed) {
-        tr.insertCell().textContent = seenParticipants.has(row.participant) ? '두 번째' : '첫 번째';
+      if (showOrder) {
+        const period = row.plannedPeriod ?? (crossed ? (seenParticipants.has(row.participant) ? 2 : 1) : null);
+        tr.insertCell().textContent = period === 1 ? '첫 번째' : period === 2 ? '두 번째' : '미기록';
         seenParticipants.add(row.participant);
       }
     }
@@ -256,10 +258,14 @@
   function validCrossoverRoster(rows, original) {
     if (original.scope !== 'single-allocation' || original.assignments.length !== rows.length || !rows.length || rows.length % 4) return false;
     const people = new Set(), tasks = new Map(), firstMethods = {manual:0, journal:0};
-    // Each consecutive pair encodes the coordinator's recommended order. Neither arm file sees the other assignment.
+    if (rows.some(row => row.plannedPeriod)) {
+      if (!rows.every(row => row.plannedPeriod)) return false;
+      rows = [...rows].sort((a,b) => a.participant < b.participant ? -1 : a.participant > b.participant ? 1 : a.plannedPeriod - b.plannedPeriod);
+    }
+    // Older single-allocation rosters encoded the recommendation in consecutive rows.
     for (let i = 0; i < rows.length; i += 2) {
       const a = rows[i], b = rows[i+1];
-      if (people.has(a.participant) || a.participant !== b.participant || a.method === b.method || !distinctArticles(a, b)) return false;
+      if ((a.plannedPeriod && (a.plannedPeriod !== 1 || b.plannedPeriod !== 2)) || people.has(a.participant) || a.participant !== b.participant || a.method === b.method || !distinctArticles(a, b)) return false;
       people.add(a.participant);
       firstMethods[a.method]++;
       for (const [index, row] of [a,b].entries()) {
@@ -306,8 +312,8 @@
       const plan = shuffled(firstArticles.flatMap(index => ['manual','journal'].map(method => ({index, method}))));
       for (const [offset, {index, method}] of plan.entries()) {
         const participant = codes[start + offset];
-        assignments.push({...specs[index], participant, method},
-          {...specs[1-index], participant, method:method === 'manual' ? 'journal' : 'manual'});
+        assignments.push({...specs[index], participant, method, plannedPeriod:1},
+          {...specs[1-index], participant, plannedPeriod:2, method:method === 'manual' ? 'journal' : 'manual'});
       }
     }
     const note = codes.length + '명에게 두 과제씩, 총 ' + assignments.length + '건을 교차 배정했습니다.' +

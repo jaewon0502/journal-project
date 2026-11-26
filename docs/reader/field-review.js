@@ -14,6 +14,7 @@
     session = null,
     generation = 0;
   let inviteActive = false, assignment = null, inviteRevision = 0;
+  let previousContext = null, previousCompletion = null, readingPrevious = false, previousRevision = 0;
   let storageVersion = null, storageLocked = false, lastCheckpointAt = null;
   let supersededTrial = false;
   let restoredBeforeResume = false;
@@ -30,6 +31,7 @@
   }
   function lockStorage(current) {
     storageLocked = true;
+    if (!session) showPreviousSetup();
     // Two windows can both restore the same paused trial. Once one advances,
     // the other has missed its active segments and cannot export an exact time.
     let other;
@@ -106,19 +108,84 @@
       .map(([k, v]) => v + ' ' + (ms[k] / 1000).toFixed(0) + '초')
       .join(' · ');
   }
+  function currentOrderContext() {
+    if (session || storageLocked || !kitVersion || el('kind').value !== 'editor' || !pack || (inviteActive && !assignment)) return null;
+    const participant = el('participant').value.trim();
+    const task = pack.tasks.find(item => item.id === el('task').value);
+    if (!participant || !task) return null;
+    return JSON.stringify([participant, pack.caseId, pack.articleUrl, task.id, task.prompt, el('method').value]);
+  }
+  function clearPrevious(note = '') {
+    previousRevision++;
+    previousCompletion = null;
+    readingPrevious = false;
+    el('previous-file').value = '';
+    el('previous-status').textContent = note;
+    el('clear-previous').hidden = true;
+  }
+  function showPreviousSetup() {
+    const target = currentOrderContext();
+    if (previousContext !== target) {
+      clearPrevious(previousCompletion || readingPrevious ? '과제 설정이 바뀌었습니다. 첫 완료 파일을 다시 선택하세요.' : '');
+      previousContext = target;
+    }
+    el('previous-completion').hidden = !target;
+    el('previous-file').disabled = !target;
+  }
+  el('clear-previous').onclick = () => {
+    if (session) return;
+    clearPrevious('첫 파일 연결을 취소했습니다.');
+    render();
+  };
+  el('previous-file').onchange = async event => {
+    if (session) return;
+    showPreviousSetup();
+    const context = previousContext, file = event.target.files[0];
+    clearPrevious();
+    if (!context || !file) { render(); return; }
+    const revision = previousRevision;
+    readingPrevious = true;
+    el('previous-status').textContent = '첫 과제의 완료 기록을 확인하고 있습니다.';
+    el('clear-previous').hidden = false;
+    render();
+    try {
+      const first = JSON.parse(await file.text());
+      if (revision !== previousRevision || context !== currentOrderContext()) return;
+      const receipt = await window.JournalFieldOrder.receipt(first);
+      if (revision !== previousRevision || context !== currentOrderContext()) return;
+      if (first.participant !== el('participant').value.trim() ||
+          first.method === el('method').value || first.caseId === pack.caseId ||
+          c.articleIdentity(first.articleUrl) === c.articleIdentity(pack.articleUrl)) {
+        throw Error();
+      }
+      previousCompletion = receipt;
+      el('previous-status').textContent = '참여 코드와 첫 과제 파일을 확인했습니다. 시간 측정을 시작하면 연결이 저장됩니다.';
+    } catch {
+      if (revision === previousRevision && context === currentOrderContext()) {
+        el('previous-status').textContent = '연결하지 못했습니다. 같은 참여 코드로 다른 기사와 방식을 검증한 첫 과제의 현업 완료 JSON을 선택하세요.';
+      }
+    } finally {
+      if (revision === previousRevision) {
+        readingPrevious = false;
+        el('clear-previous').hidden = !previousCompletion;
+        render();
+      }
+    }
+  };
   function render() {
     evidence?.update(session && !session.result && session.base.method === 'journal' &&
       session.timer.start !== null && !supersededTrial ? session.base.id : null);
     el('setup').hidden = !!session;
     el('work').hidden = !session || !!session.result;
     el('ended').hidden = !session?.result;
+    showPreviousSetup();
     if (!session) {
       el('kit-note').hidden = !!kitVersion || el('kind').value !== 'editor';
       el('participant').disabled = el('task').disabled = inviteActive;
       el('method').disabled = fixedMethod || inviteActive;
       el('manual-entry').hidden = !inviteActive;
       el('apply-invite').disabled = !pack || !el('invite-code').value.trim() || !!assignment;
-      el('start').disabled = !pack || (inviteActive && !assignment) || !el('task').value || !el('participant').value.trim();
+      el('start').disabled = readingPrevious || !pack || (inviteActive && !assignment) || !el('task').value || !el('participant').value.trim();
       return;
     }
     if (session.result) {
@@ -131,6 +198,7 @@
         ' · 기록된 활동 시간 ' +
         sec.toFixed(1) +
         '초' +
+        (r.previousCompletion ? ' · 첫 과제 완료 기록 연결 포함' : '') +
         (r.recovered ? ' · 활동 중 중단되어 전체 소요 시간 비교 제외' : '') +
         (!r.split ? ' · 단계별 시간 비교 제외' : '') +
         (Object.hasOwn(r, 'startedKitVersion') ? ' · ' + mixedKitNote : '');
@@ -235,9 +303,13 @@
   };
   el('task').onchange = render;
   el('kind').onchange = render;
+  el('method').onchange = render;
   el('participant').oninput = render;
   el('start').onclick = () => {
     if (session || !pack || (inviteActive && !assignment) || !el('participant').value.trim()) return;
+    checkTimerOwner();
+    showPreviousSetup();
+    if (readingPrevious) return;
     const t = pack.tasks.find((v) => v.id === el('task').value);
     if (!t) return;
     const selected = assignment || {
@@ -249,8 +321,11 @@
       id: crypto.randomUUID(),
       kind: el('kind').value,
       ...selected,
-      kitVersion
+      kitVersion,
+      ...(previousCompletion ? {previousCompletion} : {})
     };
+    clearPrevious();
+    previousContext = null;
     restoredBeforeResume = false;
     session = {
       base,
@@ -361,6 +436,7 @@
     render();
   };
   window.addEventListener('pagehide', () => {
+    if (!session && (previousCompletion || readingPrevious)) clearPrevious('첫 완료 파일을 다시 선택하세요.');
     if (!session || session.result || session.timer.start === null) return;
     session.timer = c.tick(session.timer, performance.now(), session.timer.phase, false);
     session.recovered = true;

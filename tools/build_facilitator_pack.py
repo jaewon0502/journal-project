@@ -71,6 +71,7 @@ START = """<!doctype html>
 <a href="연습 예시/검증성공-80초단축.html">80초 줄어든 모의 사례</a>에서 단계별 시간을 비교하세요.</p>
 <p><a href="연습 예시/빨라진-편집자의-판단이유.html">평균 30% 단축에서 빠른 두 사람이 실제로 제출한 모의 풀이 대조하기</a>.
 한 사례에서는 평소 도구로만 분모를 맞혔고 다른 사례에서는 저널로만 맞혔습니다.</p>
+<p><a href="연습 예시/완료파일-측정순서.html">첫 과제 완료 파일을 연결한 네 명의 모의 시간·성공 수 보기</a>. 두 번째 과제의 타이머를 시작하기 전에 첫 완료 JSON을 연결합니다.</p>
 <details id="deadline-example"><summary>목표 120초에서 검증 성공률이 뒤집히는 가상 예시</summary>
 <p>15세 이상 고용률을 검증하는 과제입니다. 평소 도구를 쓴 두 명은 100초와 121초에 위치·판정·이유를 모두 맞혔습니다.
 저널을 쓴 두 명은 각각 60초에 표와 판정을 맞혔지만, 판단 이유에는 15~64세 수치를 썼습니다.</p>
@@ -175,6 +176,7 @@ def packet_bytes():
              'participant-editor-study.zip': editor_zip, PRACTICE_SAMPLE: practice,
              PARTIAL_GRADING_SAMPLE: partial_grading,
              'annual-rate-practice.html': (READER / 'annual-rate-practice.html').read_bytes(),
+             '연습 예시/완료파일-측정순서.html': (CASES / 'field-reason-time' / 'observed-order.html').read_bytes(),
              '연습 예시/빨라진-편집자의-판단이유.html': (CASES / 'field-reason-time' / 'faster-reasons.html').read_bytes(),
              '연습 예시/검증성공-20초증가.html': (CASES / 'field-reason-time' / 'slow-pass.html').read_bytes(),
              '연습 예시/검증성공-80초단축.html': (CASES / 'field-reason-time' / 'fast-pass.html').read_bytes(),

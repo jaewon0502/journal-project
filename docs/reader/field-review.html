@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>실제 기사 검증 시간 · Journal</title><link rel="stylesheet" href="article-compare.css"><link rel="stylesheet" href="field-review.css"><script defer src="field-review-core.js"></script><script defer src="field-invite.js"></script><script defer src="factcheck-engine.js"></script><script defer src="field-citation.js"></script><script defer src="field-evidence.js"></script><script defer src="field-review.js"></script></head><body>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>실제 기사 검증 시간 · Journal</title><link rel="stylesheet" href="article-compare.css"><link rel="stylesheet" href="field-review.css"><script defer src="field-review-core.js"></script><script defer src="field-order.js"></script><script defer src="field-invite.js"></script><script defer src="factcheck-engine.js"></script><script defer src="field-citation.js"></script><script defer src="field-evidence.js"></script><script defer src="field-review.js"></script></head><body>
 <header><strong>Journal</strong><nav><a href="editor-study.html">통제 실험</a></nav></header>
 <main><h1>실제 기사 검증 시간</h1><p>원자료를 찾고, 근거 위치를 확인하고, 판정을 기록하는 시간을 각각 잽니다. 기사와 과제는 시작 후 확인할 수 있습니다.</p><noscript>JavaScript를 켜 주세요.</noscript>
 <section class="panel" id="setup"><h2>과제 시작</h2>
@@ -9,6 +9,10 @@
 <label>배정 방식 <select id="method"><option value="manual">평소 검증 도구</option><option value="journal">평소 검증 도구와 저널</option></select></label>
 <label>참여 구분 <select id="kind"><option value="practice">연습</option><option value="editor">현업 편집자·팩트체커 본인 참여</option></select></label>
 <p id="kit-note" class="note" role="status" hidden>이 화면에는 배포본 ID가 없어, 여기서 저장한 시간은 두 방식의 절감률 계산에서 빠집니다. 시간 비교에 참여하려면 진행자가 배정한 참여자 ZIP의 field-review.html을 열어 주세요.</p>
+<details id="previous-completion" hidden><summary>두 번째 과제라면 첫 번째 완료 파일 연결</summary>
+<p>두 과제를 이어서 검증한다면 첫 과제에서 저장한 참여 기록 JSON을 선택하세요. 첫 파일이 없어도 측정을 시작할 수 있습니다.</p>
+<label>첫 과제의 완료 기록 <input id="previous-file" type="file" accept=".json,application/json"></label>
+<button id="clear-previous" type="button" hidden>연결 취소</button><p id="previous-status" role="status"></p></details>
 <button id="start" class="primary" disabled>시간 측정 시작</button></section>
 <section class="panel" id="work" hidden><h2 id="question"></h2><p id="article-link"></p><p id="tool-link"></p>
 <fieldset><legend>현재 작업 단계</legend><div class="actions" id="phases"><button data-phase="search">원자료 찾기</button><button data-phase="locate">표·발언 위치 찾기</button><button data-phase="decide">판정 기록</button></div></fieldset>
