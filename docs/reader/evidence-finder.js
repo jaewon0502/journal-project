@@ -682,14 +682,17 @@
     const tag = /^\[(?:(publisher|outlet|source|audience)\s*[:：]\s*)?(?:conservative|centrist|liberal|progressive|(?:left|right)[- ]leaning)\s+(?:newspaper|news outlet|outlet|daily|weekly|audience)\][ \t]+/iu.exec(phrase);
     if (!tag || (!tag[1] && articleBody === articleQuery)) return phrase;
     const body = phrase.slice(tag[0].length);
-    if (!/^[A-Za-z\d]/u.test(body) || /[[\]"'“”‘’]/u.test(body)) return phrase;
+    if (!/^[A-Za-z\d]/u.test(body) || /[[\]"'“”‘’]|[^\p{Script=Latin}\d\s.,:/%?()-]/u.test(body)) return phrase;
+    // An incomplete quoted predicate, e.g. "[…] has denied …", can rely
+    // on the tagged outlet as its subject. Keep ambiguous attribution searchable.
+    if (/^(?:\w+(?:ed|es)|says?|has|had|did|do|does|is|are|was|were|will|not|never|who|which|what|when|where|why|how)\b/iu.test(body)) return phrase;
     const outletOrStatement = /\b(?:newspapers?|editors?|editorials?|headlines?|subscribers?|circulation|readership|publications?|outlets?|journalists?|revenue|profits?|according|quotes?|quoted|claim(?:s|ed)?|say(?:s)?|said|reports?|reported|wrote|writes?|den(?:y|ies|ied)|endors(?:e|es|ed)|support(?:s|ed)?|oppos(?:e|es|ed))\b/iu;
     return outletOrStatement.test(body) ? phrase : body;
   }
 
   // Keep the article search intact. A phrase supplied by the reader only opens
   // more places to inspect; a word match does not settle a claim or a quotation.
-  function withSourcePhrase(documentText, articleQuery, sourcePhrase, lookup) {
+  function withSourcePhrase(documentText, articleQuery, sourcePhrase, lookup, {keepPublisherTag = false} = {}) {
     const phrase = sourcePhrase.trim();
     if (!phrase || phrase === articleQuery.trim()) return lookup;
     const plainFields = ['paragraph', 'text', 'matched', 'context'];
@@ -698,29 +701,27 @@
         lookup.passages.some(p => Object.keys(p).some(key => !plainFields.includes(key)))) {
       return {...lookup, phraseSearch:'structured'};
     }
-    const body = phraseWithoutPublisherTag(articleQuery, phrase);
-    const labelOmitted = body !== phrase ? {phraseLabelOmitted:true} : {};
-    const words = [...terms(body).keys()].filter(word => !phraseStop.has(word));
+    const stripped = phraseWithoutPublisherTag(articleQuery, phrase);
+    const label = stripped === phrase ? {} : (keepPublisherTag ? {phraseLabelIncluded:true} : {phraseLabelOmitted:true});
+    const words = [...terms(keepPublisherTag ? phrase : stripped).keys()].filter(word => !phraseStop.has(word));
     const topics = new Set(words.filter(word => /\p{L}/u.test(word) && !/^[-\d]/u.test(word) && !/^(?:not|no|never)$/u.test(word)));
-    if (!topics.size) return {...lookup, ...labelOmitted, phraseSearch:'no-match'};
+    if (!topics.size) return {...lookup, ...label, phraseSearch:'no-match'};
     // A year or a common connecting word alone cannot add a second candidate.
     const hits = find(documentText, words.join(' '), {includeContext:true, requireAnyTerm:topics});
-    if (!hits.length) return {...lookup, ...labelOmitted, phraseSearch:'no-match'};
+    if (!hits.length) return {...lookup, ...label, phraseSearch:'no-match'};
     const original = new Map(lookup.passages.map(p => [p.paragraph, p]));
     const extra = new Map(hits.map(p => [p.paragraph, p]));
     const selected = new Map();
-    for (let i = 0; i < Math.max(hits.length, lookup.passages.length); i++) {
-      for (const p of [hits[i], lookup.passages[i]]) {
-        if (!p || selected.has(p.paragraph)) continue;
-        const a = original.get(p.paragraph), b = extra.get(p.paragraph);
-        // Preserve the quoted line and surrounding source text even when a hint
-        // includes an inaccurate translation or names the opposite side.
-        const hit = a || {paragraph:b.paragraph, text:b.text, matched:b.matched, context:b.context};
-        const matched = a && b ? [...new Set([...a.matched, ...b.matched])] : hit.matched;
-        selected.set(p.paragraph, {...hit, matched, phraseMatch:a ? (b ? 'both' : 'article') : 'phrase'});
-      }
+    // Keep adjacent results of the same search together. Splitting them could
+    // push a required second or third paragraph out of the first three results.
+    for (const p of [...hits, ...lookup.passages]) {
+      if (selected.has(p.paragraph)) continue;
+      const a = original.get(p.paragraph), b = extra.get(p.paragraph);
+      const hit = a || {paragraph:b.paragraph, text:b.text, matched:b.matched, context:b.context};
+      const matched = a && b ? [...new Set([...a.matched, ...b.matched])] : hit.matched;
+      selected.set(p.paragraph, {...hit, matched, phraseMatch:a ? (b ? 'both' : 'article') : 'phrase'});
     }
-    return {...lookup, ...labelOmitted, passages:[...selected.values()], phraseSearch:'matched'};
+    return {...lookup, ...label, passages:[...selected.values()], phraseSearch:'matched'};
   }
 
   const api = {find, tableAmbiguities, passageQuery, sourceRows, withSourcePhrase};
