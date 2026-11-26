@@ -58,16 +58,44 @@
     return {value:day, uncertain:true};
   }
 
-  function articleBody(fragment) {
-    for (const selector of ['[itemprop~="articleBody"]', '.entry-content, .entry__content', 'article', 'main, [role="main"]']) {
-      const areas = [...fragment.querySelectorAll(selector)].filter(el => el.querySelector('p, blockquote, li, br'));
-      // Nested containers represent the same article. Multiple unrelated articles
-      // cannot safely share one title and publication date.
-      const outermost = areas.filter(area => !area.parentElement?.closest(selector));
-      if (outermost.length === 1) return outermost[0];
-      if (outermost.length > 1) break;
+  function articleBody(fragment, title) {
+    const scope = fragment.querySelectorAll('main, [role="main"]');
+    const root = scope.length === 1 ? scope[0] : fragment;
+    const articles = [...root.querySelectorAll('article')].filter(el => !el.parentElement?.closest('article'));
+    function hasBody(el) {
+      return !!el.querySelector('p, blockquote, li, br');
     }
-    throw Error('웹문서에서 단일 기사 본문을 구별하지 못했습니다. 원문에서 확인할 대목을 붙여넣으세요.');
+    for (const article of articles) for (const nested of article.querySelectorAll('article')) nested.remove();
+    const candidates = articles.filter(hasBody);
+    const normalize = value => value.normalize('NFKC').replace(/\s+/gu, ' ').trim().toLowerCase();
+    let area = root;
+    if (candidates.length === 1) {
+      area = candidates[0];
+      const otherHeadline = [...root.querySelectorAll('h1')].some(h =>
+        !area.contains(h) && title && normalize(h.textContent) === normalize(title));
+      if (otherHeadline && [...root.querySelectorAll('p')].some(p => !area.contains(p) && !p.closest('header')))
+        throw Error('웹문서에서 단일 기사 본문을 구별하지 못했습니다. 원문에서 확인할 대목을 붙여넣으세요.');
+    } else if (candidates.length > 1) {
+      const identified = candidates.filter(a => [...a.querySelectorAll('h1')].some(h =>
+        title && normalize(h.textContent) === normalize(title)));
+      if (identified.length !== 1) throw Error('웹문서에서 단일 기사 본문을 구별하지 못했습니다. 원문에서 확인할 대목을 붙여넣으세요.');
+      area = identified[0];
+    } else if (articles.length || area === fragment) {
+      // Some publishers use schema.org articleBody instead of an article/main
+      // element. Require a single such body and its page-identifying headline.
+      const bodies = [...root.querySelectorAll('[itemprop~="articleBody"]')].filter(hasBody);
+      const owner = bodies.length === 1 && bodies[0].parentElement;
+      const headings = owner ? owner.querySelectorAll('h1') : [];
+      if (articles.length || !title || headings.length !== 1 || normalize(headings[0].textContent) !== normalize(title))
+        throw Error('웹문서에서 단일 기사 본문을 구별하지 못했습니다. 원문에서 확인할 대목을 붙여넣으세요.');
+      area = bodies[0];
+    }
+    for (const selector of ['[itemprop~="articleBody"]', '.entry-content, .entry__content']) {
+      if (area.matches?.(selector)) return area;
+      const inner = [...area.querySelectorAll(selector)].filter(hasBody);
+      if (inner.length === 1) return inner[0];
+    }
+    return area;
   }
 
   function parse(raw) {
@@ -88,8 +116,7 @@
 
     const schema = articleSchema(fragment, url);
     for (const el of fragment.querySelectorAll('script, style, noscript, template, iframe, object, embed, svg, math, nav, aside, footer, form, [hidden], [aria-hidden="true" i]')) el.remove();
-    const body = articleBody(fragment);
-    for (const el of body.querySelectorAll('article')) el.remove();
+    const body = articleBody(fragment, title);
     function dateField(property, item) {
       const tags = metadata('meta[property="article:' + property + '" i],meta[itemprop~="' + item + '"]', 'content');
       for (const el of body.querySelectorAll('time[itemprop~="' + item + '"],meta[itemprop~="' + item + '"]')) {

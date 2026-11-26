@@ -45,6 +45,7 @@
   let currentId = null, editingId = null, sourceForRow = null, dirty = false;
   let latestImport = 0;
   let drafts = new Map();
+  const sourcePhrases = new Map();
   let articleAssessment = null, articleAssessmentDraft = null;
   const rubric = window.JournalArticleRubric, rubricUI = window.JournalArticleRubricUI;
   const parameters = new URLSearchParams(location.search);
@@ -294,7 +295,51 @@
     }
     area.hidden = !area.childElementCount;
   }
+  function offerWebDocumentInfo(info) {
+    const area = byId('web-source-options');
+    area.replaceChildren();
+    area.hidden = true;
+    if (!info || editingId) return;
+
+    const version = [info.published && '게시 ' + info.published, info.modified && '수정 ' + info.modified]
+      .filter(Boolean).join(' · ');
+    const fields = {title:info.title, url:info.url, version};
+    // A new web excerpt may inherit the default metadata of the preceding source.
+    // A matching URL alone cannot distinguish two saved revisions of a web page.
+    if (prefillId && (!info.url || sourceBaseline.url !== info.url || !version || sourceBaseline.version !== version)) {
+      for (const key of documentFields) {
+        const input = byId('source-' + key);
+        if (!typedDocumentFields.has(key) && input.value === sourceBaseline[key]) input.value = '';
+      }
+      prefillId = null;
+      sourceBaseline = workspace.sourceDefaults();
+    }
+    area.hidden = false;
+    area.append(node('p', '파일에 표시된 자료 이름과 주소, 게시·수정 시각을 원본과 대조하세요. 게시 시각은 문서의 공개 시점입니다.', 'hint'));
+    area.append(node('p', [info.title || '자료 이름 확인 필요', info.url || '문서 주소 확인 필요',
+      '게시 ' + (info.published || '확인 필요'), '수정 ' + (info.modified || '확인 필요')].join(' · '), 'meta'));
+    if (!Object.values(fields).some(Boolean)) return;
+    const use = button('확인한 웹문서 정보 입력', () => {
+      if (!use.isConnected || window.JournalDocumentFile?.webInfo !== info || editingId) return;
+      const changes = Object.entries(fields).filter(([key, value]) => value && byId('source-' + key).value !== value);
+      if (!changes.length) return;
+      const urlChange = changes.some(([key]) => key === 'url');
+      if ((changes.some(([key]) => byId('source-' + key).value.trim()) ||
+          (urlChange && byId('source-originUrl').value.trim())) &&
+          !confirm('직접 입력한 문서 정보가 달라집니다. 파일에서 대조한 표시로 바꿀까요?')) return;
+      if (urlChange && byId('source-originUrl').value) changes.push(['originUrl', '']);
+      for (const [key, value] of changes) {
+        const input = byId('source-' + key);
+        input.value = value;
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+      }
+      message('source-status', '웹문서 정보를 입력했습니다. 원본에서 발췌 위치와 날짜의 뜻을 확인하세요.');
+      byId('source-locator').focus();
+    });
+    area.append(use);
+  }
   function offerPdfLocation(proposal) {
+    offerWebDocumentInfo(null);
     pdfProposal = proposal;
     if (!proposal) {
       byId('pdf-source-options').replaceChildren();
@@ -756,6 +801,7 @@
   }
   function resetWork(text, initialSources, initialReceipts, sample, tag = null, committed = true) {
     revisionInputs.clear();
+    sourcePhrases.clear();
     byId('share-article-url').value = '';
     window.JournalSourceReader.clearLocal();
     // Clear transient text and decisions when opening a different workspace.
@@ -856,7 +902,10 @@
         }
       }
       latestImport++;
-      if (article !== text) byId('share-article-url').value = '';
+      if (article !== text) {
+        byId('share-article-url').value = '';
+        sourcePhrases.clear();
+      }
       article = text;
       setArticleDraft(text);
       hasCommittedArticle = true;
@@ -974,6 +1023,7 @@
     const proposal = window.JournalDocumentFile?.excerptLocation(entry);
     offerPdfLocation(proposal);
     offerDocumentInfo(proposal);
+    offerWebDocumentInfo(window.JournalDocumentFile?.webInfo);
     setLocationReview(inheritsLocation);
     sourceDraftEdited();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
@@ -1136,11 +1186,20 @@
       else useExcerpt(selected);
     }));
   }
+  function rememberSourcePhrase() {
+    const row = currentRow();
+    if (!row || byId('document-query').value.trim() !== row.text) return;
+    const phrase = byId('source-phrase').value;
+    if (phrase.trim()) sourcePhrases.set(row.articleBinding, {phrase, context:byId('search-context').value});
+    else sourcePhrases.delete(row.articleBinding);
+  }
   function clearSearchContext() {
-    byId('search-context').value = '';
-    byId('search-context-options').open = false;
     const row = currentRow();
     const sameQuery = row && row.text === byId('document-query').value.trim();
+    const remembered = sameQuery && sourcePhrases.get(row.articleBinding);
+    byId('source-phrase').value = remembered?.phrase || '';
+    byId('search-context').value = remembered?.context || '';
+    byId('search-context-options').open = Boolean(remembered?.context);
     byId('use-article-context').hidden = !sameQuery || !row.context || row.context === row.text;
     const lead = firstArticleLine();
     byId('use-article-title').hidden = !sameQuery || !lead || lead === row.text;
@@ -1153,6 +1212,7 @@
     const row = currentRow();
     if (!context || row?.text !== byId('document-query').value.trim()) return;
     byId('search-context').value = context;
+    rememberSourcePhrase();
     if (byId('document-text').value.trim()) findPassages();
   }
   byId('use-article-context').addEventListener('click', () => searchWithContext(currentRow()?.context));
@@ -1300,7 +1360,7 @@
     if (passage.annualCounts) card.append(annualCountSource(passage.annualCounts));
     return card;
   }
-  function findPassages() {
+  function findPassages(keepPublisherTag = false) {
     const text = byId('document-text').value;
     const query = byId('document-query').value.trim();
     const area = byId('finder-results');
@@ -1308,7 +1368,8 @@
     if (!text.trim() || !query) return message('finder-status', '원자료 본문과 찾을 표현을 입력하세요.', true);
     const articleContext = byId('search-context').value.trim();
     const separateContext = articleContext && articleContext !== query;
-    const lookup = window.JournalEvidenceSearch.search(text, query, {articleContext, pdfSha256:window.JournalDocumentFile?.pdfSha256});
+    const original = window.JournalEvidenceSearch.search(text, query, {articleContext, pdfSha256:window.JournalDocumentFile?.pdfSha256});
+    const lookup = window.JournalEvidenceFinder.withSourcePhrase(text, query, byId('source-phrase').value, original, {keepPublisherTag:keepPublisherTag === true});
     const passages = lookup.passages;
     let rows;
     const ambiguities = window.JournalEvidenceFinder.tableAmbiguities(text, query);
@@ -1337,9 +1398,18 @@
     } else if (!lookup.gap && !lookup.transcript) {
       notices.push(passages.length ? '확인할 원문 후보 ' + passages.length + '개' : '해당 표현을 찾지 못했습니다. 다른 표현이나 원문의 표와 주석을 확인하세요.');
     }
+    if (lookup.phraseLabelOmitted) notices.push('분리 표기된 발행처·독자층은 원자료 검색어에서 제외했습니다.');
+    if (lookup.phraseLabelIncluded) notices.push('분리 표기된 발행처·독자층까지 포함해 검색했습니다.');
+    if (lookup.phraseSearch === 'matched') notices.push('입력한 원자료 표현의 후보를 먼저, 기사 주장으로만 찾은 후보를 이어서 표시합니다. 시점·수치·부정 표현을 원문에서 대조하세요.');
+    if (lookup.phraseSearch === 'no-match') notices.push('입력한 원자료 표현으로 찾은 추가 문단은 없습니다.');
+    if (lookup.phraseSearch === 'structured') notices.push('기사 주장의 표·발언·범위 대조 결과를 표시합니다. 원자료 표현은 일반 문단 검색에 적용됩니다.');
     if (lookup.needsPublicationDate) notices.push('‘올해’처럼 상대적인 시점은 기사 발행일과 원표의 연도를 대조하세요.');
     if (ambiguities.length) notices.push('같은 번호의 표 제목이 여러 개 있습니다.');
     message('finder-status', notices.join(' '));
+    if (lookup.phraseLabelOmitted || lookup.phraseLabelIncluded) {
+      area.append(button(lookup.phraseLabelOmitted ? '발행처 표지를 포함해 다시 찾기' : '발행처 표지를 빼고 다시 찾기',
+        () => findPassages(lookup.phraseLabelOmitted === true)));
+    }
     if (lookup.reserveUseChoice) {
       const choice = button('이 지출 구절만 찾기 · ' + lookup.reserveUseChoice, () => {
         byId('document-query').value = lookup.reserveUseChoice;
@@ -1368,6 +1438,8 @@
       results = node('details');
       results.append(node('summary', '표현이 겹친 위치 ' + fallbackCount + '개 보기'));
     }
+    const englishSpeakers = lookup.state === 'ordinary' && !lookup.gap && !lookup.transcript
+      ? window.JournalEvidenceTranscript?.englishSpeakerContexts?.(text,passages) : null;
     for (const passage of passages) {
       if (passage.changeRows || passage.annualRate) {
         const card = passage.changeRows ? priorChangeCard(passage) : annualRateCard(passage);
@@ -1376,6 +1448,10 @@
         continue;
       }
       const block = node('div', undefined, 'source');
+      if (passage.phraseMatch) {
+        const matchedBy = {article:'기사 주장', phrase:'입력한 원자료 표현', both:'기사 주장과 원자료 표현'};
+        block.append(node('p', matchedBy[passage.phraseMatch] + '으로 찾은 후보', 'hint'));
+      }
       const years = passage.labourYearRows;
       const comparisonExcerpt = years && citationRows([...passage.context, passage]);
       if (years) {
@@ -1508,6 +1584,13 @@
         });
         block.append(details);
       }
+      const englishSpeaker = englishSpeakers?.get(passage.paragraph);
+      if (englishSpeaker && !speaker) {
+        const preview = node('details');
+        preview.append(node('summary','원문의 화자 표지 · ' + englishSpeaker.label + ' (' + englishSpeaker.startParagraph + '~' + passage.paragraph + '문단)'),
+          node('blockquote',englishSpeaker.text,'verbatim'), button('화자 표지부터 이 문단까지 발췌', () => useExcerpt(englishSpeaker)));
+        block.append(preview);
+      }
       if (includeSpeaker) {
         const preview = node('details');
         preview.append(node('summary', '발췌할 발언 원문 (' + speaker.paragraph + '~' + passage.paragraph + '문단)'),
@@ -1543,7 +1626,14 @@
     if (browser) area.append(browser.details);
   }
   byId('find-passages').addEventListener('click', findPassages);
-  for (const id of ['document-text', 'document-query', 'search-context']) byId(id).addEventListener('input', () => {
+  byId('source-phrase').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.isComposing) {
+      event.preventDefault();
+      findPassages();
+    }
+  });
+  for (const id of ['document-text', 'document-query', 'search-context', 'source-phrase']) byId(id).addEventListener('input', () => {
+    if (id === 'source-phrase' || id === 'search-context') rememberSourcePhrase();
     if (id === 'document-text') {
       offerPdfLocation(null);
       updateNextSearch();

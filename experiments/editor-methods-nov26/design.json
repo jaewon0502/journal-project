@@ -1,0 +1,14 @@
+{
+  "format": "journal-external-review-replay-v1",
+  "source": "https://doi.org/10.5281/zenodo.3885351",
+  "download": "https://zenodo.org/records/3885351/files/all-data-as-json.zip?download=1",
+  "archiveSha256": "934a454774c2cc5d91c0182dbee918374390391403f15d9b86b6906d1d3c1a43",
+  "questions": ["pro-russia", "pro-west"],
+  "scope": "All 90 articles and all sentence-level responses for each directional question separately; never pool the two questions as independent.",
+  "flag": "Published scale 0-3: 2 or 3 is a positive response; 0 or 1 is negative. Invalid or missing values exclude that sentence-question, with counts.",
+  "assign": "Sort response positions by SHA-256 of UTF-8 JSON [seed, article ID, sentence ID, position] with compact separators and no spaces. Use the same order for the two directional questions within a sentence. Fix the first two as initial readers, the third as tiebreaker and all remaining positions as comparison panel, even when a third rating is saved. Require at least five valid positions.",
+  "seed": "journal-directional-review-v1",
+  "compare": "Three fixed ratings, two fixed ratings requiring agreement (ties unresolved), and two plus a third only when mixed. The two-plus-one binary decision must equal the same three-person majority in every case. Compare only against disjoint remaining positions. A tied remainder is counted separately. Report complete confusion counts, sensitivity and specificity, and constant-negative baseline on exactly the same held-out outcomes.",
+  "sensitivity": "Enumerate every choice of three positions and every choice of which of the three acts as tiebreaker. Average equally across sentences, then across equally likely assignments within each sentence. Report mean savings, held-out unclassified, and joint decision/held-out probabilities. Shared sentences, ranks and subjects preclude treating permutations as independent observations.",
+  "interpretation": "Counts of requested binary ratings, not minutes or article quality. No before-and-after articles, no Journal intervention and no professional editor outcomes. No source text, annotator origins or individual judgments are released here."
+}

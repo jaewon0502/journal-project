@@ -9,6 +9,7 @@
   const pdfPanel = byId('document-pdf-panel');
   const status = byId('document-file-status');
   let current = null;
+  let web = null;
   let pdfUrl = '';
   let verifiedFile = null;
   let sourceRequest = 0;
@@ -29,7 +30,8 @@
         throw new Error('본문이 있는 UTF-8 텍스트 파일을 선택하세요.');
       return {text:raw, document:null};
     }
-    if (!/\.json$/iu.test(name)) throw new Error('TXT 또는 PDF에서 만든 검색 파일(.json)을 선택하세요.');
+    if (/\.html?$/iu.test(name)) return root.JournalWebDocument.parse(raw);
+    if (!/\.json$/iu.test(name)) throw new Error('TXT 또는 PDF에서 만든 검색 파일(.json), 저장한 웹문서(.html)를 선택하세요.');
     let file;
     try { file = JSON.parse(raw.replace(/^\uFEFF/u, '')); } catch { /* handled below */ }
     if (file?.format !== 'journal-pdf-text-v1' || typeof file.pdfName !== 'string' || !file.pdfName.trim() ||
@@ -82,6 +84,7 @@
     sourceRequest++;
     pdfRequest++;
     current = null;
+    web = null;
     if (pdfUrl) URL.revokeObjectURL(pdfUrl);
     pdfUrl = '';
     verifiedFile = null;
@@ -97,6 +100,7 @@
     const request = ++sourceRequest;
     sourceInput.value = '';
     try {
+      if (/\.html?$/iu.test(file.name) && file.size > 16 * 1024 * 1024) throw new Error('16 MB 이하의 HTML 파일을 선택하거나 본문을 직접 붙여넣으세요.');
       const bytes = await readBytes(file);
       let raw;
       try { raw = new TextDecoder('utf-8', {fatal:true}).decode(bytes); }
@@ -105,7 +109,7 @@
       if (request !== sourceRequest) return;
       // Textarea values use LF even when a TXT or a JSON page contains CRLF.
       const sameText = body.value === source.text.replace(/\r\n?/gu, '\n');
-      if (sameText && current?.hash === source.document?.hash) {
+      if (sameText && current?.hash === source.document?.hash && JSON.stringify(web) === JSON.stringify(source.web || null)) {
         status.textContent = pdfUrl ? '같은 검색 파일입니다. 원본 PDF 연결을 유지했습니다.'
           : '이미 불러온 본문입니다. 현재 검색 결과를 유지했습니다.';
         return;
@@ -114,9 +118,17 @@
       body.value = source.text;
       body.dispatchEvent(new Event('input', {bubbles:true}));
       current = source.document;
+      web = source.web || null;
       pdfPanel.hidden = !current;
       status.textContent = current ? current.name + ' · PDF ' + current.count + '쪽을 불러왔습니다. 같은 원본 PDF를 연결하면 후보가 있는 쪽을 열 수 있습니다.'
         : file.name + ' 본문을 불러왔습니다.';
+      if (web) {
+        const details = ['게시 ' + (web.published || '확인 필요'), '수정 ' + (web.modified || '확인 필요')];
+        if (web.dateUncertain) details.push('날짜 표시가 다르거나 형식을 확인할 수 없습니다.');
+        if (web.urlUncertain) details.push('문서 주소를 원본에서 확인하세요.');
+        if (web.tables) details.push('표는 제외했습니다. 필요한 표는 머리글과 함께 붙여넣으세요.');
+        status.textContent += ' ' + details.join(' · ');
+      }
     } catch (error) {
       if (request === sourceRequest) status.textContent = error.message;
     }
@@ -146,5 +158,5 @@
       if (request === pdfRequest) status.textContent = error.message;
     }
   });
-  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo, excerptLocation, get pdfSha256() { return current?.hash; }});
+  root.JournalDocumentFile = Object.freeze({clear, appendPageInfo, excerptLocation, get webInfo() { return web; }, get pdfSha256() { return current?.hash; }});
 })(globalThis);

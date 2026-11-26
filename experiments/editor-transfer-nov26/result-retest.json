@@ -1,0 +1,190 @@
+{
+  "referenceHash": "b9deddec0d3cbc601b633fe027ee16db12f4a2d1386627f42069cfa3e22b8dd6",
+  "baselineResultSha256": "d5fde5369d90b9cc1561893d4be4b01d09db81edc7a6139b8d942cda0d4b4ecf",
+  "currentModules": {
+    "files": 9,
+    "sha256": "cb1f4ba59f06993b7dae773c247b728176147c1ee33f8ed7e9bf3769a4a0b41a"
+  },
+  "methods": {
+    "manualAppend": {
+      "supported": {
+        "n": 2,
+        "top1": 1,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 3,
+        "top1": 1,
+        "top3": 2
+      },
+      "unresolved": {
+        "n": 3,
+        "anyCandidate": 3
+      }
+    },
+    "currentOriginal": {
+      "supported": {
+        "n": 2,
+        "top1": 1,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 3,
+        "top1": 1,
+        "top3": 1
+      },
+      "unresolved": {
+        "n": 3,
+        "anyCandidate": 2
+      }
+    },
+    "assisted": {
+      "supported": {
+        "n": 2,
+        "top1": 1,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 3,
+        "top1": 1,
+        "top3": 2
+      },
+      "unresolved": {
+        "n": 3,
+        "anyCandidate": 3
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "mac-speed",
+      "append": [
+        2,
+        14,
+        7
+      ],
+      "currentOriginal": [
+        2,
+        14,
+        7
+      ],
+      "assisted": [
+        2,
+        14,
+        7
+      ]
+    },
+    {
+      "id": "mac-ports",
+      "append": [
+        22,
+        23,
+        24
+      ],
+      "currentOriginal": [
+        22,
+        19,
+        24
+      ],
+      "assisted": [
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "id": "mac-neural",
+      "append": [
+        14,
+        17,
+        26
+      ],
+      "currentOriginal": [
+        14,
+        17,
+        12
+      ],
+      "assisted": [
+        14,
+        17,
+        26
+      ]
+    },
+    {
+      "id": "mac-release",
+      "append": [
+        2,
+        38,
+        1
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        2,
+        38,
+        1
+      ]
+    },
+    {
+      "id": "happy-finland",
+      "append": [
+        12,
+        4,
+        6
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        12,
+        4,
+        6
+      ]
+    },
+    {
+      "id": "happy-us",
+      "append": [
+        6,
+        7,
+        1
+      ],
+      "currentOriginal": [
+        6,
+        1
+      ],
+      "assisted": [
+        6,
+        7,
+        21
+      ]
+    },
+    {
+      "id": "happy-korea",
+      "append": [
+        1,
+        6,
+        17
+      ],
+      "currentOriginal": [
+        1,
+        6
+      ],
+      "assisted": [
+        17,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "happy-north",
+      "append": [
+        3,
+        9,
+        16
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        16,
+        17,
+        23
+      ]
+    }
+  ]
+}

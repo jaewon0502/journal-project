@@ -1,0 +1,22 @@
+{
+  "id": "palestinian-quote",
+  "speakerFileSha256": "a3bb6b813a83949dd180ce4e111761f0d408beab4f0a77935f0df2b76b2aa19f",
+  "required": {
+    "header": 121,
+    "speech": 142
+  },
+  "evidenceBlocksApart": 21,
+  "querySubmissions": 1,
+  "direct": [
+    142,
+    137,
+    166
+  ],
+  "baselineSpeechDirect": true,
+  "baselineHeaderDirect": false,
+  "baselineHeaderInAnyCandidateContext": false,
+  "eligibleForOptionalPreview": true,
+  "surfacedPreviews": [],
+  "speakerAndSpeechPreview": false,
+  "optionalPreviewsAvailableToOpen": 0
+}

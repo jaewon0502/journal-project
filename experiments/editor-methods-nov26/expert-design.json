@@ -1,0 +1,14 @@
+{
+  "format": "journal-external-standing-teams-v1",
+  "researchSource": "https://aclanthology.org/2021.findings-emnlp.101/",
+  "repository": "https://github.com/Media-Bias-Group/Neural-Media-Bias-Detection-Using-Distant-Supervision-With-BABE",
+  "revision": "fb79f646dcabf1746f5ebedc06ed8dd61ba78188",
+  "expertFile": "raw_labels_SG1.csv",
+  "expertSha256": "c6e77c7bc0e7bf0d7367e5d604fcee2fc4af1e3d6a26773b99123528b8cabc0a",
+  "crowdFile": "final_labels_MBIC.csv",
+  "crowdSha256": "074ac67fed27d4cc16a2beead0419ac8cc266f84a71002fce0e6caabc8770ab8",
+  "unit": "Join by stripped news_link and NFC text with whitespace collapsed. Keep only sentences with exactly one valid binary response per each of the same eight trained annotators. Count missing, duplicate, nonbinary and unmatched records explicitly. Published crowd No agreement is unscorable.",
+  "retrospectiveTrigger": "After the Ukrainian-crisis directional replay produced virtually no positive reference cases, use a separate English dataset of perceived bias through word choice. Public papers and marginal label availability were examined before the comparisons. Word-choice bias is not a party-direction or severity measure.",
+  "assignment": "Every possible standing team consisting of two unordered first readers and one distinct adjudicator among eight people (28 x 6 = 168); team membership fixed across all eligible sentences. Ask adjudicator only if first two binary labels disagree. Fixed-three comparator uses the same three votes on every sentence. Remaining five expert votes form a disjoint majority; matched separate MBIC crowd aggregates are an additional reference.",
+  "metrics": "Per team report requested ratings versus always three and fixed two, decisions/abstentions, errors by positive/negative remaining expert majority, and errors versus separate crowd aggregate. Display typical and full range across teams without identifying raters, and pooled counts/rates. Sentence-team assignments repeat evidence and do not supply independent sample size. Count early negative agreement with a positive held-out panel. Preserve full-paper and source limitations."
+}

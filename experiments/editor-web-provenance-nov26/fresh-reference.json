@@ -1,0 +1,21 @@
+{
+  "frozenAt": "2026-11-26T14:37:23+00:00",
+  "extractorSha256": "6ce0232bb0d06c84c422173bb8b90f77179a655aed1de147d6acf39d8d90085b",
+  "selection": "Two new policy reports, MBC (independent diplomacy test) and European Commission (first original 2024 press release for AI Act entry into force). Both page-header publication dates were read before running the revised extractor. Same six-page scoring definitions.",
+  "references": [
+    {
+      "page": "mbc",
+      "url": "https://imnews.imbc.com/replay/2024/nwdesk/article/6590964_36515.html",
+      "selector": "span.input",
+      "marker": "입력 2024-04-19 20:07",
+      "date": "2024-04-19"
+    },
+    {
+      "page": "eu-ai",
+      "url": "https://digital-strategy.ec.europa.eu/en/news/european-artificial-intelligence-act-comes-force",
+      "selector": "li.ecl-page-header__meta-item",
+      "marker": "Publication 01 August 2024",
+      "date": "2024-08-01"
+    }
+  ]
+}

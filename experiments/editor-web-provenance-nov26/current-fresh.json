@@ -1,0 +1,26 @@
+{
+  "extractorSha256": "099437c24bb0fdc40f3018afa0130fd3bca807b1e8f18ce9515ebe4795f97673",
+  "total": 2,
+  "parsed": 2,
+  "correct": 1,
+  "wrong": 0,
+  "abstained": 1,
+  "pages": [
+    {
+      "page": "mbc",
+      "reference": "2024-04-19",
+      "parsed": true,
+      "proposed": "2024-04-19T20:07:54+09:00",
+      "modified": "2024-04-19T21:28:16+09:00",
+      "matched": true
+    },
+    {
+      "page": "eu-ai",
+      "reference": "2024-08-01",
+      "parsed": true,
+      "proposed": null,
+      "modified": null,
+      "matched": null
+    }
+  ]
+}

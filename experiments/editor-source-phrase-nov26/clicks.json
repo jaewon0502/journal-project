@@ -1,0 +1,83 @@
+{
+  "baseline": "2e0e028e7552aa2f3f3e209783d5d436738aba5c",
+  "results": [
+    {
+      "width": 390,
+      "method": "replace",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 5,
+        "textEntries": 1
+      },
+      "firstSourceParagraph": 2
+    },
+    {
+      "width": 390,
+      "method": "append",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 5,
+        "textEntries": 1
+      },
+      "firstSourceParagraph": 2
+    },
+    {
+      "width": 390,
+      "method": "separate",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 3,
+        "textEntries": 0
+      },
+      "firstSourceParagraph": 2
+    },
+    {
+      "width": 1280,
+      "method": "replace",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 5,
+        "textEntries": 1
+      },
+      "firstSourceParagraph": 2
+    },
+    {
+      "width": 1280,
+      "method": "append",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 5,
+        "textEntries": 1
+      },
+      "firstSourceParagraph": 2
+    },
+    {
+      "width": 1280,
+      "method": "separate",
+      "initial": {
+        "clicks": 2,
+        "textEntries": 1
+      },
+      "revisit": {
+        "clicks": 3,
+        "textEntries": 0
+      },
+      "firstSourceParagraph": 2
+    }
+  ]
+}

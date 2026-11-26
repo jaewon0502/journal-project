@@ -1,0 +1,19 @@
+{
+  "querySha256":"18721e58439e925875f27d3bcdf083534d7318fa048fc03ff1d2d7e92912c268",
+  "extractorSha256":"30f08ebac9408a9b18609e49f5c33c5820de65a6ced6aebf3aeaab3d9f7cc6cc",
+  "editions":{
+    "mbc":{"paragraphs":19,"sha256":"1a0056632fe47033f0f94279e6acce599234282a1a6c39001cefbb4ceca1b5eb"},
+    "un24":{"paragraphs":177,"sha256":"bed5c976103fb432d67085d74ea6978b38405bbed5c186ccaa7b98d26019a4ce"},
+    "history":{"paragraphs":25,"sha256":"d9331af4fe6ff3e5a31b2d13f044c02cfd4d07c37b6844d503fc1a3d350db27c"}
+  },
+  "sources":{"mbc":"un24"},
+  "scoring":"Use the revised frozen method for the first run on this new article and keep matches to the earlier model as a secondary comparison. The complete 2024 vote occupies four source blocks, so it cannot achieve full direct top-three credit. Preserve that failure and report number of distinct mandatory direct blocks retrieved as a secondary diagnostic. For the 2011 claim combine an exhaustive calendar-year register of UN Security Council vetoes with the historical admissions record. The necessary vote-list rows and the application date distinguish a possible veto threat from the actual use of a veto on this application. Speaker attribution and speech content must both be directly retrievable when they occur on different pages.",
+  "cases":{
+    "vote-2024":{"articleParagraph":8,"verdict":"supported","required":[30,31,32,33],"note":"The complete 2024 vote lists South Korea, names the US voter against and both abstaining states, and gives the 12–1–2 count and non-adoption. UN S/PV.9609 p.3."},
+    "us-rationale":{"articleParagraph":9,"verdict":"supported","required":[45,46],"note":"The US representative explains the vote in terms of direct talks, then names the two parties explicitly. UN S/PV.9609 p.4."},
+    "palestinian-quote":{"articleParagraph":16,"verdict":"supported","required":[121,142],"note":"Mansour takes the floor on p.10. He asks the Council the annexation and impunity questions on p.12, still in the same intervention. Attribution only, not a judgment on the events in his questions."},
+    "israeli-thanks":{"articleParagraph":17,"verdict":"supported","required":[171],"note":"Erdan of Israel explicitly thanks the United States and especially President Biden. UN S/PV.9609 p.13."},
+    "vote-2011":{"articleParagraph":12,"source":"history","verdict":"contradicted","required":[1,24,25],"note":"The application came before the Council in September. In the UN Library's complete calendar-year list the only US veto was in February; October concerned Syria and was vetoed by China and Russia. No 2011 US veto on this application. S/2011/705 para 21 also reports the committee's lack of consensus."},
+    "public-opinion":{"articleParagraph":18,"verdict":"unresolved","required":[],"note":"Statements about political support at the meeting do not supply a comparable US opinion poll or establish a worsening trend."}
+  }
+}

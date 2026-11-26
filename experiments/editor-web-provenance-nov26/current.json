@@ -1,0 +1,56 @@
+{
+  "extractorSha256": "099437c24bb0fdc40f3018afa0130fd3bca807b1e8f18ce9515ebe4795f97673",
+  "total": 6,
+  "parsed": 5,
+  "correct": 5,
+  "wrong": 0,
+  "abstained": 1,
+  "pages": [
+    {
+      "page": "mac",
+      "reference": "2024-10-30",
+      "parsed": true,
+      "proposed": "2024-10-30T08:46:58+09:00",
+      "modified": null,
+      "matched": true
+    },
+    {
+      "page": "apple",
+      "reference": "2024-10-29",
+      "parsed": true,
+      "proposed": "2024-10-29",
+      "modified": "2026-08-19T18:37:21Z",
+      "matched": true
+    },
+    {
+      "page": "happiness",
+      "reference": "2024-03-20",
+      "parsed": false,
+      "reason": "웹문서에서 단일 기사 본문을 구별하지 못했습니다. 원문에서 확인할 대목을 붙여넣으세요."
+    },
+    {
+      "page": "whr",
+      "reference": "2024-03-20",
+      "parsed": true,
+      "proposed": "2024-03-20",
+      "modified": null,
+      "matched": true
+    },
+    {
+      "page": "wildlife",
+      "reference": "2016-09-05",
+      "parsed": true,
+      "proposed": "2016-09-05T10:16:41+09:00",
+      "modified": "2016-09-05T10:16:41+09:00",
+      "matched": true
+    },
+    {
+      "page": "iucn",
+      "reference": "2016-09-04",
+      "parsed": true,
+      "proposed": "2016-09-04T21:00:00+02:00",
+      "modified": "2022-06-27T20:16:46+02:00",
+      "matched": true
+    }
+  ]
+}

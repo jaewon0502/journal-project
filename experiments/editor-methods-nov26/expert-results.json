@@ -1,0 +1,89 @@
+{
+  "coverage": {
+    "expertInputRows": 13597,
+    "expertDistinctSentenceKeys": 1705,
+    "crowdDistinctSentenceKeys": 1700,
+    "crowdAbsentFromExpertInput": 11,
+    "completeBinaryExpertSentences": 1667,
+    "dispositions": {
+      "duplicateRater": 0,
+      "incompletePanel": 12,
+      "missingOrNonbinary": 26,
+      "eligibleExpertWithoutCrowdMatch": 11,
+      "eligibleExpertWithCrowdTie": 146,
+      "eligibleExpertWithBinaryCrowd": 1510
+    }
+  },
+  "standingTeams": 168,
+  "sentenceTeamAssignments": 280056,
+  "individualRatings": {
+    "fixedTwo": 560112,
+    "fixedThree": 840168,
+    "adaptive": 645534,
+    "unresolvedWithOnlyTwo": 85422,
+    "additionalPctVsTwo": 15.25088,
+    "savedVsThree": 194634,
+    "savedPctVsThree": 23.16608,
+    "adaptiveVsFixedThreeDecisionMismatches": 0
+  },
+  "adaptiveAgainstRemainingFive": {
+    "truePositive": 107298,
+    "falseNegative": 28212,
+    "falsePositive": 28986,
+    "trueNegative": 115560,
+    "comparablePanelOutcomes": 280056,
+    "agreementPct": 79.57623,
+    "positivePanelAgreementPct": 79.18087,
+    "negativePanelAgreementPct": 79.94687,
+    "alwaysNegativeAgreementPct": 51.61325,
+    "earlyNegativeWithPositivePanel": 14388
+  },
+  "adaptiveAgainstSeparateCrowdMajority": {
+    "truePositive": 111564,
+    "falseNegative": 54252,
+    "falsePositive": 14430,
+    "trueNegative": 73434,
+    "comparablePanelOutcomes": 253680,
+    "agreementPct": 72.92573,
+    "positivePanelAgreementPct": 67.28181,
+    "negativePanelAgreementPct": 83.57689,
+    "alwaysNegativeAgreementPct": 34.63576
+  },
+  "across168Teams": {
+    "adaptiveRatings": {
+      "min": 3590,
+      "median": 3858.5,
+      "max": 4007
+    },
+    "savedPctVsThree": {
+      "min": 19.87602,
+      "median": 22.84543,
+      "max": 28.21436
+    },
+    "escalationPct": {
+      "min": 15.35693,
+      "median": 31.46371,
+      "max": 40.37193
+    },
+    "fiveExpertAgreementPct": {
+      "min": 71.44571,
+      "median": 80.323935,
+      "max": 83.62328
+    },
+    "fiveExpertPositiveAgreementPct": {
+      "min": 62.77372,
+      "median": 79.5466,
+      "max": 91.15646
+    },
+    "fiveExpertNegativeAgreementPct": {
+      "min": 59.2173,
+      "median": 80.51019,
+      "max": 93.50282
+    },
+    "separateCrowdAgreementPct": {
+      "min": 67.61589,
+      "median": 72.251655,
+      "max": 77.94702
+    }
+  }
+}

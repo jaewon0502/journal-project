@@ -1,0 +1,173 @@
+{
+  "referenceHash": "6d1273356081e5d5467591a972a1559279ecf85fee18ae1ec011183eb83fda32",
+  "baselineResultSha256": "1d158f53ae59a2f37004441974b476df8a01759a01d772f1e98dab08fefd9c50",
+  "currentModules": {
+    "files": 9,
+    "sha256": "cb1f4ba59f06993b7dae773c247b728176147c1ee33f8ed7e9bf3769a4a0b41a"
+  },
+  "methods": {
+    "manualAppend": {
+      "supported": {
+        "n": 4,
+        "top1": 3,
+        "top3": 4
+      },
+      "partialOrScope": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      },
+      "unresolved": {
+        "n": 0,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      }
+    },
+    "currentOriginal": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 0
+      },
+      "partialOrScope": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 0,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      }
+    },
+    "assisted": {
+      "supported": {
+        "n": 4,
+        "top1": 3,
+        "top3": 4
+      },
+      "partialOrScope": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      },
+      "unresolved": {
+        "n": 0,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "panda-status",
+      "append": [
+        17,
+        1,
+        20
+      ],
+      "currentOriginal": [
+        1,
+        2,
+        3
+      ],
+      "assisted": [
+        17,
+        20,
+        19
+      ]
+    },
+    {
+      "id": "panda-bamboo",
+      "append": [
+        17,
+        6,
+        1
+      ],
+      "currentOriginal": [
+        1,
+        2,
+        3
+      ],
+      "assisted": [
+        17,
+        6,
+        1
+      ]
+    },
+    {
+      "id": "gorilla-size",
+      "append": [
+        1,
+        5,
+        6
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        1,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "gorilla-taxonomy",
+      "append": [
+        5,
+        1,
+        6
+      ],
+      "currentOriginal": [
+        5,
+        1,
+        6
+      ],
+      "assisted": [
+        5,
+        1,
+        6
+      ]
+    },
+    {
+      "id": "gorilla-war",
+      "append": [
+        5,
+        18,
+        20
+      ],
+      "currentOriginal": [
+        18
+      ],
+      "assisted": [
+        5,
+        18,
+        20
+      ]
+    },
+    {
+      "id": "apes-status",
+      "append": [
+        1,
+        5,
+        11
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        1,
+        5,
+        11
+      ]
+    }
+  ]
+}

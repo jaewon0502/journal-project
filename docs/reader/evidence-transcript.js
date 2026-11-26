@@ -181,7 +181,61 @@
       foundRequotation ? label + '의 발언 중 다른 사람이나 문서를 인용한 곳에서 같은 표현을 찾았습니다. 원 발언자를 확인하세요.' :
       label + '의 발언과 인용 내용을 연결할 구간을 찾지 못했습니다. 원문의 화자 표기와 앞뒤 발언을 확인하세요.'};
   }
-  const api = {lookup};
+  // A navigation aid for an already-ranked English paragraph. Only formal
+  // turn labels license a preview. A reference to a person inside prose cannot.
+  const englishRole = '(?:(?:The )?(?:President|Vice President|Prime Minister|Speaker|Chair(?:man|woman|person)?|Moderator|Commissioner|Minister|Senator|Representative|Secretary|Governor|Mayor)|Mr\\.|Ms\\.|Mrs\\.|Dr\\.)';
+  const surname = "[A-Za-z][A-Za-z'’.-]*";
+  const roleHeader = new RegExp('^(' + englishRole + '(?: ' + surname + '){0,3}):(?:[ \\t]+|$)', 'iu');
+  const explicitSpeaker = /^Speaker:\s+([A-Z][\p{L}'’-]+(?: [A-Z][\p{L}'’-]+){1,3})\s*$/u;
+  const embeddedTurn = new RegExp('(?:[.!?;]\\s+|\\s+[—–-]\\s+)(?:' + englishRole + '(?: ' + surname + '){0,3}|Q|A)\\s*:', 'iu');
+  const inquiry = /^(?:Q(?:uestion)?|A(?:nswer)?|Reporter|Press|Audience member)\s*:(?:\s|$)/iu;
+  const unknownTurn = /^(?:(?:[\p{L}.'’-]+ ){0,6}[\p{L}.'’-]+\s*:|[A-Z][A-Z\s.'’-]+$)|(?:^|\s)[—–-]\s*[A-Z][\p{L}.'’ -]{1,45}:|(?:^|[.!?]\s+)(?:(?:Mr|Ms|Mrs|Dr)\.\s+[A-Z]|THE (?:CHAIR|PRESIDENT):)/u;
+  const handoff = /\b(?:give|yield|return|turn|hand)(?:ing|s|ed)? (?:the (?:floor|microphone)|(?:it|this) over)\b|\b(?:over to|next (?:speaker|question)|(?:I|we) (?:now )?(?:recognize|call on)|has the floor|the floor is yours|you may (?:begin|proceed)|please (?:welcome|proceed)|(?:session|meeting) (?:adjourned|suspended|resumed))\b/iu;
+  const aside = /[\f\t|\[\]]|^\s*[(\[<{#•*]|^\s*(?:[-—–]{2,}|(?:page|appendix|chapter|section|agenda|recess|applause|laughter|interruption|transcript|editor.?s note)\b)|\[(?:\.\.\.|…|inaudible|unintelligible)\]/iu;
+  const attribute = /\b(?:he|she|they|the (?:chair|speaker|president|moderator)|[A-Z][a-z]+ [A-Z][a-z]+) (?:said|says|asked|stated|noted|replied|announced|continued|writes?|wrote|declared|announced|explained|warned)\b/iu;
+  function englishSpeakerContexts(text, passages) {
+    const result = new Map(), candidates = new Map();
+    if (!passages.length || !/(?:^|[\r\n\u2028\u2029])[ \t]*(?:the |president|chair|moderator|speaker|minister|senator|representative|secretary|governor|mayor|commissioner|vice |prime |m[rs][s]?\.|dr\.)/iu.test(text)) return result;
+    const positions = new Map(passages.map(p => [p.paragraph,p.text]));
+    const labels = new Set();
+    const lines = text.split(/\r\n|[\r\n\u2028\u2029]/u);
+    let header = null, paragraph = 0;
+    for (const [i, raw] of lines.entries()) {
+      const line = raw.trim();
+      if (!line) { header = null; continue; }
+      paragraph++;
+      if (aside.test(raw) || handoff.test(line)) { header = null; continue; }
+      const role = roleHeader.exec(line);
+      const named = explicitSpeaker.exec(line);
+      const label = named?.[1] || role?.[1];
+      if (label) {
+        // Accept capitalized role/name labels only. Reject descriptive clauses,
+        // including lines such as "President announced today: …".
+        const personal = label.replace(new RegExp('^' + englishRole + '\\s*','iu'),'');
+        if (!/^[A-Z]/u.test(label) || (role && !named && personal && !personal.split(' ').every(word => /^[A-Z][A-Za-z'’.-]*$/u.test(word)))) {
+          header = null; continue;
+        }
+        labels.add(label.toLowerCase());
+        header = {label, start:i, paragraph};
+        const body = role && !named ? line.slice(role[0].length) : '';
+        if (aside.test(body) || handoff.test(body) || unknownTurn.test(body) || embeddedTurn.test(body)) header = null;
+        continue;
+      }
+      if (inquiry.test(line)) { labels.add('unattributed-question-or-answer'); header = null; continue; }
+      if (/^[A-Z][A-Z .'’-]{1,50}\.\s+[A-Z]/u.test(line) || unknownTurn.test(line) || embeddedTurn.test(line) || attribute.test(line) || /^(?:[A-Z][a-z'’-]+ ){2,4}[a-z]/u.test(line) || /^[A-Z][a-z'’-]+(?: [A-Z][a-z'’-]+){0,4}$/u.test(line)) {
+        header = null; continue;
+      }
+      if (header && i - header.start <= 6 && positions.has(paragraph) &&
+          (positions.get(paragraph) === undefined || positions.get(paragraph) === raw)) {
+        candidates.set(paragraph,{label:header.label, startParagraph:header.paragraph, paragraph,
+          text:lines.slice(header.start, i + 1).join('\n')});
+      }
+    }
+    if (labels.size < 2) return result;
+    return candidates;
+  }
+
+  const api = {lookup, englishSpeakerContexts};
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.JournalEvidenceTranscript = api;
 })(globalThis);

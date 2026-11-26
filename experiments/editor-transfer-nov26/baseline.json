@@ -1,0 +1,149 @@
+{
+  "referenceHash": "b9deddec0d3cbc601b633fe027ee16db12f4a2d1386627f42069cfa3e22b8dd6",
+  "baselineModules": {
+    "files": 9,
+    "sha256": "55048d873b6edc2d4aab85625ef59108fa1cc23c213fada7dbe7fa39a2cc39e9"
+  },
+  "methods": {
+    "original": {
+      "supported": {
+        "n": 2,
+        "top1": 1,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 3,
+        "top1": 1,
+        "top3": 1
+      },
+      "unresolved": {
+        "n": 3,
+        "anyCandidate": 2
+      }
+    },
+    "manual": {
+      "supported": {
+        "n": 2,
+        "top1": 1,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 3,
+        "top1": 1,
+        "top3": 2
+      },
+      "unresolved": {
+        "n": 3,
+        "anyCandidate": 3
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "mac-speed",
+      "row": 6,
+      "originalQuerySha256": "bfa3af431b434e7cdc0371e6c2b1af12dadafca44fe23a53d71c98a8c7ad7c6b",
+      "original": [
+        2,
+        14,
+        7
+      ],
+      "manual": [
+        2,
+        14,
+        7
+      ]
+    },
+    {
+      "id": "mac-ports",
+      "row": 14,
+      "originalQuerySha256": "d56265c31cb7cfde9e85f0a2113aca3a84abd2ebc4fb20ca4f698890eb7f2100",
+      "original": [
+        22,
+        19,
+        24
+      ],
+      "manual": [
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "id": "mac-neural",
+      "row": 12,
+      "originalQuerySha256": "58ca13a77b78f134daf44346b9a1b5a75733720a26b3bcf96ca24e49bca36735",
+      "original": [
+        14,
+        17,
+        12
+      ],
+      "manual": [
+        14,
+        17,
+        26
+      ]
+    },
+    {
+      "id": "mac-release",
+      "row": 16,
+      "originalQuerySha256": "7690d7d7ccf99c17b1e02d18a8c6dbea1a254202af7d5a758c023dfb9b19f981",
+      "original": [],
+      "manual": [
+        2,
+        38,
+        1
+      ]
+    },
+    {
+      "id": "happy-finland",
+      "row": 2,
+      "originalQuerySha256": "654cf93a747410c2763c0adf35691781f91f9bddc8547b67e57424703b3b0f94",
+      "original": [],
+      "manual": [
+        12,
+        4,
+        6
+      ]
+    },
+    {
+      "id": "happy-us",
+      "row": 3,
+      "originalQuerySha256": "d62069410538e3f7b9ecbd3d72d66fbc17bad6235b18fb38d2391030d2c61ce6",
+      "original": [
+        6,
+        1
+      ],
+      "manual": [
+        6,
+        7,
+        21
+      ]
+    },
+    {
+      "id": "happy-korea",
+      "row": 1,
+      "originalQuerySha256": "30cec89a922c406f49c6ef317cd901186f50fb76019d71cd5bc5a74c2211d4b9",
+      "original": [
+        1,
+        6
+      ],
+      "manual": [
+        17,
+        1,
+        2
+      ]
+    },
+    {
+      "id": "happy-north",
+      "row": 9,
+      "originalQuerySha256": "610c923bc5d68698e8db63fd042bfb62a684f4d9bb5a7f2d64c3c311f8f0fcad",
+      "original": [],
+      "manual": [
+        3,
+        9,
+        16
+      ]
+    }
+  ]
+}

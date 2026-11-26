@@ -1,0 +1,11 @@
+{
+  "protocol":"Retrospective after single-query results are known, never an independent test. Use only words that already occurred in the corresponding locked English query. Split into one subject or factual aspect per phrase. Same maximum 3 or 6 distinct reviewed source blocks in all conditions. Round-robin first direct result per search, then second, then third; remove duplicates. If the budget permits, use actual rendered context blocks, nearest first, earlier block on a tie, round-robin across direct hits. Stop on exhaustion. Count query submissions separately from distinct blocks; no participants or measured reading time. Keep all six claims even when no source exists.",
+  "parts":{
+    "vote-2024":["twelve in favour South Korea","UK Switzerland abstained","United States veto"],
+    "us-rationale":["United States explains independent Palestinian state","direct negotiations between Israel and Palestinians"],
+    "palestinian-quote":["Palestinian ambassador Mansour","time annex Palestinian land","impunity expel kill people"],
+    "israeli-thanks":["Israel thanked United States","President Biden veto membership"],
+    "vote-2011":["Palestine membership application 2011","United States cast veto","vote Security Council"],
+    "public-opinion":["United States public opinion worsening","presidential election poll","support Israel"]
+  }
+}

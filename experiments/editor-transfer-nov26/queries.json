@@ -1,0 +1,17 @@
+{
+  "articles": {
+    "mac": "https://zdnet.co.kr/view/?no=20241030075928",
+    "happiness": "https://files.newsis.com/view/NISX20240320_0002668809"
+  },
+  "protocol": "First select Korean news claims and write one English search phrase per claim, using only those two news articles. Then consult one contemporary official English announcement per article. Evaluate the resulting evidence from that announcement only. Freeze reference paragraph IDs and normalized file digests before opening the retrieval code or running searches. Take the complete selected Korean sentence as the default query. Full direct reference paragraph within top 1 and 3 counts; context preview alone does not. Count unresolved cases separately, never as true or false on a lexical hit. Evaluate the same prewritten English queries in the working old search and new method.",
+  "cases": [
+    {"id":"mac-speed","article":"mac","anchor":"1.8배","focus":"Apple's claimed maximum improvements in CPU and GPU performance over M1.","phrase":"M4 Mac mini CPU 1.8 times GPU 2.2 times versus M1"},
+    {"id":"mac-ports","article":"mac","anchor":"헤드폰 잭을","focus":"Two USB-C ports and a headphone socket on the front, three Thunderbolt USB-C ports, HDMI and Ethernet on the rear.","phrase":"two USB-C ports headphone jack front three Thunderbolt HDMI Ethernet rear"},
+    {"id":"mac-neural","article":"mac","anchor":"38 TOPS","focus":"Up to 38 trillion AI operations per second for M4.","phrase":"M4 AI engine 38 trillion operations per second"},
+    {"id":"mac-release","article":"mac","anchor":"정식 출시된다","focus":"November 9 release date reported without a market. Distinguish any market specified by the evidence.","phrase":"new Mac mini release availability November 9 preorders"},
+    {"id":"happy-finland","article":"happiness","anchor":"7년 연속 세계","focus":"Finland leads for the seventh year and scores 7.741.","phrase":"Finland happiness 7.741 first place seven consecutive years"},
+    {"id":"happy-us","article":"happiness","anchor":"23위에 그쳤다","focus":"US scores 6.725 and falls to 23rd, outside the top 20 for the first time.","phrase":"United States 6.725 23rd first time outside top twenty"},
+    {"id":"happy-korea","article":"happiness","anchor":"6.058점으로","focus":"Korea scores 6.058 and places 52nd out of 143.","phrase":"South Korea happiness ranking 52 of 143 score 6.058"},
+    {"id":"happy-north","article":"happiness","anchor":"조사 대상에 포함되지","focus":"North Korea excluded from the surveyed countries.","phrase":"North Korea excluded from countries surveyed"}
+  ]
+}
