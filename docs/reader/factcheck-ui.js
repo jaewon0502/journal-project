@@ -299,14 +299,14 @@
     const area = byId('web-source-options');
     area.replaceChildren();
     area.hidden = true;
-    if (!info || editingId) return;
+    if (!info) return /^(게시|수정) \d{4}-\d{2}-\d{2}/.test(byId('source-version').value);
 
     const version = [info.published && '게시 ' + info.published, info.modified && '수정 ' + info.modified]
       .filter(Boolean).join(' · ');
     const fields = {title:info.title, url:info.url, version};
     // A new web excerpt may inherit the default metadata of the preceding source.
     // A matching URL alone cannot distinguish two saved revisions of a web page.
-    if (prefillId && (!info.url || sourceBaseline.url !== info.url || !version || sourceBaseline.version !== version)) {
+    if (!editingId && prefillId && (!info.url || sourceBaseline.url !== info.url || !version || sourceBaseline.version !== version)) {
       for (const key of documentFields) {
         const input = byId('source-' + key);
         if (!typedDocumentFields.has(key) && input.value === sourceBaseline[key]) input.value = '';
@@ -314,11 +314,16 @@
       prefillId = null;
       sourceBaseline = workspace.sourceDefaults();
     }
+    const needsDocumentReview = Object.entries(fields).some(([key, proposed]) => {
+      const current = byId('source-' + key).value.trim();
+      return current && current !== proposed;
+    });
+    if (editingId) return needsDocumentReview;
     area.hidden = false;
     area.append(node('p', '파일에 표시된 자료 이름과 주소, 게시·수정 시각을 원본과 대조하세요. 게시 시각은 문서의 공개 시점입니다.', 'hint'));
     area.append(node('p', [info.title || '자료 이름 확인 필요', info.url || '문서 주소 확인 필요',
       '게시 ' + (info.published || '확인 필요'), '수정 ' + (info.modified || '확인 필요')].join(' · '), 'meta'));
-    if (!Object.values(fields).some(Boolean)) return;
+    if (!Object.values(fields).some(Boolean)) return needsDocumentReview;
     const use = button('확인한 웹문서 정보 입력', () => {
       if (!use.isConnected || window.JournalDocumentFile?.webInfo !== info || editingId) return;
       const changes = Object.entries(fields).filter(([key, value]) => value && byId('source-' + key).value !== value);
@@ -337,6 +342,7 @@
       byId('source-locator').focus();
     });
     area.append(use);
+    return needsDocumentReview;
   }
   function offerPdfLocation(proposal) {
     offerWebDocumentInfo(null);
@@ -946,7 +952,7 @@
       return;
     }
     if (!byId('source-location-review').hidden && !byId('source-location-checked').checked) {
-      message('source-status', '등록하려면 위 확인 위치와 발췌문을 원문에서 대조한 뒤 확인란을 선택하세요.', true);
+      message('source-status', '등록하려면 위 확인 위치와 발췌문, 자료 이름·주소·판본을 원문에서 대조한 뒤 확인란을 선택하세요.', true);
       byId('source-location-checked').focus();
       return;
     }
@@ -1023,8 +1029,8 @@
     const proposal = window.JournalDocumentFile?.excerptLocation(entry);
     offerPdfLocation(proposal);
     offerDocumentInfo(proposal);
-    offerWebDocumentInfo(window.JournalDocumentFile?.webInfo);
-    setLocationReview(inheritsLocation);
+    const needsDocumentReview = offerWebDocumentInfo(window.JournalDocumentFile?.webInfo);
+    setLocationReview(inheritsLocation || needsDocumentReview);
     sourceDraftEdited();
     const span = entry.startParagraph && entry.startParagraph !== entry.paragraph
       ? entry.startParagraph + '~' + entry.paragraph : entry.paragraph;
@@ -1667,7 +1673,7 @@
       byId('source-pdfPage').value = '';
       message('source-status', '문서 주소를 바꿨습니다. 새 주소에서 확인한 PDF 쪽번호를 입력하세요.');
     }
-    if (!byId('source-location-review').hidden && ['source-url', 'source-version', 'source-pdfPage', 'source-locator', 'source-excerpt'].includes(event.target.id)) {
+    if (!byId('source-location-review').hidden && ['source-title', 'source-url', 'source-version', 'source-pdfPage', 'source-locator', 'source-excerpt'].includes(event.target.id)) {
       setLocationReview(true);
     }
     sourceDraftEdited();

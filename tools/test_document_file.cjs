@@ -535,6 +535,26 @@ test('같은 본문이어도 판본이 바뀌면 옛 제안을 무효화하고 �
   assert.equal(p.w.JournalDocumentFile.webInfo, null);
 });
 
+test('저장 전 다른 웹 판본을 발췌하면 이전 문서 정보로 바로 등록할 수 없다', async t => {
+  const p = editor(t);
+  p.w.confirm = () => true;
+  await p.upload('document-file', '첫판.html', webPage(), /게시 2024-06-13/);
+  useWebExcerpt(p).click();
+  assert.equal(p.el('source-location-review').hidden, true);
+  await p.upload('document-file', '개정판.html', webPage({modified:'2024-09-01'}), /수정 2024-09-01/);
+  const applyRevision = useWebExcerpt(p);
+  assert.equal(p.el('source-location-review').hidden, false);
+  p.type('source-locator', '첫 문단');
+  p.el('source-save').click();
+  assert.equal(p.el('source-location-checked').checked, false);
+  assert.equal(p.el('source-count').textContent, '· 0개');
+  applyRevision.click();
+  p.el('source-location-checked').click();
+  p.el('source-save').click();
+  assert.match(p.el('source-list').textContent, /수정 2024-09-01/);
+  assert.equal(p.el('source-count').textContent, '· 1개');
+});
+
 test('발표일과 사건 날짜·다른 기사의 메타데이터를 구분하고 표·본문 구조의 한계를 표시한다', async t => {
   const p = editor(t);
   const html = webPage({published:'2024-02-30', modified:'', extra:'<meta property="og:url" content="https://different.example/other">', body:
