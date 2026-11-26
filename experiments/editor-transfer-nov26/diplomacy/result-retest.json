@@ -1,0 +1,163 @@
+{
+  "referenceHash": "cc4b0321aa108da15fc6b19bc6c04d31c5884476fa3fb9ee6b47ffcda5224260",
+  "baselineResultSha256": "c5fb7cfff3353634f4bf17ed93c9495f23ed5cefb25a26f1056b4df4435cc2ad",
+  "currentModules": {
+    "files": 9,
+    "sha256": "cb1f4ba59f06993b7dae773c247b728176147c1ee33f8ed7e9bf3769a4a0b41a"
+  },
+  "methods": {
+    "manualAppend": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 0,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 1,
+        "anyCandidate": 1
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      }
+    },
+    "currentOriginal": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 0
+      },
+      "partialOrScope": {
+        "n": 0,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 1,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      }
+    },
+    "assisted": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 0,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 1,
+        "anyCandidate": 1
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "vote-2024",
+      "append": [
+        85,
+        89,
+        66
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        85,
+        89,
+        66
+      ]
+    },
+    {
+      "id": "us-rationale",
+      "append": [
+        46,
+        94,
+        45
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        46,
+        94,
+        45
+      ]
+    },
+    {
+      "id": "palestinian-quote",
+      "append": [
+        142,
+        137,
+        166
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        142,
+        137,
+        166
+      ]
+    },
+    {
+      "id": "israeli-thanks",
+      "append": [
+        42,
+        171,
+        89
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        42,
+        171,
+        89
+      ]
+    },
+    {
+      "id": "vote-2011",
+      "append": [
+        7,
+        1,
+        19
+      ],
+      "currentOriginal": [
+        1,
+        2,
+        7
+      ],
+      "assisted": [
+        7,
+        1,
+        19
+      ]
+    },
+    {
+      "id": "public-opinion",
+      "append": [
+        109,
+        42,
+        46
+      ],
+      "currentOriginal": [],
+      "assisted": [
+        109,
+        42,
+        46
+      ]
+    }
+  ]
+}

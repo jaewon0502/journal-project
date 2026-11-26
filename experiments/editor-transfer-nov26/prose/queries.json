@@ -1,0 +1,12 @@
+{
+  "articles":{"wildlife":"https://news.sbs.co.kr/news/endPage.do?news_id=N1003768252"},
+  "protocol":"After seeing the first two articles' original and manually entered baseline results, select a third source dominated by prose. No output of the new method has been examined for any sample. Use the same retrieval rules. For this discovery round retain contradicted classifications as evidence-resolvable, but report their hit counts separately. One official English press release, with no added translations or tuning after query freeze.",
+  "cases":[
+    {"id":"panda-status","article":"wildlife","anchor":"멸종위기 정도가","focus":"IUCN moved the giant panda from Endangered to Vulnerable.","phrase":"giant panda conservation status lowered endangered to vulnerable"},
+    {"id":"panda-bamboo","article":"wildlife","anchor":"대나무가 기후변화에","focus":"Climate change threatens bamboo on which giant pandas depend.","phrase":"climate change threatens bamboo food for pandas"},
+    {"id":"gorilla-size","article":"wildlife","anchor":"몸집이 가장 큰","focus":"Eastern gorillas are the largest primates.","phrase":"eastern gorilla largest living primate"},
+    {"id":"gorilla-taxonomy","article":"wildlife","anchor":"등 2개 종으로","focus":"The Korean report assigns mountain and Grauer's gorillas species rank inside the eastern gorilla. Compare the rank of these two groups only.","phrase":"eastern gorilla divided into two species mountain and Grauer's gorillas"},
+    {"id":"gorilla-war","article":"wildlife","anchor":"르완다 내전으로","focus":"Habitat destruction due specifically to the early 1990s Rwandan civil war was a major cause of Grauer's gorilla losses, alongside poaching.","phrase":"Grauer's gorilla hunting habitat destruction Rwandan civil war early 1990s"},
+    {"id":"apes-status","article":"wildlife","anchor":"침팬지·보노보","focus":"Chimpanzees and bonobos were both Endangered.","phrase":"chimpanzees and bonobos classified as endangered"}
+  ]
+}

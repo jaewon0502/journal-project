@@ -468,3 +468,155 @@ test('다른 PDF로 돌아오면 직접 고친 문서 이름은 남고 직전의
   assert.equal(latest.pdfSha256, editionA.hash);
   assert.equal(latest.pdfPage, '2');
 });
+
+const webTitle = '관측 자료 복구 공지';
+const webAddress = 'https://mission.example/reports/recovery';
+const webPublished = '2024-06-13T19:48:23-04:00';
+const webModified = '2024-06-14T09:38:09-04:00';
+const webClaim = 'Four instruments returned usable observations.';
+function webPage({title = webTitle, address = webAddress, published = webPublished, modified = webModified, extra = '', body = ''} = {}) {
+  return '<!doctype html><html><head><title>' + title + '</title>' +
+    '<link rel="canonical" href="' + address + '">' +
+    (published ? '<meta property="article:published_time" content="' + published + '">' : '') +
+    (modified ? '<meta property="article:modified_time" content="' + modified + '">' : '') + extra +
+    '</head><body><nav>메뉴</nav><article><p>' + webClaim + '</p>' + body + '</article></body></html>';
+}
+function useWebExcerpt(p) {
+  const candidate = p.find(webClaim).querySelector('.source');
+  const apply = [...candidate.querySelectorAll('button')].find(button => button.textContent === '이 문단을 발췌문으로 사용');
+  apply.click();
+  return p.el('web-source-options').querySelector('button');
+}
+
+test('저장된 웹문서에서 발췌한 뒤에만 파일의 게시·수정 표지를 입력하고 판단은 미결로 둔다', async t => {
+  const p = editor(t);
+  await p.upload('document-file', '발표.html', webPage(), /게시 2024-06-13.*수정 2024-06-14/);
+  assert.equal(p.el('document-text').value, webClaim);
+  assert.equal(p.el('web-source-options').hidden, true);
+  assert.equal(p.el('document-pdf-panel').hidden, true);
+  const use = useWebExcerpt(p);
+  assert.equal(p.el('source-version').value, '');
+  assert.equal(p.el('source-excerpt').value, webClaim);
+  use.click();
+  assert.equal(p.el('source-title').value, webTitle);
+  assert.equal(p.el('source-url').value, webAddress);
+  assert.equal(p.el('source-version').value, '게시 ' + webPublished + ' · 수정 ' + webModified);
+  assert.equal(p.el('source-locator').value, '');
+  assert.equal(p.el('verdict').value, '');
+  p.type('source-locator', '복구 공지 본문 첫 단락');
+  p.el('source-save').click();
+  assert.match(p.el('source-list').textContent, /게시 2024-06-13.*수정 2024-06-14/);
+  assert.equal(p.el('web-source-options').hidden, true);
+  assert.equal(p.el('source-count').textContent, '· 1개');
+});
+
+test('같은 본문이어도 판본이 바뀌면 옛 제안을 무효화하고 직접 적은 내용은 취소 시 보존한다', async t => {
+  const p = editor(t);
+  await p.upload('document-file', '첫판.htm', webPage(), /게시 2024-06-13/);
+  const previous = useWebExcerpt(p);
+  p.type('source-title', '직접 입력한 제목');
+  p.w.confirm = () => false;
+  previous.click();
+  assert.equal(p.el('source-title').value, '직접 입력한 제목');
+  assert.equal(p.el('source-version').value, '');
+  await p.selectSource('수정.htm', webPage({published:'', modified:'2024-09-01'}));
+  assert.equal(p.el('web-source-options').hidden, false);
+  p.w.confirm = () => true;
+  await p.upload('document-file', '수정.htm', webPage({published:'', modified:'2024-09-01'}), /게시 확인 필요.*수정 2024-09-01/);
+  assert.equal(p.el('web-source-options').hidden, true);
+  previous.click();
+  assert.equal(p.el('source-version').value, '');
+  useWebExcerpt(p).click();
+  assert.equal(p.el('source-version').value, '수정 2024-09-01');
+  const last = p.el('web-source-options').querySelector('button');
+  p.type('document-text', webClaim + ' Changed.');
+  assert.equal(p.el('web-source-options').hidden, true);
+  last.click();
+  assert.equal(p.w.JournalDocumentFile.webInfo, null);
+});
+
+test('저장 전 다른 웹 판본을 발췌하면 이전 문서 정보로 바로 등록할 수 없다', async t => {
+  const p = editor(t);
+  p.w.confirm = () => true;
+  await p.upload('document-file', '첫판.html', webPage(), /게시 2024-06-13/);
+  useWebExcerpt(p).click();
+  assert.equal(p.el('source-location-review').hidden, true);
+  await p.upload('document-file', '개정판.html', webPage({modified:'2024-09-01'}), /수정 2024-09-01/);
+  const applyRevision = useWebExcerpt(p);
+  assert.equal(p.el('source-location-review').hidden, false);
+  p.type('source-locator', '첫 문단');
+  p.el('source-save').click();
+  assert.equal(p.el('source-location-checked').checked, false);
+  assert.equal(p.el('source-count').textContent, '· 0개');
+  applyRevision.click();
+  p.el('source-location-checked').click();
+  p.el('source-save').click();
+  assert.match(p.el('source-list').textContent, /수정 2024-09-01/);
+  assert.equal(p.el('source-count').textContent, '· 1개');
+});
+
+test('발표일과 사건 날짜·다른 기사의 메타데이터를 구분하고 표·본문 구조의 한계를 표시한다', async t => {
+  const p = editor(t);
+  const html = webPage({published:'2024-02-30', modified:'', extra:'<meta property="og:url" content="https://different.example/other">', body:
+    '<p>발사일 <time datetime="2024-02-20">2월 20일</time></p>' +
+    '<blockquote>원자료 요지 <p>괄호 안 조건</p> 후속 설명</blockquote><ul><li>항목 A<ul><li>하위 항목 B</li></ul></li></ul>' +
+    '<article><meta itemprop="datePublished" content="1999-12-31"><p>연관 기사</p></article>' +
+    '<aside><p>광고</p></aside><p hidden>숨김</p><table><tr><td>숫자 237</td></tr></table>'});
+  await p.upload('document-file', '본문.html', html, /날짜 표시.*문서 주소.*표는 제외/);
+  const extracted = p.el('document-text').value;
+  for (const part of ['발사일','원자료 요지','괄호 안 조건','후속 설명','항목 A','하위 항목 B']) assert.ok(extracted.includes(part));
+  assert.doesNotMatch(extracted, /연관 기사|광고|숨김|237/);
+  useWebExcerpt(p).click();
+  assert.equal(p.el('source-url').value,'');
+  assert.equal(p.el('source-version').value,'');
+  const parse = p.w.JournalWebDocument.parse;
+  for (const address of ['file:///a', 'https://username@example.com/p', '/relative']) {
+    assert.equal(parse(webPage({address})).web.url, '');
+  }
+  assert.equal(parse(webPage({extra:'<meta property="article:published_time" content="2024-06-12">'})).web.published, '');
+  assert.equal(parse(webPage({published:'2024-02-29'})).web.published, '2024-02-29');
+  assert.throws(() => parse('<article><p>가</p></article><article><p>나</p></article>'), /단일 기사/);
+});
+
+test('같은 문서의 구조화 기사와 게시 표시만 교차 대조하고 같은 날 서로 다른 시각은 날짜까지만 제안한다', t => {
+  const {w} = editor(t);
+  const schema = data => '<script type="application/ld+json">' + JSON.stringify(data) + '</scr' + 'ipt>';
+  const same = {'@type':'NewsArticle', mainEntityOfPage:{'@id': webAddress + '#webpage'}};
+  const other = {...same, url:'https://other.example/related', datePublished:'1999-12-31'};
+  const parse = (published, nodes, body = '') => w.JournalWebDocument.parse(webPage({
+    published, modified:'', extra:schema({'@graph':nodes}), body})).web;
+  assert.equal(parse('', [other, {...same,datePublished:'2024-10-29Z'}]).published,'2024-10-29');
+  const competing = parse(webPublished,[{...same,datePublished:'2024-06-13T10:00:00-04:00',dateModified:webModified}]);
+  assert.deepEqual([competing.published,competing.modified,competing.dateUncertain],['2024-06-13',webModified,true]);
+  assert.equal(parse(webPublished,[{...same,datePublished:'2024-06-14T23:00:00Z'}]).published,'');
+  const equivalent = parse(webPublished,[{...same,datePublished:'2024-06-13T23:48:23Z'}]);
+  assert.deepEqual([equivalent.published,equivalent.dateUncertain],[webPublished,false]);
+  for (const metadata of [other, {'@type':'Event',startDate:'1988-03-04',datePublished:'1990-01-01',url:webAddress},
+    {'@type':'NewsArticle',datePublished:'2000-02-01'}]) assert.equal(parse('',[metadata]).published,'');
+  const header = '<header><h1>자료 제목</h1><time class="post-date" datetime="2024-03-20">March 20</time></header>';
+  assert.equal(parse('',[],header).published,'2024-03-20');
+  for (const wrong of [header.replace('post-date','event'),header.replace('post-date','post-date updated'),
+    header.replace('<h1>자료 제목</h1>','')]) assert.equal(parse('',[],wrong).published,'');
+});
+
+test('다른 기사 카드에만 본문 표지가 있어도 주 기사 날짜와 섞지 않는다', t => {
+  const {w} = editor(t), parse = w.JournalWebDocument.parse;
+  const head = '<title>Harbor bulletin</title>';
+  const nested = '<article><div class="entry-content"><p>Related museum story.</p></div></article>';
+  const first = '<article><h1>Harbor bulletin</h1><p>The port is open.</p>' + nested + '</article>';
+  assert.equal(parse(head + first).text, 'Harbor bulletin\nThe port is open.');
+  const sibling = '<article><h1>Another story</h1><div itemprop="articleBody"><p>Related museum story.</p></div></article>';
+  assert.equal(parse(head + first + sibling).text, 'Harbor bulletin\nThe port is open.');
+  assert.throws(() => parse(head + first.replace('<h1>Harbor bulletin</h1>', '') + sibling), /단일 기사/);
+  assert.throws(() => parse(head + '<article>' + nested + '</article>'), /단일 기사/);
+  assert.throws(() => parse(head + '<main><h1>Harbor bulletin</h1><p>The port is open.</p>' + sibling + '</main>'), /단일 기사/);
+});
+
+test('article 태그가 없는 문서는 정식 본문 표지와 같은 구역의 일치하는 제목을 요구한다', t => {
+  const {w} = editor(t), parse = w.JournalWebDocument.parse;
+  const title = '<title>Research bulletin</title>';
+  const body = '<div><header><h1>Research bulletin</h1></header><div itemprop="articleBody"><p>First observation.</p></div></div>';
+  assert.equal(parse(title + body).text,'First observation.');
+  assert.throws(() => parse(title + body.replace('<h1>Research','<h1>Library')), /단일 기사/);
+  assert.throws(() => parse(title + body + body), /단일 기사/);
+});

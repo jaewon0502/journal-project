@@ -1,0 +1,82 @@
+[
+  {
+    "id": "C1",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "metadata": [],
+    "reason": "NASA dates the transmission of the science-data command to May 19."
+  },
+  {
+    "id": "C2",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "interview",
+        "paragraph": 1
+      },
+      {
+        "source": "interview",
+        "paragraph": 26
+      }
+    ],
+    "metadata": [],
+    "reason": "The phone interview records Han Kang expressing that hope for both groups."
+  },
+  {
+    "id": "C3",
+    "verdict": "unresolved",
+    "citations": [],
+    "metadata": [],
+    "reason": "The packet contains no retailer reports or sales figures for the claimed cutoff."
+  },
+  {
+    "id": "C4",
+    "verdict": "unresolved",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "metadata": [],
+    "reason": "NASA confirms that two instruments needed more work but does not identify the work as recalibration."
+  },
+  {
+    "id": "C5",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "nobel",
+        "paragraph": 2
+      },
+      {
+        "source": "nobel",
+        "paragraph": 5
+      }
+    ],
+    "metadata": [],
+    "reason": "The October 10, 2024 press release names Han Kang as the literature laureate."
+  },
+  {
+    "id": "C6",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "metadata": [
+      {
+        "source": "nasa",
+        "field": "published"
+      }
+    ],
+    "reason": "The NASA update, dated June 13 by its publication timestamp, reports usable science data from all four instruments."
+  }
+]

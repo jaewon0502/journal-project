@@ -1,0 +1,22 @@
+{
+  "querySha256":"4afdd4403c528ff8035ab83ddda057296f7f7fd6854755535abcfcab069d8d01",
+  "extractorSha256":"30aae7db13393e146779a0b11a77adf7a98b7fa3a1574f38e32b762e86face73",
+  "editions":{
+    "mac":{"paragraphs":9,"sha256":"36468afb68d17a84e1af5046079e20ac8333910c78e8c129b12ac429e29d3fe6"},
+    "happiness":{"paragraphs":9,"sha256":"e2aa26e81c617f335aa72e86286889bf78b13b13ec1b21c15a629ad430a13efe"},
+    "apple":{"paragraphs":46,"sha256":"d71f39c8d00b4e833031de35b3869ea5aecd890489cc6b77e13f3773fba05bec"},
+    "whr":{"paragraphs":26,"sha256":"bb299b3e653500c4ef4099b11b161dd4c12e54a2c804640b16577181359885af"}
+  },
+  "sources":{"mac":"apple","happiness":"whr"},
+  "scoring":"A supported focus is a strict direct hit when all the required paragraphs are among the first k direct search results. Empty evidence lists do not earn a hit. Separate secondary analysis counts whether all targeted explanatory paragraphs were shown for the three scope or partial cases. Report candidate exposure for the three remaining unresolved controls without treating a ranked candidate as a verdict. The displayed Korean row is the unique output of the production preparer containing both its paragraph position and anchor.",
+  "cases":{
+    "mac-speed":{"articleParagraph":3,"verdict":"supported","required":[2],"note":"Manufacturer's own comparative performance claim and maximum multipliers; no independent hardware testing."},
+    "mac-ports":{"articleParagraph":8,"verdict":"supported","required":[22,24],"note":"Body gives the connector types, counts and front jack. Rear photograph caption locates Ethernet and HDMI with the rear Thunderbolt ports. Jack diameter was outside the preselected focus."},
+    "mac-neural":{"articleParagraph":6,"verdict":"unresolved","required":[],"note":"The specified announcement does not provide the 38-trillion figure."},
+    "mac-release":{"articleParagraph":9,"verdict":"scope-dependent","required":[38],"note":"Apple dates the first wave, including the US, to November 8. The story says November 9 without naming a release market and also prints Korean prices. The announcement identifies no November 9 market; it does not establish a Korean market date."},
+    "happy-finland":{"articleParagraph":2,"verdict":"partial","required":[3],"note":"The release states first place for seven consecutive years but does not supply the precise score."},
+    "happy-us":{"articleParagraph":3,"verdict":"partial","required":[6],"note":"The release establishes first fall out of the top twenty and rank 23, but does not supply the precise score."},
+    "happy-korea":{"articleParagraph":1,"verdict":"unresolved","required":[],"note":"The release states over 140 countries but omits the exact denominator, South Korean score and rank."},
+    "happy-north":{"articleParagraph":6,"verdict":"unresolved","required":[],"note":"The release neither enumerates the countries surveyed nor discusses North Korea. Absence from this article does not establish exclusion from the survey."}
+  }
+}

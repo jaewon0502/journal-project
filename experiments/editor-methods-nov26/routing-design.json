@@ -1,0 +1,12 @@
+{
+  "format": "journal-first-reader-routing-v1",
+  "dataset": "BABE SG1 complete eight-person sentence panels already defined in expert-design.json; separately compare published matching MBIC outcomes",
+  "status": "Exploratory follow-up specified after observing the fixed-team benchmark, before seeing any routing outcomes. No threshold selection or changes to the existing article rubric.",
+  "auditSeed": "journal-standing-audit-v1",
+  "audit": "For each source article, hash the seed, a newline and the stripped published URL with UTF-8 SHA-256. Audit the article when the first 8 digest bytes read as an unsigned big-endian integer modulo 10 are zero. Apply to all its sentences and all teams.",
+  "teams": "Use all 8*7*6=336 ordered teams of first reader, second reader and third reader; use the remaining five labels as held-out same-sentence majority. Keep each team fixed across sentences.",
+  "policies": ["oneOnly", "twoConsensus", "fixedThree", "twoPlusTie", "doubleFirstPositive", "doubleFirstNegative"],
+  "rules": "Fixed two require both ratings to agree and otherwise abstain. Fixed three take a 2-of-3 majority. Two plus tie omits the third only on agreement. The two targeted policies obtain a second rating for every first label matching the stated direction or for every randomly audited article. Obtain the third only when the first two disagree. For other cases use the first reader alone. Both targeted policies retain a final binary judgment on all cases.",
+  "denominators": "Count individual ratings; list both fixed-two and fixed-three workload. Across identical held-out outcomes report conditional agreement on classified cases, positive and negative hits divided by all held-out positives/negatives, discordance and abstention counts. Track skipped-low cases where the remaining five or the separate crowd sees a positive, including denominator of all skipped lows. Distinguish two agreements from three out-of-five evidence; no claim of real article accuracy or future validation.",
+  "decision": "Report both directions regardless of results. Retain the original two-editor independent before/after rubric. These policies test where to spend an additional review in pilot screening only."
+}

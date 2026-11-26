@@ -1,0 +1,132 @@
+{
+  "referenceHash": "6d1273356081e5d5467591a972a1559279ecf85fee18ae1ec011183eb83fda32",
+  "baselineModules": {
+    "files": 9,
+    "sha256": "55048d873b6edc2d4aab85625ef59108fa1cc23c213fada7dbe7fa39a2cc39e9"
+  },
+  "methods": {
+    "original": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 0
+      },
+      "partialOrScope": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 0,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      }
+    },
+    "manual": {
+      "supported": {
+        "n": 4,
+        "top1": 3,
+        "top3": 4
+      },
+      "partialOrScope": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      },
+      "unresolved": {
+        "n": 0,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 1,
+        "top3": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "panda-status",
+      "row": 3,
+      "originalQuerySha256": "431e07e0dad92068c83d8180c3b76b2ec7967b85ac93aafdecd3bc585c827763",
+      "original": [
+        1,
+        2,
+        3
+      ],
+      "manual": [
+        17,
+        20,
+        19
+      ]
+    },
+    {
+      "id": "panda-bamboo",
+      "row": 6,
+      "originalQuerySha256": "60e88a3b04cb33312ccfd3c94fbfc7a94ae88bfc321a147a925f3d040c8f3c47",
+      "original": [
+        1,
+        2,
+        3
+      ],
+      "manual": [
+        17,
+        6
+      ]
+    },
+    {
+      "id": "gorilla-size",
+      "row": 9,
+      "originalQuerySha256": "a26e1c9c7fb880532981e87aeed0988bd5fc6a50809f7b8ea75acfcaa256d6aa",
+      "original": [],
+      "manual": [
+        1,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "gorilla-taxonomy",
+      "row": 8,
+      "originalQuerySha256": "86e5e207e4d4123209ae88512e8fb07aacdf9ee471987c169628c1aa44a5a2b8",
+      "original": [
+        5,
+        1,
+        6
+      ],
+      "manual": [
+        5,
+        1,
+        6
+      ]
+    },
+    {
+      "id": "gorilla-war",
+      "row": 12,
+      "originalQuerySha256": "b5bd5efff22a62a55c7afd4fc61d59b41d4a096ed0a3ab6cc73f860a40ca1b92",
+      "original": [
+        18
+      ],
+      "manual": [
+        5,
+        18,
+        20
+      ]
+    },
+    {
+      "id": "apes-status",
+      "row": 15,
+      "originalQuerySha256": "a00246afef4485723061cb6bd7e3908a3cf7a39f974083c976bb8aa455870af6",
+      "original": [],
+      "manual": [
+        1,
+        5,
+        11
+      ]
+    }
+  ]
+}

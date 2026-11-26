@@ -1,0 +1,47 @@
+{
+  "fixedAt": "2026-11-26T14:34:19Z",
+  "references": [
+    {
+      "page": "mac",
+      "selector": "p.meta span",
+      "label": "입력",
+      "marker": "2024/10/30 08:46",
+      "date": "2024-10-30"
+    },
+    {
+      "page": "apple",
+      "selector": ".category-eyebrow__date",
+      "label": "Press release header",
+      "marker": "October 29, 2024",
+      "date": "2024-10-29"
+    },
+    {
+      "page": "happiness",
+      "selector": "p.txt span",
+      "label": "등록",
+      "marker": "등록 2024.03.20 20:21:03",
+      "date": "2024-03-20"
+    },
+    {
+      "page": "whr",
+      "selector": ".post-header-content time",
+      "label": "Post header",
+      "marker": "March 20, 2024",
+      "date": "2024-03-20"
+    },
+    {
+      "page": "wildlife",
+      "selector": ".date_area span",
+      "label": "작성",
+      "marker": "2016.09.05 10:16",
+      "date": "2016-09-05"
+    },
+    {
+      "page": "iucn",
+      "selector": "span.date",
+      "label": "Press release header",
+      "marker": "04 Sep, 2016",
+      "date": "2016-09-04"
+    }
+  ]
+}

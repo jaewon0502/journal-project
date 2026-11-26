@@ -1,0 +1,518 @@
+{
+  "fragmentsSha256": "f7b2171d9ab3d13e2612cb050ad7b22f1c05f6c807b5a65314ee9530cf5b48a9",
+  "sample": {
+    "claims": 6,
+    "supported": 4,
+    "supportedBlocks": 9,
+    "contradicted": 1,
+    "contradictedBlocks": 3,
+    "unresolved": 1
+  },
+  "caps": {
+    "3": {
+      "original": {
+        "queries": 6,
+        "distinctBlocksReviewed": 3,
+        "supportedComplete": 0,
+        "supportedBlocks": 0,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 0
+      },
+      "english": {
+        "queries": 6,
+        "distinctBlocksReviewed": 18,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "appended": {
+        "queries": 6,
+        "distinctBlocksReviewed": 18,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "assisted": {
+        "queries": 6,
+        "distinctBlocksReviewed": 18,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "splitEnglish": {
+        "queries": 16,
+        "distinctBlocksReviewed": 18,
+        "supportedComplete": 1,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "splitAssisted": {
+        "queries": 16,
+        "distinctBlocksReviewed": 18,
+        "supportedComplete": 1,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      }
+    },
+    "6": {
+      "original": {
+        "queries": 6,
+        "distinctBlocksReviewed": 6,
+        "supportedComplete": 0,
+        "supportedBlocks": 0,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 0
+      },
+      "english": {
+        "queries": 6,
+        "distinctBlocksReviewed": 36,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "appended": {
+        "queries": 6,
+        "distinctBlocksReviewed": 36,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "assisted": {
+        "queries": 6,
+        "distinctBlocksReviewed": 36,
+        "supportedComplete": 2,
+        "supportedBlocks": 4,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "splitEnglish": {
+        "queries": 16,
+        "distinctBlocksReviewed": 36,
+        "supportedComplete": 3,
+        "supportedBlocks": 6,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      },
+      "splitAssisted": {
+        "queries": 16,
+        "distinctBlocksReviewed": 36,
+        "supportedComplete": 3,
+        "supportedBlocks": 6,
+        "contradictedComplete": 0,
+        "contradictedBlocks": 1,
+        "unresolvedWithCandidates": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "vote-2024",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": []
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            85,
+            89,
+            66,
+            84,
+            88,
+            65
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            85,
+            89,
+            66,
+            84,
+            88,
+            65
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            85,
+            89,
+            66,
+            84,
+            88,
+            65
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 3,
+          "selected": [
+            30,
+            85,
+            39,
+            66,
+            74,
+            89
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 3,
+          "selected": [
+            30,
+            85,
+            39,
+            66,
+            74,
+            89
+          ]
+        }
+      }
+    },
+    {
+      "id": "us-rationale",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": []
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            46,
+            94,
+            45,
+            93,
+            44,
+            47
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            46,
+            94,
+            45,
+            93,
+            44,
+            47
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            46,
+            94,
+            45,
+            93,
+            44,
+            47
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 2,
+          "selected": [
+            104,
+            46,
+            90,
+            94,
+            45,
+            103
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 2,
+          "selected": [
+            104,
+            46,
+            90,
+            94,
+            45,
+            103
+          ]
+        }
+      }
+    },
+    {
+      "id": "palestinian-quote",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": []
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            142,
+            137,
+            166,
+            141,
+            136,
+            165
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            142,
+            137,
+            166,
+            141,
+            136,
+            165
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            142,
+            137,
+            166,
+            141,
+            136,
+            165
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 3,
+          "selected": [
+            121,
+            142,
+            22,
+            137,
+            25,
+            23
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 3,
+          "selected": [
+            121,
+            142,
+            22,
+            137,
+            25,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "id": "israeli-thanks",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": []
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            42,
+            171,
+            89,
+            41,
+            170,
+            88
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            42,
+            171,
+            89,
+            41,
+            170,
+            88
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            42,
+            171,
+            89,
+            41,
+            170,
+            88
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 2,
+          "selected": [
+            35,
+            42,
+            37,
+            171,
+            41,
+            89
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 2,
+          "selected": [
+            35,
+            42,
+            37,
+            171,
+            41,
+            89
+          ]
+        }
+      }
+    },
+    {
+      "id": "vote-2011",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": [
+            1,
+            2,
+            7,
+            6,
+            3,
+            8
+          ]
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            7,
+            1,
+            19,
+            6,
+            2,
+            18
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            7,
+            1,
+            19,
+            6,
+            2,
+            18
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            7,
+            1,
+            19,
+            6,
+            2,
+            18
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 3,
+          "selected": [
+            1,
+            14,
+            19,
+            7,
+            8,
+            9
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 3,
+          "selected": [
+            1,
+            14,
+            19,
+            7,
+            8,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "public-opinion",
+      "runs": {
+        "original": {
+          "submissions": 1,
+          "selected": []
+        },
+        "english": {
+          "submissions": 1,
+          "selected": [
+            109,
+            42,
+            46,
+            108,
+            41,
+            45
+          ]
+        },
+        "appended": {
+          "submissions": 1,
+          "selected": [
+            109,
+            42,
+            46,
+            108,
+            41,
+            45
+          ]
+        },
+        "assisted": {
+          "submissions": 1,
+          "selected": [
+            109,
+            42,
+            46,
+            108,
+            41,
+            45
+          ]
+        },
+        "splitEnglish": {
+          "submissions": 3,
+          "selected": [
+            109,
+            42,
+            19,
+            46,
+            31,
+            62
+          ]
+        },
+        "splitAssisted": {
+          "submissions": 3,
+          "selected": [
+            109,
+            42,
+            19,
+            46,
+            31,
+            62
+          ]
+        }
+      }
+    }
+  ]
+}

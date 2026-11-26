@@ -1,0 +1,123 @@
+{
+  "referenceHash": "cc4b0321aa108da15fc6b19bc6c04d31c5884476fa3fb9ee6b47ffcda5224260",
+  "baselineModules": {
+    "files": 9,
+    "sha256": "55048d873b6edc2d4aab85625ef59108fa1cc23c213fada7dbe7fa39a2cc39e9"
+  },
+  "methods": {
+    "original": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 0
+      },
+      "partialOrScope": {
+        "n": 0,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 1,
+        "anyCandidate": 0
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      }
+    },
+    "manual": {
+      "supported": {
+        "n": 4,
+        "top1": 0,
+        "top3": 2
+      },
+      "partialOrScope": {
+        "n": 0,
+        "top1": 0,
+        "top3": 0
+      },
+      "unresolved": {
+        "n": 1,
+        "anyCandidate": 1
+      },
+      "contradicted": {
+        "n": 1,
+        "top1": 0,
+        "top3": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "vote-2024",
+      "row": 8,
+      "originalQuerySha256": "79aad737773ad9aa24eccfc49a3c4529dffc7dfece742a657249666d232d4b6e",
+      "original": [],
+      "manual": [
+        85,
+        89,
+        66
+      ]
+    },
+    {
+      "id": "us-rationale",
+      "row": 9,
+      "originalQuerySha256": "80b581796ddd91878a381db754f2bef7e40b40622b7811271d3f315bb4aef61a",
+      "original": [],
+      "manual": [
+        46,
+        94,
+        45
+      ]
+    },
+    {
+      "id": "palestinian-quote",
+      "row": 16,
+      "originalQuerySha256": "71de17322acd7110ce3d5a959f522db48c8fdc1992622acd1a1b1333b3a7efad",
+      "original": [],
+      "manual": [
+        142,
+        137,
+        166
+      ]
+    },
+    {
+      "id": "israeli-thanks",
+      "row": 17,
+      "originalQuerySha256": "cba1265214fcacc37d71190494f312245f7074dd6de1184fc828ebc3d72fe0b5",
+      "original": [],
+      "manual": [
+        42,
+        171,
+        89
+      ]
+    },
+    {
+      "id": "vote-2011",
+      "row": 12,
+      "originalQuerySha256": "b61244c1320878a6d51850c7c3a9a02fbe83e9c0b885c3ff492b0fd5978bf15b",
+      "original": [
+        1,
+        2,
+        7
+      ],
+      "manual": [
+        7,
+        1,
+        19
+      ]
+    },
+    {
+      "id": "public-opinion",
+      "row": 18,
+      "originalQuerySha256": "627a7acc4322f0c61315fb95a320994a9b00df464f019ed965e531c40fab8a67",
+      "original": [],
+      "manual": [
+        109,
+        42,
+        46
+      ]
+    }
+  ]
+}

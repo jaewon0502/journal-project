@@ -1,0 +1,58 @@
+{
+  "extractorSha256": "807321864c81ceaad652d9fae05d6c905d210ba7cc974bdba15d153f5f244652",
+  "total": 6,
+  "parsed": 6,
+  "correct": 4,
+  "wrong": 0,
+  "abstained": 2,
+  "pages": [
+    {
+      "page": "mac",
+      "reference": "2024-10-30",
+      "parsed": true,
+      "proposed": "2024-10-30T08:46:58+09:00",
+      "modified": null,
+      "matched": true
+    },
+    {
+      "page": "apple",
+      "reference": "2024-10-29",
+      "parsed": true,
+      "proposed": null,
+      "modified": null,
+      "matched": null
+    },
+    {
+      "page": "happiness",
+      "reference": "2024-03-20",
+      "parsed": true,
+      "proposed": "2024-03-20T23:31:29+09:00",
+      "modified": null,
+      "matched": true
+    },
+    {
+      "page": "whr",
+      "reference": "2024-03-20",
+      "parsed": true,
+      "proposed": null,
+      "modified": null,
+      "matched": null
+    },
+    {
+      "page": "wildlife",
+      "reference": "2016-09-05",
+      "parsed": true,
+      "proposed": "2016-09-05T10:16:41+09:00",
+      "modified": null,
+      "matched": true
+    },
+    {
+      "page": "iucn",
+      "reference": "2016-09-04",
+      "parsed": true,
+      "proposed": "2016-09-04T21:00:00+02:00",
+      "modified": "2022-06-27T20:16:46+02:00",
+      "matched": true
+    }
+  ]
+}

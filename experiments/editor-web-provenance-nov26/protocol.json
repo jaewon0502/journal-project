@@ -1,0 +1,8 @@
+{
+  "frozenAt": "2026-11-26T14:32:29Z",
+  "initialExtractorSha256": "807321864c81ceaad652d9fae05d6c905d210ba7cc974bdba15d153f5f244652",
+  "selection": "All three Korean reports and their three primary documents in the independently selected editor-transfer-nov26 trial, including its separately declared prose supplement. Select no pages by HTML structure. The older five Nobel/Voyager pages are development examples.",
+  "reference": "Record publication-day references from public publisher-visible pages separately from machine extractable fields before running the HTML importer on these six. If a date cannot be assigned to first publication from the page itself, leave it unknown. A later update or historical event date does not establish initial publication.",
+  "score": "Count parseable article, proposed publication date, correct proposed publication day among independently dated pages, and wrong proposals separately. Report all six pages including abstentions. Evaluate title and URL as aids, not human accuracy. Keep original results if fixes are made after inspection.",
+  "workflow": "On the previously seen NASA release, use the factcheck UI offline and inspect the exported source and an independent review file. Count on-screen operations or distinct manual field entries for an equivalent completed task, disclosing differences in starting input. Never estimate human time or reduced political bias from these actions."
+}

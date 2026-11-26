@@ -1,0 +1,18 @@
+{
+  "querySha256":"c8452dab8baf1e6de57c39c5ba5b281ef23a0805ddbdbb38da1938c607d45125",
+  "extractorSha256":"3c1672d8c0e91c16dea2b0cc3fb8cbf4fcd654bd9b8e6314934baff17bcc5f57",
+  "editions":{
+    "wildlife":{"paragraphs":20,"sha256":"d084c4dbaaa4e591af3487168422f42b495f353e7dbdc880bb56387147e44538"},
+    "iucn":{"paragraphs":25,"sha256":"5e9be6bef7ae79aed6f24ed4a7e5b34dd55ca1e32b4f285a00bc2da3e3c38e42"}
+  },
+  "sources":{"wildlife":"iucn"},
+  "scoring":"Keep each preselected claim in its own category. For the four supported and one contradicted foci, all direct required paragraphs among top 1 or top 3 count. For the partially supported war explanation count the partial official evidence only, never a validation of the war explanation.",
+  "cases":{
+    "panda-status":{"articleParagraph":3,"verdict":"supported","required":[17],"note":"The 2016 update explicitly downgrades the giant panda to Vulnerable from Endangered."},
+    "panda-bamboo":{"articleParagraph":6,"verdict":"supported","required":[17],"note":"The dated forecast links climate-driven bamboo habitat loss to population losses. This is a projection."},
+    "gorilla-size":{"articleParagraph":9,"verdict":"supported","required":[1],"note":"The lead identifies the eastern gorilla as the largest living primate."},
+    "gorilla-taxonomy":{"articleParagraph":8,"verdict":"contradicted","required":[5],"note":"The report calls the divisions two species. The 2016 IUCN release specifically identifies the two named gorillas as subspecies. Only this taxonomy clause is adjudicated."},
+    "gorilla-war":{"articleParagraph":12,"verdict":"partial","required":[5],"note":"IUCN states hunting is the greatest threat to Grauer’s gorillas, but does not mention the Rwandan civil war or establish that particular habitat-loss explanation."},
+    "apes-status":{"articleParagraph":15,"verdict":"supported","required":[5],"note":"The two named great apes are explicitly both listed as Endangered in the 2016 update."}
+  }
+}

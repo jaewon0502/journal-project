@@ -1,0 +1,140 @@
+{
+  "articles": 90,
+  "uniqueSentenceRecords": 2057,
+  "questions": {
+    "pro-russia": {
+      "sentences": 2057,
+      "excluded": {},
+      "responseCountsPerSentence": {
+        "5": 1034,
+        "6": 391,
+        "7": 135,
+        "8": 190,
+        "9": 80,
+        "10": 62,
+        "11": 84,
+        "12": 26,
+        "13": 29,
+        "15": 26
+      },
+      "rawResponseCount": 13324,
+      "fixedSplit": {
+        "fixedThreeRatings": 6171,
+        "twoOnlyRatings": 4114,
+        "adaptiveRatings": 4262,
+        "escalated": 148,
+        "savedVersusThree": 1909,
+        "savedPctVersusThree": 30.93502,
+        "additionalPctVersusTwo": 3.59747,
+        "adaptiveVersusFixedThreeMismatches": 0,
+        "adaptiveAgainstHeldOutPanel": {
+          "truePositive": 0,
+          "falseNegative": 1,
+          "falsePositive": 1,
+          "trueNegative": 1941,
+          "panelTie": 114,
+          "comparablePanelOutcomes": 1943,
+          "agreementPct": 99.89707,
+          "positivePanelAgreementPct": 0.0,
+          "negativePanelAgreementPct": 99.94851,
+          "alwaysNegativeAgreementPct": 99.94853
+        },
+        "twoOnlyAgainstSameHeldOutPanel": {
+          "unresolved": 148,
+          "truePositive": 0,
+          "falseNegative": 1,
+          "falsePositive": 1,
+          "trueNegative": 1796,
+          "panelTie": 111,
+          "comparablePanelOutcomes": 1798,
+          "agreementPct": 99.88877,
+          "positivePanelAgreementPct": 0.0,
+          "negativePanelAgreementPct": 99.94435,
+          "alwaysNegativeAgreementPct": 99.94438
+        }
+      },
+      "allSplitsWithEqualSentenceWeight": {
+        "escalationPct": 7.16415,
+        "savedPctVersusThree": 30.94528,
+        "cellsAsFractionsOfAllSentences": {
+          "truePositive": 0.0,
+          "falseNegative": 0.000291687,
+          "falsePositive": 0.000875061,
+          "trueNegative": 0.944579485,
+          "panelTie": 0.054253768
+        },
+        "agreementPct": 99.87663,
+        "positivePanelAgreementPct": 0.0,
+        "negativePanelAgreementPct": 99.90745,
+        "alwaysNegativeAgreementPct": 99.96916
+      }
+    },
+    "pro-west": {
+      "sentences": 2057,
+      "excluded": {},
+      "responseCountsPerSentence": {
+        "5": 1034,
+        "6": 391,
+        "7": 135,
+        "8": 190,
+        "9": 80,
+        "10": 62,
+        "11": 84,
+        "12": 26,
+        "13": 29,
+        "15": 26
+      },
+      "rawResponseCount": 13324,
+      "fixedSplit": {
+        "fixedThreeRatings": 6171,
+        "twoOnlyRatings": 4114,
+        "adaptiveRatings": 4275,
+        "escalated": 161,
+        "savedVersusThree": 1896,
+        "savedPctVersusThree": 30.72436,
+        "additionalPctVersusTwo": 3.91347,
+        "adaptiveVersusFixedThreeMismatches": 0,
+        "adaptiveAgainstHeldOutPanel": {
+          "truePositive": 0,
+          "falseNegative": 0,
+          "falsePositive": 0,
+          "trueNegative": 1926,
+          "panelTie": 131,
+          "comparablePanelOutcomes": 1926,
+          "agreementPct": 100.0,
+          "positivePanelAgreementPct": null,
+          "negativePanelAgreementPct": 100.0,
+          "alwaysNegativeAgreementPct": 100.0
+        },
+        "twoOnlyAgainstSameHeldOutPanel": {
+          "unresolved": 161,
+          "truePositive": 0,
+          "falseNegative": 0,
+          "falsePositive": 0,
+          "trueNegative": 1765,
+          "panelTie": 131,
+          "comparablePanelOutcomes": 1765,
+          "agreementPct": 100.0,
+          "positivePanelAgreementPct": null,
+          "negativePanelAgreementPct": 100.0,
+          "alwaysNegativeAgreementPct": 100.0
+        }
+      },
+      "allSplitsWithEqualSentenceWeight": {
+        "escalationPct": 7.89754,
+        "savedPctVersusThree": 30.70082,
+        "cellsAsFractionsOfAllSentences": {
+          "truePositive": 0.0,
+          "falseNegative": 0.0,
+          "falsePositive": 0.0,
+          "trueNegative": 0.939718036,
+          "panelTie": 0.060281964
+        },
+        "agreementPct": 100.0,
+        "positivePanelAgreementPct": null,
+        "negativePanelAgreementPct": 100.0,
+        "alwaysNegativeAgreementPct": 100.0
+      }
+    }
+  }
+}
