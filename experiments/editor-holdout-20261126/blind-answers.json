@@ -1,0 +1,79 @@
+[
+  {
+    "id": "C1",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 2
+      },
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "reason": "The NASA account identifies Voyager 1 and dates the team's command to resume science-data transmission to May 19."
+  },
+  {
+    "id": "C2",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "interview",
+        "paragraph": 1
+      },
+      {
+        "source": "interview",
+        "paragraph": 26
+      }
+    ],
+    "reason": "The heading identifies a phone interview. In her own response, Han names readers of Korean literature and her friends who write as the people she hopes will welcome the news."
+  },
+  {
+    "id": "C3",
+    "verdict": "unresolved",
+    "citations": [],
+    "reason": "The supplied sources give no retailer sales figures, retailer count, or reporting cutoff against which to check the claim."
+  },
+  {
+    "id": "C4",
+    "verdict": "unresolved",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "reason": "NASA says two instruments needed more work but does not identify that work as recalibration."
+  },
+  {
+    "id": "C5",
+    "verdict": "supported",
+    "citations": [
+      {
+        "source": "nobel",
+        "paragraph": 2
+      },
+      {
+        "source": "nobel",
+        "paragraph": 5
+      }
+    ],
+    "reason": "The release is dated October 10, 2024 and names Han Kang as that year's literature prize recipient."
+  },
+  {
+    "id": "C6",
+    "verdict": "unresolved",
+    "citations": [
+      {
+        "source": "nasa",
+        "paragraph": 2
+      },
+      {
+        "source": "nasa",
+        "paragraph": 3
+      }
+    ],
+    "reason": "The update confirms all four instruments were sending usable science data when written. Its supplied paragraphs give no June 13 publication date or recovery deadline."
+  }
+]

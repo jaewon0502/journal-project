@@ -150,7 +150,7 @@ class FacilitatorPack(unittest.TestCase):
             for name in archive.namelist():
                 if name.endswith('.zip'):
                     with ZipFile(BytesIO(archive.read(name))) as nested:
-                        self.assertTrue({'연습 예시/빨라진-편집자의-판단이유.html', *SCORE_PRACTICE.values(), PARTY_LEDGER_SAMPLE, *BIAS_PRACTICE.values(), *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
+                        self.assertTrue({'연습 예시/완료파일-측정순서.html', '연습 예시/빨라진-편집자의-판단이유.html', *SCORE_PRACTICE.values(), PARTY_LEDGER_SAMPLE, *BIAS_PRACTICE.values(), *QUOTE_PRACTICE.values(), *DISPUTE_FILES.values()}.isdisjoint(nested.namelist()))
                         self.assertNotIn('core-context-notes-ui.js', nested.namelist())
                         for page in (n for n in nested.namelist() if n.endswith('.html')):
                             self.assertNotIn(b'id="bias-score-practice"', nested.read(page))

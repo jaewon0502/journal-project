@@ -114,6 +114,7 @@ test('판본과 서로 다른 기사가 필요하며 변경된 순서를 가진 
   const sameArticle = [catalog[0],{...catalog[1],material:{...catalog[1].material,articleUrl:catalog[0].material.articleUrl+'#표'}}];
   for (const entries of [[],[catalog[0]],missingKit,sameArticle]) assert.equal(form(t,entries).el('allocation-mode-picker').hidden,true);
   const p=form(t); p.selectPlan(4); p.generate(); const saved=await p.save();
+  for (const row of saved.assignments) delete row.plannedPeriod; // Original position-only roster format.
   for (const mutate of [
     rows=>rows.pop(),
     rows=>{[rows[1],rows[2]]=[rows[2],rows[1]];},
@@ -126,4 +127,30 @@ test('판본과 서로 다른 기사가 필요하며 변경된 순서를 가진 
   const q=form(t); const ordinary={format:saved.format,assignments:saved.assignments};
   await q.open(ordinary); assert.deepEqual(await q.save(),ordinary);
   assert.equal(q.el('cross-order-heading').hidden,true);
+});
+
+test('권장 순서는 배정행 재정렬과 평면 명부 재저장 뒤에도 유지하고 충돌한 두 명부는 거부한다', async t => {
+  const original = form(t); original.selectPlan(4); original.generate();
+  const saved = await original.save(), mixed = structuredClone(saved);
+  const firstRows = mixed.assignments.filter(row => row.plannedPeriod === 1).reverse();
+  const secondRows = mixed.assignments.filter(row => row.plannedPeriod === 2).reverse();
+  assert.equal(firstRows.length, 4); assert.equal(secondRows.length, 4);
+  mixed.assignments = [...secondRows, ...firstRows];
+  for (const roster of [mixed, {format:saved.format, assignments:mixed.assignments}]) {
+    const page = form(t);
+    await page.open(roster);
+    assert.equal(page.el('cross-order-heading').hidden, false);
+    assert.equal(page.el('allocations').rows[0].lastElementChild.textContent, '두 번째');
+    assert.deepEqual((await page.save()).assignments, roster.assignments);
+  }
+  const core = original.w.JournalFieldReview;
+  const one = mixed.assignments[0];
+  const legacy = {...one}; delete legacy.plannedPeriod;
+  const wrap = row => ({format:saved.format, assignments:[row]});
+  for (const pair of [[one,legacy], [legacy,one]]) {
+    assert.equal(core.mergeAssignments([], pair.map(wrap))[0].plannedPeriod, 2);
+  }
+  assert.throws(() => core.mergeAssignments([], [wrap(one), wrap({...one,plannedPeriod:1})]), /순서/);
+  const other = firstRows.find(row => row.participant === one.participant);
+  assert.throws(() => core.mergeAssignments([], [wrap(one), wrap({...other,plannedPeriod:2})]), /순서/);
 });

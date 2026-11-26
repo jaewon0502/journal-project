@@ -1,0 +1,123 @@
+{
+  "keySha256": "d6f28e1b5896376b81d6743b11fbe2d08589aa8b472f216b35c6332c8bac0567",
+  "articleRows": {
+    "ko": 81,
+    "en": 33
+  },
+  "totals": {
+    "selected": 6,
+    "located": 6,
+    "referenceSupported": 4,
+    "referenceUnresolved": 2,
+    "coreSupported": 2,
+    "fullHitAt1": 2,
+    "fullHitAt3": 2,
+    "coreFullHitAt3": 1,
+    "unresolvedWithAnyCandidate": 2
+  },
+  "cases": [
+    {
+      "id": "ko-award",
+      "article": "ko",
+      "core": true,
+      "referenceJudgment": "supported",
+      "readerRow": 6,
+      "querySha256": "323ff68f75be4fe88ea74073dc64231db98643a57ef3354ab2b303889b2eb7a3",
+      "rowStatus": "pending",
+      "firstThree": [
+        "nobel/2"
+      ],
+      "required": [
+        "nobel/2",
+        "nobel/5"
+      ],
+      "hitAt1": false,
+      "hitAt3": false
+    },
+    {
+      "id": "ko-wish",
+      "article": "ko",
+      "core": false,
+      "referenceJudgment": "supported",
+      "readerRow": 26,
+      "querySha256": "5b47437c9db4d377322ddfe86ea7ed43bffd501cda5b5e934b3ca0adf0e53e61",
+      "rowStatus": "pending",
+      "firstThree": [],
+      "required": [
+        "interview/26"
+      ],
+      "hitAt1": false,
+      "hitAt3": false
+    },
+    {
+      "id": "ko-sales",
+      "article": "ko",
+      "core": false,
+      "referenceJudgment": "unresolved",
+      "readerRow": 74,
+      "querySha256": "1e8ce0b82e329802eefb512f39165b1d33659431e4517472aa72e8a44fc8f0ce",
+      "rowStatus": "pending",
+      "firstThree": [
+        "nobel/2"
+      ],
+      "required": [],
+      "hitAt1": null,
+      "hitAt3": null
+    },
+    {
+      "id": "en-resumed",
+      "article": "en",
+      "core": true,
+      "referenceJudgment": "supported",
+      "readerRow": 10,
+      "querySha256": "6865cbf829f7dcf5bbc00aac5e1074cc48063d7b1d9323dbe402ea1b98d901e9",
+      "rowStatus": "pending",
+      "firstThree": [
+        "nasa/3",
+        "nasa/4",
+        "nasa/5"
+      ],
+      "required": [
+        "nasa/3"
+      ],
+      "hitAt1": true,
+      "hitAt3": true
+    },
+    {
+      "id": "en-command",
+      "article": "en",
+      "core": false,
+      "referenceJudgment": "supported",
+      "readerRow": 8,
+      "querySha256": "b1a20db8bb9f70c7d70a9b58df027d46894e87105be0cf2e908763f8fb104aa6",
+      "rowStatus": "pending",
+      "firstThree": [
+        "nasa/3",
+        "nasa/5",
+        "nasa/2"
+      ],
+      "required": [
+        "nasa/3"
+      ],
+      "hitAt1": true,
+      "hitAt3": true
+    },
+    {
+      "id": "en-recalibration",
+      "article": "en",
+      "core": false,
+      "referenceJudgment": "unresolved",
+      "readerRow": 9,
+      "querySha256": "dc180f08a8c3134fbfc647abffccf0f70bb0777330df70b55d469506a9d853f1",
+      "rowStatus": "pending",
+      "firstThree": [
+        "nasa/3",
+        "nasa/5",
+        "nasa/6"
+      ],
+      "required": [],
+      "hitAt1": null,
+      "hitAt3": null
+    }
+  ]
+}

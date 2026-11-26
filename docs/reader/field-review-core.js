@@ -93,6 +93,12 @@
         (v.found === 'found' && (!url(v.documentUrl) || !text(v.locator))))
     )
       throw Error('제출 기록의 근거 위치와 판정을 확인하세요.');
+    if (Object.hasOwn(v, 'previousCompletion')) {
+      const link = v.previousCompletion;
+      if (!link || Object.keys(link).length !== 2 || !text(link.id) || !kitVersion(link.sha256)) {
+        throw Error('연결된 첫 완료 응답의 형식을 확인하세요.');
+      }
+    }
     if (Object.hasOwn(v, 'assignedKitVersion')) {
       const {assignedKitVersion, ...trial} = v;
       return trial;
@@ -375,6 +381,10 @@
           !url(row.articleUrl) || !['manual','journal'].includes(row.method))
         throw Error('배정표의 참여 코드, 기사, 과제와 방식을 확인하세요.');
       const assignment = Object.fromEntries(assignmentFields.map(k => [k, row[k]]));
+      if (Object.hasOwn(row, 'plannedPeriod')) {
+        if (![1, 2].includes(row.plannedPeriod)) throw Error('교차 배정표의 권장 순서를 확인하세요.');
+        assignment.plannedPeriod = row.plannedPeriod;
+      }
       const targetSeconds = assignmentTarget(row);
       if (targetSeconds !== undefined) assignment.targetSeconds = targetSeconds;
       if (Object.hasOwn(row, 'assignedKitVersion')) {
@@ -395,6 +405,9 @@
         throw Error('같은 참여 코드와 기사의 예정 배포본이 서로 다르거나 한 명부에만 기록됐습니다. 원래 배정표를 확인하세요.');
       if (prior && (prior.targetSeconds !== targetSeconds || !assignmentFields.every(k => prior[k] === assignment[k])))
         throw Error('같은 참여 코드에 같은 사례나 기사의 서로 다른 배정이 있습니다. 원래 명부를 확인하세요.');
+      if (prior?.plannedPeriod && assignment.plannedPeriod && prior.plannedPeriod !== assignment.plannedPeriod)
+        throw Error('같은 과제의 권장 순서가 두 배정표에서 다릅니다.');
+      if (prior?.plannedPeriod) assignment.plannedPeriod = prior.plannedPeriod;
       byCase.set(caseKey, assignment);
       byArticle.set(articleKey, assignment);
     }
@@ -407,6 +420,14 @@
         throw Error('지원하지 않는 배정표 종류입니다. 원래 명부를 확인하세요.');
       const taskTargets = singleAllocation ? new Map() : null;
       for (const row of file.assignments) insert(row, taskTargets);
+    }
+    const assignedPeriods = new Map();
+    for (const row of byCase.values()) {
+      if (!row.plannedPeriod) continue;
+      if (!assignedPeriods.has(row.participant)) assignedPeriods.set(row.participant, new Set());
+      const periods = assignedPeriods.get(row.participant);
+      if (periods.has(row.plannedPeriod)) throw Error('같은 참여자의 서로 다른 교차 과제에 같은 권장 순서가 있습니다.');
+      periods.add(row.plannedPeriod);
     }
     return [...byCase.values()];
   }
@@ -540,7 +561,7 @@
     return hasReasonBasis ? {successfulWork:result, fasterReason} : {successfulWork:result};
   }
 
-  function editorCrossover(byParticipant, unexpectedReturns, onFasterReasonPair) {
+  function editorCrossover(byParticipant, unexpectedReturns, onFasterReasonPair, onOrderPair) {
     const result = {assignedEditors:byParticipant.size, pairedAssignments:0, completeEditors:0, comparedEditors:0,
       faster:0, sameTime:0, slower:0, fasterQuality:{fewer:0, same:0, more:0}, fasterUnsafe:{eligible:0, more:0},
       manualMeanMs:null, journalMeanMs:null, savedMs:null, savedPct:null};
@@ -565,15 +586,30 @@
       cohort.complete[direction]++;
       cohort.standards[direction].add(m.gradingKey);
       cohort.standards[1 - direction].add(j.gradingKey);
-      cohort.pairs.push({m, j, direction});
+      const plannedFirst = manual.a.plannedPeriod === 1 && journal.a.plannedPeriod === 2 ? 'manual' :
+        journal.a.plannedPeriod === 1 && manual.a.plannedPeriod === 2 ? 'journal' : null;
+      cohort.pairs.push({m, j, direction, plannedFirst, manual:manual.completed.trial, journal:journal.completed.trial});
     }
     let manualMs = 0n, journalMs = 0n;
     const comparedCohorts = [];
-    for (const {planned, complete, pairs, standards} of cohorts.values()) {
+    for (const [cohortKey, {planned, complete, pairs, standards}] of cohorts) {
       // Different articles are compared within one editor. Keep the whole pair of tasks
       // only when both the roster and observed reviewers balance the opposite assignments.
       if (planned[0] !== planned[1] || complete[0] !== complete[1] || standards.some(keys => keys.size !== 1)) continue;
       comparedCohorts.push(pairs);
+      if (onOrderPair) {
+        const criteria = [new Set(), new Set()];
+        for (const {m, j, direction} of pairs) {
+          if (m.explanation) criteria[direction].add(m.explanation);
+          if (j.explanation) criteria[1 - direction].add(j.explanation);
+        }
+        const sameCriteria = criteria.every(values => values.size <= 1);
+        const pass = outcome => !sameCriteria || outcome === 'pending' ? null : outcome === 'yes';
+        for (const {m, j, direction, plannedFirst, manual, journal} of pairs) {
+          onOrderPair({manual, journal, plannedFirst, direction, cohort:cohortKey,
+            manualPassed:pass(m.outcome), journalPassed:pass(j.outcome)});
+        }
+      }
       for (const {m, j} of pairs) {
         result.comparedEditors++;
         manualMs += m.ms;
@@ -599,7 +635,7 @@
   }
 
   // The packet is an observed method. Only a separate assignment can supply the intended arm.
-  function allocationReport(assignments, records, repeated, onFasterReasonPair) {
+  function allocationReport(assignments, records, repeated, onFasterReasonPair, onOrderPair) {
     const totals = () => ({assigned:0, completed:0, withdrawn:0, wrongTask:0, excluded:0, missing:0, crossover:0});
     const armKey = a => JSON.stringify([a.caseId, a.articleUrl, a.taskId, a.prompt, a.method]);
     const byParticipant = new Map(), arms = new Map(), matched = [];
@@ -723,7 +759,7 @@
     for (const comparison of editionDeadlines.values())
       comparison.difference = yieldDifference(comparison.manual, comparison.journal);
     return {all, arms:[...arms.values()], groups, outsideRoster, unlinked,
-      editorCrossover:editorCrossover(byParticipant, new Set(otherArticles), onFasterReasonPair), assignmentComparisons:[...byTask.values()],
+      editorCrossover:editorCrossover(byParticipant, new Set(otherArticles), onFasterReasonPair, onOrderPair), assignmentComparisons:[...byTask.values()],
       deadlineAssigned, deadlineComparisons:[...deadlines.values()], unknownPlannedEdition,
       editionDeadlineComparisons:[...editionDeadlines.values()]};
   }

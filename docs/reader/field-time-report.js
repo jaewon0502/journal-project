@@ -74,7 +74,33 @@ window.JournalFieldTimeReport = (() => {
         }
       } else area.append(node('p', '단계별 시간 미산출 · 두 방식의 단계별 기록이 있고 양방향 배정이 균형을 이루어야 합니다.'));
     }
-    area.append(node('p', '각 편집자가 서로 다른 기사를 검토했습니다. 회신에는 두 과제의 실제 시작 순서가 기록되지 않아 난이도와 순서의 영향을 분리할 수 없습니다.'));
+    area.append(node('p', '각 편집자가 서로 다른 기사를 검토했습니다. 과제 난이도와 어느 방식으로 먼저 측정했는지가 시간 차이에 영향을 줄 수 있습니다.'));
+  }
+  function renderOrder(order, area) {
+    const add = (tag, text) => {
+      const element = area.ownerDocument.createElement(tag);
+      element.textContent = text; area.append(element);
+    };
+    add('h4', '완료 응답으로 확인한 측정 순서');
+    add('p', '비교한 ' + order.total + '명 중 순서 확인 ' + order.confirmed + '명 · 첫 완료 파일 미연결 ' +
+      order.unlinked + '명 · 연결 불일치 ' + order.invalid + '명');
+    if (!order.confirmed) return;
+    add('p', '평소 도구 먼저 ' + order.manualFirst + '명 · 저널 먼저 ' + order.journalFirst + '명. 권장 순서와 일치 ' +
+      order.asPlanned + '명 · 반대 ' + order.reversed + '명 · 명부에 순서 미기록 ' + order.withoutPlan + '명.');
+    add('p', '참여 화면은 두 번째 측정을 시작하기 전에 첫 완료 파일을 연결합니다. 이 집계는 제출된 두 파일의 연결을 대조합니다. 파일 작성자·작성 시각과 화면 밖에서 기사를 읽은 순서는 확인할 수 없습니다.');
+    const balanced = order.balanced;
+    if (!balanced.editors) {
+      add('p', '순서별 시간·정확도 비교 대기 · 같은 두 과제에서 첫 방식과 기사별 배정의 네 조합에 같은 수의 편집자가 필요합니다.');
+      return;
+    }
+    add('p', '네 조합의 인원이 같은 과제 묶음 ' + balanced.cohorts + '개 · 순서별 비교에 포함된 편집자 ' + balanced.editors + '명');
+    for (const [label, group] of [['평소 도구 먼저', balanced.manualFirst], ['저널 먼저', balanced.journalFirst]]) {
+      add('p', label + ' ' + group.editors + '명 · 과제당 평균 평소 도구 ' + seconds(group.manualMeanMs, 1) + ' / 저널 ' +
+        seconds(group.journalMeanMs, 1) + ' · ' + timeChangeText(group));
+      add('p', label + ' 집단에서 근거 위치·판정·판단 이유까지 성공 · 평소 도구 ' + group.manualPassed + '/' + group.editors +
+        '명 (미확정 ' + group.manualPending + '명) · 저널 ' + group.journalPassed + '/' + group.editors + '명 (미확정 ' +
+        group.journalPending + '명)');
+    }
   }
   function reportPage(title) {
     const doc = document.implementation.createHTMLDocument(title);
@@ -97,11 +123,12 @@ window.JournalFieldTimeReport = (() => {
     append(main, 'h1', title);
     return {doc, main, append};
   }
-  function crossoverHtml(data, exampleTitle = '') {
+  function crossoverHtml(data, exampleTitle = '', order = null) {
     const {doc, main, append} = reportPage(exampleTitle || '교차 배정한 편집자의 검증 시간 비교');
     if (exampleTitle) append(main, 'p', '가상 편집자 4명의 모의 기록입니다.');
     const panel = doc.createElement('div');
     renderEditorCrossover(data, panel);
+    if (order) renderOrder(order, panel);
     for (const line of panel.children) {
       if (line.tagName === 'H3') append(main, 'h2', line.textContent);
       if (line.tagName === 'H4') append(main, 'h3', line.textContent);
@@ -157,5 +184,5 @@ window.JournalFieldTimeReport = (() => {
     append(main, 'p', '참여자와 진행자가 동시에 일한 시간도 각각 더합니다.');
     return '<!doctype html>' + doc.documentElement.outerHTML;
   }
-  return {html, seconds, timeChangeText, renderEditorCrossover, crossoverHtml};
+  return {html, seconds, timeChangeText, renderEditorCrossover, renderOrder, crossoverHtml};
 })();

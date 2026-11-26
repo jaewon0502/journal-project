@@ -1,0 +1,107 @@
+{
+  "frozenAt": "2026-11-26T14:13:05Z",
+  "engineRevision": "9b62cce015ef3fbc988a6e1da75c023ef4971358",
+  "extractorSha256": "2d281e1f98bb0b4366176868137669278afe5f9116e40ea91674bbdd0756474e",
+  "sha256": {
+    "ko": "faa0c91a282a54be1565749f5bb1535aa4fc66a0ea75f7d77246d69240292ad2",
+    "en": "a0a8ce102a41c1cc455b7cc16571acc3ebe0abd94811c3e3d4cf0e21e759e407",
+    "nobel": "2c1ecf861c5cf196bbec343afe7497aab5a0d9650c52642aebbc80f6049af65e",
+    "interview": "87f835fd217773fcf7637c741574ebb3d4dc2176b1ac4adb09b15747fb881793",
+    "nasa": "e12dd09f221bc743b445a0cb0aeafa93bf0e860ffaf4a5aec694110978527fab"
+  },
+  "documents": {
+    "ko": [
+      "nobel",
+      "interview"
+    ],
+    "en": [
+      "nasa"
+    ]
+  },
+  "method": "Read key against page texts before running the production reader. Number article and source paragraphs from 1. Join preselected source sections per article in given order separated by one newline. Run prepare on the complete normalized article, select the unique row containing the short anchor in the specified paragraph, then search with the unedited row as both query and context. No translation or alternate query. Count full direct hits only when all mandatory reference paragraphs appear among first k returned direct candidates (k=1,3). Do not score contextual neighbours. For an unresolved claim count surfaced candidates separately without awarding a hit. A missing or ambiguous row is a retrieval failure and remains in its original denominator.",
+  "cases": [
+    {
+      "id": "ko-award",
+      "article": "ko",
+      "articleParagraph": 6,
+      "anchor": "10월 10일 발표된",
+      "claim": "Han Kang was announced as the 2024 Nobel literature laureate on October 10.",
+      "core": true,
+      "referenceJudgment": "supported",
+      "requiredParagraphs": {
+        "nobel": [
+          2,
+          5
+        ]
+      },
+      "reason": "The date and the award statement are on different lines of the Academy release. The surrounding literary appraisal is outside this claim."
+    },
+    {
+      "id": "ko-wish",
+      "article": "ko",
+      "articleParagraph": 13,
+      "anchor": "친구 작가들에게도",
+      "claim": "In her phone interview Han Kang wished the news would be good for readers of Korean literature and her writer friends.",
+      "core": false,
+      "referenceJudgment": "supported",
+      "requiredParagraphs": {
+        "interview": [
+          26
+        ]
+      },
+      "reason": "Her own response in the October telephone interview supplies the meaning. Attribution is to Han Kang without a claim about the interviewer’s affiliation."
+    },
+    {
+      "id": "ko-sales",
+      "article": "ko",
+      "articleParagraph": 33,
+      "anchor": "103만 2000부",
+      "claim": "Three retailers reported combined print sales of 1,032,000 copies by 9 am on October 16.",
+      "core": false,
+      "referenceJudgment": "unresolved",
+      "requiredParagraphs": {},
+      "reason": "Neither the award release nor the interview supplies the retailer totals or cutoff. Need contemporaneous sales data."
+    },
+    {
+      "id": "en-resumed",
+      "article": "en",
+      "articleParagraph": 6,
+      "anchor": "Now, all four instruments",
+      "claim": "By the June 13 NASA update all four Voyager 1 instruments were returning usable science data.",
+      "core": true,
+      "referenceJudgment": "supported",
+      "requiredParagraphs": {
+        "nasa": [
+          3
+        ]
+      },
+      "reason": "The dated mission release explicitly reports four instruments and usable data together."
+    },
+    {
+      "id": "en-command",
+      "article": "en",
+      "articleParagraph": 6,
+      "anchor": "On May 19",
+      "claim": "The mission team commanded Voyager 1 to return science data on May 19.",
+      "core": false,
+      "referenceJudgment": "supported",
+      "requiredParagraphs": {
+        "nasa": [
+          3
+        ]
+      },
+      "reason": "The NASA mission release specifies the date, command and purpose."
+    },
+    {
+      "id": "en-recalibration",
+      "article": "en",
+      "articleParagraph": 6,
+      "anchor": "required recalibration",
+      "claim": "The two remaining instruments specifically needed recalibration.",
+      "core": false,
+      "referenceJudgment": "unresolved",
+      "requiredParagraphs": {},
+      "reason": "NASA paragraph 3 specifies additional work without identifying recalibration. It supplies partial context and no contradiction."
+    }
+  ]
+}
